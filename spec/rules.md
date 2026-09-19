@@ -33,7 +33,7 @@ use safe messages.
 JUnit tests use temporary directories and immutable classpath fixtures; they never modify tracked files. Hand-authored
 schemas and valid examples validate each other with NetworkNT in offline Draft 2020-12 mode. Semantic validation tests
 compare exact, deterministically ordered errors and prove that invalid inputs never invoke the solver. Timefold
-Isolated Timefold score-analysis tests exercise matching and non-matching cases for every catalog row, while deterministic
+Timefold ConstraintVerifier tests exercise matching and non-matching cases for every catalog row, while deterministic
 step-limited solver tests assert complete assignments, hard validity, score-vector values, and later replanning
 priorities. Packaged-process tests invoke the real dependency-inclusive JAR with real files and assert exit codes,
 stdout/stderr separation, exact result values, overwrite refusal, and destination preservation. Negative tests assert
@@ -112,9 +112,9 @@ scale.
 - Constraint: MUST implement exactly the hard and soft catalog rows in `spec/spec.md`, using stable IDs and signed
   64-bit-safe penalty arithmetic, and MUST NOT introduce an implicit scheduling rule or bonus.
 - Reason: Extra or missing constraints change actor-visible feasibility and optimization behavior.
-- Verification: One isolated Timefold score-analysis test family per catalog row proves matching and non-matching cases;
-  a catalog exactness test compares IDs, order, default weights, categories, counts, and aggregate penalties by value
-  and proves absence of extra rows.
+- Verification: One Timefold ConstraintVerifier test family per catalog row proves matching and non-matching cases; a
+  catalog exactness test compares IDs, order, default weights, categories, counts, and aggregate penalties by value and
+  proves absence of extra rows.
 
 ### RULE-8 - Diagnostic candidates remain non-results
 
