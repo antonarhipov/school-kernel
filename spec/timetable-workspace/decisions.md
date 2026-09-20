@@ -141,8 +141,9 @@ Repair draft -- discard draft -> Accepted baseline
   not “impossible.” Constraint IDs and involved entities are translated into plain-language, navigable diagnostics, but
   they are not presented as a proof or a guaranteed recipe for repair.
 - **D030 — Proposal identity:** Every proposal is tied to the exact accepted timetable revision, successor-definition
-  revision, workspace-intent revision, and kernel result revision that produced it. Acceptance is refused if any of
-  those no longer match current state.
+  revision, workspace-intent revision, complete kernel result document, and proposed timetable revision that produced
+  it. The workspace does not invent a public whole-result revision absent from the kernel contract. Acceptance is
+  refused if any authoritative identity or the revalidated result no longer matches current state.
 - **D031 — Rerun replacement:** Starting a replan immediately invalidates the prior unaccepted proposal. A new feasible
   run replaces it; cancelling or failing the run returns to the draft with no proposal eligible for acceptance.
 

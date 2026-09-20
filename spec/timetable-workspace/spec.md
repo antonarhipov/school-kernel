@@ -100,8 +100,9 @@ hard pin versus ordinary movement is insufficient.
 - **Directly affected lesson:** Before solving, a lesson whose accepted assignment contradicts staged resource
   availability, or whose lesson definition is explicitly edited. In this increment only the availability condition can
   make a lesson directly affected. Pins alone do not.
-- **Proposal:** A complete verified `FEASIBLE` kernel result tied to the exact baseline, successor definition, workspace
-  intent, and result revisions that produced it. It is never current until accepted.
+- **Proposal:** A complete verified `FEASIBLE` kernel result tied to the exact baseline, successor definition,
+  workspace intent, complete kernel result document, and proposed timetable revision that produced it. It is never
+  current until accepted.
 - **Ripple effect:** A kernel-classified change not directly caused by staged intent but needed to produce a feasible
   timetable under the complete successor definition.
 
@@ -168,8 +169,9 @@ baseline. Every transition not shown above is refused without changing the accep
 An initial definition contains no `basedOnRevision`. Every repair definition is a complete successor whose
 `basedOnRevision` equals the accepted result's `inputRevision`, never its `timetableRevision`. A proposal records the
 exact accepted timetable revision or, for initial planning, the explicit absence of an accepted baseline; the complete
-definition revision; workspace-intent revision; and kernel result and timetable revisions. The workspace never guesses
-ancestry, rebases a draft silently, or mutates accepted assignment JSON.
+definition revision; workspace-intent revision; complete kernel result document; and proposed timetable revision. The
+workspace never invents a public whole-result revision, guesses ancestry, rebases a draft silently, or mutates accepted
+assignment JSON.
 
 ## UC-1 - Import school data into an empty workspace
 
@@ -470,7 +472,7 @@ ancestry, rebases a draft silently, or mutates accepted assignment JSON.
 - G3. The accepted bundle remains immutable through compilation, solving, cancellation, failure, and feasible proposal
   creation.
 - G4. Proposal identity contains the exact accepted timetable revision, successor-definition revision,
-  workspace-intent revision, kernel result revision, and proposed timetable revision.
+  workspace-intent revision, complete revalidated kernel result document, and proposed timetable revision.
 - G5. The workspace describes kernel priority as period stability before room-only stability before ordinary
   preferences. It never describes a time-limited proposal as optimal or globally minimal.
 - G6. Proposal details preserve the actual limit, termination reason, elapsed time, and authoritative kernel change
