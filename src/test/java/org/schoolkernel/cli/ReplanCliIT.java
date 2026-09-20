@@ -72,6 +72,7 @@ class ReplanCliIT {
     @DisplayName("UC-2 ext 2b: tampering, lineage mismatch, and school mismatch are rejected before solving")
     void rejectsTamperingAndLineageMismatch() throws Exception {
         Path current = produceCurrent();
+        byte[] originalCurrent = Files.readAllBytes(current);
         ObjectNode updated = updatedFromCurrent(current);
 
         ObjectNode tampered = (ObjectNode) JsonSupport.mapper().readTree(current);
@@ -120,6 +121,46 @@ class ReplanCliIT {
         assertFalse(duplicateResult.has("timetable"));
         assertFalse(duplicateResult.has("changeReport"));
         assertFalse(duplicateProcess.stderr().contains("Solving started"));
+
+        ObjectNode colliding = (ObjectNode) JsonSupport.mapper().readTree(current);
+        ArrayNode collidingAssignments = (ArrayNode) colliding.path("timetable").path("assignments");
+        ((ObjectNode) collidingAssignments.get(1)).put("periodId", "mon-1").put("roomId", "room-102");
+        colliding.put("timetableRevision", new RevisionService().timetableRevision(
+                colliding.path("schemaVersion").intValue(),
+                colliding.path("schoolId").stringValue(),
+                colliding.path("inputRevision").stringValue(),
+                collidingAssignments));
+        Path collisionOutput = temporaryDirectory.resolve("collision-result.json");
+        ProcessResult collisionProcess = run("replan", "--definition", write("updated-c.json", updated).toString(),
+                "--current", write("colliding-current.json", colliding).toString(),
+                "--output", collisionOutput.toString(), "--step-limit", "10");
+        assertEquals(2, collisionProcess.exitCode());
+        JsonNode collisionResult = JsonSupport.mapper().readTree(collisionOutput);
+        assertEquals("INVALID_INPUT", collisionResult.path("status").stringValue());
+        assertEquals(JsonSupport.mapper().readTree("""
+                [
+                  {
+                    "location": "/timetable/assignments",
+                    "entityIds": ["lesson-math-1", "lesson-science-1", "cohort-7a", "mon-1"],
+                    "message": "current timetable violates hard.cohort-period"
+                  },
+                  {
+                    "location": "/timetable/assignments",
+                    "entityIds": ["lesson-math-1", "lesson-science-1", "room-102", "mon-1"],
+                    "message": "current timetable violates hard.room-period"
+                  },
+                  {
+                    "location": "/timetable/assignments",
+                    "entityIds": ["lesson-math-1", "lesson-science-1", "teacher-alex", "mon-1"],
+                    "message": "current timetable violates hard.teacher-period"
+                  }
+                ]
+                """), collisionResult.path("validationReport").path("errors"));
+        assertEquals(3, collisionResult.path("validationReport").path("totalErrors").intValue());
+        assertFalse(collisionResult.has("timetable"));
+        assertFalse(collisionResult.has("changeReport"));
+        assertFalse(collisionProcess.stderr().contains("Solving started"));
+        assertArrayEquals(originalCurrent, Files.readAllBytes(current));
     }
 
     @Test

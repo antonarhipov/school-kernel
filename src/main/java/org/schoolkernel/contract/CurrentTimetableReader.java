@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 
 import com.networknt.schema.Schema;
 import com.networknt.schema.SchemaRegistry;
@@ -96,6 +99,12 @@ public final class CurrentTimetableReader {
             return new Outcome(null, ValidationReport.from(errors));
         }
         assignments.sort(Comparator.comparing(Assignment::lessonId));
+        addPeriodCollisions(assignments, errors, Assignment::teacherId, "hard.teacher-period");
+        addPeriodCollisions(assignments, errors, Assignment::cohortId, "hard.cohort-period");
+        addPeriodCollisions(assignments, errors, Assignment::roomId, "hard.room-period");
+        if (!errors.isEmpty()) {
+            return new Outcome(null, ValidationReport.from(errors));
+        }
         return new Outcome(new CurrentTimetable(
                 input.path("schemaVersion").intValue(),
                 input.path("schoolId").stringValue(),
@@ -104,4 +113,32 @@ public final class CurrentTimetableReader {
                 List.copyOf(assignments)),
                 ValidationReport.from(List.of()));
     }
+
+    private static void addPeriodCollisions(
+            List<Assignment> assignments,
+            List<ValidationError> errors,
+            Function<Assignment, String> resourceId,
+            String constraintId) {
+        Map<ResourcePeriod, List<Assignment>> byResourcePeriod = new TreeMap<>(
+                Comparator.comparing(ResourcePeriod::resourceId).thenComparing(ResourcePeriod::periodId));
+        assignments.forEach(assignment -> byResourcePeriod
+                .computeIfAbsent(
+                        new ResourcePeriod(resourceId.apply(assignment), assignment.periodId()),
+                        ignored -> new ArrayList<>())
+                .add(assignment));
+        byResourcePeriod.forEach((key, values) -> {
+            for (int left = 0; left < values.size(); left++) {
+                for (int right = left + 1; right < values.size(); right++) {
+                    errors.add(new ValidationError(
+                            "/timetable/assignments",
+                            List.of(
+                                    values.get(left).lessonId(), values.get(right).lessonId(),
+                                    key.resourceId(), key.periodId()),
+                            "current timetable violates " + constraintId));
+                }
+            }
+        });
+    }
+
+    private record ResourcePeriod(String resourceId, String periodId) {}
 }
