@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "schoolId": "no-room-school",
+  "subjects": [{ "id": "science", "displayName": "Science" }],
+  "teachers": [{
+    "id": "teacher-1",
+    "displayName": "Teacher One",
+    "qualifiedSubjectIds": ["science"]
+  }],
+  "cohorts": [{ "id": "cohort-1", "displayName": "Cohort One", "size": 30 }],
+  "rooms": [{
+    "id": "room-1",
+    "displayName": "Small room",
+    "capacity": 10,
+    "capabilityIds": []
+  }],
+  "periods": [{
+    "id": "mon-1",
+    "displayName": "Monday 1",
+    "weekday": "MONDAY",
+    "order": 1
+  }],
+  "lessons": [{
+    "id": "lesson-1",
+    "displayName": "Science lesson",
+    "subjectId": "science",
+    "cohortId": "cohort-1",
+    "teacherId": "teacher-1"
+  }]
+}

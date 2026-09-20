@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ -f "$SCRIPT_DIR/school-kernel.jar" ]; then
+  JAR_PATH="$SCRIPT_DIR/school-kernel.jar"
+else
+  JAR_PATH="$SCRIPT_DIR/target/school-kernel.jar"
+fi
+
+exec java -jar "$JAR_PATH" "$@"

@@ -1,0 +1,203 @@
+package org.schoolkernel.contract;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+
+import org.schoolkernel.domain.SchoolDefinition;
+import org.schoolkernel.domain.ValidationReport;
+import org.schoolkernel.solver.ConstraintDiagnostic;
+import org.schoolkernel.solver.SchoolSchedule;
+import org.schoolkernel.solver.ScheduleEvaluator;
+import org.schoolkernel.solver.SolverAdapter.ExecutionControls;
+
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
+
+public final class ResultFactory {
+    public static final String KERNEL_VERSION = "1.0.0-SNAPSHOT";
+
+    private final RevisionService revisions = new RevisionService();
+
+    public ObjectNode invalidInput(
+            String correlationId,
+            long elapsedMillis,
+            ValidationReport report,
+            Integer catalogVersion,
+            String inputRevision,
+            Map<String, Long> effectiveWeights) {
+        ObjectNode result = envelope("INVALID_INPUT", correlationId, elapsedMillis);
+        addDerivableMetadata(result, catalogVersion, inputRevision, effectiveWeights);
+        ObjectNode validation = result.putObject("validationReport");
+        validation.put("totalErrors", report.totalErrors());
+        validation.put("truncated", report.truncated());
+        ArrayNode errors = validation.putArray("errors");
+        report.errors().forEach(error -> {
+            ObjectNode detail = errors.addObject();
+            detail.put("location", error.location());
+            ArrayNode ids = detail.putArray("entityIds");
+            error.entityIds().forEach(ids::add);
+            detail.put("message", error.message());
+        });
+        return result;
+    }
+
+    public ObjectNode noFeasibleSolution(
+            String correlationId,
+            long elapsedMillis,
+            SchoolDefinition definition,
+            String inputRevision,
+            ExecutionControls controls,
+            String terminationReason,
+            List<ConstraintDiagnostic> diagnostics) {
+        ObjectNode result = envelope("NO_FEASIBLE_SOLUTION_FOUND", correlationId, elapsedMillis);
+        addDerivableMetadata(result, definition.catalogVersion(), inputRevision, definition.softWeights());
+        addExecutionMetadata(result, controls, terminationReason);
+        ObjectNode search = result.putObject("searchDiagnostics");
+        long totalMatches = diagnostics.stream().mapToLong(ConstraintDiagnostic::matchCount).sum();
+        search.put("totalMatches", totalMatches);
+        long availableExamples = diagnostics.stream().mapToLong(diagnostic -> diagnostic.examples().size()).sum();
+        search.put("truncated", availableExamples > 1_000 || totalMatches > availableExamples);
+        ArrayNode constraints = search.putArray("constraints");
+        int remainingExamples = 1_000;
+        diagnostics.forEach(diagnostic -> {
+            ObjectNode constraint = constraints.addObject();
+            constraint.put("constraintId", diagnostic.constraintId());
+            constraint.put("matchCount", diagnostic.matchCount());
+            constraint.putArray("examples");
+        });
+        for (int index = 0; index < diagnostics.size() && remainingExamples > 0; index++) {
+            ArrayNode examples = (ArrayNode) constraints.get(index).path("examples");
+            for (List<String> exampleIds : diagnostics.get(index).examples()) {
+                if (remainingExamples-- == 0) {
+                    break;
+                }
+                ArrayNode example = examples.addArray();
+                exampleIds.forEach(example::add);
+            }
+        }
+        return result;
+    }
+
+    public ObjectNode feasible(
+            String correlationId,
+            long elapsedMillis,
+            SchoolDefinition definition,
+            String inputRevision,
+            ExecutionControls controls,
+            String terminationReason,
+            SchoolSchedule schedule,
+            ScheduleEvaluator.Evaluation evaluation) {
+        ObjectNode result = envelope("FEASIBLE", correlationId, elapsedMillis);
+        addDerivableMetadata(result, definition.catalogVersion(), inputRevision, definition.softWeights());
+        addExecutionMetadata(result, controls, terminationReason);
+        ArrayNode assignments = result.putObject("timetable").putArray("assignments");
+        schedule.getLessons().stream()
+                .sorted(java.util.Comparator.comparing(org.schoolkernel.solver.PlanningLesson::getId))
+                .forEach(lesson -> {
+                    ObjectNode assignment = assignments.addObject();
+                    assignment.put("lessonId", lesson.getId());
+                    assignment.put("subjectId", lesson.getSubjectId());
+                    assignment.put("cohortId", lesson.getCohortId());
+                    assignment.put("teacherId", lesson.getTeacherId());
+                    assignment.put("periodId", lesson.getPeriod().id());
+                    assignment.put("roomId", lesson.getRoom().id());
+                });
+        result.put("timetableRevision",
+                revisions.timetableRevision(1, definition.schoolId(), inputRevision, assignments));
+        addProductScore(result, definition.softWeights(), evaluation);
+        return result;
+    }
+
+    public ObjectNode emptyFeasible(
+            String correlationId,
+            long elapsedMillis,
+            SchoolDefinition definition,
+            String inputRevision,
+            ExecutionControls controls) {
+        var emptySchedule = new SchoolSchedule(List.of(), List.of(), List.of(),
+                ai.timefold.solver.core.api.domain.solution.ConstraintWeightOverrides.none());
+        var evaluation = new ScheduleEvaluator.Evaluation(
+                true,
+                true,
+                SchoolDefinition.HARD_CONSTRAINT_IDS.stream()
+                        .collect(java.util.stream.Collectors.toMap(id -> id, ignored -> 0L)),
+                SchoolDefinition.SOFT_CONSTRAINT_IDS.stream()
+                        .collect(java.util.stream.Collectors.toMap(id -> id, ignored -> 0L)),
+                0);
+        return feasible(correlationId, elapsedMillis, definition, inputRevision, controls,
+                "EMPTY_PROBLEM", emptySchedule, evaluation);
+    }
+
+    public ObjectNode internalError(String correlationId, long elapsedMillis) {
+        ObjectNode result = envelope("INTERNAL_ERROR", correlationId, elapsedMillis);
+        result.put("safeMessage", "An unexpected internal error occurred.");
+        return result;
+    }
+
+    private static ObjectNode envelope(String status, String correlationId, long elapsedMillis) {
+        ObjectNode result = JsonSupport.mapper().createObjectNode();
+        result.put("schemaVersion", 1);
+        result.put("status", status);
+        result.put("kernelVersion", KERNEL_VERSION);
+        result.put("correlationId", correlationId);
+        result.put("elapsedTimeMs", elapsedMillis);
+        return result;
+    }
+
+    private static void addDerivableMetadata(
+            ObjectNode result,
+            Integer catalogVersion,
+            String inputRevision,
+            Map<String, Long> effectiveWeights) {
+        if (catalogVersion != null) {
+            result.put("catalogVersion", catalogVersion);
+        }
+        if (inputRevision != null) {
+            result.put("inputRevision", inputRevision);
+        }
+        if (effectiveWeights != null) {
+            ObjectNode weights = result.putObject("effectiveSoftWeights");
+            SchoolDefinition.SOFT_CONSTRAINT_IDS.forEach(id -> weights.put(id, effectiveWeights.get(id)));
+        }
+    }
+
+    private static void addExecutionMetadata(
+            ObjectNode result,
+            ExecutionControls controls,
+            String terminationReason) {
+        result.put("seed", controls.seed());
+        ObjectNode limit = result.putObject("limit");
+        if (controls.timeLimit() != null) {
+            limit.put("type", "TIME");
+            limit.put("duration", controls.timeLimit().toString());
+        } else {
+            limit.put("type", "STEP");
+            limit.put("steps", controls.stepLimit());
+        }
+        if (terminationReason != null) {
+            result.put("terminationReason", terminationReason);
+        }
+    }
+
+    private static void addProductScore(
+            ObjectNode result,
+            Map<String, Long> weights,
+            ScheduleEvaluator.Evaluation evaluation) {
+        ObjectNode score = result.putObject("score");
+        score.put("periodMoves", 0);
+        score.put("roomOnlyMoves", 0);
+        score.put("ordinaryPreferencePenalty", evaluation.ordinaryPreferencePenalty());
+        ArrayNode breakdown = score.putArray("constraintBreakdown");
+        SchoolDefinition.SOFT_CONSTRAINT_IDS.forEach(id -> {
+            ObjectNode item = breakdown.addObject();
+            long weight = weights.get(id);
+            long matchCount = evaluation.softMatchCounts().get(id);
+            item.put("constraintId", id);
+            item.put("category", "ORDINARY_PREFERENCE");
+            item.put("effectiveWeight", weight);
+            item.put("matchCount", matchCount);
+            item.put("aggregatePenalty", Math.multiplyExact(weight, matchCount));
+        });
+    }
+}

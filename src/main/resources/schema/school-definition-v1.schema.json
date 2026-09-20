@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://school-kernel.invalid/schema/school-definition-v1.schema.json",
+  "title": "School Kernel school definition v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "catalogVersion", "schoolId", "subjects", "teachers",
+    "cohorts", "rooms", "periods", "lessons"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "catalogVersion": { "const": 1 },
+    "schoolId": { "$ref": "#/$defs/id" },
+    "basedOnRevision": { "$ref": "#/$defs/revision" },
+    "subjects": { "type": "array", "items": { "$ref": "#/$defs/subject" } },
+    "teachers": { "type": "array", "items": { "$ref": "#/$defs/teacher" } },
+    "cohorts": { "type": "array", "items": { "$ref": "#/$defs/cohort" } },
+    "rooms": { "type": "array", "items": { "$ref": "#/$defs/room" } },
+    "periods": { "type": "array", "items": { "$ref": "#/$defs/period" } },
+    "lessons": { "type": "array", "items": { "$ref": "#/$defs/lesson" } },
+    "softConstraintOverrides": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/softConstraintOverride" }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/id" },
+      "uniqueItems": true
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "$ref": "#/$defs/displayName" }
+      }
+    },
+    "teacher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "qualifiedSubjectIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "$ref": "#/$defs/displayName" },
+        "qualifiedSubjectIds": { "$ref": "#/$defs/idArray" },
+        "availablePeriodIds": { "$ref": "#/$defs/idArray" },
+        "undesirablePeriodIds": { "$ref": "#/$defs/idArray" }
+      }
+    },
+    "cohort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "size"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "$ref": "#/$defs/displayName" },
+        "size": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+        "availablePeriodIds": { "$ref": "#/$defs/idArray" },
+        "undesirablePeriodIds": { "$ref": "#/$defs/idArray" }
+      }
+    },
+    "room": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "capacity", "capabilityIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "$ref": "#/$defs/displayName" },
+        "capacity": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+        "capabilityIds": { "$ref": "#/$defs/idArray" },
+        "availablePeriodIds": { "$ref": "#/$defs/idArray" }
+      }
+    },
+    "period": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "weekday", "order"],
+      "dependentRequired": {
+        "startTime": ["endTime"],
+        "endTime": ["startTime"]
+      },
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "$ref": "#/$defs/displayName" },
+        "weekday": {
+          "enum": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+        },
+        "order": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+        "startTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" },
+        "endTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" }
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "displayName", "subjectId", "cohortId", "teacherId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "displayName": { "$ref": "#/$defs/displayName" },
+        "subjectId": { "$ref": "#/$defs/id" },
+        "cohortId": { "$ref": "#/$defs/id" },
+        "teacherId": { "$ref": "#/$defs/id" },
+        "seriesId": { "$ref": "#/$defs/id" },
+        "requiredRoomCapabilityIds": { "$ref": "#/$defs/idArray" },
+        "preferredRoomIds": { "$ref": "#/$defs/idArray" },
+        "undesirablePeriodIds": { "$ref": "#/$defs/idArray" },
+        "periodLock": { "$ref": "#/$defs/id" },
+        "roomLock": { "$ref": "#/$defs/id" }
+      }
+    },
+    "softConstraintOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constraintId", "weight"],
+      "properties": {
+        "constraintId": {
+          "enum": [
+            "soft.teacher-gap", "soft.series-same-day",
+            "soft.undesirable-period", "soft.non-preferred-room"
+          ]
+        },
+        "weight": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+      }
+    }
+  }
+}

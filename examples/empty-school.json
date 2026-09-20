@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "schoolId": "empty-school",
+  "subjects": [],
+  "teachers": [],
+  "cohorts": [],
+  "rooms": [],
+  "periods": [],
+  "lessons": []
+}

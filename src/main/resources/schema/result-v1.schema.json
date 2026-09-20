@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://school-kernel.invalid/schema/result-v1.schema.json",
+  "title": "School Kernel result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "kernelVersion", "correlationId", "elapsedTimeMs"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": {
+      "enum": ["FEASIBLE", "NO_FEASIBLE_SOLUTION_FOUND", "INVALID_INPUT", "INTERNAL_ERROR"]
+    },
+    "kernelVersion": { "type": "string", "minLength": 1 },
+    "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "elapsedTimeMs": { "type": "integer", "minimum": 0 },
+    "catalogVersion": { "const": 1 },
+    "inputRevision": { "$ref": "#/$defs/revision" },
+    "effectiveSoftWeights": { "$ref": "#/$defs/effectiveSoftWeights" },
+    "seed": { "type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807 },
+    "limit": { "$ref": "#/$defs/limit" },
+    "terminationReason": { "enum": ["TIME_LIMIT", "STEP_LIMIT", "SEARCH_EXHAUSTED", "EMPTY_PROBLEM"] },
+    "timetable": { "$ref": "#/$defs/timetable" },
+    "timetableRevision": { "$ref": "#/$defs/revision" },
+    "score": { "$ref": "#/$defs/score" },
+    "validationReport": { "$ref": "#/$defs/validationReport" },
+    "searchDiagnostics": { "$ref": "#/$defs/searchDiagnostics" },
+    "safeMessage": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "FEASIBLE" } } },
+      "then": {
+        "required": [
+          "catalogVersion", "inputRevision", "effectiveSoftWeights", "seed", "limit",
+          "terminationReason", "timetable", "timetableRevision", "score"
+        ],
+        "not": { "anyOf": [
+          { "required": ["validationReport"] },
+          { "required": ["searchDiagnostics"] },
+          { "required": ["safeMessage"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "INVALID_INPUT" } } },
+      "then": {
+        "required": ["validationReport"],
+        "not": { "anyOf": [
+          { "required": ["timetable"] },
+          { "required": ["timetableRevision"] },
+          { "required": ["score"] },
+          { "required": ["searchDiagnostics"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "NO_FEASIBLE_SOLUTION_FOUND" } } },
+      "then": {
+        "required": [
+          "catalogVersion", "inputRevision", "effectiveSoftWeights", "seed", "limit", "searchDiagnostics"
+        ],
+        "not": { "anyOf": [
+          { "required": ["timetable"] },
+          { "required": ["timetableRevision"] },
+          { "required": ["score"] },
+          { "required": ["validationReport"] }
+        ] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "INTERNAL_ERROR" } } },
+      "then": {
+        "required": ["safeMessage"],
+        "not": { "anyOf": [
+          { "required": ["timetable"] },
+          { "required": ["timetableRevision"] },
+          { "required": ["score"] },
+          { "required": ["validationReport"] },
+          { "required": ["searchDiagnostics"] }
+        ] }
+      }
+    }
+  ],
+  "$defs": {
+    "revision": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "effectiveSoftWeights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "soft.teacher-gap", "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"
+      ],
+      "properties": {
+        "soft.teacher-gap": { "$ref": "#/$defs/weight" },
+        "soft.series-same-day": { "$ref": "#/$defs/weight" },
+        "soft.undesirable-period": { "$ref": "#/$defs/weight" },
+        "soft.non-preferred-room": { "$ref": "#/$defs/weight" }
+      }
+    },
+    "weight": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+    "limit": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "duration"],
+          "properties": {
+            "type": { "const": "TIME" },
+            "duration": { "type": "string", "pattern": "^PT" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "steps"],
+          "properties": {
+            "type": { "const": "STEP" },
+            "steps": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ]
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lessonId", "subjectId", "cohortId", "teacherId", "periodId", "roomId"],
+      "properties": {
+        "lessonId": { "$ref": "#/$defs/id" },
+        "subjectId": { "$ref": "#/$defs/id" },
+        "cohortId": { "$ref": "#/$defs/id" },
+        "teacherId": { "$ref": "#/$defs/id" },
+        "periodId": { "$ref": "#/$defs/id" },
+        "roomId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "timetable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assignments"],
+      "properties": {
+        "assignments": { "type": "array", "items": { "$ref": "#/$defs/assignment" } }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["periodMoves", "roomOnlyMoves", "ordinaryPreferencePenalty", "constraintBreakdown"],
+      "properties": {
+        "periodMoves": { "type": "integer", "minimum": 0 },
+        "roomOnlyMoves": { "type": "integer", "minimum": 0 },
+        "ordinaryPreferencePenalty": { "type": "integer", "minimum": 0 },
+        "constraintBreakdown": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/breakdown" }
+        }
+      }
+    },
+    "breakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constraintId", "category", "effectiveWeight", "matchCount", "aggregatePenalty"],
+      "properties": {
+        "constraintId": { "type": "string" },
+        "category": { "const": "ORDINARY_PREFERENCE" },
+        "effectiveWeight": { "$ref": "#/$defs/weight" },
+        "matchCount": { "type": "integer", "minimum": 0 },
+        "aggregatePenalty": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "validationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalErrors", "truncated", "errors"],
+      "properties": {
+        "totalErrors": { "type": "integer", "minimum": 1 },
+        "truncated": { "type": "boolean" },
+        "errors": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/validationError" } }
+      }
+    },
+    "validationError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location", "entityIds", "message"],
+      "properties": {
+        "location": { "type": "string" },
+        "entityIds": { "type": "array", "items": { "type": "string" } },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    },
+    "searchDiagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalMatches", "truncated", "constraints"],
+      "properties": {
+        "totalMatches": { "type": "integer", "minimum": 1 },
+        "truncated": { "type": "boolean" },
+        "constraints": { "type": "array", "items": { "$ref": "#/$defs/constraintDiagnostic" } }
+      }
+    },
+    "constraintDiagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constraintId", "matchCount", "examples"],
+      "properties": {
+        "constraintId": { "type": "string", "pattern": "^hard\\." },
+        "matchCount": { "type": "integer", "minimum": 1 },
+        "examples": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

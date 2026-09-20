@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "schoolId": "test-school",
+  "subjects": [{ "id": "math", "displayName": "Mathematics" }],
+  "teachers": [{
+    "id": "teacher-1",
+    "displayName": "Teacher One",
+    "qualifiedSubjectIds": ["math"]
+  }],
+  "cohorts": [{ "id": "cohort-1", "displayName": "Cohort One", "size": 20 }],
+  "rooms": [{
+    "id": "room-1",
+    "displayName": "Room One",
+    "capacity": 25,
+    "capabilityIds": []
+  }],
+  "periods": [{
+    "id": "mon-1",
+    "displayName": "Monday 1",
+    "weekday": "MONDAY",
+    "order": 1
+  }],
+  "lessons": [{
+    "id": "lesson-1",
+    "displayName": "Math lesson",
+    "subjectId": "math",
+    "cohortId": "cohort-1",
+    "teacherId": "teacher-1"
+  }]
+}
