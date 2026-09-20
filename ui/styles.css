@@ -261,6 +261,10 @@ h1 {
     outline: none;
 }
 
+.mobile-timetable {
+    display: none;
+}
+
 table {
     width: 100%;
     min-width: 910px;
@@ -432,19 +436,30 @@ td:empty {
 
 @media (max-width: 700px) {
     .topbar {
+        height: 60px;
         padding-inline: 16px;
     }
 
     main {
-        padding: 34px 14px 28px;
+        padding: 26px 12px 28px;
     }
 
     .intro {
+        margin-bottom: 20px;
         align-items: flex-start;
         flex-direction: column;
+        gap: 14px;
+    }
+
+    .school-name {
+        max-width: calc(100vw - 24px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .toolbar {
+        padding: 12px;
         align-items: stretch;
         flex-direction: column;
         gap: 12px;
@@ -460,6 +475,193 @@ td:empty {
 
     .entity-picker select {
         min-width: min(220px, 62vw);
+    }
+
+    .timetable-wrap {
+        display: none;
+    }
+
+    .mobile-timetable {
+        display: block;
+    }
+
+    .mobile-days {
+        padding: 0 8px;
+        display: grid;
+        grid-auto-columns: minmax(58px, 1fr);
+        grid-auto-flow: column;
+        overflow-x: auto;
+        border-bottom: 1px solid var(--line);
+        background: #fafbfa;
+        scrollbar-width: none;
+    }
+
+    .mobile-days::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mobile-days button {
+        min-width: 58px;
+        min-height: 64px;
+        padding: 9px 6px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 5px;
+        border: 0;
+        border-bottom: 3px solid transparent;
+        color: #77827b;
+        background: transparent;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .mobile-days button[aria-selected="true"] {
+        border-bottom-color: var(--accent);
+        color: var(--accent);
+        background: linear-gradient(to top, rgba(22, 118, 71, 0.06), transparent 75%);
+    }
+
+    .mobile-days button:focus-visible,
+    .mobile-schedule:focus-visible {
+        outline: 3px solid rgba(22, 118, 71, 0.18);
+        outline-offset: -3px;
+    }
+
+    .mobile-day-name {
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .mobile-day-count {
+        min-width: 20px;
+        height: 20px;
+        padding-inline: 5px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        color: #68746c;
+        background: #e9eeeb;
+        font-size: 10px;
+    }
+
+    .mobile-days button[aria-selected="true"] .mobile-day-count {
+        color: white;
+        background: var(--accent);
+    }
+
+    .mobile-schedule {
+        min-height: 260px;
+        padding: 18px 14px 20px;
+        background: #f7f9f7;
+        outline: none;
+    }
+
+    .mobile-schedule-heading {
+        margin-bottom: 13px;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .mobile-schedule-heading h2 {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: -0.02em;
+    }
+
+    .mobile-schedule-heading span {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 650;
+    }
+
+    .mobile-lesson-list {
+        display: grid;
+        gap: 9px;
+    }
+
+    .mobile-lesson {
+        min-height: 82px;
+        padding: 13px 14px 13px 11px;
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr);
+        align-items: center;
+        gap: 13px;
+        border: 1px solid #e3e8e4;
+        border-left: 4px solid var(--lesson-color);
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 3px 10px rgba(30, 52, 41, 0.04);
+    }
+
+    .mobile-period {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 9px;
+        color: #647168;
+        background: #f0f3f1;
+        line-height: 1;
+    }
+
+    .mobile-period span {
+        font-size: 9px;
+        font-weight: 650;
+        text-transform: uppercase;
+    }
+
+    .mobile-period strong {
+        margin-top: 4px;
+        color: var(--ink);
+        font-size: 18px;
+    }
+
+    .mobile-lesson-content {
+        min-width: 0;
+    }
+
+    .mobile-lesson-content h3 {
+        margin: 0;
+        overflow: hidden;
+        color: #24342b;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 14px;
+        line-height: 1.3;
+    }
+
+    .mobile-lesson-details {
+        margin-top: 7px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 12px;
+        color: #6b776f;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .mobile-lesson-details span + span {
+        position: relative;
+    }
+
+    .mobile-lesson-details span + span::before {
+        position: absolute;
+        left: -7px;
+        color: #b6beb9;
+        content: "·";
+    }
+
+    .mobile-empty {
+        margin: 48px 0;
+        color: #7a857e;
+        text-align: center;
+        font-size: 13px;
     }
 
     .drop-hint {

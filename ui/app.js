@@ -40,6 +40,9 @@ const elements = {
     message: document.querySelector("#message"),
     timetableWrap: document.querySelector("#timetable-wrap"),
     timetable: document.querySelector("#timetable"),
+    mobileTimetable: document.querySelector("#mobile-timetable"),
+    mobileDays: document.querySelector("#mobile-days"),
+    mobileSchedule: document.querySelector("#mobile-schedule"),
     dropOverlay: document.querySelector("#drop-overlay")
 };
 
@@ -47,7 +50,8 @@ const state = {
     result: null,
     assignments: [],
     view: "cohortId",
-    selected: null
+    selected: null,
+    mobileDay: null
 };
 
 function humanize(value) {
@@ -93,11 +97,13 @@ function showMessage(message) {
     elements.message.textContent = message;
     elements.message.hidden = false;
     elements.timetableWrap.hidden = true;
+    elements.mobileTimetable.hidden = true;
 }
 
 function clearMessage() {
     elements.message.hidden = true;
     elements.timetableWrap.hidden = false;
+    elements.mobileTimetable.hidden = false;
 }
 
 function setResult(result, sourceName) {
@@ -115,6 +121,7 @@ function setResult(result, sourceName) {
 
 function setView(view) {
     state.view = view;
+    state.mobileDay = null;
     for (const button of elements.switcher.querySelectorAll("button")) {
         button.setAttribute("aria-pressed", String(button.dataset.view === view));
     }
@@ -166,6 +173,97 @@ function lessonCard(assignment) {
 
     article.append(subject, details);
     return article;
+}
+
+function mobileLessonCard(assignment, period) {
+    const article = document.createElement("article");
+    article.className = "mobile-lesson";
+    article.style.setProperty("--lesson-color", subjectColor(assignment.subjectId));
+
+    const periodBadge = document.createElement("div");
+    periodBadge.className = "mobile-period";
+    const periodLabel = document.createElement("span");
+    periodLabel.textContent = "Lesson";
+    const periodNumber = document.createElement("strong");
+    periodNumber.textContent = period.slot;
+    periodBadge.append(periodLabel, periodNumber);
+
+    const content = document.createElement("div");
+    content.className = "mobile-lesson-content";
+    const subject = document.createElement("h3");
+    subject.textContent = humanize(assignment.subjectId);
+    const details = document.createElement("div");
+    details.className = "mobile-lesson-details";
+    const detailKeys = ["cohortId", "teacherId", "roomId"].filter(key => key !== state.view);
+    for (const key of detailKeys) {
+        const detail = document.createElement("span");
+        detail.textContent = displayEntity(assignment[key], key);
+        details.append(detail);
+    }
+    content.append(subject, details);
+    article.append(periodBadge, content);
+    return article;
+}
+
+function renderMobileTimetable(parsed, presentDays) {
+    elements.mobileDays.replaceChildren();
+    elements.mobileSchedule.replaceChildren();
+
+    const lessonDays = new Set(parsed.map(item => item.period.day));
+    if (!presentDays.includes(state.mobileDay)) {
+        state.mobileDay = presentDays.find(day => lessonDays.has(day)) ?? presentDays[0] ?? null;
+    }
+
+    for (const day of presentDays) {
+        const count = parsed.filter(item => item.period.day === day).length;
+        const button = document.createElement("button");
+        button.type = "button";
+        button.id = `mobile-day-${day}`;
+        button.setAttribute("role", "tab");
+        button.dataset.day = day;
+        button.setAttribute("aria-selected", String(day === state.mobileDay));
+        button.setAttribute("aria-controls", "mobile-schedule");
+        button.setAttribute("aria-label", `${DAY_NAMES[day] || humanize(day)}, ${count} ${count === 1 ? "lesson" : "lessons"}`);
+        button.tabIndex = day === state.mobileDay ? 0 : -1;
+
+        const name = document.createElement("span");
+        name.className = "mobile-day-name";
+        name.textContent = (DAY_NAMES[day] || humanize(day)).slice(0, 3);
+        const badge = document.createElement("span");
+        badge.className = "mobile-day-count";
+        badge.textContent = count;
+        button.append(name, badge);
+        elements.mobileDays.append(button);
+    }
+    elements.mobileSchedule.setAttribute("aria-labelledby", `mobile-day-${state.mobileDay}`);
+
+    const heading = document.createElement("div");
+    heading.className = "mobile-schedule-heading";
+    const title = document.createElement("h2");
+    title.textContent = DAY_NAMES[state.mobileDay] || humanize(state.mobileDay);
+    const dayAssignments = parsed
+        .filter(item => item.period.day === state.mobileDay)
+        .sort((left, right) => left.period.numericSlot - right.period.numericSlot
+            || left.assignment.lessonId.localeCompare(right.assignment.lessonId));
+    const summary = document.createElement("span");
+    summary.textContent = `${dayAssignments.length} ${dayAssignments.length === 1 ? "lesson" : "lessons"}`;
+    heading.append(title, summary);
+    elements.mobileSchedule.append(heading);
+
+    if (dayAssignments.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "mobile-empty";
+        empty.textContent = "No lessons scheduled.";
+        elements.mobileSchedule.append(empty);
+        return;
+    }
+
+    const list = document.createElement("div");
+    list.className = "mobile-lesson-list";
+    for (const item of dayAssignments) {
+        list.append(mobileLessonCard(item.assignment, item.period));
+    }
+    elements.mobileSchedule.append(list);
 }
 
 function renderTimetable() {
@@ -239,6 +337,7 @@ function renderTimetable() {
     }
 
     elements.timetable.append(thead, tbody);
+    renderMobileTimetable(parsed, presentDays);
 }
 
 async function loadFile(file) {
@@ -260,7 +359,32 @@ elements.switcher.addEventListener("click", event => {
 
 elements.entitySelect.addEventListener("change", event => {
     state.selected = event.target.value;
+    state.mobileDay = null;
     renderTimetable();
+});
+
+elements.mobileDays.addEventListener("click", event => {
+    const button = event.target.closest("button[data-day]");
+    if (!button) return;
+    state.mobileDay = button.dataset.day;
+    renderTimetable();
+    elements.mobileDays.querySelector("button[aria-selected='true']")?.focus();
+});
+
+elements.mobileDays.addEventListener("keydown", event => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const buttons = [...elements.mobileDays.querySelectorAll("button[data-day]")];
+    const currentIndex = buttons.indexOf(event.target.closest("button[data-day]"));
+    if (currentIndex < 0) return;
+    event.preventDefault();
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % buttons.length;
+    if (event.key === "Home") nextIndex = 0;
+    if (event.key === "End") nextIndex = buttons.length - 1;
+    state.mobileDay = buttons[nextIndex].dataset.day;
+    renderTimetable();
+    elements.mobileDays.querySelector("button[aria-selected='true']")?.focus();
 });
 
 elements.fileInput.addEventListener("change", event => loadFile(event.target.files[0]));

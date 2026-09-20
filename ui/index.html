@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="A lightweight viewer for School Kernel timetable results.">
     <title>School Kernel · Timetable</title>
     <link rel="icon" href="data:,">
@@ -58,6 +58,10 @@
         <div id="message" class="message" role="status" hidden></div>
         <div id="timetable-wrap" class="timetable-wrap" tabindex="0" aria-label="Scrollable weekly timetable">
             <table id="timetable"></table>
+        </div>
+        <div id="mobile-timetable" class="mobile-timetable">
+            <div id="mobile-days" class="mobile-days" role="tablist" aria-label="Choose a day"></div>
+            <div id="mobile-schedule" class="mobile-schedule" role="tabpanel" tabindex="0"></div>
         </div>
     </section>
 
