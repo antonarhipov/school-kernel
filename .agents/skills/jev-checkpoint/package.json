@@ -1,0 +1,21 @@
+{
+  "name": "school-kernel-jev-checkpoint",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "tsc --noEmit false --outDir .build",
+    "jev-checkpoint": "npm run --silent build && node .build/scripts/jev-checkpoint.js"
+  },
+  "dependencies": {
+    "@typesafe-ai/sdk": "0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
