@@ -8,6 +8,8 @@ import java.util.concurrent.Callable;
 
 import org.schoolkernel.application.PlanRequest;
 import org.schoolkernel.application.PlanService;
+import org.schoolkernel.application.ReplanRequest;
+import org.schoolkernel.application.ReplanService;
 import org.schoolkernel.solver.SolverAdapter.ExecutionControls;
 
 import picocli.CommandLine;
@@ -39,7 +41,7 @@ public final class SchoolKernelMain {
             name = "school-kernel",
             mixinStandardHelpOptions = true,
             description = "Stateless school timetable planning kernel.",
-            subcommands = PlanCommand.class)
+            subcommands = {PlanCommand.class, ReplanCommand.class})
     static final class RootCommand implements Callable<Integer> {
         @Spec
         private CommandSpec spec;
@@ -141,5 +143,64 @@ public final class SchoolKernelMain {
         } catch (DateTimeParseException | NumberFormatException | ArithmeticException exception) {
             throw new IllegalArgumentException("--time-limit must be a positive duration such as 30s or PT30S");
         }
+    }
+
+    @Command(name = "replan", mixinStandardHelpOptions = true, description = "Replan a current timetable.")
+    static final class ReplanCommand implements Callable<Integer> {
+        @Option(names = "--definition", required = true, paramLabel = "PATH")
+        private Path definition;
+
+        @Option(names = "--current", required = true, paramLabel = "PATH")
+        private Path current;
+
+        @Option(names = "--output", required = true, paramLabel = "PATH")
+        private Path output;
+
+        @ArgGroup(exclusive = true, multiplicity = "0..1")
+        private LimitGroup limit;
+
+        @Option(names = "--seed", defaultValue = "0")
+        private long seed;
+
+        @Option(names = "--correlation-id")
+        private String correlationId;
+
+        @Option(names = "--force")
+        private boolean force;
+
+        @Option(names = "--debug")
+        private boolean debug;
+
+        @Spec
+        private CommandSpec spec;
+
+        @Override
+        public Integer call() {
+            PrintWriter errorWriter = spec.commandLine().getErr();
+            if (correlationId != null && (correlationId.isBlank() || correlationId.length() > 128)) {
+                errorWriter.println("--correlation-id must be nonblank and at most 128 characters");
+                return 64;
+            }
+            ExecutionControls controls;
+            try {
+                controls = controls(limit, seed);
+            } catch (IllegalArgumentException exception) {
+                errorWriter.println(exception.getMessage());
+                return 64;
+            }
+            return new ReplanService().replan(
+                    new ReplanRequest(definition, current, output, controls, correlationId, force, debug),
+                    errorWriter);
+        }
+    }
+
+    private static ExecutionControls controls(LimitGroup limit, long seed) {
+        if (limit == null) {
+            return new ExecutionControls(Duration.ofSeconds(30), null, seed);
+        }
+        if (limit.stepLimit != null) {
+            return new ExecutionControls(null, limit.stepLimit, seed);
+        }
+        return new ExecutionControls(parseDuration(limit.timeLimit), null, seed);
     }
 }

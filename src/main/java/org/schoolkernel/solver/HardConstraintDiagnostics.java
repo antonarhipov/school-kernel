@@ -8,10 +8,10 @@ import java.util.Map;
 
 import org.schoolkernel.domain.SchoolDefinition;
 
-final class HardConstraintDiagnostics {
+public final class HardConstraintDiagnostics {
     private HardConstraintDiagnostics() {}
 
-    static List<ConstraintDiagnostic> from(
+    public static List<ConstraintDiagnostic> from(
             SchoolSchedule schedule,
             ScheduleEvaluator.Evaluation evaluation) {
         var examples = new LinkedHashMap<String, List<List<String>>>();

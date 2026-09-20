@@ -92,6 +92,7 @@ class TargetScaleBenchmark {
                 1,
                 1,
                 "benchmark-school",
+                null,
                 subjects,
                 teachers,
                 cohorts,

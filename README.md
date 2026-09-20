@@ -17,6 +17,12 @@ artifact:
   --definition examples/initial-school.json \
   --output /tmp/timetable.json \
   --step-limit 100
+
+./school-kernel replan \
+  --definition examples/updated-school.json \
+  --current /tmp/timetable.json \
+  --output /tmp/revised-timetable.json \
+  --step-limit 100
 ```
 
 The output file contains the only machine-readable result. Human diagnostics use stderr. Existing output is preserved

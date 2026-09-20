@@ -2,6 +2,7 @@ package org.schoolkernel.solver;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import org.schoolkernel.domain.SchoolDefinition;
 
@@ -39,7 +40,14 @@ public final class SolverAdapter implements InitialSolver {
     private final ScheduleEvaluator evaluator = new ScheduleEvaluator();
 
     public SolveResult solve(SchoolDefinition definition, ExecutionControls controls) {
-        SchoolSchedule problem = mapper.toPlanningProblem(definition);
+        return solve(definition, controls, Map.of());
+    }
+
+    public SolveResult solve(
+            SchoolDefinition definition,
+            ExecutionControls controls,
+            Map<String, PlanningMapper.BaselineAssignment> baselineAssignments) {
+        SchoolSchedule problem = mapper.toPlanningProblem(definition, baselineAssignments);
         SolverConfig config = baseConfig(controls);
         SolverFactory<SchoolSchedule> factory = SolverFactory.create(config);
         Solver<SchoolSchedule> solver = factory.buildSolver();

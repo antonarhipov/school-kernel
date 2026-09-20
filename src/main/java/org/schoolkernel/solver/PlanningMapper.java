@@ -10,7 +10,15 @@ import ai.timefold.solver.core.api.domain.solution.ConstraintWeightOverrides;
 import ai.timefold.solver.core.api.score.BendableScore;
 
 public final class PlanningMapper {
+    public record BaselineAssignment(String periodId, String roomId) {}
+
     public SchoolSchedule toPlanningProblem(SchoolDefinition definition) {
+        return toPlanningProblem(definition, Map.of());
+    }
+
+    public SchoolSchedule toPlanningProblem(
+            SchoolDefinition definition,
+            Map<String, BaselineAssignment> baselineAssignments) {
         var periods = definition.periods().stream()
                 .map(period -> new PeriodValue(period.id(), period.weekday(), period.order()))
                 .toList();
@@ -26,11 +34,14 @@ public final class PlanningMapper {
         var lessons = definition.lessons().stream().map(lesson -> {
             var teacher = teachers.get(lesson.teacherId());
             var cohort = cohorts.get(lesson.cohortId());
+            var baseline = baselineAssignments.get(lesson.id());
             return new PlanningLesson(
                     lesson.id(), lesson.subjectId(), lesson.cohortId(), cohort.size(), lesson.teacherId(),
                     lesson.seriesId(), teacher.availablePeriodIds(), teacher.undesirablePeriodIds(),
                     cohort.availablePeriodIds(), cohort.undesirablePeriodIds(), lesson.undesirablePeriodIds(),
                     lesson.requiredRoomCapabilityIds(), lesson.preferredRoomIds(), lesson.periodLock(), lesson.roomLock(),
+                    baseline == null ? null : baseline.periodId(),
+                    baseline == null ? null : baseline.roomId(),
                     periods);
         }).toList();
 

@@ -26,9 +26,19 @@ public final class DefinitionValidator {
     public record Outcome(SchoolDefinition definition, ValidationReport report) {}
 
     public Outcome validateForPlan(SchoolDefinitionDto input) {
+        return validate(input, false);
+    }
+
+    public Outcome validateForReplan(SchoolDefinitionDto input) {
+        return validate(input, true);
+    }
+
+    private Outcome validate(SchoolDefinitionDto input, boolean replan) {
         var errors = new ArrayList<ValidationError>();
-        if (input.basedOnRevision() != null) {
+        if (!replan && input.basedOnRevision() != null) {
             error(errors, "/basedOnRevision", List.of(), "basedOnRevision is forbidden for initial planning");
+        } else if (replan && input.basedOnRevision() == null) {
+            error(errors, "/basedOnRevision", List.of(), "basedOnRevision is required for replanning");
         }
 
         checkDisplayNames(input, errors);
@@ -421,7 +431,8 @@ public final class DefinitionValidator {
                         set(value.undesirablePeriodIds()), value.periodLock(), value.roomLock()))
                 .toList();
         return new SchoolDefinition(
-                input.schemaVersion(), input.catalogVersion(), input.schoolId(), subjects, teachers, cohorts, rooms,
+                input.schemaVersion(), input.catalogVersion(), input.schoolId(), input.basedOnRevision(),
+                subjects, teachers, cohorts, rooms,
                 periods, lessons, Map.copyOf(effectiveWeights(input.softConstraintOverrides())));
     }
 

@@ -167,6 +167,32 @@ class SchoolConstraintProviderTest {
         verifier.verifyThat(SchoolConstraintProvider::nonPreferredRoom).given(lesson).hasNoImpact();
     }
 
+    @Test
+    @DisplayName("UC-2 G5-G8: stability levels count period then room-only moves and exclude forced dimensions")
+    void stabilityMoves() {
+        var lesson = new PlanningLesson(
+                "a", "subject", "c", 20, "t", null,
+                Set.of("p1", "p2", "p3"), Set.of(),
+                Set.of("p1", "p2", "p3"), Set.of(), Set.of(),
+                Set.of(), Set.of(), null, null, "p1", "r1", PERIODS);
+        assign(lesson, P2, R2);
+        verifier.verifyThat(SchoolConstraintProvider::periodMove).given(lesson).penalizesBy(1);
+        verifier.verifyThat(SchoolConstraintProvider::roomOnlyMove).given(lesson).hasNoImpact();
+
+        assign(lesson, P1, R2);
+        verifier.verifyThat(SchoolConstraintProvider::periodMove).given(lesson).hasNoImpact();
+        verifier.verifyThat(SchoolConstraintProvider::roomOnlyMove).given(lesson).penalizesBy(1);
+
+        var forced = new PlanningLesson(
+                "b", "subject", "c", 20, "t", null,
+                Set.of("p1", "p2", "p3"), Set.of(),
+                Set.of("p1", "p2", "p3"), Set.of(), Set.of(),
+                Set.of(), Set.of(), "p2", "r2", "p1", "r1", PERIODS);
+        assign(forced, P2, R2);
+        verifier.verifyThat(SchoolConstraintProvider::periodMove).given(forced).hasNoImpact();
+        verifier.verifyThat(SchoolConstraintProvider::roomOnlyMove).given(forced).hasNoImpact();
+    }
+
     private static PlanningLesson lesson(String id, String teacher, String cohort, String series) {
         return lesson(id, teacher, cohort, series, Set.of(), Set.of(), null, null);
     }

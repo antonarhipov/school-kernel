@@ -1,6 +1,7 @@
 package org.schoolkernel.contract;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -129,9 +130,96 @@ public final class ResultFactory {
                         .collect(java.util.stream.Collectors.toMap(id -> id, ignored -> 0L)),
                 SchoolDefinition.SOFT_CONSTRAINT_IDS.stream()
                         .collect(java.util.stream.Collectors.toMap(id -> id, ignored -> 0L)),
+                0,
+                0,
                 0);
         return feasible(correlationId, elapsedMillis, definition, inputRevision, controls,
                 "EMPTY_PROBLEM", emptySchedule, evaluation);
+    }
+
+    public ObjectNode replannedFeasible(
+            String correlationId,
+            long elapsedMillis,
+            SchoolDefinition definition,
+            String inputRevision,
+            ExecutionControls controls,
+            String terminationReason,
+            SchoolSchedule schedule,
+            ScheduleEvaluator.Evaluation evaluation,
+            CurrentTimetableReader.CurrentTimetable current) {
+        ObjectNode result = feasible(
+                correlationId, elapsedMillis, definition, inputRevision, controls,
+                terminationReason, schedule, evaluation);
+        addChangeReport(result, definition, schedule, current);
+        return result;
+    }
+
+    private static void addChangeReport(
+            ObjectNode result,
+            SchoolDefinition definition,
+            SchoolSchedule schedule,
+            CurrentTimetableReader.CurrentTimetable current) {
+        ObjectNode report = result.putObject("changeReport");
+        ArrayNode additions = report.putArray("additions");
+        ArrayNode cancellations = report.putArray("cancellations");
+        ArrayNode teacherChanges = report.putArray("teacherChanges");
+        ArrayNode forcedMoves = report.putArray("forcedMoves");
+        ArrayNode periodMoves = report.putArray("periodMoves");
+        ArrayNode roomOnlyMoves = report.putArray("roomOnlyMoves");
+
+        var oldById = new HashMap<String, CurrentTimetableReader.Assignment>();
+        current.assignments().forEach(value -> oldById.put(value.lessonId(), value));
+        var lessonById = new HashMap<String, SchoolDefinition.Lesson>();
+        definition.lessons().forEach(value -> lessonById.put(value.id(), value));
+        var solvedById = new HashMap<String, org.schoolkernel.solver.PlanningLesson>();
+        schedule.getLessons().forEach(value -> solvedById.put(value.getId(), value));
+
+        definition.lessons().stream().map(SchoolDefinition.Lesson::id).sorted()
+                .filter(id -> !oldById.containsKey(id))
+                .forEach(id -> additions.addObject().put("lessonId", id));
+        current.assignments().stream().map(CurrentTimetableReader.Assignment::lessonId).sorted()
+                .filter(id -> !lessonById.containsKey(id))
+                .forEach(id -> cancellations.addObject().put("lessonId", id));
+
+        oldById.keySet().stream().filter(lessonById::containsKey).sorted().forEach(id -> {
+            var old = oldById.get(id);
+            var lesson = lessonById.get(id);
+            var solved = solvedById.get(id);
+            if (!old.teacherId().equals(lesson.teacherId())) {
+                teacherChanges.addObject()
+                        .put("lessonId", id)
+                        .put("oldTeacherId", old.teacherId())
+                        .put("newTeacherId", lesson.teacherId());
+            }
+            boolean periodChanged = !old.periodId().equals(solved.getPeriod().id());
+            boolean roomChanged = !old.roomId().equals(solved.getRoom().id());
+            boolean forcedPeriod = periodChanged && lesson.periodLock() != null
+                    && lesson.periodLock().equals(solved.getPeriod().id());
+            boolean forcedRoom = roomChanged && lesson.roomLock() != null
+                    && lesson.roomLock().equals(solved.getRoom().id());
+            if (forcedPeriod || forcedRoom) {
+                ObjectNode item = forcedMoves.addObject().put("lessonId", id);
+                if (forcedPeriod) {
+                    item.put("oldPeriodId", old.periodId()).put("newPeriodId", solved.getPeriod().id());
+                }
+                if (forcedRoom) {
+                    item.put("oldRoomId", old.roomId()).put("newRoomId", solved.getRoom().id());
+                }
+            }
+            if (periodChanged && !forcedPeriod) {
+                periodMoves.addObject()
+                        .put("lessonId", id)
+                        .put("oldPeriodId", old.periodId())
+                        .put("newPeriodId", solved.getPeriod().id())
+                        .put("oldRoomId", old.roomId())
+                        .put("newRoomId", solved.getRoom().id());
+            } else if (!periodChanged && roomChanged && !forcedRoom) {
+                roomOnlyMoves.addObject()
+                        .put("lessonId", id)
+                        .put("oldRoomId", old.roomId())
+                        .put("newRoomId", solved.getRoom().id());
+            }
+        });
     }
 
     public ObjectNode internalError(
@@ -203,8 +291,8 @@ public final class ResultFactory {
             Map<String, Long> weights,
             ScheduleEvaluator.Evaluation evaluation) {
         ObjectNode score = result.putObject("score");
-        score.put("periodMoves", 0);
-        score.put("roomOnlyMoves", 0);
+        score.put("periodMoves", evaluation.periodMoves());
+        score.put("roomOnlyMoves", evaluation.roomOnlyMoves());
         score.put("ordinaryPreferencePenalty", evaluation.ordinaryPreferencePenalty());
         ArrayNode breakdown = score.putArray("constraintBreakdown");
         SchoolDefinition.SOFT_CONSTRAINT_IDS.forEach(id -> {

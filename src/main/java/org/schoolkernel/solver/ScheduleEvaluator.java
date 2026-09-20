@@ -15,6 +15,8 @@ public final class ScheduleEvaluator {
             boolean feasible,
             Map<String, Long> hardMatchCounts,
             Map<String, Long> softMatchCounts,
+            long periodMoves,
+            long roomOnlyMoves,
             long ordinaryPreferencePenalty) {}
 
     public Evaluation evaluate(SchoolSchedule schedule, Map<String, Long> weights) {
@@ -23,9 +25,11 @@ public final class ScheduleEvaluator {
         boolean complete = schedule.getLessons().stream()
                 .allMatch(lesson -> lesson.getPeriod() != null && lesson.getRoom() != null);
         if (!complete) {
-            return new Evaluation(false, false, Map.copyOf(hard), Map.copyOf(soft), 0);
+            return new Evaluation(false, false, Map.copyOf(hard), Map.copyOf(soft), 0, 0, 0);
         }
 
+        long periodMoves = 0;
+        long roomOnlyMoves = 0;
         var teacherPeriods = new HashMap<String, List<String>>();
         var cohortPeriods = new HashMap<String, List<String>>();
         var roomPeriods = new HashMap<String, List<String>>();
@@ -51,6 +55,20 @@ public final class ScheduleEvaluator {
                     lesson.getPeriodLock() != null && !lesson.getPeriodLock().equals(periodId));
             incrementIf(hard, "hard.room-lock",
                     lesson.getRoomLock() != null && !lesson.getRoomLock().equals(lesson.getRoom().id()));
+
+            if (lesson.getBaselinePeriodId() != null) {
+                boolean forcedPeriod = lesson.getPeriodLock() != null
+                        && !lesson.getPeriodLock().equals(lesson.getBaselinePeriodId());
+                boolean forcedRoom = lesson.getRoomLock() != null
+                        && !lesson.getRoomLock().equals(lesson.getBaselineRoomId());
+                if (!lesson.getBaselinePeriodId().equals(periodId)) {
+                    if (!forcedPeriod) {
+                        periodMoves++;
+                    }
+                } else if (!lesson.getBaselineRoomId().equals(lesson.getRoom().id()) && !forcedRoom) {
+                    roomOnlyMoves++;
+                }
+            }
 
             soft.compute("soft.undesirable-period",
                     (key, count) -> count + SchoolConstraintProvider.undesirableMatchCount(lesson));
@@ -81,7 +99,8 @@ public final class ScheduleEvaluator {
                     Math.multiplyExact(soft.get(constraintId), weights.get(constraintId)));
         }
         boolean feasible = hard.values().stream().allMatch(count -> count == 0);
-        return new Evaluation(true, feasible, Map.copyOf(hard), Map.copyOf(soft), ordinaryPenalty);
+        return new Evaluation(
+                true, feasible, Map.copyOf(hard), Map.copyOf(soft), periodMoves, roomOnlyMoves, ordinaryPenalty);
     }
 
     private static LinkedHashMap<String, Long> zeroCounts(List<String> ids) {

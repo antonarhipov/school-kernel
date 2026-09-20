@@ -24,6 +24,8 @@ public class PlanningLesson {
     private Set<String> preferredRoomIds;
     private String periodLock;
     private String roomLock;
+    private String baselinePeriodId;
+    private String baselineRoomId;
     private List<PeriodValue> periodCatalog;
     private PeriodValue period;
     private RoomValue room;
@@ -47,6 +49,32 @@ public class PlanningLesson {
             String periodLock,
             String roomLock,
             List<PeriodValue> periodCatalog) {
+        this(id, subjectId, cohortId, cohortSize, teacherId, seriesId,
+                teacherAvailablePeriodIds, teacherUndesirablePeriodIds,
+                cohortAvailablePeriodIds, cohortUndesirablePeriodIds, lessonUndesirablePeriodIds,
+                requiredRoomCapabilityIds, preferredRoomIds, periodLock, roomLock,
+                null, null, periodCatalog);
+    }
+
+    public PlanningLesson(
+            String id,
+            String subjectId,
+            String cohortId,
+            int cohortSize,
+            String teacherId,
+            String seriesId,
+            Set<String> teacherAvailablePeriodIds,
+            Set<String> teacherUndesirablePeriodIds,
+            Set<String> cohortAvailablePeriodIds,
+            Set<String> cohortUndesirablePeriodIds,
+            Set<String> lessonUndesirablePeriodIds,
+            Set<String> requiredRoomCapabilityIds,
+            Set<String> preferredRoomIds,
+            String periodLock,
+            String roomLock,
+            String baselinePeriodId,
+            String baselineRoomId,
+            List<PeriodValue> periodCatalog) {
         this.id = id;
         this.subjectId = subjectId;
         this.cohortId = cohortId;
@@ -62,6 +90,8 @@ public class PlanningLesson {
         this.preferredRoomIds = preferredRoomIds;
         this.periodLock = periodLock;
         this.roomLock = roomLock;
+        this.baselinePeriodId = baselinePeriodId;
+        this.baselineRoomId = baselineRoomId;
         this.periodCatalog = periodCatalog;
     }
 
@@ -124,6 +154,14 @@ public class PlanningLesson {
 
     public String getRoomLock() {
         return roomLock;
+    }
+
+    public String getBaselinePeriodId() {
+        return baselinePeriodId;
+    }
+
+    public String getBaselineRoomId() {
+        return baselineRoomId;
     }
 
     public List<PeriodValue> getPeriodCatalog() {

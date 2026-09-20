@@ -25,7 +25,8 @@
     "score": { "$ref": "#/$defs/score" },
     "validationReport": { "$ref": "#/$defs/validationReport" },
     "searchDiagnostics": { "$ref": "#/$defs/searchDiagnostics" },
-    "safeMessage": { "type": "string", "minLength": 1 }
+    "safeMessage": { "type": "string", "minLength": 1 },
+    "changeReport": { "$ref": "#/$defs/changeReport" }
   },
   "allOf": [
     {
@@ -212,6 +213,58 @@
           "maxItems": 1000,
           "items": { "type": "array", "items": { "type": "string" } }
         }
+      }
+    },
+    "changeReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves"],
+      "properties": {
+        "additions": { "type": "array", "items": { "$ref": "#/$defs/lessonChange" } },
+        "cancellations": { "type": "array", "items": { "$ref": "#/$defs/lessonChange" } },
+        "teacherChanges": { "type": "array", "items": { "$ref": "#/$defs/teacherChange" } },
+        "forcedMoves": { "type": "array", "items": { "$ref": "#/$defs/forcedMove" } },
+        "periodMoves": { "type": "array", "items": { "$ref": "#/$defs/periodMove" } },
+        "roomOnlyMoves": { "type": "array", "items": { "$ref": "#/$defs/roomOnlyMove" } }
+      }
+    },
+    "lessonChange": {
+      "type": "object", "additionalProperties": false, "required": ["lessonId"],
+      "properties": { "lessonId": { "$ref": "#/$defs/id" } }
+    },
+    "teacherChange": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lessonId", "oldTeacherId", "newTeacherId"],
+      "properties": {
+        "lessonId": { "$ref": "#/$defs/id" },
+        "oldTeacherId": { "$ref": "#/$defs/id" },
+        "newTeacherId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "forcedMove": {
+      "type": "object", "additionalProperties": false, "required": ["lessonId"],
+      "properties": {
+        "lessonId": { "$ref": "#/$defs/id" },
+        "oldPeriodId": { "$ref": "#/$defs/id" }, "newPeriodId": { "$ref": "#/$defs/id" },
+        "oldRoomId": { "$ref": "#/$defs/id" }, "newRoomId": { "$ref": "#/$defs/id" }
+      },
+      "anyOf": [{ "required": ["oldPeriodId", "newPeriodId"] }, { "required": ["oldRoomId", "newRoomId"] }]
+    },
+    "periodMove": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lessonId", "oldPeriodId", "newPeriodId", "oldRoomId", "newRoomId"],
+      "properties": {
+        "lessonId": { "$ref": "#/$defs/id" },
+        "oldPeriodId": { "$ref": "#/$defs/id" }, "newPeriodId": { "$ref": "#/$defs/id" },
+        "oldRoomId": { "$ref": "#/$defs/id" }, "newRoomId": { "$ref": "#/$defs/id" }
+      }
+    },
+    "roomOnlyMove": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lessonId", "oldRoomId", "newRoomId"],
+      "properties": {
+        "lessonId": { "$ref": "#/$defs/id" },
+        "oldRoomId": { "$ref": "#/$defs/id" }, "newRoomId": { "$ref": "#/$defs/id" }
       }
     }
   }

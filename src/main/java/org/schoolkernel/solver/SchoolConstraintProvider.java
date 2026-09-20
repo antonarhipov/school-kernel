@@ -14,6 +14,8 @@ import ai.timefold.solver.core.api.score.stream.Joiners;
 
 public final class SchoolConstraintProvider implements ConstraintProvider {
     private static final BendableScore HARD = BendableScore.ofHard(1, 3, 0, 1);
+    private static final BendableScore PERIOD_MOVE = BendableScore.ofSoft(1, 3, 0, 1);
+    private static final BendableScore ROOM_ONLY_MOVE = BendableScore.ofSoft(1, 3, 1, 1);
     private static final BendableScore PREFERENCE = BendableScore.ofSoft(1, 3, 2, 1);
 
     @Override
@@ -29,6 +31,8 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 roomCapability(factory),
                 periodLock(factory),
                 roomLock(factory),
+                periodMove(factory),
+                roomOnlyMove(factory),
                 teacherGap(factory),
                 seriesSameDay(factory),
                 undesirablePeriod(factory),
@@ -111,6 +115,27 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .filter(lesson -> lesson.getRoomLock() != null && !lesson.getRoomLock().equals(lesson.getRoom().id()))
                 .penalize(HARD)
                 .asConstraint("hard.room-lock");
+    }
+
+    public Constraint periodMove(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getBaselinePeriodId() != null
+                        && !lesson.getBaselinePeriodId().equals(lesson.getPeriod().id())
+                        && (lesson.getPeriodLock() == null
+                                || lesson.getPeriodLock().equals(lesson.getBaselinePeriodId())))
+                .penalize(PERIOD_MOVE)
+                .asConstraint("stability.period-move");
+    }
+
+    public Constraint roomOnlyMove(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getBaselinePeriodId() != null
+                        && lesson.getBaselinePeriodId().equals(lesson.getPeriod().id())
+                        && !lesson.getBaselineRoomId().equals(lesson.getRoom().id())
+                        && (lesson.getRoomLock() == null
+                                || lesson.getRoomLock().equals(lesson.getBaselineRoomId())))
+                .penalize(ROOM_ONLY_MOVE)
+                .asConstraint("stability.room-only-move");
     }
 
     public Constraint teacherGap(ConstraintFactory factory) {

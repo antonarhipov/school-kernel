@@ -10,6 +10,7 @@ public record SchoolDefinition(
         int schemaVersion,
         int catalogVersion,
         String schoolId,
+        String basedOnRevision,
         List<Subject> subjects,
         List<Teacher> teachers,
         List<Cohort> cohorts,

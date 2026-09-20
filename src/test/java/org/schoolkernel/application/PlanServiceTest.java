@@ -105,7 +105,7 @@ class PlanServiceTest {
         var incomplete = new PlanningMapper().toPlanningProblem(definition);
         solver.result = new SolverAdapter.SolveResult(
                 incomplete,
-                new ScheduleEvaluator.Evaluation(true, true, java.util.Map.of(), java.util.Map.of(), 0),
+                new ScheduleEvaluator.Evaluation(true, true, java.util.Map.of(), java.util.Map.of(), 0, 0, 0),
                 "STEP_LIMIT",
                 List.of());
 
