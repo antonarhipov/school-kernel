@@ -60,6 +60,10 @@ public final class PlanService {
     public int plan(PlanRequest request, PrintWriter errorWriter) {
         long started = System.nanoTime();
         String correlationId = request.correlationId() == null ? UUID.randomUUID().toString() : request.correlationId();
+        String derivedSchoolId = null;
+        Integer acceptedCatalogVersion = null;
+        String derivedInputRevision = null;
+        Map<String, Long> derivedEffectiveWeights = null;
         try {
             try {
                 files.requireDistinct(request.definitionPath(), request.outputPath());
@@ -80,7 +84,15 @@ public final class PlanService {
                 var report = ValidationReport.from(List.of(
                         new ValidationError("/", List.of(), "Malformed JSON input")));
                 return publishHandled(
-                        results.invalidInput(correlationId, elapsed(started), report, null, null, null),
+                        results.invalidInput(
+                                correlationId,
+                                elapsed(started),
+                                report,
+                                null,
+                                null,
+                                null,
+                                null,
+                                request.controls()),
                         request,
                         errorWriter,
                         2);
@@ -90,14 +102,27 @@ public final class PlanService {
             if (!schemaErrors.isEmpty()) {
                 var report = ValidationReport.from(schemaErrors);
                 Integer catalogVersion = input.path("catalogVersion").isInt()
-                        ? input.path("catalogVersion").intValue()
+                                && input.path("catalogVersion").intValue() == 1
+                        ? 1
                         : null;
                 return publishHandled(
-                        results.invalidInput(correlationId, elapsed(started), report, catalogVersion, null, null),
+                        results.invalidInput(
+                                correlationId,
+                                elapsed(started),
+                                report,
+                                null,
+                                catalogVersion,
+                                null,
+                                null,
+                                request.controls()),
                         request,
                         errorWriter,
                         2);
             }
+
+            derivedSchoolId = input.path("schoolId").stringValue();
+            acceptedCatalogVersion = 1;
+            derivedInputRevision = revisions.definitionRevision(input);
 
             SchoolDefinitionDto inputDto;
             try {
@@ -106,13 +131,20 @@ public final class PlanService {
                 var report = ValidationReport.from(List.of(
                         new ValidationError("/", List.of(), "Input could not be bound to schema version 1")));
                 return publishHandled(
-                        results.invalidInput(correlationId, elapsed(started), report, 1, null, null),
+                        results.invalidInput(
+                                correlationId,
+                                elapsed(started),
+                                report,
+                                derivedSchoolId,
+                                acceptedCatalogVersion,
+                                derivedInputRevision,
+                                null,
+                                request.controls()),
                         request,
                         errorWriter,
                         2);
             }
 
-            String inputRevision = revisions.definitionRevision(input);
             DefinitionValidator.Outcome validation = definitionValidator.validateForPlan(inputDto);
             if (!validation.report().isValid()) {
                 return publishHandled(
@@ -120,15 +152,18 @@ public final class PlanService {
                                 correlationId,
                                 elapsed(started),
                                 validation.report(),
-                                inputDto.catalogVersion(),
-                                inputRevision,
-                                null),
+                                derivedSchoolId,
+                                acceptedCatalogVersion,
+                                derivedInputRevision,
+                                null,
+                                request.controls()),
                         request,
                         errorWriter,
                         2);
             }
 
             SchoolDefinition definition = validation.definition();
+            derivedEffectiveWeights = definition.softWeights();
             var obviousFailures = preflight.findObviousFailures(definition);
             if (!obviousFailures.isEmpty()) {
                 return publishHandled(
@@ -136,7 +171,7 @@ public final class PlanService {
                                 correlationId,
                                 elapsed(started),
                                 definition,
-                                inputRevision,
+                                derivedInputRevision,
                                 request.controls(),
                                 null,
                                 obviousFailures),
@@ -151,7 +186,7 @@ public final class PlanService {
                                 correlationId,
                                 elapsed(started),
                                 definition,
-                                inputRevision,
+                                derivedInputRevision,
                                 request.controls()),
                         request,
                         errorWriter,
@@ -172,7 +207,7 @@ public final class PlanService {
                                 correlationId,
                                 elapsed(started),
                                 definition,
-                                inputRevision,
+                                derivedInputRevision,
                                 request.controls(),
                                 solveResult.terminationReason(),
                                 solveResult.diagnostics()),
@@ -185,7 +220,7 @@ public final class PlanService {
                             correlationId,
                             elapsed(started),
                             definition,
-                            inputRevision,
+                            derivedInputRevision,
                             request.controls(),
                             solveResult.terminationReason(),
                             solveResult.schedule(),
@@ -209,7 +244,17 @@ public final class PlanService {
                 errorWriter.println("Internal failure; correlation ID: " + correlationId);
             }
             try {
-                files.publish(results.internalError(correlationId, elapsed(started)), request.outputPath(), request.force());
+                files.publish(
+                        results.internalError(
+                                correlationId,
+                                elapsed(started),
+                                derivedSchoolId,
+                                acceptedCatalogVersion,
+                                derivedInputRevision,
+                                derivedEffectiveWeights,
+                                request.controls()),
+                        request.outputPath(),
+                        request.force());
                 return 4;
             } catch (TransportException publicationFailure) {
                 errorWriter.println(publicationFailure.getMessage());

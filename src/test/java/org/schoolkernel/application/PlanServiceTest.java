@@ -85,6 +85,12 @@ class PlanServiceTest {
         JsonNode result = JsonSupport.mapper().readTree(output);
         assertEquals("INTERNAL_ERROR", result.path("status").stringValue());
         assertEquals("An unexpected internal error occurred.", result.path("safeMessage").stringValue());
+        assertEquals("test-school", result.path("schoolId").stringValue());
+        assertEquals(1, result.path("catalogVersion").intValue());
+        assertTrue(result.path("inputRevision").stringValue().startsWith("sha256:"));
+        assertEquals(4, result.path("effectiveSoftWeights").size());
+        assertEquals(0, result.path("seed").longValue());
+        assertEquals("PT1S", result.path("limit").path("duration").stringValue());
         assertFalse(result.has("timetable"));
         assertFalse(diagnostics.toString().contains("secret technical detail"));
     }

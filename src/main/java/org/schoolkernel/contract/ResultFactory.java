@@ -23,11 +23,14 @@ public final class ResultFactory {
             String correlationId,
             long elapsedMillis,
             ValidationReport report,
+            String schoolId,
             Integer catalogVersion,
             String inputRevision,
-            Map<String, Long> effectiveWeights) {
+            Map<String, Long> effectiveWeights,
+            ExecutionControls controls) {
         ObjectNode result = envelope("INVALID_INPUT", correlationId, elapsedMillis);
-        addDerivableMetadata(result, catalogVersion, inputRevision, effectiveWeights);
+        addDerivableMetadata(result, schoolId, catalogVersion, inputRevision, effectiveWeights);
+        addExecutionMetadata(result, controls, null);
         ObjectNode validation = result.putObject("validationReport");
         validation.put("totalErrors", report.totalErrors());
         validation.put("truncated", report.truncated());
@@ -51,7 +54,8 @@ public final class ResultFactory {
             String terminationReason,
             List<ConstraintDiagnostic> diagnostics) {
         ObjectNode result = envelope("NO_FEASIBLE_SOLUTION_FOUND", correlationId, elapsedMillis);
-        addDerivableMetadata(result, definition.catalogVersion(), inputRevision, definition.softWeights());
+        addDerivableMetadata(
+                result, definition.schoolId(), definition.catalogVersion(), inputRevision, definition.softWeights());
         addExecutionMetadata(result, controls, terminationReason);
         ObjectNode search = result.putObject("searchDiagnostics");
         long totalMatches = diagnostics.stream().mapToLong(ConstraintDiagnostic::matchCount).sum();
@@ -89,7 +93,8 @@ public final class ResultFactory {
             SchoolSchedule schedule,
             ScheduleEvaluator.Evaluation evaluation) {
         ObjectNode result = envelope("FEASIBLE", correlationId, elapsedMillis);
-        addDerivableMetadata(result, definition.catalogVersion(), inputRevision, definition.softWeights());
+        addDerivableMetadata(
+                result, definition.schoolId(), definition.catalogVersion(), inputRevision, definition.softWeights());
         addExecutionMetadata(result, controls, terminationReason);
         ArrayNode assignments = result.putObject("timetable").putArray("assignments");
         schedule.getLessons().stream()
@@ -129,8 +134,17 @@ public final class ResultFactory {
                 "EMPTY_PROBLEM", emptySchedule, evaluation);
     }
 
-    public ObjectNode internalError(String correlationId, long elapsedMillis) {
+    public ObjectNode internalError(
+            String correlationId,
+            long elapsedMillis,
+            String schoolId,
+            Integer catalogVersion,
+            String inputRevision,
+            Map<String, Long> effectiveWeights,
+            ExecutionControls controls) {
         ObjectNode result = envelope("INTERNAL_ERROR", correlationId, elapsedMillis);
+        addDerivableMetadata(result, schoolId, catalogVersion, inputRevision, effectiveWeights);
+        addExecutionMetadata(result, controls, null);
         result.put("safeMessage", "An unexpected internal error occurred.");
         return result;
     }
@@ -147,9 +161,13 @@ public final class ResultFactory {
 
     private static void addDerivableMetadata(
             ObjectNode result,
+            String schoolId,
             Integer catalogVersion,
             String inputRevision,
             Map<String, Long> effectiveWeights) {
+        if (schoolId != null) {
+            result.put("schoolId", schoolId);
+        }
         if (catalogVersion != null) {
             result.put("catalogVersion", catalogVersion);
         }

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.schoolkernel.contract.JsonSupport;
+import org.schoolkernel.contract.RevisionService;
 
 import tools.jackson.databind.JsonNode;
 
@@ -48,6 +49,7 @@ class PlanCliIT {
         JsonNode result = JsonSupport.mapper().readTree(output);
         assertEquals("FEASIBLE", result.path("status").stringValue());
         assertEquals("test-main", result.path("correlationId").stringValue());
+        assertEquals("test-school", result.path("schoolId").stringValue());
         assertEquals("SEARCH_EXHAUSTED", result.path("terminationReason").stringValue());
         assertEquals(1, result.path("timetable").path("assignments").size());
         JsonNode assignment = result.path("timetable").path("assignments").get(0);
@@ -66,6 +68,13 @@ class PlanCliIT {
                                 result.path("score").path("constraintBreakdown").spliterator(), false)
                         .map(item -> item.path("constraintId").stringValue())
                         .toList());
+        assertEquals(
+                result.path("timetableRevision").stringValue(),
+                new RevisionService().timetableRevision(
+                        result.path("schemaVersion").intValue(),
+                        result.path("schoolId").stringValue(),
+                        result.path("inputRevision").stringValue(),
+                        (tools.jackson.databind.node.ArrayNode) result.path("timetable").path("assignments")));
         assertTrue(resultSchema().validate(result).isEmpty());
         assertArrayEquals(JsonSupport.canonicalBytes(result), Files.readAllBytes(output));
     }
@@ -117,6 +126,9 @@ class PlanCliIT {
         JsonNode malformedResult = JsonSupport.mapper().readTree(malformedOutput);
         assertEquals("INVALID_INPUT", malformedResult.path("status").stringValue());
         assertFalse(malformedResult.has("timetable"));
+        assertEquals(0, malformedResult.path("seed").longValue());
+        assertEquals(10, malformedResult.path("limit").path("steps").intValue());
+        assertTrue(resultSchema().validate(malformedResult).isEmpty());
         assertFalse(malformedProcess.stderr().contains("Solving started"));
 
         Path successor = copyFixture("valid-plan.json");
@@ -130,7 +142,23 @@ class PlanCliIT {
         JsonNode successorResult = JsonSupport.mapper().readTree(successorOutput);
         assertEquals("INVALID_INPUT", successorResult.path("status").stringValue());
         assertFalse(successorResult.has("timetable"));
+        assertEquals("test-school", successorResult.path("schoolId").stringValue());
+        assertEquals(10, successorResult.path("limit").path("steps").intValue());
+        assertTrue(resultSchema().validate(successorResult).isEmpty());
         assertFalse(successorProcess.stderr().contains("Solving started"));
+
+        Path unsupported = copyFixture("valid-plan.json", "unsupported.json");
+        var unsupportedJson = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper().readTree(unsupported);
+        unsupportedJson.put("catalogVersion", 2);
+        Files.write(unsupported, JsonSupport.mapper().writeValueAsBytes(unsupportedJson));
+        Path unsupportedOutput = temporaryDirectory.resolve("unsupported-result.json");
+        ProcessResult unsupportedProcess = run("plan", "--definition", unsupported.toString(), "--output",
+                unsupportedOutput.toString(), "--step-limit", "10");
+        assertEquals(2, unsupportedProcess.exitCode());
+        JsonNode unsupportedResult = JsonSupport.mapper().readTree(unsupportedOutput);
+        assertFalse(unsupportedResult.has("catalogVersion"));
+        assertEquals(10, unsupportedResult.path("limit").path("steps").intValue());
+        assertTrue(resultSchema().validate(unsupportedResult).isEmpty());
     }
 
     @Test
@@ -279,8 +307,12 @@ class PlanCliIT {
     }
 
     private Path copyFixture(String name) throws Exception {
-        Path target = temporaryDirectory.resolve(name);
-        try (InputStream input = PlanCliIT.class.getResourceAsStream("/fixtures/" + name)) {
+        return copyFixture(name, name);
+    }
+
+    private Path copyFixture(String resourceName, String targetName) throws Exception {
+        Path target = temporaryDirectory.resolve(targetName);
+        try (InputStream input = PlanCliIT.class.getResourceAsStream("/fixtures/" + resourceName)) {
             Files.copy(input, target);
         }
         return target;

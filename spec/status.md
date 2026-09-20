@@ -3,24 +3,25 @@
 ## Current
 
 - Use case: UC-1
-- Status: NEEDS_REVISION
-- Next eligible: UC-1
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none until UC-1 is approved
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | NEEDS_REVISION | none | `422a774` from `69cc268` | `spec/convergence/UC-1.md` - REJECT (C-1, C-2) |
+| UC-1 | READY_FOR_CONVERGENCE | none | `HEAD at convergence`; revises `422a774` for C-1 and C-2 | reconvergence pending |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
 
 - Started: 2026-09-19T23:38:42Z
 - Completed: 2026-09-20T00:17:06Z
+- Revision completed: 2026-09-20T00:27:54Z
 - Started from: `69cc268a1b90b960c320d4a82cb1e301d664d898`
 - Pre-existing dirty files: none
 - Implementation submission: `HEAD at convergence`
-- Convergence findings: C-1 (published timetable lacks verifiable `schoolId` lineage), C-2 (handled outcomes omit derivable result-envelope metadata)
+- Convergence findings addressed: C-1 publishes and independently verifies `schoolId` lineage; C-2 preserves derivable execution and accepted-input metadata on handled outcomes.
 - Changed files:
   - Build and distribution: `pom.xml`, `.mvn/wrapper/maven-wrapper.properties`, `mvnw`, `mvnw.cmd`, `school-kernel`, `README.md`
   - Examples: `examples/empty-school.json`, `examples/initial-school.json`
@@ -37,6 +38,7 @@
   - `./mvnw dependency:tree -Dincludes=ai.timefold.solver:timefold-solver-core,tools.jackson.core:jackson-databind,com.networknt:json-schema-validator,info.picocli:picocli,io.github.erdtman:java-json-canonicalization -Dscope=runtime` - PASS; resolved Timefold 2.6.0, Jackson 3.2.2, NetworkNT 3.0.7, Picocli 4.7.7, and JCS 1.1.
   - `./school-kernel plan --definition examples/initial-school.json --output /tmp/school-kernel-uc1.5zpLTs/result.json --step-limit 100 --correlation-id uc1-final-journey` - exit 0; canonical `FEASIBLE`, 2 complete assignments, `STEP_LIMIT`, revisions and score breakdown present.
   - `git diff --check` - PASS.
+  - Revision verification: `./mvnw -q clean verify` - PASS; 45 tests, 0 failures/errors/skips. Fresh launcher journeys published `schoolId: demo-school` on `FEASIBLE` and seed 0 / step limit 10 on malformed `INVALID_INPUT`.
 
 | Contract element | Evidence |
 |---|---|

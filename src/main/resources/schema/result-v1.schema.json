@@ -13,6 +13,7 @@
     "kernelVersion": { "type": "string", "minLength": 1 },
     "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
     "elapsedTimeMs": { "type": "integer", "minimum": 0 },
+    "schoolId": { "$ref": "#/$defs/id" },
     "catalogVersion": { "const": 1 },
     "inputRevision": { "$ref": "#/$defs/revision" },
     "effectiveSoftWeights": { "$ref": "#/$defs/effectiveSoftWeights" },
@@ -31,7 +32,7 @@
       "if": { "properties": { "status": { "const": "FEASIBLE" } } },
       "then": {
         "required": [
-          "catalogVersion", "inputRevision", "effectiveSoftWeights", "seed", "limit",
+          "schoolId", "catalogVersion", "inputRevision", "effectiveSoftWeights", "seed", "limit",
           "terminationReason", "timetable", "timetableRevision", "score"
         ],
         "not": { "anyOf": [
@@ -44,7 +45,7 @@
     {
       "if": { "properties": { "status": { "const": "INVALID_INPUT" } } },
       "then": {
-        "required": ["validationReport"],
+        "required": ["seed", "limit", "validationReport"],
         "not": { "anyOf": [
           { "required": ["timetable"] },
           { "required": ["timetableRevision"] },
@@ -57,7 +58,7 @@
       "if": { "properties": { "status": { "const": "NO_FEASIBLE_SOLUTION_FOUND" } } },
       "then": {
         "required": [
-          "catalogVersion", "inputRevision", "effectiveSoftWeights", "seed", "limit", "searchDiagnostics"
+          "schoolId", "catalogVersion", "inputRevision", "effectiveSoftWeights", "seed", "limit", "searchDiagnostics"
         ],
         "not": { "anyOf": [
           { "required": ["timetable"] },
@@ -70,7 +71,7 @@
     {
       "if": { "properties": { "status": { "const": "INTERNAL_ERROR" } } },
       "then": {
-        "required": ["safeMessage"],
+        "required": ["seed", "limit", "safeMessage"],
         "not": { "anyOf": [
           { "required": ["timetable"] },
           { "required": ["timetableRevision"] },
