@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.networknt.schema.Schema;
 import com.networknt.schema.SchemaRegistry;
@@ -72,13 +74,27 @@ public final class CurrentTimetableReader {
             return new Outcome(null, ValidationReport.from(errors));
         }
         var assignments = new ArrayList<Assignment>();
-        assignmentsNode.forEach(node -> assignments.add(new Assignment(
-                node.path("lessonId").stringValue(),
-                node.path("subjectId").stringValue(),
-                node.path("cohortId").stringValue(),
-                node.path("teacherId").stringValue(),
-                node.path("periodId").stringValue(),
-                node.path("roomId").stringValue())));
+        var lessonIds = new HashSet<String>();
+        var duplicateLessonIds = new TreeSet<String>();
+        assignmentsNode.forEach(node -> {
+            String lessonId = node.path("lessonId").stringValue();
+            if (!lessonIds.add(lessonId)) {
+                duplicateLessonIds.add(lessonId);
+            }
+            assignments.add(new Assignment(
+                    lessonId,
+                    node.path("subjectId").stringValue(),
+                    node.path("cohortId").stringValue(),
+                    node.path("teacherId").stringValue(),
+                    node.path("periodId").stringValue(),
+                    node.path("roomId").stringValue()));
+        });
+        duplicateLessonIds.forEach(lessonId -> errors.add(new ValidationError(
+                "/timetable/assignments", List.of(lessonId),
+                "current timetable contains more than one assignment for the lesson")));
+        if (!errors.isEmpty()) {
+            return new Outcome(null, ValidationReport.from(errors));
+        }
         assignments.sort(Comparator.comparing(Assignment::lessonId));
         return new Outcome(new CurrentTimetable(
                 input.path("schemaVersion").intValue(),

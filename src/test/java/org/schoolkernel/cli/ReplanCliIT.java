@@ -21,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.schoolkernel.contract.JsonSupport;
+import org.schoolkernel.contract.RevisionService;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ArrayNode;
@@ -98,6 +99,27 @@ class ReplanCliIT {
                 "--current", current.toString(), "--output", schoolOutput.toString(), "--step-limit", "10");
         assertEquals(2, schoolProcess.exitCode());
         assertFalse(schoolProcess.stderr().contains("Solving started"));
+
+        ObjectNode duplicate = (ObjectNode) JsonSupport.mapper().readTree(current);
+        ArrayNode assignments = (ArrayNode) duplicate.path("timetable").path("assignments");
+        assignments.add(assignments.get(0).deepCopy());
+        duplicate.put("timetableRevision", new RevisionService().timetableRevision(
+                duplicate.path("schemaVersion").intValue(),
+                duplicate.path("schoolId").stringValue(),
+                duplicate.path("inputRevision").stringValue(),
+                assignments));
+        Path duplicateOutput = temporaryDirectory.resolve("duplicate-result.json");
+        ProcessResult duplicateProcess = run("replan", "--definition", write("updated-b.json", updated).toString(),
+                "--current", write("duplicate-current.json", duplicate).toString(),
+                "--output", duplicateOutput.toString(), "--step-limit", "10");
+        assertEquals(2, duplicateProcess.exitCode());
+        JsonNode duplicateResult = JsonSupport.mapper().readTree(duplicateOutput);
+        assertEquals("INVALID_INPUT", duplicateResult.path("status").stringValue());
+        assertEquals("lesson-math-1",
+                duplicateResult.path("validationReport").path("errors").get(0).path("entityIds").get(0).stringValue());
+        assertFalse(duplicateResult.has("timetable"));
+        assertFalse(duplicateResult.has("changeReport"));
+        assertFalse(duplicateProcess.stderr().contains("Solving started"));
     }
 
     @Test
@@ -121,6 +143,12 @@ class ReplanCliIT {
                 .put("subjectId", "math")
                 .put("cohortId", "cohort-7a")
                 .put("teacherId", "teacher-alex");
+        lessons.addObject()
+                .put("id", "lesson-alpha")
+                .put("displayName", "Alpha mathematics")
+                .put("subjectId", "math")
+                .put("cohortId", "cohort-7a")
+                .put("teacherId", "teacher-alex");
         Path output = temporaryDirectory.resolve("changes-result.json");
 
         ProcessResult process = run("replan", "--definition", write("changes.json", updated).toString(),
@@ -128,14 +156,54 @@ class ReplanCliIT {
 
         assertEquals(0, process.exitCode());
         JsonNode result = JsonSupport.mapper().readTree(output);
-        JsonNode report = result.path("changeReport");
-        assertEquals("lesson-new", report.path("additions").get(0).path("lessonId").stringValue());
-        assertEquals("lesson-math-1", report.path("cancellations").get(0).path("lessonId").stringValue());
-        assertEquals("teacher-alex", report.path("teacherChanges").get(0).path("oldTeacherId").stringValue());
-        assertEquals("teacher-new", report.path("teacherChanges").get(0).path("newTeacherId").stringValue());
-        assertEquals("mon-3", report.path("forcedMoves").get(0).path("newPeriodId").stringValue());
+        assertEquals(JsonSupport.mapper().readTree("""
+                {
+                  "additions": [
+                    {"lessonId": "lesson-alpha"},
+                    {"lessonId": "lesson-new"}
+                  ],
+                  "cancellations": [{"lessonId": "lesson-math-1"}],
+                  "teacherChanges": [{
+                    "lessonId": "lesson-science-1",
+                    "oldTeacherId": "teacher-alex",
+                    "newTeacherId": "teacher-new"
+                  }],
+                  "forcedMoves": [{
+                    "lessonId": "lesson-science-1",
+                    "oldPeriodId": "mon-2",
+                    "newPeriodId": "mon-3"
+                  }],
+                  "periodMoves": [],
+                  "roomOnlyMoves": []
+                }
+                """), result.path("changeReport"));
         assertEquals(0, result.path("score").path("periodMoves").longValue());
+        assertEquals(0, result.path("score").path("roomOnlyMoves").longValue());
         assertTrue(resultSchema().validate(result).isEmpty());
+
+        ObjectNode forcedRoom = updatedFromCurrent(current);
+        ((ObjectNode) forcedRoom.withArray("lessons").get(0)).put("roomLock", "room-101");
+        Path forcedRoomOutput = temporaryDirectory.resolve("forced-room-result.json");
+        ProcessResult forcedRoomProcess = run("replan",
+                "--definition", write("forced-room.json", forcedRoom).toString(),
+                "--current", current.toString(), "--output", forcedRoomOutput.toString(), "--step-limit", "100");
+        assertEquals(0, forcedRoomProcess.exitCode());
+        JsonNode forcedRoomResult = JsonSupport.mapper().readTree(forcedRoomOutput);
+        assertEquals(JsonSupport.mapper().readTree("""
+                {
+                  "additions": [],
+                  "cancellations": [],
+                  "teacherChanges": [],
+                  "forcedMoves": [{
+                    "lessonId": "lesson-math-1",
+                    "oldRoomId": "room-102",
+                    "newRoomId": "room-101"
+                  }],
+                  "periodMoves": [],
+                  "roomOnlyMoves": []
+                }
+                """), forcedRoomResult.path("changeReport"));
+        assertEquals("mon-1", assignment(forcedRoomResult, "lesson-math-1").path("periodId").stringValue());
     }
 
     @Test
@@ -153,7 +221,12 @@ class ReplanCliIT {
         JsonNode result = JsonSupport.mapper().readTree(output);
         assertEquals("EMPTY_PROBLEM", result.path("terminationReason").stringValue());
         assertEquals(0, result.path("timetable").path("assignments").size());
-        assertEquals(2, result.path("changeReport").path("cancellations").size());
+        assertEquals(JsonSupport.mapper().readTree("""
+                [
+                  {"lessonId": "lesson-math-1"},
+                  {"lessonId": "lesson-science-1"}
+                ]
+                """), result.path("changeReport").path("cancellations"));
         assertFalse(process.stderr().contains("Solving started"));
     }
 
@@ -190,6 +263,14 @@ class ReplanCliIT {
         assertEquals(74, transport.exitCode());
         assertFalse(Files.exists(transportOutput));
         assertArrayEquals(original, Files.readAllBytes(current));
+
+        Path existingOutput = temporaryDirectory.resolve("existing-result.json");
+        byte[] previous = "previous-result".getBytes(StandardCharsets.UTF_8);
+        Files.write(existingOutput, previous);
+        ProcessResult overwriteRefused = run("replan", "--definition", updated.toString(),
+                "--current", current.toString(), "--output", existingOutput.toString(), "--step-limit", "10");
+        assertEquals(74, overwriteRefused.exitCode());
+        assertArrayEquals(previous, Files.readAllBytes(existingOutput));
     }
 
     @Test
@@ -252,6 +333,16 @@ class ReplanCliIT {
         assertEquals(0, periodResult.path("score").path("roomOnlyMoves").longValue());
         assertEquals("lesson-science-1",
                 periodResult.path("changeReport").path("periodMoves").get(0).path("lessonId").stringValue());
+        assertEquals(JsonSupport.mapper().readTree("""
+                [{
+                  "lessonId": "lesson-science-1",
+                  "oldPeriodId": "mon-2",
+                  "newPeriodId": "mon-3",
+                  "oldRoomId": "room-101",
+                  "newRoomId": "room-101"
+                }]
+                """), periodResult.path("changeReport").path("periodMoves"));
+        assertEquals(0, periodResult.path("changeReport").path("roomOnlyMoves").size());
 
         ObjectNode roomUpdate = updatedFromCurrent(current);
         ((ObjectNode) roomUpdate.withArray("rooms").get(1))
@@ -265,6 +356,41 @@ class ReplanCliIT {
         assertEquals(1, roomResult.path("score").path("roomOnlyMoves").longValue());
         assertEquals("lesson-math-1",
                 roomResult.path("changeReport").path("roomOnlyMoves").get(0).path("lessonId").stringValue());
+        assertEquals(JsonSupport.mapper().readTree("""
+                [{
+                  "lessonId": "lesson-math-1",
+                  "oldRoomId": "room-102",
+                  "newRoomId": "room-101"
+                }]
+                """), roomResult.path("changeReport").path("roomOnlyMoves"));
+        assertEquals(0, roomResult.path("changeReport").path("periodMoves").size());
+    }
+
+    @Test
+    @DisplayName("UC-2 ext 2j and minimal guarantee: interruption exits 130 without publication")
+    void interruptionDoesNotPublish() throws Exception {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            return;
+        }
+        Path current = produceCurrent();
+        Path updated = write("interrupt-update.json", updatedFromCurrent(current));
+        Path output = temporaryDirectory.resolve("interrupted.json");
+        Process process = start("replan", "--definition", updated.toString(), "--current", current.toString(),
+                "--output", output.toString(), "--time-limit", "30s");
+        Thread.sleep(100);
+        new ProcessBuilder("kill", "-INT", Long.toString(process.pid())).start().waitFor();
+
+        assertTrue(process.waitFor(10, TimeUnit.SECONDS));
+        assertEquals(130, process.exitValue());
+        assertFalse(Files.exists(output));
+    }
+
+    private static JsonNode assignment(JsonNode result, String lessonId) {
+        return java.util.stream.StreamSupport.stream(
+                        result.path("timetable").path("assignments").spliterator(), false)
+                .filter(value -> lessonId.equals(value.path("lessonId").stringValue()))
+                .findFirst()
+                .orElseThrow();
     }
 
     private Path produceCurrent() throws Exception {
@@ -294,17 +420,21 @@ class ReplanCliIT {
     }
 
     private static ProcessResult run(String... arguments) throws Exception {
-        var command = new ArrayList<String>();
-        command.add(Path.of(System.getProperty("java.home"), "bin", "java").toString());
-        command.add("-jar");
-        command.add(JAR.toString());
-        command.addAll(List.of(arguments));
-        Process process = new ProcessBuilder(command).start();
+        Process process = start(arguments);
         assertTrue(process.waitFor(30, TimeUnit.SECONDS), "packaged CLI did not terminate");
         return new ProcessResult(
                 process.exitValue(),
                 new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8),
                 new String(process.getErrorStream().readAllBytes(), StandardCharsets.UTF_8));
+    }
+
+    private static Process start(String... arguments) throws Exception {
+        var command = new ArrayList<String>();
+        command.add(Path.of(System.getProperty("java.home"), "bin", "java").toString());
+        command.add("-jar");
+        command.add(JAR.toString());
+        command.addAll(List.of(arguments));
+        return new ProcessBuilder(command).start();
     }
 
     private record ProcessResult(int exitCode, String stdout, String stderr) {}

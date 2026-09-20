@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-2
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `8c2fb7f`; revises `422a774` for C-1 and C-2 | `spec/convergence/UC-1.md` - APPROVE |
-| UC-2 | NEEDS_REVISION | UC-1 | `bfb7a40` from `498fb2e` | `spec/convergence/UC-2.md` - REJECT (C-1, G-1 through G-3) |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | `HEAD at convergence`; revises `bfb7a40` from `801deb5` | pending reconvergence; prior `spec/convergence/UC-2.md` - REJECT |
 
 ## UC-1 Evidence
 
@@ -57,26 +57,32 @@
 
 - Started from: `498fb2e358cf03b46dc5f4bae84072691b5cad28`
 - Pre-existing dirty files: `src/test/java/org/schoolkernel/fixtures/MerivaljaExampleFixtureTests.java`, `src/test/resources/fixtures/README.md`, `src/test/resources/fixtures/merivalja-1a-1b-4a-4avr-4b-9a-9b.json`, `src/test/resources/fixtures/merivalja-5a-5b.json`
-- Prior convergence findings: none
+- Prior convergence findings: C-1, G-1, G-2, G-3 from `801deb5`
 - Implementation submission: `HEAD at convergence`
 - Convergence findings: C-1, G-1, G-2, G-3
+- Revision started from: `801deb59066831d9e213245305cf1ee460613136`
+- Revision completed: 2026-09-20T00:58:37Z
 - Changed files: `README.md`, `examples/updated-school.json`, `spec/status.md`, `spec/checkpoints/UC-2.md`, `src/main/java/org/schoolkernel/application/{ReplanRequest,ReplanService}.java`, `src/main/java/org/schoolkernel/cli/SchoolKernelMain.java`, `src/main/java/org/schoolkernel/contract/{CurrentTimetableReader,ResultFactory}.java`, `src/main/java/org/schoolkernel/domain/{DefinitionValidator,SchoolDefinition}.java`, `src/main/java/org/schoolkernel/solver/{HardConstraintDiagnostics,PlanningLesson,PlanningMapper,ScheduleEvaluator,SchoolConstraintProvider,SolverAdapter}.java`, `src/main/resources/schema/result-v1.schema.json`, `src/test/java/org/schoolkernel/application/PlanServiceTest.java`, `src/test/java/org/schoolkernel/benchmark/TargetScaleBenchmark.java`, `src/test/java/org/schoolkernel/cli/ReplanCliIT.java`, `src/test/java/org/schoolkernel/solver/SchoolConstraintProviderTest.java`
+- Revision files: `src/main/java/org/schoolkernel/solver/ReplanningSolver.java`, `src/test/java/org/schoolkernel/application/ReplanServiceTest.java`, `src/test/java/org/schoolkernel/solver/ReplanningSolverTest.java`; revised current reader, replan service/adapter/constraints, CLI integration tests, solver configuration tests, status, and checkpoint.
 - Commands and results:
-  - `./mvnw -q clean verify` - PASS; 53 tests, 0 failures/errors/skips (51 implementation-owned plus 2 concurrent fixture tests).
+  - `./mvnw -q clean verify` - PASS; 61 tests, 0 failures/errors/skips (59 implementation-owned plus 2 concurrent fixture tests).
+  - `./mvnw -q -Dtest=ReplanServiceTest,ReplanningSolverTest,SolverConfigurationTest,SchoolConstraintProviderTest test` - PASS; injected failure boundaries, score levels, dominance trade-offs, and stability matches.
+  - `./mvnw -q -Dit.test=ReplanCliIT verify` - PASS; 42 unit tests and 8 packaged replan integration tests in the focused lifecycle.
   - `./school-kernel plan --definition examples/initial-school.json --output /tmp/school-kernel-uc2.rc692V/current.json --step-limit 100` - exit 0, approved UC-1 baseline.
   - `./school-kernel replan --definition examples/updated-school.json --current /tmp/school-kernel-uc2.rc692V/current.json --output /tmp/school-kernel-uc2.rc692V/revised.json --step-limit 100` - exit 0, complete `FEASIBLE`, zero avoidable moves, empty change categories, current preserved.
+  - Revision journey: packaged replan exits 0 with the complete unchanged timetable; a schema-valid, revision-verifiable duplicate current assignment now exits 2 with deterministic `INVALID_INPUT`, no solver/timetable/change report.
   - `git diff --check` - PASS.
 
 | Contract element | Evidence |
 |---|---|
 | UC-2 main and success | `ReplanCliIT.mainSuccessAndDirectSuccessor` consumes production UC-1 output, preserves assignments, validates the result, preserves current bytes, and uses the revised result in a second direct replan. |
-| UC-2 extensions 1a-1c, 2a-2c | `ReplanCliIT.misuseAndMalformedInputsPreserveFiles`, `rejectsTamperingAndLineageMismatch`, and `lockAndFeasibilityFailures`. |
+| UC-2 extensions 1a-1c, 2a-2c | Packaged misuse/transport/overwrite, malformed/tampered/duplicate-current, lineage, school, and lock-conflict cases; semantic validation precedes baseline collection and solving. |
 | UC-2 extensions 2d-2h | Main journey accepts the updated definition, empty update reports cancellations, limit-bounded results remain feasible, preflight and exhausted-search fixtures disclose no timetable/change report. |
-| UC-2 extensions 2i-2k | Shared safe-result, interrupt, and atomic-publication mechanisms remain covered by approved UC-1 tests; `ReplanService` applies them at the same output boundary. |
+| UC-2 extensions 2i-2k | `ReplanServiceTest` injects internal, interruption, resource-safeguard, and publication failures; `ReplanCliIT.interruptionDoesNotPublish` proves packaged exit 130 and no publication. |
 | UC-2 G1-G3 | Approved UC-1 invariants, current result schema/revision verification, same-school/direct-lineage checks, and updated-definition hard validation. |
-| UC-2 G4-G8 | Baseline facts use only common lesson IDs; fixed Bendable levels and `stabilityMoves` prove period-before-room ordering and forced-dimension exclusion. |
-| UC-2 G9-G11 | `classifiesObservableChanges`, `classifiesSolverChosenMoves`, `emptyUpdateReportsCancellations`, and main/direct-successor packaged journeys assert exact deterministic categories and bounded-search semantics. |
-| UC-2 minimal guarantee | Tamper/lineage/misuse/transport/search failures publish no replacement timetable or change report and preserve the current file. |
+| UC-2 G4-G8 | Common-ID facts, exact 1-hard/3-soft levels, solver period-over-room/preference and room-over-preference choices, and independent lock evidence are verified. |
+| UC-2 G9-G11 | Packaged tests compare complete sorted change arrays, full old/new values, allowed teacher overlap, forbidden move overlap, empty cancellations, and direct-successor reuse. |
+| UC-2 minimal guarantee | Packaged and injected misuse, transport, safeguard, validation, search, interrupt, and publication failures preserve current/prior destination and omit replacement timetable/change report. |
 | RULE-1 through RULE-12, RULE-14 through RULE-17 | Detailed evidence is recorded in `spec/checkpoints/UC-2.md`; the full suite regresses approved UC-1. |
 
 ## Blockers

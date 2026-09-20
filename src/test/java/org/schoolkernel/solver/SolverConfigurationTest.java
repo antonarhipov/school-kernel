@@ -33,4 +33,17 @@ class SolverConfigurationTest {
         var localSearch = (LocalSearchPhaseConfig) config.getPhaseConfigList().get(1);
         assertNull(localSearch.getTerminationConfig());
     }
+
+    @Test
+    @DisplayName("RULE-6 and UC-2 G5: product scoring has one hard and three ordered soft levels")
+    void bendableProductLevels() {
+        assertEquals(1, SchoolConstraintProvider.HARD.hardLevelsSize());
+        assertEquals(3, SchoolConstraintProvider.HARD.softLevelsSize());
+        assertEquals(1, SchoolConstraintProvider.PERIOD_MOVE.hardLevelsSize());
+        assertEquals(3, SchoolConstraintProvider.PERIOD_MOVE.softLevelsSize());
+        assertEquals(1, SchoolConstraintProvider.ROOM_ONLY_MOVE.hardLevelsSize());
+        assertEquals(3, SchoolConstraintProvider.ROOM_ONLY_MOVE.softLevelsSize());
+        assertEquals(1, SchoolConstraintProvider.PREFERENCE.hardLevelsSize());
+        assertEquals(3, SchoolConstraintProvider.PREFERENCE.softLevelsSize());
+    }
 }

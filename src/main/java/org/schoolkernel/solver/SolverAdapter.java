@@ -15,7 +15,7 @@ import ai.timefold.solver.core.config.solver.SolverConfig;
 import ai.timefold.solver.core.config.solver.termination.TerminationConfig;
 import ai.timefold.solver.core.impl.solver.DefaultSolver;
 
-public final class SolverAdapter implements InitialSolver {
+public final class SolverAdapter implements InitialSolver, ReplanningSolver {
     public record ExecutionControls(Duration timeLimit, Integer stepLimit, long seed) {
         public ExecutionControls {
             if ((timeLimit == null) == (stepLimit == null)) {

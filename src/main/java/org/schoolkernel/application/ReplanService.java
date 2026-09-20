@@ -19,6 +19,7 @@ import org.schoolkernel.domain.ValidationError;
 import org.schoolkernel.domain.ValidationReport;
 import org.schoolkernel.solver.PlanningMapper;
 import org.schoolkernel.solver.PreflightFeasibilityCheck;
+import org.schoolkernel.solver.ReplanningSolver;
 import org.schoolkernel.solver.ScheduleEvaluator;
 import org.schoolkernel.solver.SchoolSchedule;
 import org.schoolkernel.solver.SolverAdapter;
@@ -30,15 +31,42 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 
 public final class ReplanService {
-    private final PlanFiles files = new FileBoundary();
-    private final DefinitionSchemaValidator definitionSchema = new DefinitionSchemaValidator();
-    private final DefinitionValidator definitionValidator = new DefinitionValidator();
-    private final CurrentTimetableReader currentReader = new CurrentTimetableReader();
-    private final RevisionService revisions = new RevisionService();
-    private final PreflightFeasibilityCheck preflight = new PreflightFeasibilityCheck();
-    private final SolverAdapter solver = new SolverAdapter();
-    private final ScheduleEvaluator evaluator = new ScheduleEvaluator();
-    private final ResultFactory results = new ResultFactory();
+    private final PlanFiles files;
+    private final DefinitionSchemaValidator definitionSchema;
+    private final DefinitionValidator definitionValidator;
+    private final CurrentTimetableReader currentReader;
+    private final RevisionService revisions;
+    private final PreflightFeasibilityCheck preflight;
+    private final ReplanningSolver solver;
+    private final ScheduleEvaluator evaluator;
+    private final ResultFactory results;
+
+    public ReplanService() {
+        this(new FileBoundary(), new DefinitionSchemaValidator(), new DefinitionValidator(),
+                new CurrentTimetableReader(), new RevisionService(), new PreflightFeasibilityCheck(),
+                new SolverAdapter(), new ScheduleEvaluator(), new ResultFactory());
+    }
+
+    ReplanService(
+            PlanFiles files,
+            DefinitionSchemaValidator definitionSchema,
+            DefinitionValidator definitionValidator,
+            CurrentTimetableReader currentReader,
+            RevisionService revisions,
+            PreflightFeasibilityCheck preflight,
+            ReplanningSolver solver,
+            ScheduleEvaluator evaluator,
+            ResultFactory results) {
+        this.files = files;
+        this.definitionSchema = definitionSchema;
+        this.definitionValidator = definitionValidator;
+        this.currentReader = currentReader;
+        this.revisions = revisions;
+        this.preflight = preflight;
+        this.solver = solver;
+        this.evaluator = evaluator;
+        this.results = results;
+    }
 
     public int replan(ReplanRequest request, PrintWriter errorWriter) {
         long started = System.nanoTime();

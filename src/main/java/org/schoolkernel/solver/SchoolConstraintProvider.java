@@ -13,10 +13,10 @@ import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
 import ai.timefold.solver.core.api.score.stream.Joiners;
 
 public final class SchoolConstraintProvider implements ConstraintProvider {
-    private static final BendableScore HARD = BendableScore.ofHard(1, 3, 0, 1);
-    private static final BendableScore PERIOD_MOVE = BendableScore.ofSoft(1, 3, 0, 1);
-    private static final BendableScore ROOM_ONLY_MOVE = BendableScore.ofSoft(1, 3, 1, 1);
-    private static final BendableScore PREFERENCE = BendableScore.ofSoft(1, 3, 2, 1);
+    static final BendableScore HARD = BendableScore.ofHard(1, 3, 0, 1);
+    static final BendableScore PERIOD_MOVE = BendableScore.ofSoft(1, 3, 0, 1);
+    static final BendableScore ROOM_ONLY_MOVE = BendableScore.ofSoft(1, 3, 1, 1);
+    static final BendableScore PREFERENCE = BendableScore.ofSoft(1, 3, 2, 1);
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory factory) {
