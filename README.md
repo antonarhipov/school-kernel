@@ -49,6 +49,18 @@ and `130` for interruption before publication.
 The complete behavior, constraint catalog, failure semantics, and score definitions are in
 [`spec/spec.md`](spec/spec.md).
 
+## Timetable viewer
+
+The dependency-free web viewer renders a result JSON by class, teacher, or room. Start a static server from the
+repository root, then open <http://localhost:8080/ui/>:
+
+```bash
+python3 -m http.server 8080
+```
+
+[`examples/timetable.json`](examples/timetable.json) loads automatically. Use **Open JSON** or drag another result
+file onto the page to inspect it.
+
 The target-scale performance measurement is deliberately separate from correctness gates:
 
 ```bash

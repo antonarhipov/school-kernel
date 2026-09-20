@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A lightweight viewer for School Kernel timetable results.">
+    <title>School Kernel · Timetable</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="./" aria-label="School Kernel timetable">
+        <span class="brand-mark" aria-hidden="true">SK</span>
+        <span>School Kernel</span>
+    </a>
+    <label class="load-button" for="file-input">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 15.5V19h14v-3.5"/>
+        </svg>
+        Open JSON
+    </label>
+    <input id="file-input" type="file" accept="application/json,.json" hidden>
+</header>
+
+<main>
+    <section class="intro" aria-labelledby="page-title">
+        <div>
+            <p class="eyebrow">Weekly schedule</p>
+            <h1 id="page-title">Timetable</h1>
+            <p id="school-name" class="school-name">Loading example…</p>
+        </div>
+        <div id="result-state" class="result-state" hidden>
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="result-status"></span>
+            <span class="separator" aria-hidden="true"></span>
+            <span id="lesson-count"></span>
+        </div>
+    </section>
+
+    <section class="viewer" aria-label="Timetable viewer">
+        <div class="toolbar">
+            <div id="view-switcher" class="segmented" aria-label="View timetable by" role="group">
+                <button type="button" data-view="cohortId" aria-pressed="true">Classes</button>
+                <button type="button" data-view="teacherId" aria-pressed="false">Teachers</button>
+                <button type="button" data-view="roomId" aria-pressed="false">Rooms</button>
+            </div>
+
+            <label class="entity-picker">
+                <span id="entity-label">Class</span>
+                <span class="select-wrap">
+                    <select id="entity-select" aria-labelledby="entity-label"></select>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
+                </span>
+            </label>
+        </div>
+
+        <div id="message" class="message" role="status" hidden></div>
+        <div id="timetable-wrap" class="timetable-wrap" tabindex="0" aria-label="Scrollable weekly timetable">
+            <table id="timetable"></table>
+        </div>
+    </section>
+
+    <p class="drop-hint">Drop a School Kernel result JSON anywhere on this page to view it.</p>
+</main>
+
+<div id="drop-overlay" class="drop-overlay" aria-hidden="true">
+    <div>Drop timetable JSON</div>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
