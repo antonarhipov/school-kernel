@@ -1,0 +1,3154 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 1,
+  "schoolId": "merivalja-selected-classes-example",
+  "subjects": [
+    {
+      "id": "opiabi",
+      "displayName": "Õpiabi"
+    },
+    {
+      "id": "klassitund",
+      "displayName": "Klassitund"
+    },
+    {
+      "id": "muusikaopetus",
+      "displayName": "Muusikaõpetus"
+    },
+    {
+      "id": "kehaline-kasvatus",
+      "displayName": "Kehaline kasvatus"
+    },
+    {
+      "id": "kunstiopetus",
+      "displayName": "Kunstiõpetus"
+    },
+    {
+      "id": "mudilaskoor",
+      "displayName": "Mudilaskoor"
+    },
+    {
+      "id": "kasitoo-ja-tehnoloogiaopetus",
+      "displayName": "Käsitöö- ja tehnoloogiaõpetus"
+    },
+    {
+      "id": "taiendav-eesti-keel-i-kooliaste",
+      "displayName": "Täiendav eesti keel I kooliaste"
+    },
+    {
+      "id": "eesti-keel-vr",
+      "displayName": "Eesti keel VR"
+    },
+    {
+      "id": "ujumine",
+      "displayName": "Ujumine"
+    },
+    {
+      "id": "matemaatika-vr",
+      "displayName": "Matemaatika VR"
+    },
+    {
+      "id": "sotsiaalpedagoog",
+      "displayName": "Sotsiaalpedagoog"
+    },
+    {
+      "id": "eripedagoog",
+      "displayName": "Eripedagoog"
+    },
+    {
+      "id": "bioloogia",
+      "displayName": "Bioloogia"
+    },
+    {
+      "id": "uhiskonnaopetus",
+      "displayName": "Ühiskonnaõpetus"
+    },
+    {
+      "id": "into",
+      "displayName": "IntÕ"
+    },
+    {
+      "id": "matemaatika",
+      "displayName": "Matemaatika"
+    },
+    {
+      "id": "kirjandus",
+      "displayName": "Kirjandus"
+    },
+    {
+      "id": "eksami-ettevalmistus-eesti-keel",
+      "displayName": "Eksami ettevalmistus eesti keel"
+    },
+    {
+      "id": "keemia",
+      "displayName": "Keemia"
+    },
+    {
+      "id": "eesti-keel",
+      "displayName": "Eesti keel"
+    },
+    {
+      "id": "inglise-keel",
+      "displayName": "Inglise keel"
+    },
+    {
+      "id": "geograafia",
+      "displayName": "Geograafia"
+    },
+    {
+      "id": "fuusika",
+      "displayName": "Füüsika"
+    },
+    {
+      "id": "ajalugu",
+      "displayName": "Ajalugu"
+    },
+    {
+      "id": "eksami-ettevalmistus-matemaatika",
+      "displayName": "Eksami ettevalmistus matemaatika"
+    },
+    {
+      "id": "eksami-ettevalmistus",
+      "displayName": "Eksami ettevalmistus"
+    },
+    {
+      "id": "taiendav-eesti-keel-ii-iii-kooliaste",
+      "displayName": "Täiendav eesti keel II/III kooliaste"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "piret-laanesaar",
+      "displayName": "Piret Laanesaar",
+      "qualifiedSubjectIds": [
+        "opiabi",
+        "klassitund"
+      ]
+    },
+    {
+      "id": "kaie-kodres",
+      "displayName": "Kaie Kodres",
+      "qualifiedSubjectIds": [
+        "muusikaopetus",
+        "mudilaskoor"
+      ]
+    },
+    {
+      "id": "hektor-talviste",
+      "displayName": "Hektor Talviste",
+      "qualifiedSubjectIds": [
+        "kehaline-kasvatus",
+        "ujumine"
+      ]
+    },
+    {
+      "id": "kairi-meressaar",
+      "displayName": "Kairi Meressaar",
+      "qualifiedSubjectIds": [
+        "klassitund",
+        "opiabi"
+      ]
+    },
+    {
+      "id": "anette-maria-rennit",
+      "displayName": "Anette Maria Rennit",
+      "qualifiedSubjectIds": [
+        "opiabi",
+        "klassitund"
+      ]
+    },
+    {
+      "id": "katri-plooman",
+      "displayName": "Katri Plooman",
+      "qualifiedSubjectIds": [
+        "kehaline-kasvatus"
+      ]
+    },
+    {
+      "id": "helena-kroon",
+      "displayName": "Helena Kroon",
+      "qualifiedSubjectIds": [
+        "kunstiopetus",
+        "kasitoo-ja-tehnoloogiaopetus"
+      ]
+    },
+    {
+      "id": "marina-pokintsereda",
+      "displayName": "Marina Pokintšereda",
+      "qualifiedSubjectIds": [
+        "taiendav-eesti-keel-i-kooliaste",
+        "taiendav-eesti-keel-ii-iii-kooliaste"
+      ]
+    },
+    {
+      "id": "reena-korp",
+      "displayName": "Reena Korp",
+      "qualifiedSubjectIds": [
+        "eesti-keel-vr"
+      ]
+    },
+    {
+      "id": "aida-martin",
+      "displayName": "Aida Martin",
+      "qualifiedSubjectIds": [
+        "matemaatika-vr"
+      ]
+    },
+    {
+      "id": "grete-suurvali",
+      "displayName": "Grete Suurväli",
+      "qualifiedSubjectIds": [
+        "sotsiaalpedagoog"
+      ]
+    },
+    {
+      "id": "helina-silberg",
+      "displayName": "Helina Silberg",
+      "qualifiedSubjectIds": [
+        "eripedagoog"
+      ]
+    },
+    {
+      "id": "rita-lumiste",
+      "displayName": "Rita Lumiste",
+      "qualifiedSubjectIds": [
+        "klassitund"
+      ]
+    },
+    {
+      "id": "malle-salu",
+      "displayName": "Malle Salu",
+      "qualifiedSubjectIds": [
+        "bioloogia"
+      ]
+    },
+    {
+      "id": "siiri-aiaste",
+      "displayName": "Siiri Aiaste",
+      "qualifiedSubjectIds": [
+        "uhiskonnaopetus",
+        "ajalugu"
+      ]
+    },
+    {
+      "id": "marilin-laanetu",
+      "displayName": "Marilin Laanetu",
+      "qualifiedSubjectIds": [
+        "into"
+      ]
+    },
+    {
+      "id": "piret-noor",
+      "displayName": "Piret Noor",
+      "qualifiedSubjectIds": [
+        "matemaatika",
+        "eksami-ettevalmistus-matemaatika",
+        "into"
+      ]
+    },
+    {
+      "id": "katrin-jaaksoo",
+      "displayName": "Katrin Jaaksoo",
+      "qualifiedSubjectIds": [
+        "kirjandus",
+        "eesti-keel"
+      ]
+    },
+    {
+      "id": "aarne-ruben",
+      "displayName": "Aarne Ruben",
+      "qualifiedSubjectIds": [
+        "eksami-ettevalmistus-eesti-keel"
+      ]
+    },
+    {
+      "id": "liivi-kivimae-bondarev",
+      "displayName": "Liivi Kivimäe-Bondarev",
+      "qualifiedSubjectIds": [
+        "keemia",
+        "fuusika"
+      ]
+    },
+    {
+      "id": "maya-blinder",
+      "displayName": "Maya Blinder",
+      "qualifiedSubjectIds": [
+        "inglise-keel",
+        "eksami-ettevalmistus"
+      ]
+    },
+    {
+      "id": "madelen-monika-soiver",
+      "displayName": "Madelen Monika Soiver",
+      "qualifiedSubjectIds": [
+        "geograafia"
+      ]
+    },
+    {
+      "id": "leelo-jaanimagi",
+      "displayName": "Leelo Jaanimägi",
+      "qualifiedSubjectIds": [
+        "muusikaopetus"
+      ]
+    },
+    {
+      "id": "katariin-treial",
+      "displayName": "Katariin Treial",
+      "qualifiedSubjectIds": [
+        "kirjandus",
+        "eesti-keel"
+      ]
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "1a",
+      "displayName": "1A",
+      "size": 24
+    },
+    {
+      "id": "1b",
+      "displayName": "1B",
+      "size": 24
+    },
+    {
+      "id": "4a",
+      "displayName": "4A",
+      "size": 24
+    },
+    {
+      "id": "4avr",
+      "displayName": "4AVR",
+      "size": 24
+    },
+    {
+      "id": "4b",
+      "displayName": "4B",
+      "size": 24
+    },
+    {
+      "id": "9a",
+      "displayName": "9A",
+      "size": 24
+    },
+    {
+      "id": "9b",
+      "displayName": "9B",
+      "size": 24
+    }
+  ],
+  "rooms": [
+    {
+      "id": "mu",
+      "displayName": "MU",
+      "capacity": 30,
+      "capabilityIds": [
+        "music-room"
+      ]
+    },
+    {
+      "id": "kk3",
+      "displayName": "KK3",
+      "capacity": 30,
+      "capabilityIds": [
+        "sports-hall"
+      ]
+    },
+    {
+      "id": "kk2",
+      "displayName": "KK2",
+      "capacity": 30,
+      "capabilityIds": [
+        "sports-hall"
+      ]
+    },
+    {
+      "id": "a118",
+      "displayName": "A118",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a230",
+      "displayName": "A230",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a217",
+      "displayName": "A217",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a207",
+      "displayName": "A207",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a209",
+      "displayName": "A209",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a211",
+      "displayName": "A211",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "kk1",
+      "displayName": "KK1",
+      "capacity": 30,
+      "capabilityIds": [
+        "sports-hall"
+      ]
+    },
+    {
+      "id": "b215",
+      "displayName": "B215",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a231",
+      "displayName": "A231",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "b212",
+      "displayName": "B212",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a216",
+      "displayName": "A216",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a229",
+      "displayName": "A229",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "a223-lab",
+      "displayName": "A223(LAB)",
+      "capacity": 30,
+      "capabilityIds": [
+        "science-lab"
+      ]
+    },
+    {
+      "id": "a215",
+      "displayName": "A215",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "b216",
+      "displayName": "B216",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    },
+    {
+      "id": "b213",
+      "displayName": "B213",
+      "capacity": 30,
+      "capabilityIds": [
+        "general-classroom"
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "id": "mon-0",
+      "displayName": "Esmaspäev 0",
+      "weekday": "MONDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "mon-1",
+      "displayName": "Esmaspäev 1",
+      "weekday": "MONDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "mon-2",
+      "displayName": "Esmaspäev 2",
+      "weekday": "MONDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "mon-3",
+      "displayName": "Esmaspäev 3",
+      "weekday": "MONDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "mon-4",
+      "displayName": "Esmaspäev 4",
+      "weekday": "MONDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "mon-5",
+      "displayName": "Esmaspäev 5",
+      "weekday": "MONDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "mon-6",
+      "displayName": "Esmaspäev 6",
+      "weekday": "MONDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "mon-7",
+      "displayName": "Esmaspäev 7",
+      "weekday": "MONDAY",
+      "order": 8,
+      "startTime": "14:45:00",
+      "endTime": "15:30:00"
+    },
+    {
+      "id": "mon-8",
+      "displayName": "Esmaspäev 8",
+      "weekday": "MONDAY",
+      "order": 9,
+      "startTime": "15:40:00",
+      "endTime": "16:25:00"
+    },
+    {
+      "id": "tue-0",
+      "displayName": "Teisipäev 0",
+      "weekday": "TUESDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "tue-1",
+      "displayName": "Teisipäev 1",
+      "weekday": "TUESDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "tue-2",
+      "displayName": "Teisipäev 2",
+      "weekday": "TUESDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "tue-3",
+      "displayName": "Teisipäev 3",
+      "weekday": "TUESDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "tue-4",
+      "displayName": "Teisipäev 4",
+      "weekday": "TUESDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "tue-5",
+      "displayName": "Teisipäev 5",
+      "weekday": "TUESDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "tue-6",
+      "displayName": "Teisipäev 6",
+      "weekday": "TUESDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "tue-7",
+      "displayName": "Teisipäev 7",
+      "weekday": "TUESDAY",
+      "order": 8,
+      "startTime": "14:45:00",
+      "endTime": "15:30:00"
+    },
+    {
+      "id": "tue-8",
+      "displayName": "Teisipäev 8",
+      "weekday": "TUESDAY",
+      "order": 9,
+      "startTime": "15:40:00",
+      "endTime": "16:25:00"
+    },
+    {
+      "id": "wed-0",
+      "displayName": "Kolmapäev 0",
+      "weekday": "WEDNESDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "wed-1",
+      "displayName": "Kolmapäev 1",
+      "weekday": "WEDNESDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "wed-2",
+      "displayName": "Kolmapäev 2",
+      "weekday": "WEDNESDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "wed-3",
+      "displayName": "Kolmapäev 3",
+      "weekday": "WEDNESDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "wed-4",
+      "displayName": "Kolmapäev 4",
+      "weekday": "WEDNESDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "wed-5",
+      "displayName": "Kolmapäev 5",
+      "weekday": "WEDNESDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "wed-6",
+      "displayName": "Kolmapäev 6",
+      "weekday": "WEDNESDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "wed-7",
+      "displayName": "Kolmapäev 7",
+      "weekday": "WEDNESDAY",
+      "order": 8,
+      "startTime": "14:45:00",
+      "endTime": "15:30:00"
+    },
+    {
+      "id": "wed-8",
+      "displayName": "Kolmapäev 8",
+      "weekday": "WEDNESDAY",
+      "order": 9,
+      "startTime": "15:40:00",
+      "endTime": "16:25:00"
+    },
+    {
+      "id": "thu-0",
+      "displayName": "Neljapäev 0",
+      "weekday": "THURSDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "thu-1",
+      "displayName": "Neljapäev 1",
+      "weekday": "THURSDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "thu-2",
+      "displayName": "Neljapäev 2",
+      "weekday": "THURSDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "thu-3",
+      "displayName": "Neljapäev 3",
+      "weekday": "THURSDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "thu-4",
+      "displayName": "Neljapäev 4",
+      "weekday": "THURSDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "thu-5",
+      "displayName": "Neljapäev 5",
+      "weekday": "THURSDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "thu-6",
+      "displayName": "Neljapäev 6",
+      "weekday": "THURSDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "thu-7",
+      "displayName": "Neljapäev 7",
+      "weekday": "THURSDAY",
+      "order": 8,
+      "startTime": "14:45:00",
+      "endTime": "15:30:00"
+    },
+    {
+      "id": "thu-8",
+      "displayName": "Neljapäev 8",
+      "weekday": "THURSDAY",
+      "order": 9,
+      "startTime": "15:40:00",
+      "endTime": "16:25:00"
+    },
+    {
+      "id": "fri-0",
+      "displayName": "Reede 0",
+      "weekday": "FRIDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "fri-1",
+      "displayName": "Reede 1",
+      "weekday": "FRIDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "fri-2",
+      "displayName": "Reede 2",
+      "weekday": "FRIDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "fri-3",
+      "displayName": "Reede 3",
+      "weekday": "FRIDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "fri-4",
+      "displayName": "Reede 4",
+      "weekday": "FRIDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "fri-5",
+      "displayName": "Reede 5",
+      "weekday": "FRIDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "fri-6",
+      "displayName": "Reede 6",
+      "weekday": "FRIDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "fri-7",
+      "displayName": "Reede 7",
+      "weekday": "FRIDAY",
+      "order": 8,
+      "startTime": "14:45:00",
+      "endTime": "15:30:00"
+    },
+    {
+      "id": "fri-8",
+      "displayName": "Reede 8",
+      "weekday": "FRIDAY",
+      "order": 9,
+      "startTime": "15:40:00",
+      "endTime": "16:25:00"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "1a.opiabi.01",
+      "displayName": "1A Õpiabi 1",
+      "subjectId": "opiabi",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.01",
+      "displayName": "1A Klassitund 1",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.02",
+      "displayName": "1A Klassitund 2",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.muusikaopetus.01",
+      "displayName": "1A Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "1a",
+      "teacherId": "kaie-kodres",
+      "seriesId": "1a.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "1a.klassitund.03",
+      "displayName": "1A Klassitund 3",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.04",
+      "displayName": "1A Klassitund 4",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.05",
+      "displayName": "1A Klassitund 5",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.06",
+      "displayName": "1A Klassitund 6",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.07",
+      "displayName": "1A Klassitund 7",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.opiabi.02",
+      "displayName": "1A Õpiabi 2",
+      "subjectId": "opiabi",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.08",
+      "displayName": "1A Klassitund 8",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.09",
+      "displayName": "1A Klassitund 9",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.10",
+      "displayName": "1A Klassitund 10",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.11",
+      "displayName": "1A Klassitund 11",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.12",
+      "displayName": "1A Klassitund 12",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.kehaline-kasvatus.01",
+      "displayName": "1A Kehaline kasvatus 1",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "1a",
+      "teacherId": "hektor-talviste",
+      "seriesId": "1a.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk3"
+      ]
+    },
+    {
+      "id": "1a.muusikaopetus.02",
+      "displayName": "1A Muusikaõpetus 2",
+      "subjectId": "muusikaopetus",
+      "cohortId": "1a",
+      "teacherId": "kaie-kodres",
+      "seriesId": "1a.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "1a.klassitund.13",
+      "displayName": "1A Klassitund 13",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.14",
+      "displayName": "1A Klassitund 14",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.kehaline-kasvatus.02",
+      "displayName": "1A Kehaline kasvatus 2",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "1a",
+      "teacherId": "hektor-talviste",
+      "seriesId": "1a.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk3"
+      ]
+    },
+    {
+      "id": "1a.klassitund.15",
+      "displayName": "1A Klassitund 15",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1a.klassitund.16",
+      "displayName": "1A Klassitund 16",
+      "subjectId": "klassitund",
+      "cohortId": "1a",
+      "teacherId": "piret-laanesaar",
+      "seriesId": "1a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.01",
+      "displayName": "1B Klassitund 1",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.kehaline-kasvatus.01",
+      "displayName": "1B Kehaline kasvatus 1",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "1b",
+      "teacherId": "hektor-talviste",
+      "seriesId": "1b.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk3"
+      ]
+    },
+    {
+      "id": "1b.klassitund.02",
+      "displayName": "1B Klassitund 2",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.03",
+      "displayName": "1B Klassitund 3",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.muusikaopetus.01",
+      "displayName": "1B Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "1b",
+      "teacherId": "kaie-kodres",
+      "seriesId": "1b.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "1b.klassitund.04",
+      "displayName": "1B Klassitund 4",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.05",
+      "displayName": "1B Klassitund 5",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.06",
+      "displayName": "1B Klassitund 6",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.07",
+      "displayName": "1B Klassitund 7",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.08",
+      "displayName": "1B Klassitund 8",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.opiabi.01",
+      "displayName": "1B Õpiabi 1",
+      "subjectId": "opiabi",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.09",
+      "displayName": "1B Klassitund 9",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.10",
+      "displayName": "1B Klassitund 10",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.11",
+      "displayName": "1B Klassitund 11",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.opiabi.02",
+      "displayName": "1B Õpiabi 2",
+      "subjectId": "opiabi",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.muusikaopetus.02",
+      "displayName": "1B Muusikaõpetus 2",
+      "subjectId": "muusikaopetus",
+      "cohortId": "1b",
+      "teacherId": "kaie-kodres",
+      "seriesId": "1b.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "1b.klassitund.12",
+      "displayName": "1B Klassitund 12",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.13",
+      "displayName": "1B Klassitund 13",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.14",
+      "displayName": "1B Klassitund 14",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.klassitund.15",
+      "displayName": "1B Klassitund 15",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "1b.kehaline-kasvatus.02",
+      "displayName": "1B Kehaline kasvatus 2",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "1b",
+      "teacherId": "hektor-talviste",
+      "seriesId": "1b.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk3"
+      ]
+    },
+    {
+      "id": "1b.klassitund.16",
+      "displayName": "1B Klassitund 16",
+      "subjectId": "klassitund",
+      "cohortId": "1b",
+      "teacherId": "kairi-meressaar",
+      "seriesId": "1b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.opiabi.01",
+      "displayName": "4A Õpiabi 1",
+      "subjectId": "opiabi",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.kehaline-kasvatus.01",
+      "displayName": "4A Kehaline kasvatus 1",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "4a",
+      "teacherId": "katri-plooman",
+      "seriesId": "4a.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk2"
+      ]
+    },
+    {
+      "id": "4a.kunstiopetus.01",
+      "displayName": "4A Kunstiõpetus 1",
+      "subjectId": "kunstiopetus",
+      "cohortId": "4a",
+      "teacherId": "helena-kroon",
+      "seriesId": "4a.kunstiopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a118"
+      ]
+    },
+    {
+      "id": "4a.klassitund.01",
+      "displayName": "4A Klassitund 1",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.02",
+      "displayName": "4A Klassitund 2",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.kehaline-kasvatus.02",
+      "displayName": "4A Kehaline kasvatus 2",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "4a",
+      "teacherId": "katri-plooman",
+      "seriesId": "4a.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk2"
+      ]
+    },
+    {
+      "id": "4a.muusikaopetus.01",
+      "displayName": "4A Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "4a",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4a.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4a.mudilaskoor.01",
+      "displayName": "4A Mudilaskoor 1",
+      "subjectId": "mudilaskoor",
+      "cohortId": "4a",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4a.mudilaskoor",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4a.klassitund.03",
+      "displayName": "4A Klassitund 3",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.04",
+      "displayName": "4A Klassitund 4",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.05",
+      "displayName": "4A Klassitund 5",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.06",
+      "displayName": "4A Klassitund 6",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.07",
+      "displayName": "4A Klassitund 7",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.kasitoo-ja-tehnoloogiaopetus.01",
+      "displayName": "4A Käsitöö- ja tehnoloogiaõpetus 1",
+      "subjectId": "kasitoo-ja-tehnoloogiaopetus",
+      "cohortId": "4a",
+      "teacherId": "helena-kroon",
+      "seriesId": "4a.kasitoo-ja-tehnoloogiaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a118"
+      ]
+    },
+    {
+      "id": "4a.klassitund.08",
+      "displayName": "4A Klassitund 8",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.09",
+      "displayName": "4A Klassitund 9",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.muusikaopetus.02",
+      "displayName": "4A Muusikaõpetus 2",
+      "subjectId": "muusikaopetus",
+      "cohortId": "4a",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4a.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4a.mudilaskoor.02",
+      "displayName": "4A Mudilaskoor 2",
+      "subjectId": "mudilaskoor",
+      "cohortId": "4a",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4a.mudilaskoor",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4a.kasitoo-ja-tehnoloogiaopetus.02",
+      "displayName": "4A Käsitöö- ja tehnoloogiaõpetus 2",
+      "subjectId": "kasitoo-ja-tehnoloogiaopetus",
+      "cohortId": "4a",
+      "teacherId": "helena-kroon",
+      "seriesId": "4a.kasitoo-ja-tehnoloogiaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a118"
+      ]
+    },
+    {
+      "id": "4a.taiendav-eesti-keel-i-kooliaste.01",
+      "displayName": "4A Täiendav eesti keel I kooliaste 1",
+      "subjectId": "taiendav-eesti-keel-i-kooliaste",
+      "cohortId": "4a",
+      "teacherId": "marina-pokintsereda",
+      "seriesId": "4a.taiendav-eesti-keel-i-kooliaste",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a230"
+      ]
+    },
+    {
+      "id": "4a.klassitund.10",
+      "displayName": "4A Klassitund 10",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.11",
+      "displayName": "4A Klassitund 11",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.12",
+      "displayName": "4A Klassitund 12",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.13",
+      "displayName": "4A Klassitund 13",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4a.klassitund.14",
+      "displayName": "4A Klassitund 14",
+      "subjectId": "klassitund",
+      "cohortId": "4a",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4a.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.opiabi.01",
+      "displayName": "4AVR Õpiabi 1",
+      "subjectId": "opiabi",
+      "cohortId": "4avr",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4avr.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.kehaline-kasvatus.01",
+      "displayName": "4AVR Kehaline kasvatus 1",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "4avr",
+      "teacherId": "katri-plooman",
+      "seriesId": "4avr.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk2"
+      ]
+    },
+    {
+      "id": "4avr.kunstiopetus.01",
+      "displayName": "4AVR Kunstiõpetus 1",
+      "subjectId": "kunstiopetus",
+      "cohortId": "4avr",
+      "teacherId": "helena-kroon",
+      "seriesId": "4avr.kunstiopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a118"
+      ]
+    },
+    {
+      "id": "4avr.eesti-keel-vr.01",
+      "displayName": "4AVR Eesti keel VR 1",
+      "subjectId": "eesti-keel-vr",
+      "cohortId": "4avr",
+      "teacherId": "reena-korp",
+      "seriesId": "4avr.eesti-keel-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a217"
+      ]
+    },
+    {
+      "id": "4avr.kehaline-kasvatus.02",
+      "displayName": "4AVR Kehaline kasvatus 2",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "4avr",
+      "teacherId": "katri-plooman",
+      "seriesId": "4avr.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk2"
+      ]
+    },
+    {
+      "id": "4avr.muusikaopetus.01",
+      "displayName": "4AVR Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "4avr",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4avr.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4avr.mudilaskoor.01",
+      "displayName": "4AVR Mudilaskoor 1",
+      "subjectId": "mudilaskoor",
+      "cohortId": "4avr",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4avr.mudilaskoor",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4avr.eesti-keel-vr.02",
+      "displayName": "4AVR Eesti keel VR 2",
+      "subjectId": "eesti-keel-vr",
+      "cohortId": "4avr",
+      "teacherId": "reena-korp",
+      "seriesId": "4avr.eesti-keel-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a217"
+      ]
+    },
+    {
+      "id": "4avr.eesti-keel-vr.03",
+      "displayName": "4AVR Eesti keel VR 3",
+      "subjectId": "eesti-keel-vr",
+      "cohortId": "4avr",
+      "teacherId": "reena-korp",
+      "seriesId": "4avr.eesti-keel-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a217"
+      ]
+    },
+    {
+      "id": "4avr.klassitund.01",
+      "displayName": "4AVR Klassitund 1",
+      "subjectId": "klassitund",
+      "cohortId": "4avr",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4avr.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.klassitund.02",
+      "displayName": "4AVR Klassitund 2",
+      "subjectId": "klassitund",
+      "cohortId": "4avr",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4avr.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.kasitoo-ja-tehnoloogiaopetus.01",
+      "displayName": "4AVR Käsitöö- ja tehnoloogiaõpetus 1",
+      "subjectId": "kasitoo-ja-tehnoloogiaopetus",
+      "cohortId": "4avr",
+      "teacherId": "helena-kroon",
+      "seriesId": "4avr.kasitoo-ja-tehnoloogiaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a118"
+      ]
+    },
+    {
+      "id": "4avr.ujumine.01",
+      "displayName": "4AVR Ujumine 1",
+      "subjectId": "ujumine",
+      "cohortId": "4avr",
+      "teacherId": "hektor-talviste",
+      "seriesId": "4avr.ujumine",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk3"
+      ]
+    },
+    {
+      "id": "4avr.matemaatika-vr.01",
+      "displayName": "4AVR Matemaatika VR 1",
+      "subjectId": "matemaatika-vr",
+      "cohortId": "4avr",
+      "teacherId": "aida-martin",
+      "seriesId": "4avr.matemaatika-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a207"
+      ]
+    },
+    {
+      "id": "4avr.sotsiaalpedagoog.01",
+      "displayName": "4AVR Sotsiaalpedagoog 1",
+      "subjectId": "sotsiaalpedagoog",
+      "cohortId": "4avr",
+      "teacherId": "grete-suurvali",
+      "seriesId": "4avr.sotsiaalpedagoog",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a209"
+      ]
+    },
+    {
+      "id": "4avr.klassitund.03",
+      "displayName": "4AVR Klassitund 3",
+      "subjectId": "klassitund",
+      "cohortId": "4avr",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4avr.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.muusikaopetus.02",
+      "displayName": "4AVR Muusikaõpetus 2",
+      "subjectId": "muusikaopetus",
+      "cohortId": "4avr",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4avr.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4avr.mudilaskoor.02",
+      "displayName": "4AVR Mudilaskoor 2",
+      "subjectId": "mudilaskoor",
+      "cohortId": "4avr",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4avr.mudilaskoor",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4avr.kasitoo-ja-tehnoloogiaopetus.02",
+      "displayName": "4AVR Käsitöö- ja tehnoloogiaõpetus 2",
+      "subjectId": "kasitoo-ja-tehnoloogiaopetus",
+      "cohortId": "4avr",
+      "teacherId": "helena-kroon",
+      "seriesId": "4avr.kasitoo-ja-tehnoloogiaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a118"
+      ]
+    },
+    {
+      "id": "4avr.matemaatika-vr.02",
+      "displayName": "4AVR Matemaatika VR 2",
+      "subjectId": "matemaatika-vr",
+      "cohortId": "4avr",
+      "teacherId": "aida-martin",
+      "seriesId": "4avr.matemaatika-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a207"
+      ]
+    },
+    {
+      "id": "4avr.eripedagoog.01",
+      "displayName": "4AVR Eripedagoog 1",
+      "subjectId": "eripedagoog",
+      "cohortId": "4avr",
+      "teacherId": "helina-silberg",
+      "seriesId": "4avr.eripedagoog",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a211"
+      ]
+    },
+    {
+      "id": "4avr.klassitund.04",
+      "displayName": "4AVR Klassitund 4",
+      "subjectId": "klassitund",
+      "cohortId": "4avr",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4avr.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.opiabi.02",
+      "displayName": "4AVR Õpiabi 2",
+      "subjectId": "opiabi",
+      "cohortId": "4avr",
+      "teacherId": "anette-maria-rennit",
+      "seriesId": "4avr.opiabi",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4avr.eesti-keel-vr.04",
+      "displayName": "4AVR Eesti keel VR 4",
+      "subjectId": "eesti-keel-vr",
+      "cohortId": "4avr",
+      "teacherId": "reena-korp",
+      "seriesId": "4avr.eesti-keel-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a217"
+      ]
+    },
+    {
+      "id": "4avr.matemaatika-vr.03",
+      "displayName": "4AVR Matemaatika VR 3",
+      "subjectId": "matemaatika-vr",
+      "cohortId": "4avr",
+      "teacherId": "aida-martin",
+      "seriesId": "4avr.matemaatika-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a209"
+      ]
+    },
+    {
+      "id": "4avr.matemaatika-vr.04",
+      "displayName": "4AVR Matemaatika VR 4",
+      "subjectId": "matemaatika-vr",
+      "cohortId": "4avr",
+      "teacherId": "aida-martin",
+      "seriesId": "4avr.matemaatika-vr",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a209"
+      ]
+    },
+    {
+      "id": "4b.kehaline-kasvatus.01",
+      "displayName": "4B Kehaline kasvatus 1",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "4b",
+      "teacherId": "katri-plooman",
+      "seriesId": "4b.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk2"
+      ]
+    },
+    {
+      "id": "4b.muusikaopetus.01",
+      "displayName": "4B Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "4b",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4b.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4b.klassitund.01",
+      "displayName": "4B Klassitund 1",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.02",
+      "displayName": "4B Klassitund 2",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.kehaline-kasvatus.02",
+      "displayName": "4B Kehaline kasvatus 2",
+      "subjectId": "kehaline-kasvatus",
+      "cohortId": "4b",
+      "teacherId": "katri-plooman",
+      "seriesId": "4b.kehaline-kasvatus",
+      "requiredRoomCapabilityIds": [
+        "sports-hall"
+      ],
+      "preferredRoomIds": [
+        "kk1"
+      ]
+    },
+    {
+      "id": "4b.klassitund.03",
+      "displayName": "4B Klassitund 3",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.04",
+      "displayName": "4B Klassitund 4",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.05",
+      "displayName": "4B Klassitund 5",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.06",
+      "displayName": "4B Klassitund 6",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.07",
+      "displayName": "4B Klassitund 7",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.08",
+      "displayName": "4B Klassitund 8",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.09",
+      "displayName": "4B Klassitund 9",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.muusikaopetus.02",
+      "displayName": "4B Muusikaõpetus 2",
+      "subjectId": "muusikaopetus",
+      "cohortId": "4b",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4b.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4b.mudilaskoor.01",
+      "displayName": "4B Mudilaskoor 1",
+      "subjectId": "mudilaskoor",
+      "cohortId": "4b",
+      "teacherId": "kaie-kodres",
+      "seriesId": "4b.mudilaskoor",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "4b.klassitund.10",
+      "displayName": "4B Klassitund 10",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.11",
+      "displayName": "4B Klassitund 11",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.taiendav-eesti-keel-i-kooliaste.01",
+      "displayName": "4B Täiendav eesti keel I kooliaste 1",
+      "subjectId": "taiendav-eesti-keel-i-kooliaste",
+      "cohortId": "4b",
+      "teacherId": "marina-pokintsereda",
+      "seriesId": "4b.taiendav-eesti-keel-i-kooliaste",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a230"
+      ]
+    },
+    {
+      "id": "4b.klassitund.12",
+      "displayName": "4B Klassitund 12",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.13",
+      "displayName": "4B Klassitund 13",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.14",
+      "displayName": "4B Klassitund 14",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.15",
+      "displayName": "4B Klassitund 15",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.16",
+      "displayName": "4B Klassitund 16",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "4b.klassitund.17",
+      "displayName": "4B Klassitund 17",
+      "subjectId": "klassitund",
+      "cohortId": "4b",
+      "teacherId": "rita-lumiste",
+      "seriesId": "4b.klassitund",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9a.bioloogia.01",
+      "displayName": "9A Bioloogia 1",
+      "subjectId": "bioloogia",
+      "cohortId": "9a",
+      "teacherId": "malle-salu",
+      "seriesId": "9a.bioloogia",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9a.uhiskonnaopetus.01",
+      "displayName": "9A Ühiskonnaõpetus 1",
+      "subjectId": "uhiskonnaopetus",
+      "cohortId": "9a",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9a.uhiskonnaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9a.into.01",
+      "displayName": "9A IntÕ 1",
+      "subjectId": "into",
+      "cohortId": "9a",
+      "teacherId": "marilin-laanetu",
+      "seriesId": "9a.into",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9a.matemaatika.01",
+      "displayName": "9A Matemaatika 1",
+      "subjectId": "matemaatika",
+      "cohortId": "9a",
+      "teacherId": "piret-noor",
+      "seriesId": "9a.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "9a.matemaatika.02",
+      "displayName": "9A Matemaatika 2",
+      "subjectId": "matemaatika",
+      "cohortId": "9a",
+      "teacherId": "piret-noor",
+      "seriesId": "9a.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "9a.kirjandus.01",
+      "displayName": "9A Kirjandus 1",
+      "subjectId": "kirjandus",
+      "cohortId": "9a",
+      "teacherId": "katrin-jaaksoo",
+      "seriesId": "9a.kirjandus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a216"
+      ]
+    },
+    {
+      "id": "9a.eksami-ettevalmistus-eesti-keel.01",
+      "displayName": "9A Eksami ettevalmistus eesti keel 1",
+      "subjectId": "eksami-ettevalmistus-eesti-keel",
+      "cohortId": "9a",
+      "teacherId": "aarne-ruben",
+      "seriesId": "9a.eksami-ettevalmistus-eesti-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a229"
+      ]
+    },
+    {
+      "id": "9a.matemaatika.03",
+      "displayName": "9A Matemaatika 3",
+      "subjectId": "matemaatika",
+      "cohortId": "9a",
+      "teacherId": "piret-noor",
+      "seriesId": "9a.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "9a.kirjandus.02",
+      "displayName": "9A Kirjandus 2",
+      "subjectId": "kirjandus",
+      "cohortId": "9a",
+      "teacherId": "katrin-jaaksoo",
+      "seriesId": "9a.kirjandus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a216"
+      ]
+    },
+    {
+      "id": "9a.matemaatika.04",
+      "displayName": "9A Matemaatika 4",
+      "subjectId": "matemaatika",
+      "cohortId": "9a",
+      "teacherId": "piret-noor",
+      "seriesId": "9a.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "9a.keemia.01",
+      "displayName": "9A Keemia 1",
+      "subjectId": "keemia",
+      "cohortId": "9a",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9a.keemia",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9a.bioloogia.02",
+      "displayName": "9A Bioloogia 2",
+      "subjectId": "bioloogia",
+      "cohortId": "9a",
+      "teacherId": "malle-salu",
+      "seriesId": "9a.bioloogia",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9a.eesti-keel.01",
+      "displayName": "9A Eesti keel 1",
+      "subjectId": "eesti-keel",
+      "cohortId": "9a",
+      "teacherId": "katrin-jaaksoo",
+      "seriesId": "9a.eesti-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a216"
+      ]
+    },
+    {
+      "id": "9a.matemaatika.05",
+      "displayName": "9A Matemaatika 5",
+      "subjectId": "matemaatika",
+      "cohortId": "9a",
+      "teacherId": "piret-noor",
+      "seriesId": "9a.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "9a.inglise-keel.01",
+      "displayName": "9A Inglise keel 1",
+      "subjectId": "inglise-keel",
+      "cohortId": "9a",
+      "teacherId": "maya-blinder",
+      "seriesId": "9a.inglise-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9a.inglise-keel.02",
+      "displayName": "9A Inglise keel 2",
+      "subjectId": "inglise-keel",
+      "cohortId": "9a",
+      "teacherId": "maya-blinder",
+      "seriesId": "9a.inglise-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9a.geograafia.01",
+      "displayName": "9A Geograafia 1",
+      "subjectId": "geograafia",
+      "cohortId": "9a",
+      "teacherId": "madelen-monika-soiver",
+      "seriesId": "9a.geograafia",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9a.fuusika.01",
+      "displayName": "9A Füüsika 1",
+      "subjectId": "fuusika",
+      "cohortId": "9a",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9a.fuusika",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9a.eesti-keel.02",
+      "displayName": "9A Eesti keel 2",
+      "subjectId": "eesti-keel",
+      "cohortId": "9a",
+      "teacherId": "katrin-jaaksoo",
+      "seriesId": "9a.eesti-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9a.ajalugu.01",
+      "displayName": "9A Ajalugu 1",
+      "subjectId": "ajalugu",
+      "cohortId": "9a",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9a.ajalugu",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9a.uhiskonnaopetus.02",
+      "displayName": "9A Ühiskonnaõpetus 2",
+      "subjectId": "uhiskonnaopetus",
+      "cohortId": "9a",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9a.uhiskonnaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9a.inglise-keel.03",
+      "displayName": "9A Inglise keel 3",
+      "subjectId": "inglise-keel",
+      "cohortId": "9a",
+      "teacherId": "maya-blinder",
+      "seriesId": "9a.inglise-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b216"
+      ]
+    },
+    {
+      "id": "9a.eksami-ettevalmistus-matemaatika.01",
+      "displayName": "9A Eksami ettevalmistus matemaatika 1",
+      "subjectId": "eksami-ettevalmistus-matemaatika",
+      "cohortId": "9a",
+      "teacherId": "piret-noor",
+      "seriesId": "9a.eksami-ettevalmistus-matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "9a.keemia.02",
+      "displayName": "9A Keemia 2",
+      "subjectId": "keemia",
+      "cohortId": "9a",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9a.keemia",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9a.fuusika.02",
+      "displayName": "9A Füüsika 2",
+      "subjectId": "fuusika",
+      "cohortId": "9a",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9a.fuusika",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9a.ajalugu.02",
+      "displayName": "9A Ajalugu 2",
+      "subjectId": "ajalugu",
+      "cohortId": "9a",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9a.ajalugu",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9a.muusikaopetus.01",
+      "displayName": "9A Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "9a",
+      "teacherId": "leelo-jaanimagi",
+      "seriesId": "9a.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "9a.eksami-ettevalmistus.01",
+      "displayName": "9A Eksami ettevalmistus 1",
+      "subjectId": "eksami-ettevalmistus",
+      "cohortId": "9a",
+      "teacherId": "maya-blinder",
+      "seriesId": "9a.eksami-ettevalmistus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9b.eksami-ettevalmistus-matemaatika.01",
+      "displayName": "9B Eksami ettevalmistus matemaatika 1",
+      "subjectId": "eksami-ettevalmistus-matemaatika",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.eksami-ettevalmistus-matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.kirjandus.01",
+      "displayName": "9B Kirjandus 1",
+      "subjectId": "kirjandus",
+      "cohortId": "9b",
+      "teacherId": "katariin-treial",
+      "seriesId": "9b.kirjandus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9b.bioloogia.01",
+      "displayName": "9B Bioloogia 1",
+      "subjectId": "bioloogia",
+      "cohortId": "9b",
+      "teacherId": "malle-salu",
+      "seriesId": "9b.bioloogia",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9b.ajalugu.01",
+      "displayName": "9B Ajalugu 1",
+      "subjectId": "ajalugu",
+      "cohortId": "9b",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9b.ajalugu",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9b.matemaatika.01",
+      "displayName": "9B Matemaatika 1",
+      "subjectId": "matemaatika",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.inglise-keel.01",
+      "displayName": "9B Inglise keel 1",
+      "subjectId": "inglise-keel",
+      "cohortId": "9b",
+      "teacherId": "maya-blinder",
+      "seriesId": "9b.inglise-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b213"
+      ]
+    },
+    {
+      "id": "9b.fuusika.01",
+      "displayName": "9B Füüsika 1",
+      "subjectId": "fuusika",
+      "cohortId": "9b",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9b.fuusika",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9b.eesti-keel.01",
+      "displayName": "9B Eesti keel 1",
+      "subjectId": "eesti-keel",
+      "cohortId": "9b",
+      "teacherId": "katariin-treial",
+      "seriesId": "9b.eesti-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9b.kirjandus.02",
+      "displayName": "9B Kirjandus 2",
+      "subjectId": "kirjandus",
+      "cohortId": "9b",
+      "teacherId": "katariin-treial",
+      "seriesId": "9b.kirjandus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a216"
+      ]
+    },
+    {
+      "id": "9b.ajalugu.02",
+      "displayName": "9B Ajalugu 2",
+      "subjectId": "ajalugu",
+      "cohortId": "9b",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9b.ajalugu",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9b.taiendav-eesti-keel-ii-iii-kooliaste.01",
+      "displayName": "9B Täiendav eesti keel II/III kooliaste 1",
+      "subjectId": "taiendav-eesti-keel-ii-iii-kooliaste",
+      "cohortId": "9b",
+      "teacherId": "marina-pokintsereda",
+      "seriesId": "9b.taiendav-eesti-keel-ii-iii-kooliaste",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.matemaatika.02",
+      "displayName": "9B Matemaatika 2",
+      "subjectId": "matemaatika",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.geograafia.01",
+      "displayName": "9B Geograafia 1",
+      "subjectId": "geograafia",
+      "cohortId": "9b",
+      "teacherId": "madelen-monika-soiver",
+      "seriesId": "9b.geograafia",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9b.keemia.01",
+      "displayName": "9B Keemia 1",
+      "subjectId": "keemia",
+      "cohortId": "9b",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9b.keemia",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9b.bioloogia.02",
+      "displayName": "9B Bioloogia 2",
+      "subjectId": "bioloogia",
+      "cohortId": "9b",
+      "teacherId": "malle-salu",
+      "seriesId": "9b.bioloogia",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9b.taiendav-eesti-keel-ii-iii-kooliaste.02",
+      "displayName": "9B Täiendav eesti keel II/III kooliaste 2",
+      "subjectId": "taiendav-eesti-keel-ii-iii-kooliaste",
+      "cohortId": "9b",
+      "teacherId": "marina-pokintsereda",
+      "seriesId": "9b.taiendav-eesti-keel-ii-iii-kooliaste",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.matemaatika.03",
+      "displayName": "9B Matemaatika 3",
+      "subjectId": "matemaatika",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.muusikaopetus.01",
+      "displayName": "9B Muusikaõpetus 1",
+      "subjectId": "muusikaopetus",
+      "cohortId": "9b",
+      "teacherId": "leelo-jaanimagi",
+      "seriesId": "9b.muusikaopetus",
+      "requiredRoomCapabilityIds": [
+        "music-room"
+      ],
+      "preferredRoomIds": [
+        "mu"
+      ]
+    },
+    {
+      "id": "9b.inglise-keel.02",
+      "displayName": "9B Inglise keel 2",
+      "subjectId": "inglise-keel",
+      "cohortId": "9b",
+      "teacherId": "maya-blinder",
+      "seriesId": "9b.inglise-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9b.matemaatika.04",
+      "displayName": "9B Matemaatika 4",
+      "subjectId": "matemaatika",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.fuusika.02",
+      "displayName": "9B Füüsika 2",
+      "subjectId": "fuusika",
+      "cohortId": "9b",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9b.fuusika",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9b.eesti-keel.02",
+      "displayName": "9B Eesti keel 2",
+      "subjectId": "eesti-keel",
+      "cohortId": "9b",
+      "teacherId": "katariin-treial",
+      "seriesId": "9b.eesti-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b216"
+      ]
+    },
+    {
+      "id": "9b.uhiskonnaopetus.01",
+      "displayName": "9B Ühiskonnaõpetus 1",
+      "subjectId": "uhiskonnaopetus",
+      "cohortId": "9b",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9b.uhiskonnaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9b.eksami-ettevalmistus-eesti-keel.01",
+      "displayName": "9B Eksami ettevalmistus eesti keel 1",
+      "subjectId": "eksami-ettevalmistus-eesti-keel",
+      "cohortId": "9b",
+      "teacherId": "aarne-ruben",
+      "seriesId": "9b.eksami-ettevalmistus-eesti-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    },
+    {
+      "id": "9b.into.01",
+      "displayName": "9B IntÕ 1",
+      "subjectId": "into",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.into",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.keemia.02",
+      "displayName": "9B Keemia 2",
+      "subjectId": "keemia",
+      "cohortId": "9b",
+      "teacherId": "liivi-kivimae-bondarev",
+      "seriesId": "9b.keemia",
+      "requiredRoomCapabilityIds": [
+        "science-lab"
+      ],
+      "preferredRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "9b.uhiskonnaopetus.02",
+      "displayName": "9B Ühiskonnaõpetus 2",
+      "subjectId": "uhiskonnaopetus",
+      "cohortId": "9b",
+      "teacherId": "siiri-aiaste",
+      "seriesId": "9b.uhiskonnaopetus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "9b.matemaatika.05",
+      "displayName": "9B Matemaatika 5",
+      "subjectId": "matemaatika",
+      "cohortId": "9b",
+      "teacherId": "piret-noor",
+      "seriesId": "9b.matemaatika",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "9b.inglise-keel.03",
+      "displayName": "9B Inglise keel 3",
+      "subjectId": "inglise-keel",
+      "cohortId": "9b",
+      "teacherId": "maya-blinder",
+      "seriesId": "9b.inglise-keel",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "b215"
+      ]
+    },
+    {
+      "id": "9b.eksami-ettevalmistus.01",
+      "displayName": "9B Eksami ettevalmistus 1",
+      "subjectId": "eksami-ettevalmistus",
+      "cohortId": "9b",
+      "teacherId": "maya-blinder",
+      "seriesId": "9b.eksami-ettevalmistus",
+      "requiredRoomCapabilityIds": [
+        "general-classroom"
+      ],
+      "preferredRoomIds": [
+        "a215"
+      ]
+    }
+  ]
+}
