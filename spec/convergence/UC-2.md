@@ -2,127 +2,94 @@
 
 ## Summary
 
-- Submission: `spec/checkpoints/UC-2.md` at `bfb7a40`
+- Submission: `spec/checkpoints/UC-2.md` at `acd488c`
 - Verdict: REJECT
-- Findings: 1 critical, 3 gaps, 0 protocol, 0 drift, 0 cosmetic
-- Suite: 53 run, 0 failed, 0 errors, 0 skipped
-- Working tree impact from verification: none; the pre-existing untracked debugger skill and Merivälja fixture files remain unchanged
+- Findings: 1 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
+- Suite: 61 run, 0 failed, 0 errors, 0 skipped
+- Working tree impact from verification: none; pre-existing untracked debugger and Merivälja files remain unchanged
 
 ## Protocol Gate
 
-1. PASS - exactly UC-2 is named and was `READY_FOR_CONVERGENCE` at the gate.
-2. PASS - `spec/checkpoints/UC-2.md` and the implementation are committed together at `bfb7a40` from base `498fb2e`.
-3. PASS - required UC-1 is `APPROVED` with convergence report `spec/convergence/UC-1.md`.
-4. PASS - no other use case is `IN_PROGRESS` or `READY_FOR_CONVERGENCE`.
-5. PASS - the checkpoint contains claims for the scenario, extensions, guarantees, postconditions, rules, relationship, commands, changed files, and UC-1 regression.
-6. PASS - all 22 files in `498fb2e..bfb7a40` are attributable to UC-2; the concurrent debugger and Merivälja files are untracked and excluded.
+1. PASS - exactly UC-2 was `READY_FOR_CONVERGENCE`.
+2. PASS - checkpoint and implementation revision are committed together at `acd488c` from revision base `801deb5`.
+3. PASS - required UC-1 remains `APPROVED`.
+4. PASS - no other use case is active or awaiting convergence.
+5. PASS - the revised checkpoint covers scenarios, guarantees, rules, relationships, changed files, commands, and regression.
+6. PASS - the 11-file revision diff is attributable to C-1 and G-1 through G-3; concurrent untracked files are excluded.
 
 ## Runtime Reproduction
 
 | Actor | Step or extension | Executor reported | Converge observed |
 |---|---|---|---|
-| Scheduling client | UC-1 prerequisite | Packaged `plan` creates the current timetable | Exit 0; canonical `FEASIBLE` current timetable with two assignments and verifiable revisions |
-| Scheduling client | UC-2 main steps 1-3 | Replan preserves the feasible baseline and publishes an empty change set | Exit 0; `FEASIBLE`, two unchanged assignments, score `0/0/0`, all six change categories empty, stdout empty, solver diagnostics on stderr |
-| Scheduling client | UC-2 extension 2a | Semantically invalid current documents publish `INVALID_INPUT` and exit 2 | A schema-valid, revision-verifiable current document with a duplicate `lesson-math-1` assignment exited 4 and published `INTERNAL_ERROR`; debug identified `Collectors.toMap` duplicate key at `ReplanService.java:128` |
-| Scheduling client | UC-2 extension 2i | Unexpected failures publish only a safe result unless debug is selected | The duplicate-key failure produced safe `INTERNAL_ERROR` output without debug and printed its stack only with `--debug` |
-| Build client | Focused UC-2 process suite | Seven packaged UC-2 tests pass | `./mvnw -q -Dit.test=ReplanCliIT verify` passed: 35 unit tests plus 7 UC-2 integration tests |
-| Build client | Full regression | 53 tests pass | `./mvnw -q clean verify` passed: 35 unit and 18 integration tests, 0 failures/errors/skips |
+| Scheduling client | Main steps 1-3 | Production plan-to-replan succeeds with zero avoidable change | Exit 0; complete `FEASIBLE`, two unchanged assignments, `0/0/0`, six empty categories |
+| Scheduling client | Extension 2a, prior C-1 | Duplicate current lesson assignment becomes deterministic invalid input | Exit 2; `INVALID_INPUT`, one ordered error, no solver/timetable/change report |
+| Scheduling client | Extension 2b and RULE-14 | Every non-feasible current timetable is rejected | A revision-verifiable snapshot assigning both lessons to `teacher-alex` and `cohort-7a` in `mon-1` exited 0, invoked Timefold, and published a revised `FEASIBLE` result with one period move |
+| Build client | Full regression | 61 tests green | `./mvnw -q clean verify`: 42 unit plus 19 integration, 0 failures/errors/skips |
 
 ## Evidence Ledger
 
 | Contract element | Executor claim | Evidence obtained | Strength | Verified |
 |---|---|---|---|---|
-| Main step 1 | Real packaged command with three distinct paths and controls | `ReplanCliIT.mainSuccessAndDirectSuccessor` and fresh launcher run | STRONG | yes |
-| Main step 2 | Atomic feasible result, stability, and complete change report | Fresh plan-to-replan run produced a schema-valid complete timetable, `0/0/0` score, and six empty categories | STRONG | yes |
-| Main step 3 | Exit 0 and direct-successor eligibility | `mainSuccessAndDirectSuccessor` successfully replans the first revised output | STRONG | yes |
-| Extension 1a | Both limits cause misuse and no output | Packaged test asserts exit 64 and absent destination | STRONG | yes |
-| Extension 1b | Output equal to current is refused without mutation | Packaged test asserts exit 64 and byte-identical current; source checks both input paths | STRONG | yes |
-| Extension 1c | Missing input proves the whole transport branch | Only missing-definition input is exercised; overwrite refusal, pre-parse safeguard, destination preparation, and late publication failure are not exercised through `replan` | WEAK | no |
-| Extension 2a | Malformed documents produce `INVALID_INPUT` before solving | Malformed JSON passes, but a recomputed-revision duplicate assignment reaches `Collectors.toMap` and becomes `INTERNAL_ERROR` | WEAK | no |
-| Extension 2b | Status, tamper, school, lineage, and revision checks reject before solving | Strict result schema/status reader plus packaged tamper, school, and lineage cases | STRONG | yes |
-| Extension 2c | Direct lock contradictions are semantic invalid input | Packaged period-lock/teacher-availability conflict exits 2 before solver logging | STRONG | yes |
-| Extension 2d | A stale current assignment is accepted as the replan baseline | Packaged period/room invalidation and cancellation/change fixture paths solve successfully | STRONG | yes |
-| Extension 2e | Empty update bypasses search and reports cancellations | Packaged test asserts `EMPTY_PROBLEM`, empty timetable, two cancellations, and no solver start | STRONG | yes |
-| Extension 2f | Obvious no-room case publishes diagnostics without a timetable | Packaged test exits 3 before search and omits timetable | STRONG | yes |
-| Extension 2g | Bounded feasible search reports its real termination | Main launcher run exits 0 with `STEP_LIMIT`, complete timetable, and no optimality claim | STRONG | yes |
-| Extension 2h | Exhausted unsuccessful search exposes diagnostics only | Packaged conflict fixture exits 3 and omits timetable and change report | STRONG | yes |
-| Extension 2i | Safe internal result and debug-only exception detail | Independent normal/debug duplicate-key runs exercise both channel behaviors | STRONG | yes |
-| Extension 2j | Interruption exits 130 and preserves destinations | Only source checks and UC-1 tests are cited; no UC-2 service or packaged-process interruption evidence | ABSENT | no |
-| Extension 2k | Serialization or atomic publication failure exits 74 and preserves destinations | Shared `FileBoundary` source is present, but no UC-2 service or packaged-process failure injection exercises its catch/publication boundary | ABSENT | no |
-| G1 | UC-1 guarantees regress for replan | Full UC-1 regression is green, but UC-2 failure-boundary coverage is incomplete | WEAK | no |
-| G2 | Current integrity and revision are verified | Public tamper rejection and independent recomputed revision establish the implemented revision boundary | STRONG | yes |
-| G3 | Current may be stale; only revised timetable must satisfy updated hard rules | Period, room, cancellation, and changed-teacher/lock journeys exercise stale baselines | STRONG | yes |
-| G4 | Common IDs alone incur stability; additions/cancellations do not | Common-ID mapping and packaged addition/cancellation fixture with zero period moves | STRONG | yes |
-| G5 | Period moves dominate room-only moves, which dominate preferences | Constraint tests count each component at its level, but no deterministic trade-off fixture proves either dominance relation through solving | WEAK | no |
-| G6 | Period moves and room-only moves do not overlap | Packaged forced period and forced room-update journeys assert mutually exclusive score counts | STRONG | yes |
-| G7 | Forced dimensions are excluded and teacher changes coexist correctly | One packaged fixture samples a teacher change plus forced period, but does not assert the complete category contents or both forced dimensions | WEAK | no |
-| G8 | Period and room locks are independent | Unit test forces both dimensions together; no fixture proves one locked dimension leaves the other solver-controlled | WEAK | no |
-| G9 | Exactly six deterministic categories with full field fidelity and non-overlap | Tests sample selected IDs/fields but do not assert exact arrays, counts, ordering, old/new values, and overlap rules | WEAK | no |
-| G10 | Revised assignment snapshot supports another direct replan | Packaged direct-successor journey succeeds from the revised result | STRONG | yes |
-| G11 | Stability is bounded-search behavior without a global minimum claim | Result contract exposes counts and actual termination without `OPTIMAL`; README makes no stronger promise | STRONG | yes |
-| Success postcondition | Canonical feasible revised timetable and report can be reused | Schema validation plus direct-successor packaged journey | STRONG | yes |
-| Minimal guarantee | All refused, interrupted, unsuccessful, and failed paths preserve current/destination | Refusal and search paths are strong; UC-2 interruption and late publication failures are absent | WEAK | no |
-| Requires UC-1 | UC-2 consumes the approved UC-1 production postcondition | Every packaged success fixture creates its current file through the production `plan` command | STRONG | yes |
-| Lineage state model | Only same-school direct successors are accepted | Packaged wrong-school, wrong-lineage, and direct-successor cases | STRONG | yes |
-| Assignment fidelity | A feasible timetable has one assignment per lesson and deterministic IDs | Revised output is complete, but duplicate lesson IDs in a supplied current `FEASIBLE` document are not semantically rejected | WEAK | no |
-| Product score | Stable `periodMoves`, `roomOnlyMoves`, and preference vector | Values and catalog breakdown are emitted; dominance trade-offs lack a solver fixture | WEAK | no |
-| Change report | Exact categories, values, order, and non-overlap | Schema and source structure are correct; actor-boundary assertions are incomplete | WEAK | no |
-| Result envelope and exit codes | Stable status/field/exit mapping | Main, misuse, validation, no-solution, and internal outcomes reproduced; UC-2 interruption/publication exits are not | WEAK | no |
+| Main step 1 | Packaged three-path request | Main and direct-successor process test plus fresh launcher journey | STRONG | yes |
+| Main step 2 | Feasible stable result and complete report | Exact result schema, assignments, product vector, and all categories | STRONG | yes |
+| Main step 3 | Exit 0 and reusable revised baseline | Direct-successor packaged replan succeeds | STRONG | yes |
+| Extension 1a | CLI misuse | Both-limit packaged case exits 64 with no output | STRONG | yes |
+| Extension 1b | Equal paths | Packaged equal-current path preserves bytes | STRONG | yes |
+| Extension 1c | Transport and preparation failures | Missing input, overwrite, safeguard, and injected publication paths preserve destinations | STRONG | yes |
+| Extension 2a | Structural and semantic invalid input | Malformed and duplicate-current cases are strong; universal current hard collisions remain accepted | WEAK | no |
+| Extension 2b | Current must be a verified `FEASIBLE` timetable | Status/revision/lineage pass, but an intrinsically hard-colliding current snapshot is accepted | WEAK | no |
+| Extension 2c | Lock contradictions | Packaged pre-solver lock conflict | STRONG | yes |
+| Extension 2d | Stale baseline accepted against updated definition | Availability, room, cancellation, teacher, and lock journeys | STRONG | yes |
+| Extension 2e | Empty update | Empty timetable, sorted cancellations, `EMPTY_PROBLEM`, no search | STRONG | yes |
+| Extension 2f | Obvious no-room failure | Exit 3, diagnostics, no timetable, no search | STRONG | yes |
+| Extension 2g | Bounded feasible search | Actual `STEP_LIMIT`, complete result, no optimality claim | STRONG | yes |
+| Extension 2h | Unsuccessful search | Exit 3, diagnostics, no timetable/change report | STRONG | yes |
+| Extension 2i | Safe internal failure | Injected service failure asserts safe result and hidden detail | STRONG | yes |
+| Extension 2j | Interruption | Injected interruption and packaged SIGINT exit 130 without publication | STRONG | yes |
+| Extension 2k | Publication failure | Injected failure exits 74 and preserves prior bytes | STRONG | yes |
+| G1 | UC-1 guarantees carry over | Full regression and UC-2 failures pass; current hard-valid prerequisite remains incomplete | WEAK | no |
+| G2 | Current integrity and provenance | Revision tamper and duplicate checks pass, but recomputed hard-colliding content passes | WEAK | no |
+| G3 | Current may be stale under the updated definition | Stale updated-definition cases are distinguished from intrinsic snapshot collision | STRONG | yes |
+| G4 | Common IDs and additions/cancellations | Exact mapping and report arrays | STRONG | yes |
+| G5 | Period > room > preferences | Deterministic competing solver fixtures prove both dominance relations | STRONG | yes |
+| G6 | Non-overlapping period/room-only scores | Exact score/report cases | STRONG | yes |
+| G7 | Forced dimensions and teacher changes | Full-value teacher-plus-period-force and room-force reports | STRONG | yes |
+| G8 | Independent locks | Separate period-locked and room-locked packaged journeys | STRONG | yes |
+| G9 | Exact deterministic change report | Complete arrays, values, sorting, and overlap assertions | STRONG | yes |
+| G10 | Snapshot supports another direct replan | Direct-successor packaged journey | STRONG | yes |
+| G11 | Bounded stability only | Actual termination and no global-minimum label | STRONG | yes |
+| Success postcondition | Canonical revised timetable/report reusable | Main and direct-successor journeys | STRONG | yes |
+| Minimal guarantee | All refused/failed paths preserve inputs/destinations | Packaged and injected negative paths | STRONG | yes |
+| Requires UC-1 | Consume actual approved postcondition | Baselines come from production `plan`, but forged hard-invalid content is not fully refused | WEAK | no |
+| Assignment fidelity | One hard-valid assignment per lesson | Duplicate IDs are rejected; teacher/cohort period collisions in the snapshot are not | WEAK | no |
 
 ## Rule Conformance
 
 | Rule | Constraint | Evidence | Result |
 |---|---|---|---|
-| RULE-1 | Plain Java DTO/domain/Timefold boundaries | Component boundary tests and inspected UC-2 mapping keep Timefold types out of public DTO/domain | PASS |
-| RULE-2 | Pinned stable dependency baseline | Dependency tree resolves Timefold 2.6.0, Jackson 3.2.2, NetworkNT 3.0.7, Picocli 4.7.7, and JCS 1.1; clean Java 25 build passes | PASS |
-| RULE-3 | Strict offline Draft 2020-12 schema-first JSON | Bundled result/definition schemas, strict tests, and unknown-field rejection regress green | PASS |
-| RULE-4 | All validation precedes solving and returns deterministic invalid reports | Duplicate current lesson IDs are not validated; they reach baseline collection and exit as internal error | FAIL (C-1) |
-| RULE-5 | RFC 8785 content revisions | Existing vectors/digests plus tamper and independently recomputed timetable revision checks pass | PASS |
-| RULE-6 | Hard, period, room, preference levels and deterministic controls | Source uses Bendable levels 0/1/2, but committed tests do not inspect level count or prove dominance trade-offs | FAIL (G-2) |
-| RULE-7 | Exact hard/soft catalogs without extras | Catalog regression and new stability constraints are separated from product catalog breakdown | PASS |
-| RULE-8 | Diagnostic candidates remain non-results | Packaged failed-search path exposes diagnostics without timetable/change report | PASS |
-| RULE-9 | Atomic sibling publication preserves destinations on every failure | Shared boundary source is correct, but UC-2 does not inject late serialization/move failure or prove destination preservation | FAIL (G-1) |
-| RULE-10 | Central CLI outcomes, channels, exits, interruption | Replan CLI covers ordinary channels/exits; exit 130 and late exit 74 are not exercised | FAIL (G-1) |
-| RULE-11 | Stateless, side-effect-bounded runtime | Dependency/source inspection and direct-successor process isolation show no retained state/network/database | PASS |
-| RULE-12 | Complete shaded executable and launcher | Clean build, launcher, and packaged tests pass | PASS |
-| RULE-14 | Consume a verified UC-1 output and preserve current | Production UC-1 journeys and tamper/lineage checks pass, but a current document violating assignment fidelity is not refused as invalid | FAIL (C-1) |
-| RULE-15 | Stability facts and exact deterministic classification | Component counting exists; dominance, independent lock dimensions, exact fields/order, and overlap semantics are not fully proven | FAIL (G-2, G-3) |
-| RULE-16 | Isolated layered tests with no tracked writes | 53 tests are clean, but UC-2 lacks the required failure-boundary and deterministic trade-off/exactness fixtures | FAIL (G-1, G-2, G-3) |
-| RULE-17 | Safe stderr observability and debug-only exceptions | Main stdout is empty; independent normal/debug internal-failure runs show safe/default and debug-only exception detail | PASS |
+| RULE-1 through RULE-3 | Boundaries, dependencies, strict Draft 2020-12 JSON | Architecture/dependency/schema suites and source inspection | PASS |
+| RULE-4 | Validation precedes solving | Intrinsic current teacher/cohort period collisions reach Timefold | FAIL (C-2) |
+| RULE-5 through RULE-12 | Revisions, scoring, catalogs, diagnostics, publication, CLI, statelessness, distribution | Revised evidence and full lifecycle | PASS |
+| RULE-14 | Require the UC-1 `FEASIBLE` postcondition | Reader checks schema/status/revision/unique lesson IDs but not universally detectable hard collisions | FAIL (C-2) |
+| RULE-15 | Stability and exact change classification | Trade-off and complete-report fixtures | PASS |
+| RULE-16 | Isolated layered verification | 61 clean tests, but missing current-collision semantic fixture | FAIL (C-2) |
+| RULE-17 | Safe observability | Channel and injected internal/debug evidence | PASS |
 
 ## Related-UC Regression
 
 | Use case | Relationship/shared surface | Evidence | Result |
 |---|---|---|---|
-| UC-1 | Required current-timetable producer; shares schemas, solver, result factory, CLI, and file boundary | Full clean suite includes all 45 previously reported UC-1 checks and remains green | PASS |
+| UC-1 | Required producer and shared solver/result/file boundary | All 45 prior checks remain green inside the 61-test lifecycle | PASS |
 
 ## Findings
 
-### C-1 CRITICAL - Duplicate current assignments escape semantic validation
+### C-2 CRITICAL - Intrinsically hard-invalid current snapshots are accepted
 
-UC-2 extension 2a requires a document that "fails semantic validation" to publish `INVALID_INPUT` with exit 2, assignment fidelity requires one assignment for every active lesson and no others, and RULE-4 requires validation before Timefold. `CurrentTimetableReader.read` validates schema, status, and revision but never rejects duplicate `lessonId` values (`CurrentTimetableReader.java:52-89`). `ReplanService` then collects assignments with an unguarded unique-key collector (`ReplanService.java:127-130`) and converts the duplicate-key exception to `INTERNAL_ERROR` (`ReplanService.java:165-179`).
+UC-2 extension 2b requires `INVALID_INPUT` when the current document "is not a `FEASIBLE` timetable"; UC-1 G2 defines feasible as satisfying every hard constraint, assignment fidelity requires a complete valid assignment set, and RULE-14 requires the UC-1 `FEASIBLE` postcondition. The revised reader rejects duplicate lesson IDs, but after revision verification it otherwise accepts assignments without checking the three hard rules fully derivable from the snapshot: teacher-period, cohort-period, and room-period (`CurrentTimetableReader.java:63-104`).
 
-Independent reproduction duplicated the `lesson-math-1` assignment in a valid UC-1 result, recomputed its public timetable revision, and invoked packaged `replan`. The process printed `Internal failure; correlation ID: duplicate-current`, exited 4, and published `INTERNAL_ERROR`; `--debug` confirmed `IllegalStateException: Duplicate key lesson-math-1` at line 128. This is observable wrong status and exit behavior and means RULE-14 does not fully require the UC-1 feasible assignment postcondition.
+Independent reproduction changed the second assignment in a genuine UC-1 result to `mon-1`, recomputed the public timetable revision, and supplied that current document to packaged replan. Both lessons then used the same teacher and cohort in `mon-1`, so the snapshot cannot be a UC-1-feasible timetable under any definition. The command nevertheless started Timefold, exited 0, and published `FEASIBLE` with one period move. This conflates an intrinsically invalid current snapshot with extension 2d, where a formerly valid timetable is merely stale under the updated definition.
 
-Revision outcome: validate the semantic invariants available from the current snapshot, at minimum unique lesson assignments, return a deterministic `INVALID_INPUT` report before baseline collection/solving, and add a packaged regression asserting exit 2, no solver start, no timetable/change report, and byte-identical current/destination guarantees.
-
-### G-1 GAP - UC-2 failure-boundary evidence stops at shared source
-
-UC-2 extensions 1c, 2j, and 2k and the minimal guarantee require destination preservation for preparation, interruption, serialization, and atomic-publication failures. RULE-9 requires injected serialization/move failures, RULE-10 requires controllable interruption, and RULE-16 requires per-use-case packaged verification. The checkpoint groups extensions 2i-2k under UC-1 regression (`spec/checkpoints/UC-2.md:26`), while the UC-2 process suite only exercises a missing definition for transport failure (`ReplanCliIT.java:187-192`). The replan interruption and publication catches exist (`ReplanService.java:142-143`, `162-182`, `203-210`) but are not driven through the UC-2 boundary.
-
-Revision outcome: add controllable UC-2 evidence for interruption before publication and injected serialization/atomic-move failure, plus the untested destination/overwrite/resource-safeguard alternatives needed to prove extension 1c and the minimal guarantee. Assert exact exit, channels, absence of new/partial results, current immutability, prior-destination bytes, and temporary-artifact handling.
-
-### G-2 GAP - No fixture proves lexicographic dominance
-
-UC-2 G5 requires period moves to dominate room-only moves and room-only moves to dominate ordinary preferences. RULE-6 requires the configured levels, and RULE-15 explicitly calls for small step-limited dominance fixtures. Source assigns Bendable soft levels 0, 1, and 2 (`SchoolConstraintProvider.java:15-19`), and the unit test proves isolated match counts (`SchoolConstraintProviderTest.java:170-194`). The packaged move tests make the baseline period or room unavailable (`ReplanCliIT.java:238-267`), so the solver has no competing feasible choice and the tests cannot prove either dominance relation. `SolverConfigurationTest` also does not inspect score level counts.
-
-Revision outcome: add deterministic solver/process fixtures with competing feasible schedules where preserving one period is chosen despite any number of room/preference improvements, and preserving one room is chosen despite preference improvements; assert assignments, product vector, catalog breakdown, termination, and configured level count.
-
-### G-3 GAP - Exact change-report and independent-lock claims are only sampled
-
-UC-2 G7-G9 and RULE-15 require independent lock dimensions plus exact counts, fields, ordering, and non-overlap for all six categories. `classifiesObservableChanges` checks one ID or selected field in four categories without asserting array sizes, full old/new values, ordering, category absence, or overlap (`ReplanCliIT.java:103-139`). `classifiesSolverChosenMoves` checks only lesson IDs and score counts for the remaining move categories (`ReplanCliIT.java:238-267`). The unit forced-move case locks period and room together (`SchoolConstraintProviderTest.java:186-193`), so it does not prove that the unlocked dimension stays solver-controlled.
-
-Revision outcome: assert complete change-report arrays by value for additions, cancellations, teacher changes, independently forced period/room moves, solver period moves including both room IDs, and room-only moves; include deliberately permuted IDs and coexisting teacher/assignment changes to prove deterministic ordering and allowed/forbidden overlap.
+Revision outcome: before lineage/solving, deterministically reject every teacher-period, cohort-period, and room-period collision observable from the current assignment snapshot. Add a revision-verifiable packaged fixture that triggers all three, asserts exit 2, exact ordered validation details, no solver/timetable/change report, and current/destination preservation. Do not validate old-definition availability, eligibility, or locks against the updated definition; those remain legitimate extension 2d inputs.
 
 ## Status Update
 
@@ -130,4 +97,4 @@ Revision outcome: assert complete change-report arrays by value for additions, c
 
 ## Response to execute
 
-REVISE UC-2: resolve C-1 and add strong UC-2 evidence for G-1 through G-3 before resubmission.
+REVISE UC-2: reject intrinsically hard-colliding current assignment snapshots before solving (C-2).
