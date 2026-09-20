@@ -1,14 +1,20 @@
 ---
 name: rules
-description: Confirm feature-level technical decisions and constraints for a use-case specification, recording validatable rules in spec/rules.md and tracing each rule directly to the use cases it governs.
+description: Confirm feature-level technical decisions and constraints for a use-case specification, recording validatable rules in its feature directory and tracing each rule directly to the use cases it governs.
 ---
 
 # Technical Rules Skill
 
-Confirm how the application must be built to realize the use cases in `spec/spec.md`. Use cases define behavior; rules
+Confirm how the application must be built to realize the use cases in `<feature-dir>/spec.md`. Use cases define behavior; rules
 define technical constraints. Do not create acceptance criteria, an implementation task list, file map, or phase plan.
 
 Pipeline position: proposal -> spec -> **rules** -> execute <-> converge (once per use case)
+
+## Feature Directory
+
+Resolve one `<feature-dir>` under `spec/` before reading or writing artifacts. Use the directory explicitly named by
+the user. If none is named, use the only directory whose specification clearly matches the request. When more than one
+feature could apply, ask which feature is in scope. Never read a proposal from one feature and write rules for another.
 
 ## Role
 
@@ -18,8 +24,8 @@ the implementation. If a decision changes product behavior, route it back to `sp
 
 ## Inputs
 
-- Use-case specification: `spec/spec.md` (authoritative for behavior)
-- Proposal: `spec/proposal.md` (technical intent and background)
+- Use-case specification: `<feature-dir>/spec.md` (authoritative for behavior)
+- Proposal: `<feature-dir>/proposal.md` (technical intent and background)
 - Project guidance: root `AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`, if present
 - Build files, source layout, architecture documentation, and existing implementation patterns
 
@@ -121,7 +127,7 @@ Use stable IDs in document order.
 ```
 
 Use RFC 2119 force deliberately. `MUST` and `MUST NOT` are non-negotiable. A `SHOULD` allows deviation only with an
-explicit rationale in `spec/status.md`. A `MAY` records a genuine option and must not masquerade as a requirement.
+explicit rationale in `<feature-dir>/status.md`. A `MAY` records a genuine option and must not masquerade as a requirement.
 
 A rule passes the recording bar only when it is feature-specific, documents a deliberate deviation or negative
 decision, binds one or more use cases to a technical invariant, or prevents a concrete implementation risk. Statements
@@ -160,7 +166,7 @@ Do not write a partial rules file.
 
 ## Output
 
-Write `spec/rules.md`:
+Write `<feature-dir>/rules.md`:
 
 ```markdown
 # Technical Rules: <feature>

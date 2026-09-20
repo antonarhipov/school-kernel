@@ -1,15 +1,21 @@
 ---
 name: converge
-description: Independently verify one implemented use case against spec/spec.md and applicable technical rules, record the verdict, and update its status before execution may continue. Use whenever a UC is ready for convergence or the user asks to validate an implemented use case.
+description: Independently verify one implemented use case against its feature specification and applicable technical rules, record the verdict, and update its status before execution may continue. Use whenever a UC is ready for convergence or the user asks to validate an implemented use case.
 ---
 
 # Converge Use Case Skill
 
 Verify one implemented use case immediately after execution submits it. Grade evidence you obtain yourself, record the
-verdict in `spec/convergence/UC-n.md`, and update `spec/status.md`. Do not wait for a phase, batch several use cases,
+verdict in `<feature-dir>/convergence/UC-n.md`, and update `<feature-dir>/status.md`. Do not wait for a phase, batch several use cases,
 or depend on criteria, review, plan, task, or artifact-map files.
 
 Pipeline position: proposal -> spec -> rules -> execute -> **converge UC-n** -> execute ...
+
+## Feature Directory
+
+Resolve the same `<feature-dir>` used by the executor before reading evidence or writing a verdict. Use the directory
+explicitly named by the user or recorded in the submitted checkpoint. When the target could belong to more than one
+feature, stop and ask which feature is in scope. Never verify against a sibling feature's specification or rules.
 
 ## Role
 
@@ -22,22 +28,25 @@ walkthrough before approval.
 
 ## Inputs
 
-- Target use case and all related use cases: `spec/spec.md`
-- Applicable constraints and verification strategy: `spec/rules.md`
-- Executor ledger: `spec/status.md`
-- Executor submission: `spec/checkpoints/UC-n.md`
-- Earlier convergence reports: `spec/convergence/UC-*.md`
+- Target use case and all related use cases: `<feature-dir>/spec.md`
+- Applicable constraints and verification strategy: `<feature-dir>/rules.md`
+- Executor ledger: `<feature-dir>/status.md`
+- Executor submission: `<feature-dir>/checkpoints/UC-n.md`
+- Optional advisory Jev preflight: `<feature-dir>/checkpoints/UC-n.jev.json`
+- Earlier convergence reports: `<feature-dir>/convergence/UC-*.md`
 - Git history and diff, code, tests, configuration, migrations, templates, messages, and runtime data
 
 Read the detailed UC, not only the use-case map. The contract consists of every main-scenario step, extension,
 guarantee, success and minimal postcondition, state transition, normative-data dependency, and relationship.
+The Jev preflight may identify places to inspect, but it is neither executor evidence nor a verifier finding. Never
+upgrade an evidence grade or approve a use case because the preflight is clean.
 
 ## Per-UC Protocol Gate
 
 Run this gate before grading behavior:
 
 1. Exactly one target UC is named and its status is `READY_FOR_CONVERGENCE`.
-2. `spec/checkpoints/UC-n.md` exists and is committed with the submitted implementation. If commits were explicitly
+2. `<feature-dir>/checkpoints/UC-n.md` exists and is committed with the submitted implementation. If commits were explicitly
    prohibited, it instead names the base commit and exact current diff, and no later work has begun.
 3. Every `Requires` and `Includes` dependency is `APPROVED`; the base of an `Extends` relation is `APPROVED`.
 4. No other UC is `IN_PROGRESS` or `READY_FOR_CONVERGENCE`.
@@ -168,7 +177,7 @@ Critical, gap, and protocol findings block approval.
 - `BLOCKED`: resolving the finding requires a product decision, conflicting rules, or unavailable authority. Set UC
   to `BLOCKED`.
 
-Update only the target row, `Current`, `Next eligible`, and convergence reference in `spec/status.md`. Preserve the
+Update only the target row, `Current`, `Next eligible`, and convergence reference in `<feature-dir>/status.md`. Preserve the
 executor's evidence. On rejection, list finding IDs under the UC entry.
 
 After writing the report and status update, commit only those convergence artifacts as
@@ -192,21 +201,21 @@ Before writing the report, verify:
 - Every applicable verification category records evidence or a finding.
 - Related approved UCs were regression-tested.
 - The verdict matches the finding counts and walkthrough state.
-- `spec/status.md` reflects the verdict and names the convergence report.
+- `<feature-dir>/status.md` reflects the verdict and names the convergence report.
 - The report ends with exactly one response line for execute.
 
 Do not write a partial report.
 
 ## Output
 
-Write or replace `spec/convergence/UC-n.md`:
+Write or replace `<feature-dir>/convergence/UC-n.md`:
 
 ```markdown
 # Convergence: UC-n - <actor goal>
 
 ## Summary
 
-- Submission: spec/checkpoints/UC-n.md at <commit or exact diff>
+- Submission: <feature-dir>/checkpoints/UC-n.md at <commit or exact diff>
 - Verdict: <APPROVE | APPROVE WITH NOTES | PENDING WALKTHROUGH | REJECT | BLOCKED>
 - Findings: <counts by severity>
 - Suite: <run/failed/errors/skipped>

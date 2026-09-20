@@ -1,15 +1,22 @@
 ---
 name: spec
-description: Turn a feature proposal into a complete, declarative use-case specification in spec/spec.md, including use-case relationships, scenarios, guarantees, and observable outcomes. Use before technical rules or implementation.
+description: Turn a feature proposal into a complete, declarative use-case specification in its feature directory, including use-case relationships, scenarios, guarantees, and observable outcomes. Use before technical rules or implementation.
 ---
 
 # Use-Case Specification Skill
 
-Create the behavioral contract for a feature as a set of related use cases. The use cases in `spec/spec.md` are the
+Create the behavioral contract for a feature as a set of related use cases. The use cases in `<feature-dir>/spec.md` are the
 units that `execute` implements and `converge` verifies. Do not create a separate behavior list, acceptance-criteria
 file, task plan, artifact map, or implementation checklist.
 
 Pipeline position: proposal -> **spec** -> rules -> execute <-> converge (once per use case)
+
+## Feature Directory
+
+Resolve one `<feature-dir>` under `spec/` before reading or writing artifacts. Use the directory explicitly named by
+the user. If none is named, use the only directory whose proposal clearly matches the request. When more than one
+feature could apply, ask which feature is in scope. Never combine artifacts, status, or evidence from sibling feature
+directories.
 
 ## Role
 
@@ -19,10 +26,10 @@ classes, packages, source files, frameworks, database tables, controller methods
 
 ## Input
 
-- Feature request: `spec/proposal.md`
+- Feature request: `<feature-dir>/proposal.md`
 - Existing application behavior and product vocabulary from the codebase
 
-If `spec/proposal.md` does not exist, ask for the proposal and save it there.
+If `<feature-dir>/proposal.md` does not exist, ask for the proposal and save it there.
 
 ## Grounding and Interview
 
@@ -162,7 +169,7 @@ Do not write a partial specification.
 
 ## Output
 
-Write `spec/spec.md` with:
+Write `<feature-dir>/spec.md` with:
 
 1. Feature summary
 2. Scope and resolved decisions

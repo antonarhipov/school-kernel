@@ -1,15 +1,22 @@
 ---
 name: execute
-description: Implement a declarative specification one complete use case at a time, track progress in spec/status.md, and invoke convergence immediately after each use case. Use when asked to implement, execute, continue, or resume a use-case specification.
+description: Implement a declarative specification one complete use case at a time, track progress in its feature directory, and invoke convergence immediately after each use case. Use when asked to implement, execute, continue, or resume a use-case specification.
 ---
 
 # Execute Use Cases Skill
 
-Implement the use cases in `spec/spec.md` as vertical slices. A use case, including its main scenario, extensions,
+Implement the use cases in `<feature-dir>/spec.md` as vertical slices. A use case, including its main scenario, extensions,
 guarantees, postconditions, relations, and applicable technical rules, is the unit of work. Do not generate or depend on
 `criteria.md`, `review.md`, `plan-review.md`, `tasks.yaml`, phases, or a file-level implementation plan.
 
 Pipeline position: proposal -> spec -> rules -> **execute -> converge** -> execute -> converge ...
+
+## Feature Directory
+
+Resolve one `<feature-dir>` under `spec/` before reading, implementing, or writing evidence. Use the directory
+explicitly named by the user. If none is named, use the only directory with an executable specification and rules that
+clearly match the request. When more than one feature could apply, ask which feature is in scope. Never mix status,
+checkpoints, or convergence reports between feature directories.
 
 Convergence is mandatory after every use case. Once a use case is implemented, stop all other implementation work,
 mark it `READY_FOR_CONVERGENCE`, write its evidence report, and invoke `converge` for that use case immediately. Do
@@ -17,20 +24,20 @@ not start another use case until the current one is `APPROVED`.
 
 ## Role
 
-You are the builder. You choose implementation details within `spec/rules.md` and established project conventions,
+You are the builder. You choose implementation details within `<feature-dir>/rules.md` and established project conventions,
 implement one actor goal end to end, prove its observable behavior, and keep a small status ledger. You do not turn the
 use case into a low-level task list or predeclare exact files. Files changed are recorded afterward as evidence, not
 beforehand as the plan.
 
 ## Inputs
 
-- Behavioral contract: `spec/spec.md`
-- Technical constraints: `spec/rules.md`
-- Progress ledger: `spec/status.md` (create if missing)
-- Prior convergence reports: `spec/convergence/UC-*.md`
+- Behavioral contract: `<feature-dir>/spec.md`
+- Technical constraints: `<feature-dir>/rules.md`
+- Progress ledger: `<feature-dir>/status.md` (create if missing)
+- Prior convergence reports: `<feature-dir>/convergence/UC-*.md`
 - Codebase, project guidance, build files, and tests
 
-`spec/spec.md` and `spec/rules.md` are required. The rules file may state that the feature introduces no special
+`<feature-dir>/spec.md` and `<feature-dir>/rules.md` are required. The rules file may state that the feature introduces no special
 constraint, but the technical decision pass must still have happened. A missing or incomplete behavioral decision is a
 blocker, not an implementation choice.
 
@@ -59,7 +66,7 @@ duplicate of the scenarios in `spec.md`.
    rules. Do not implement from the summary table alone.
 2. Validate the relationship graph. Every `Requires`, `Includes`, and `Extends` target must exist. Dependencies
    must be acyclic. If not, raise a `SPEC_AMBIGUITY` blocker.
-3. Create `spec/status.md` from the format below if absent. Add every UC as `NOT_STARTED`; do not invent rows.
+3. Create `<feature-dir>/status.md` from the format below if absent. Add every UC as `NOT_STARTED`; do not invent rows.
 4. Reconcile status with existing convergence reports and Git history. Never silently reset an approved use case.
 5. Record the current `HEAD` and `git status --short`. Preserve unrelated user changes and do not absorb them into
    use-case evidence or commits.
@@ -134,10 +141,15 @@ in `status.md`.
 
 ### 5. Submit for immediate convergence
 
-Write `spec/checkpoints/UC-n.md` using the format below, set the UC to `READY_FOR_CONVERGENCE`, and create one
+Write `<feature-dir>/checkpoints/UC-n.md` using the format below, set the UC to `READY_FOR_CONVERGENCE`, and create one
 coherent commit named `UC-n: <actor goal>` containing the UC implementation, its tests, status update, and checkpoint
 report. The report identifies this immutable submission as `HEAD at convergence`; converge resolves the actual hash.
 Do not include unrelated changes.
+
+When `.agents/skills/jev-checkpoint/SKILL.md` is present, use it on the completed checkpoint before submission. Include
+its advisory report with the checkpoint. Independently inspect every flag and resolve confirmed defects before marking
+the UC ready. A clean Jev report is not approval; missing credentials, service failure, or low confidence is recorded as
+`REVIEW` in checkpoint notes and never weakens the ordinary verification or convergence gates.
 
 Then invoke `converge` for `UC-n` immediately. This is part of execution, not an optional later review. Do not
 implement, investigate, or prepare another UC while convergence is pending.
@@ -251,6 +263,7 @@ Write a concise blocker with type `SPEC_AMBIGUITY`, `SPEC_CONFLICT`, `TECHNICAL`
 - Runtime evidence: <actor, path/action, observed result>
 - Changed files: <actual paths>
 - Approved UCs regression-tested: <ids and results>
+- Jev preflight: <report path, pinned model, and flagged count | REVIEW with reason>
 
 ## Notes
 

@@ -47,7 +47,7 @@ and `130` for interruption before publication.
   infeasibility or optimality.
 
 The complete behavior, constraint catalog, failure semantics, and score definitions are in
-[`spec/spec.md`](spec/spec.md).
+[`spec/kernel-v1/spec.md`](spec/kernel-v1/spec.md).
 
 ## Timetable viewer
 
@@ -59,7 +59,7 @@ python3 -m http.server 8080
 ```
 
 [`examples/timetable.json`](examples/timetable.json) loads automatically. Use **Open JSON** or drag another result
-file onto the page to inspect it.
+file onto the page to inspect it. On mobile screens, the weekly grid becomes a touch-friendly daily agenda.
 
 The target-scale performance measurement is deliberately separate from correctness gates:
 

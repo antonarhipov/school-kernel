@@ -109,7 +109,7 @@ scale.
 ### RULE-7 - Exact catalog implementation
 
 - Applies to: all use cases
-- Constraint: MUST implement exactly the hard and soft catalog rows in `spec/spec.md`, using stable IDs and signed
+- Constraint: MUST implement exactly the hard and soft catalog rows in `spec/kernel-v1/spec.md`, using stable IDs and signed
   64-bit-safe penalty arithmetic, and MUST NOT introduce an implicit scheduling rule or bonus.
 - Reason: Extra or missing constraints change actor-visible feasibility and optimization behavior.
 - Verification: One Timefold ConstraintVerifier test family per catalog row proves matching and non-matching cases; a
