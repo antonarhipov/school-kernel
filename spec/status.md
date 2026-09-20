@@ -2,8 +2,8 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
+- Use case: none
+- Status: APPROVED
 - Next eligible: none
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `8c2fb7f`; revises `422a774` for C-1 and C-2 | `spec/convergence/UC-1.md` - APPROVE |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | `HEAD at convergence`; revises `acd488c` from `bbbecb1` | pending reconvergence; prior `spec/convergence/UC-2.md` - REJECT (C-2) |
+| UC-2 | APPROVED | UC-1 | `e6401f6`; revises `acd488c` for C-2 | `spec/convergence/UC-2.md` - APPROVE |
 
 ## UC-1 Evidence
 
@@ -63,6 +63,7 @@
 - Reconvergence finding: C-2
 - Second revision started from: `bbbecb1f9636b331068137ab5c497a27e4c358f5`
 - Second revision completed: 2026-09-20T01:06:29Z
+- Final convergence: APPROVE at `e6401f6`; C-1, C-2, and G-1 through G-3 resolved.
 - Revision started from: `801deb59066831d9e213245305cf1ee460613136`
 - Revision completed: 2026-09-20T00:58:37Z
 - Changed files: `README.md`, `examples/updated-school.json`, `spec/status.md`, `spec/checkpoints/UC-2.md`, `src/main/java/org/schoolkernel/application/{ReplanRequest,ReplanService}.java`, `src/main/java/org/schoolkernel/cli/SchoolKernelMain.java`, `src/main/java/org/schoolkernel/contract/{CurrentTimetableReader,ResultFactory}.java`, `src/main/java/org/schoolkernel/domain/{DefinitionValidator,SchoolDefinition}.java`, `src/main/java/org/schoolkernel/solver/{HardConstraintDiagnostics,PlanningLesson,PlanningMapper,ScheduleEvaluator,SchoolConstraintProvider,SolverAdapter}.java`, `src/main/resources/schema/result-v1.schema.json`, `src/test/java/org/schoolkernel/application/PlanServiceTest.java`, `src/test/java/org/schoolkernel/benchmark/TargetScaleBenchmark.java`, `src/test/java/org/schoolkernel/cli/ReplanCliIT.java`, `src/test/java/org/schoolkernel/solver/SchoolConstraintProviderTest.java`
