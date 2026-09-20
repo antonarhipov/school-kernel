@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none until UC-1 is approved
+- Status: APPROVED
+- Next eligible: UC-2
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | `HEAD at convergence`; revises `422a774` for C-1 and C-2 | reconvergence pending |
+| UC-1 | APPROVED | none | `8c2fb7f`; revises `422a774` for C-1 and C-2 | `spec/convergence/UC-1.md` - APPROVE |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
