@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none until UC-1 is approved
+- Status: NEEDS_REVISION
+- Next eligible: UC-1
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | `HEAD at convergence` from `69cc268` | pending |
+| UC-1 | NEEDS_REVISION | none | `422a774` from `69cc268` | `spec/convergence/UC-1.md` - REJECT (C-1, C-2) |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
@@ -20,6 +20,7 @@
 - Started from: `69cc268a1b90b960c320d4a82cb1e301d664d898`
 - Pre-existing dirty files: none
 - Implementation submission: `HEAD at convergence`
+- Convergence findings: C-1 (published timetable lacks verifiable `schoolId` lineage), C-2 (handled outcomes omit derivable result-envelope metadata)
 - Changed files:
   - Build and distribution: `pom.xml`, `.mvn/wrapper/maven-wrapper.properties`, `mvnw`, `mvnw.cmd`, `school-kernel`, `README.md`
   - Examples: `examples/empty-school.json`, `examples/initial-school.json`
