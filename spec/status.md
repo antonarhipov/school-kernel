@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: none
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `8c2fb7f`; revises `422a774` for C-1 and C-2 | `spec/convergence/UC-1.md` - APPROVE |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | `HEAD at convergence` from `498fb2e` | pending |
+| UC-2 | NEEDS_REVISION | UC-1 | `bfb7a40` from `498fb2e` | `spec/convergence/UC-2.md` - REJECT (C-1, G-1 through G-3) |
 
 ## UC-1 Evidence
 
@@ -59,6 +59,7 @@
 - Pre-existing dirty files: `src/test/java/org/schoolkernel/fixtures/MerivaljaExampleFixtureTests.java`, `src/test/resources/fixtures/README.md`, `src/test/resources/fixtures/merivalja-1a-1b-4a-4avr-4b-9a-9b.json`, `src/test/resources/fixtures/merivalja-5a-5b.json`
 - Prior convergence findings: none
 - Implementation submission: `HEAD at convergence`
+- Convergence findings: C-1, G-1, G-2, G-3
 - Changed files: `README.md`, `examples/updated-school.json`, `spec/status.md`, `spec/checkpoints/UC-2.md`, `src/main/java/org/schoolkernel/application/{ReplanRequest,ReplanService}.java`, `src/main/java/org/schoolkernel/cli/SchoolKernelMain.java`, `src/main/java/org/schoolkernel/contract/{CurrentTimetableReader,ResultFactory}.java`, `src/main/java/org/schoolkernel/domain/{DefinitionValidator,SchoolDefinition}.java`, `src/main/java/org/schoolkernel/solver/{HardConstraintDiagnostics,PlanningLesson,PlanningMapper,ScheduleEvaluator,SchoolConstraintProvider,SolverAdapter}.java`, `src/main/resources/schema/result-v1.schema.json`, `src/test/java/org/schoolkernel/application/PlanServiceTest.java`, `src/test/java/org/schoolkernel/benchmark/TargetScaleBenchmark.java`, `src/test/java/org/schoolkernel/cli/ReplanCliIT.java`, `src/test/java/org/schoolkernel/solver/SchoolConstraintProviderTest.java`
 - Commands and results:
   - `./mvnw -q clean verify` - PASS; 53 tests, 0 failures/errors/skips (51 implementation-owned plus 2 concurrent fixture tests).
