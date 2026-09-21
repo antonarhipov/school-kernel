@@ -90,7 +90,13 @@ function makeModel(baseline) {
     subject: maps.subjects.get(assignment.subjectId), teacher: maps.teachers.get(assignment.teacherId), cohort: maps.cohorts.get(assignment.cohortId),
     room: maps.rooms.get(assignment.roomId), period: maps.periods.get(assignment.periodId), lesson: maps.lessons.get(assignment.lessonId) }));
   const assignmentMap = new Map(enriched.map(item => [item.lessonId, item]));
-  return { definition, assignments: enriched, assignmentMap, maps, weekdays };
+  const assignmentsByCell = new Map();
+  for (const assignment of enriched) {
+    const key = `${assignment.cohortId}\u0000${assignment.periodId}`;
+    const cell = assignmentsByCell.get(key);
+    if (cell) cell.push(assignment); else assignmentsByCell.set(key, [assignment]);
+  }
+  return { definition, assignments: enriched, assignmentMap, assignmentsByCell, maps, weekdays };
 }
 
 function renderAccepted(snapshot, schoolName) {
@@ -104,8 +110,8 @@ function renderWholeSchool() {
   const host = document.querySelector('#accepted-view');
   const model = acceptedModel;
   const dayPeriods = periodsForDay(view.day);
-  const matches = filteredAssignments();
   const active = activeCriteria();
+  const matches = active.length ? filteredAssignments() : model.assignments;
   const visibleCohorts = active.length === 0 ? model.definition.cohorts : model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id));
   host.innerHTML = `<div class="inspection-toolbar" aria-label="${M.wholeSchool}">
       <label class="search-control"><span>${M.searchLabel}</span><input id="lesson-search" type="search" value="${escapeAttribute(view.search)}" placeholder="${M.searchPlaceholder}"></label>
@@ -119,21 +125,15 @@ function renderWholeSchool() {
     <div class="filter-status" role="status"><strong id="filter-title">${active.length ? M.filteredMatrix : M.completeMatrix}</strong><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
     ${model.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
     <p id="no-matches" class="empty-message" role="status"${active.length && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
-    ${matrix(model.definition.cohorts, dayPeriods, model.assignments, false)}
+    ${matrix(model.definition.cohorts, dayPeriods, model.assignmentsByCell, false)}
     <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : ''}</div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
   bindInspectionControls();
   applyFiltersInPlace();
 }
 
-function matrix(cohorts, periods, assignments, filtered) {
+function matrix(cohorts, periods, assignmentsByCell, filtered) {
   const selectedPeriods = view.periodId ? periods.filter(period => period.id === view.periodId) : periods;
-  const assignmentsByCell = new Map();
-  for (const assignment of assignments) {
-    const key = `${assignment.cohortId}\u0000${assignment.periodId}`;
-    const cell = assignmentsByCell.get(key);
-    if (cell) cell.push(assignment); else assignmentsByCell.set(key, [assignment]);
-  }
   const headers = selectedPeriods.map(period => `<th scope="col"><span>${escapeHtml(period.displayName)}</span>${period.startTime ? `<small>${escapeHtml(M.optionalTime(period.startTime, period.endTime))}</small>` : ''}</th>`).join('');
   const rows = cohorts.map(cohort => `<tr><th scope="row"><span>${escapeHtml(entityName(cohort))}</span><small>${escapeHtml(cohort.id)}</small></th>${selectedPeriods.map(period => {
     const items = assignmentsByCell.get(`${cohort.id}\u0000${period.id}`) || [];

@@ -14,7 +14,8 @@ terminates only that run. Kernel files and results remain authoritative. The bro
 snapshot and performs search, filtering, grouping, and timetable rendering locally at the validation scale.
 
 Spring Security provides same-origin protection without login. The application and development database bind only to
-loopback interfaces. Authentication, roles, remote deployment, and final packaging remain later decisions.
+loopback interfaces. Spring Boot owns a repository-root Docker Compose PostgreSQL lifecycle for local JVM startup and
+walkthroughs; authentication, roles, remote deployment, and production packaging remain later decisions.
 
 ## Codebase alignment
 
@@ -28,9 +29,9 @@ loopback interfaces. Authentication, roles, remote deployment, and final packagi
 - The kernel retains its separately pinned Timefold, Jackson, schema-validation, Picocli, canonicalization, and logging
   baseline. Spring dependency management must not silently change kernel runtime dependencies. Tested stable upgrades
   are allowed only through an explicit version change and the complete kernel compatibility suite.
-- During development, the workspace runs as a local JVM process and PostgreSQL runs in a container. Final application
-  packaging is deliberately unresolved; no Docker Compose, installer, or hosted deployment assumption may enter the
-  implementation contract yet.
+- During development, the workspace runs as a local JVM process and Spring Boot Docker Compose support starts and
+  stops the repository-root PostgreSQL service with it. This local walkthrough lifecycle does not select a production
+  application image, installer, hosted deployment, or production database topology.
 
 ## Security surface
 
@@ -496,13 +497,32 @@ tracked files, example data, or a runtime workspace.
   hardware identity, wall time, termination reason, verification result, and change counts for all three cases and
   fails when any case exceeds the gate or lacks a verified feasible result.
 
+### RULE-30 - Local application startup owns the walkthrough database
+
+- Applies to: UC-3
+- Constraint: Starting the workspace as a local JVM from the repository root MUST use Spring Boot's Docker Compose
+  lifecycle to start one `postgres:18.6` service, wait for `pg_isready`, and supply its JDBC connection details without
+  a separate database-start command. The service MUST publish only to IPv4 loopback, MUST use a named volume so an
+  accepted walkthrough workspace survives ordinary application restarts, and MUST be removable with one documented
+  reset command. The Compose file MAY contain clearly labeled, well-known local-development credentials; they MUST NOT
+  be described or reused as production secrets. Docker Compose support MUST be packaged with the executable workspace
+  JAR, while production and test profiles MUST be able to disable it explicitly. It MUST NOT containerize the
+  workspace application or alter the packaged kernel process boundary.
+- Reason: Administrator walkthroughs need one application command and durable local state without weakening loopback
+  exposure, PostgreSQL fidelity, or the separate kernel executable contract.
+- Verification: Configuration tests compare the Compose image, health check, loopback mapping, volume, credentials,
+  and Spring Boot dependency/plugin settings by value. A live packaged-JAR smoke test begins with no project database
+  container, starts the application once, observes Compose create a healthy PostgreSQL 18.6 service and Flyway-migrated
+  `EMPTY` workspace, reaches `/workspace/` over loopback, stops the application, and proves the database service stops
+  while its named volume remains. The standard Testcontainers suite disables Compose and stays isolated.
+
 ## Use-case cross-reference
 
 | Use case | Rules |
 |---|---|
 | UC-1 | RULE-3, RULE-4, RULE-5, RULE-6, RULE-7, RULE-8, RULE-9, RULE-13, RULE-14, RULE-21, RULE-22, RULE-23, RULE-24, RULE-26, RULE-27, RULE-28 |
 | UC-2 | RULE-3, RULE-5, RULE-6, RULE-7, RULE-8, RULE-10, RULE-11, RULE-12, RULE-13, RULE-17, RULE-21, RULE-22, RULE-23, RULE-24, RULE-26, RULE-27, RULE-28, RULE-29 |
-| UC-3 | RULE-19, RULE-20, RULE-21, RULE-22, RULE-23, RULE-24, RULE-25 |
+| UC-3 | RULE-19, RULE-20, RULE-21, RULE-22, RULE-23, RULE-24, RULE-25, RULE-30 |
 | UC-4 | RULE-3, RULE-5, RULE-6, RULE-8, RULE-15, RULE-16, RULE-19, RULE-20, RULE-21, RULE-22, RULE-23, RULE-24, RULE-25 |
 | UC-5 | RULE-3, RULE-5, RULE-6, RULE-8, RULE-10, RULE-11, RULE-12, RULE-13, RULE-15, RULE-17, RULE-21, RULE-22, RULE-23, RULE-24, RULE-26, RULE-27, RULE-28, RULE-29 |
 | UC-6 | RULE-3, RULE-5, RULE-6, RULE-7, RULE-8, RULE-17, RULE-18, RULE-19, RULE-20, RULE-21, RULE-22, RULE-23, RULE-24, RULE-25 |
@@ -516,8 +536,8 @@ persisted postcondition in relationship tests.
 
 ## Design exclusions
 
-- Final packaging, Docker Compose deployment, installers, service managers, hosted operation, and production database
-  topology are not selected during the development period.
+- Production application images, Compose deployment, installers, service managers, hosted operation, and production
+  database topology are not selected during the development period. RULE-30 selects only local JVM walkthrough startup.
 - Authentication, accounts, roles, remote clients, multi-school routing, multi-user locking, and authorization policy
   are deferred. The local same-origin protections in these rules are not deferred.
 - JPA/Hibernate, Spring Data repositories, H2, filesystem state as a second authority, event sourcing, audit history,

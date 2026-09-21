@@ -39,6 +39,26 @@ class ArchitectureTest {
     }
 
     @Test
+    @DisplayName("RULE-30: packaged local startup owns a loopback PostgreSQL 18.6 Compose lifecycle")
+    void localStartupOwnsWalkthroughDatabase() throws Exception {
+        String compose = Files.readString(Path.of("..", "compose.yaml"));
+        String pom = Files.readString(Path.of("pom.xml"));
+        String testConfiguration = Files.readString(Path.of("src/test/resources/application.yml"));
+
+        assertTrue(compose.contains("image: postgres:18.6"));
+        assertTrue(compose.contains("host_ip: 127.0.0.1"));
+        assertTrue(compose.contains("pg_isready -U school_workspace -d school_workspace"));
+        assertTrue(compose.contains("workspace-postgres-data:/var/lib/postgresql"));
+        assertTrue(compose.contains("POSTGRES_PASSWORD: local_walkthrough_only"));
+        assertTrue(pom.contains("<artifactId>spring-boot-docker-compose</artifactId>"));
+        assertTrue(pom.contains("<scope>runtime</scope>"));
+        assertTrue(pom.contains("<optional>true</optional>"));
+        assertTrue(pom.contains("<excludeDockerCompose>false</excludeDockerCompose>"));
+        assertTrue(pom.contains("<includeOptional>true</includeOptional>"));
+        assertTrue(testConfiguration.contains("enabled: false"));
+    }
+
+    @Test
     @DisplayName("UC-3 RULE-20: native workspace English is sourced from one message catalog")
     void workspaceUsesOneMessageCatalog() throws Exception {
         Path assets = Path.of("src/main/resources/static/workspace");

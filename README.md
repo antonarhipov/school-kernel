@@ -58,20 +58,29 @@ The complete behavior, constraint catalog, failure semantics, and score definiti
 
 ## Operations workspace
 
-The workspace binds to loopback and stores one versioned aggregate in PostgreSQL. During development, start a local
-PostgreSQL 18.6 database, then provide its credentials and launch the packaged application:
+The workspace binds to loopback and stores one versioned aggregate in PostgreSQL. Build once, then launch the packaged
+application from the repository root:
 
 ```bash
-export WORKSPACE_DATABASE_URL=jdbc:postgresql://127.0.0.1:5432/school_workspace
-export WORKSPACE_DATABASE_USERNAME=school_workspace
-export WORKSPACE_DATABASE_PASSWORD=school_workspace
-export SCHOOL_KERNEL_EXECUTABLE="$PWD/school-kernel"
+./mvnw -q -pl timetable-workspace -am package
 java -jar timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar
 ```
 
-Open <http://localhost:8080/workspace/>. An empty workspace accepts either an initial definition, a matching verified
-definition/result pair, or an accepted-bundle ZIP. Import verification runs through the packaged kernel; the browser
-does not require JSON editing or command-line use.
+Spring Boot automatically runs `docker compose up` for the repository's PostgreSQL 18.6 service, waits for its health
+check, applies Flyway, and stops the service when the application exits. Its named volume preserves the walkthrough
+workspace across ordinary restarts. Open <http://localhost:8080/workspace/>. An empty workspace accepts either an
+initial definition, a matching verified definition/result pair, or an accepted-bundle ZIP. Import verification runs
+through the packaged kernel; the browser does not require JSON editing or command-line use.
+
+To deliberately erase the local walkthrough database and start over:
+
+```bash
+docker compose down --volumes
+```
+
+The Compose credential is a well-known local-development value, not a production secret. Set
+`SPRING_DOCKER_COMPOSE_ENABLED=false` and provide `WORKSPACE_DATABASE_URL`, `WORKSPACE_DATABASE_USERNAME`, and
+`WORKSPACE_DATABASE_PASSWORD` to use an externally managed PostgreSQL instance.
 
 ## Timetable viewer
 

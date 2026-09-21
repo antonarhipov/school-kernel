@@ -10,6 +10,9 @@ server:
 spring:
   application:
     name: timetable-workspace
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
   datasource:
     url: ${WORKSPACE_DATABASE_URL:jdbc:postgresql://127.0.0.1:5432/school_workspace}
     username: ${WORKSPACE_DATABASE_USERNAME}
