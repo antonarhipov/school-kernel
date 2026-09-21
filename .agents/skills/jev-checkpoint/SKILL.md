@@ -14,7 +14,8 @@ Pipeline position: execute -> checkpoint draft -> **Jev preflight** -> converge
 
 Jev may classify the strength of supplied evidence. It cannot run code, inspect an unprovided file, establish that a
 command really ran, prove absence of side effects, or approve a use case. Typed output guarantees the response shape,
-not the truth of the judgment.
+not the truth of the judgment. Jev 1.13 is not a text generator, so the helper creates actionable reasons
+deterministically from atomic answers and their probabilities; those reasons are not model-generated rationale.
 
 Keep facts that code can decide out of Jev: checkpoint completeness, Git status and commit identity, test exit status,
 schema validity, exact values, counts, hashes, and file changes. Verify those deterministically.
@@ -70,10 +71,11 @@ Before changing the integration, re-read the live [API](https://docs.typesafe.ai
      --model jev-1.13.0
    ```
 
-6. Independently inspect every flagged item:
-   - Confirmed `WEAK`, `MISPLACED`, `IMPOSSIBLE`, `ABSENT`, missing-negative-proof, or contradiction: revise the
+6. Independently inspect every `finding` and `review` item:
+   - Confirmed `weak`, `misplaced`, `impossible`, `absent`, missing-negative-proof, or contradiction: revise the
      implementation/evidence before submission or record a convergence finding.
-   - Low confidence or insufficient context: route to the human/reasoning verifier.
+   - `review` is uncertainty or model-version drift, not a substantive finding. Route it to the human/reasoning
+     verifier and do not count it as a defect.
    - Demonstrable false positive: keep the underlying evidence and record why the Jev flag was not adopted.
 7. Commit the Jev report with the checkpoint when it was part of execute. Invoke `converge` regardless of whether Jev
    flagged anything. Converge must obtain its own evidence and must not copy Jev's judgment as a finding.
@@ -83,5 +85,12 @@ Before changing the integration, re-read the live [API](https://docs.typesafe.ai
 Jev can only escalate review. It cannot produce `APPROVED`, `APPROVED WITH NOTES`, or `READY_FOR_CONVERGENCE`.
 A result with no flags means "no issue detected in the supplied excerpts," not "the implementation matches the spec."
 
+The helper asks one question about positive evidence strength, one narrowly defined contradiction question, and one
+Noul for each negative obligation. It preserves Choice distributions and Noul probabilities, then derives exact
+missing-obligation reasons in code. Do not replace the atomic Noul questions with an aggregate "all obligations"
+question; Jev 1.13 is not reliable at counting or multi-condition conjunctions.
+
 Until thresholds are calibrated on this repository's historical submissions, treat the report as pilot telemetry. Use
 the rejected submissions and later convergence findings listed in the bundle reference as the initial labeled set.
+Track substantive-finding recall separately from `review` routing and false-positive rate. Do not tune thresholds on a
+single use case or promote the pilot into a blocking gate merely because one replay improves.

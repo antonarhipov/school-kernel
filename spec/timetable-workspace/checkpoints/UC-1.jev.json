@@ -1,0 +1,801 @@
+{
+  "schemaVersion": 1,
+  "useCase": "UC-1",
+  "submission": "diff-from-db18108c24ddc14b9a1496f0a258f47d3d06c870",
+  "modelRequested": "jev-1.13.0",
+  "confidenceFloor": 0.8,
+  "generatedAt": "2026-09-21T10:52:31.665Z",
+  "advisoryOnly": true,
+  "summary": {
+    "items": 33,
+    "flagged": 33
+  },
+  "items": [
+    {
+      "id": "UC-1 main",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.82
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.98
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.91
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 extension 1a",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "strong",
+          "confidence": 0.37
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.97
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.85
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence"
+      ]
+    },
+    {
+      "id": "UC-1 extension 1b",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.79
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.99
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.99
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 extension 2a",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.61
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.98
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.86
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 extension 2b",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.49
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 1
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.95
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 extension 2c",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.87
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.98
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.95
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 extension 4a",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "strong",
+          "confidence": 0.55
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.45
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.88
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:low_confidence",
+        "negative_proof:missing",
+        "strength:low_confidence"
+      ]
+    },
+    {
+      "id": "UC-1 G1",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.78
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.97
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.99
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 G2",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.85
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.9
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.36
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 G3",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.74
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.98
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.97
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 G4",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.54
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.88
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.96
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 G5",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.6
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.8
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.83
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 success postcondition",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.73
+        },
+        "negative_proof": {
+          "choice": "not_applicable",
+          "confidence": 1
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.75
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 minimal guarantee",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.68
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.54
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.96
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:low_confidence",
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "UC-1 relations",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "strong",
+          "confidence": 0.74
+        },
+        "negative_proof": {
+          "choice": "not_applicable",
+          "confidence": 1
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.98
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "strength:low_confidence"
+      ]
+    },
+    {
+      "id": "RULE-1",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.44
+        },
+        "negative_proof": {
+          "choice": "complete",
+          "confidence": 0.48
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.97
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:low_confidence",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-2",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.8
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 1
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.79
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-3",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.88
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.87
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.92
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-4",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.69
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.98
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.95
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-5",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.9
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.93
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.56
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-6",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.85
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.98
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.76
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-7",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.56
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.36
+        },
+        "conflict": {
+          "choice": "present",
+          "confidence": 0.51
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "conflict:present",
+        "negative_proof:low_confidence",
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-8",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.68
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 1
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.96
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-9",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.9
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.96
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.71
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-13",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.97
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.99
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.81
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-14",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.96
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.85
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.77
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-21",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.5
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.9
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.96
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-22",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.92
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.97
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.93
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-23",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.97
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.99
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.96
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-24",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.85
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.99
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.7
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-26",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.76
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.91
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.98
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:low_confidence",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-27",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.81
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 0.97
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.96
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    },
+    {
+      "id": "RULE-28",
+      "modelObserved": "jev-1.13.0",
+      "judgments": {
+        "strength": {
+          "choice": "weak",
+          "confidence": 0.94
+        },
+        "negative_proof": {
+          "choice": "missing",
+          "confidence": 1
+        },
+        "conflict": {
+          "choice": "none",
+          "confidence": 0.52
+        }
+      },
+      "flagged": true,
+      "flags": [
+        "conflict:low_confidence",
+        "negative_proof:missing",
+        "strength:weak"
+      ]
+    }
+  ]
+}

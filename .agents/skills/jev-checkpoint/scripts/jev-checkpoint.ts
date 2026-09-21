@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
-import { choice, TypeSafeClient } from "@typesafe-ai/sdk";
+import { choice, noul, TypeSafeClient, type Questions } from "@typesafe-ai/sdk";
 import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const DEFAULT_MODEL = "jev-1.13.0";
 const MAX_STATE_BYTES = 96_000;
+const NEGATIVE_SUPPORT_THRESHOLD = 0.5;
+const NOUL_REVIEW_MARGIN = 0.15;
 const STRENGTHS = ["strong", "weak", "misplaced", "impossible", "absent"] as const;
-const NEGATIVE_PROOFS = ["complete", "missing", "not_applicable"] as const;
 const CONFLICTS = ["none", "present", "insufficient_context"] as const;
 
 interface Evidence {
@@ -17,7 +19,7 @@ interface Evidence {
   observation: string;
 }
 
-interface BundleItem {
+export interface BundleItem {
   [key: string]: string | string[] | Evidence[];
   id: string;
   contract: string;
@@ -48,12 +50,24 @@ interface Arguments {
 interface Judgment {
   choice: string | null;
   confidence: number | null;
+  probabilities: Record<string, number>;
+}
+
+interface NegativeObligationJudgment {
+  index: number;
+  obligation: string;
+  supportProbability: number | null;
+  supported: boolean | null;
+  nearThreshold: boolean;
 }
 
 interface ItemResult {
   id: string;
   modelObserved: string | null;
   judgments: Record<string, Judgment>;
+  negativeObligations: NegativeObligationJudgment[];
+  reasons: string[];
+  severity: "clear" | "review" | "finding";
   flagged: boolean;
   flags: string[];
 }
@@ -199,38 +213,53 @@ function parseArguments(args: string[]): Arguments {
   return { bundle, output, validateOnly, model, confidenceFloor, timeoutMs };
 }
 
-const questionSet = {
-  strength: choice(
-    "Assess only whether `evidence` proves `contract` and `rules` at `actorBoundary`. Treat `claim` as an unverified assertion, use `counterEvidence`, and do not infer facts that are not supplied. Choose the evidence strength.",
-    {
-      strong:
-        "Concrete evidence pins the observable outcome at the contract boundary, including all stated negative obligations.",
-      weak:
-        "Some relevant evidence exists but is partial, sampled, indirect, or could pass for an implementation that violates the contract.",
-      misplaced:
-        "The evidence is below or different from the actor or technical boundary required by the contract or rule.",
-      impossible:
-        "The evidence depends on a value, double, route, or condition that production cannot produce according to the supplied material.",
-      absent: "No concrete supplied evidence exercises the contract element.",
-    },
-  ),
-  negative_proof: choice(
-    "Assess whether `evidence` proves every item in `negativeObligations`. Do not treat a successful response or exit status alone as proof that prohibited side effects are absent.",
-    {
-      complete: "Every listed negative obligation has direct supplied evidence.",
-      missing: "At least one listed negative obligation lacks direct supplied evidence.",
-      not_applicable: "The `negativeObligations` array is empty.",
-    },
-  ),
-  conflict: choice(
-    "Determine whether the supplied `claim`, `evidence`, or `counterEvidence` visibly conflicts with `contract` or `rules`. Judge only the supplied state.",
-    {
-      none: "No conflict is visible in the supplied material.",
-      present: "At least one supplied fact contradicts the contract, rule, or claim.",
-      insufficient_context: "The supplied material is too incomplete to decide whether a conflict exists.",
-    },
-  ),
-};
+export function buildQuestionSet(item: BundleItem): Questions {
+  const questions: Questions = {
+    strength: choice(
+      "Assess only whether `evidence` establishes the positive `contract` and `rules` at `actorBoundary`. Negative obligations are evaluated separately. Treat missing or sampled coverage as weak, not as a conflict. Do not infer unsupplied facts.",
+      {
+        strong:
+          "Every positive condition is directly established at the required actor or technical boundary. Do not require negative-obligation proof for this choice.",
+        weak:
+          "Relevant evidence exists but is partial, sampled, indirect, or omits a positive condition.",
+        misplaced:
+          "Relevant evidence exists only below or at a different boundary from the one the contract requires.",
+        impossible:
+          "Supplied evidence or counterevidence explicitly shows that a required production condition cannot occur.",
+        absent: "No concrete supplied evidence establishes the positive contract element.",
+      },
+    ),
+  };
+
+  if (item.counterEvidence.length > 0) {
+    questions.conflict = choice(
+      "Does a supplied `counterEvidence` statement directly contradict `contract` or `rules`? Missing tests, sampled coverage, indirect evidence, and other limitations are not contradictions.",
+      {
+        none: "No counterevidence statement directly contradicts the contract or rules.",
+        present:
+          "A counterevidence statement explicitly describes production behavior or data incompatible with the contract or rules.",
+        insufficient_context:
+          "A counterevidence statement may contradict the contract, but its wording is ambiguous. Mere missing proof does not qualify.",
+      },
+    );
+  }
+
+  item.negativeObligations.forEach((obligation, index) => {
+    questions[`negative_${index}`] = noul(
+      {
+        question:
+          "Does at least one supplied evidence observation directly prove this one negative obligation at the actorBoundary? Answer no when absence is only inferred from success, source structure, or unrelated evidence.",
+        actorBoundary: item.actorBoundary,
+        obligation,
+      },
+      {
+        true: "Direct evidence observes that this prohibited side effect or disclosure does not occur.",
+        false: "The obligation is unproved, indirect, or only inferred.",
+      },
+    );
+  });
+  return questions;
+}
 
 function parseJudgment(
   questionId: string,
@@ -241,7 +270,7 @@ function parseJudgment(
   const flags: string[] = [];
   if (typeof answer !== "object" || answer === null) {
     return {
-      judgment: { choice: null, confidence: null },
+      judgment: { choice: null, confidence: null, probabilities: {} },
       flags: [`${questionId}:malformed_answer`],
     };
   }
@@ -258,10 +287,70 @@ function parseJudgment(
   } else if (confidence < confidenceFloor) {
     flags.push(`${questionId}:low_confidence`);
   }
-  return { judgment: { choice: answerChoice, confidence }, flags };
+
+  const probabilities: Record<string, number> = {};
+  const rawProbabilities = raw.probabilities;
+  if (typeof rawProbabilities !== "object" || rawProbabilities === null) {
+    flags.push(`${questionId}:missing_probabilities`);
+  } else {
+    for (const label of allowed) {
+      const probability = (rawProbabilities as Record<string, unknown>)[label];
+      if (typeof probability !== "number" || probability < 0 || probability > 1) {
+        flags.push(`${questionId}:invalid_probability:${label}`);
+      } else {
+        probabilities[label] = probability;
+      }
+    }
+  }
+  return { judgment: { choice: answerChoice, confidence, probabilities }, flags };
 }
 
-function evaluateAnswers(
+function parseNegativeObligation(
+  item: BundleItem,
+  index: number,
+  answer: unknown,
+): { judgment: NegativeObligationJudgment; flags: string[] } {
+  const questionId = `negative_${index}`;
+  const obligation = item.negativeObligations[index] ?? "";
+  if (typeof answer !== "object" || answer === null) {
+    return {
+      judgment: {
+        index,
+        obligation,
+        supportProbability: null,
+        supported: null,
+        nearThreshold: false,
+      },
+      flags: [`${questionId}:malformed_answer`],
+    };
+  }
+  const probability = (answer as Record<string, unknown>).noul;
+  if (typeof probability !== "number" || probability < 0 || probability > 1) {
+    return {
+      judgment: {
+        index,
+        obligation,
+        supportProbability: null,
+        supported: null,
+        nearThreshold: false,
+      },
+      flags: [`${questionId}:invalid_probability`],
+    };
+  }
+  const nearThreshold = Math.abs(probability - NEGATIVE_SUPPORT_THRESHOLD) < NOUL_REVIEW_MARGIN;
+  return {
+    judgment: {
+      index,
+      obligation,
+      supportProbability: probability,
+      supported: probability >= NEGATIVE_SUPPORT_THRESHOLD,
+      nearThreshold,
+    },
+    flags: nearThreshold ? [`${questionId}:near_threshold`] : [],
+  };
+}
+
+export function evaluateAnswers(
   item: BundleItem,
   modelObserved: unknown,
   answers: Record<string, unknown>,
@@ -269,34 +358,77 @@ function evaluateAnswers(
   modelExpected: string,
 ): ItemResult {
   const strength = parseJudgment("strength", answers.strength, STRENGTHS, confidenceFloor);
-  const negativeProof = parseJudgment(
-    "negative_proof",
-    answers.negative_proof,
-    NEGATIVE_PROOFS,
-    confidenceFloor,
+  const conflict =
+    item.counterEvidence.length === 0
+      ? {
+          judgment: { choice: "none", confidence: null, probabilities: {} } as Judgment,
+          flags: [] as string[],
+        }
+      : parseJudgment("conflict", answers.conflict, CONFLICTS, confidenceFloor);
+  const negativeResults = item.negativeObligations.map((_, index) =>
+    parseNegativeObligation(item, index, answers[`negative_${index}`]),
   );
-  const conflict = parseJudgment("conflict", answers.conflict, CONFLICTS, confidenceFloor);
+  const negativeObligations = negativeResults.map((result) => result.judgment);
+  const negativeChoice =
+    negativeObligations.length === 0
+      ? "not_applicable"
+      : negativeObligations.every((obligation) => obligation.supported === true)
+        ? "complete"
+        : "missing";
+  const negativeProof: Judgment = {
+    choice: negativeChoice,
+    confidence: null,
+    probabilities: {},
+  };
   const observed = typeof modelObserved === "string" ? modelObserved : null;
-  const flags = [...strength.flags, ...negativeProof.flags, ...conflict.flags];
+  const reviewFlags = [
+    ...strength.flags,
+    ...conflict.flags,
+    ...negativeResults.flatMap((result) => result.flags),
+  ];
+  const findingFlags: string[] = [];
+  const reasons: string[] = [];
 
   if (strength.judgment.choice !== "strong") {
-    flags.push(`strength:${strength.judgment.choice ?? "unknown"}`);
+    findingFlags.push(`strength:${strength.judgment.choice ?? "unknown"}`);
+    reasons.push(`Positive evidence strength is ${strength.judgment.choice ?? "unknown"}.`);
   }
-  if (negativeProof.judgment.choice === "missing") flags.push("negative_proof:missing");
-  if (["present", "insufficient_context"].includes(conflict.judgment.choice ?? "")) {
-    flags.push(`conflict:${conflict.judgment.choice}`);
+  if (negativeChoice === "missing") {
+    findingFlags.push("negative_proof:missing");
+    negativeObligations
+      .filter((obligation) => obligation.supported !== true)
+      .forEach((obligation) => {
+        const probability =
+          obligation.supportProbability === null
+            ? "unknown"
+            : obligation.supportProbability.toFixed(3);
+        reasons.push(
+          `Negative obligation ${obligation.index + 1} is unsupported (p=${probability}): ${obligation.obligation}`,
+        );
+      });
   }
-  if (observed !== modelExpected) flags.push("model:unexpected_version");
+  if (conflict.judgment.choice === "present") {
+    findingFlags.push("conflict:present");
+    reasons.push("Supplied material is classified as directly contradictory.");
+  } else if (conflict.judgment.choice === "insufficient_context") {
+    reviewFlags.push("conflict:insufficient_context");
+    reasons.push("A possible contradiction needs human review.");
+  }
+  if (observed !== modelExpected) reviewFlags.push("model:unexpected_version");
 
-  const uniqueFlags = [...new Set(flags)].sort();
+  const uniqueFlags = [...new Set([...findingFlags, ...reviewFlags])].sort();
+  const severity = findingFlags.length > 0 ? "finding" : reviewFlags.length > 0 ? "review" : "clear";
   return {
     id: item.id,
     modelObserved: observed,
     judgments: {
       strength: strength.judgment,
-      negative_proof: negativeProof.judgment,
+      negative_proof: negativeProof,
       conflict: conflict.judgment,
     },
+    negativeObligations,
+    reasons,
+    severity,
     flagged: uniqueFlags.length > 0,
     flags: uniqueFlags,
   };
@@ -348,13 +480,23 @@ async function main(): Promise<number> {
   });
 
   const results: ItemResult[] = [];
+  let inputTokens = 0;
+  let outputTokens = 0;
   try {
     for (const item of bundle.items) {
       const response = await client.systemOne({
-        state: item,
+        state: {
+          contract: item.contract,
+          rules: item.rules,
+          actorBoundary: item.actorBoundary,
+          evidence: item.evidence,
+          counterEvidence: item.counterEvidence,
+        },
         model: args.model,
-        questions: questionSet,
+        questions: buildQuestionSet(item),
       });
+      inputTokens += response.usage.input_tokens;
+      outputTokens += response.usage.output_tokens;
       results.push(
         evaluateAnswers(
           item,
@@ -372,19 +514,28 @@ async function main(): Promise<number> {
   }
 
   const flagged = results.filter((result) => result.flagged).length;
+  const findings = results.filter((result) => result.severity === "finding").length;
+  const reviews = results.filter((result) => result.severity === "review").length;
+  const clear = results.filter((result) => result.severity === "clear").length;
   writeAtomic(args.output!, {
-    schemaVersion: 1,
+    schemaVersion: 2,
     useCase: bundle.useCase,
     submission: bundle.submission,
     modelRequested: args.model,
     confidenceFloor: args.confidenceFloor,
     generatedAt: new Date().toISOString(),
     advisoryOnly: true,
-    summary: { items: results.length, flagged },
+    summary: { items: results.length, flagged, findings, reviews, clear },
+    usage: { requests: results.length, inputTokens, outputTokens },
     items: results,
   });
-  console.log(`Jev preflight complete: ${results.length} item(s), ${flagged} flagged`);
+  console.log(
+    `Jev preflight complete: ${results.length} item(s), ${findings} finding(s), ${reviews} review(s), ${clear} clear`,
+  );
   return 0;
 }
 
-process.exitCode = await main();
+const invokedPath = process.argv[1];
+if (invokedPath !== undefined && import.meta.url === pathToFileURL(resolve(invokedPath)).href) {
+  process.exitCode = await main();
+}

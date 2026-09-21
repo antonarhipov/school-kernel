@@ -49,14 +49,16 @@ claim as its own evidence. Include known counterevidence; hiding it invalidates 
 
 ## Returned judgments
 
-Jev answers three independent Choice questions per item:
+The helper asks atomic questions rather than asking Jev to combine several obligations:
 
-- `strength`: `strong`, `weak`, `misplaced`, `impossible`, or `absent`, matching the converge evidence grades.
-- `negative_proof`: `complete`, `missing`, or `not_applicable`.
-- `conflict`: `none`, `present`, or `insufficient_context`.
+- `strength`: `strong`, `weak`, `misplaced`, `impossible`, or `absent`, considering positive evidence only.
+- `conflict`: asked only when explicit counterevidence exists; missing or sampled evidence is not a conflict.
+- one Noul per `negativeObligations` entry, returning the probability that direct evidence proves that exact obligation.
 
-The helper flags every non-strong strength, missing negative proof, present conflict, insufficient context, malformed
-answer, or answer below the confidence floor. The helper does not calculate an approval verdict.
+The report retains each Choice probability distribution and Noul probability. Code derives `negative_proof`, names
+each unsupported obligation in `reasons`, and routes the item as `finding`, `review`, or `clear`. `review` is uncertainty
+or model-version drift, not a substantive finding. Jev does not generate the reasons and the helper does not calculate
+an approval verdict.
 
 ## Initial School Kernel calibration set
 
@@ -71,4 +73,3 @@ Replay these immutable submissions without revealing the later finding in the in
 Also sample `STRONG` rows from the final approved submissions `8c2fb7f` and `e6401f6` to measure false-positive rate.
 Track blocking-finding recall, false-positive rate, confidence calibration, and repeatability. Pin the model version and
 do not turn the pilot into a blocking gate until its routing thresholds are supported by these results.
-
