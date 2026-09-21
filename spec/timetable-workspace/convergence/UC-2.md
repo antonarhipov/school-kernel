@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-2.md` at `b7180a985063e3c8ef01a79c0e455c5b4dd507f0`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE WITH NOTES
 - Findings: 0 critical, 0 gap, 0 protocol, 1 cosmetic
 - Suite: 135 run, 0 failed, 0 errors, 0 skipped; focused rerun 14 run, 0 failed, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -109,12 +109,12 @@ Automated browser evidence is strong. User confirmation remains for this UC-deri
 4. Confirm `Accept as current` is gated by the explicit checkbox; select it and accept.
 5. Confirm the opened view says `Accepted baseline` / `Accepted timetable · Demo School` and shows both timetable assignments.
 
-User result: pending.
+User result: approved on 2026-09-21.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; no next UC may start until the walkthrough is approved.
+`PENDING_WALKTHROUGH` -> `APPROVED`. Next eligible use cases: UC-3, UC-4, and UC-8.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm the five-step UC-2 administrator journey above.
+APPROVED WITH NOTES: K-1 is a documentation-only cleanup for stale checkpoint references.
