@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-1.md` at `854493f6f1b17f1d9c4437c4f816a89100d0ccbe`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Suite: `mvn -q clean verify` — 120 run, 0 failed, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -186,13 +186,12 @@ Automated evidence passes. Approval now requires the administrator to confirm th
 5. In fresh empty workspaces, import a matching definition/result pair and then the exact accepted-bundle archive;
    confirm each opens an accepted baseline rather than an initial draft.
 
-User result: pending.
+User result: approved on 2026-09-21.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`. Next eligible use cases: none. UC-2 remains `NOT_STARTED` until the
-walkthrough is confirmed and UC-1 becomes `APPROVED`.
+`PENDING_WALKTHROUGH` -> `APPROVED`. Next eligible use cases: UC-2, UC-3, UC-4, and UC-8.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: Confirm the five-step UC-1 administrator walkthrough.
+APPROVED
