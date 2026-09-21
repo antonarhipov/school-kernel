@@ -371,6 +371,51 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("UC-5 main/G1-G6/RULE-24: real browser keeps accepted inspection live and presents the packaged verified repair as a proposal")
+    void generatesRepairProposalInRealBrowser() throws Exception {
+        ObjectNode document = validAcceptedDocument();
+        JsonNode acceptedBefore = document.path("acceptedBaseline").deepCopy();
+        storeAccepted(document);
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(15));
+            cdp.evaluate("""
+                    document.querySelector('.repair-entry').open=true;
+                    document.querySelector('[name=period][value="mon-1"]').checked=true;
+                    document.querySelector('#start-repair-form').requestSubmit();
+                    """);
+            cdp.awaitText("Generate 30-second repair proposal", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            String solving = cdp.awaitText("Repair generation · running", Duration.ofSeconds(10));
+            assertTrue(solving.contains("Accepted baseline remains current"));
+            assertTrue(solving.contains("Search lessons"));
+            assertFalse(solving.contains("Apply selected pins"));
+
+            String proposal = cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(50));
+            assertTrue(proposal.contains("Accepted baseline remains current"));
+            assertTrue(proposal.contains("period stability, then room-only stability"));
+            assertTrue(proposal.contains("Execution limit\nPT30S"));
+            assertTrue(proposal.contains("Period moves"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        JsonNode stored = JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single());
+        assertEquals("REPAIR_PROPOSAL", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single());
+        assertEquals(acceptedBefore, stored.path("acceptedBaseline"));
+        assertEquals("FEASIBLE", stored.path("proposal").path("result").path("status").stringValue());
+    }
+
+    @Test
     @DisplayName("UC-3 G5 and RULE-25: target-scale post-load inspection interactions remain below 250 ms p95")
     void measuresTargetScaleInspectionInteractionsInRealBrowser() throws Exception {
         ObjectNode document = scaleDocument();
@@ -520,6 +565,24 @@ class WorkspaceBrowserIT {
         baseline.set("definition", definition);
         baseline.set("result", result);
         baseline.putObject("manifest").put("manifestVersion", 1);
+        return document;
+    }
+
+    private ObjectNode validAcceptedDocument() throws Exception {
+        JsonNode definition = JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        JsonNode result = JSON.readTree(Path.of("src/test/resources/uc5-accepted-result.json").toFile());
+        ObjectNode document = JSON.createObjectNode();
+        document.putObject("school").put("id", "demo-school").put("displayName", "Demo School");
+        document.put("definitionRevision", result.path("inputRevision").stringValue());
+        document.put("timetableRevision", result.path("timetableRevision").stringValue());
+        ObjectNode baseline = document.putObject("acceptedBaseline");
+        baseline.set("definition", definition);
+        baseline.set("result", result);
+        ObjectNode manifest = baseline.putObject("manifest");
+        manifest.put("manifestVersion", 1).put("definitionSchemaVersion", 1).put("resultSchemaVersion", 1)
+                .put("catalogVersion", 1).put("schoolId", "demo-school")
+                .put("inputRevision", result.path("inputRevision").stringValue())
+                .put("timetableRevision", result.path("timetableRevision").stringValue()).putArray("locks");
         return document;
     }
 

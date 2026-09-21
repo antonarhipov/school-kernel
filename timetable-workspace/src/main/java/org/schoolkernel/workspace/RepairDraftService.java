@@ -29,6 +29,7 @@ public class RepairDraftService {
     private final WorkspaceRepository repository;
     private final WorkspaceMutation mutation;
     private final ObjectMapper json;
+    private volatile long failedAutosaveVersion = -1;
 
     public RepairDraftService(WorkspaceRepository repository, WorkspaceMutation mutation, ObjectMapper json) {
         this.repository = repository;
@@ -49,8 +50,10 @@ public class RepairDraftService {
         intent.putArray("bulkActions");
         stageAvailability(intent, request, acceptedDefinition(current));
         refresh(draft, acceptedDefinition(current), acceptedAssignments(current), current.document().path("acceptedBaseline").path("manifest"));
-        return mutation.replaceRepair(expectedVersion, WorkspaceState.ACCEPTED_BASELINE,
+        WorkspaceAggregate started = mutation.replaceRepair(expectedVersion, WorkspaceState.ACCEPTED_BASELINE,
                 WorkspaceState.REPAIR_DRAFT, document);
+        failedAutosaveVersion = -1;
+        return started;
     }
 
     public WorkspaceAggregate update(String ifMatch, JsonNode request) {
@@ -71,8 +74,15 @@ public class RepairDraftService {
             default -> throw invalid("This repair action is not supported in the current increment.");
         }
         refresh(draft, acceptedDefinition(current), acceptedAssignments(current), current.document().path("acceptedBaseline").path("manifest"));
-        return mutation.replaceRepair(expectedVersion, WorkspaceState.REPAIR_DRAFT,
-                WorkspaceState.REPAIR_DRAFT, document);
+        try {
+            WorkspaceAggregate saved = mutation.replaceRepair(expectedVersion, WorkspaceState.REPAIR_DRAFT,
+                    WorkspaceState.REPAIR_DRAFT, document);
+            failedAutosaveVersion = -1;
+            return saved;
+        } catch (RuntimeException failure) {
+            failedAutosaveVersion = expectedVersion;
+            throw failure;
+        }
     }
 
     public BulkPinPreview preview(String ifMatch, JsonNode request) {
@@ -166,6 +176,10 @@ public class RepairDraftService {
             if (pin.path("roomSources").size() > 0) lesson.put("roomLock", assignment.path("roomId").stringValue());
         }
         return definition;
+    }
+
+    boolean hasUnsavedBrowserState(long durableVersion) {
+        return failedAutosaveVersion == durableVersion;
     }
 
     private void stageAvailability(ObjectNode intent, JsonNode request, JsonNode definition) {

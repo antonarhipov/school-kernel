@@ -15,5 +15,6 @@ public class WorkspaceRecovery {
     @EventListener(ApplicationReadyEvent.class)
     public void recoverInterruptedRun() {
         repository.recoverInterruptedInitialRun();
+        repository.recoverInterruptedRepairRun();
     }
 }

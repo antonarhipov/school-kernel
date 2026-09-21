@@ -61,6 +61,29 @@ public class WorkspaceMutation {
     }
 
     @Transactional
+    public WorkspaceAggregate startRepairRun(long expectedVersion, UUID runId, JsonNode document) {
+        if (repository.startRepairRun(expectedVersion, runId, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "Repair generation can start only from a ready repair draft.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
+    public WorkspaceAggregate finishRepairRun(
+            long expectedVersion,
+            UUID runId,
+            WorkspaceState nextState,
+            JsonNode document) {
+        if (repository.finishRepairRun(expectedVersion, runId, nextState, document).isEmpty()) {
+            throw new WorkspaceProblem(
+                    HttpStatus.CONFLICT,
+                    "STALE_RUN",
+                    "This repair run is no longer active.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
     public WorkspaceAggregate replaceInitial(
             long expectedVersion,
             WorkspaceState expectedState,

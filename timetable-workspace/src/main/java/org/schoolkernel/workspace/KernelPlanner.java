@@ -162,6 +162,134 @@ public class KernelPlanner {
         }
     }
 
+    public Outcome replan(
+            UUID runId,
+            JsonNode currentDefinition,
+            JsonNode currentResult,
+            JsonNode successorDefinition,
+            String limit) {
+        if (!"PT30S".equals(limit) && !"PT2M".equals(limit)) {
+            throw new IllegalArgumentException("Unsupported repair limit");
+        }
+        String correlationId = UUID.randomUUID().toString();
+        long started = System.nanoTime();
+        Path directory = null;
+        ActiveProcess holder = new ActiveProcess();
+        ActiveProcess existing = active.putIfAbsent(runId, holder);
+        if (existing != null) {
+            if (existing.cancelled) {
+                active.remove(runId, existing);
+                return Outcome.cancelled();
+            }
+            return Outcome.failed("INTERNAL_ERROR", "The repair run could not be started.");
+        }
+        try {
+            if (holder.cancelled) return Outcome.cancelled();
+            directory = Files.createTempDirectory(temporaryRoot, "school-workspace-replan-");
+            restrict(directory, true);
+            Path currentDefinitionPath = directory.resolve("accepted-definition.json");
+            Path currentResultPath = directory.resolve("accepted-result.json");
+            Path successorPath = directory.resolve("successor-definition.json");
+            Path outputPath = directory.resolve("repair-result.json");
+            writePrivate(currentDefinitionPath, CanonicalJson.bytes(currentDefinition));
+            writePrivate(currentResultPath, CanonicalJson.bytes(currentResult));
+            writePrivate(successorPath, CanonicalJson.bytes(successorDefinition));
+            String cliLimit = "PT2M".equals(limit) ? "120s" : "30s";
+            List<String> arguments = List.of(
+                    executable,
+                    "replan",
+                    "--current-definition", currentDefinitionPath.toString(),
+                    "--current", currentResultPath.toString(),
+                    "--definition", successorPath.toString(),
+                    "--output", outputPath.toString(),
+                    "--time-limit", cliLimit,
+                    "--correlation-id", correlationId);
+            Process process = processes.start(arguments);
+            holder.process = process;
+            if (holder.cancelled) {
+                terminate(process);
+                return Outcome.cancelled();
+            }
+            Thread stdout = Thread.ofVirtual().start(() -> drain(process.getInputStream()));
+            Thread stderr = Thread.ofVirtual().start(() -> drain(process.getErrorStream()));
+            long watchdogSeconds = "PT2M".equals(limit) ? 130 : 40;
+            boolean completed = process.waitFor(watchdogSeconds, TimeUnit.SECONDS);
+            if (!completed) {
+                terminate(process);
+                join(stdout, stderr);
+                logRepair(correlationId, runId, "TIMEOUT", started, limit, null, false, null);
+                return Outcome.failed("KERNEL_TIMEOUT", "Repair generation did not finish within its bounded run.");
+            }
+            join(stdout, stderr);
+            if (holder.cancelled) {
+                logRepair(correlationId, runId, "CANCELLED", started, limit, null, false, null);
+                return Outcome.cancelled();
+            }
+            int exit = process.exitValue();
+            JsonNode result = readResult(outputPath);
+            String status = result.path("status").stringValue();
+            if (exit == 0 && "FEASIBLE".equals(status)) {
+                if (result.path("schemaVersion").intValue() != 1
+                        || !correlationId.equals(result.path("correlationId").stringValue())
+                        || !successorDefinition.path("schoolId").stringValue()
+                                .equals(result.path("schoolId").stringValue())
+                        || result.path("seed").longValue() != 0L
+                        || !"TIME".equals(result.path("limit").path("type").stringValue())
+                        || !limit.equals(result.path("limit").path("duration").stringValue())
+                        || "STEP_LIMIT".equals(result.path("terminationReason").stringValue())
+                        || !result.path("timetable").path("assignments").isArray()
+                        || !completeChangeReport(result.path("changeReport"))) {
+                    throw new WorkspaceProblem(
+                            org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE,
+                            "KERNEL_UNAVAILABLE",
+                            "School Kernel returned mismatched repair evidence.");
+                }
+                verifier.verify(new ImportDocuments(
+                        successorDefinition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+                logRepair(correlationId, runId, "FEASIBLE", started, limit,
+                        result.path("terminationReason").stringValue(), true, result.path("changeReport"));
+                return Outcome.feasible(result);
+            }
+            if (exit == 3 && "NO_FEASIBLE_SOLUTION_FOUND".equals(status)) {
+                logRepair(correlationId, runId, status, started, limit,
+                        result.path("terminationReason").stringValue(), false, null);
+                return Outcome.failed(status, "No feasible repair was found within this run.", result);
+            }
+            if (exit == 2 && "INVALID_INPUT".equals(status)) {
+                logRepair(correlationId, runId, status, started, limit, null, false, null);
+                return Outcome.failed(status, "School Kernel rejected the repair definition.", result);
+            }
+            logRepair(correlationId, runId, "INTERNAL_ERROR", started, limit, null, false, null);
+            return Outcome.failed("INTERNAL_ERROR", "School Kernel could not complete repair generation.");
+        } catch (WorkspaceProblem problem) {
+            logRepair(correlationId, runId, "REJECTED_OUTPUT", started, limit, null, false, null);
+            return Outcome.failed("REJECTED_OUTPUT", "School Kernel returned an unverified repair result.");
+        } catch (IOException exception) {
+            logRepair(correlationId, runId, "TRANSPORT", started, limit, null, false, null);
+            return Outcome.failed("TRANSPORT_FAILURE", "School Kernel could not be started.");
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            Process process = holder.process;
+            if (process != null) terminate(process);
+            logRepair(correlationId, runId, "INTERRUPTED", started, limit, null, false, null);
+            return Outcome.failed("INTERRUPTED", "Repair generation was interrupted.");
+        } finally {
+            active.remove(runId, holder);
+            deleteTree(directory);
+        }
+    }
+
+    private static boolean completeChangeReport(JsonNode report) {
+        return report.isObject()
+                && report.path("additions").isArray()
+                && report.path("cancellations").isArray()
+                && report.path("teacherChanges").isArray()
+                && report.path("forcedMoves").isArray()
+                && report.path("periodMoves").isArray()
+                && report.path("roomOnlyMoves").isArray()
+                && report.size() == 6;
+    }
+
     public boolean cancel(UUID runId) {
         ActiveProcess holder = active.computeIfAbsent(runId, ignored -> new ActiveProcess());
         holder.cancelled = true;
@@ -243,6 +371,29 @@ public class KernelPlanner {
                 Duration.ofNanos(System.nanoTime() - started).toMillis(),
                 terminationReason == null ? "NONE" : terminationReason,
                 feasible);
+    }
+
+    private static void logRepair(
+            String correlationId,
+            UUID runId,
+            String exitClass,
+            long started,
+            String limit,
+            String terminationReason,
+            boolean feasible,
+            JsonNode changes) {
+        LOG.info(
+                "correlationId={} runId={} kernelCommand=replan exitClass={} elapsedTimeMs={} configuredLimit={} terminationReason={} feasible={} additions={} cancellations={} teacherChanges={} forcedMoves={} periodMoves={} roomOnlyMoves={}",
+                correlationId, runId, exitClass,
+                Duration.ofNanos(System.nanoTime() - started).toMillis(), limit,
+                terminationReason == null ? "NONE" : terminationReason,
+                feasible,
+                changes == null ? 0 : changes.path("additions").size(),
+                changes == null ? 0 : changes.path("cancellations").size(),
+                changes == null ? 0 : changes.path("teacherChanges").size(),
+                changes == null ? 0 : changes.path("forcedMoves").size(),
+                changes == null ? 0 : changes.path("periodMoves").size(),
+                changes == null ? 0 : changes.path("roomOnlyMoves").size());
     }
 
     private static void deleteTree(Path directory) {

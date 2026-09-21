@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-4
-- Status: APPROVED
-- Next eligible: UC-5 or UC-8
+- Use case: UC-5
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: UC-8
 
 ## Progress
 
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - APPROVED WITH NOTES |
 | UC-3 | APPROVED | UC-1 | `1a796d2`; walkthrough startup `2523205`; started from `a9ab56a` | `convergence/UC-3.md` - APPROVED |
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
-| UC-5 | NOT_STARTED | UC-4 | - | - |
+| UC-5 | READY_FOR_CONVERGENCE | UC-4 | HEAD at convergence; started from `c7ea4f8` | pending |
 | UC-6 | NOT_STARTED | UC-5 | - | - |
 | UC-7 | NOT_STARTED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
@@ -124,6 +124,24 @@
 | UC-4 G6 | 1,000-lesson persisted pin-feedback test at `WorkspaceBrowserIT.java:432`; final p95 166.3 ms below 250 ms |
 | Requires UC-1 | Approved exact accepted definition/result/manifest is consumed through the production singleton aggregate in every UC-4 integration journey |
 | RULE-1 through RULE-25 applicable to UC-4 | Reactor, lifecycle, concurrency, fidelity, overlay/snapshot, browser, accessibility, security, failure, observability, PostgreSQL, and scale evidence recorded by rule in `checkpoints/UC-4.md` |
+
+## UC-5 Evidence
+
+- Started: 2026-09-21; base `c7ea4f82045db1c156b667ed7881e6d1e29d4fec`.
+- Pre-existing dirty files: none.
+- Implementation submission: HEAD at convergence.
+- Changed files: repair-planning service; planner, repair compiler guard, controller, mutation, recovery, and repository integration; native workspace UI/messages; planner, PostgreSQL/HTTP, and real-browser tests; accepted-result fixture; status, checkpoint, and Jev bundle.
+- Commands and results: focused `KernelPlannerTest` - PASS; `WorkspaceRepairPlanningIT` - 3 tests PASS; real-Chrome UC-5 journey - PASS; UC-4 auto-save regression - PASS; `./mvnw -q clean verify` - 157 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` - PASS; Jev bundle validation through the already-built pinned helper - valid, 37 items; external Jev - REVIEW because disclosure was not authorized.
+
+| Contract element | Evidence |
+|---|---|
+| UC-5 main steps 1-5 | Real packaged HTTP/PostgreSQL journey at `WorkspaceRepairPlanningIT.java:72`; real Chrome journey at `WorkspaceBrowserIT.java:375` |
+| UC-5 extensions 2a, 2b, 3a | Cancellation, stale ETag, and startup-recovery exact-state assertions at `WorkspaceRepairPlanningIT.java:166` |
+| UC-5 extensions 4a through 4d | Structured process failure mappings in `KernelPlannerTest.java:126,165,247`; unchanged-intent diagnostic/retry journey at `WorkspaceRepairPlanningIT.java:117` |
+| UC-5 extension 5a | Exact replan evidence, complete report, independent verification, and mismatch rejection at `KernelPlannerTest.java:214`; guarded completion at `RepairPlanningService.java:193` |
+| UC-5 G1-G7 and both postconditions | Frozen controls, exact identity/evidence, accepted immutability, safe diagnostics, and proposal/minimal-state assertions recorded in `checkpoints/UC-5.md` |
+| Requires UC-4 | Approved UC-4 production draft/compiler path supplies the exact intent revision and complete successor definition in every UC-5 success journey |
+| RULE-3 through RULE-29 applicable to UC-5 | JSONB lifecycle, ETag, canonical process, async/cancel, overlay/identity, security/failure/logging, PostgreSQL/browser, typed kernel, metadata/input, and corpus evidence recorded by rule in `checkpoints/UC-5.md` |
 
 ## Blockers
 

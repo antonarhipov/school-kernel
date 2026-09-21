@@ -210,6 +210,39 @@ class KernelPlannerTest {
     }
 
     @Test
+    @DisplayName("UC-5 main/extensions and RULE-10/12/13/17: replan uses four private paths, exact presets, independent verification, and authoritative changes")
+    void invokesVerifiedReplanBoundaryWithExactPresetAndChangeReport() throws Exception {
+        AtomicBoolean verified = new AtomicBoolean();
+        KernelProcessLauncher launcher = new ReplanResultWritingLauncher();
+        KernelVerifier verifier = new KernelVerifier("kernel", launcher, temporaryRoot) {
+            @Override
+            public Verification verify(ImportDocuments documents) {
+                verified.set(true);
+                assertEquals("FEASIBLE", documents.result().path("status").stringValue());
+                assertEquals(revision('1'), documents.result().path("inputRevision").stringValue());
+                return new Verification("demo-school", revision('1'), revision('2'));
+            }
+        };
+        KernelPlanner planner = new KernelPlanner("kernel", launcher, verifier, JSON, temporaryRoot);
+
+        KernelPlanner.Outcome outcome = planner.replan(
+                UUID.randomUUID(), definition(), JSON.createObjectNode(), definition(), "PT2M");
+
+        assertEquals(KernelPlanner.Kind.FEASIBLE, outcome.kind());
+        assertTrue(verified.get());
+        assertEquals(6, outcome.result().path("changeReport").size());
+        try (var paths = Files.list(temporaryRoot)) {
+            assertTrue(paths.findAny().isEmpty());
+        }
+
+        KernelPlanner.Outcome unsuccessful = planner(new StructuredFailureLauncher(3, "NO_FEASIBLE_SOLUTION_FOUND"))
+                .replan(UUID.randomUUID(), definition(), JSON.createObjectNode(), definition(), "PT30S");
+        assertEquals(KernelPlanner.Kind.FAILED, unsuccessful.kind());
+        assertEquals("NO_FEASIBLE_SOLUTION_FOUND", unsuccessful.code());
+        assertFalse(unsuccessful.result().has("timetable"));
+    }
+
+    @Test
     @DisplayName("UC-2 extension 3a and RULE-12: watchdog expiry force-terminates the process and publishes no proposal")
     void watchdogForceTerminatesHungProcess() throws Exception {
         ImmediateTimeoutProcess process = new ImmediateTimeoutProcess();
@@ -292,6 +325,46 @@ class KernelPlannerTest {
             result.putObject("timetable").putArray("assignments");
             Files.write(output, JSON.writeValueAsBytes(result));
             return new ProcessBuilder("/usr/bin/true").start();
+        }
+    }
+
+    private final class ReplanResultWritingLauncher extends KernelProcessLauncher {
+        @Override
+        public Process start(List<String> arguments) throws IOException {
+            assertEquals("replan", arguments.get(1));
+            assertTrue(arguments.containsAll(List.of(
+                    "--current-definition", "--current", "--definition", "--output",
+                    "--time-limit", "120s", "--correlation-id")));
+            assertFalse(arguments.contains("--debug"));
+            assertFalse(arguments.contains("--seed"));
+            assertFalse(arguments.contains("--step-limit"));
+            Set<Path> paths = Set.of(
+                    Path.of(arguments.get(arguments.indexOf("--current-definition") + 1)),
+                    Path.of(arguments.get(arguments.indexOf("--current") + 1)),
+                    Path.of(arguments.get(arguments.indexOf("--definition") + 1)),
+                    Path.of(arguments.get(arguments.indexOf("--output") + 1)));
+            assertEquals(4, paths.size());
+            paths.stream().filter(Files::exists).forEach(path -> {
+                try {
+                    assertFalse(Files.getPosixFilePermissions(path).contains(PosixFilePermission.GROUP_READ));
+                } catch (IOException exception) {
+                    throw new AssertionError(exception);
+                }
+            });
+            String correlationId = arguments.get(arguments.indexOf("--correlation-id") + 1);
+            ObjectNode result = JSON.createObjectNode();
+            result.put("schemaVersion", 1).put("status", "FEASIBLE").put("correlationId", correlationId)
+                    .put("schoolId", "demo-school").put("seed", 0).put("terminationReason", "TIME_LIMIT")
+                    .put("inputRevision", revision('1')).put("timetableRevision", revision('2')).put("elapsedTimeMs", 1);
+            result.putObject("limit").put("type", "TIME").put("duration", "PT2M");
+            result.putObject("timetable").putArray("assignments");
+            ObjectNode report = result.putObject("changeReport");
+            for (String category : List.of("additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves")) {
+                report.putArray(category);
+            }
+            Path output = Path.of(arguments.get(arguments.indexOf("--output") + 1));
+            Files.write(output, JSON.writeValueAsBytes(result));
+            return new CompletedProcess(0);
         }
     }
 

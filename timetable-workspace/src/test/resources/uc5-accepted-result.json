@@ -1,0 +1,37 @@
+{
+  "catalogVersion": 1,
+  "correlationId": "uc5-test-baseline",
+  "effectiveSoftWeights": {
+    "soft.non-preferred-room": 1,
+    "soft.series-same-day": 1,
+    "soft.teacher-gap": 2,
+    "soft.undesirable-period": 1
+  },
+  "elapsedTimeMs": 2004,
+  "inputRevision": "sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14",
+  "kernelVersion": "1.0.0-SNAPSHOT",
+  "limit": {"duration": "PT1S", "type": "TIME"},
+  "schemaVersion": 1,
+  "schoolId": "demo-school",
+  "score": {
+    "constraintBreakdown": [
+      {"aggregatePenalty": 0, "category": "ORDINARY_PREFERENCE", "constraintId": "soft.teacher-gap", "effectiveWeight": 2, "matchCount": 0},
+      {"aggregatePenalty": 0, "category": "ORDINARY_PREFERENCE", "constraintId": "soft.series-same-day", "effectiveWeight": 1, "matchCount": 0},
+      {"aggregatePenalty": 0, "category": "ORDINARY_PREFERENCE", "constraintId": "soft.undesirable-period", "effectiveWeight": 1, "matchCount": 0},
+      {"aggregatePenalty": 0, "category": "ORDINARY_PREFERENCE", "constraintId": "soft.non-preferred-room", "effectiveWeight": 1, "matchCount": 0}
+    ],
+    "ordinaryPreferencePenalty": 0,
+    "periodMoves": 0,
+    "roomOnlyMoves": 0
+  },
+  "seed": 0,
+  "status": "FEASIBLE",
+  "terminationReason": "TIME_LIMIT",
+  "timetable": {
+    "assignments": [
+      {"cohortId": "cohort-7a", "lessonId": "lesson-math-1", "periodId": "mon-1", "roomId": "room-102", "subjectId": "math", "teacherId": "teacher-alex"},
+      {"cohortId": "cohort-7a", "lessonId": "lesson-science-1", "periodId": "mon-2", "roomId": "room-101", "subjectId": "science", "teacherId": "teacher-alex"}
+    ]
+  },
+  "timetableRevision": "sha256:232c53bcf2ee6b373cb3965afc87849d245040c9c171f0cc543dff8742bf6b3c"
+}

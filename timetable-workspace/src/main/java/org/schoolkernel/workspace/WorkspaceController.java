@@ -29,6 +29,7 @@ public class WorkspaceController {
     private final WorkspaceRepository repository;
     private final ImportService imports;
     private final InitialPlanningService planning;
+    private final RepairPlanningService repairPlanning;
     private final RepairDraftService repairs;
     private final ObjectMapper json;
 
@@ -36,11 +37,13 @@ public class WorkspaceController {
             WorkspaceRepository repository,
             ImportService imports,
             InitialPlanningService planning,
+            RepairPlanningService repairPlanning,
             RepairDraftService repairs,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
         this.planning = planning;
+        this.repairPlanning = repairPlanning;
         this.repairs = repairs;
         this.json = json;
     }
@@ -122,8 +125,12 @@ public class WorkspaceController {
     @PostMapping("/api/runs")
     @ResponseBody
     public ResponseEntity<JsonNode> startRun(
-            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
-        WorkspaceAggregate started = planning.start(ifMatch);
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody(required = false) JsonNode request) {
+        WorkspaceAggregate current = repository.load();
+        WorkspaceAggregate started = current.state() == WorkspaceState.REPAIR_DRAFT
+                ? repairPlanning.start(ifMatch, request)
+                : planning.start(ifMatch);
         return ResponseEntity.accepted()
                 .eTag(started.etag())
                 .cacheControl(CacheControl.noStore())
@@ -139,7 +146,7 @@ public class WorkspaceController {
                 .eTag(current.etag())
                 .cacheControl(CacheControl.noStore())
                 .header("X-Content-Type-Options", "nosniff")
-                .body(planning.run(runId));
+                .body(isRepairRun(current, runId) ? repairPlanning.run(runId) : planning.run(runId));
     }
 
     @DeleteMapping("/api/runs/{runId}")
@@ -147,14 +154,18 @@ public class WorkspaceController {
     public ResponseEntity<JsonNode> cancelRun(
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @PathVariable UUID runId) {
-        return response(planning.cancel(ifMatch, runId));
+        WorkspaceAggregate current = repository.load();
+        return response(current.state() == WorkspaceState.SOLVING_REPAIR
+                ? repairPlanning.cancel(ifMatch, runId)
+                : planning.cancel(ifMatch, runId));
     }
 
     @GetMapping("/api/proposal")
     @ResponseBody
     public ResponseEntity<JsonNode> proposal() {
         WorkspaceAggregate current = repository.load();
-        if (current.state() != WorkspaceState.INITIAL_PROPOSAL) {
+        if (current.state() != WorkspaceState.INITIAL_PROPOSAL
+                && current.state() != WorkspaceState.REPAIR_PROPOSAL) {
             throw new WorkspaceProblem(
                     org.springframework.http.HttpStatus.NOT_FOUND,
                     "PROPOSAL_NOT_FOUND",
@@ -199,5 +210,17 @@ public class WorkspaceController {
         });
         body.set("workspace", aggregate.document());
         return body;
+    }
+
+    private static boolean isRepairRun(WorkspaceAggregate current, UUID runId) {
+        for (String field : java.util.List.of("run", "lastRun", "proposal")) {
+            JsonNode candidate = current.document().path(field);
+            String idField = "proposal".equals(field) ? "runId" : "id";
+            if (candidate.path(idField).isTextual()
+                    && candidate.path("kind").isTextual()
+                    && runId.toString().equals(candidate.path(idField).stringValue())
+                    && "REPAIR".equals(candidate.path("kind").stringValue())) return true;
+        }
+        return false;
     }
 }

@@ -86,6 +86,23 @@ function render(snapshot) {
     acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
     if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
     renderRepair(snapshot, schoolName);
+  } else if (snapshot.state === 'SOLVING_REPAIR') {
+    currentLabel.textContent = M.acceptedTimetable(schoolName);
+    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
+    if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
+    const run = snapshot.workspace.run;
+    stateCard.className = `card workspace-card density-${view.density}`;
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state running">${M.repairRunning}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairRunningDetail}</p><dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div><div id="accepted-view"></div>`;
+    document.querySelector('#cancel-run').addEventListener('click', () => cancelRun(run.id));
+    renderWholeSchool();
+    pollTimer = setTimeout(load, 300);
+  } else if (snapshot.state === 'REPAIR_PROPOSAL') {
+    currentLabel.textContent = M.acceptedTimetable(schoolName);
+    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
+    const proposal = snapshot.workspace.proposal;
+    stateCard.className = 'card workspace-card';
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairProposalDetail}</p><p class="notice">${M.repairPriority}</p>
+      <dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(proposal.proposedTimetableRevision)}</code></dd></div></dl>${changeCountSummary(proposal.changeCounts)}`;
   }
 }
 
@@ -148,6 +165,9 @@ function renderRepair(snapshot, schoolName) {
     renderFocused(); return;
   }
   const changes = draft.intent.changes.map(change => repairChange(change)).join('');
+  const lastRun = snapshot.workspace.lastRun;
+  const retryAvailable = lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
+  const runFeedback = lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' ? repairRunFeedback(lastRun) : '';
   const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h3>${M.blockingConflicts}</h3>${draft.conflicts.map(item => `<p><strong>${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))}</strong> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
   stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div>
     <p>${M.repairDraftIntro}</p><div class="draft-summary"><section><h3>${M.weeklyChanges}</h3>${changes || `<p>${M.noWeeklyChanges}</p>`}</section><section><h3>${M.draftCounts}</h3><dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd id="attempt-pin-count">${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd id="draft-conflict-count">${draft.conflicts.length}</dd></div></dl></section></div>${conflicts}
@@ -156,7 +176,7 @@ function renderRepair(snapshot, schoolName) {
     ${matrix(acceptedModel.definition.cohorts, periodsForDay(view.day), acceptedModel.assignmentsByCell, false)}
     <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(acceptedModel.assignmentMap.get(view.selectedLessonId)) : ''}</div>
     <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div>
-    <label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft" disabled="${!draft.readyToSolve}">${draft.readyToSolve ? M.readyForRepair : M.resolveConflicts}</button></div>`;
+    ${runFeedback}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve ? '' : ' disabled'}>${draft.readyToSolve ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div>`;
   bindRepairControls();
 }
 
@@ -194,6 +214,25 @@ function bindRepairControls() {
   const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
   confirmation.addEventListener('change', () => { discard.disabled = !confirmation.checked; });
   discard.addEventListener('click', () => mutateJson('/api/repair-draft', 'DELETE', { confirmed: true }));
+  document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT30S' }));
+  document.querySelector('#retry-repair')?.addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT2M' }));
+  document.querySelectorAll('[data-diagnostic-id]').forEach(button => button.addEventListener('click', () => {
+    const id = button.dataset.diagnosticId;
+    if (acceptedModel.assignmentMap.has(id)) { view.selectedLessonId = id; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); }
+  }));
+}
+
+function repairRunFeedback(run) {
+  const diagnostics = run.searchDiagnostics?.constraints || [];
+  const rows = diagnostics.map(item => `<li><strong>${escapeHtml(item.constraintId)}</strong> · ${item.matchCount} matches ${item.examples.flat().map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
+  const validation = run.validationReport?.errors || [];
+  const validationRows = validation.map(item => `<li>${escapeHtml(item.message || item.code || M.actionFailed)} ${(item.entityIds || []).map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
+  return `<section class="conflict-list" role="status"><h3>${M.runDiagnostics}</h3><p><strong>${escapeHtml(run.message || M.actionFailed)}</strong></p>${rows || validationRows ? `<ul>${rows}${validationRows}</ul>` : ''}<p>${M.diagnosticsCaution}</p></section>`;
+}
+
+function changeCountSummary(counts) {
+  const categories = [['additions', M.additions], ['cancellations', M.cancellations], ['teacherChanges', M.teacherChanges], ['forcedMoves', M.forcedMoves], ['periodMoves', M.periodMoves], ['roomOnlyMoves', M.roomOnlyMoves]];
+  return `<section><h3>${M.runDiagnostics}</h3><dl>${categories.map(([key, label]) => `<div><dt>${label}</dt><dd>${counts[key]}</dd></div>`).join('')}</dl></section>`;
 }
 
 function renderWholeSchool() {

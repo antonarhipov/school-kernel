@@ -69,12 +69,25 @@ public class WorkspaceRepository {
                 runId, document, false);
     }
 
+    public Optional<Long> startRepairRun(long expectedVersion, UUID runId, JsonNode document) {
+        return update(expectedVersion, WorkspaceState.REPAIR_DRAFT, WorkspaceState.SOLVING_REPAIR,
+                runId, document, false);
+    }
+
     public Optional<Long> finishRun(
             long expectedVersion,
             UUID runId,
             WorkspaceState nextState,
             JsonNode document) {
         return update(expectedVersion, WorkspaceState.SOLVING_INITIAL, nextState, runId, document, true);
+    }
+
+    public Optional<Long> finishRepairRun(
+            long expectedVersion,
+            UUID runId,
+            WorkspaceState nextState,
+            JsonNode document) {
+        return update(expectedVersion, WorkspaceState.SOLVING_REPAIR, nextState, runId, document, true);
     }
 
     public Optional<Long> replaceInitialDraft(
@@ -98,6 +111,19 @@ public class WorkspaceRepository {
                             document = document - 'run' - 'proposal'
                         WHERE workspace_id = 1
                           AND lifecycle_state IN ('SOLVING_INITIAL', 'INITIAL_PROPOSAL')
+                        """)
+                .update();
+    }
+
+    public int recoverInterruptedRepairRun() {
+        return jdbc.sql("""
+                        UPDATE workspace_aggregate
+                        SET lifecycle_state = 'REPAIR_DRAFT',
+                            version = version + 1,
+                            active_run_id = NULL,
+                            document = document - 'run' - 'proposal'
+                        WHERE workspace_id = 1
+                          AND lifecycle_state = 'SOLVING_REPAIR'
                         """)
                 .update();
     }
@@ -127,7 +153,8 @@ public class WorkspaceRepository {
                           AND lifecycle_state = :expected_state
                         """ + runPredicate + " RETURNING version")
                 .param("next_state", nextState.name())
-                .param("next_run_id", nextState == WorkspaceState.SOLVING_INITIAL ? runId : null)
+                .param("next_run_id", nextState == WorkspaceState.SOLVING_INITIAL
+                        || nextState == WorkspaceState.SOLVING_REPAIR ? runId : null)
                 .param("document", serialized)
                 .param("expected_version", expectedVersion)
                 .param("expected_state", expectedState.name());
