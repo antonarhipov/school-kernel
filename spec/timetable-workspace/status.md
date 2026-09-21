@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-5
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: UC-8
 
 ## Progress
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - APPROVED WITH NOTES |
 | UC-3 | APPROVED | UC-1 | `1a796d2`; walkthrough startup `2523205`; started from `a9ab56a` | `convergence/UC-3.md` - APPROVED |
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
-| UC-5 | READY_FOR_CONVERGENCE | UC-4 | HEAD at convergence; started from `c7ea4f8` | pending |
+| UC-5 | NEEDS_REVISION | UC-4 | `340cf31`; started from `c7ea4f8` | `convergence/UC-5.md` - REJECT (C-1, G-1 through G-3) |
 | UC-6 | NOT_STARTED | UC-5 | - | - |
 | UC-7 | NOT_STARTED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
