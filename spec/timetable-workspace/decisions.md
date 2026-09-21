@@ -8,6 +8,11 @@ Source: Design grilling of [`proposal.md`](proposal.md)
 
 Selection mode: The recommended option was selected automatically for every decision, as requested.
 
+On 2026-09-21 the user explicitly selected the recommended resolution of UC-1 convergence finding C-1:
+
+- **D056 — School display name:** The kernel definition contract carries a required nonblank school-level
+  `displayName`. The workspace displays that value and never substitutes `schoolId` as the school heading.
+
 This document resolves the proposal's open product decisions and contradictions. It is normative for the subsequent
 specification. The workspace remains a client of School Kernel; these decisions do not weaken or redefine the kernel's
 existing contracts.

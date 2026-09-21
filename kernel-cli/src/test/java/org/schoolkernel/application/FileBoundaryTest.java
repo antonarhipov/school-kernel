@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.FileSystems;
+import java.net.URI;
+import java.util.Map;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Executors;
@@ -74,6 +77,42 @@ class FileBoundaryTest {
         assertArrayEquals(
                 JsonSupport.canonicalBytes(JsonSupport.mapper().createObjectNode().put("publisher", "last")),
                 Files.readAllBytes(destination));
+    }
+
+    @Test
+    @DisplayName("RULE-28: unsupported hard-link capability fails without publishing or leaking a temporary result")
+    void unsupportedLinkCapabilityFailsCleanly() throws Exception {
+        Path archive = temporaryDirectory.resolve("filesystem.zip");
+        try (var filesystem = FileSystems.newFileSystem(
+                URI.create("jar:" + archive.toUri()), Map.of("create", "true"))) {
+            Path destination = filesystem.getPath("/result.json");
+            FileBoundary boundary = new FileBoundary();
+
+            assertThrows(TransportException.class, () -> boundary.publish(
+                    JsonSupport.mapper().createObjectNode().put("status", "complete"), destination, false));
+
+            assertTrue(Files.notExists(destination));
+            try (var entries = Files.list(destination.getParent())) {
+                assertEquals(0, entries.count());
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("RULE-28: directory, same-file and missing-parent collisions preserve existing bytes")
+    void publicationCollisionMatrix() throws Exception {
+        FileBoundary boundary = new FileBoundary();
+        Path input = temporaryDirectory.resolve("input.json");
+        Files.writeString(input, "input");
+        assertThrows(TransportException.class, () -> boundary.requireDistinct(input, input));
+
+        Path directoryDestination = temporaryDirectory.resolve("directory");
+        Files.createDirectory(directoryDestination);
+        assertThrows(TransportException.class, () -> boundary.prepareDestination(directoryDestination, true));
+
+        Path missingParent = temporaryDirectory.resolve("missing/result.json");
+        assertThrows(TransportException.class, () -> boundary.prepareDestination(missingParent, false));
+        assertArrayEquals("input".getBytes(), Files.readAllBytes(input));
     }
 
     private Path write(String name, int size) throws Exception {

@@ -1,15 +1,10 @@
 package org.schoolkernel.workspace;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +14,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 public class SecurityConfiguration {
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, HostOriginFilter hostOriginFilter) throws Exception {
+    SecurityFilterChain securityFilterChain(
+            HttpSecurity http, HostOriginFilter hostOriginFilter, ProblemResponder problems) throws Exception {
         return http
                 .cors(cors -> cors.disable())
                 .httpBasic(basic -> basic.disable())
@@ -31,7 +27,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/import").permitAll()
                         .anyRequest().denyAll())
                 .csrf(Customizer.withDefaults())
-                .exceptionHandling(errors -> errors.accessDeniedHandler(accessDeniedHandler()))
+                .exceptionHandling(errors -> errors.accessDeniedHandler(accessDeniedHandler(problems)))
                 .headers(headers -> headers
                         .contentTypeOptions(Customizer.withDefaults())
                         .referrerPolicy(policy -> policy.policy(
@@ -42,17 +38,11 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    private static AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, exception) -> denied(response);
-    }
-
-    private static void denied(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setHeader("Cache-Control", "no-store");
-        response.setHeader("X-Content-Type-Options", "nosniff");
-        response.getWriter().write("{\"code\":\"REQUEST_FORBIDDEN\",\"message\":\"The local request was not authorized.\",\"correlationId\":\""
-                + UUID.randomUUID() + "\",\"state\":\"UNKNOWN\",\"etag\":null}");
+    private static AccessDeniedHandler accessDeniedHandler(ProblemResponder problems) {
+        return (request, response, exception) -> problems.write(
+                response,
+                HttpStatus.FORBIDDEN,
+                "REQUEST_FORBIDDEN",
+                "The local request was not authorized.");
     }
 }

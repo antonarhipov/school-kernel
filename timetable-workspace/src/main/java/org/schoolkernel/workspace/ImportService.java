@@ -50,13 +50,7 @@ public class ImportService {
         ObjectNode workspace = json.createObjectNode();
         ObjectNode school = workspace.putObject("school");
         school.put("id", verification.schoolId());
-        if (documents.definition().path("displayName").isTextual()) {
-            school.put("displayName", documents.definition().path("displayName").stringValue());
-            school.put("displayNameAvailable", true);
-        } else {
-            school.put("displayName", verification.schoolId());
-            school.put("displayNameAvailable", false);
-        }
+        school.put("displayName", documents.definition().path("displayName").stringValue());
         workspace.put("importMode", documents.mode().name());
         workspace.put("definitionRevision", verification.definitionRevision());
         WorkspaceState nextState;

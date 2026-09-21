@@ -66,6 +66,11 @@ public class SafeImportReader {
             throw tooLarge("Accepted-bundle archive exceeds 25 MiB.");
         }
         byte[] bytes = readBounded(archive, ARCHIVE_LIMIT, "archive");
+        if (bytes.length < 4 || bytes[0] != 'P' || bytes[1] != 'K'
+                || (bytes[2] != 3 && bytes[2] != 5 && bytes[2] != 7)
+                || (bytes[3] != 4 && bytes[3] != 6 && bytes[3] != 8)) {
+            throw invalid("UNREADABLE_ARCHIVE", "The accepted-bundle archive is unreadable or encrypted.");
+        }
         Map<String, byte[]> entries = new HashMap<>();
         long total = 0;
         try (ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(bytes))) {

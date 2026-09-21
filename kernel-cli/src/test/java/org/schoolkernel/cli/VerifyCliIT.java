@@ -20,8 +20,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.schoolkernel.contract.JsonSupport;
+import org.schoolkernel.contract.RevisionService;
 
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 class VerifyCliIT {
     private static final Path JAR = Path.of("target", "school-kernel.jar").toAbsolutePath();
@@ -74,6 +76,36 @@ class VerifyCliIT {
     }
 
     @Test
+    @DisplayName("RULE-26: one shared fixture family traverses plan, replan and both verify modes")
+    void sharedFixtureTraversesEveryCommandHandler() throws Exception {
+        Path initial = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path updated = Path.of("..", "examples", "updated-school.json").toAbsolutePath();
+        Path current = temporaryDirectory.resolve("shared-current.json");
+        Path initialEvidence = temporaryDirectory.resolve("shared-initial-evidence.json");
+        Path baselineEvidence = temporaryDirectory.resolve("shared-baseline-evidence.json");
+        Path revised = temporaryDirectory.resolve("shared-revised.json");
+        Path revisedEvidence = temporaryDirectory.resolve("shared-revised-evidence.json");
+
+        assertEquals(0, run("plan", "--definition", initial.toString(), "--output", current.toString(),
+                "--step-limit", "100").exitCode());
+        assertEquals(0, run("verify", "--definition", initial.toString(), "--output", initialEvidence.toString())
+                .exitCode());
+        assertEquals(0, run("verify", "--definition", initial.toString(), "--result", current.toString(),
+                "--output", baselineEvidence.toString()).exitCode());
+        assertEquals(0, run("replan", "--current-definition", initial.toString(), "--definition", updated.toString(),
+                "--current", current.toString(), "--output", revised.toString(), "--step-limit", "100").exitCode());
+        assertEquals(0, run("verify", "--definition", updated.toString(), "--result", revised.toString(),
+                "--output", revisedEvidence.toString()).exitCode());
+
+        assertEquals("INITIAL_DEFINITION",
+                JsonSupport.mapper().readTree(initialEvidence).path("mode").stringValue());
+        assertEquals("ACCEPTED_BASELINE",
+                JsonSupport.mapper().readTree(baselineEvidence).path("mode").stringValue());
+        assertEquals("ACCEPTED_BASELINE",
+                JsonSupport.mapper().readTree(revisedEvidence).path("mode").stringValue());
+    }
+
+    @Test
     @DisplayName("timetable-workspace UC-1 extensions 2b and 2c: successor-only and mismatched pairs are rejected")
     void rejectsSuccessorOnlyAndMismatchedPair() throws Exception {
         Path definition = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
@@ -104,6 +136,68 @@ class VerifyCliIT {
         assertEquals("INVALID_INPUT", mismatch.path("status").stringValue());
         assertFalse(mismatch.has("timetable"));
         assertTrue(verificationSchema().validate(mismatch).isEmpty());
+    }
+
+    @Test
+    @DisplayName("timetable-workspace UC-1 extension 2a: packaged verify rejects the complete baseline invalidity matrix")
+    void rejectsCompleteBaselineInvalidityMatrix() throws Exception {
+        Path definitionPath = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path validResultPath = temporaryDirectory.resolve("valid-result.json");
+        assertEquals(0, run("plan", "--definition", definitionPath.toString(), "--output", validResultPath.toString(),
+                "--step-limit", "100").exitCode());
+        ObjectNode definition = (ObjectNode) JsonSupport.mapper().readTree(definitionPath);
+        ObjectNode validResult = (ObjectNode) JsonSupport.mapper().readTree(validResultPath);
+
+        List<ObjectNode> invalidDefinitions = new ArrayList<>();
+        ObjectNode unsupportedSchema = definition.deepCopy();
+        unsupportedSchema.put("schemaVersion", 2);
+        invalidDefinitions.add(unsupportedSchema);
+        ObjectNode unsupportedCatalog = definition.deepCopy();
+        unsupportedCatalog.put("catalogVersion", 2);
+        invalidDefinitions.add(unsupportedCatalog);
+        ObjectNode missingSchoolName = definition.deepCopy();
+        missingSchoolName.remove("displayName");
+        invalidDefinitions.add(missingSchoolName);
+        ObjectNode blankSchoolName = definition.deepCopy();
+        blankSchoolName.put("displayName", " ");
+        invalidDefinitions.add(blankSchoolName);
+        ObjectNode successor = definition.deepCopy();
+        successor.put("basedOnRevision", "sha256:" + "0".repeat(64));
+        invalidDefinitions.add(successor);
+
+        int sequence = 0;
+        for (ObjectNode invalidDefinition : invalidDefinitions) {
+            assertInvalid(invalidDefinition, null, "definition-" + sequence++);
+        }
+
+        List<ObjectNode> invalidResults = new ArrayList<>();
+        ObjectNode wrongSchool = validResult.deepCopy();
+        wrongSchool.put("schoolId", "another-school");
+        refreshTimetableRevision(wrongSchool);
+        invalidResults.add(wrongSchool);
+        ObjectNode wrongDefinitionRevision = validResult.deepCopy();
+        wrongDefinitionRevision.put("inputRevision", "sha256:" + "0".repeat(64));
+        refreshTimetableRevision(wrongDefinitionRevision);
+        invalidResults.add(wrongDefinitionRevision);
+        ObjectNode incomplete = validResult.deepCopy();
+        ((tools.jackson.databind.node.ArrayNode) incomplete.path("timetable").path("assignments")).remove(1);
+        refreshTimetableRevision(incomplete);
+        invalidResults.add(incomplete);
+        ObjectNode collision = validResult.deepCopy();
+        var collisionAssignments = (tools.jackson.databind.node.ArrayNode) collision.path("timetable").path("assignments");
+        ((ObjectNode) collisionAssignments.get(1)).put(
+                "periodId", collisionAssignments.get(0).path("periodId").stringValue());
+        refreshTimetableRevision(collision);
+        invalidResults.add(collision);
+        ObjectNode unknownRoom = validResult.deepCopy();
+        ((ObjectNode) unknownRoom.path("timetable").path("assignments").get(0)).put("roomId", "unknown-room");
+        refreshTimetableRevision(unknownRoom);
+        invalidResults.add(unknownRoom);
+
+        sequence = 0;
+        for (ObjectNode invalidResult : invalidResults) {
+            assertInvalid(definition, invalidResult, "result-" + sequence++);
+        }
     }
 
     @Test
@@ -198,6 +292,35 @@ class VerifyCliIT {
         content[1] = '}';
         Files.write(path, content);
         return path;
+    }
+
+    private void assertInvalid(ObjectNode definition, ObjectNode result, String name) throws Exception {
+        Path definitionPath = temporaryDirectory.resolve(name + "-definition.json");
+        Path output = temporaryDirectory.resolve(name + "-verification.json");
+        Files.write(definitionPath, JsonSupport.mapper().writeValueAsBytes(definition));
+        List<String> arguments = new ArrayList<>(List.of(
+                "verify", "--definition", definitionPath.toString(), "--output", output.toString()));
+        if (result != null) {
+            Path resultPath = temporaryDirectory.resolve(name + "-result.json");
+            Files.write(resultPath, JsonSupport.mapper().writeValueAsBytes(result));
+            arguments.add(3, "--result");
+            arguments.add(4, resultPath.toString());
+        }
+        ProcessResult process = run(arguments.toArray(String[]::new));
+        assertEquals(2, process.exitCode(), name);
+        JsonNode verification = JsonSupport.mapper().readTree(output);
+        assertEquals("INVALID_INPUT", verification.path("status").stringValue(), name);
+        assertFalse(verification.has("timetable"), name);
+        assertFalse(process.stderr().contains("Solving started"), name);
+        assertTrue(verificationSchema().validate(verification).isEmpty(), name);
+    }
+
+    private static void refreshTimetableRevision(ObjectNode result) {
+        result.put("timetableRevision", new RevisionService().timetableRevision(
+                result.path("schemaVersion").intValue(),
+                result.path("schoolId").stringValue(),
+                result.path("inputRevision").stringValue(),
+                (tools.jackson.databind.node.ArrayNode) result.path("timetable").path("assignments")));
     }
 
     private static com.networknt.schema.Schema verificationSchema() throws Exception {

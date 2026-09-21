@@ -1,22 +1,21 @@
 package org.schoolkernel.workspace;
 
-import java.util.UUID;
-
 import org.springframework.dao.DataAccessException;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.transaction.TransactionException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class ProblemHandler {
-    private final WorkspaceRepository repository;
+    private final ProblemResponder responder;
 
-    public ProblemHandler(WorkspaceRepository repository) {
-        this.repository = repository;
+    public ProblemHandler(ProblemResponder responder) {
+        this.responder = responder;
     }
 
     @ExceptionHandler(WorkspaceProblem.class)
@@ -37,23 +36,31 @@ public class ProblemHandler {
                 "Local storage is unavailable. Import did not complete.");
     }
 
+    @ExceptionHandler(TransactionException.class)
+    ResponseEntity<ProblemResponse> transactionUnavailable() {
+        return response(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                "STORAGE_UNAVAILABLE",
+                "Local storage is unavailable. Import did not complete.");
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    ResponseEntity<ProblemResponse> malformedMultipart() {
+        return response(
+                HttpStatus.BAD_REQUEST,
+                "MALFORMED_REQUEST",
+                "The import request could not be read.");
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    ResponseEntity<ProblemResponse> resourceNotFound() {
+        return response(
+                HttpStatus.NOT_FOUND,
+                "RESOURCE_NOT_FOUND",
+                "The requested local resource does not exist.");
+    }
+
     private ResponseEntity<ProblemResponse> response(HttpStatus status, String code, String message) {
-        String state = "UNKNOWN";
-        String etag = null;
-        try {
-            WorkspaceAggregate current = repository.load();
-            state = current.state().name();
-            etag = current.etag();
-        } catch (RuntimeException ignored) {
-            // A database outage cannot safely disclose a current state.
-        }
-        ProblemResponse body = new ProblemResponse(code, message, UUID.randomUUID().toString(), state, etag);
-        ResponseEntity.BodyBuilder response = ResponseEntity.status(status)
-                .cacheControl(CacheControl.noStore())
-                .header("X-Content-Type-Options", "nosniff");
-        if (etag != null) {
-            response.header(HttpHeaders.ETAG, etag);
-        }
-        return response.body(body);
+        return responder.response(status, code, message);
     }
 }

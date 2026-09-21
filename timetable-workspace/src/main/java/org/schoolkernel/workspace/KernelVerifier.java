@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -33,17 +34,29 @@ public class KernelVerifier {
     private static final int OUTPUT_LIMIT = 64 * 1024;
     private static final ObjectMapper JSON = JsonMapper.builder().build();
     private final String executable;
+    private final KernelProcessLauncher processes;
+    private final Path temporaryRoot;
 
-    public KernelVerifier(@Value("${workspace.kernel-executable}") String executable) {
+    @Autowired
+    public KernelVerifier(
+            @Value("${workspace.kernel-executable}") String executable,
+            KernelProcessLauncher processes) {
+        this(executable, processes, Path.of(System.getProperty("java.io.tmpdir")));
+    }
+
+    KernelVerifier(String executable, KernelProcessLauncher processes, Path temporaryRoot) {
         this.executable = executable;
+        this.processes = processes;
+        this.temporaryRoot = temporaryRoot;
     }
 
     public Verification verify(ImportDocuments documents) {
         String correlationId = UUID.randomUUID().toString();
         long started = System.nanoTime();
         Path directory = null;
+        boolean logged = false;
         try {
-            directory = Files.createTempDirectory("school-workspace-verify-");
+            directory = Files.createTempDirectory(temporaryRoot, "school-workspace-verify-");
             restrict(directory, true);
             Path definition = directory.resolve("school-definition.json");
             Path output = directory.resolve("verification-result.json");
@@ -60,7 +73,7 @@ public class KernelVerifier {
                 arguments.add(4, "--result");
                 arguments.add(5, result.toString());
             }
-            Process process = new ProcessBuilder(arguments).start();
+            Process process = processes.start(List.copyOf(arguments));
             Thread stdout = Thread.ofVirtual().start(() -> drain(process.getInputStream()));
             Thread stderr = Thread.ofVirtual().start(() -> drain(process.getErrorStream()));
             boolean completed = process.waitFor(30, TimeUnit.SECONDS);
@@ -76,24 +89,34 @@ public class KernelVerifier {
             stderr.join();
             int exit = process.exitValue();
             JsonNode verification = readVerification(output);
-            LOG.info("correlationId={} kernelCommand=verify exitClass={} elapsedTimeMs={}",
-                    correlationId, exitClass(exit), elapsedMillis(started));
             if (exit == 0 && "VERIFIED".equals(verification.path("status").stringValue())) {
-                return trusted(verification, documents);
+                Verification trusted = trusted(verification, documents);
+                log(correlationId, "VERIFIED", started);
+                logged = true;
+                return trusted;
             }
             if (exit == 2 && "INVALID_INPUT".equals(verification.path("status").stringValue())) {
+                log(correlationId, "INVALID_INPUT", started);
+                logged = true;
                 throw new WorkspaceProblem(
                         HttpStatus.UNPROCESSABLE_ENTITY,
                         "KERNEL_VERIFICATION_FAILED",
                         safeValidationMessage(verification));
             }
+            log(correlationId, exitClass(exit), started);
+            logged = true;
             throw unavailable("School Kernel could not verify the import.");
         } catch (WorkspaceProblem problem) {
+            if (!logged) {
+                log(correlationId, "TRANSPORT", started);
+            }
             throw problem;
         } catch (IOException exception) {
+            log(correlationId, "TRANSPORT", started);
             throw unavailable("School Kernel could not be started.");
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
+            log(correlationId, "INTERRUPTED", started);
             throw unavailable("School Kernel verification was interrupted.");
         } finally {
             deleteTree(directory);
@@ -189,6 +212,11 @@ public class KernelVerifier {
             case 4 -> "INTERNAL_ERROR";
             default -> "TRANSPORT";
         };
+    }
+
+    private static void log(String correlationId, String exitClass, long started) {
+        LOG.info("correlationId={} kernelCommand=verify exitClass={} elapsedTimeMs={}",
+                correlationId, exitClass, elapsedMillis(started));
     }
 
     private static long elapsedMillis(long started) {

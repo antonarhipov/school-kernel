@@ -23,16 +23,13 @@ function render(snapshot) {
     return;
   }
   importCard.hidden = true;
-  const schoolName = school?.displayName || school?.id || 'School';
-  const missingName = school?.displayNameAvailable === false
-    ? '<p class="muted">School name unavailable; showing the stable school ID.</p>'
-    : '';
+  const schoolName = school?.displayName || 'School';
   if (snapshot.state === 'INITIAL_DRAFT') {
     currentLabel.textContent = 'No accepted timetable';
-    stateCard.innerHTML = `<span class="state">Initial draft</span><h2>${escapeHtml(schoolName)}</h2>${missingName}<p>The definition is verified and durably stored. It is awaiting initial planning; no timetable is accepted yet.</p><p class="muted">Definition revision <code>${escapeHtml(snapshot.workspace.definitionRevision)}</code></p>`;
+    stateCard.innerHTML = `<span class="state">Initial draft</span><h2>${escapeHtml(schoolName)}</h2><p>The definition is verified and durably stored. It is awaiting initial planning; no timetable is accepted yet.</p><p class="muted">Definition revision <code>${escapeHtml(snapshot.workspace.definitionRevision)}</code></p>`;
   } else {
     currentLabel.textContent = `Accepted timetable · ${schoolName}`;
-    stateCard.innerHTML = `<span class="state">Accepted baseline</span><h2>${escapeHtml(schoolName)}</h2>${missingName}<p>The complete definition and matching feasible result are the current accepted timetable.</p><p class="muted">Timetable revision <code>${escapeHtml(snapshot.workspace.timetableRevision)}</code></p>`;
+    stateCard.innerHTML = `<span class="state">Accepted baseline</span><h2>${escapeHtml(schoolName)}</h2><p>The complete definition and matching feasible result are the current accepted timetable.</p><p class="muted">Timetable revision <code>${escapeHtml(snapshot.workspace.timetableRevision)}</code></p>`;
   }
 }
 

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 
@@ -49,6 +50,15 @@ class KernelArchitectureTest {
                 .getReturnType() == CommandOutcome.class);
         assertTrue(VerifyService.class.getMethod("handle", org.schoolkernel.application.VerifyRequest.class)
                 .getReturnType() == CommandOutcome.class);
+        assertTrue(Set.of(CommandOutcome.class.getPermittedSubclasses()).equals(Set.of(
+                CommandOutcome.DocumentOutcome.class,
+                CommandOutcome.TransportFailure.class,
+                CommandOutcome.Interrupted.class)));
+        assertTrue(Set.of(CommandOutcome.DocumentOutcome.class.getPermittedSubclasses()).equals(Set.of(
+                CommandOutcome.Succeeded.class,
+                CommandOutcome.InvalidInput.class,
+                CommandOutcome.NoFeasibleSolution.class,
+                CommandOutcome.InternalError.class)));
     }
 
     @Test

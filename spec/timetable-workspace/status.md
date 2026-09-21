@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: BLOCKED
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | BLOCKED | none | `2671b2a24e7d97b0bc3363a952011a99593e19d1` | `convergence/UC-1.md` — BLOCKED (C-1 through C-3; G-1 through G-10) |
+| UC-1 | READY_FOR_CONVERGENCE | none | HEAD at convergence; revises `2671b2a` for C-1 through C-3 and G-1 through G-10 | pending reconvergence |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
@@ -24,9 +24,16 @@
 - Started: 2026-09-20T22:00:15Z
 - Started from: `db18108c24ddc14b9a1496f0a258f47d3d06c870`
 - Pre-existing dirty files: none
+- Revision started: 2026-09-21; base `d0e90317359b08be026c9d8f9a8f37195cbea3f7`; user selected the required
+  school-level `displayName` contract resolution for C-1.
 - Implementation submission: HEAD at convergence
-- Changed files: `.gitignore`, `README.md`, `pom.xml`, `school-kernel`; root `src/` relocated into `kernel-cli/` and `kernel-contract/`; new `timetable-workspace/`; `spec/timetable-workspace/status.md`; `spec/timetable-workspace/checkpoints/UC-1.md`; `spec/timetable-workspace/checkpoints/UC-1.jev-bundle.json`
-- Commands and results: `mvn -q clean verify` — 96 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` — clean; contract JAR `.class` scan — none; Jackson dependency tree — `tools.jackson.core:jackson-databind:3.2.2`; Jev bundle validation — valid, 33 items; external Jev preflight — REVIEW because disclosure was not authorized
+- Changed files in this revision: kernel verification/publication architecture tests; workspace process, security, problem,
+  archive, import, credential, and UI production files; Flyway/process/browser/archive/HTTP tests; decisions, status,
+  checkpoint, Jev bundle, and `output/playwright/uc1-display-name.png`.
+- Commands and results: `mvn -q clean verify` — 120 tests, 0 failures, 0 errors, 0 skipped; focused malformed
+  multipart test — PASS; independent kernel suites and packaged plan -> replan -> verify — PASS; `git diff --check` —
+  PASS; visible Playwright import — `Demo School`, exact revision, zero console errors/warnings; Jev bundle local
+  validation — valid, 33 items; external Jev preflight — REVIEW because disclosure was not authorized.
 
 | Contract element | Evidence |
 |---|---|
@@ -48,8 +55,7 @@
 
 ## Blockers
 
-UC-1 C-1 requires a product decision: add a normative school display-name field to the kernel definition contract, or
-revise the workspace behavior to permit the explicit stable-ID unavailable-name fallback. See `convergence/UC-1.md`.
+None. The user resolved C-1 on 2026-09-21 by selecting a required school-level `displayName` in the kernel definition.
 
 ## Deviations
 
