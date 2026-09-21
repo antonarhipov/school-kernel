@@ -3,9 +3,10 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-3.md` at `1a796d273e0105dc74a9eda3411b7a04ef4dad3c`
+- Walkthrough enablement: Compose-managed local database support at `2523205`
 - Verdict: PENDING WALKTHROUGH
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
-- Suite: 140 run, 0 failed, 0 errors, 0 skipped
+- Suite: final clean run 141 tests, 0 failures, 0 errors, 0 skipped
 - Working tree impact from verification: none
 
 ## Protocol Gate
@@ -31,6 +32,7 @@
 | Administrator at 390x844 | Extension 5a | Explicit read-only focused schedule without desktop workflow | Read-only class schedule rendered; acceptance action and desktop matrix were absent; browser console remained empty |
 | Administrator at target scale | G5/RULE-25 | All post-load p95 values below 250 ms | Focused run: search 69.7, filter 43.8, day 216.2, selection 169.8 ms. Full run: search 48.8, filter 38.3, day 176.1, selection 131.6 ms. Solver excluded |
 | HTTP client | RULE-19/G6 | Complete snapshot and no mutation | `GET /api/workspace` returned exact accepted JSON and ETag; every UC-3 journey preserved exact version/document |
+| Administrator starting the packaged app | RULE-30 | Database starts and stops with the application | With no database variables set, the executable JAR started Compose PostgreSQL 18.6 on loopback, waited for healthy, applied Flyway, returned `EMPTY`/ETag `ws-0` and the workspace page over HTTP, then stopped the container while retaining the named volume |
 
 ## Evidence Ledger
 
@@ -69,6 +71,7 @@
 | RULE-23 | Safe bounded observability | UC-3 emits no new logs/persistence; captured safe-log and run-evidence regressions pass | PASS |
 | RULE-24 | Disposable PostgreSQL, real HTTP/browser, exact negative assertions | Both verifier runs use PostgreSQL 18.6 Testcontainers and real Chrome; no fallback/skips; state comparisons exact | PASS |
 | RULE-25 | Complete scale fixture and post-load p95 separate from solver | Exact 1000/100/60/100/60 fixture, raw 20-sample series, p95 assertion, and solver exclusion reproduced twice | PASS |
+| RULE-30 | Packaged local startup owns a loopback, health-checked, persistent walkthrough database | `compose.yaml`, packaged `spring-boot-docker-compose`, disabled test profile, architecture assertions, and the live packaged-JAR start/HTTP/stop/volume journey all pass | PASS |
 
 ## Related-UC Regression
 
@@ -82,6 +85,12 @@
 
 None. Automated evidence is strong. Approval remains withheld only because the required human UI walkthrough has not
 yet been confirmed.
+
+The first two clean runs after adding Compose support exposed the existing day-change timing path at 368.5 ms and
+281.3 ms p95 under loaded-suite conditions. The accepted model now indexes assignments by class/period once and avoids
+two full 1,000-assignment rescans on unfiltered rerender. The focused rerun passed at 186.5 ms and the final clean-suite
+run passed at 199.4 ms; search, filter, and selection also remained below 250 ms. This was treated as a measured product
+correction, not hidden as a retry.
 
 ## Walkthrough
 

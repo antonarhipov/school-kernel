@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `854493f`; revises `2671b2a` for C-1 through C-3 and G-1 through G-10 | `convergence/UC-1.md` - APPROVED |
 | UC-2 | APPROVED | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - APPROVED WITH NOTES |
-| UC-3 | PENDING_WALKTHROUGH | UC-1 | `1a796d2`; started from `a9ab56a` | `convergence/UC-3.md` - PENDING WALKTHROUGH |
+| UC-3 | PENDING_WALKTHROUGH | UC-1 | `1a796d2`; walkthrough startup `2523205`; started from `a9ab56a` | `convergence/UC-3.md` - PENDING WALKTHROUGH |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-4 | - | - |
 | UC-6 | NOT_STARTED | UC-5 | - | - |
@@ -85,6 +85,11 @@
 - Commands and results: focused real-browser keyboard journey — PASS; `./mvnw -q clean verify` — 140 tests, 0
   failures, 0 errors, 0 skipped; `git diff --check` — PASS. Latest target-scale p95: search 69.5 ms, filter 38.8 ms,
   day 172.6 ms, selection 81.1 ms; solver time excluded.
+- Walkthrough startup enablement: `2523205` adds Spring Boot-managed `postgres:18.6` Compose startup, loopback-only
+  dynamic publication, health check, persistent named volume, packaged-JAR support, isolated-test disablement, and
+  one-command documentation. Live packaged smoke returned `EMPTY` with ETag `ws-0`, served `/workspace/`, stopped the
+  database with the application, and retained its volume. Final `./mvnw -q clean verify` — 141 tests, 0 failures,
+  0 errors, 0 skipped; final loaded-suite day-change p95 199.4 ms after pre-indexing accepted assignments.
 
 | Contract element | Evidence |
 |---|---|
