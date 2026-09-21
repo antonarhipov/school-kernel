@@ -60,8 +60,21 @@ public class WorkspaceController {
     @ResponseBody
     public ResponseEntity<JsonNode> updateRepair(
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestHeader(value = "Prefer", required = false) String prefer,
             @RequestBody JsonNode request) {
-        return response(repairs.update(ifMatch, request));
+        WorkspaceAggregate updated = repairs.update(ifMatch, request);
+        if ("return=minimal".equals(prefer)
+                && request.path("action").isTextual()
+                && java.util.Set.of("PIN", "UNPIN").contains(request.path("action").stringValue())) {
+            ObjectNode body = json.createObjectNode();
+            body.set("repairDraft", updated.document().path("repairDraft"));
+            return ResponseEntity.ok()
+                    .eTag(updated.etag())
+                    .cacheControl(CacheControl.noStore())
+                    .header("X-Content-Type-Options", "nosniff")
+                    .body(body);
+        }
+        return response(updated);
     }
 
     @DeleteMapping("/api/repair-draft")

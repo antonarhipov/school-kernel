@@ -4,22 +4,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -33,7 +44,9 @@ import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @Testcontainers
-@SpringBootTest(classes = WorkspaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        classes = {WorkspaceApplication.class, WorkspaceRepairPlanningIT.ProcessConfiguration.class},
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WorkspaceRepairPlanningIT {
     private static final ObjectMapper JSON = JsonMapper.builder().build();
     private static final Path ROOT = Path.of("..").toAbsolutePath().normalize();
@@ -53,6 +66,7 @@ class WorkspaceRepairPlanningIT {
     @LocalServerPort int port;
     @Autowired JdbcClient jdbc;
     @Autowired WorkspaceRecovery recovery;
+    @Autowired SwitchingRepairProcessLauncher processes;
 
     private HttpClient client;
 
@@ -63,6 +77,7 @@ class WorkspaceRepairPlanningIT {
                 SET lifecycle_state='EMPTY', version=0, active_run_id=NULL, document='{}'::jsonb
                 WHERE workspace_id=1
                 """).update();
+        processes.reset();
         CookieManager cookies = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         client = HttpClient.newBuilder().cookieHandler(cookies).connectTimeout(Duration.ofSeconds(5)).build();
     }
@@ -121,18 +136,10 @@ class WorkspaceRepairPlanningIT {
         JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
         JsonNode intentBefore = storedDocument().path("repairDraft").path("intent").deepCopy();
 
-        ObjectNode arranged = (ObjectNode) storedDocument();
-        String intentRevision = arranged.path("repairDraft").path("intentRevision").stringValue();
-        ObjectNode arrangedLastRun = arranged.putObject("lastRun");
-        arrangedLastRun.put("id", UUID.randomUUID().toString()).put("kind", "REPAIR")
-                .put("status", "FAILED").put("code", "NO_FEASIBLE_SOLUTION_FOUND")
-                .put("message", "No feasible repair was found within this run.")
-                .put("limit", "PT30S").put("intentRevision", intentRevision).put("feasible", false);
-        arrangedLastRun.putObject("searchDiagnostics").put("totalMatches", 2).put("truncated", false)
-                .putArray("constraints").addObject().put("constraintId", "hard.teacher-period")
-                .put("matchCount", 2).putArray("examples").addArray().add("lesson-math-1");
-        jdbc.sql("UPDATE workspace_aggregate SET document=CAST(:document AS jsonb) WHERE workspace_id=1")
-                .param("document", JSON.writeValueAsString(arranged)).update();
+        processes.failure = RepairFailure.NO_FEASIBLE;
+        HttpResponse<String> unsuccessful = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        assertEquals(202, unsuccessful.statusCode(), unsuccessful.body());
+        awaitState("REPAIR_DRAFT", Duration.ofSeconds(5));
         JsonNode failed = body(get("/api/workspace"));
         JsonNode lastRun = failed.path("workspace").path("lastRun");
         assertEquals("NO_FEASIBLE_SOLUTION_FOUND", lastRun.path("code").stringValue());
@@ -151,14 +158,99 @@ class WorkspaceRepairPlanningIT {
 
         command("PATCH", "/api/repair-draft", session(),
                 "{\"action\":\"STAGE_UNAVAILABILITY\",\"resourceType\":\"TEACHER\",\"resourceId\":\"teacher-alex\",\"periodIds\":[\"mon-1\",\"mon-2\",\"mon-3\"]}");
+        processes.failure = null;
+        processes.blockReplan = true;
         HttpResponse<String> retry = command("POST", "/api/runs", session(), "{\"limit\":\"PT2M\"}");
         assertEquals(202, retry.statusCode(), retry.body());
         assertEquals("PT2M", body(retry).path("workspace").path("run").path("limit").stringValue());
+        processes.awaitBlocked();
         String retryRunId = body(retry).path("workspace").path("run").path("id").stringValue();
         command("DELETE", "/api/runs/" + retryRunId, session(), "");
         assertEquals("PT2M", storedDocument().path("lastRun").path("limit").stringValue());
         assertFalse(storedDocument().has("proposal"));
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
+    }
+
+    @Test
+    @DisplayName("UC-5 extensions 4a/4d/5a and G2/G3: every failed or rejected repair output returns through HTTP to the exact draft with no candidate")
+    void failedAndRejectedRepairOutputsNeverBecomeProposals() throws Exception {
+        establishAcceptedBaseline();
+        command("POST", "/api/repair-draft", session(),
+                "{\"resourceType\":\"TEACHER\",\"resourceId\":\"teacher-alex\",\"periodIds\":[\"mon-1\"]}");
+        JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
+        JsonNode draftBefore = storedDocument().path("repairDraft").deepCopy();
+
+        for (FailureExpectation expectation : List.of(
+                new FailureExpectation(RepairFailure.INVALID_INPUT, "INVALID_INPUT"),
+                new FailureExpectation(RepairFailure.INTERNAL_ERROR, "INTERNAL_ERROR"),
+                new FailureExpectation(RepairFailure.TRANSPORT, "TRANSPORT_FAILURE"),
+                new FailureExpectation(RepairFailure.INTERRUPTED, "INTERRUPTED"),
+                new FailureExpectation(RepairFailure.MISMATCHED, "REJECTED_OUTPUT"))) {
+            processes.failure = expectation.failure();
+            HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+            assertEquals(202, started.statusCode(), started.body());
+            JsonNode snapshot = awaitState("REPAIR_DRAFT", Duration.ofSeconds(5));
+            assertEquals(expectation.code(), snapshot.path("workspace").path("lastRun").path("code").stringValue());
+            assertEquals(draftBefore, snapshot.path("workspace").path("repairDraft"));
+            assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
+            assertFalse(snapshot.path("workspace").has("proposal"));
+            assertFalse(snapshot.path("workspace").path("lastRun").has("result"));
+            assertFalse(snapshot.path("workspace").path("lastRun").has("timetable"));
+            assertFalse(snapshot.toString().contains("secret raw"));
+            if (expectation.failure() == RepairFailure.INVALID_INPUT) {
+                assertEquals("INVALID_REFERENCE", snapshot.path("workspace").path("lastRun")
+                        .path("validationReport").path("errors").get(0).path("code").stringValue());
+            }
+        }
+        assertTrue(storedDocument().path("lastRun").path("message").isTextual());
+    }
+
+    @Test
+    @DisplayName("UC-5 RULE-11/12/23: active conflict, forced cancellation, watchdog, and stale completion are bounded and cannot publish")
+    void boundsAndSuppressesConcurrentLateRepairRuns() throws Exception {
+        establishAcceptedBaseline();
+        command("POST", "/api/repair-draft", session(),
+                "{\"resourceType\":\"ROOM\",\"resourceId\":\"room-101\",\"periodIds\":[\"mon-2\"]}");
+        JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
+        JsonNode draftBefore = storedDocument().path("repairDraft").deepCopy();
+
+        processes.blockReplan = true;
+        HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        processes.awaitBlocked();
+        int processCount = processes.commands().size();
+        HttpResponse<String> conflict = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        assertEquals(409, conflict.statusCode());
+        assertEquals(processCount, processes.commands().size());
+        String runId = body(started).path("workspace").path("run").path("id").stringValue();
+        command("DELETE", "/api/runs/" + runId, session(), "");
+        assertTrue(processes.lastBlocking.forceCalled);
+        assertEquals(draftBefore, storedDocument().path("repairDraft"));
+        assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
+        assertFalse(storedDocument().has("proposal"));
+
+        processes.reset();
+        processes.failure = RepairFailure.WATCHDOG;
+        command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        JsonNode timedOut = awaitState("REPAIR_DRAFT", Duration.ofSeconds(5));
+        assertEquals("KERNEL_TIMEOUT", timedOut.path("workspace").path("lastRun").path("code").stringValue());
+        assertTrue(processes.lastBlocking.forceCalled);
+        assertFalse(timedOut.path("workspace").has("proposal"));
+
+        processes.reset();
+        processes.blockReplan = true;
+        command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        processes.awaitBlocked();
+        ObjectNode changed = (ObjectNode) storedDocument();
+        changed.remove("run");
+        jdbc.sql("""
+                UPDATE workspace_aggregate SET lifecycle_state='REPAIR_DRAFT', version=version+1,
+                active_run_id=NULL, document=CAST(:document AS jsonb) WHERE workspace_id=1
+                """).param("document", JSON.writeValueAsString(changed)).update();
+        JsonNode beforeLate = storedDocument();
+        processes.lastBlocking.release(4);
+        Thread.sleep(150);
+        assertEquals(beforeLate, storedDocument());
+        assertFalse(storedDocument().has("proposal"));
     }
 
     @Test
@@ -259,4 +351,140 @@ class WorkspaceRepairPlanningIT {
     private JsonNode storedDocument() throws Exception { return JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1").query(String.class).single()); }
     private String lifecycle() { return jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1").query(String.class).single(); }
     private record Session(String csrfHeader, String csrfToken, String etag) {}
+    private record FailureExpectation(RepairFailure failure, String code) {}
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class ProcessConfiguration {
+        @Bean
+        @Primary
+        SwitchingRepairProcessLauncher switchingRepairProcessLauncher() {
+            return new SwitchingRepairProcessLauncher();
+        }
+    }
+
+    private enum RepairFailure {
+        NO_FEASIBLE, INVALID_INPUT, INTERNAL_ERROR, TRANSPORT, INTERRUPTED, MISMATCHED, WATCHDOG
+    }
+
+    static final class SwitchingRepairProcessLauncher extends KernelProcessLauncher {
+        private final CopyOnWriteArrayList<List<String>> commands = new CopyOnWriteArrayList<>();
+        volatile RepairFailure failure;
+        volatile boolean blockReplan;
+        volatile BlockingRepairProcess lastBlocking;
+
+        @Override
+        public Process start(List<String> arguments) throws java.io.IOException {
+            commands.add(List.copyOf(arguments));
+            if (arguments.size() < 2 || !"replan".equals(arguments.get(1))) return super.start(arguments);
+            if (failure == RepairFailure.TRANSPORT) throw new java.io.IOException("secret raw repair transport detail");
+            if (failure == RepairFailure.INTERRUPTED) return new InterruptedRepairProcess();
+            if (failure == RepairFailure.WATCHDOG) {
+                lastBlocking = new BlockingRepairProcess(true);
+                return lastBlocking;
+            }
+            if (blockReplan) {
+                lastBlocking = new BlockingRepairProcess(false);
+                return lastBlocking;
+            }
+            if (failure != null) {
+                Path output = Path.of(arguments.get(arguments.indexOf("--output") + 1));
+                ObjectNode result = JSON.createObjectNode();
+                switch (failure) {
+                    case NO_FEASIBLE -> {
+                        result.put("status", "NO_FEASIBLE_SOLUTION_FOUND");
+                        result.put("elapsedTimeMs", 17);
+                        result.put("terminationReason", "TIME_LIMIT");
+                        result.putObject("searchDiagnostics").put("totalMatches", 2).put("truncated", false)
+                                .putArray("constraints").addObject().put("constraintId", "hard.teacher-period")
+                                .put("matchCount", 2).putArray("examples").addArray().add("lesson-math-1");
+                    }
+                    case INVALID_INPUT -> {
+                        result.put("status", "INVALID_INPUT");
+                        result.put("elapsedTimeMs", 5);
+                        result.putObject("validationReport").putArray("errors").addObject()
+                                .put("code", "INVALID_REFERENCE").put("message", "A repair reference is invalid.")
+                                .putArray("entityIds").add("lesson-math-1");
+                    }
+                    case INTERNAL_ERROR -> result.put("status", "INTERNAL_ERROR").put("elapsedTimeMs", 3);
+                    case MISMATCHED -> {
+                        result.put("schemaVersion", 1).put("status", "FEASIBLE")
+                                .put("correlationId", "wrong").put("schoolId", "wrong").put("seed", 0);
+                        result.putObject("limit").put("type", "TIME").put("duration", "PT30S");
+                        result.put("terminationReason", "TIME_LIMIT").putObject("timetable").putArray("assignments");
+                    }
+                    default -> throw new IllegalStateException("Unsupported configured failure " + failure);
+                }
+                Files.write(output, JSON.writeValueAsBytes(result));
+                int exit = failure == RepairFailure.NO_FEASIBLE ? 3
+                        : failure == RepairFailure.INVALID_INPUT ? 2
+                        : failure == RepairFailure.MISMATCHED ? 0 : 4;
+                return new CompletedRepairProcess(exit);
+            }
+            return super.start(arguments);
+        }
+
+        void awaitBlocked() throws Exception {
+            long deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
+            while (lastBlocking == null && System.nanoTime() < deadline) Thread.sleep(10);
+            assertTrue(lastBlocking != null, "repair process did not block");
+        }
+
+        List<List<String>> commands() { return List.copyOf(commands); }
+
+        void reset() {
+            if (lastBlocking != null) lastBlocking.release(137);
+            failure = null;
+            blockReplan = false;
+            lastBlocking = null;
+            commands.clear();
+        }
+    }
+
+    static class CompletedRepairProcess extends Process {
+        private final int exit;
+
+        CompletedRepairProcess(int exit) { this.exit = exit; }
+        @Override public OutputStream getOutputStream() { return OutputStream.nullOutputStream(); }
+        @Override public InputStream getInputStream() { return InputStream.nullInputStream(); }
+        @Override public InputStream getErrorStream() {
+            return new java.io.ByteArrayInputStream("secret raw stderr path assignment".getBytes(StandardCharsets.UTF_8));
+        }
+        @Override public int waitFor() { return exit; }
+        @Override public boolean waitFor(long timeout, TimeUnit unit) throws InterruptedException { return true; }
+        @Override public int exitValue() { return exit; }
+        @Override public void destroy() {}
+        @Override public Process destroyForcibly() { return this; }
+        @Override public boolean isAlive() { return false; }
+    }
+
+    static final class InterruptedRepairProcess extends CompletedRepairProcess {
+        InterruptedRepairProcess() { super(137); }
+        @Override public boolean waitFor(long timeout, TimeUnit unit) throws InterruptedException {
+            throw new InterruptedException("injected repair interruption");
+        }
+    }
+
+    static final class BlockingRepairProcess extends Process {
+        private final CountDownLatch completed = new CountDownLatch(1);
+        private final boolean immediateTimeout;
+        private volatile int exit = 137;
+        volatile boolean forceCalled;
+
+        BlockingRepairProcess(boolean immediateTimeout) { this.immediateTimeout = immediateTimeout; }
+        void release(int value) { exit = value; completed.countDown(); }
+        @Override public OutputStream getOutputStream() { return OutputStream.nullOutputStream(); }
+        @Override public InputStream getInputStream() { return InputStream.nullInputStream(); }
+        @Override public InputStream getErrorStream() { return InputStream.nullInputStream(); }
+        @Override public int waitFor() throws InterruptedException { completed.await(); return exit; }
+        @Override public boolean waitFor(long timeout, TimeUnit unit) throws InterruptedException {
+            return !immediateTimeout && completed.await(timeout, unit);
+        }
+        @Override public int exitValue() {
+            if (completed.getCount() > 0) throw new IllegalThreadStateException();
+            return exit;
+        }
+        @Override public void destroy() {}
+        @Override public Process destroyForcibly() { forceCalled = true; release(137); return this; }
+        @Override public boolean isAlive() { return completed.getCount() > 0; }
+    }
 }

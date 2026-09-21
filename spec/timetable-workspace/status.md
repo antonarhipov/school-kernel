@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-5
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: UC-8
 
 ## Progress
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - APPROVED WITH NOTES |
 | UC-3 | APPROVED | UC-1 | `1a796d2`; walkthrough startup `2523205`; started from `a9ab56a` | `convergence/UC-3.md` - APPROVED |
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
-| UC-5 | NEEDS_REVISION | UC-4 | `340cf31`; started from `c7ea4f8` | `convergence/UC-5.md` - REJECT (C-1, G-1 through G-3) |
+| UC-5 | READY_FOR_CONVERGENCE | UC-4 | HEAD at convergence; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | pending independent reconvergence |
 | UC-6 | NOT_STARTED | UC-5 | - | - |
 | UC-7 | NOT_STARTED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
@@ -131,17 +131,17 @@
 - Pre-existing dirty files: none.
 - Implementation submission: HEAD at convergence.
 - Changed files: repair-planning service; planner, repair compiler guard, controller, mutation, recovery, and repository integration; native workspace UI/messages; planner, PostgreSQL/HTTP, and real-browser tests; accepted-result fixture; status, checkpoint, and Jev bundle.
-- Commands and results: focused `KernelPlannerTest` - PASS; `WorkspaceRepairPlanningIT` - 3 tests PASS; real-Chrome UC-5 journey - PASS; UC-4 auto-save regression - PASS; `./mvnw -q clean verify` - 157 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` - PASS; Jev bundle validation through the already-built pinned helper - valid, 37 items; external Jev - REVIEW because disclosure was not authorized.
+- Commands and results: expanded `WorkspaceRepairPlanningIT` - 5 tests PASS; real-Chrome UC-5 journey - PASS; focused UC-4 pin-feedback p95 149.0 ms - PASS; `./mvnw -q clean verify` - 159 tests, 0 failures, 0 errors, 0 skipped, with UC-4 pin-feedback p95 107.4 ms; `git diff --check` - PASS; Jev bundle validation through the already-built pinned helper - valid, 37 items; external Jev - REVIEW because disclosure was not authorized.
 
 | Contract element | Evidence |
 |---|---|
 | UC-5 main steps 1-5 | Real packaged HTTP/PostgreSQL journey at `WorkspaceRepairPlanningIT.java:72`; real Chrome journey at `WorkspaceBrowserIT.java:375` |
 | UC-5 extensions 2a, 2b, 3a | Cancellation, stale ETag, and startup-recovery exact-state assertions at `WorkspaceRepairPlanningIT.java:166` |
-| UC-5 extensions 4a through 4d | Structured process failure mappings in `KernelPlannerTest.java:126,165,247`; unchanged-intent diagnostic/retry journey at `WorkspaceRepairPlanningIT.java:117` |
-| UC-5 extension 5a | Exact replan evidence, complete report, independent verification, and mismatch rejection at `KernelPlannerTest.java:214`; guarded completion at `RepairPlanningService.java:193` |
+| UC-5 extensions 4a through 4d | Real HTTP/PostgreSQL unsuccessful, validation, internal, transport, interruption, timeout, and retry journeys at `WorkspaceRepairPlanningIT.java:130,174,208`; adapter details remain covered by `KernelPlannerTest` |
+| UC-5 extension 5a | Real HTTP rejection and stale authoritative-completion suppression at `WorkspaceRepairPlanningIT.java:174,208`; exact adapter evidence and independent verification at `KernelPlannerTest.java:214` |
 | UC-5 G1-G7 and both postconditions | Frozen controls, exact identity/evidence, accepted immutability, safe diagnostics, and proposal/minimal-state assertions recorded in `checkpoints/UC-5.md` |
 | Requires UC-4 | Approved UC-4 production draft/compiler path supplies the exact intent revision and complete successor definition in every UC-5 success journey |
-| RULE-3 through RULE-29 applicable to UC-5 | JSONB lifecycle, ETag, canonical process, async/cancel, overlay/identity, security/failure/logging, PostgreSQL/browser, typed kernel, metadata/input, and corpus evidence recorded by rule in `checkpoints/UC-5.md` |
+| RULE-3 through RULE-29 applicable to UC-5 | JSONB lifecycle, ETag, canonical process, async/conflict/cancel/watchdog/stale completion, overlay/identity, security/failure/logging, PostgreSQL/browser, typed kernel, metadata/input, and corpus evidence recorded by rule in `checkpoints/UC-5.md` |
 
 ## Blockers
 

@@ -50,9 +50,9 @@
       "id": "UC-5 extension 4a",
       "contract": "INVALID_INPUT becomes safe navigable validation feedback, returns to the unchanged draft, and creates no proposal.",
       "rules": ["RULE-10", "RULE-22"],
-      "actorBoundary": "Packaged process result mapping and durable run evidence",
-      "claim": "Structured INVALID_INPUT is mapped without exposing candidate assignments and validationReport is the only retained diagnostic payload.",
-      "evidence": [{"kind":"process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:126-162","observation":"The process double returns exit 2 and INVALID_INPUT; assertions check the failure code, safe mapping, candidate absence, and prohibited log content. RepairPlanningService lines 241-258 retains validationReport and returns REPAIR_DRAFT."}],
+      "actorBoundary": "Real HTTP/PostgreSQL repair completion",
+      "claim": "Structured INVALID_INPUT is completed through the production service without exposing candidate assignments and validationReport is the only retained diagnostic payload.",
+      "evidence": [{"kind":"http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:174-206","observation":"POST /api/runs receives a controllable process INVALID_INPUT, polling returns to the exact REPAIR_DRAFT, the response retains safe INVALID_REFERENCE validation feedback, and assertions reject proposal, result, timetable, raw stderr, or accepted-data changes."}],
       "negativeObligations": ["No proposal is created", "No candidate assignments are disclosed", "Raw stderr is not returned"],
       "counterEvidence": []
     },
@@ -80,9 +80,9 @@
       "id": "UC-5 extension 4d",
       "contract": "Interruption, transport, or internal failure produces a safe outcome, restores the unchanged draft, and creates no proposal.",
       "rules": ["RULE-12", "RULE-22"],
-      "actorBoundary": "Kernel process adapter and conditional completion transaction",
-      "claim": "All non-success process classes map to safe Outcome values; the repair service persists only run evidence and returns to REPAIR_DRAFT.",
-      "evidence": [{"kind":"process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:126-210","observation":"Tests cover internal, transport, interrupted, missing, and malformed output classes and assert no candidate result; RepairPlanningService lines 241-260 removes proposal on every non-FEASIBLE outcome."}],
+      "actorBoundary": "Real HTTP/PostgreSQL repair completion",
+      "claim": "Internal, transport, interruption, and watchdog outcomes pass through the production repair service, persist only safe run evidence, and return to REPAIR_DRAFT.",
+      "evidence": [{"kind":"http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:174-254","observation":"Real POST /api/runs journeys poll through internal, transport, interruption, and watchdog outcomes; each asserts exact draft/accepted preservation, safe failure codes, forced watchdog termination where applicable, and absence of proposal, result, timetable, and raw stderr."}],
       "negativeObligations": ["No proposal is created", "Raw technical details are not disclosed", "Accepted and draft data are not changed"],
       "counterEvidence": []
     },
@@ -90,9 +90,9 @@
       "id": "UC-5 extension 5a",
       "contract": "Incomplete, non-feasible, mismatched, stale, or independently unverified output is rejected without exposing candidate assignments.",
       "rules": ["RULE-10", "RULE-11", "RULE-17"],
-      "actorBoundary": "Packaged result verification and guarded PostgreSQL completion",
-      "claim": "The adapter checks every result identity and complete six-category report before independent verification; completion additionally matches run, version, accepted, and intent identities.",
-      "evidence": [{"kind":"process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:214-243","observation":"The replan test verifies exact arguments, PT30S/PT2M evidence, complete report, and independent verifier invocation; existing mismatch tests reject altered evidence."},{"kind":"code-evidence","source":"timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairPlanningService.java:193-200","observation":"Completion returns without mutation unless running version, lifecycle, run ID, source version, accepted revision, and intent revision all match."}],
+      "actorBoundary": "Real HTTP/PostgreSQL rejected and stale completion",
+      "claim": "Mismatched feasible output is rejected without candidate retention; completion additionally requires current authoritative version, state, run, accepted, and intent identities.",
+      "evidence": [{"kind":"http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:174-254","observation":"A mismatched feasible process output returns through HTTP as REJECTED_OUTPUT with the exact draft and no proposal/result/timetable; a blocked run completed after an authoritative version/state change leaves the stored aggregate byte-for-value unchanged."},{"kind":"process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:214-243","observation":"The packaged replan adapter verifies exact evidence and invokes independent verification before returning FEASIBLE."}],
       "negativeObligations": ["Rejected candidate assignments are not exposed", "Late or duplicate completion cannot mutate state", "Non-FEASIBLE output cannot become a proposal"],
       "counterEvidence": []
     },
@@ -122,7 +122,7 @@
       "rules": ["RULE-8", "RULE-15"],
       "actorBoundary": "PostgreSQL aggregate comparisons",
       "claim": "Success, solving, cancellation, retry, and recovery compare acceptedBaseline exactly to its pre-run JSON.",
-      "evidence": [{"kind":"postgresql-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:76-109,121-161,170-196","observation":"All three repair integration journeys deep-copy acceptedBaseline before action and assert equality after every terminal outcome."}],
+      "evidence": [{"kind":"postgresql-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:85-289","observation":"All five repair integration journeys deep-copy acceptedBaseline before action and assert equality after feasible, unsuccessful, failed, rejected, cancelled, timed-out, conflicting, stale, and recovered outcomes."}],
       "negativeObligations": ["Accepted definition is not edited", "Accepted result is not edited", "Accepted manifest is not edited"],
       "counterEvidence": []
     },
@@ -251,8 +251,8 @@
       "contract": "Repair runs asynchronously one at a time; only exact active completion may write a proposal.",
       "rules": ["RULE-11"],
       "actorBoundary": "202 HTTP response, dedicated executor, polling, and conditional completion",
-      "claim": "Start persists a unique run before background execution, accepted inspection remains available, and completion matches every authoritative identity.",
-      "evidence": [{"kind":"integration-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:79-112","observation":"POST returns 202 SOLVING_REPAIR before polling reaches proposal; GET workspace and run remain available."},{"kind":"code-evidence","source":"timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairPlanningService.java:193-200","observation":"Late completion is discarded unless version, state, run, source, accepted, and intent identities match."}],
+      "claim": "Start persists one unique run before background execution, refuses a conflicting start without launching another process, and discards completion after authoritative state/version change.",
+      "evidence": [{"kind":"integration-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:85-128,208-254","observation":"The success journey observes 202 SOLVING_REPAIR before proposal; the bounded-concurrency journey receives 409 on a second start with an unchanged process count and proves completion after authoritative state/version change cannot mutate or publish."}],
       "negativeObligations": ["At most one active run", "Late completion cannot mutate", "Duplicate completion cannot mutate"],
       "counterEvidence": []
     },
@@ -262,7 +262,7 @@
       "rules": ["RULE-12"],
       "actorBoundary": "HTTP presets and child-process lifecycle",
       "claim": "Only PT30S/PT2M are accepted, PT2M is identity-gated, watchdogs are limit plus ten seconds, and cancellation uses the shared two-second escalation.",
-      "evidence": [{"kind":"process-http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:91-122,214-275; timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:115-161","observation":"Tests prove exact presets, unchanged retry gate, two-second forced cancellation, watchdog mapping, and no proposal after termination."}],
+      "evidence": [{"kind":"http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:130-172,208-254","observation":"Real HTTP tests prove the unchanged-intent PT2M gate, forced repair cancellation, repair watchdog mapping to KERNEL_TIMEOUT, stale completion suppression, and no proposal after termination."},{"kind":"process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:91-122,214-275","observation":"Adapter tests additionally prove exact CLI presets, watchdog duration, and absence of seed/step controls."}],
       "negativeObligations": ["No seed control", "No step control", "Changed intent cannot use retry"],
       "counterEvidence": []
     },
@@ -312,7 +312,7 @@
       "rules": ["RULE-22"],
       "actorBoundary": "HTTP problem mapping",
       "claim": "Stale, transition, retry, draft, validation, transport, and rejected-output classes use stable safe codes/messages.",
-      "evidence": [{"kind":"http-process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:89-92,144-155,181-184; timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:126-210","observation":"Tests assert 409/412 codes, safe process classifications, prohibited log content, and candidate absence."}],
+      "evidence": [{"kind":"http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:104-107,130-206,208-254,256-289","observation":"Real HTTP journeys assert 409/412 transition, conflict, retry, and stale responses plus safe validation, internal, transport, interruption, watchdog, and rejected-output codes; every negative rejects proposal/candidate payloads and raw secret stderr."}],
       "negativeObligations": ["No stack trace", "No raw stderr", "No candidate assignments in failure"],
       "counterEvidence": []
     },
@@ -322,7 +322,7 @@
       "rules": ["RULE-23"],
       "actorBoundary": "Captured structured logging and workspace run evidence",
       "claim": "Replan logs correlation/run IDs, class, timing, limit, termination, feasibility, and counts; persisted lastRun mirrors safe result evidence.",
-      "evidence": [{"kind":"process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:214-243","observation":"Captured-output assertions exercise replan logging and prohibited data checks; the full run logged FEASIBLE with six counts while persisted proposal assertions matched result evidence."}],
+      "evidence": [{"kind":"http-process-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:85-254; timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:214-243","observation":"HTTP/PostgreSQL assertions cover persisted feasible, unsuccessful, validation, failure, cancellation, timeout, and rejected run evidence; captured-output assertions cover safe replan metadata and prohibit definition, assignment, display-name, path, and token disclosure."}],
       "negativeObligations": ["No definition/result content in logs", "No display names or assignments in logs", "No tokens or paths in logs"],
       "counterEvidence": []
     },
@@ -332,7 +332,7 @@
       "rules": ["RULE-24"],
       "actorBoundary": "Testcontainers PostgreSQL, ephemeral server, Chrome, packaged executable",
       "claim": "The clean Maven lifecycle runs the UC-5 packaged HTTP/PostgreSQL and Chrome journeys with state assertions.",
-      "evidence": [{"kind":"clean-suite","source":"./mvnw -q clean verify","observation":"157 tests passed with 0 failures, 0 errors, and 0 skipped; WorkspaceRepairPlanningIT had 3 passing journeys and WorkspaceBrowserIT included the UC-5 real-Chrome journey."}],
+      "evidence": [{"kind":"clean-suite","source":"./mvnw -q clean verify","observation":"159 tests passed with 0 failures, 0 errors, and 0 skipped; WorkspaceRepairPlanningIT had 5 passing real HTTP/PostgreSQL journeys and WorkspaceBrowserIT included the UC-5 real-Chrome journey plus the approved UC-4 target-scale regression at p95 107.4 ms."}],
       "negativeObligations": ["No H2 fallback", "No mocked success boundary", "Tracked runtime data is unchanged"],
       "counterEvidence": []
     },
@@ -352,7 +352,7 @@
       "rules": ["RULE-27"],
       "actorBoundary": "Packaged kernel and architecture suite",
       "claim": "UC-5 adds no kernel catalog/version duplication or solver-internal dependency and exercises the packaged manifest-bearing binary.",
-      "evidence": [{"kind":"clean-suite","source":"./mvnw -q clean verify","observation":"Catalog, manifest, component-boundary, public solver API, and packaged replan tests all pass in the 157-test clean reactor."}],
+      "evidence": [{"kind":"clean-suite","source":"./mvnw -q clean verify","observation":"Catalog, manifest, component-boundary, public solver API, and packaged replan tests all pass in the 159-test clean reactor."}],
       "negativeObligations": ["No duplicate version constant", "No Timefold impl API"],
       "counterEvidence": []
     },

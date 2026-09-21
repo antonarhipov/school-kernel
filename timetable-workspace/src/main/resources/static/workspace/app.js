@@ -313,18 +313,20 @@ function bindPinActions() {
 }
 
 async function mutatePin(payload) {
-  const response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
   const result = await response.json();
   if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
-  etag = response.headers.get('ETag'); currentSnapshot = result;
-  if (acceptedModel.assignments.length < 200 || result.workspace.repairDraft.conflicts.length) { render(result); return; }
+  etag = response.headers.get('ETag');
+  if (result.repairDraft) currentSnapshot.workspace.repairDraft = result.repairDraft; else currentSnapshot = result;
+  const draft = currentSnapshot.workspace.repairDraft;
+  if (acceptedModel.assignments.length < 200 || draft.conflicts.length) { render(currentSnapshot); return; }
   const item = acceptedModel.assignmentMap.get(payload.lessonId);
   const oldButton = document.querySelector(`[data-lesson-id="${CSS.escape(payload.lessonId)}"]`);
   if (oldButton) { const holder = document.createElement('div'); holder.innerHTML = lessonButton(item, false); const replacement = holder.firstElementChild; replacement.addEventListener('click', () => selectLesson(replacement)); oldButton.replaceWith(replacement); }
   const host = document.querySelector('#lesson-details-host');
   host.innerHTML = lessonDetails(item); bindCloseDetails(); bindPinActions();
-  document.querySelector('#attempt-pin-count').textContent = result.workspace.repairDraft.intent.pins.length;
-  document.querySelector('#draft-conflict-count').textContent = result.workspace.repairDraft.conflicts.length;
+  document.querySelector('#attempt-pin-count').textContent = draft.intent.pins.length;
+  document.querySelector('#draft-conflict-count').textContent = draft.conflicts.length;
   document.querySelector('#lesson-panel-title')?.focus();
 }
 
