@@ -2,16 +2,16 @@
 
 ## Current
 
-- Use case: none
-- Status: APPROVED
-- Next eligible: UC-2
+- Use case: UC-2
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `78b5bb7`; revises `8c2fb7f` for required school `displayName` | `convergence/UC-1.md` - APPROVE |
-| UC-2 | NEEDS_REVISION | UC-1 | `e6401f6`; school `displayName` contract revision pending | prior `spec/convergence/UC-2.md` - APPROVE |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence; reconciles `e6401f6` with approved school `displayName` contract | pending reconvergence |
 
 ## UC-1 Evidence
 
@@ -66,6 +66,15 @@
 | RULE-1 through RULE-13, RULE-16, RULE-17 | Detailed code, test, runtime, and command pointers are in `spec/checkpoints/UC-1.md`. |
 
 ## UC-2 Evidence
+
+- Contract-revision reconciliation started from: `b5da3d6478b5291e5448b15df9157bd6ef43c1f4`.
+- Pre-existing dirty files: timetable-workspace UC-1 revision files; excluded from this submission.
+- Implementation submission: HEAD at convergence.
+- Changed files: `spec/kernel-v1/checkpoints/UC-2.md`, `spec/kernel-v1/status.md`; the shared contract, updated
+  definition lineage, and constructor regression were committed and approved with required UC-1.
+- Commands and results: fresh packaged plan -> replan -> verify exited 0/0/0 with statuses
+  `FEASIBLE`/`FEASIBLE`/`VERIFIED`, two revised assignments, and exact direct lineage; kernel suite 85/0/0/0; full
+  reactor 120/0/0/0; `git diff --check` PASS.
 
 - Started from: `498fb2e358cf03b46dc5f4bae84072691b5cad28`
 - Pre-existing dirty files: `src/test/java/org/schoolkernel/fixtures/MerivaljaExampleFixtureTests.java`, `src/test/resources/fixtures/README.md`, `src/test/resources/fixtures/merivalja-1a-1b-4a-4avr-4b-9a-9b.json`, `src/test/resources/fixtures/merivalja-5a-5b.json`

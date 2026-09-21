@@ -3,11 +3,16 @@
 ## Summary
 
 - Status: READY_FOR_CONVERGENCE
+- Contract-revision base commit: `b5da3d6478b5291e5448b15df9157bd6ef43c1f4` (UC-1 school `displayName` reconvergence approved)
 - Base commit: `498fb2e358cf03b46dc5f4bae84072691b5cad28`
 - Revision base commit: `801deb59066831d9e213245305cf1ee460613136`
 - Second revision base commit: `bbbecb1f9636b331068137ab5c497a27e4c358f5`
 - Submission commit: `HEAD at convergence`
 - Relations verified: Requires UC-1; every packaged UC-2 success journey generates and consumes its baseline through the approved `plan` command
+
+The shared required school `displayName` contract is already committed in approved UC-1 submission `78b5bb7`; this
+UC-2 reconciliation verifies that successor definitions, `basedOnRevision`, and plan -> replan -> verify behavior
+consume that revised postcondition without changing UC-2's actor-visible contract.
 
 ## Contract Evidence
 
@@ -26,7 +31,7 @@
 | Extension 2g | Step-bounded main/change journeys publish the best complete feasible result with actual termination | PASS |
 | Extension 2h | Four lessons competing for three periods exhaust search; result has diagnostics, no timetable/change report | PASS |
 | Extensions 2i-2k | Injected UC-2 internal/interrupt/publication failures plus packaged SIGINT prove safe result, exit 130/no publication, and exit 74/prior-byte preservation | PASS |
-| G1-G3 | UC-1 rules regress green; current schema, status, revision, unique lessons, three snapshot-provable hard collisions, school, and direct lineage validate before solving | PASS |
+| G1-G3 | Approved UC-1 school-name/schema/revision rules regress green; current schema, status, revision, unique lessons, three snapshot-provable hard collisions, school, and direct lineage validate before solving | PASS |
 | G4-G8 | Common-ID mapping, exact 1-hard/3-soft levels, solver trade-off fixtures, and independent period/room lock journeys prove stability ordering and exclusions | PASS |
 | G9 | Packaged tests compare complete sorted arrays, all old/new fields, independent forced dimensions, allowed teacher overlap, and forbidden move overlap | PASS |
 | G10 | Revised assignments preserve all six snapshot IDs and produce a new verifiable timetable revision | PASS |
@@ -49,14 +54,19 @@
 ## Validation
 
 - Focused commands: service failure injection, solver dominance trade-offs, packaged plan -> replan -> replan direct-successor, exact report, duplicate/colliding-current, and SIGINT paths.
-- Full relevant suite: `./mvnw -q clean verify` - 61 run, 0 failed, 0 errors, 0 skipped.
+- Full relevant suite: `mvn -q clean verify` - 120 run, 0 failed, 0 errors, 0 skipped; independent
+  kernel-only `mvn -q -pl kernel-cli -am verify` - 85 run, 0 failed, 0 errors, 0 skipped.
 - Working tree impact from tests: none; only ignored `target/` artifacts.
-- Runtime evidence: real launcher returned `FEASIBLE`, preserved both baseline assignments, reported zero moves and six empty change categories, and left current bytes unchanged.
+- Runtime evidence: fresh packaged plan -> replan -> verify returned `FEASIBLE`, `FEASIBLE`, and `VERIFIED` with two
+  assignments. `examples/updated-school.json.basedOnRevision` exactly matched the fresh current result's
+  `inputRevision` (`sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14`).
 - Changed files: exact groups are listed in `spec/status.md`.
-- Approved UCs regression-tested: UC-1, all 45 prior checks remain green within the 61-test run.
+- Approved UCs regression-tested: UC-1, all 85 kernel checks remain green.
 
 ## Notes
 
-C-1, C-2, and G-1 through G-3 from the prior convergence reports are addressed. The four concurrent Merivälja fixture files remain excluded. No deviations.
+C-1, C-2, and G-1 through G-3 from the prior convergence reports remain addressed. The required school-name change is
+shared approved UC-1 infrastructure; updated-school lineage and UC-2 constructor fixtures were regenerated in that
+dependency submission. Timetable-workspace revision files remain excluded. No deviations.
 
 READY FOR CONVERGENCE: UC-2
