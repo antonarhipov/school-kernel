@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
+- Status: PENDING_WALKTHROUGH
 - Next eligible: none
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `854493f`; revises `2671b2a` for C-1 through C-3 and G-1 through G-10 | `convergence/UC-1.md` - APPROVED |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence; started from `dfe0e75` | - |
+| UC-2 | PENDING_WALKTHROUGH | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - PENDING WALKTHROUGH |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-4 | - | - |
