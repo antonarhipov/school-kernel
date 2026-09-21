@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-5.md` at `75a6c223ee4648df7a764260236737387f89924e`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 CRITICAL, 0 GAP, 0 PROTOCOL
 - Suite: 159 tests, 0 failures, 0 errors, 0 skipped
 - Working tree impact from verification: convergence report and status only
@@ -100,7 +100,7 @@ None. Prior C-1 and G-1 through G-3 are resolved by the minimal pin response and
 
 ## Walkthrough
 
-Automated evidence passes. Administrator confirmation is still required:
+The administrator confirmed the following walkthrough:
 
 1. Open a ready repair draft with no blocking conflict and request the default 30-second repair.
 2. While solving, confirm draft controls are frozen, accepted-timetable inspection/navigation remain responsive, and Cancel is available.
@@ -111,12 +111,12 @@ Automated evidence passes. Administrator confirmation is still required:
 7. Change intent and confirm retry is unavailable; restore the exact intent and confirm the two-minute retry starts.
 8. If exercising restart/stale/failure fixtures, confirm each returns to the unchanged draft and exposes no candidate timetable.
 
-User result: pending.
+User result: confirmed by the administrator on 2026-09-22.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE -> PENDING_WALKTHROUGH`; no later dependent use case may start until UC-5 is approved.
+`PENDING_WALKTHROUGH -> APPROVED`; UC-6 and UC-8 are eligible next.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: automated convergence passes; confirm the UC-5 administrator walkthrough above.
+APPROVED
