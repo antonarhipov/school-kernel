@@ -103,6 +103,14 @@ public class WorkspaceMutation {
     }
 
     @Transactional
+    public WorkspaceAggregate acceptRepair(long expectedVersion, JsonNode document) {
+        if (repository.acceptRepairProposal(expectedVersion, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "This repair proposal is no longer eligible for acceptance.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
     public WorkspaceAggregate replaceRepair(
             long expectedVersion,
             WorkspaceState expectedState,

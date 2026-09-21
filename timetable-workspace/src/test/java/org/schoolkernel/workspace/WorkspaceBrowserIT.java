@@ -67,6 +67,9 @@ class WorkspaceBrowserIT {
     @Autowired
     JdbcClient jdbc;
 
+    @Autowired
+    ProposalReviewService reviews;
+
     @TempDir
     Path browserProfile;
 
@@ -371,7 +374,7 @@ class WorkspaceBrowserIT {
     }
 
     @Test
-    @DisplayName("UC-5 main/G1-G6/RULE-24: real browser keeps accepted inspection live and presents the packaged verified repair as a proposal")
+    @DisplayName("UC-5 plus UC-6 main/G4/G6/RULE-24: real browser reviews every repair impact and explicitly accepts the packaged proposal")
     void generatesRepairProposalInRealBrowser() throws Exception {
         ObjectNode document = validAcceptedDocument();
         JsonNode acceptedBefore = document.path("acceptedBaseline").deepCopy();
@@ -405,14 +408,29 @@ class WorkspaceBrowserIT {
             assertTrue(proposal.contains("period stability, then room-only stability"));
             assertTrue(proposal.contains("Execution limit\nPT30S"));
             assertTrue(proposal.contains("Period moves"));
+            assertTrue(proposal.contains("Unique changed lessons"));
+            assertTrue(proposal.contains("Direct effects of your intent"));
+            assertTrue(proposal.contains("Solver ripple effects"));
+            assertTrue(proposal.contains("Additions\n0"));
+            assertTrue(proposal.contains("Cancellations\n0"));
+            assertTrue(proposal.contains("Old assignment"));
+            assertTrue(proposal.contains("Proposed assignment"));
+            cdp.evaluate("document.querySelector('#confirm-repair-accept').focus()");
+            cdp.pressKey(" ", "Space");
+            cdp.evaluate("document.querySelector('#accept-repair').focus()");
+            cdp.pressKey(" ", "Space");
+            String accepted = cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(15));
+            assertTrue(accepted.contains("Start a protected repair"));
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         JsonNode stored = JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
                 .query(String.class).single());
-        assertEquals("REPAIR_PROPOSAL", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1")
+        assertEquals("ACCEPTED_BASELINE", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1")
                 .query(String.class).single());
-        assertEquals(acceptedBefore, stored.path("acceptedBaseline"));
-        assertEquals("FEASIBLE", stored.path("proposal").path("result").path("status").stringValue());
+        assertFalse(acceptedBefore.equals(stored.path("acceptedBaseline")));
+        assertEquals("FEASIBLE", stored.path("acceptedBaseline").path("result").path("status").stringValue());
+        assertFalse(stored.has("proposal"));
+        assertFalse(stored.has("repairDraft"));
     }
 
     @Test
@@ -524,6 +542,44 @@ class WorkspaceBrowserIT {
         assertEquals("REPAIR_DRAFT", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1").query(String.class).single());
     }
 
+    @Test
+    @DisplayName("UC-6 G5 and RULE-25: target-scale proposal impact review opens below one second with solver time excluded")
+    void measuresTargetScaleProposalReviewOpeningInRealBrowser() throws Exception {
+        ObjectNode document = scaleProposalDocument();
+        jdbc.sql("""
+                UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=10,
+                active_run_id=NULL, document=CAST(:document AS jsonb) WHERE workspace_id=1
+                """).param("document", JSON.writeValueAsString(document)).update();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            String rendered = cdp.awaitText("Unique changed lessons\n100", Duration.ofSeconds(20));
+            assertTrue(rendered.contains("Direct effects of your intent: 50"));
+            assertTrue(rendered.contains("Solver ripple effects: 50"));
+            assertTrue(rendered.contains("By class"));
+            cdp.evaluate("document.querySelector('#show-unchanged').click()");
+            assertTrue(cdp.awaitText("Accepted and unchanged · not included in change totals", Duration.ofSeconds(5))
+                    .contains("Accepted assignment"));
+            cdp.evaluate("document.querySelector('[data-review-context]').click()");
+            cdp.awaitText("Review context", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#return-review').click()");
+            cdp.awaitText("Proposal impact review", Duration.ofSeconds(5));
+            double openingMs = cdp.evaluateValue("window.__workspaceProposalReviewMs")
+                    .path("result").path("result").path("value").doubleValue();
+            assertTrue(openingMs < 1_000.0, "proposal review opened in " + openingMs + " ms");
+            System.out.printf("UC-6 scale proposal-review opening=%.3f ms; solver time excluded%n", openingMs);
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
     private static JsonNode measured(Cdp cdp, String operation) throws Exception {
         return cdp.evaluateValue("""
                 (async () => {
@@ -622,6 +678,44 @@ class WorkspaceBrowserIT {
         document.put("definitionRevision", "sha256:scale-definition").put("timetableRevision", "sha256:scale-timetable");
         ObjectNode baseline = document.putObject("acceptedBaseline");
         baseline.set("definition", definition); baseline.set("result", result); baseline.putObject("manifest").put("manifestVersion", 1);
+        return document;
+    }
+
+    private ObjectNode scaleProposalDocument() {
+        ObjectNode document = scaleDocument();
+        ObjectNode draft = document.putObject("repairDraft");
+        ObjectNode intent = draft.putObject("intent");
+        intent.putArray("changes"); intent.putArray("pins"); intent.putArray("bulkActions");
+        var direct = draft.putArray("directEffectLessonIds");
+        for (int i = 0; i < 50; i++) direct.add("lesson-" + i);
+        draft.put("intentRevision", "sha256:scale-intent").put("readyToSolve", true).putArray("conflicts");
+        JsonNode baseline = document.path("acceptedBaseline");
+        ObjectNode definition = (ObjectNode) baseline.path("definition").deepCopy();
+        definition.put("basedOnRevision", "sha256:scale-definition");
+        ObjectNode result = (ObjectNode) baseline.path("result").deepCopy();
+        var report = result.putObject("changeReport");
+        report.putArray("additions"); report.putArray("cancellations"); report.putArray("teacherChanges");
+        report.putArray("forcedMoves"); var periodMoves = report.putArray("periodMoves"); report.putArray("roomOnlyMoves");
+        for (int i = 0; i < 100; i++) {
+            ObjectNode assignment = (ObjectNode) result.path("timetable").path("assignments").get(i);
+            String oldPeriod = assignment.path("periodId").stringValue();
+            String newPeriod = "period-" + ((i + 1) % 60);
+            String room = assignment.path("roomId").stringValue();
+            assignment.put("periodId", newPeriod);
+            periodMoves.addObject().put("lessonId", "lesson-" + i).put("oldPeriodId", oldPeriod)
+                    .put("newPeriodId", newPeriod).put("oldRoomId", room).put("newRoomId", room);
+        }
+        ObjectNode proposal = document.putObject("proposal");
+        proposal.put("kind", "REPAIR").put("sourceWorkspaceVersion", 8)
+                .put("acceptedTimetableRevision", "sha256:scale-timetable")
+                .put("successorDefinitionRevision", "sha256:scale-successor")
+                .put("intentRevision", "sha256:scale-intent").put("proposedTimetableRevision", "sha256:scale-proposed")
+                .put("runId", java.util.UUID.randomUUID().toString()).put("limit", "PT30S")
+                .put("terminationReason", "TIME_LIMIT").put("elapsedTimeMs", 30_000);
+        proposal.set("definition", definition); proposal.set("result", result);
+        ObjectNode counts = proposal.putObject("changeCounts");
+        ProposalReviewService.CATEGORIES.forEach(category -> counts.put(category, report.path(category).size()));
+        proposal.set("review", reviews.create(baseline, draft, definition, result));
         return document;
     }
 

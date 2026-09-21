@@ -126,6 +126,34 @@ code { overflow-wrap: anywhere; }
 .lesson-cell .policy-label { background: #eee8fa; color: #51427a; }
 .lesson-cell .pin-label { background: #dff3e7; color: #1b5c39; }
 .unpinned-state { background: #edf0ee; color: #4c5953; }
+.proposal-facts { margin: 18px 0 24px; }
+.impact-totals { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 20px; }
+.impact-totals span, .change-card header span { padding: 5px 8px; border-radius: 6px; font-size: .76rem; font-weight: 800; }
+.ripple-label { background: #f2eafa; color: #573d76; }
+.review-categories { display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 12px; }
+.review-category { padding: 13px; border: 1px solid #d7dfda; border-radius: 10px; background: #fafcfb; }
+.review-category h4 { display: flex; justify-content: space-between; gap: 10px; margin: 0; }
+.review-category h4 span { min-width: 28px; padding: 3px 7px; border-radius: 999px; background: #e8eee9; text-align: center; }
+.review-category ul, .review-groups ul { padding-left: 20px; }
+.review-groups { margin: 8px 0; padding: 11px 14px; border: 1px solid #d7dfda; border-radius: 9px; }
+.review-groups summary { cursor: pointer; font-weight: 800; }
+.context-label { padding: 2px 6px; border-radius: 4px; background: #eef0f7; color: #42486c; font-size: .72rem; font-weight: 800; }
+.changed-lessons { display: grid; gap: 14px; }
+.change-card { padding: 16px; border: 1px solid #ccd8d1; border-radius: 12px; background: #fbfdfc; }
+.change-card header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.change-card h4 { margin: 0; font-size: 1.08rem; }
+.before-after { display: grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
+.before-after section { padding: 12px; border-radius: 9px; background: white; }
+.before-after h5 { margin: 0 0 8px; font-size: .92rem; }
+.before-after dl { grid-template-columns: repeat(5, minmax(90px, 1fr)); }
+.changed-dimension { border-color: #bf861b; background: #fff8e9; }
+.changed-dimension dt { color: #714c08; font-weight: 800; }
+.context-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.context-actions button { font-size: .76rem; }
+.unchanged-review { margin-top: 22px; padding: 16px; border: 1px solid #d7dfda; border-radius: 12px; }
+.unchanged-review select { max-width: 420px; padding: 9px; border: 1px solid #bfcac4; border-radius: 8px; }
+.quiet-state { padding: 8px 10px; border-left: 4px solid #708178; background: #f1f4f2; color: #45534c; font-weight: 750; }
+.acceptance-warning { margin-top: 24px; padding: 13px; border-left: 4px solid #875d0a; background: #fff7e6; }
 
 @media (max-width: 600px) {
   header { padding-top: 28px; }
@@ -135,6 +163,8 @@ code { overflow-wrap: anywhere; }
 @media (max-width: 1180px) {
   .inspection-toolbar { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
   .search-control { grid-column: span 2; }
+  .review-categories { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
+  .before-after dl { grid-template-columns: repeat(3, minmax(100px, 1fr)); }
 }
 
 @media (max-width: 700px) {
@@ -147,4 +177,5 @@ code { overflow-wrap: anywhere; }
   .focused-day { grid-template-columns: 1fr; }
   .focused-lesson { grid-column: 1; grid-template-columns: 1fr; gap: 7px; }
   .repair-entry, .repair-controls, .draft-summary, .repair-day, .repair-mode > .matrix-wrap, .repair-mode > .confirmation, .repair-mode > .actions { display: none; }
+  .review-mode .review-categories, .review-mode .changed-lessons, .review-mode .confirmation, .review-mode > .actions { display: none; }
 }

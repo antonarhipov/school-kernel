@@ -152,6 +152,8 @@ public class RepairDraftService {
         ObjectNode definition = copy(workspaceDocument.path("acceptedBaseline").path("definition"));
         JsonNode result = workspaceDocument.path("acceptedBaseline").path("result");
         JsonNode intent = workspaceDocument.path("repairDraft").path("intent");
+        clearPriorAttemptScopedLocks(
+                definition, workspaceDocument.path("acceptedBaseline").path("manifest"));
         definition.put("basedOnRevision", result.path("inputRevision").stringValue());
         Map<String, ObjectNode> teachers = mutableById(definition.path("teachers"));
         Map<String, ObjectNode> rooms = mutableById(definition.path("rooms"));
@@ -176,6 +178,16 @@ public class RepairDraftService {
             if (pin.path("roomSources").size() > 0) lesson.put("roomLock", assignment.path("roomId").stringValue());
         }
         return definition;
+    }
+
+    private static void clearPriorAttemptScopedLocks(ObjectNode definition, JsonNode manifest) {
+        Map<String, ObjectNode> lessons = mutableById(definition.path("lessons"));
+        for (JsonNode lock : manifest.path("locks")) {
+            ObjectNode lesson = lessons.get(lock.path("lessonId").stringValue());
+            if (lesson == null) continue;
+            if ("ATTEMPT_SCOPED".equals(text(lock.path("periodLockOrigin")))) lesson.remove("periodLock");
+            if ("ATTEMPT_SCOPED".equals(text(lock.path("roomLockOrigin")))) lesson.remove("roomLock");
+        }
     }
 
     boolean hasUnsavedBrowserState(long durableVersion) {

@@ -4,6 +4,7 @@ let etag;
 let csrf;
 let pollTimer;
 let acceptedModel;
+let proposedModel;
 let currentSnapshot;
 let bulkPreview;
 
@@ -99,11 +100,82 @@ function render(snapshot) {
   } else if (snapshot.state === 'REPAIR_PROPOSAL') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
-    const proposal = snapshot.workspace.proposal;
-    stateCard.className = 'card workspace-card';
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairProposalDetail}</p><p class="notice">${M.repairPriority}</p>
-      <dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(proposal.proposedTimetableRevision)}</code></dd></div></dl>${changeCountSummary(proposal.changeCounts)}`;
+    proposedModel = makeModel({ definition: snapshot.workspace.proposal.definition, result: snapshot.workspace.proposal.result });
+    renderRepairProposal(snapshot, schoolName);
   }
+}
+
+function renderRepairProposal(snapshot, schoolName) {
+  const reviewStarted = performance.now();
+  const proposal = snapshot.workspace.proposal;
+  if (view.narrow) {
+    stateCard.className = 'card workspace-card';
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice}</p><div id="accepted-view"></div>`;
+    if (!view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
+    renderFocused(); return;
+  }
+  const review = proposal.review;
+  const categoryHtml = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
+  const changedHtml = review.changedLessons.map(change => reviewLessonCard(change)).join('');
+  const unchanged = acceptedModel.assignments.filter(item => !review.changedLessons.some(change => change.lessonId === item.lessonId));
+  stateCard.className = 'card workspace-card review-mode';
+  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairProposalDetail}</p><p class="notice">${M.repairPriority}</p>
+    <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.periodMoves}</dt><dd>${categoryCount(review, 'periodMoves')}</dd></div><div><dt>${M.roomOnlyMoves}</dt><dd>${categoryCount(review, 'roomOnlyMoves')}</dd></div><div><dt>${M.forcedChanges}</dt><dd>${categoryCount(review, 'forcedMoves')}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
+    <section aria-labelledby="impact-title"><h3 id="impact-title">${M.proposalImpact}</h3><div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div>
+    <h3>${M.changeCategories}</h3><div class="review-categories">${categoryHtml}</div>
+    <h3>${M.impactGroups}</h3>${reviewGroup('classes', M.groupClasses)}${reviewGroup('teachers', M.groupTeachers)}${reviewGroup('rooms', M.groupRooms)}${reviewGroup('days', M.groupDays)}
+    <h3>${M.changedLessonDetails}</h3><div class="changed-lessons">${changedHtml || `<p>${M.emptyCategory}</p>`}</div></section>
+    ${unchanged.length ? `<section class="unchanged-review"><h3>${M.unchangedLesson}</h3><div class="actions"><select id="unchanged-lesson">${unchanged.map(item => `<option value="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(item.lesson, item.lessonId))}</option>`).join('')}</select><button type="button" id="show-unchanged" class="secondary">${M.showUnchanged}</button></div><div id="unchanged-host"></div></section>` : ''}
+    <p class="acceptance-warning"><strong>${M.acceptanceAdvancesBaseline}</strong></p><label class="confirmation"><input id="confirm-repair-accept" type="checkbox"> ${M.confirmRepairAcceptance}</label><div class="actions"><button id="accept-repair" disabled>${M.acceptRepair}</button><button id="revise-proposal" class="secondary">${M.reviseIntent}</button><button id="discard-proposal" class="danger">${M.discardRepairProposal}</button></div>`;
+  bindRepairReview();
+  window.__workspaceProposalReviewMs = performance.now() - reviewStarted;
+}
+
+function categoryCount(review, id) { return review.categories.find(category => category.id === id)?.count || 0; }
+function reviewLessonName(id) { return entityName(proposedModel.maps.lessons.get(id) || acceptedModel.maps.lessons.get(id), id); }
+function reviewGroup(key, title) {
+  const groups = currentSnapshot.workspace.proposal.review.groupings[key];
+  const label = value => value === 'OLD' ? M.oldContext : value === 'PROPOSED' ? M.proposedContext : M.bothContexts;
+  const map = key === 'classes' ? proposedModel.maps.cohorts : key === 'teachers' ? proposedModel.maps.teachers : key === 'rooms' ? proposedModel.maps.rooms : null;
+  return `<details class="review-groups"><summary>${title} · ${groups.length}</summary>${groups.length ? `<ul>${groups.map(group => `<li><strong>${escapeHtml(key === 'days' ? (M.days[group.id] || group.id) : entityName(map?.get(group.id) || acceptedGroupEntity(key, group.id), group.id))}</strong> <span class="context-label">${label(group.context)}</span> · ${group.lessonIds.length}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>`;
+}
+function acceptedGroupEntity(key, id) { const map = key === 'classes' ? acceptedModel.maps.cohorts : key === 'teachers' ? acceptedModel.maps.teachers : acceptedModel.maps.rooms; return map.get(id); }
+
+function reviewLessonCard(change) {
+  const direct = change.directEffect ? `<span class="direct-label">${M.directEffectChanges}</span>` : `<span class="ripple-label">${M.rippleEffectChanges}</span>`;
+  return `<article class="change-card" id="review-${escapeAttribute(change.lessonId)}"><header><h4>${escapeHtml(reviewLessonName(change.lessonId))}</h4>${direct}</header><div class="before-after">${reviewSide(M.oldAssignment, change.old, change.changedDimensions, acceptedModel)}${reviewSide(M.proposedAssignment, change.proposed, change.changedDimensions, proposedModel)}</div><div class="context-actions"><button type="button" class="secondary" data-review-context="${escapeAttribute(change.lessonId)}">${M.openWholeContext}</button><button type="button" class="secondary" data-review-focus="cohortId" data-review-context="${escapeAttribute(change.lessonId)}">${M.openClassContext}</button><button type="button" class="secondary" data-review-focus="teacherId" data-review-context="${escapeAttribute(change.lessonId)}">${M.openTeacherContext}</button><button type="button" class="secondary" data-review-focus="roomId" data-review-context="${escapeAttribute(change.lessonId)}">${M.openRoomContext}</button></div></article>`;
+}
+
+function reviewSide(title, side, changed, model) {
+  if (!side) return `<section><h5>${title}</h5><p>${M.notPresent}</p></section>`;
+  const values = [['subjectId', M.subject, model.maps.subjects], ['cohortId', M.class, model.maps.cohorts], ['teacherId', M.teacher, model.maps.teachers], ['periodId', M.period, model.maps.periods], ['roomId', M.room, model.maps.rooms]];
+  return `<section><h5>${title}</h5><dl>${values.map(([field, label, map]) => `<div class="${changed.includes(field) ? 'changed-dimension' : ''}"><dt>${label}${changed.includes(field) ? ` · ${M.changedDimension}` : ''}</dt><dd>${escapeHtml(entityName(map.get(side[field]), side[field] || ''))}</dd></div>`).join('')}</dl></section>`;
+}
+
+function bindRepairReview() {
+  const confirmation = document.querySelector('#confirm-repair-accept'); const accept = document.querySelector('#accept-repair');
+  confirmation.addEventListener('change', () => { accept.disabled = !confirmation.checked; });
+  accept.addEventListener('click', () => mutate('/api/proposal/accept', 'POST'));
+  document.querySelector('#revise-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
+  document.querySelector('#discard-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
+  document.querySelectorAll('[data-review-lesson]').forEach(button => button.addEventListener('click', () => { document.querySelector(`#review-${CSS.escape(button.dataset.reviewLesson)}`)?.scrollIntoView(); document.querySelector(`#review-${CSS.escape(button.dataset.reviewLesson)} h4`)?.focus(); }));
+  document.querySelectorAll('[data-review-context]').forEach(button => button.addEventListener('click', () => showReviewContext(button.dataset.reviewContext, button.dataset.reviewFocus)));
+  document.querySelector('#show-unchanged')?.addEventListener('click', () => { const item = acceptedModel.assignmentMap.get(document.querySelector('#unchanged-lesson').value); document.querySelector('#unchanged-host').innerHTML = `<p class="quiet-state">${M.visuallyQuiet}</p>${lessonDetails(item)}`; bindCloseDetails(); });
+}
+
+function showReviewContext(lessonId, focusType) {
+  const change = currentSnapshot.workspace.proposal.review.changedLessons.find(item => item.lessonId === lessonId);
+  const side = change?.proposed || change?.old;
+  const model = change?.proposed ? proposedModel : acceptedModel;
+  const item = model.assignmentMap.get(lessonId);
+  stateCard.innerHTML = `<button id="return-review" type="button" class="secondary">← ${M.returnImpactReview}</button><h2>${M.reviewContext}</h2><p class="mode-note">${M.acceptedStillCurrent}</p><div id="review-context-host"></div>`;
+  const host = document.querySelector('#review-context-host');
+  if (focusType && side) {
+    const field = focusType; const selected = side[field];
+    const items = model.assignments.filter(candidate => candidate[field] === selected);
+    host.innerHTML = `<h3>${escapeHtml(entityName((field === 'cohortId' ? model.maps.cohorts : field === 'teacherId' ? model.maps.teachers : model.maps.rooms).get(selected), selected))}</h3>${items.map(candidate => `<p>${escapeHtml(reviewLessonName(candidate.lessonId))} · ${escapeHtml(periodLabel(candidate.period))}</p>`).join('')}`;
+  } else host.innerHTML = item ? lessonDetails(item) : `<p>${M.notPresent}</p>`;
+  document.querySelector('#return-review').addEventListener('click', () => renderRepairProposal(currentSnapshot, currentSnapshot.workspace.school.displayName));
 }
 
 function makeModel(baseline) {

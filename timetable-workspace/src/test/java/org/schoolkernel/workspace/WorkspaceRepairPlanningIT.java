@@ -50,6 +50,8 @@ import tools.jackson.databind.node.ObjectNode;
 class WorkspaceRepairPlanningIT {
     private static final ObjectMapper JSON = JsonMapper.builder().build();
     private static final Path ROOT = Path.of("..").toAbsolutePath().normalize();
+    private static volatile ObjectNode cachedProposalWithoutPin;
+    private static volatile ObjectNode cachedProposalWithPin;
 
     @Container
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:18.6")
@@ -66,6 +68,8 @@ class WorkspaceRepairPlanningIT {
     @LocalServerPort int port;
     @Autowired JdbcClient jdbc;
     @Autowired WorkspaceRecovery recovery;
+    @Autowired RepairDraftService drafts;
+    @Autowired ProposalReviewService reviews;
     @Autowired SwitchingRepairProcessLauncher processes;
 
     private HttpClient client;
@@ -125,6 +129,145 @@ class WorkspaceRepairPlanningIT {
         assertEquals("FEASIBLE", body(get("/api/runs/" + runId)).path("status").stringValue());
         assertEquals(proposal, body(get("/api/proposal")));
         assertFalse(proposal.has("resultRevision"));
+        assertEquals(6, proposal.path("review").path("categories").size());
+        assertEquals(proposal.path("review").path("uniqueChangedLessonCount").intValue(),
+                proposal.path("review").path("changedLessons").size());
+    }
+
+    @Test
+    @DisplayName("UC-6 main/G1-G6/success and RULE-7/17/18: explicit acceptance atomically advances the exact verified repair and clears draft state")
+    void acceptsExactRepairProposalAndStartsNextRepairWithoutPriorAttemptPins() throws Exception {
+        JsonNode proposalSnapshot = createRepairProposal(true);
+        JsonNode oldAccepted = proposalSnapshot.path("workspace").path("acceptedBaseline").deepCopy();
+        JsonNode proposal = proposalSnapshot.path("workspace").path("proposal").deepCopy();
+        assertTrue(proposal.path("review").path("categories").valueStream()
+                .allMatch(category -> category.has("count") && category.path("lessonIds").isArray()));
+        assertEquals(proposalSnapshot.path("version").longValue() - 2,
+                proposal.path("sourceWorkspaceVersion").longValue(), "source version");
+        assertEquals(proposalSnapshot.path("workspace").path("acceptedBaseline").path("result").path("timetableRevision"),
+                proposal.path("acceptedTimetableRevision"), "accepted timetable identity");
+        assertEquals(proposalSnapshot.path("workspace").path("repairDraft").path("intentRevision"),
+                proposal.path("intentRevision"), "intent identity");
+        assertEquals(proposal.path("result").path("inputRevision"), proposal.path("successorDefinitionRevision"),
+                "definition identity");
+        assertEquals(proposal.path("result").path("timetableRevision"), proposal.path("proposedTimetableRevision"),
+                "proposed timetable identity");
+        assertTrue(java.util.Arrays.equals(
+                CanonicalJson.bytes(reviews.create(
+                        proposalSnapshot.path("workspace").path("acceptedBaseline"),
+                        proposalSnapshot.path("workspace").path("repairDraft"),
+                        proposal.path("definition"), proposal.path("result"))),
+                CanonicalJson.bytes(proposal.path("review"))), "review identity");
+
+        HttpResponse<String> acceptedResponse = command("POST", "/api/proposal/accept", session(), null);
+        assertEquals(200, acceptedResponse.statusCode(), acceptedResponse.body());
+        JsonNode accepted = body(acceptedResponse);
+        assertEquals("ACCEPTED_BASELINE", accepted.path("state").stringValue());
+        assertEquals(proposal.path("definition"), accepted.path("workspace").path("acceptedBaseline").path("definition"));
+        assertEquals(proposal.path("result"), accepted.path("workspace").path("acceptedBaseline").path("result"));
+        assertFalse(accepted.path("workspace").has("proposal"));
+        assertFalse(accepted.path("workspace").has("repairDraft"));
+        assertEquals(proposal.path("proposedTimetableRevision"), accepted.path("workspace").path("timetableRevision"));
+        JsonNode roomPin = accepted.path("workspace").path("acceptedBaseline").path("manifest").path("locks")
+                .valueStream().filter(lock -> "lesson-science-1".equals(lock.path("lessonId").stringValue()))
+                .findFirst().orElseThrow();
+        assertEquals("ATTEMPT_SCOPED", roomPin.path("roomLockOrigin").stringValue());
+        assertFalse(oldAccepted.equals(accepted.path("workspace").path("acceptedBaseline")));
+
+        command("POST", "/api/repair-draft", session(),
+                "{\"resourceType\":\"TEACHER\",\"resourceId\":\"teacher-alex\",\"periodIds\":[\"mon-2\"]}");
+        JsonNode nextDefinition = drafts.compiledDefinition(storedDocument());
+        JsonNode nextLesson = nextDefinition.path("lessons").valueStream()
+                .filter(lesson -> "lesson-science-1".equals(lesson.path("id").stringValue()))
+                .findFirst().orElseThrow();
+        assertFalse(nextLesson.has("roomLock"), "a prior attempt-scoped pin must not carry into the next repair");
+        assertEquals(proposal.path("result").path("inputRevision"), nextDefinition.path("basedOnRevision"));
+    }
+
+    @Test
+    @DisplayName("UC-6 extensions 5a/5b and minimal guarantee: discard or revise removes only the proposal and retains exact draft and baseline")
+    void discardsOnlyProposalAndRetainsRepairDraft() throws Exception {
+        JsonNode proposalSnapshot = createRepairProposal(false);
+        JsonNode acceptedBefore = proposalSnapshot.path("workspace").path("acceptedBaseline").deepCopy();
+        JsonNode draftBefore = proposalSnapshot.path("workspace").path("repairDraft").deepCopy();
+
+        HttpResponse<String> discardedResponse = command("DELETE", "/api/proposal", session(), null);
+        assertEquals(200, discardedResponse.statusCode(), discardedResponse.body());
+        JsonNode discarded = body(discardedResponse);
+        assertEquals("REPAIR_DRAFT", discarded.path("state").stringValue());
+        assertEquals(acceptedBefore, discarded.path("workspace").path("acceptedBaseline"));
+        assertEquals(draftBefore, discarded.path("workspace").path("repairDraft"));
+        assertFalse(discarded.path("workspace").has("proposal"));
+    }
+
+    @Test
+    @DisplayName("UC-6 extension 6a/RULE-17: every proposal identity, result, and review mismatch invalidates eligibility without accepted mutation")
+    void invalidatesEveryStaleRepairProposalIdentity() throws Exception {
+        JsonNode arranged = createRepairProposal(false);
+        ObjectNode pristine = (ObjectNode) arranged.path("workspace").deepCopy();
+        JsonNode acceptedBefore = pristine.path("acceptedBaseline").deepCopy();
+        long proposalVersion = arranged.path("version").longValue();
+        List<java.util.function.Consumer<ObjectNode>> corruptions = List.of(
+                document -> ((ObjectNode) document.path("proposal")).put("sourceWorkspaceVersion", -1),
+                document -> ((ObjectNode) document.path("proposal")).put("acceptedTimetableRevision", "wrong"),
+                document -> ((ObjectNode) document.path("proposal")).put("successorDefinitionRevision", "wrong"),
+                document -> ((ObjectNode) document.path("proposal")).put("intentRevision", "wrong"),
+                document -> ((ObjectNode) document.path("proposal")).put("proposedTimetableRevision", "wrong"),
+                document -> ((ObjectNode) document.path("proposal")).put("runId", UUID.randomUUID().toString()),
+                document -> ((ObjectNode) document.path("proposal")).put("limit", "PT2M"),
+                document -> ((ObjectNode) document.path("proposal")).put("terminationReason", "wrong"),
+                document -> ((ObjectNode) document.path("proposal")).put("elapsedTimeMs", -1),
+                document -> ((ObjectNode) document.path("proposal").path("changeCounts")).put("periodMoves", -1),
+                document -> ((ObjectNode) document.path("proposal").path("result")).put("schoolId", "wrong"),
+                document -> ((ObjectNode) document.path("proposal").path("review")).put("uniqueChangedLessonCount", -1));
+
+        for (java.util.function.Consumer<ObjectNode> corruption : corruptions) {
+            ObjectNode corrupted = pristine.deepCopy();
+            corruption.accept(corrupted);
+            jdbc.sql("""
+                    UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=:version,
+                    active_run_id=NULL, document=CAST(:document AS jsonb) WHERE workspace_id=1
+                    """).param("version", proposalVersion).param("document", JSON.writeValueAsString(corrupted)).update();
+
+            HttpResponse<String> response = command("POST", "/api/proposal/accept", session(), null);
+            assertEquals(409, response.statusCode(), response.body());
+            assertEquals("STALE_PROPOSAL", body(response).path("code").stringValue());
+            assertEquals("REPAIR_DRAFT", lifecycle());
+            assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
+            assertFalse(storedDocument().has("proposal"));
+        }
+    }
+
+    @Test
+    @DisplayName("UC-6 extension 6b/RULE-7: failed durable acceptance keeps byte-exact baseline and unchanged proposal for retry")
+    void rollsBackFailedAcceptanceAndKeepsProposalReviewable() throws Exception {
+        JsonNode proposalSnapshot = createRepairProposal(false);
+        JsonNode before = proposalSnapshot.path("workspace").deepCopy();
+        long versionBefore = proposalSnapshot.path("version").longValue();
+        jdbc.sql("""
+                CREATE OR REPLACE FUNCTION fail_repair_accept() RETURNS trigger AS $$
+                BEGIN
+                  IF NEW.lifecycle_state = 'ACCEPTED_BASELINE' THEN RAISE EXCEPTION 'injected acceptance failure'; END IF;
+                  RETURN NEW;
+                END; $$ LANGUAGE plpgsql
+                """).update();
+        jdbc.sql("""
+                CREATE TRIGGER fail_repair_accept_trigger BEFORE UPDATE ON workspace_aggregate
+                FOR EACH ROW EXECUTE FUNCTION fail_repair_accept()
+                """).update();
+        try {
+            HttpResponse<String> failed = command("POST", "/api/proposal/accept", session(), null);
+            assertEquals(503, failed.statusCode(), failed.body());
+            assertEquals("STORAGE_UNAVAILABLE", body(failed).path("code").stringValue());
+            assertEquals("REPAIR_PROPOSAL", lifecycle());
+            assertEquals(versionBefore, jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1").query(Long.class).single());
+            assertEquals(before, storedDocument());
+        } finally {
+            jdbc.sql("DROP TRIGGER IF EXISTS fail_repair_accept_trigger ON workspace_aggregate").update();
+            jdbc.sql("DROP FUNCTION IF EXISTS fail_repair_accept()").update();
+        }
+        assertEquals(200, command("POST", "/api/proposal/accept", session(), null).statusCode());
+        assertEquals("ACCEPTED_BASELINE", lifecycle());
     }
 
     @Test
@@ -312,6 +455,33 @@ class WorkspaceRepairPlanningIT {
                 UPDATE workspace_aggregate SET lifecycle_state='ACCEPTED_BASELINE', version=7,
                 active_run_id=NULL, document=CAST(:document AS jsonb) WHERE workspace_id=1
                 """).param("document", JSON.writeValueAsString(document)).update();
+    }
+
+    private JsonNode createRepairProposal(boolean addRoomPin) throws Exception {
+        ObjectNode cached = addRoomPin ? cachedProposalWithPin : cachedProposalWithoutPin;
+        if (cached != null) {
+            ObjectNode snapshot = cached.deepCopy();
+            jdbc.sql("""
+                    UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=:version,
+                    active_run_id=NULL, document=CAST(:document AS jsonb) WHERE workspace_id=1
+                    """).param("version", snapshot.path("version").longValue())
+                    .param("document", JSON.writeValueAsString(snapshot.path("workspace"))).update();
+            return snapshot;
+        }
+        establishAcceptedBaseline();
+        command("POST", "/api/repair-draft", session(),
+                "{\"resourceType\":\"TEACHER\",\"resourceId\":\"teacher-alex\",\"periodIds\":[\"mon-1\"]}");
+        if (addRoomPin) {
+            HttpResponse<String> pinned = command("PATCH", "/api/repair-draft", session(),
+                    "{\"action\":\"PIN\",\"lessonId\":\"lesson-science-1\",\"dimensions\":[\"ROOM\"]}");
+            assertEquals(200, pinned.statusCode(), pinned.body());
+        }
+        HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        assertEquals(202, started.statusCode(), started.body());
+        ObjectNode snapshot = (ObjectNode) awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        if (addRoomPin) cachedProposalWithPin = snapshot.deepCopy();
+        else cachedProposalWithoutPin = snapshot.deepCopy();
+        return snapshot;
     }
 
     private JsonNode awaitState(String state, Duration timeout) throws Exception {

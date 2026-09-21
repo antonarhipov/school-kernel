@@ -25,6 +25,7 @@ public class RepairPlanningService {
     private final WorkspaceMutation mutation;
     private final RepairDraftService drafts;
     private final KernelPlanner planner;
+    private final ProposalReviewService reviews;
     private final ObjectMapper json;
     private final ExecutorService executor = Executors.newSingleThreadExecutor(
             Thread.ofVirtual().name("repair-planning-", 0).factory());
@@ -34,11 +35,13 @@ public class RepairPlanningService {
             WorkspaceMutation mutation,
             RepairDraftService drafts,
             KernelPlanner planner,
+            ProposalReviewService reviews,
             ObjectMapper json) {
         this.repository = repository;
         this.mutation = mutation;
         this.drafts = drafts;
         this.planner = planner;
+        this.reviews = reviews;
         this.json = json;
     }
 
@@ -230,6 +233,11 @@ public class RepairPlanningService {
             proposal.put("terminationReason", result.path("terminationReason").stringValue());
             proposal.put("elapsedTimeMs", result.path("elapsedTimeMs").longValue());
             proposal.set("changeCounts", changeCounts(changeReport));
+            proposal.set("review", reviews.create(
+                    current.document().path("acceptedBaseline"),
+                    current.document().path("repairDraft"),
+                    successorDefinition,
+                    result));
             try {
                 mutation.finishRepairRun(runningVersion, runId, WorkspaceState.REPAIR_PROPOSAL, document);
             } catch (WorkspaceProblem ignored) {

@@ -31,6 +31,7 @@ public class WorkspaceController {
     private final InitialPlanningService planning;
     private final RepairPlanningService repairPlanning;
     private final RepairDraftService repairs;
+    private final RepairProposalService repairProposals;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -39,12 +40,14 @@ public class WorkspaceController {
             InitialPlanningService planning,
             RepairPlanningService repairPlanning,
             RepairDraftService repairs,
+            RepairProposalService repairProposals,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
         this.planning = planning;
         this.repairPlanning = repairPlanning;
         this.repairs = repairs;
+        this.repairProposals = repairProposals;
         this.json = json;
     }
 
@@ -195,14 +198,16 @@ public class WorkspaceController {
     @ResponseBody
     public ResponseEntity<JsonNode> acceptProposal(
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
-        return response(planning.accept(ifMatch));
+        return response(repository.load().state() == WorkspaceState.REPAIR_PROPOSAL
+                ? repairProposals.accept(ifMatch) : planning.accept(ifMatch));
     }
 
     @DeleteMapping("/api/proposal")
     @ResponseBody
     public ResponseEntity<JsonNode> discardProposal(
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
-        return response(planning.discard(ifMatch));
+        return response(repository.load().state() == WorkspaceState.REPAIR_PROPOSAL
+                ? repairProposals.discard(ifMatch) : planning.discard(ifMatch));
     }
 
     private ResponseEntity<JsonNode> response(WorkspaceAggregate aggregate) {

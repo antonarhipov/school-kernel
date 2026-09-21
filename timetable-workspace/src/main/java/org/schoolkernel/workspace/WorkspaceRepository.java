@@ -102,6 +102,11 @@ public class WorkspaceRepository {
                 null, document, true);
     }
 
+    public Optional<Long> acceptRepairProposal(long expectedVersion, JsonNode document) {
+        return update(expectedVersion, WorkspaceState.REPAIR_PROPOSAL, WorkspaceState.ACCEPTED_BASELINE,
+                null, document, true);
+    }
+
     public int recoverInterruptedInitialRun() {
         return jdbc.sql("""
                         UPDATE workspace_aggregate

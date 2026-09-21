@@ -32,6 +32,28 @@ public class ManifestService {
         return documents.manifest();
     }
 
+    public JsonNode forAcceptedRepair(
+            JsonNode definition, JsonNode result, JsonNode previousManifest, JsonNode repairDraft) {
+        ObjectNode manifest = generated(definition, result);
+        Set<String> persistentPeriod = lockIds(previousManifest, "periodLockOrigin", "PERSISTENT_POLICY");
+        Set<String> persistentRoom = lockIds(previousManifest, "roomLockOrigin", "PERSISTENT_POLICY");
+        Set<String> attemptPeriod = pinIds(repairDraft, "periodSources");
+        Set<String> attemptRoom = pinIds(repairDraft, "roomSources");
+        for (JsonNode lockNode : manifest.path("locks")) {
+            ObjectNode lock = (ObjectNode) lockNode;
+            String lessonId = lock.path("lessonId").stringValue();
+            if (lock.has("periodLockOrigin")) {
+                lock.put("periodLockOrigin", persistentPeriod.contains(lessonId)
+                        ? "PERSISTENT_POLICY" : attemptPeriod.contains(lessonId) ? "ATTEMPT_SCOPED" : "PERSISTENT_POLICY");
+            }
+            if (lock.has("roomLockOrigin")) {
+                lock.put("roomLockOrigin", persistentRoom.contains(lessonId)
+                        ? "PERSISTENT_POLICY" : attemptRoom.contains(lessonId) ? "ATTEMPT_SCOPED" : "PERSISTENT_POLICY");
+            }
+        }
+        return manifest;
+    }
+
     private static ObjectNode generated(JsonNode definition, JsonNode result) {
         ObjectNode manifest = tools.jackson.databind.json.JsonMapper.builder().build().createObjectNode();
         manifest.put("manifestVersion", 1);
@@ -110,6 +132,22 @@ public class ManifestService {
             }
         }
         return null;
+    }
+
+    private static Set<String> lockIds(JsonNode manifest, String field, String origin) {
+        Set<String> result = new HashSet<>();
+        for (JsonNode lock : manifest.path("locks")) {
+            if (origin.equals(lock.path(field).stringValue())) result.add(lock.path("lessonId").stringValue());
+        }
+        return result;
+    }
+
+    private static Set<String> pinIds(JsonNode repairDraft, String sourceField) {
+        Set<String> result = new HashSet<>();
+        for (JsonNode pin : repairDraft.path("intent").path("pins")) {
+            if (!pin.path(sourceField).isEmpty()) result.add(pin.path("lessonId").stringValue());
+        }
+        return result;
     }
 
     private static boolean sameText(JsonNode left, String leftField, JsonNode right, String rightField) {
