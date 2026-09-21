@@ -381,8 +381,14 @@ class WorkspaceImportIT {
         HttpResponse<String> page = client.send(HttpRequest.newBuilder(uri("/workspace/")).GET().build(),
                 HttpResponse.BodyHandlers.ofString());
         assertEquals(200, page.statusCode());
-        assertTrue(page.body().contains("Operations workspace"));
+        assertTrue(page.body().contains("id=\"page-title\""));
+        assertTrue(page.body().contains("type=\"module\" src=\"/workspace/app.js\""));
         assertTrue(page.headers().firstValue("Content-Security-Policy").orElseThrow().contains("default-src 'self'"));
+
+        HttpResponse<String> messages = client.send(HttpRequest.newBuilder(uri("/workspace/messages.js")).GET().build(),
+                HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, messages.statusCode());
+        assertTrue(messages.body().contains("pageTitle: 'Operations workspace'"));
 
         HttpResponse<String> login = client.send(HttpRequest.newBuilder(uri("/login")).GET().build(),
                 HttpResponse.BodyHandlers.ofString());

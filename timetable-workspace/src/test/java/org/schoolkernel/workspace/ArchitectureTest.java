@@ -37,4 +37,20 @@ class ArchitectureTest {
         assertFalse(configuration.contains("WORKSPACE_DATABASE_PASSWORD:"));
         assertFalse(configuration.contains("password: school_workspace"));
     }
+
+    @Test
+    @DisplayName("UC-3 RULE-20: native workspace English is sourced from one message catalog")
+    void workspaceUsesOneMessageCatalog() throws Exception {
+        Path assets = Path.of("src/main/resources/static/workspace");
+        String application = Files.readString(assets.resolve("app.js"));
+        String index = Files.readString(assets.resolve("index.html"));
+        String catalog = Files.readString(assets.resolve("messages.js"));
+
+        assertTrue(application.startsWith("import { M } from './messages.js';"));
+        assertTrue(catalog.contains("export const M = Object.freeze"));
+        assertTrue(catalog.contains("technicalMapping: 'Administrator term Class corresponds to kernel term cohort.'"));
+        assertFalse(index.contains(">Operations workspace<"));
+        assertFalse(index.contains(">Import school data<"));
+        assertFalse(application.contains("'Complete whole-school matrix'"));
+    }
 }

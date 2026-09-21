@@ -3,37 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>School timetable workspace</title>
+  <title></title>
   <link rel="icon" href="/workspace/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/workspace/styles.css">
 </head>
 <body>
   <header>
-    <p class="eyebrow">Local school timetable</p>
-    <h1>Operations workspace</h1>
-    <p id="current-label" class="current-label">Loading the local workspace…</p>
+    <p id="eyebrow" class="eyebrow"></p>
+    <h1 id="page-title"></h1>
+    <p id="current-label" class="current-label"></p>
   </header>
   <main>
     <section id="state-card" class="card" aria-live="polite"></section>
 
     <section id="import-card" class="card" hidden>
-      <h2>Import school data</h2>
-      <p>Start with an initial school definition, a matching definition and feasible result, or an accepted-bundle ZIP.</p>
+      <h2 id="import-heading"></h2>
+      <p id="import-intro"></p>
 
       <form id="json-import">
         <fieldset>
-          <legend>JSON documents</legend>
-          <label>School definition <input id="definition" name="definition" type="file" accept="application/json,.json"></label>
-          <label>Matching feasible result (optional) <input id="result" name="result" type="file" accept="application/json,.json"></label>
-          <button type="submit">Import JSON documents</button>
+          <legend id="json-legend"></legend>
+          <label><span id="definition-label"></span><input id="definition" name="definition" type="file" accept="application/json,.json"></label>
+          <label><span id="result-label"></span><input id="result" name="result" type="file" accept="application/json,.json"></label>
+          <button id="json-submit" type="submit"></button>
         </fieldset>
       </form>
 
       <form id="archive-import">
         <fieldset>
-          <legend>Accepted-bundle archive</legend>
-          <label>Accepted bundle <input id="archive" name="archive" type="file" accept="application/zip,.zip"></label>
-          <button type="submit">Import accepted bundle</button>
+          <legend id="archive-legend"></legend>
+          <label><span id="archive-label"></span><input id="archive" name="archive" type="file" accept="application/zip,.zip"></label>
+          <button id="archive-submit" type="submit"></button>
         </fieldset>
       </form>
       <p id="import-status" role="status"></p>

@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "useCase": "UC-3",
+  "submission": "diff-from-a9ab56a950d32e2f77d5daddffbc156a70efb1b9",
+  "items": [
+    {
+      "id": "UC-3 main step 1",
+      "contract": "The administrator selects a weekday in the recurring week.",
+      "rules": ["RULE-19 requires native in-browser day changes."],
+      "actorBoundary": "Real Chrome over the local workspace HTTP application",
+      "claim": "The accepted view exposes definition-backed weekday navigation and renders the selected day.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:185-210 and app.js:106-116,182,275","observation":"The browser opens the accepted Monday view; the weekday select changes view.day and renders definition periods sorted by order."}],
+      "negativeObligations": ["No weekday meaning is inferred from an ID"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 main step 2",
+      "contract": "The selected day shows every class by every definition-ordered period with occupied and visible empty cells.",
+      "rules": ["RULE-19 requires the complete native snapshot presentation."],
+      "actorBoundary": "Real Chrome accepted whole-school matrix",
+      "claim": "The matrix preserves complete class context and displays subject, teacher, room, and empty cells.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:203-209 and app.js:129-142","observation":"Assertions observe accepted state, names, Empty, and Showing 1 of 1 classes; matrix loops every declared class and selected-day period."}],
+      "negativeObligations": ["No declared class or selected-day period is omitted from the complete matrix"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 main step 3",
+      "contract": "Search, filters, density, day or period focus, and lesson selection retain whole-school and accepted-state context.",
+      "rules": ["RULE-19 keeps interactions in browser memory.", "RULE-20 requires keyboard operation."],
+      "actorBoundary": "Real Chrome accepted inspection controls",
+      "claim": "Native controls update presentation while the accepted label and whole-school workspace remain visible.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:211-240 and app.js:178-250","observation":"Chrome inserts search text, observes filters, activates a lesson with trusted Space input, and changes density; all handlers update only view state/DOM."}],
+      "negativeObligations": ["No inspection interaction sends a mutation command"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 main step 4",
+      "contract": "The workspace highlights matches, summarizes active filters, resets in one action, and shows an accepted assignment without leaving the matrix.",
+      "rules": ["RULE-20 requires text or icons in addition to color."],
+      "actorBoundary": "Real Chrome filtered matrix and assignment panel",
+      "claim": "Match/selected text, criteria summary, reset, and accepted detail panel are presented in the matrix view.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:211-231 and app.js:119-124,145-154,221-250","observation":"Assertions observe Filtered whole-school matrix, Search: Science, match class, reset, Accepted assignment, lesson/class names, and technical ID while the matrix remains."}],
+      "negativeObligations": ["Selection does not navigate away from the matrix"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 main step 5",
+      "contract": "The administrator may open a class, teacher, or room schedule and return to retained whole-school context.",
+      "rules": ["RULE-20 requires focused interaction conventions and keyboard behavior."],
+      "actorBoundary": "Real Chrome focused schedule journey",
+      "claim": "Focused schedules are accessible from the matrix and offer return to the retained matrix state.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:233-240 and app.js:157-170","observation":"Trusted Space opens Teacher schedule - Alex, Chrome observes Monday and Return to whole-school matrix, then returns and changes density."}],
+      "negativeObligations": ["Focused inspection does not alter accepted data"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 extension 2a",
+      "contract": "An accepted school with no lessons still shows declared classes, weekdays, periods, and empty state without invented assignments.",
+      "rules": ["RULE-19 requires definition-backed complete presentation."],
+      "actorBoundary": "Real Chrome empty accepted timetable",
+      "claim": "The empty accepted view retains declared structure and exact stored state.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:255-278","observation":"Chrome observes No accepted lessons are scheduled, Year 7A, Monday 1, and Empty; the test compares the exact PostgreSQL document before and after."}],
+      "negativeObligations": ["No assignment is invented", "Accepted storage is unchanged"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 extension 3a",
+      "contract": "A narrowed population is labeled filtered and is never presented as the complete school.",
+      "rules": ["RULE-20 centralizes the visible state label."],
+      "actorBoundary": "Real Chrome filtered matrix",
+      "claim": "Any active criterion changes the matrix label from complete to filtered.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:211-216 and app.js:243-247","observation":"After browser text input the test waits for Filtered whole-school matrix, asserts Search: Science and match marking; code changes both visible title and aria-label."}],
+      "negativeObligations": ["Filtered results are not labeled complete"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 extension 3b",
+      "contract": "No-match search shows active criteria and reset while leaving the accepted timetable unchanged.",
+      "rules": ["RULE-19 keeps filtering local."],
+      "actorBoundary": "Real Chrome no-match state plus PostgreSQL state",
+      "claim": "No-match feedback is actionable and storage remains byte-equivalent at the document/version boundary.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:218-223,252","observation":"Chrome observes the no-match message, Search: not-present, Reset view, resets, and the test compares the exact stored version/document before and after."}],
+      "negativeObligations": ["No accepted assignment is changed or disclosed as a match"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 extension 5a",
+      "contract": "A narrow screen may show a read-only focused schedule but withholds operational editing and acceptance workflow.",
+      "rules": ["RULE-20 requires narrow-screen read-only behavior."],
+      "actorBoundary": "Real Chrome at 390 by 844 device metrics",
+      "claim": "The narrow view explicitly labels itself read-only and omits matrix and acceptance actions.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:242-250 and styles.css:112-120","observation":"Chrome observes Read-only focused schedule and Class schedule - Year 7A, asserts Accept as current absent and matrix-wrap absent, with zero browser errors."}],
+      "negativeObligations": ["No editing or acceptance action is exposed", "No desktop operational workflow claim is made"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 G1",
+      "contract": "Definition names, weekdays, period order and times are authoritative; opaque IDs appear only as technical details and are not parsed for meaning.",
+      "rules": ["RULE-19 requires opaque IDs and definition metadata."],
+      "actorBoundary": "Native accepted-view model and real Chrome",
+      "claim": "Rendering joins exact IDs through maps and displays metadata independently from technical IDs.",
+      "evidence": [{"kind":"code-and-browser","source":"app.js:84-93,129-154,261-280; WorkspaceBrowserIT.java:203-231","observation":"Maps use full ID keys, periods use metadata weekday/order/time, Chrome observes display names and separately expands lesson-math-1 in technical details."}],
+      "negativeObligations": ["ID spelling is never parsed into display meaning"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 G2",
+      "contract": "Administrator text uses Class and technical details explicitly map it to kernel cohort.",
+      "rules": ["RULE-20 requires Class and an explicit cohort mapping."],
+      "actorBoundary": "Workspace message catalog and accepted assignment details",
+      "claim": "The centralized catalog supplies both the administrator term and explicit technical mapping.",
+      "evidence": [{"kind":"architecture-test","source":"ArchitectureTest.java:41-55 and messages.js:54,94","observation":"The test asserts the exact technical mapping and rejects inline production labels; details render M.class and M.technicalMapping."}],
+      "negativeObligations": ["Administrator-facing labels do not substitute Cohort for Class"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 G3",
+      "contract": "Accepted and any other shown semantic states use text or icons in addition to color.",
+      "rules": ["RULE-20 requires non-color semantics."],
+      "actorBoundary": "Real Chrome accepted matrix and details",
+      "claim": "Every semantic state shown in UC-3 has visible text or a check icon plus text.",
+      "evidence": [{"kind":"code-and-browser","source":"app.js:98,147,152,175 and WorkspaceBrowserIT.java:203-250","observation":"Accepted baseline/current timetable, Match, Selected, and Accepted assignment are rendered as text; accepted also has a check icon. Later-UC states are not rendered."}],
+      "negativeObligations": ["No shown state depends on color alone"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 G4",
+      "contract": "Day, search, filters, reset, density, selection, and focused-schedule entry are keyboard-operable.",
+      "rules": ["RULE-20 requires complete keyboard behavior without pointer input."],
+      "actorBoundary": "Real Chrome native controls through CDP keyboard input",
+      "claim": "All operations are native inputs/selects/buttons and consequential selection/entry paths are keyboard-proven.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:211-240 and app.js:110-124,178-193","observation":"CDP inserts real text and sends trusted Space keyDown/keyUp to focused native buttons to open details and focused schedule; remaining controls are native selects/buttons with change/click handlers."}],
+      "negativeObligations": ["Lesson selection and focused-schedule entry do not require pointer input"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 G5",
+      "contract": "Validation-scale post-load interactions meet 250 ms p95 on the reference machine.",
+      "rules": ["RULE-25 defines fixture cardinality, sampling, p95, and solver exclusion."],
+      "actorBoundary": "Real Chrome with complete target-scale accepted snapshot",
+      "claim": "Measured search, filter, day and selection p95 values are each below 250 ms.",
+      "evidence": [{"kind":"browser-performance-test","source":"WorkspaceBrowserIT.java:300-378 and final clean verify output","observation":"Fixture asserts 1000 lessons, 100 teachers, 60 classes, 100 rooms, 60 periods; 20 post-load samples give p95 search 69.5, filter 38.8, day 172.6, selection 81.1 ms; solver time excluded."}],
+      "negativeObligations": ["Initial snapshot load and solver duration are excluded from interaction samples"],
+      "counterEvidence": ["The first selection sample was 458.6 ms and one day sample was 261.7 ms; both are above the target but below-p95 by the declared nearest-rank calculation."]
+    },
+    {
+      "id": "UC-3 G6",
+      "contract": "Inspection never mutates accepted definition, assignments, draft, or proposal.",
+      "rules": ["RULE-19 limits inspection to in-memory presentation."],
+      "actorBoundary": "Real Chrome/HTTP plus exact PostgreSQL document comparison",
+      "claim": "All UC-3 inspection journeys preserve the exact workspace version and JSON document.",
+      "evidence": [{"kind":"browser-and-http-tests","source":"WorkspaceBrowserIT.java:185-355","observation":"Main, empty, snapshot and scale tests capture version:document before inspection and assert exact equality afterward; snapshot GET itself is also compared to the stored accepted document."}],
+      "negativeObligations": ["No accepted definition or assignment mutation", "No draft or proposal is created"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 success postcondition",
+      "contract": "The administrator can identify the accepted assignment and school-wide disruption context and can continue toward repair.",
+      "rules": [],
+      "actorBoundary": "Real Chrome accepted whole-school and focused schedules",
+      "claim": "The browser identifies exact assignment context while retaining whole-school and focused navigation context.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:203-240","observation":"Chrome observes accepted state, complete class matrix, subject/teacher/room, exact selected lesson/class, technical ID, teacher schedule, Monday, and return action."}],
+      "negativeObligations": ["UC-3 does not mutate or prematurely implement a repair draft"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 minimal guarantee",
+      "contract": "Failed/empty search and presentation changes invent no assignments and leave workspace state unchanged.",
+      "rules": [],
+      "actorBoundary": "Real Chrome no-match/empty/presentation paths plus PostgreSQL",
+      "claim": "Empty and no-match states remain definition-backed, and every presentation journey preserves exact stored state.",
+      "evidence": [{"kind":"browser-tests","source":"WorkspaceBrowserIT.java:185-355","observation":"Tests assert no-match criteria/reset, declared empty class/period/cells, and exact version/document equality after main, empty and scale journeys."}],
+      "negativeObligations": ["No invented assignment", "No workspace-state mutation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-3 Requires UC-1",
+      "contract": "UC-3 consumes the verified accepted baseline established by approved UC-1.",
+      "rules": [],
+      "actorBoundary": "Production workspace accepted snapshot",
+      "claim": "UC-1 is approved and UC-3 reads its complete accepted definition/result pair through GET /api/workspace.",
+      "evidence": [{"kind":"status-and-http-test","source":"status.md UC-1 row; WorkspaceBrowserIT.java:280-298","observation":"Status records UC-1 APPROVED; HTTP returns ACCEPTED_BASELINE, acceptedTimetable true, ETag ws-7, and exact complete stored document without mutation."}],
+      "negativeObligations": ["UC-3 does not bypass the accepted workspace aggregate"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-1",
+      "contract": "Reactor modules preserve the kernel/workspace process boundary.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Clean Maven reactor and compiled workspace architecture",
+      "claim": "UC-3 preserves the approved module graph and adds no kernel implementation dependency.",
+      "evidence": [{"kind":"architecture-and-build","source":"ArchitectureTest.java:15-28; ./mvnw -q clean verify","observation":"ArchUnit rejects kernel application/domain/solver/CLI dependencies from workspace production classes; all 140 reactor tests pass."}],
+      "negativeObligations": ["Workspace does not compile against kernel implementation classes"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-2",
+      "contract": "The pinned Java/Spring/PostgreSQL stack is retained without excluded persistence or frontend dependencies.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Clean Java 25 Maven reactor",
+      "claim": "UC-3 adds dependency-free native browser assets and the pinned backend stack remains green.",
+      "evidence": [{"kind":"clean-build","source":"./mvnw -q clean verify and git diff","observation":"The Java 25 reactor passes 140 tests using Spring Boot 4.1.1, PostgreSQL 18.6 and Testcontainers 2.0.5; no POM/package dependency changes exist."}],
+      "negativeObligations": ["No frontend framework, Node/npm, JPA, Hibernate, Spring Data JDBC, or H2 is introduced"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-4",
+      "contract": "Flyway remains the only schema authority and fresh PostgreSQL migration behavior stays valid.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Disposable PostgreSQL 18.6 integration suite",
+      "claim": "UC-3 requires no schema change and the existing Flyway-only startup/failure suite remains green.",
+      "evidence": [{"kind":"integration-suite","source":"./mvnw -q clean verify and UC-3 git diff","observation":"The clean suite migrates fresh PostgreSQL and passes FlywayFailureIT; UC-3 changes no migration, schema generation, or seed file."}],
+      "negativeObligations": ["No runtime schema generation or school-data seed is introduced"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-19",
+      "contract": "GET /api/workspace returns one complete snapshot and native modules perform accepted presentation locally using opaque IDs and metadata.",
+      "rules": ["Applies to UC-3."],
+      "actorBoundary": "Production HTTP snapshot and real Chrome native ES module",
+      "claim": "The full accepted JSON is fetched once and search/filter/day/selection/rendering execute in browser memory.",
+      "evidence": [{"kind":"http-and-browser-tests","source":"WorkspaceBrowserIT.java:280-355 and app.js:84-280","observation":"HTTP test compares exact stored document/ETag; browser scale interactions run after load with no filter API; code joins opaque IDs through Maps and renders definition metadata."}],
+      "negativeObligations": ["No filter API call", "No kernel input reconstruction or proposal classification"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-20",
+      "contract": "The workspace is accessible, centralized-English, Class-oriented, non-color-only, keyboard-operable, and narrow-safe.",
+      "rules": ["Applies to UC-3."],
+      "actorBoundary": "Static architecture check and real Chrome",
+      "claim": "One catalog supplies all English and native controls satisfy semantic/keyboard/narrow requirements.",
+      "evidence": [{"kind":"architecture-and-browser-tests","source":"ArchitectureTest.java:41-55; messages.js; WorkspaceBrowserIT.java:185-250","observation":"Catalog exactness and Class/cohort mapping pass; Chrome proves trusted keyboard selection/focus entry and read-only narrow behavior with visible semantic text."}],
+      "negativeObligations": ["No inline production English outside the catalog", "No pointer-only consequential operation", "No color-only state"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-21",
+      "contract": "Same-origin local security and narrow route exposure remain enforced without identity.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Real HTTP route/security integration tests",
+      "claim": "The localized module shell/catalog are safely allowlisted without widening protected routes.",
+      "evidence": [{"kind":"http-test","source":"WorkspaceImportIT.java:373-405 and full clean suite","observation":"Root redirects to workspace; page and messages module return 200 with self-only CSP; login/actuator and hostile preflight are denied; shared CSRF/Host/Origin tests pass."}],
+      "negativeObligations": ["No login, management endpoint, CORS, credential, or mutation-route exposure is added"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-22",
+      "contract": "API failures retain the stable safe problem shape and prohibit technical/school-data disclosure.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Existing real HTTP problem-response suite",
+      "claim": "UC-3 adds no API failure mapping and the complete safe-response regression suite remains green.",
+      "evidence": [{"kind":"regression-suite","source":"./mvnw -q clean verify and UC-3 git diff","observation":"All 140 tests pass, including malformed/security/database/kernel problem mappings; UC-3 changes no controller or problem handler."}],
+      "negativeObligations": ["No stack trace, SQL, path, raw stderr, credential, or candidate assignment disclosure is introduced"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-23",
+      "contract": "Logs and retained validation evidence remain bounded and free of school data/secrets.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Existing captured-log suite and UC-3 inspection paths",
+      "claim": "Accepted inspection introduces no new logging or persisted run evidence and safe logging regressions pass.",
+      "evidence": [{"kind":"code-and-regression-suite","source":"app.js/messages.js/styles.css diff; ./mvnw -q clean verify","observation":"UC-3 production changes are browser presentation only and contain no logging/persistence call; all captured safe-observability tests remain green."}],
+      "negativeObligations": ["No definition, assignment, display name, credential, CSRF token, session ID, filename, path, or exception detail is logged"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-24",
+      "contract": "Each UC has isolated PostgreSQL 18.6, real HTTP/browser success evidence and exact negative-state assertions.",
+      "rules": ["Applies to all use cases."],
+      "actorBoundary": "Standard Maven verification with Testcontainers and real headless Chrome",
+      "claim": "UC-3 success, empty, snapshot, and scale journeys use disposable PostgreSQL and exact immutability assertions.",
+      "evidence": [{"kind":"clean-integration-suite","source":"./mvnw -q clean verify; WorkspaceBrowserIT.java:185-355","observation":"140 tests pass with PostgreSQL 18.6 Testcontainers and Chrome; each UC-3 path asserts consequential UI/HTTP state and exact stored document preservation."}],
+      "negativeObligations": ["No H2/existing-database/browser mock fallback", "Negative paths do not mutate or disclose invented assignments"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-25",
+      "contract": "Target-scale post-load interactions are measured at p95 separately from solver time.",
+      "rules": ["Applies to UC-3."],
+      "actorBoundary": "Real Chrome target-scale performance test",
+      "claim": "The exact fixture cardinalities, raw samples, nearest-rank p95 and solver exclusion are repeatably checked.",
+      "evidence": [{"kind":"browser-performance-test","source":"WorkspaceBrowserIT.java:300-378 and final clean verify output","observation":"Test asserts 1000/100/60/100/60 cardinalities, records 20 samples per interaction, computes ceil(n*.95)-1, asserts all p95 under 250 ms, prints raw samples and solver exclusion."}],
+      "negativeObligations": ["Solver time is not included or used to excuse interaction latency"],
+      "counterEvidence": ["Individual cold samples exceeded 250 ms for day and selection, while the specified p95 remained below target."]
+    }
+  ]
+}

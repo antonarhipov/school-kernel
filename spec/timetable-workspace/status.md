@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: none
-- Status: APPROVED
-- Next eligible: UC-3, UC-4, UC-8
+- Use case: UC-3
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: UC-4, UC-8
 
 ## Progress
 
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `854493f`; revises `2671b2a` for C-1 through C-3 and G-1 through G-10 | `convergence/UC-1.md` - APPROVED |
 | UC-2 | APPROVED | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - APPROVED WITH NOTES |
-| UC-3 | NOT_STARTED | UC-1 | - | - |
+| UC-3 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence; started from `a9ab56a` | `checkpoints/UC-3.md` |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-4 | - | - |
 | UC-6 | NOT_STARTED | UC-5 | - | - |
@@ -73,6 +73,28 @@
 | UC-2 extension 6a | Kernel revalidation unavailability and injected PostgreSQL acceptance failure retain the exact proposal/version at `WorkspaceInitialPlanningIT.java:261` |
 | UC-2 G1-G6 and both postconditions | Explicit-confirmation browser/HTTP acceptance, exact definition/result comparison, safe labels/controls, all-or-nothing rollback, and retryable draft/proposal assertions recorded in `checkpoints/UC-2.md` |
 | RULE-1 through RULE-29 applicable to UC-2 | Reactor, lifecycle, transaction, process, security, packaged-kernel, PostgreSQL/browser, and kernel compatibility evidence recorded by rule in `checkpoints/UC-2.md` |
+
+## UC-3 Evidence
+
+- Started: 2026-09-21; base `a9ab56a950d32e2f77d5daddffbc156a70efb1b9`.
+- Pre-existing dirty files: none.
+- Implementation submission: HEAD at convergence.
+- Changed files: native accepted-inspection UI and centralized message catalog; architecture, HTTP, real-browser,
+  empty-state, immutability, keyboard, narrow-screen, complete-snapshot, and target-scale tests; status, checkpoint, and
+  Jev advisory artifacts.
+- Commands and results: focused real-browser keyboard journey — PASS; `./mvnw -q clean verify` — 140 tests, 0
+  failures, 0 errors, 0 skipped; `git diff --check` — PASS. Latest target-scale p95: search 69.5 ms, filter 38.8 ms,
+  day 172.6 ms, selection 81.1 ms; solver time excluded.
+
+| Contract element | Evidence |
+|---|---|
+| UC-3 main steps 1-5 | Real Chrome whole-school, local-filter, keyboard selection, assignment-detail, focused schedule, and return journey at `WorkspaceBrowserIT.java:185` |
+| UC-3 extensions 2a, 3a, 3b, 5a | Empty accepted browser journey at `WorkspaceBrowserIT.java:255`; filtered/no-match/narrow-screen assertions at `:211-250` |
+| UC-3 G1-G6 | Opaque-ID/metadata rendering, catalog/state text, keyboard, scale p95, and exact non-mutation evidence in `checkpoints/UC-3.md` |
+| UC-3 success postcondition | Browser identifies accepted assignment and complete/focused school context while preserving repair entry context |
+| UC-3 minimal guarantee | Empty/no-match/presentation changes compare the exact unchanged PostgreSQL document and invent no assignments |
+| Requires UC-1 | Approved UC-1 accepted pair consumed by complete production snapshot test at `WorkspaceBrowserIT.java:280` |
+| RULE-1, RULE-2, RULE-4, RULE-19 through RULE-25 | Reactor, architecture, Flyway, snapshot, catalog, security, safe failure/logging, PostgreSQL/browser, and scale evidence in `checkpoints/UC-3.md` |
 
 ## Blockers
 
