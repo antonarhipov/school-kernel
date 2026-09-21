@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-4.md` and implementation at `5f545ee716a66ad6080acb5a382e5caa51aff7d7`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Builder suite: 152 tests, 0 failures, 0 errors, 0 skipped
 - Verifier reproduction: 9 focused PostgreSQL/HTTP tests pass; the focused real-Chrome UC-4 journey passes
@@ -104,10 +104,11 @@ reported as green.
 
 ## Findings
 
-None. Automated contract evidence is sufficient for technical convergence, but approval remains gated on the required
-administrator UI walkthrough.
+None. Automated contract evidence is sufficient and the required administrator UI walkthrough is confirmed.
 
 ## Walkthrough
+
+User result: PASS, confirmed by the user on 2026-09-21.
 
 1. Open an accepted baseline on a desktop-width screen and confirm it is clearly labeled current.
 2. Start repair, select a teacher and a named weekly unavailable period, and confirm directly affected lessons are
@@ -124,8 +125,8 @@ administrator UI walkthrough.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; no later use case is eligible until the walkthrough is confirmed.
+`PENDING_WALKTHROUGH` -> `APPROVED`; next eligible use cases: UC-5 and UC-8.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm the UC-4 administrator walkthrough before approval or any later use case begins.
+APPROVED
