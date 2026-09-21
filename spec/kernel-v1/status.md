@@ -2,15 +2,15 @@
 
 ## Current
 
-- Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none
+- Use case: none
+- Status: APPROVED
+- Next eligible: UC-2
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | HEAD at convergence; revises `8c2fb7f` for required school `displayName` | pending reconvergence |
+| UC-1 | APPROVED | none | `78b5bb7`; revises `8c2fb7f` for required school `displayName` | `convergence/UC-1.md` - APPROVE |
 | UC-2 | NEEDS_REVISION | UC-1 | `e6401f6`; school `displayName` contract revision pending | prior `spec/convergence/UC-2.md` - APPROVE |
 
 ## UC-1 Evidence
