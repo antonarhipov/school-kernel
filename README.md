@@ -1,7 +1,7 @@
 # School Kernel
 
-School Kernel is a stateless Java 25 command-line runtime for generating and replanning a recurring school timetable.
-The current implementation exposes initial planning through canonical, versioned JSON.
+School Kernel is a Java 25 Maven reactor containing the versioned public contract, the stateless planning CLI, and a
+local school timetable operations workspace.
 
 ## Build
 
@@ -9,8 +9,8 @@ The current implementation exposes initial planning through canonical, versioned
 ./mvnw clean verify
 ```
 
-The build creates `target/school-kernel.jar`, a dependency-inclusive executable JAR. The repository launcher uses that
-artifact:
+The build creates `kernel-cli/target/school-kernel.jar` and
+`timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar`. The repository launcher uses the kernel artifact:
 
 ```bash
 ./school-kernel plan \
@@ -19,10 +19,15 @@ artifact:
   --step-limit 100
 
 ./school-kernel replan \
+  --current-definition examples/initial-school.json \
   --definition examples/updated-school.json \
   --current /tmp/timetable.json \
   --output /tmp/revised-timetable.json \
   --step-limit 100
+
+./school-kernel verify \
+  --definition examples/initial-school.json \
+  --output /tmp/verification.json
 ```
 
 The output file contains the only machine-readable result. Human diagnostics use stderr. Existing output is preserved
@@ -35,8 +40,10 @@ and `130` for interruption before publication.
 
 ## Public contract
 
-- [`school-definition-v1.schema.json`](src/main/resources/schema/school-definition-v1.schema.json) defines inputs.
-- [`result-v1.schema.json`](src/main/resources/schema/result-v1.schema.json) defines structured outcomes.
+- [`school-definition-v1.schema.json`](kernel-contract/src/main/resources/schema/school-definition-v1.schema.json) defines inputs.
+- [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
+- [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
+  defines the non-solving import-verification outcome.
 - Schema and catalog version `1` are the only supported versions.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
@@ -48,6 +55,23 @@ and `130` for interruption before publication.
 
 The complete behavior, constraint catalog, failure semantics, and score definitions are in
 [`spec/kernel-v1/spec.md`](spec/kernel-v1/spec.md).
+
+## Operations workspace
+
+The workspace binds to loopback and stores one versioned aggregate in PostgreSQL. During development, start a local
+PostgreSQL 18.6 database, then provide its credentials and launch the packaged application:
+
+```bash
+export WORKSPACE_DATABASE_URL=jdbc:postgresql://127.0.0.1:5432/school_workspace
+export WORKSPACE_DATABASE_USERNAME=school_workspace
+export WORKSPACE_DATABASE_PASSWORD=school_workspace
+export SCHOOL_KERNEL_EXECUTABLE="$PWD/school-kernel"
+java -jar timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar
+```
+
+Open <http://localhost:8080/workspace/>. An empty workspace accepts either an initial definition, a matching verified
+definition/result pair, or an accepted-bundle ZIP. Import verification runs through the packaged kernel; the browser
+does not require JSON editing or command-line use.
 
 ## Timetable viewer
 

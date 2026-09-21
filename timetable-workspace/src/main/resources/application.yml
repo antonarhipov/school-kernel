@@ -1,0 +1,32 @@
+server:
+  address: 127.0.0.1
+  forward-headers-strategy: none
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: strict
+
+spring:
+  application:
+    name: timetable-workspace
+  datasource:
+    url: ${WORKSPACE_DATABASE_URL:jdbc:postgresql://127.0.0.1:5432/school_workspace}
+    username: ${WORKSPACE_DATABASE_USERNAME:school_workspace}
+    password: ${WORKSPACE_DATABASE_PASSWORD:school_workspace}
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+    clean-disabled: true
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 26MB
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-store: true
+
+workspace:
+  kernel-executable: ${SCHOOL_KERNEL_EXECUTABLE:./school-kernel}

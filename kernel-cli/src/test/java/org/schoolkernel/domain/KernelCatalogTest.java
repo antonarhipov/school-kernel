@@ -1,0 +1,40 @@
+package org.schoolkernel.domain;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+class KernelCatalogTest {
+    @Test
+    @DisplayName("RULE-27: catalog version, IDs, order, categories, and defaults are exact")
+    void catalogIsExact() {
+        assertEquals(1, KernelCatalog.VERSION);
+        assertEquals(List.of(
+                row("hard.teacher-period", "HARD", null),
+                row("hard.cohort-period", "HARD", null),
+                row("hard.room-period", "HARD", null),
+                row("hard.teacher-availability", "HARD", null),
+                row("hard.cohort-availability", "HARD", null),
+                row("hard.room-availability", "HARD", null),
+                row("hard.room-capacity", "HARD", null),
+                row("hard.room-capability", "HARD", null),
+                row("hard.period-lock", "HARD", null),
+                row("hard.room-lock", "HARD", null),
+                row("stability.period-move", "PERIOD_STABILITY", null),
+                row("stability.room-only-move", "ROOM_STABILITY", null),
+                row("soft.teacher-gap", "ORDINARY_PREFERENCE", 1L),
+                row("soft.series-same-day", "ORDINARY_PREFERENCE", 1L),
+                row("soft.undesirable-period", "ORDINARY_PREFERENCE", 1L),
+                row("soft.non-preferred-room", "ORDINARY_PREFERENCE", 1L)),
+                KernelCatalog.CONSTRAINTS.stream()
+                        .map(value -> row(value.id(), value.category().name(), value.defaultWeight()))
+                        .toList());
+    }
+
+    private static List<Object> row(String id, String category, Long defaultWeight) {
+        return List.of(id, category, defaultWeight == null ? "-" : defaultWeight);
+    }
+}

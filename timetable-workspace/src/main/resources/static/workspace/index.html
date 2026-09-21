@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>School timetable workspace</title>
+  <link rel="icon" href="/workspace/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/workspace/styles.css">
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Local school timetable</p>
+    <h1>Operations workspace</h1>
+    <p id="current-label" class="current-label">Loading the local workspace…</p>
+  </header>
+  <main>
+    <section id="state-card" class="card" aria-live="polite"></section>
+
+    <section id="import-card" class="card" hidden>
+      <h2>Import school data</h2>
+      <p>Start with an initial school definition, a matching definition and feasible result, or an accepted-bundle ZIP.</p>
+
+      <form id="json-import">
+        <fieldset>
+          <legend>JSON documents</legend>
+          <label>School definition <input id="definition" name="definition" type="file" accept="application/json,.json"></label>
+          <label>Matching feasible result (optional) <input id="result" name="result" type="file" accept="application/json,.json"></label>
+          <button type="submit">Import JSON documents</button>
+        </fieldset>
+      </form>
+
+      <form id="archive-import">
+        <fieldset>
+          <legend>Accepted-bundle archive</legend>
+          <label>Accepted bundle <input id="archive" name="archive" type="file" accept="application/zip,.zip"></label>
+          <button type="submit">Import accepted bundle</button>
+        </fieldset>
+      </form>
+      <p id="import-status" role="status"></p>
+    </section>
+  </main>
+  <script type="module" src="/workspace/app.js"></script>
+</body>
+</html>

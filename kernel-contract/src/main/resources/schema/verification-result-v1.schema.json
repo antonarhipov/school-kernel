@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://school-kernel.invalid/schema/verification-result-v1.schema.json",
+  "title": "School Kernel verification result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "kernelVersion", "correlationId", "elapsedTimeMs"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "enum": ["VERIFIED", "INVALID_INPUT", "INTERNAL_ERROR"] },
+    "kernelVersion": { "type": "string", "minLength": 1 },
+    "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "elapsedTimeMs": { "type": "integer", "minimum": 0 },
+    "mode": { "enum": ["INITIAL_DEFINITION", "ACCEPTED_BASELINE"] },
+    "schoolId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
+    "catalogVersion": { "const": 1 },
+    "definitionRevision": { "$ref": "#/$defs/revision" },
+    "timetableRevision": { "$ref": "#/$defs/revision" },
+    "validationReport": { "$ref": "#/$defs/validationReport" },
+    "safeMessage": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "VERIFIED" } } },
+      "then": {
+        "required": ["mode", "schoolId", "catalogVersion", "definitionRevision"],
+        "not": { "anyOf": [{ "required": ["validationReport"] }, { "required": ["safeMessage"] }] }
+      }
+    },
+    {
+      "if": { "required": ["mode"], "properties": { "mode": { "const": "ACCEPTED_BASELINE" } } },
+      "then": { "required": ["timetableRevision"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "INVALID_INPUT" } } },
+      "then": {
+        "required": ["validationReport"],
+        "not": { "anyOf": [{ "required": ["mode"] }, { "required": ["timetableRevision"] }, { "required": ["safeMessage"] }] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "INTERNAL_ERROR" } } },
+      "then": {
+        "required": ["safeMessage"],
+        "not": { "anyOf": [{ "required": ["mode"] }, { "required": ["schoolId"] }, { "required": ["catalogVersion"] }, { "required": ["definitionRevision"] }, { "required": ["timetableRevision"] }, { "required": ["validationReport"] }] }
+      }
+    }
+  ],
+  "$defs": {
+    "revision": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "validationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["totalErrors", "truncated", "errors"],
+      "properties": {
+        "totalErrors": { "type": "integer", "minimum": 1 },
+        "truncated": { "type": "boolean" },
+        "errors": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/validationError" } }
+      }
+    },
+    "validationError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location", "entityIds", "message"],
+      "properties": {
+        "location": { "type": "string" },
+        "entityIds": { "type": "array", "items": { "type": "string" } },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

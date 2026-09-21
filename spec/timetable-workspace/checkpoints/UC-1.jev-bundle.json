@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 1,
+  "useCase": "UC-1",
+  "submission": "diff-from-db18108c24ddc14b9a1496f0a258f47d3d06c870",
+  "items": [
+    {
+      "id": "UC-1 main",
+      "contract": "The administrator imports an initial definition or exact accepted baseline; the workspace validates it, identifies the state, durably stores it, and opens that state.",
+      "rules": ["RULE-7 requires accepted baseline import to be atomic.", "RULE-9 makes packaged kernel verify authoritative."],
+      "actorBoundary": "Real local browser and Spring HTTP application backed by PostgreSQL 18.6 and packaged School Kernel",
+      "claim": "Both explicit import modes and the exact accepted archive complete through the actor boundary and persist the corresponding lifecycle state.",
+      "evidence": [
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:93", "observation": "POST of the real definition returns 200; assertions compare INITIAL_DRAFT, no accepted timetable, school ID, import mode, ETag, version 1, and the complete stored definition tree."},
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:115", "observation": "POST of a definition and packaged-plan result returns 200; assertions compare ACCEPTED_BASELINE and both complete stored JSON trees."},
+        {"kind": "browser-runtime", "source": "output/playwright/uc1-initial-draft.png", "observation": "The browser journey observed Initial draft and No accepted timetable after importing examples/initial-school.json, with zero console errors or warnings."}
+      ],
+      "negativeObligations": ["No invalid pair becomes current", "No partial persistence", "No result-only import"],
+      "counterEvidence": ["The kernel v1 definition schema has no school-level display-name field, so the fixture is shown by stable school ID with an explicit unavailable-name cue rather than by a definition-supplied school display name."]
+    },
+    {
+      "id": "UC-1 extension 1a",
+      "contract": "A result alone is rejected with a matching-definition explanation and no import.",
+      "rules": ["RULE-22 requires safe stable failure output."],
+      "actorBoundary": "Real HTTP import route",
+      "claim": "A result-only upload returns MATCHING_DEFINITION_REQUIRED and leaves the exact empty aggregate.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:182", "observation": "Assertions require HTTP 422, code MATCHING_DEFINITION_REQUIRED, no assignments text, EMPTY, version 0, and {} JSONB."}],
+      "negativeObligations": ["No draft", "No accepted baseline", "No candidate disclosure"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 extension 1b",
+      "contract": "An accepted archive must contain exactly the three safe root entries; absent, duplicate, extra, unreadable, or unsafe content rejects the import.",
+      "rules": ["RULE-14 defines exact bounded no-extraction ZIP parsing."],
+      "actorBoundary": "Multipart HTTP import and bounded archive reader",
+      "claim": "Exact archives import; extra and traversal entries are rejected without mutation or filesystem extraction.",
+      "evidence": [
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:141", "observation": "The exact archive reaches ACCEPTED_BASELINE; a second archive with ../extra.json returns 422 UNSAFE_ARCHIVE and the row remains exactly empty."},
+        {"kind": "unit-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/SafeImportReaderTest.java:41", "observation": "The reader accepts the exact entry set in memory, while the unsafeArchive test rejects traversal content."}
+      ],
+      "negativeObligations": ["No archive extraction", "No partial persistence", "No planning invocation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 extension 2a",
+      "contract": "Parsing, version, identity, revision, assignment, hard-validity, or lineage failure names a safe reason and persists or discloses nothing.",
+      "rules": ["RULE-9 requires non-solving structured verification.", "RULE-26 requires the independent direct hard-feasibility verifier."],
+      "actorBoundary": "Packaged verify process followed by real HTTP import",
+      "claim": "Strict kernel verification rejects malformed, unsupported, mismatched, incomplete, tampered, and hard-invalid documents before workspace mutation.",
+      "evidence": [
+        {"kind": "packaged-test", "source": "kernel-cli/src/test/java/org/schoolkernel/cli/VerifyCliIT.java:78", "observation": "Successor-only and definition/result revision mismatch return exit 2 and structured INVALID_INPUT with no timetable."},
+        {"kind": "shared-verifier-test", "source": "kernel-cli/src/test/java/org/schoolkernel/cli/ReplanCliIT.java:73", "observation": "The same BaselineVerifier production path rejects tampering, lineage and school mismatch, duplicates, missing assignments, and hard collisions before solving."},
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:182", "observation": "Malformed HTTP input returns 422 and exact EMPTY/version 0/{} state."}
+      ],
+      "negativeObligations": ["No solver invocation by verify", "No candidate timetable", "No workspace mutation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 extension 2b",
+      "contract": "Definition-only import containing basedOnRevision is rejected without state change.",
+      "rules": ["RULE-9 definition-only mode rejects basedOnRevision."],
+      "actorBoundary": "Packaged School Kernel verify process",
+      "claim": "Successor-only input returns INVALID_INPUT and cannot reach persistence.",
+      "evidence": [{"kind": "packaged-test", "source": "kernel-cli/src/test/java/org/schoolkernel/cli/VerifyCliIT.java:84", "observation": "The test adds basedOnRevision to the initial definition and asserts exit 2 and status INVALID_INPUT."}],
+      "negativeObligations": ["No solver", "No workspace state"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 extension 2c",
+      "contract": "A definition/result import requires a complete FEASIBLE result matching the exact definition.",
+      "rules": ["RULE-9 baseline mode requires exact definition revision and direct hard validity."],
+      "actorBoundary": "Packaged verify process and accepted-pair HTTP route",
+      "claim": "Only an exact complete verified pair becomes ACCEPTED_BASELINE.",
+      "evidence": [
+        {"kind": "packaged-test", "source": "kernel-cli/src/test/java/org/schoolkernel/cli/VerifyCliIT.java:56", "observation": "A packaged-plan FEASIBLE result verifies with definitionRevision and timetableRevision equal by value."},
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:115", "observation": "The verified pair is stored atomically as the complete accepted definition, result, and manifest."}
+      ],
+      "negativeObligations": ["No incomplete/non-FEASIBLE pair", "No mismatched accepted baseline"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 extension 4a",
+      "contract": "Durable-storage failure reports incomplete import, exposes no accepted baseline, and leaves the workspace empty.",
+      "rules": ["RULE-7 requires all-or-nothing accepted-state transaction."],
+      "actorBoundary": "Real HTTP and PostgreSQL transaction with injected trigger failure",
+      "claim": "An accepted-pair write failure rolls back the entire state transition.",
+      "evidence": [{"kind": "database-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:333", "observation": "A BEFORE UPDATE trigger raises an error; HTTP returns 503, then assertions require EMPTY, version 0, and {} JSONB."}],
+      "negativeObligations": ["No accepted reference", "No definition/result/manifest residue", "No version increment"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 G1",
+      "contract": "Definition-only creates a draft; verified pair creates an accepted baseline; invalid input is never current.",
+      "rules": [],
+      "actorBoundary": "Real HTTP import representations and PostgreSQL state",
+      "claim": "Import modes have distinct durable lifecycle and acceptedTimetable values.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:93", "observation": "Definition mode asserts INITIAL_DRAFT and acceptedTimetable false; accepted-pair mode at line 115 asserts ACCEPTED_BASELINE and true."}],
+      "negativeObligations": ["No draft labeled accepted", "No invalid pair labeled current"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 G2",
+      "contract": "Identifiers are exact and names, weekdays, ordering, and optional times come from metadata rather than ID spelling.",
+      "rules": ["RULE-8 forbids reconstructing kernel documents or interpreting IDs."],
+      "actorBoundary": "Stored JSONB snapshot and native browser presentation",
+      "claim": "The complete imported document is retained by value and the browser never parses IDs into meaning.",
+      "evidence": [
+        {"kind": "database-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:108", "observation": "The test compares the complete stored initialDefinition tree to the uploaded bytes parsed as JSON."},
+        {"kind": "source-evidence", "source": "timetable-workspace/src/main/resources/static/workspace/app.js:26", "observation": "Presentation consumes explicit displayName/id fields; missing school name receives an explicit unavailable-name cue."}
+      ],
+      "negativeObligations": ["No ID spelling interpretation", "No identifier conversion"],
+      "counterEvidence": ["The current kernel contract does not provide a school-level display name, so the school ID is visibly used with an unavailable-name cue."]
+    },
+    {
+      "id": "UC-1 G3",
+      "contract": "Without a manifest, imported locks are persistent policy.",
+      "rules": [],
+      "actorBoundary": "Accepted-pair import manifest generation",
+      "claim": "Every imported period/room lock is recorded with PERSISTENT_POLICY origin.",
+      "evidence": [{"kind": "unit-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/ManifestServiceTest.java:18", "observation": "A definition with one period lock and one room lock yields sorted manifest entries whose origins are both PERSISTENT_POLICY."}],
+      "negativeObligations": ["No attempt-scoped inference"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 G4",
+      "contract": "Validation is isolated and accepts no unsupported schema or catalog version.",
+      "rules": ["RULE-24 requires disposable PostgreSQL and packaged CLI."],
+      "actorBoundary": "Packaged kernel and isolated PostgreSQL Testcontainers application",
+      "claim": "Every import journey uses isolated state and strict versioned schemas.",
+      "evidence": [
+        {"kind": "contract-test", "source": "kernel-cli/src/test/java/org/schoolkernel/contract/ContractTest.java:41", "observation": "Unsupported versions and coercive scalar types are rejected by the strict schema pipeline."},
+        {"kind": "integration-configuration", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:53", "observation": "The HTTP suite starts postgres:18.6 in a disposable container and resets the singleton row before each test."}
+      ],
+      "negativeObligations": ["No developer database", "No demo/runtime data", "No unsupported version"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 G5",
+      "contract": "Rejected or interrupted import persists no partial state and makes data unavailable beyond the local machine.",
+      "rules": ["RULE-21 requires loopback, Host/Origin, CSRF, and no CORS."],
+      "actorBoundary": "Real HTTP security and PostgreSQL state",
+      "claim": "Every tested refusal leaves exact empty state and the listener accepts only the configured local origin/port.",
+      "evidence": [
+        {"kind": "http-security-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:235", "observation": "Missing CSRF, hostile Origin, and absent Origin all return 403 and assert the exact empty row."},
+        {"kind": "http-security-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:255", "observation": "Hostile Host, wrong loopback port, CORS preflight, traversal, login, and actuator routes are denied without secret disclosure."}
+      ],
+      "negativeObligations": ["No remote access", "No partial state", "No candidate disclosure"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 success postcondition",
+      "contract": "Success leaves exactly one durable initial draft or verified accepted baseline.",
+      "rules": [],
+      "actorBoundary": "PostgreSQL singleton aggregate after HTTP success",
+      "claim": "Both successful modes leave version 1 and exactly the corresponding complete document state.",
+      "evidence": [{"kind": "database-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:93", "observation": "Definition and accepted-pair tests assert lifecycle, version, and complete JSON values after the response."}],
+      "negativeObligations": [],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 minimal guarantee",
+      "contract": "Failure leaves the workspace empty and discloses or accepts no candidate timetable.",
+      "rules": [],
+      "actorBoundary": "Real HTTP failure responses and PostgreSQL row",
+      "claim": "All import refusal families assert the canonical empty row and candidate absence.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:182", "observation": "Result-only, malformed, missing If-Match, and stale requests assert EMPTY/version 0/{}; result-only body lacks assignments."}],
+      "negativeObligations": ["No candidate", "No accepted baseline", "No partial draft"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-1 relations",
+      "contract": "UC-1 has no Requires, Includes, or Extends relations.",
+      "rules": [],
+      "actorBoundary": "Feature relationship graph",
+      "claim": "UC-1 is an eligible root and does not consume an unapproved use case.",
+      "evidence": [{"kind": "specification", "source": "spec/timetable-workspace/spec.md:184", "observation": "The UC-1 relation block lists none for all three relation types."}],
+      "negativeObligations": [],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-1",
+      "contract": "Separate resource-only contract, CLI, and workspace modules preserve the process boundary and the contract JAR has no classes.",
+      "rules": [],
+      "actorBoundary": "Clean Maven reactor and compiled workspace classes",
+      "claim": "The reactor graph and bytecode enforce the required module/process separation.",
+      "evidence": [
+        {"kind": "architecture-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/ArchitectureTest.java:13", "observation": "ArchUnit finds no workspace production dependency on kernel implementation packages."},
+        {"kind": "archive-inspection", "source": "kernel-contract/target/kernel-contract-1.0.0-SNAPSHOT.jar", "observation": "jar tf filtered for .class returned no entries after clean verify."}
+      ],
+      "negativeObligations": ["No in-process kernel implementation dependency", "No compiled public Java API"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-2",
+      "contract": "The pinned Java/Spring/PostgreSQL stack is used and excluded persistence/frontend stacks and Timefold internals are absent.",
+      "rules": [],
+      "actorBoundary": "Effective Maven reactor and clean Java 25 build",
+      "claim": "The clean reactor uses the selected versions and allowed technology set.",
+      "evidence": [{"kind": "build", "source": "pom.xml and timetable-workspace/pom.xml", "observation": "mvn -q clean verify passed under Java 25; PostgreSQL 18.6 Testcontainers started; dependency tree resolved Jackson 3.2.2 and source checks found no Timefold .impl import."}],
+      "negativeObligations": ["No JPA/Hibernate/Spring Data JDBC/H2/Node/frontend framework/prerelease/Timefold .impl"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-3",
+      "contract": "One relationally guarded JSONB singleton is the sole workspace persistence model and uses JdbcClient SQL.",
+      "rules": [],
+      "actorBoundary": "Fresh PostgreSQL schema and repository",
+      "claim": "The exact singleton guard columns and one authoritative JSONB document round-trip without a second store.",
+      "evidence": [{"kind": "database-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:100", "observation": "Assertions compare state/version and complete stored JSONB after import; the migration creates only workspace_aggregate and its singleton seed."}],
+      "negativeObligations": ["No parallel persistence model", "No second workspace row"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-4",
+      "contract": "Flyway is the only schema authority and fresh state contains one EMPTY aggregate with no school data.",
+      "rules": [],
+      "actorBoundary": "Spring startup against fresh PostgreSQL 18.6",
+      "claim": "Flyway validates and applies the sole forward migration to the exact empty singleton.",
+      "evidence": [{"kind": "integration-run", "source": "mvn -q clean verify PostgreSQL logs", "observation": "Flyway reported an empty schema, validated one migration, applied V1, and the before-each assertions read EMPTY/version 0/{}."}],
+      "negativeObligations": ["No runtime DDL generation", "No school-data seed"],
+      "counterEvidence": ["There is no retained prior migration state yet; checksum-drift startup refusal is configured through Flyway validation but not exercised by a dedicated test in this checkpoint."]
+    },
+    {
+      "id": "RULE-5",
+      "contract": "Exactly eight lifecycle values exist and every unlisted transition is refused without side effects.",
+      "rules": [],
+      "actorBoundary": "Import application service and conditional PostgreSQL mutation",
+      "claim": "UC-1 allows only EMPTY to INITIAL_DRAFT or ACCEPTED_BASELINE; occupied import is refused with exact state preservation.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:309", "observation": "After a first import, a second returns 409 INVALID_WORKSPACE_TRANSITION and assertions compare the prior version and entire JSON document unchanged."}],
+      "negativeObligations": ["No version increment on refusal", "No process launch after occupied-state check"],
+      "counterEvidence": ["Transitions belonging exclusively to later use cases are represented in the enum/migration but are not executable routes yet."]
+    },
+    {
+      "id": "RULE-6",
+      "contract": "Strong ETag/If-Match and the same SQL version guard serialize every mutation with exact 428/412 failures and one racing winner.",
+      "rules": [],
+      "actorBoundary": "Real HTTP requests racing against conditional PostgreSQL SQL",
+      "claim": "Missing and stale preconditions do not mutate; simultaneous same-version imports yield exactly one durable winner.",
+      "evidence": [{"kind": "http-concurrency-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:215", "observation": "Two virtual-thread POSTs with the same ETag produce sorted statuses [200,412], state INITIAL_DRAFT, version 1, and one exact definition tree."}],
+      "negativeObligations": ["No loser mutation", "No loser version increment"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-7",
+      "contract": "Accepted-bundle import stores all accepted fields and advances state in one rollback-safe transaction.",
+      "rules": [],
+      "actorBoundary": "Transactional JdbcClient update",
+      "claim": "The accepted pair is one JSONB replacement and an injected database failure leaves every guard/document value unchanged.",
+      "evidence": [{"kind": "database-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:333", "observation": "A trigger rejects the one update; the post-failure row is exactly EMPTY/version 0/{} with no accepted baseline."}],
+      "negativeObligations": ["No half bundle", "No advanced accepted reference"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-8",
+      "contract": "Kernel JSON fidelity and canonical revision semantics are preserved without ID interpretation or display-model reconstruction.",
+      "rules": [],
+      "actorBoundary": "Canonical process files, JSONB storage, and browser snapshot",
+      "claim": "Imported documents round-trip by JSON value and canonical process bytes use the kernel RFC 8785 implementation.",
+      "evidence": [
+        {"kind": "database-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:128", "observation": "Accepted definition and result nodes are compared in full to the uploaded document trees."},
+        {"kind": "canonicalization-test", "source": "kernel-cli/src/test/java/org/schoolkernel/contract/ContractTest.java:63", "observation": "Independent RFC 8785 vectors and definition/timetable revision scope tests pass."}
+      ],
+      "negativeObligations": ["No Unicode normalization", "No ID parsing", "No document reconstruction"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-9",
+      "contract": "verify is a structured, non-solving public command covering both modes and all named integrity checks.",
+      "rules": [],
+      "actorBoundary": "Packaged school-kernel executable",
+      "claim": "The command returns schema-valid VERIFIED/INVALID_INPUT evidence with correct exit codes and no timetable or solver invocation.",
+      "evidence": [{"kind": "packaged-test", "source": "kernel-cli/src/test/java/org/schoolkernel/cli/VerifyCliIT.java:33", "observation": "Six packaged-process tests cover both modes, malformed/successor/mismatch input, no solve controls/logs/candidate, token/byte bounds, schema validity, and concurrent publication."}],
+      "negativeObligations": ["No solve", "No timetable/candidate", "No historical provenance claim"],
+      "counterEvidence": ["Several baseline mutation families are asserted through the same shared BaselineVerifier in packaged replan tests rather than repeated individually through verify."]
+    },
+    {
+      "id": "RULE-13",
+      "contract": "Every kernel invocation uses private bounded temporary files/streams, no debug, explicit correlation, and cleanup.",
+      "rules": [],
+      "actorBoundary": "Workspace KernelVerifier process adapter",
+      "claim": "Verify runs in a new owner-only directory with distinct files, capped drains, safe structured output, and finally cleanup.",
+      "evidence": [{"kind": "source-evidence", "source": "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelVerifier.java:41", "observation": "The adapter creates a temp directory, applies POSIX owner permissions, writes distinct canonical inputs/output, passes correlation-id, bounds both drains to 64 KiB retained data, and deletes the tree in finally."}],
+      "negativeObligations": ["No --debug", "No accepted/import file used as output", "No raw stderr to browser"],
+      "counterEvidence": ["Private permission, oversized child-output, and cleanup failure families are established by code inspection rather than dedicated adapter fault-injection tests in this checkpoint."]
+    },
+    {
+      "id": "RULE-14",
+      "contract": "Import JSON/manifest/archive sizes and exact ZIP structure are bounded and entries are never extracted.",
+      "rules": [],
+      "actorBoundary": "SafeImportReader before packaged kernel invocation",
+      "claim": "Bounded stream reads reject size, count, duplicate, missing, extra, directory, traversal, separator, encrypted/unreadable, truncation, and bomb forms before persistence.",
+      "evidence": [
+        {"kind": "unit-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/SafeImportReaderTest.java:41", "observation": "Exact archive parsing succeeds in memory; extra/traversal and over-limit document forms are rejected."},
+        {"kind": "source-evidence", "source": "timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java:64", "observation": "Compressed, per-entry, total-uncompressed and entry-count bounds are checked while reading ZipInputStream; only exact root names enter an in-memory map and no extraction API is used."}
+      ],
+      "negativeObligations": ["No extraction", "No persistence", "No planning"],
+      "counterEvidence": ["The full one-byte boundary and malformed-archive matrix named by the rule is not represented by separate test cases; only representative over-limit and unsafe forms are automated here."]
+    },
+    {
+      "id": "RULE-21",
+      "contract": "The local no-identity surface is loopback-only, same-origin, CSRF-protected, CORS-disabled, and narrowly routed.",
+      "rules": [],
+      "actorBoundary": "Real Tomcat HTTP server and Spring Security chain",
+      "claim": "Only the UC-1 route subset and static workspace are reachable on the configured loopback origin/port.",
+      "evidence": [{"kind": "http-security-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:255", "observation": "The test proves root redirect and workspace asset success, while login/actuator/CORS preflight/hostile Host/wrong local port/traversal are denied; mutation tests cover valid, missing, and hostile CSRF/Origin."}],
+      "negativeObligations": ["No remote listener", "No CORS", "No forwarded-host trust", "No login/management routes"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-22",
+      "contract": "Failures use the stable safe JSON problem shape and mapped HTTP statuses without technical or candidate disclosure.",
+      "rules": [],
+      "actorBoundary": "Real HTTP error responses",
+      "claim": "UC-1 failure families return stable codes/status/state/ETag/correlation fields and safe messages.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceImportIT.java:182", "observation": "The suite asserts 403,409,412,422,428,503 mappings, stable codes, state/correlation where applicable, and absence of assignments/secrets."}],
+      "negativeObligations": ["No stack trace", "No SQL/path/raw stderr/uploaded value/candidate"],
+      "counterEvidence": ["Dedicated production-response scans for every prohibited token are not separate tests; representative candidate, secret, and password disclosures are asserted absent."]
+    },
+    {
+      "id": "RULE-23",
+      "contract": "Logs are safe structured stderr summaries and retain only required non-sensitive validation evidence.",
+      "rules": [],
+      "actorBoundary": "Workspace process adapter logging",
+      "claim": "Normal import logs only correlation ID, verify command, exit class, and elapsed time and never log school documents.",
+      "evidence": [{"kind": "runtime-log", "source": "mvn -q clean verify WorkspaceImportIT output", "observation": "Each verify completion line contains correlationId, kernelCommand=verify, exitClass, and elapsedTimeMs; no definition/result/display name/assignment/path appears."}],
+      "negativeObligations": ["No definitions/results/names/assignments/credentials/tokens/session IDs/filenames/paths/exception details"],
+      "counterEvidence": ["Captured logging tests for every failure class are not present as a dedicated test family in this checkpoint."]
+    },
+    {
+      "id": "RULE-24",
+      "contract": "Each use case has real HTTP and browser success journeys on disposable PostgreSQL 18.6; kernel-dependent paths use the packaged CLI.",
+      "rules": [],
+      "actorBoundary": "Maven verify, PostgreSQL Testcontainers, packaged launcher, and browser",
+      "claim": "UC-1 has all required outer-boundary success and negative journeys with no database substitute.",
+      "evidence": [
+        {"kind": "clean-suite", "source": "mvn -q clean verify", "observation": "96 tests passed with 0 failures/errors/skips; logs show postgres:18.6, Flyway, ephemeral Tomcat, and packaged verify invocations."},
+        {"kind": "browser-runtime", "source": "output/playwright/uc1-initial-draft.png", "observation": "A real browser imported the fixture and observed the durable initial-draft state with no console errors or warnings."}
+      ],
+      "negativeObligations": ["No H2/mock JDBC/developer DB", "No tracked runtime-data writes"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-26",
+      "contract": "Typed handlers, shared loading/baseline verification, independent hard validation, exhaustive mappings, and no Throwable catch preserve kernel boundaries.",
+      "rules": [],
+      "actorBoundary": "Compiled kernel architecture and packaged commands",
+      "claim": "Plan/replan/verify share strict production pipelines and only the CLI constructs adapters/maps sealed outcomes.",
+      "evidence": [{"kind": "architecture-test", "source": "kernel-cli/src/test/java/org/schoolkernel/architecture/KernelArchitectureTest.java:28", "observation": "Four architecture tests assert CLI-only adapter construction, separate handlers returning the sealed outcome family, absence of catch(Throwable), and public Timefold boundary; packaged tests exercise the shared paths."}],
+      "negativeObligations": ["No adapter construction outside CLI", "No fatal Error conversion", "No drifted definition/baseline validation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-27",
+      "contract": "One immutable catalog and manifest-derived kernel version drive all metadata; solver uses only public SolverManager/SolverJob APIs.",
+      "rules": [],
+      "actorBoundary": "Kernel metadata tests and compiled architecture",
+      "claim": "Catalog fields are exact, malformed package version fails safely, and no internal Timefold API is referenced.",
+      "evidence": [
+        {"kind": "unit-test", "source": "kernel-cli/src/test/java/org/schoolkernel/domain/KernelCatalogTest.java:13", "observation": "The test compares the complete catalog version, ordered IDs, categories, and weights by value."},
+        {"kind": "architecture-test", "source": "kernel-cli/src/test/java/org/schoolkernel/architecture/KernelArchitectureTest.java:66", "observation": "ArchUnit rejects Timefold types outside the solver adapter package and any .impl dependency; solver integration uses SolverManager/SolverJob."}
+      ],
+      "negativeObligations": ["No duplicate version constant", "No Timefold .impl API"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-28",
+      "contract": "Kernel inputs are byte/token/depth bounded and atomic publication is exactly-one without force and replacement with force.",
+      "rules": [],
+      "actorBoundary": "Unit file boundary and concurrent packaged verify processes",
+      "claim": "Every numeric boundary is tested and concurrent publication preserves complete destination bytes with exit 74 for refusal.",
+      "evidence": [
+        {"kind": "boundary-test", "source": "kernel-cli/src/test/java/org/schoolkernel/contract/JsonSupportLimitsTest.java:14", "observation": "Depth 64, string 1 MiB, and number 100 are each tested below/at/above; byte tests do the same at 10 MiB."},
+        {"kind": "packaged-concurrency-test", "source": "kernel-cli/src/test/java/org/schoolkernel/cli/VerifyCliIT.java:158", "observation": "Two unforced publishers yield [0,74] and schema-valid output; forced publishers both succeed and the last completed correlation ID owns a complete output."}
+      ],
+      "negativeObligations": ["No verifier/solver after limit breach", "No partial destination", "No overwritten destination without force"],
+      "counterEvidence": ["Controlled crash and injected filesystem capability/close/link/move failures are not all represented as packaged-process fault-injection cases; lower-level atomic boundary tests cover ordinary supported-filesystem behavior."]
+    }
+  ]
+}
