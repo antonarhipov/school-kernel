@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "demo-school",
+  "displayName": "Demo School",
   "subjects": [
     { "id": "math", "displayName": "Mathematics" },
     { "id": "science", "displayName": "Science" }

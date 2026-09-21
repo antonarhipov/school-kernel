@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "search-conflict-school",
+  "displayName": "Search Conflict School",
   "subjects": [{ "id": "math", "displayName": "Mathematics" }],
   "teachers": [{
     "id": "teacher-1",

@@ -2,18 +2,30 @@
 
 ## Current
 
-- Use case: none
-- Status: APPROVED
+- Use case: UC-1
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | APPROVED | none | `8c2fb7f`; revises `422a774` for C-1 and C-2 | `spec/convergence/UC-1.md` - APPROVE |
-| UC-2 | APPROVED | UC-1 | `e6401f6`; revises `acd488c` for C-2 | `spec/convergence/UC-2.md` - APPROVE |
+| UC-1 | READY_FOR_CONVERGENCE | none | HEAD at convergence; revises `8c2fb7f` for required school `displayName` | pending reconvergence |
+| UC-2 | NEEDS_REVISION | UC-1 | `e6401f6`; school `displayName` contract revision pending | prior `spec/convergence/UC-2.md` - APPROVE |
 
 ## UC-1 Evidence
+
+- Contract revision started: 2026-09-21
+- Contract revision base: `d0e90317359b08be026c9d8f9a8f37195cbea3f7`
+- Contract revision decision: required nonblank school-level `displayName`; it participates in the complete definition revision.
+- Pre-existing dirty files for this reconciliation: timetable-workspace UC-1 revision files; they are excluded from the
+  kernel UC-1 submission.
+- Contract revision submission: HEAD at convergence.
+- Contract revision changed files: definition schema, DTO/domain propagation, kernel specification/decision, all
+  definition fixtures/examples and regenerated lineage, constructor-call regressions, `ContractTest`, this status, and
+  `checkpoints/UC-1.md`.
+- Contract revision verification: `mvn -q clean verify` - PASS, 120 tests, 0 failures/errors/skips (85 kernel and 35
+  timetable-workspace); `git diff --check` - PASS; tests caused no tracked-file drift.
 
 - Started: 2026-09-19T23:38:42Z
 - Completed: 2026-09-20T00:17:06Z

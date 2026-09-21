@@ -3,10 +3,10 @@
 ## Summary
 
 - Status: READY_FOR_CONVERGENCE
-- Base commit: `24efd35` (revision after convergence rejection)
+- Base commit: `d0e90317359b08be026c9d8f9a8f37195cbea3f7` (required school `displayName` contract revision)
 - Submission commit: `HEAD at convergence`
 - Relations verified: none; UC-1 has no Requires, Includes, or Extends relation
-- Prior convergence findings addressed: C-1 and C-2 from `spec/convergence/UC-1.md`
+- Prior convergence: APPROVED; invalidated only by the user-selected required school `displayName` contract revision
 
 ## Contract Evidence
 
@@ -27,12 +27,12 @@
 | UC-1 extension 2g | Injected late solver failure returns safe `INTERNAL_ERROR`, hides technical detail, publishes no timetable, and retains school/catalog/revision/weights/seed/limit in `PlanServiceTest.unexpectedFailurePublishesSafeInternalError` (`PlanServiceTest.java:74`) | PASS |
 | UC-1 extension 2h | SIGINT exits 130 without destination publication in `PlanCliIT.interruptionDoesNotPublish` (`PlanCliIT.java:269`) | PASS |
 | UC-1 extension 2i | Injected publication failure exits 74 and preserves destination bytes in `PlanServiceTest.publicationFailurePreservesDestination` (`PlanServiceTest.java:122`) | PASS |
-| UC-1 G1 | Draft 2020-12 schema and semantic validation cover typed, case-sensitive identity, references, qualification, series, availability, periods, locks, weights, and overflow; representative tests at `ContractTest.java:21` and `DefinitionValidatorTest.java:20` | PASS |
+| UC-1 G1 | Draft 2020-12 schema and semantic validation cover typed, case-sensitive identity, references, qualification, series, availability, periods, locks, weights, overflow, and the required nonblank school `displayName`; `kernel-cli/src/test/java/org/schoolkernel/contract/ContractTest.java` exercises missing, blank, and Unicode school names. | PASS |
 | UC-1 G2 | Ten hard constraints each have matching and non-matching ConstraintVerifier evidence in `SchoolConstraintProviderTest` (`src/test/java/org/schoolkernel/solver/SchoolConstraintProviderTest.java:26`); independent post-solve check at `src/main/java/org/schoolkernel/application/PlanService.java:200` | PASS |
 | UC-1 G3 | Four exact soft catalog rows and semantics are tested at `SchoolConstraintProviderTest.java:112`; result order and weights are asserted at `PlanCliIT.java:36` | PASS |
 | UC-1 G4 | Every packaged structured status is checked with the offline result schema; malformed input proves seed/limit retention and late internal failure proves retention of every already-derived field | PASS |
 | UC-1 G5 | Incomplete adapter result is refused at `PlanServiceTest.incompleteSolverCandidateIsRefused` (`PlanServiceTest.java:100`); unsuccessful search has diagnostics only at `PlanCliIT.java:185` | PASS |
-| UC-1 G6 | Published RFC 8785 number vector, independent SHA-256 digest, normalized definition ordering, timetable scope mutation, exact preserved IDs, and packaged timetable-revision recomputation using only published `schemaVersion`, `schoolId`, `inputRevision`, and assignments | PASS |
+| UC-1 G6 | Published RFC 8785 number vector, independent SHA-256 digest, normalized definition ordering, school-name revision mutation, timetable scope mutation, exact preserved IDs, and packaged timetable-revision recomputation using only published `schemaVersion`, `schoolId`, `inputRevision`, and assignments | PASS |
 | UC-1 G7 | Seed, one-thread mode, default/selected limit, and deterministic move budget at `SolverConfigurationTest` (`src/test/java/org/schoolkernel/solver/SolverConfigurationTest.java:17`) and distribution test (`PlanCliIT.java:287`) | PASS |
 | UC-1 G8 | Runtime reports effective controls without claiming cross-machine byte identity; README states the bounded reproducibility contract | PASS |
 | UC-1 G9 | Refusal preserves bytes and `--force` atomically replaces in `PlanCliIT.overwriteRules` (`PlanCliIT.java:231`); same-path remains forbidden | PASS |
@@ -64,16 +64,29 @@
 ## Validation
 
 - Focused commands: `./mvnw -Pbenchmark test` - 1/0/0/0 and 11,821 ms observed; dependency tree - success with exact pinned versions.
-- Full relevant suite after C-1/C-2 revision: `./mvnw -q clean verify` - 45 run, 0 failed, 0 errors, 0 skipped.
+- Full relevant suite after the school-name contract revision: `mvn -q clean verify` - 120 run, 0 failed,
+  0 errors, 0 skipped (85 kernel and 35 timetable-workspace regression tests).
 - Working tree impact from tests: none; only ignored `target/` outputs were generated.
-- Runtime evidence: fresh scheduling-client journey published exit-0 `FEASIBLE` with `schoolId: demo-school`, seed 0, step limit 100, two assignments, and revisions. Fresh malformed-input journey exited 2 with no timetable and retained seed 0 / step limit 10.
+- Runtime evidence: packaged plan/verify/replan journeys accepted named definitions, published exit-0 `FEASIBLE`
+  results with revised lineage, and rejected missing/blank names as `INVALID_INPUT` without solver evidence.
 - Changed files: exact UC-1 paths are listed in `spec/status.md`; implementation spans pinned build/distribution, CLI/application, strict schemas/DTO/domain, Timefold adapter/catalog, examples/docs, layered tests, and this checkpoint.
-- Approved UCs regression-tested: none; UC-1 is the first use case.
+- Approved UCs regression-tested: prior UC-2 behavior and the timetable-workspace import boundary both passed in the
+  full reactor run; UC-2 remains `NEEDS_REVISION` until its own checkpoint is reconciled.
+
+## Contract Revision Evidence
+
+| Element | Evidence | Result |
+|---|---|---|
+| Required serialized field | `kernel-contract/src/main/resources/schema/school-definition-v1.schema.json` requires `displayName` and reuses the nonblank display-name definition. | PASS |
+| DTO and validated domain fidelity | `SchoolDefinitionDto`, `DefinitionValidator`, and `SchoolDefinition` carry the school name without deriving it from `schoolId`. | PASS |
+| Revision identity | `ContractTest.schoolDisplayNameContract` proves a Unicode name is accepted and changing only it changes the definition revision. | PASS |
+| Invalid input | `ContractTest.schoolDisplayNameContract` and packaged `VerifyCliIT.rejectsCompleteBaselineInvalidityMatrix` reject missing and blank names without solving. | PASS |
+| Existing plan behavior | All initial-definition fixtures now supply a school name; the packaged plan and result lineage regressions remain green. | PASS |
 
 ## Notes
 
-This revision resolves C-1 and C-2 without changing UC-1 behavior outside the result envelope. The default suite also
-ran two concurrent fixture tests successfully. Their test source and three resources are not part of this submission
-and must remain unstaged. There are no approved deviations.
+This submission preserves the previously approved UC-1 behavior and reconciles it with the selected complete-definition
+contract. Timetable-workspace revision files were already dirty at the reconciliation base and are excluded from this
+kernel submission. There are no approved deviations.
 
 READY FOR CONVERGENCE: UC-1

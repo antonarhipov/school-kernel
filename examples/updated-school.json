@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "demo-school",
-  "basedOnRevision": "sha256:cdbf20756fef7b07f1e47622f0c549137f859ccd86d13a5798c8033bc6d0cc9e",
+  "displayName": "Demo School",
+  "basedOnRevision": "sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14",
   "subjects": [
     { "id": "math", "displayName": "Mathematics" },
     { "id": "science", "displayName": "Science" }

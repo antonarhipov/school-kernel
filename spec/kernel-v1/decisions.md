@@ -27,7 +27,8 @@ This document records the complete set of accepted decisions for School Kernel v
 - **D073 — Target scale:** v1 is deliberately designed and benchmarked for one school week containing up to 1,000 lessons, 100 teachers, 60 cohorts, 100 rooms, and 60 periods.
 - **D109 — Empty problem:** A definition with no lessons is valid and immediately produces a feasible empty timetable.
 - **D110 — Weekdays:** Periods may use any ISO weekday from Monday through Sunday. The declared periods determine the actual school week.
-- **D111 — Display names:** Every entity has a nonblank display name. Display names need not be unique; IDs alone establish identity and references.
+- **D111 — Display names:** The school and every entity have a nonblank display name. Display names need not be unique;
+  IDs alone establish identity and references.
 
 ## Feasibility, validation, and diagnostics
 

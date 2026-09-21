@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "merivalja-example",
+  "displayName": "Merivälja Kool",
   "subjects": [
     { "id": "int-o", "displayName": "IntÕ" },
     { "id": "estonian", "displayName": "Eesti keel" },

@@ -5,13 +5,14 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schemaVersion", "catalogVersion", "schoolId", "subjects", "teachers",
+    "schemaVersion", "catalogVersion", "schoolId", "displayName", "subjects", "teachers",
     "cohorts", "rooms", "periods", "lessons"
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
     "catalogVersion": { "const": 1 },
     "schoolId": { "$ref": "#/$defs/id" },
+    "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
     "subjects": { "type": "array", "items": { "$ref": "#/$defs/subject" } },
     "teachers": { "type": "array", "items": { "$ref": "#/$defs/teacher" } },

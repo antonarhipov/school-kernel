@@ -159,6 +159,28 @@ class PlanCliIT {
         assertFalse(unsupportedResult.has("catalogVersion"));
         assertEquals(10, unsupportedResult.path("limit").path("steps").intValue());
         assertTrue(resultSchema().validate(unsupportedResult).isEmpty());
+
+        for (String name : List.of("missing-school-name", "blank-school-name")) {
+            Path invalid = copyFixture("valid-plan.json", name + ".json");
+            var invalidJson = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper().readTree(invalid);
+            if (name.startsWith("missing")) {
+                invalidJson.remove("displayName");
+            } else {
+                invalidJson.put("displayName", " ");
+            }
+            Files.write(invalid, JsonSupport.mapper().writeValueAsBytes(invalidJson));
+            Path invalidOutput = temporaryDirectory.resolve(name + "-result.json");
+
+            ProcessResult invalidProcess = run("plan", "--definition", invalid.toString(), "--output",
+                    invalidOutput.toString(), "--step-limit", "10");
+
+            assertEquals(2, invalidProcess.exitCode(), name);
+            JsonNode invalidResult = JsonSupport.mapper().readTree(invalidOutput);
+            assertEquals("INVALID_INPUT", invalidResult.path("status").stringValue(), name);
+            assertFalse(invalidResult.has("timetable"), name);
+            assertFalse(invalidProcess.stderr().contains("Solving started"), name);
+            assertTrue(resultSchema().validate(invalidResult).isEmpty(), name);
+        }
     }
 
     @Test

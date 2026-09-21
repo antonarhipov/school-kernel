@@ -231,7 +231,7 @@ The logical definition contains the following data. Versioned JSON Schema fixes 
 
 | Structure | Required logical fields and rules |
 |---|---|
-| Definition | `schemaVersion`, `catalogVersion`, `schoolId`, subjects, teachers, cohorts, rooms, periods, lessons, and optional soft-constraint overrides. `basedOnRevision` is forbidden for UC-1 and required for UC-2. A claimed current revision is forbidden. |
+| Definition | `schemaVersion`, `catalogVersion`, `schoolId`, nonblank school `displayName`, subjects, teachers, cohorts, rooms, periods, lessons, and optional soft-constraint overrides. `basedOnRevision` is forbidden for UC-1 and required for UC-2. A claimed current revision is forbidden. |
 | Subject | Stable `id` and nonblank `displayName`. |
 | Teacher | Stable `id`, nonblank `displayName`, qualified subject IDs, optional availability period IDs, and optional undesirable period IDs. |
 | Cohort | Stable `id`, nonblank `displayName`, positive integer size, optional availability period IDs, and optional undesirable period IDs. |
@@ -388,7 +388,8 @@ The diagnostics are aggregated from the best available diagnostic candidate and 
 - An input definition never contains its own claimed revision.
 - Revision-bearing content is normalized into deterministic entity, reference-set, and assignment order, serialized according to RFC 8785 JSON Canonicalization Scheme, and hashed with SHA-256.
 - A revision is encoded as `sha256:` followed by lowercase hexadecimal digest text.
-- The definition revision covers all definition data that changes scheduling semantics, including `schemaVersion`, `catalogVersion`, `schoolId`, `basedOnRevision` when present, resources, lessons, locks, and soft overrides.
+- The definition revision covers the complete normalized definition, including `schemaVersion`, `catalogVersion`,
+  `schoolId`, school `displayName`, `basedOnRevision` when present, resources, lessons, locks, and soft overrides.
 - Caller correlation, seed, solve limit, filesystem paths, elapsed time, and diagnostic output are excluded from the definition revision.
 - `timetableRevision` covers exactly `schemaVersion`, `schoolId`, `inputRevision`, and the canonical assignments. It excludes scores, diagnostics, change reports, correlation data, and timing metadata.
 - Manual changes to assignment content therefore invalidate the timetable revision. Changes to excluded non-assignment metadata do not create a different timetable state.

@@ -6,6 +6,7 @@ public record SchoolDefinitionDto(
         int schemaVersion,
         int catalogVersion,
         String schoolId,
+        String displayName,
         String basedOnRevision,
         List<SubjectDto> subjects,
         List<TeacherDto> teachers,

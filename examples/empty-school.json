@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "empty-school",
+  "displayName": "Empty School",
   "subjects": [],
   "teachers": [],
   "cohorts": [],

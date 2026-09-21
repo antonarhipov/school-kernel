@@ -51,6 +51,25 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("UC-1 G1: school displayName is required, nonblank, Unicode metadata and revision-bearing")
+    void schoolDisplayNameContract() throws Exception {
+        var valid = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        var missing = valid.deepCopy();
+        missing.remove("displayName");
+        assertFalse(new DefinitionSchemaValidator().validate(missing).isEmpty());
+        var blank = valid.deepCopy();
+        blank.put("displayName", "");
+        assertFalse(new DefinitionSchemaValidator().validate(blank).isEmpty());
+        var unicode = valid.deepCopy();
+        unicode.put("displayName", "Õppekool 🎓");
+        assertTrue(new DefinitionSchemaValidator().validate(unicode).isEmpty());
+        assertNotEquals(
+                new RevisionService().definitionRevision(valid),
+                new RevisionService().definitionRevision(unicode));
+    }
+
+    @Test
     @DisplayName("RULE-3: bundled result schema is valid Draft 2020-12 and resolves offline")
     void resultSchemaLoadsOffline() throws Exception {
         try (InputStream input = ContractTest.class.getResourceAsStream("/schema/result-v1.schema.json")) {

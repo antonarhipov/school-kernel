@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "test-school",
+  "displayName": "Test School",
   "subjects": [{ "id": "math", "displayName": "Mathematics" }],
   "teachers": [{
     "id": "teacher-1",

@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "catalogVersion": 1,
   "schoolId": "no-room-school",
+  "displayName": "No Room School",
   "subjects": [{ "id": "science", "displayName": "Science" }],
   "teachers": [{
     "id": "teacher-1",

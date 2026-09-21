@@ -72,6 +72,9 @@ public final class DefinitionValidator {
     }
 
     private static void checkDisplayNames(SchoolDefinitionDto input, List<ValidationError> errors) {
+        if (input.displayName().isBlank()) {
+            error(errors, "/displayName", List.of(input.schoolId()), "displayName must not be blank");
+        }
         checkNames("subjects", input.subjects(), SubjectDto::id, SubjectDto::displayName, errors);
         checkNames("teachers", input.teachers(), TeacherDto::id, TeacherDto::displayName, errors);
         checkNames("cohorts", input.cohorts(), CohortDto::id, CohortDto::displayName, errors);
@@ -434,7 +437,8 @@ public final class DefinitionValidator {
                         set(value.undesirablePeriodIds()), value.periodLock(), value.roomLock()))
                 .toList();
         return new SchoolDefinition(
-                input.schemaVersion(), input.catalogVersion(), input.schoolId(), input.basedOnRevision(),
+                input.schemaVersion(), input.catalogVersion(), input.schoolId(), input.displayName(),
+                input.basedOnRevision(),
                 subjects, teachers, cohorts, rooms,
                 periods, lessons, Map.copyOf(effectiveWeights(input.softConstraintOverrides())));
     }

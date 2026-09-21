@@ -70,6 +70,7 @@ class ReplanningSolverTest {
                 1,
                 1,
                 "school",
+                "School",
                 "sha256:" + "0".repeat(64),
                 List.of(new SchoolDefinition.Subject("subject", "Subject")),
                 List.of(new SchoolDefinition.Teacher(
