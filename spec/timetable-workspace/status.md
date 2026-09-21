@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
+- Status: BLOCKED
 - Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | HEAD at convergence | Pending |
+| UC-1 | BLOCKED | none | `2671b2a24e7d97b0bc3363a952011a99593e19d1` | `convergence/UC-1.md` — BLOCKED (C-1 through C-3; G-1 through G-10) |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
@@ -48,7 +48,8 @@
 
 ## Blockers
 
-None.
+UC-1 C-1 requires a product decision: add a normative school display-name field to the kernel definition contract, or
+revise the workspace behavior to permit the explicit stable-ID unavailable-name fallback. See `convergence/UC-1.md`.
 
 ## Deviations
 
