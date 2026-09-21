@@ -4,7 +4,7 @@
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-3.md` at `1a796d273e0105dc74a9eda3411b7a04ef4dad3c`
 - Walkthrough enablement: Compose-managed local database support at `2523205`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Suite: final clean run 141 tests, 0 failures, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -83,8 +83,7 @@
 
 ## Findings
 
-None. Automated evidence is strong. Approval remains withheld only because the required human UI walkthrough has not
-yet been confirmed.
+None. Automated evidence is strong and the required human UI walkthrough is confirmed.
 
 The first two clean runs after adding Compose support exposed the existing day-change timing path at 368.5 ms and
 281.3 ms p95 under loaded-suite conditions. The accepted model now indexes assignments by class/period once and avoids
@@ -94,7 +93,7 @@ correction, not hidden as a retry.
 
 ## Walkthrough
 
-User result: pending.
+User result: PASS, confirmed by the user on 2026-09-21.
 
 1. Open an accepted workspace on a desktop-width screen. Select a weekday and confirm every declared class remains a
    row, definition-ordered periods are columns, empty cells are visible, and occupied cells lead with subject and show
@@ -113,8 +112,8 @@ User result: pending.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; next eligible UCs: none until the walkthrough is confirmed.
+`PENDING_WALKTHROUGH` -> `APPROVED`; next eligible UCs: UC-4 and UC-8.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm the six UC-3 administrator walkthrough steps above.
+APPROVED
