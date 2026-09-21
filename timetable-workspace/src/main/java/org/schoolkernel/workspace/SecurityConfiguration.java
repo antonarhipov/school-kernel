@@ -23,8 +23,11 @@ public class SecurityConfiguration {
                 .logout(logout -> logout.disable())
                 .requestCache(cache -> cache.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/", "/workspace/**", "/api/csrf", "/api/workspace").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/import").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/workspace/**", "/api/csrf", "/api/workspace",
+                                "/api/runs/*", "/api/proposal").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/import", "/api/initial-draft/replace",
+                                "/api/runs", "/api/proposal/accept").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/runs/*", "/api/proposal").permitAll()
                         .anyRequest().denyAll())
                 .csrf(Customizer.withDefaults())
                 .exceptionHandling(errors -> errors.accessDeniedHandler(accessDeniedHandler(problems)))

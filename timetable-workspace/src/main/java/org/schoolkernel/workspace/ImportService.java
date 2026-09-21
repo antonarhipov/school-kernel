@@ -68,6 +68,28 @@ public class ImportService {
         return mutation.importVerified(expectedVersion, nextState, workspace);
     }
 
+    public WorkspaceAggregate replaceInitial(String ifMatch, MultipartFile definition) {
+        WorkspaceAggregate current = repository.load();
+        long expectedVersion = requireMatchingVersion(ifMatch, current);
+        if (current.state() != WorkspaceState.INITIAL_DRAFT) {
+            throw new WorkspaceProblem(
+                    HttpStatus.CONFLICT,
+                    "INVALID_WORKSPACE_TRANSITION",
+                    "The initial definition can be replaced only before planning.");
+        }
+        ImportDocuments documents = reader.read(definition, null, null);
+        KernelVerifier.Verification verification = verifier.verify(documents);
+        ObjectNode workspace = json.createObjectNode();
+        ObjectNode school = workspace.putObject("school");
+        school.put("id", verification.schoolId());
+        school.put("displayName", documents.definition().path("displayName").stringValue());
+        workspace.put("importMode", ImportDocuments.ImportMode.INITIAL_DEFINITION.name());
+        workspace.put("definitionRevision", verification.definitionRevision());
+        workspace.set("initialDefinition", documents.definition());
+        return mutation.replaceInitial(
+                expectedVersion, WorkspaceState.INITIAL_DRAFT, workspace);
+    }
+
     static long requireMatchingVersion(String ifMatch, WorkspaceAggregate current) {
         if (ifMatch == null || ifMatch.isBlank()) {
             throw new WorkspaceProblem(

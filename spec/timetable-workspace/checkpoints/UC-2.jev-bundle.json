@@ -1,0 +1,399 @@
+{
+  "schemaVersion": 1,
+  "useCase": "UC-2",
+  "submission": "workspace-uc2-from-dfe0e75",
+  "items": [
+    {
+      "id": "UC-2 main",
+      "contract": "The administrator requests initial planning, reviews a complete verified feasible proposal, explicitly confirms it, and opens the durably accepted exact definition/result baseline.",
+      "rules": ["RULE-10 requires packaged process-only planning.", "RULE-17 requires proposal identity and transactional acceptance guards."],
+      "actorBoundary": "Real browser and HTTP application backed by PostgreSQL 18.6 and packaged School Kernel",
+      "claim": "All six main steps complete at the administrator boundary and proposal state remains distinct from accepted state until explicit confirmation.",
+      "evidence": [
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:100", "observation": "The test imports through UC-1, asserts HTTP 202 and SOLVING_INITIAL, polls a complete FEASIBLE proposal with NO_BASELINE/NO_INTENT and no accepted timetable, then POSTs acceptance and compares the exact accepted definition and result with proposal values."},
+        {"kind": "browser-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java:134-181", "observation": "Real Chrome performs every administrator action through file input, buttons, polling, and checkbox confirmation. Before confirmation it directly asserts both 'No accepted timetable' and 'No timetable is accepted yet'; only after the accept button does it observe Accepted baseline, with zero browser errors and no administrator CLI action."},
+        {"kind": "visible-browser-runtime", "source": "output/playwright/uc2-accepted-baseline.png", "observation": "Visible Playwright reached Accepted baseline for Demo School at revision sha256:232c53bcf2ee6b373cb3965afc87849d245040c9c171f0cc543dff8742bf6b3c after the production 30-second run; console had zero messages."}
+      ],
+      "negativeObligations": ["No accepted timetable before confirmation", "No partial or mismatched accepted bundle", "No direct kernel invocation by the administrator"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 1a",
+      "contract": "Replacing the initial definition validates and atomically stores only a valid replacement; validation or storage failure preserves the prior draft.",
+      "rules": ["RULE-7 requires atomic accepted-state changes.", "RULE-8 requires exact document fidelity."],
+      "actorBoundary": "Multipart HTTP initial-draft replacement route",
+      "claim": "A valid replacement is stored exactly and an invalid replacement leaves the version and JSON document unchanged.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:179", "observation": "The test compares the complete replacement tree after HTTP 200, then submits a missing-schoolId document and asserts HTTP 422 plus exact before/after version and document equality."}],
+      "negativeObligations": ["No invalid replacement", "No mutation on validation failure"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 2a",
+      "contract": "Cancellation stops the active run and returns to the unchanged initial draft with no proposal.",
+      "rules": ["RULE-12 requires graceful then forced termination and late-output suppression."],
+      "actorBoundary": "DELETE run HTTP route and child-process boundary",
+      "claim": "Active cancellation preserves the draft, removes proposal eligibility, suppresses late completion, and force-terminates an uncooperative child after the grace period.",
+      "evidence": [
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:148-175", "observation": "DELETE of the active run directly asserts INITIAL_DRAFT, exact definition equality, CANCELLED evidence, proposal absence, and INITIAL_DRAFT again after a late-result wait; the later discard branch separately asserts exact definition equality and proposal absence."},
+        {"kind": "process-unit-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:86", "observation": "The uncooperative Process records both destroy and destroyForcibly; outcome is CANCELLED, verify is never invoked, and the temporary root is empty."}
+      ],
+      "negativeObligations": ["No proposal", "No late-result mutation", "No accepted state"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 2b",
+      "contract": "Restart during initial planning restores the exact initial draft with no proposal eligible for acceptance.",
+      "rules": ["RULE-5 defines restart recovery from SOLVING_INITIAL."],
+      "actorBoundary": "Application-ready recovery against durable PostgreSQL state",
+      "claim": "Interrupted solving and unaccepted initial-proposal state recover to the exact initial draft without run or proposal.",
+      "evidence": [{"kind": "postgresql-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:214", "observation": "The test arranges SOLVING_INITIAL in PostgreSQL, invokes production WorkspaceRecovery, and compares INITIAL_DRAFT, the exact definition, no run, and no proposal; the production SQL covers INITIAL_PROPOSAL too."}],
+      "negativeObligations": ["No recovered proposal eligibility", "No accepted state"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 3a",
+      "contract": "Invalid input, unsuccessful search, interruption, transport failure, internal error, or watchdog expiry returns safely to the unchanged draft with no proposal.",
+      "rules": ["RULE-12 bounds execution.", "RULE-22 requires safe failure output."],
+      "actorBoundary": "Packaged planning adapter and real HTTP polling",
+      "claim": "Every named failure class maps to a safe non-feasible outcome without candidate disclosure; the HTTP failed-search journey preserves the exact draft.",
+      "evidence": [
+        {"kind": "process-unit-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:125-211", "observation": "Injected INVALID_INPUT, NO_FEASIBLE_SOLUTION_FOUND, INTERNAL_ERROR, transport failure, thread interruption, watchdog, missing output, and malformed output are asserted by exact safe kind/code/message. Candidate results are directly absent or null, interrupted work is terminated, and failed paths are forbidden from invoking verify."},
+        {"kind": "captured-diagnostics-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:125-163", "observation": "The child writes a raw diagnostic containing a JDBC URL, SQL, stack-trace text, teacher name, and assignment text; captured application output directly asserts that the entire raw diagnostic is absent."},
+        {"kind": "watchdog-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:158", "observation": "Immediate watchdog expiry records graceful and forced termination, KERNEL_TIMEOUT, null result, and empty temporary root."},
+        {"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:179-210,230-264", "observation": "Real HTTP/PostgreSQL tests cover packaged no-feasible plus injected INVALID_INPUT, INTERNAL_ERROR, TRANSPORT_FAILURE, and INTERRUPTED process outcomes. Every polled terminal response directly asserts its exact safe code/message, exact retained definition, proposal absence, acceptedTimetable false, and absence of the raw child diagnostic."}
+      ],
+      "negativeObligations": ["No partial timetable", "No proposal", "No accepted state", "No raw process diagnostics"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 3b",
+      "contract": "Anything other than a complete verified FEASIBLE timetable for the exact definition fails without partial disclosure.",
+      "rules": ["RULE-10 requires exit, schema, and identity verification before proposal persistence."],
+      "actorBoundary": "Kernel planner result boundary",
+      "claim": "Mismatched authoritative execution evidence is rejected before independent verifier invocation and returns no candidate.",
+      "evidence": [{"kind": "process-unit-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:65-87", "observation": "A nominal FEASIBLE result whose authoritative duration is PT2M instead of PT30S directly yields FAILED/REJECTED_OUTPUT, asserts the independent verifier was not invoked, asserts the exposed result is null, and asserts the temporary root is empty."}, {"kind": "http-postgresql-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:213-228", "observation": "The same authoritative PT2M mismatch is driven through POST /api/runs; the polled response directly asserts REJECTED_OUTPUT, exact retained initial definition, proposal absence, and acceptedTimetable false, proving no candidate disclosure or proposal persistence at the actor boundary."}],
+      "negativeObligations": ["No verifier trust for mismatched output", "No candidate disclosure", "No proposal persistence"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 4a",
+      "contract": "Discarding the proposal removes it and returns to the unchanged initial draft.",
+      "rules": ["RULE-5 permits INITIAL_PROPOSAL to INITIAL_DRAFT only through discard or revision."],
+      "actorBoundary": "DELETE proposal HTTP route",
+      "claim": "Discard returns HTTP 200 with exact initial definition and no proposal.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:167-175", "observation": "After reaching INITIAL_PROPOSAL, DELETE /api/proposal directly asserts HTTP 200, INITIAL_DRAFT, exact definition equality, and proposal absence. INITIAL_DRAFT has no accepted baseline, so the response exposes neither retained proposal nor accepted timetable."}],
+      "negativeObligations": ["No accepted baseline", "No retained proposal"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 5a",
+      "contract": "Any stale proposal identity or stored result refuses acceptance, invalidates the proposal, and returns to the initial draft.",
+      "rules": ["RULE-17 requires every identity and result to be recomputed and compared in the conditional transaction."],
+      "actorBoundary": "POST proposal acceptance HTTP route and packaged verify inside the transaction",
+      "claim": "Every proposal identity/count and the complete result are independently altered and refused with exact draft preservation and no accepted baseline.",
+      "evidence": [{"kind": "postgresql-http-matrix", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:345-387", "observation": "Eleven independent iterations change source version, no-baseline marker, definition revision, intent marker, timetable revision, run ID, limit, termination, elapsed time, lesson count, or complete result identity. Every acceptance POST directly asserts 409 STALE_PROPOSAL, INITIAL_DRAFT, exact definition equality, proposal absence, and acceptedBaseline absence."}],
+      "negativeObligations": ["No stale acceptance", "No accepted data mutation", "No proposal remains eligible"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 extension 6a",
+      "contract": "Verification, durable storage, or reference-advancement failure reports incomplete acceptance, retains no accepted baseline, and keeps the unchanged proposal reviewable.",
+      "rules": ["RULE-7 requires all-or-nothing accepted-state mutation."],
+      "actorBoundary": "POST proposal acceptance with packaged verifier and PostgreSQL transaction",
+      "claim": "Transient verifier unavailability and injected PostgreSQL acceptance failure both return safe 503 and preserve the exact proposal and version.",
+      "evidence": [{"kind": "http-postgresql-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:261-297", "observation": "For verifier unavailability and a PostgreSQL trigger that raises on ACCEPTED_BASELINE, the HTTP responses directly assert safe 503 codes, INITIAL_PROPOSAL, unchanged version, and full before/after JSON document equality. That exact retained document contains the proposal and contains no acceptedBaseline, directly proving no half acceptance, version advance, or proposal loss."}],
+      "negativeObligations": ["No half-accepted bundle", "No version advance", "No proposal loss"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 G1",
+      "contract": "Only explicit confirmation can create accepted state.",
+      "rules": [],
+      "actorBoundary": "Browser confirmation and HTTP lifecycle",
+      "claim": "Replacement, failure, cancellation, feasible output, and discard all remain non-accepted; only confirmed acceptance reaches ACCEPTED_BASELINE.",
+      "evidence": [{"kind": "browser-and-http-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java:134 and WorkspaceInitialPlanningIT.java:100", "observation": "Browser acceptance is disabled until the checkbox is selected; HTTP assertions keep acceptedTimetable false at SOLVING_INITIAL and INITIAL_PROPOSAL and true only after accept."}],
+      "negativeObligations": ["No implicit acceptance"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 G2",
+      "contract": "A time-limited feasible result is never described as optimal, best, or globally minimal.",
+      "rules": [],
+      "actorBoundary": "Rendered initial proposal",
+      "claim": "The proposal is labeled feasible and shows TIME_LIMIT/PT30S without an optimization claim.",
+      "evidence": [{"kind": "browser-render-and-source-scan", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java:164-174 and timetable-workspace/src/main/resources/static/workspace/app.js", "observation": "Real Chrome directly asserts the rendered label 'Initial proposal · feasible', PT30S, and termination reason. Inspection of the complete production proposal-rendering branch finds no optimal, best, globally minimal, or equivalent optimization claim."}],
+      "negativeObligations": ["No optimality claim", "No global-minimum claim"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 G3",
+      "contract": "Failed search says no feasible timetable was found within this run, not that scheduling is impossible.",
+      "rules": [],
+      "actorBoundary": "HTTP workspace snapshot rendered by the browser",
+      "claim": "The exact bounded-search message is retained with the unchanged draft.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:191-199", "observation": "The failed-search HTTP snapshot directly asserts code NO_FEASIBLE_SOLUTION_FOUND, exact message 'No feasible timetable was found within this run.', exact retained draft, proposal absence, and acceptedTimetable false. The asserted message is run-bounded and contains no impossibility claim."}],
+      "negativeObligations": ["No impossibility claim"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 G4",
+      "contract": "Seed and step controls are absent; proposal details show actual limit and termination reason.",
+      "rules": ["RULE-12 fixes the normal preset at 30 seconds."],
+      "actorBoundary": "Kernel process arguments and rendered proposal",
+      "claim": "The process receives 30s with no seed/step controls and the UI renders PT30S plus the returned termination reason.",
+      "evidence": [{"kind": "process-and-browser-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:37 and WorkspaceBrowserIT.java:169", "observation": "Arguments contain --time-limit 30s and exclude --seed/--step-limit; browser text includes Execution limit PT30S and Termination reason."}],
+      "negativeObligations": ["No seed control", "No step control"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 G5",
+      "contract": "The administrator never inspects JSON or invokes School Kernel directly.",
+      "rules": [],
+      "actorBoundary": "Native local browser UI",
+      "claim": "The complete journey is performed through file selection, buttons, polling, checkbox confirmation, and rendered timetable details.",
+      "evidence": [{"kind": "browser-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java:134-181", "observation": "The actor journey is executed exclusively through a real Chrome file chooser and rendered import, plan, confirmation-checkbox, and accept controls. The actor never opens or inspects JSON text and never invokes a command line; all kernel work occurs behind those HTTP/UI actions."}],
+      "negativeObligations": ["No command-line action by actor", "No JSON inspection requirement"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 G6",
+      "contract": "Acceptance is all-or-nothing under crash or storage failure.",
+      "rules": ["RULE-7 requires one PostgreSQL transaction."],
+      "actorBoundary": "PostgreSQL-backed acceptance HTTP route",
+      "claim": "The complete accepted document is written by one conditional transaction and injected failure preserves the full prior proposal and version.",
+      "evidence": [{"kind": "postgresql-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:274-297", "observation": "A PostgreSQL BEFORE UPDATE trigger raises exactly when lifecycle would become ACCEPTED_BASELINE. The request directly asserts STORAGE_UNAVAILABLE, lifecycle still INITIAL_PROPOSAL, unchanged version, and byte-equivalent logical JSON document, whose proposal remains complete and whose acceptedBaseline is absent."}],
+      "negativeObligations": ["No half bundle", "No accepted reference without complete data"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 success postcondition",
+      "contract": "One exact initial definition/result bundle is the accepted baseline and is inspectable and usable as the parent of later work.",
+      "rules": [],
+      "actorBoundary": "Accepted HTTP snapshot and whole-timetable browser view",
+      "claim": "Accepted state contains the exact definition, result, manifest, and revisions with no draft/proposal/run and renders the complete timetable.",
+      "evidence": [{"kind": "http-and-browser-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:123 and WorkspaceBrowserIT.java:175", "observation": "Assertions compare exact definition/result, matching timetable revision, ACCEPTED_BASELINE, proposal/draft absence, and visible accepted timetable details."}],
+      "negativeObligations": ["No competing baseline", "No residual proposal"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 minimal guarantee",
+      "contract": "When planning or acceptance cannot complete, no timetable is accepted and the imported initial draft remains retryable or replaceable.",
+      "rules": [],
+      "actorBoundary": "HTTP failure/cancellation/recovery paths",
+      "claim": "All failed planning paths return the exact initial draft; transient acceptance/storage failures preserve the exact proposal for retry, never an accepted baseline.",
+      "evidence": [{"kind": "integration-test-matrix", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:148-307", "observation": "Cancel, failed search, restart, stale identity/result, verifier outage, and storage failure each directly assert no accepted state. Terminal planning failures compare the exact retryable initialDefinition; transient acceptance failures compare the entire unchanged INITIAL_PROPOSAL document and version, directly proving deliberate retry state is not lost."}],
+      "negativeObligations": ["No accepted timetable on failure", "No loss of deliberate retry state"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-2 Requires UC-1",
+      "contract": "UC-2 consumes the approved UC-1 durable verified initial draft.",
+      "rules": [],
+      "actorBoundary": "Production import route followed by production planning route",
+      "claim": "Every successful UC-2 journey begins with the approved UC-1 import path and plans its stored complete initial definition.",
+      "evidence": [{"kind": "http-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:101-105 and importInitial helper", "observation": "Every UC-2 success setup calls the production /api/import route first, requires its response state INITIAL_DRAFT, and only then POSTs /api/runs. The production start method refuses every state other than INITIAL_DRAFT, directly preventing planning from EMPTY or bypassing the approved UC-1 import/verification path."}],
+      "negativeObligations": ["No bypass of UC-1 verification", "No planning from EMPTY"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-1",
+      "contract": "Workspace and kernel remain separate reactor modules and integrate only through the packaged executable.",
+      "rules": [],
+      "actorBoundary": "Maven reactor and production process adapter",
+      "claim": "UC-2 adds no kernel implementation dependency to the workspace and executes school-kernel as a child process.",
+      "evidence": [{"kind": "architecture-process-and-archive-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/ArchitectureTest.java:16-28 and KernelPlannerTest.java:37-58", "observation": "ArchUnit imports every compiled workspace production class and rejects dependencies on kernel application, CLI, contract-Java, domain, or solver packages. The planner test directly observes the executable plus explicit 'plan' argument list. Reactor dependency and public-contract archive checks pass and find no kernel implementation classpath edge or compiled class in the contract artifact."}],
+      "negativeObligations": ["No in-process kernel call", "No kernel implementation classpath dependency"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-2",
+      "contract": "The pinned Java 25, Spring Boot, PostgreSQL, JDBC, Testcontainers, Flyway, MVC, and Security stack is used without excluded alternatives.",
+      "rules": [],
+      "actorBoundary": "Clean Maven reactor",
+      "claim": "The clean compatibility suite resolves and executes the pinned stack with PostgreSQL 18.6 containers and Java 25.",
+      "evidence": [{"kind": "effective-build-and-dependency-verification", "source": "./mvnw -q clean verify plus reactor effective-POM/dependency/archive checks", "observation": "The clean Java 25.0.1 reactor resolves and executes Spring Boot 4.1.1, PostgreSQL JDBC 42.7.13, Testcontainers 2.0.5 with postgres:18.6, Flyway, JdbcClient, MVC, and Security; 132 tests pass with zero failures/errors/skips. Dependency checks scan the resolved graph and directly find no H2, JPA/Hibernate, Spring Data JDBC, Node/npm, frontend framework, prerelease dependency, or Timefold .impl API."}],
+      "negativeObligations": ["No H2/JPA/Node/frontend framework"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-3",
+      "contract": "One JdbcClient-managed singleton aggregate stores lifecycle, version, run ID, and authoritative JSONB state.",
+      "rules": [],
+      "actorBoundary": "PostgreSQL repository",
+      "claim": "UC-2 transitions one row and stores complete run, proposal, draft, and accepted documents in JSONB.",
+      "evidence": [{"kind": "repository-and-fresh-postgresql-tests", "source": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceRepository.java:13-138 and workspace integration tests", "observation": "The only production workspace repository is JdbcClient-based. Every load/update targets workspace_id=1 and reads/writes only lifecycle_state, monotonically incremented version, optional active_run_id, and one complete JSONB document. Fresh PostgreSQL and full-tree round-trip assertions directly compare this singleton row; source/dependency inspection finds no second persistence store or parallel relational kernel-document model."}],
+      "negativeObligations": ["No second persistence store", "No parallel relational kernel-document model"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-5",
+      "contract": "Only declared lifecycle transitions occur; every other transition is refused without side effects.",
+      "rules": [],
+      "actorBoundary": "Application service and conditional PostgreSQL updates",
+      "claim": "UC-2 implements INITIAL_DRAFT to SOLVING_INITIAL to INITIAL_PROPOSAL or back, then accept/discard, with state predicates on every write.",
+      "evidence": [{"kind": "http-postgresql-transition-matrix", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:148-175,230-249,325-359", "observation": "Tests directly exercise the declared start, cancel, completion, discard, accept, and restart edges. A second start in SOLVING_INITIAL asserts 409 INVALID_WORKSPACE_TRANSITION, exact unchanged version/document, and an unchanged process-command count; missing-precondition refusal also asserts zero new process commands."}],
+      "negativeObligations": ["No wrong-state mutation", "No process launch on refusal"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-6",
+      "contract": "Strong ETag and matching If-Match guard every mutation and the same version participates in conditional SQL.",
+      "rules": [],
+      "actorBoundary": "Real HTTP plus PostgreSQL conditional update",
+      "claim": "UC-2 mutation routes require current If-Match and use that version in state-qualified SQL.",
+      "evidence": [{"kind": "http-postgresql-concurrency-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:309-329 and approved WorkspaceImportIT stale/race matrix", "observation": "A mutation without If-Match directly asserts 428 PRECONDITION_REQUIRED and an unchanged process-command count. Real HTTP helpers use the current strong ETag; stale and racing requests assert the losing version cannot change PostgreSQL, while repository SQL uses that same expected version and expected lifecycle predicate."}],
+      "negativeObligations": ["No mutation without precondition", "No kernel call for precondition loser"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-7",
+      "contract": "Proposal acceptance atomically stores the complete accepted bundle and clears draft/proposal/run in one transaction; failure rolls back exactly.",
+      "rules": [],
+      "actorBoundary": "Acceptance transaction in PostgreSQL",
+      "claim": "Revalidation, identity comparison, accepted-document creation, and conditional update are transaction-bound and failures preserve the prior proposal/version.",
+      "evidence": [{"kind": "transaction-integration-test", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:123-136,261-297", "observation": "Successful acceptance directly compares complete definition and result, matching revision, ACCEPTED_BASELINE, and proposal/draft absence. A PostgreSQL trigger fails the state/reference update inside the same transaction; the response directly asserts 503, INITIAL_PROPOSAL, unchanged version, and full document equality, proving no partial baseline or version advance."}],
+      "negativeObligations": ["No partial accepted baseline", "No version advance on rollback"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-8",
+      "contract": "Kernel documents preserve exact values and use canonical JSON at process boundaries.",
+      "rules": [],
+      "actorBoundary": "JSONB and packaged process files",
+      "claim": "UC-2 writes canonical definition bytes, stores the full verified result, and compares complete trees through acceptance.",
+      "evidence": [{"kind": "canonical-boundary-and-full-tree-tests", "source": "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelPlanner.java:81-92 and WorkspaceInitialPlanningIT.java:129-135", "observation": "The exact stored definition tree is serialized with CanonicalJson.bytes into the process input. Acceptance directly asserts full-tree equality for definition and result plus exact revision identity, while round-trip tests compare every ID/value; no display-model reconstruction or ID-normalization path participates in stored/process documents."}],
+      "negativeObligations": ["No display-model reconstruction", "No ID normalization beyond kernel contract"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-10",
+      "contract": "Initial planning invokes packaged plan with explicit paths and verifies inputs, exit, output schema, and identities before proposal persistence.",
+      "rules": [],
+      "actorBoundary": "Packaged kernel process",
+      "claim": "KernelPlanner uses explicit plan arguments and rejects missing, malformed, mismatched, or unverified output.",
+      "evidence": [{"kind": "process-architecture-and-http-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:41-87,165-211; ArchitectureTest.java:16-28; WorkspaceInitialPlanningIT.java:213-228", "observation": "The process double receives the configured executable plus explicit plan/path/limit/correlation arguments; no shell is constructed, and ArchUnit excludes every kernel implementation dependency. Tests directly reject mismatched, missing, and malformed output before verification with null candidates; the HTTP mismatch journey asserts no proposal and no accepted timetable."}],
+      "negativeObligations": ["No shell", "No in-process scheduling", "No unverified proposal"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-11",
+      "contract": "One asynchronous run returns 202, supports polling, and only matching active identity may apply completion.",
+      "rules": [],
+      "actorBoundary": "HTTP run routes and single background executor",
+      "claim": "Run creation commits SOLVING_INITIAL before a single executor starts, polling is durable, and late/cancelled/duplicate state loses conditional application.",
+      "evidence": [{"kind": "http-postgresql-async-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:104-122,148-175,319-329", "observation": "POST /api/runs directly returns 202 and durable SOLVING_INITIAL with a unique run ID before polling later observes FEASIBLE. A blocked first process makes a second run assert 409 with unchanged version/document. Cancellation followed by a late-result wait directly asserts INITIAL_DRAFT remains, proving stale completion cannot mutate."}],
+      "negativeObligations": ["No concurrent second run", "No stale completion mutation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-12",
+      "contract": "Normal planning uses 30 seconds, exposes no seed/step controls, cancels within the grace/force policy, and watchdog-ends overruns with no proposal.",
+      "rules": [],
+      "actorBoundary": "Process adapter and browser controls",
+      "claim": "Exact arguments, two-second escalation, 40-second watchdog, and candidate absence are directly exercised.",
+      "evidence": [{"kind": "process-and-browser-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:37-116,158-179 and WorkspaceBrowserIT.java:164-174", "observation": "Process assertions require --time-limit 30s and directly reject --seed/--step-limit. An uncooperative process records destroy then destroyForcibly within the bounded test and returns CANCELLED; watchdog expiry records the same escalation, KERNEL_TIMEOUT, and null result. HTTP/browser state assertions show neither path creates a proposal."}],
+      "negativeObligations": ["No forbidden controls", "No proposal after cancel/timeout"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-13",
+      "contract": "Every process uses new owner-only files, 64 KiB-bounded channels, safe correlation, no debug, and complete cleanup.",
+      "rules": [],
+      "actorBoundary": "Planner temporary filesystem and process streams",
+      "claim": "UC-2 applies and tests private distinct paths, bounded drains, correlation-only arguments, and cleanup on all tested outcomes.",
+      "evidence": [{"kind": "filesystem-process-and-source-boundary", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/KernelPlannerTest.java:37-116 and KernelPlanner.java:81-108,220-260", "observation": "The process test directly asserts new directory/file owner-only permissions, distinct definition/output paths, a correlation ID, and absence of --debug, then asserts empty temporary roots after feasible, mismatch, and cancellation. Production drains each channel while retaining at most 64 KiB, returns only structured safe results (never raw stderr), and creates the output only inside the new private directory, never at an accepted/imported path."}],
+      "negativeObligations": ["No raw stderr to browser", "No retained temporary school data", "No accepted file used as output"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-17",
+      "contract": "Proposal stores every authoritative identity/evidence field and acceptance revalidates all of them inside the conditional transaction.",
+      "rules": [],
+      "actorBoundary": "Proposal JSONB and acceptance route",
+      "claim": "Proposal construction records all required fields and the independent corruption matrix proves every mismatch is refused and invalidated.",
+      "evidence": [{"kind": "source-and-http-matrix", "source": "timetable-workspace/src/main/java/org/schoolkernel/workspace/InitialPlanningService.java:117-161,182-203,236-267 and WorkspaceInitialPlanningIT.java:345-387", "observation": "The proposal stores exactly source version, NO_BASELINE, definition/intent/timetable revisions, complete result, run ID, limit, termination, elapsed time, and lesson count—no whole-result revision. Inside the transactional accept method every identity is recomputed/compared; eleven independent corruptions directly assert STALE_PROPOSAL, proposal invalidation, and acceptedBaseline absence."}],
+      "negativeObligations": ["No invented whole-result revision", "No stale proposal acceptance"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-21",
+      "contract": "The no-login local surface is same-origin, CSRF protected, loopback bound, CORS disabled, and narrowly routed.",
+      "rules": [],
+      "actorBoundary": "Spring Security HTTP filter chain",
+      "claim": "Only the declared run/proposal methods are allowlisted and all mutations use CSRF, If-Match, Host, and Origin protections.",
+      "evidence": [{"kind": "security-route-matrix", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:331-338 and WorkspaceImportIT.java:350-429", "observation": "A hostile-Origin planning POST directly asserts 403 and assignment absence. The complete real-HTTP route matrix asserts missing/wrong CSRF denial with no process/state change, hostile/missing Host and Origin denial, disabled CORS, denied login/actuator/traversal/unknown routes, loopback Host enforcement, and no credential disclosure; SecurityConfiguration contains only the declared allowlist."}],
+      "negativeObligations": ["No hostile-origin mutation", "No unexpected route", "No credential disclosure"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-22",
+      "contract": "API failures use the stable safe problem shape and exact status mappings without technical or candidate disclosure.",
+      "rules": [],
+      "actorBoundary": "Real HTTP failure responses",
+      "claim": "UC-2 returns stable 403/409/428/503 codes and safe messages while preserving state and withholding assignments where required.",
+      "evidence": [{"kind": "http-problem-and-disclosure-tests", "source": "timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceInitialPlanningIT.java:214-342 and approved WorkspaceImportIT failure matrix", "observation": "Real HTTP directly asserts stable 409 STALE_PROPOSAL, 503 KERNEL_UNAVAILABLE/STORAGE_UNAVAILABLE, 428 PRECONDITION_REQUIRED, 409 INVALID_WORKSPACE_TRANSITION, and hostile-origin 403. Bodies are scanned for assignments and the shared production-mode failure matrix scans prohibited raw stderr, SQL, filesystem paths, stack traces, and uploaded values; exact unchanged state is asserted after negative paths."}],
+      "negativeObligations": ["No raw stderr", "No SQL/path/stack trace", "No partial candidate"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-23",
+      "contract": "Logs contain only safe structured run evidence and durable validation retains only required non-sensitive solver evidence.",
+      "rules": [],
+      "actorBoundary": "Planner logging and workspace JSONB",
+      "claim": "Planner logs only allowed IDs/classification/timing fields and lastRun retains bounded status evidence, not school documents or assignments.",
+      "evidence": [{"kind": "complete-log-template-and-captured-log-regression", "source": "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelPlanner.java:233-245 and KernelPlannerTest.java:125-163", "observation": "The sole planner log statement contains only correlationId, runId, command kind, exit class, elapsed time, configured limit, termination reason, and feasible. A child emits a diagnostic containing a JDBC URL, SQL, stack-trace marker, teacher, and assignment; captured output directly asserts that raw diagnostic is absent. Durable lastRun assertions contain only bounded safe solver evidence."}],
+      "negativeObligations": ["No definition/result/assignment in logs", "No credentials/tokens/paths in logs"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-24",
+      "contract": "Each use case has real PostgreSQL HTTP and browser success journeys using the packaged CLI, with negative no-side-effect proofs.",
+      "rules": [],
+      "actorBoundary": "Standard Maven verification lifecycle",
+      "claim": "UC-2 runs against disposable PostgreSQL 18.6, real HTTP, real Chrome, and the packaged kernel in clean verify.",
+      "evidence": [{"kind": "standard-lifecycle-boundary-tests", "source": "./mvnw -q clean verify", "observation": "The standard lifecycle starts disposable postgres:18.6 containers and ephemeral HTTP servers, executes the packaged CLI, and drives real Chrome through UC-2; 132 tests pass with zero failures/errors/skips and no H2 dependency/fallback. Negative HTTP/process tests directly compare exact before/after PostgreSQL JSON/version, assignment absence, proposal absence, and process-call counts rather than mocking browser success."}],
+      "negativeObligations": ["No H2 fallback", "No mocked browser success", "No hidden negative-path mutation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-26",
+      "contract": "Kernel commands retain typed handlers, shared strict input/revision pipelines, and an independent hard-feasibility verifier.",
+      "rules": [],
+      "actorBoundary": "Packaged kernel architecture and verify command",
+      "claim": "UC-2 consumes the approved packaged plan/verify handlers without changing their typed architecture.",
+      "evidence": [{"kind": "kernel-architecture-and-verifier-suite", "source": "kernel-cli/src/test/java/org/schoolkernel/architecture/KernelArchitectureTest.java:27-81 and domain/BaselineVerifierTest.java", "observation": "ArchUnit directly restricts adapter construction to the CLI root; reflection asserts the exhaustive sealed outcome family for plan/replan/verify; source scan asserts production never catches Throwable. Shared loading/revision fixtures and the independent direct hard verifier exercise every hard catalog row, so no duplicated workspace verifier or fatal Error conversion is used."}],
+      "negativeObligations": ["No duplicated workspace verifier", "No fatal Error conversion"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-27",
+      "contract": "Kernel catalog/version metadata has one controlled source and the solver uses public Timefold APIs.",
+      "rules": [],
+      "actorBoundary": "Packaged kernel metadata and solver adapter",
+      "claim": "The unchanged approved kernel catalog/manifest/public-API boundary remains green and UC-2 trusts packaged evidence only.",
+      "evidence": [{"kind": "kernel-metadata-and-architecture-tests", "source": "kernel-cli/src/test/java/org/schoolkernel/contract/KernelMetadataTest.java, domain/KernelCatalogTest.java, and architecture/KernelArchitectureTest.java:74-81", "observation": "Tests compare the packaged manifest version to Maven metadata and reject missing/malformed metadata; catalog tests compare every version/ID/order/category/default with the normative table. ArchUnit directly rejects ai.timefold..impl and every Timefold dependency outside the solver adapter, while public SolverManager/SolverJob completion/cancellation mappings pass; no runtime duplicate version constant is present."}],
+      "negativeObligations": ["No duplicate version constant", "No Timefold impl API"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-28",
+      "contract": "Kernel inputs are bounded and result publication is atomic and race-safe before workspace trust.",
+      "rules": [],
+      "actorBoundary": "Packaged kernel file boundary",
+      "claim": "The approved bounded-input and atomic-publication suites remain green; workspace separately caps result size and verifies the published result.",
+      "evidence": [{"kind": "kernel-input-and-publication-boundary-tests", "source": "kernel-cli/src/test/java/org/schoolkernel/application/FileBoundaryTest.java:26-116 and packaged CLI boundary suites", "observation": "Tests directly assert below/at/above byte and token limits, no solver/verifier/output on breach, exact destination preservation, one atomic unforced winner under concurrency, exact last completed forced bytes, and no destination/temp leak when capability is unsupported. Workspace additionally rejects missing, oversized, or malformed published output before proposal creation, so no partial or raced publication is trusted."}],
+      "negativeObligations": ["No oversized input trust", "No partial/raced publication trust"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-29",
+      "contract": "A release candidate passes the documented reference corpus and must not turn that gate into a universal promise.",
+      "rules": [],
+      "actorBoundary": "Conditional release gate and actor-visible claims",
+      "claim": "This use-case checkpoint is not declared a release candidate; it records actual production-run evidence and makes no arbitrary-school feasibility, optimality, or latency promise.",
+      "evidence": [{"kind": "conditional-gate-scope-and-visible-runtime", "source": "spec/timetable-workspace/rules.md RULE-29, output/playwright/uc2-initial-proposal.png, and spec/timetable-workspace/checkpoints/UC-2.md", "observation": "RULE-29 is conditional on declaring a release candidate; this implementation checkpoint is explicitly not a release candidate and therefore makes no gate-pass claim. The visible runtime records only this school's FEASIBLE result, PT30S, and TIME_LIMIT, while checkpoint text expressly disclaims arbitrary-school feasibility, optimality, and latency promises and leaves corpus evidence external."}],
+      "negativeObligations": ["No universal feasibility promise", "No release-candidate claim without corpus evidence"],
+      "counterEvidence": []
+    }
+  ]
+}

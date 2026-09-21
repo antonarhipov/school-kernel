@@ -33,7 +33,7 @@ public class ProblemHandler {
         return response(
                 HttpStatus.SERVICE_UNAVAILABLE,
                 "STORAGE_UNAVAILABLE",
-                "Local storage is unavailable. Import did not complete.");
+                "Local storage is unavailable. The action did not complete.");
     }
 
     @ExceptionHandler(TransactionException.class)
@@ -41,7 +41,7 @@ public class ProblemHandler {
         return response(
                 HttpStatus.SERVICE_UNAVAILABLE,
                 "STORAGE_UNAVAILABLE",
-                "Local storage is unavailable. Import did not complete.");
+                "Local storage is unavailable. The action did not complete.");
     }
 
     @ExceptionHandler(MultipartException.class)

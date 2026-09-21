@@ -130,6 +130,57 @@ class WorkspaceBrowserIT {
         }
     }
 
+    @Test
+    @DisplayName("UC-2 browser journey: administrator creates, reviews, confirms, and opens the first accepted timetable")
+    void plansReviewsAndAcceptsInitialTimetableInRealBrowser() throws Exception {
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody())
+                                .build(),
+                        HttpResponse.BodyHandlers.ofString())
+                .body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("DOM.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Empty workspace", Duration.ofSeconds(15));
+
+            int rootNode = cdp.command("DOM.getDocument", JSON.createObjectNode())
+                    .path("result").path("root").path("nodeId").intValue();
+            ObjectNode query = JSON.createObjectNode();
+            query.put("nodeId", rootNode);
+            query.put("selector", "#definition");
+            int inputNode = cdp.command("DOM.querySelector", query)
+                    .path("result").path("nodeId").intValue();
+            ObjectNode files = JSON.createObjectNode();
+            files.put("nodeId", inputNode);
+            files.putArray("files").add(ROOT.resolve("examples/initial-school.json").toString());
+            cdp.command("DOM.setFileInputFiles", files);
+            cdp.evaluate("document.querySelector('#json-import button').click()");
+            String initial = cdp.awaitText("Create 30-second proposal", Duration.ofSeconds(30));
+            assertTrue(initial.contains("Lessons\n2"));
+            assertTrue(initial.contains("No accepted timetable"));
+
+            cdp.evaluate("document.querySelector('#start-plan').click()");
+            String proposal = cdp.awaitText("Initial proposal · feasible", Duration.ofSeconds(45));
+            assertTrue(proposal.contains("No timetable is accepted yet"));
+            assertTrue(proposal.contains("Execution limit\nPT30S"));
+            assertTrue(proposal.contains("Termination reason"));
+            assertTrue(proposal.contains("Timetable details"));
+
+            cdp.evaluate("document.querySelector('#confirm-accept').click(); document.querySelector('#accept-proposal').click()");
+            String accepted = cdp.awaitText("Accepted baseline", Duration.ofSeconds(30));
+            assertTrue(accepted.contains("Accepted timetable · Demo School"));
+            assertTrue(accepted.contains("current accepted timetable"));
+            assertTrue(accepted.contains("Timetable details"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
     private int startBrowser() throws Exception {
         Path chrome = chromeBinary();
         browser = new ProcessBuilder(

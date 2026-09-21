@@ -22,6 +22,23 @@ input[type=file] { max-width: 100%; padding: 10px; border: 1px solid #cbd3ce; bo
 button { border: 0; border-radius: 9px; padding: 11px 16px; background: #1f5d42; color: white; font: inherit; font-weight: 700; cursor: pointer; }
 button:focus-visible, input:focus-visible { outline: 3px solid #f0b44d; outline-offset: 2px; }
 button[disabled] { opacity: .6; cursor: wait; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.secondary { background: #e8efe9; color: #234c38; }
+.danger { background: #9b2c2c; }
+.notice { padding: 12px; border-left: 4px solid #b47813; background: #fff8e9; }
+.replace-form { margin-top: 24px; border-top: 1px solid #d9dfdb; padding-top: 12px; }
+.confirmation { grid-template-columns: auto 1fr; align-items: start; margin-top: 22px; }
+.running { background: #fff2d7; color: #704a00; }
+.proposal { background: #e8e9f8; color: #373b77; }
+.accepted { background: #dff3e7; color: #164c2d; }
+dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+dl div { padding: 10px; border: 1px solid #e0e5e2; border-radius: 9px; }
+dt { color: #5c6964; font-size: .8rem; }
+dd { margin: 4px 0 0; font-weight: 750; overflow-wrap: anywhere; }
+.table-wrap { overflow-x: auto; margin-top: 18px; }
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+caption { text-align: left; font-weight: 750; margin-bottom: 8px; }
+th, td { padding: 9px; border-bottom: 1px solid #d9dfdb; text-align: left; }
 .error { color: #9b2c2c; font-weight: 650; }
 .muted { color: #5c6964; }
 code { overflow-wrap: anywhere; }

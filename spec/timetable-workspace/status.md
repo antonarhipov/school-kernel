@@ -2,16 +2,16 @@
 
 ## Current
 
-- Use case: none
-- Status: APPROVED
-- Next eligible: UC-2, UC-3, UC-4, UC-8
+- Use case: UC-2
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `854493f`; revises `2671b2a` for C-1 through C-3 and G-1 through G-10 | `convergence/UC-1.md` - APPROVED |
-| UC-2 | NOT_STARTED | UC-1 | - | - |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence; started from `dfe0e75` | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-4 | - | - |
@@ -52,6 +52,27 @@
 | RULE-13, RULE-14 | Private bounded process adapter and strict no-extraction archive reader/tests |
 | RULE-21 through RULE-24 | Loopback Host/Origin/CSRF/CORS route tests, safe problem responses/logs, real PostgreSQL/HTTP/browser boundary |
 | RULE-26 through RULE-28 | Typed shared handlers, controlled catalog/version/public solver APIs, bounded input and race-safe publication suites |
+
+## UC-2 Evidence
+
+- Started: 2026-09-21; base `dfe0e75`.
+- Pre-existing dirty files: none.
+- Implementation submission: HEAD at convergence.
+- Changed files: initial-planning service, packaged planner adapter, recovery hook, repository/mutation/controller/security/import/problem extensions, native workspace UI, planner/HTTP/browser tests, two Playwright screenshots, status, checkpoint, and Jev advisory artifacts.
+- Commands and results: focused `KernelPlannerTest` — 6 tests PASS; focused `WorkspaceInitialPlanningIT` — 8 tests PASS; `./mvnw -q clean verify` — 135 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` — PASS; Jev bundle validation — valid, 38 items; authorized external `jev-1.13.0` preflight — 13 findings, 22 reviews, 3 clear, with every flag independently dispositioned in `checkpoints/UC-2.md`.
+- Runtime evidence: visible real-browser import -> production 30-second plan -> feasible initial proposal -> checkbox-confirmed acceptance opened `Demo School` at timetable revision `sha256:232c53bcf2ee6b373cb3965afc87849d245040c9c171f0cc543dff8742bf6b3c`; browser console reported 0 messages, errors, or warnings; screenshots are `output/playwright/uc2-initial-proposal.png` and `output/playwright/uc2-accepted-baseline.png`.
+
+| Contract element | Evidence |
+|---|---|
+| UC-2 main steps 1-6 | Real PostgreSQL/HTTP/package journey at `WorkspaceInitialPlanningIT.java:100`; real Chrome journey at `WorkspaceBrowserIT.java:134`; visible production-limit journey and screenshots above |
+| UC-2 extension 1a | Replacement success, unsuccessful search preservation, and invalid replacement no-mutation assertions at `WorkspaceInitialPlanningIT.java:179` |
+| UC-2 extensions 2a and 4a | Cancel/late-result suppression and discard preserve the exact draft with no proposal at `WorkspaceInitialPlanningIT.java:148`; forced process cancellation at `KernelPlannerTest.java:86` |
+| UC-2 extension 2b | Recovery of both interrupted solving and unaccepted proposal states at `WorkspaceInitialPlanningIT.java:214` and `WorkspaceRepository.java:92` |
+| UC-2 extensions 3a and 3b | Safe invalid, no-feasible, internal, transport, interruption, watchdog, missing/malformed, and mismatched-output results at `KernelPlannerTest.java:67,126,165,214`; HTTP failure-class and mismatch journeys at `WorkspaceInitialPlanningIT.java:215,230` |
+| UC-2 extension 5a | Stale identity invalidation plus the independent every-identity/result matrix at `WorkspaceInitialPlanningIT.java:261,394` |
+| UC-2 extension 6a | Kernel revalidation unavailability and injected PostgreSQL acceptance failure retain the exact proposal/version at `WorkspaceInitialPlanningIT.java:261` |
+| UC-2 G1-G6 and both postconditions | Explicit-confirmation browser/HTTP acceptance, exact definition/result comparison, safe labels/controls, all-or-nothing rollback, and retryable draft/proposal assertions recorded in `checkpoints/UC-2.md` |
+| RULE-1 through RULE-29 applicable to UC-2 | Reactor, lifecycle, transaction, process, security, packaged-kernel, PostgreSQL/browser, and kernel compatibility evidence recorded by rule in `checkpoints/UC-2.md` |
 
 ## Blockers
 

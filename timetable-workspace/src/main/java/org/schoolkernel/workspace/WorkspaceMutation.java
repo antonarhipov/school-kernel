@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tools.jackson.databind.JsonNode;
 
+import java.util.UUID;
+
 @Component
 public class WorkspaceMutation {
     private final WorkspaceRepository repository;
@@ -33,5 +35,58 @@ public class WorkspaceMutation {
                     "School data can be imported only into an empty workspace.");
         }
         return repository.load();
+    }
+
+    @Transactional
+    public WorkspaceAggregate startInitialRun(long expectedVersion, UUID runId, JsonNode document) {
+        if (repository.startRun(expectedVersion, runId, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "Initial planning can start only from an initial draft.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
+    public WorkspaceAggregate finishInitialRun(
+            long expectedVersion,
+            UUID runId,
+            WorkspaceState nextState,
+            JsonNode document) {
+        if (repository.finishRun(expectedVersion, runId, nextState, document).isEmpty()) {
+            throw new WorkspaceProblem(
+                    HttpStatus.CONFLICT,
+                    "STALE_RUN",
+                    "This planning run is no longer active.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
+    public WorkspaceAggregate replaceInitial(
+            long expectedVersion,
+            WorkspaceState expectedState,
+            JsonNode document) {
+        if (repository.replaceInitialDraft(expectedVersion, expectedState, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "The initial definition cannot be replaced in the current state.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
+    public WorkspaceAggregate acceptInitial(long expectedVersion, JsonNode document) {
+        if (repository.acceptInitialProposal(expectedVersion, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "This proposal is no longer eligible for acceptance.");
+        }
+        return repository.load();
+    }
+
+    private WorkspaceProblem transitionProblem(long expectedVersion, String message) {
+        WorkspaceAggregate current = repository.load();
+        if (current.version() != expectedVersion) {
+            return new WorkspaceProblem(
+                    HttpStatus.PRECONDITION_FAILED,
+                    "STALE_WORKSPACE_VERSION",
+                    "The workspace changed. Reload it before continuing.");
+        }
+        return new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION", message);
     }
 }
