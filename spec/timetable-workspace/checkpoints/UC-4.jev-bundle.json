@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "useCase": "UC-4",
+  "submission": "diff-from-f3b9253b67f9be528cd6b6ff90343ba9b4992f28",
+  "items": [
+    {
+      "id": "UC-4 main scenario",
+      "contract": "The administrator stages recurring teacher or room unavailability, inspects direct effects and policy state, applies individual or confirmed bulk pins, and leaves one durable conflict-free repair draft ready to solve.",
+      "rules": ["RULE-15 requires a separate intent overlay.", "RULE-16 requires immutable direct-effect and bulk snapshots."],
+      "actorBoundary": "Real Chrome and real HTTP over PostgreSQL 18.6",
+      "claim": "Both resource journeys, direct effects, individual and bulk pins, conflict feedback, summary, and durable ready state are implemented end to end.",
+      "evidence": [{"kind":"http-browser-tests","source":"WorkspaceRepairDraftIT.java:68-127 and WorkspaceBrowserIT.java:301-381","observation":"HTTP assertions compare exact staged changes, effects, pins, revisions and accepted bundle; Chrome performs staging, keyboard pinning, conflict resolution, bulk confirmation/undo and discard."}],
+      "negativeObligations": ["Accepted definition and result are not mutated", "No conflict-free readiness is shown while a conflict exists"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 1a",
+      "contract": "Unsupported class unavailability, cancellation, required move, or teacher reassignment stages nothing and explains the boundary.",
+      "rules": ["RULE-15 forbids unsupported change types."],
+      "actorBoundary": "Repair-draft HTTP command",
+      "claim": "An unsupported reassignment is refused with a safe stable response and no state change; the UI lists the unsupported actions.",
+      "evidence": [{"kind":"negative-http-test","source":"WorkspaceRepairDraftIT.java:186-199 and messages.js","observation":"The test receives 422 INVALID_REPAIR_DRAFT, retains ACCEPTED_BASELINE and compares exact accepted JSON; catalog text names all deferred actions."}],
+      "negativeObligations": ["No repair draft or accepted mutation is persisted"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 2a",
+      "contract": "A staged resource change with no directly affected accepted lesson is retained and explicitly represented by an empty direct-effect set.",
+      "rules": ["RULE-16 calculates effects only from accepted assignments."],
+      "actorBoundary": "Repair-draft HTTP and repository boundary",
+      "claim": "Unavailability at mon-3 remains staged with an empty direct-effect array and a durable repair draft.",
+      "evidence": [{"kind":"integration-test","source":"WorkspaceRepairDraftIT.java:200-204","observation":"The test asserts directEffectLessonIds is empty and compares the HTTP repairDraft with a new repository load."}],
+      "negativeObligations": ["No accepted lesson is invented as directly affected"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 4a",
+      "contract": "A pin contradicting staged unavailability or persistent policy is an explicit blocking conflict and no winner is chosen silently.",
+      "rules": ["RULE-16 requires DRAFT_CONFLICT semantics and retained instructions."],
+      "actorBoundary": "Repair-draft HTTP conflict calculation",
+      "claim": "Attempt and persistent policy conflicts retain both instructions, identify the exact lesson, and block readiness.",
+      "evidence": [{"kind":"integration-test","source":"WorkspaceRepairDraftIT.java:128-150","observation":"Assertions observe lesson-math-1, PIN_CONTRADICTS_UNAVAILABILITY and readyToSolve false for both attempt and persistent locks."}],
+      "negativeObligations": ["No pin or availability instruction is silently removed"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 5a",
+      "contract": "Cancelling bulk preview applies no pin from the snapshot.",
+      "rules": ["RULE-16 separates preview from confirmation."],
+      "actorBoundary": "Version-sensitive preview HTTP and browser preview",
+      "claim": "Preview is non-mutating; making no confirmation request leaves the pin set empty and the browser supplies a cancel action.",
+      "evidence": [{"kind":"negative-integration-test","source":"WorkspaceRepairDraftIT.java:152-168 and app.js bulk preview controls","observation":"After a successful preview the repository intent pins array remains empty; cancel changes only browser-local bulkPreview state."}],
+      "negativeObligations": ["No preview lesson is pinned before confirmation"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 6a",
+      "contract": "Undoing a bulk action removes exactly its snapshot except persistent policy locks and independent pins.",
+      "rules": ["RULE-16 requires exact source-scoped undo."],
+      "actorBoundary": "Repair-draft HTTP and PostgreSQL intent document",
+      "claim": "Bulk source removal preserves an independently applied room source and clears only the named bulk action.",
+      "evidence": [{"kind":"integration-test","source":"WorkspaceRepairDraftIT.java:169-184","observation":"After undo, periodSources is empty, roomSources equals [INDIVIDUAL], and bulkActions is empty."}],
+      "negativeObligations": ["Independent pin sources are not removed", "Persistent policy locks are not edited"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 6b",
+      "contract": "Autosave failure warns, preserves accepted state, and prevents solving from an unpersisted intent revision.",
+      "rules": ["RULE-3 and RULE-5 require durable guarded lifecycle mutation."],
+      "actorBoundary": "Injected PostgreSQL failure over real HTTP",
+      "claim": "A failed update returns STORAGE_UNAVAILABLE, rolls back to the exact durable draft and baseline, and run start remains refused.",
+      "evidence": [{"kind":"failure-injection-test","source":"WorkspaceRepairDraftIT.java:233-263","observation":"A BEFORE UPDATE trigger fails autosave; assertions compare exact pre/post document and receive 409 when POST /api/runs is attempted."}],
+      "negativeObligations": ["No unpersisted pin is exposed as durable", "No kernel process is started from the repair draft"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 7a",
+      "contract": "Any remaining conflict identifies the lesson and instructions and prevents solve submission.",
+      "rules": ["RULE-16 makes conflicts blocking."],
+      "actorBoundary": "HTTP draft state and desktop browser",
+      "claim": "Conflict state identifies lesson/resource with visible text and disables later solve readiness until unpinned.",
+      "evidence": [{"kind":"http-browser-tests","source":"WorkspaceRepairDraftIT.java:128-150 and WorkspaceBrowserIT.java:339-348","observation":"The server emits the exact conflict and readyToSolve false; Chrome observes Resolve blocking conflicts and then ready state after removal."}],
+      "negativeObligations": ["A conflicting draft is not submitted"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 7b",
+      "contract": "Explicit confirmed discard clears staged intent and attempt pins and returns to accepted baseline.",
+      "rules": ["RULE-5 permits only the repair-draft to accepted-baseline discard edge."],
+      "actorBoundary": "Confirmed DELETE and real Chrome",
+      "claim": "Unconfirmed discard is refused; confirmed discard removes repairDraft and preserves exact acceptedBaseline.",
+      "evidence": [{"kind":"http-browser-tests","source":"WorkspaceRepairDraftIT.java:205-209 and WorkspaceBrowserIT.java:366-380","observation":"HTTP and Chrome require confirmation, return ACCEPTED_BASELINE, assert repairDraft absent and compare accepted JSON."}],
+      "negativeObligations": ["Unconfirmed discard does not mutate state", "Accepted baseline is not removed"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 extension 7c",
+      "contract": "Restart restores autosaved changes and attempt pins as a repair draft without changing accepted baseline.",
+      "rules": ["RULE-3 makes PostgreSQL the durable authority."],
+      "actorBoundary": "PostgreSQL aggregate loaded through repository/startup behavior",
+      "claim": "REPAIR_DRAFT is stored durably and is not one of the transient states rewritten by WorkspaceRecovery.",
+      "evidence": [{"kind":"persistence-test","source":"WorkspaceRepairDraftIT.java:200-204 and WorkspaceRecovery.java","observation":"A fresh repository load equals the HTTP repairDraft; recovery updates only SOLVING_INITIAL and INITIAL_PROPOSAL, leaving REPAIR_DRAFT stable."}],
+      "negativeObligations": ["Restart does not accept the draft", "Accepted bundle remains exact"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 G1",
+      "contract": "Pins copy accepted values, accepted assignments are not mutated, and intent compiles only into a complete successor definition.",
+      "rules": ["RULE-15 defines overlay compilation."],
+      "actorBoundary": "RepairDraftService compiler and PostgreSQL integration",
+      "claim": "Deep-copy compilation sets accepted inputRevision lineage, materializes availability and copies accepted assignment locks while exact accepted JSON stays equal.",
+      "evidence": [{"kind":"field-comparison-test","source":"WorkspaceRepairDraftIT.java:68-127","observation":"Assertions compare basedOnRevision, availablePeriodIds, periodLock, roomLock, omitted accepted availability and full acceptedBaseline before/after."}],
+      "negativeObligations": ["Accepted assignment JSON is not edited", "No substitute or soft-protection weight is created"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 G2",
+      "contract": "All currently unaffected lessons is the immutable complement at preview time and later edits do not expand it.",
+      "rules": ["RULE-16 records an immutable preview snapshot."],
+      "actorBoundary": "Bulk preview and confirmation HTTP",
+      "claim": "The preview captures an ordered exact complement and confirmation accepts only the complete server-recomputed immutable snapshot.",
+      "evidence": [{"kind":"integration-test","source":"WorkspaceRepairDraftIT.previewsConfirmsAndUndoesExactBulkSnapshot, selectsCompleteDayAndClassSnapshotsRegardlessOfViewFilters, and refusesAlteredOrStaleBulkPreviewsWithoutMutation","observation":"UNAFFECTED, DAY, and CLASS preview IDs/counts are exact and filter-independent; canonical full-snapshot comparison rejects altered IDs and later-edit staleness without mutation."}],
+      "negativeObligations": ["Confirmation does not reselect or silently expand lessons"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 G3",
+      "contract": "Attempt pins survive draft revision/retry but are cleared after acceptance or discard; persistent policy locks remain.",
+      "rules": ["RULE-15 records pin provenance.", "RULE-16 preserves independent sources."],
+      "actorBoundary": "Durable repair intent and manifest policy state",
+      "claim": "Source arrays retain pins across edits, exact undo preserves independent pins, discard clears repair intent, and manifest policy origins are never edited.",
+      "evidence": [{"kind":"integration-tests","source":"WorkspaceRepairDraftIT.java:128-209","observation":"Tests cover policy conflict, overlapping individual/bulk sources, revision, undo and confirmed discard with accepted manifest preserved."}],
+      "negativeObligations": ["Attempt pins do not enter acceptedBaseline on discard", "Policy locks are not removed"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 G4",
+      "contract": "Pin, policy, direct, conflict and unpinned states are non-color-only and selection, pinning, preview, confirmation and undo are keyboard operable.",
+      "rules": ["RULE-20 requires centralized accessible state semantics."],
+      "actorBoundary": "Real Chrome desktop and narrow viewport",
+      "claim": "Catalog text labels every state and native buttons/inputs support keyboard selection and pinning; editing is absent at 390 by 844.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:301-381 and app.js repairLessonState/bindRepairControls","observation":"Trusted Space activates lesson and pin button; Chrome observes direct/conflict/ready text, bulk controls, narrow read-only schedule and no editing actions."}],
+      "negativeObligations": ["State meaning does not depend on color", "Narrow screen exposes no repair mutation control"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 G5",
+      "contract": "Draft edits, pins, undo, discard and persistence never change accepted bundle.",
+      "rules": ["RULE-3 keeps one JSONB aggregate while RULE-15 separates intent."],
+      "actorBoundary": "Real HTTP/PostgreSQL mutation and failure boundaries",
+      "claim": "Every positive and negative repair journey compares the complete acceptedBaseline before and after.",
+      "evidence": [{"kind":"database-tests","source":"WorkspaceRepairDraftIT.java and WorkspaceBrowserIT.java:301-381","observation":"Assertions compare semantic trees across staging, pinning, conflicts, bulk, failure and discard; browser final state retains the exact baseline."}],
+      "negativeObligations": ["Accepted definition/result/manifest remain unchanged"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 G6",
+      "contract": "Pin feedback meets the 250 ms p95 interaction target on the validation-scale fixture.",
+      "rules": ["RULE-25 separates interaction measurement from solver duration."],
+      "actorBoundary": "Real Chrome with ephemeral HTTP and PostgreSQL",
+      "claim": "Twenty persisted post-load pin/unpin samples on the exact scale fixture meet p95 below 250 ms.",
+      "evidence": [{"kind":"performance-browser-test","source":"WorkspaceBrowserIT.java:432-479","observation":"Fixture cardinalities are 1000/100/60/100/60; clean-run nearest-rank p95 was 190.5 ms and the test excludes solver time."}],
+      "negativeObligations": ["Solver duration is not included in pin-feedback samples"],
+      "counterEvidence": ["A pre-submission full-matrix rerender measured 369.8 ms p95; it was replaced and later focused/full runs passed at 142.2/190.5 ms."]
+    },
+    {
+      "id": "UC-4 success postcondition",
+      "contract": "One durable repair draft contains exact weekly resource changes, direct effects and non-conflicting attempt pins ready for successor compilation.",
+      "rules": ["RULE-15 and RULE-16 define exact durable contents."],
+      "actorBoundary": "PostgreSQL singleton aggregate",
+      "claim": "Successful journeys persist intent, canonical revisions, exact effects, pins, empty conflicts, readyToSolve and persisted indicators.",
+      "evidence": [{"kind":"integration-test","source":"WorkspaceRepairDraftIT.java:68-101 and 152-184","observation":"Assertions inspect every stored component and compile the successor while lifecycle remains REPAIR_DRAFT."}],
+      "negativeObligations": ["No conflicting draft is marked ready"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 minimal guarantee",
+      "contract": "Accepted baseline remains byte-equivalent and no conflicting or unpersisted draft can be submitted.",
+      "rules": ["RULE-5, RULE-6 and RULE-16 guard mutation and conflict submission."],
+      "actorBoundary": "HTTP, SQL and PostgreSQL failure boundaries",
+      "claim": "All refusal/failure cases preserve accepted JSON and version-appropriate durable draft; POST /api/runs rejects repair state in this UC.",
+      "evidence": [{"kind":"negative-integration-tests","source":"WorkspaceRepairDraftIT.java:128-263","observation":"Conflict, stale, missing, malformed, unsupported, unconfirmed and injected-failure assertions inspect status/code and exact database state."}],
+      "negativeObligations": ["No conflicting or unpersisted draft launches a process", "No accepted data changes"],
+      "counterEvidence": []
+    },
+    {
+      "id": "UC-4 requires UC-1",
+      "contract": "UC-4 consumes an approved verified accepted definition/result bundle from UC-1.",
+      "rules": ["Use-case relationship requires the real persisted predecessor postcondition."],
+      "actorBoundary": "Production singleton aggregate and repair service",
+      "claim": "Repair starts only from ACCEPTED_BASELINE and reads the exact persisted definition, result assignments and manifest.",
+      "evidence": [{"kind":"relationship-test","source":"WorkspaceRepairDraftIT.java:68-127 and RepairDraftService.start","observation":"Tests store the approved accepted bundle shape and the service refuses any state other than ACCEPTED_BASELINE before reading and copying it."}],
+      "negativeObligations": ["Repair cannot start from an initial draft or empty workspace"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-1",
+      "contract": "Reactor modules preserve the public process boundary.",
+      "rules": ["Workspace must not compile against kernel implementation classes."],
+      "actorBoundary": "Maven reactor and ArchUnit",
+      "claim": "UC-4 adds only workspace code and clean architecture/archive checks pass.",
+      "evidence": [{"kind":"clean-build","source":"./mvnw -q clean verify and ArchitectureTest","observation":"The 150-test reactor is green and dependency boundary assertions pass."}],
+      "negativeObligations": ["No kernel implementation dependency is introduced"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-2",
+      "contract": "UC-4 stays on the pinned Java, Spring and PostgreSQL stack without forbidden dependencies.",
+      "rules": ["No JPA, H2, Node or frontend framework."],
+      "actorBoundary": "Maven effective build",
+      "claim": "No dependency changed and Java 25/Spring Boot 4.1.1/PostgreSQL 18.6 verification passes.",
+      "evidence": [{"kind":"clean-build","source":"pom.xml and ./mvnw -q clean verify","observation":"Pinned-stack architecture tests and all modules pass with no new dependency."}],
+      "negativeObligations": ["No forbidden persistence or frontend dependency appears"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-3",
+      "contract": "Repair state remains inside the JSONB-first singleton aggregate with relational lifecycle/version guards.",
+      "rules": ["Explicit JdbcClient SQL and no second store."],
+      "actorBoundary": "PostgreSQL repository",
+      "claim": "All repair data is a subtree of the singleton document and mutations use the existing guarded update.",
+      "evidence": [{"kind":"database-test","source":"RepairDraftService, WorkspaceMutation.replaceRepair and WorkspaceRepairDraftIT","observation":"Tests inspect one row/document, lifecycle/version and exact repairDraft contents across mutations and restart load."}],
+      "negativeObligations": ["No parallel repair persistence store exists"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-4",
+      "contract": "Flyway remains the only schema authority.",
+      "rules": ["No runtime schema generation or seed change."],
+      "actorBoundary": "Fresh and failure PostgreSQL migration tests",
+      "claim": "UC-4 needs no schema change and the existing Flyway suite remains green.",
+      "evidence": [{"kind":"clean-build","source":"FlywayFailureIT and ./mvnw -q clean verify","observation":"Fresh migration, checksum drift and broken migration checks pass against PostgreSQL 18.6."}],
+      "negativeObligations": ["No runtime DDL or school data seed is added"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-5",
+      "contract": "Only specified repair lifecycle transitions are allowed and all others return 409 without side effects.",
+      "rules": ["Accepted baseline to repair draft; edit stays repair draft; discard returns accepted baseline."],
+      "actorBoundary": "Conditional HTTP and SQL lifecycle mutation",
+      "claim": "Allowed edges and refused run/import-like states are guarded by exact expected state and version.",
+      "evidence": [{"kind":"integration-tests","source":"WorkspaceRepairDraftIT.java and WorkspaceMutation.replaceRepair","observation":"Tests exercise start/edit/discard and receive INVALID_WORKSPACE_TRANSITION for solve submission without document mutation."}],
+      "negativeObligations": ["Refused transition does not increment version or launch a process"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-6",
+      "contract": "Every repair command and preview is guarded by strong ETag, If-Match and conditional SQL version.",
+      "rules": ["Missing is 428 and mismatch is 412."],
+      "actorBoundary": "Real HTTP concurrency boundary",
+      "claim": "Missing/stale commands and stale preview confirmation are refused without mutation; successful responses advance ETag.",
+      "evidence": [{"kind":"http-test","source":"WorkspaceRepairDraftIT.java:211-231 and RepairDraftService.confirmBulk","observation":"Assertions observe 428/412 stable codes and compare exact document after stale/malformed requests; SQL matches version/state."}],
+      "negativeObligations": ["A stale request cannot mutate draft or invoke kernel"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-8",
+      "contract": "Canonical JSON preserves accepted documents and deterministic intent identity.",
+      "rules": ["Opaque IDs, omission fidelity and RFC 8785 canonical bytes."],
+      "actorBoundary": "Intent revision and successor compiler",
+      "claim": "Intent revisions hash canonical complete intent and compilation deep-copies accepted JSON with deterministic arrays.",
+      "evidence": [{"kind":"field-comparison-test","source":"RepairDraftService.revision/compiledDefinition and WorkspaceRepairDraftIT.java:68-127","observation":"Tests assert lowercase SHA-256 shape, omitted accepted availability, materialized successor values and unchanged accepted tree."}],
+      "negativeObligations": ["ID spelling is not interpreted", "Accepted omission is not rewritten"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-15",
+      "contract": "Intent overlay compiles a complete successor without accepted mutation or unsupported edits.",
+      "rules": ["Set direct basedOnRevision, materialize availability and copy accepted pin values."],
+      "actorBoundary": "Repair compiler and integration tests",
+      "claim": "Teacher/room omitted availability, both pin dimensions, lineage and persistent locks are compared by value.",
+      "evidence": [{"kind":"table-journey-tests","source":"WorkspaceRepairDraftIT.java:68-127","observation":"Teacher and room tests assert exact availablePeriodIds, accepted locks, inputRevision lineage and accepted equality."}],
+      "negativeObligations": ["No substitute, soft tier or unsupported change type is emitted"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-16",
+      "contract": "Direct effects, conflicts and bulk pins use immutable exact snapshots and source-scoped undo.",
+      "rules": ["Preview records IDs, dimensions, version, direct revision, count and conflicts."],
+      "actorBoundary": "Preview/confirm/undo HTTP",
+      "claim": "All required preview fields come from one aggregate snapshot, confirmation is If-Match bound and canonically recomputed, conflicts block, and undo removes only its source.",
+      "evidence": [{"kind":"integration-test","source":"WorkspaceRepairDraftIT bulk-preview tests","observation":"Deterministic DAY, CLASS, UNAFFECTED, filter-independent, empty, conflict, non-mutating, altered/stale refusal, exact confirmation, and overlapping-source undo assertions pass."}],
+      "negativeObligations": ["No preview re-evaluation or silent instruction drop occurs"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-19",
+      "contract": "Complete workspace snapshot drives native in-browser repair presentation and only intent commands leave the browser.",
+      "rules": ["Browser treats IDs as opaque and sends current ETag."],
+      "actorBoundary": "GET snapshot and real Chrome",
+      "claim": "Browser builds repair views from the complete accepted/draft snapshot and sends JSON intent commands with CSRF/If-Match.",
+      "evidence": [{"kind":"browser-test","source":"app.js renderRepair/mutatePin and WorkspaceBrowserIT.java:301-479","observation":"Chrome performs the full and scale journeys without filter APIs or kernel-input reconstruction; server snapshots remain authoritative."}],
+      "negativeObligations": ["Browser does not compile successor definitions or classify effects"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-20",
+      "contract": "Repair UI uses centralized English text, non-color state semantics and complete keyboard behavior.",
+      "rules": ["Whole-school matrix stays primary; narrow view is read-only."],
+      "actorBoundary": "Message catalog and real Chrome",
+      "claim": "Every new visible label is catalog-backed; native controls and trusted Space activation cover selection/pinning; narrow editing is absent.",
+      "evidence": [{"kind":"architecture-browser-tests","source":"messages.js, ArchitectureTest and WorkspaceBrowserIT.java:301-381","observation":"Catalog architecture passes; Chrome observes explicit accepted/draft/direct/pin/conflict/read-only text and keyboard actions."}],
+      "negativeObligations": ["State is not conveyed by color alone", "No narrow editing action is exposed"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-21",
+      "contract": "Repair routes retain same-origin local security without identity.",
+      "rules": ["Mutations require CSRF, Host/Origin and no CORS."],
+      "actorBoundary": "Spring Security real HTTP",
+      "claim": "Only the specified POST/PATCH/DELETE repair routes are allowlisted and tests use valid session CSRF/Origin.",
+      "evidence": [{"kind":"security-suite","source":"SecurityConfiguration and clean WorkspaceImportIT route/security tests","observation":"Full real-HTTP security suite passes after adding exactly the spec route methods; login/actuator/other routes remain denied."}],
+      "negativeObligations": ["No credential or remote route is exposed"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-22",
+      "contract": "Repair failures use stable safe problem responses and exact status mappings.",
+      "rules": ["Malformed 400, conflict 409, stale 412, semantic 422, missing precondition 428, storage 503."],
+      "actorBoundary": "Real HTTP negative matrix",
+      "claim": "Repair negative tests observe stable code/status/ETag and exact non-mutation for all applicable classes.",
+      "evidence": [{"kind":"http-negative-tests","source":"WorkspaceRepairDraftIT.java:186-263 and ProblemHandler","observation":"Assertions cover MALFORMED_REQUEST, INVALID_WORKSPACE_TRANSITION, STALE_WORKSPACE_VERSION, INVALID_REPAIR_DRAFT, PRECONDITION_REQUIRED and STORAGE_UNAVAILABLE."}],
+      "negativeObligations": ["No SQL, path, stack, intent or assignment appears in the problem body"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-23",
+      "contract": "Observability does not create a second school-data or draft/pin store.",
+      "rules": ["Draft intent and pins must not be logged."],
+      "actorBoundary": "Production logging and clean validation suite",
+      "claim": "UC-4 adds no logging statement or solver run evidence and existing prohibited-value log checks pass.",
+      "evidence": [{"kind":"source-and-regression","source":"RepairDraftService and ./mvnw -q clean verify","observation":"The repair service contains no logger; the full safe-observability suite is green."}],
+      "negativeObligations": ["Draft intent, pins and display names are not logged"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-24",
+      "contract": "UC-4 verification uses disposable PostgreSQL, real HTTP and real browser with negative side-effect assertions.",
+      "rules": ["No H2 or silent test substitution."],
+      "actorBoundary": "Testcontainers PostgreSQL 18.6 and Chrome",
+      "claim": "Every actor and database journey runs on isolated PostgreSQL/ephemeral server; Chrome covers success and scale.",
+      "evidence": [{"kind":"clean-suite","source":"WorkspaceRepairDraftIT, WorkspaceBrowserIT and failsafe reports","observation":"150 tests pass with zero failures/errors/skips; UC-4 tests assert state after steps and candidate/process absence where applicable."}],
+      "negativeObligations": ["No existing database or H2 is used", "Tests leave tracked runtime data unchanged"],
+      "counterEvidence": []
+    },
+    {
+      "id": "RULE-25",
+      "contract": "Validation-scale browser interaction measurements are separate from solving.",
+      "rules": ["Pin feedback p95 is below 250 ms on approximately 1000/100/60/100/60 fixture."],
+      "actorBoundary": "Real Chrome performance samples",
+      "claim": "The exact target cardinalities drive 20 persisted samples and nearest-rank p95 assertion with solver excluded.",
+      "evidence": [{"kind":"performance-test","source":"WorkspaceBrowserIT.java:432-479 and final clean output","observation":"Final samples produce 190.5 ms p95; test explicitly prints solver time excluded and asserts cardinalities."}],
+      "negativeObligations": ["Solver time is not used to excuse interaction latency"],
+      "counterEvidence": ["A pre-submission run measured 369.8 ms p95 and exposed a full-matrix rerender; the submitted implementation was revised and passed at 190.5 ms."]
+    }
+  ]
+}

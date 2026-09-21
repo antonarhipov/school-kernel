@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.transaction.TransactionException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 @RestControllerAdvice
 public class ProblemHandler {
@@ -50,6 +51,14 @@ public class ProblemHandler {
                 HttpStatus.BAD_REQUEST,
                 "MALFORMED_REQUEST",
                 "The import request could not be read.");
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ProblemResponse> malformedJson() {
+        return response(
+                HttpStatus.BAD_REQUEST,
+                "MALFORMED_REQUEST",
+                "The request could not be read.");
     }
 
     @ExceptionHandler(NoResourceFoundException.class)

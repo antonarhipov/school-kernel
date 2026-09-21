@@ -4,6 +4,8 @@ let etag;
 let csrf;
 let pollTimer;
 let acceptedModel;
+let currentSnapshot;
+let bulkPreview;
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
@@ -27,6 +29,7 @@ async function load() {
 }
 
 function render(snapshot) {
+  currentSnapshot = snapshot;
   clearTimeout(pollTimer);
   const school = snapshot.workspace.school;
   if (snapshot.state === 'EMPTY') {
@@ -72,12 +75,17 @@ function render(snapshot) {
     confirmation.addEventListener('change', () => { accept.disabled = !confirmation.checked; });
     accept.addEventListener('click', () => mutate('/api/proposal/accept', 'POST'));
     document.querySelector('#discard-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
-  } else {
+  } else if (snapshot.state === 'ACCEPTED_BASELINE') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
     if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
     if (view.narrow && !view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
     renderAccepted(snapshot, schoolName);
+  } else if (snapshot.state === 'REPAIR_DRAFT') {
+    currentLabel.textContent = M.acceptedTimetable(schoolName);
+    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
+    if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
+    renderRepair(snapshot, schoolName);
   }
 }
 
@@ -102,8 +110,90 @@ function makeModel(baseline) {
 function renderAccepted(snapshot, schoolName) {
   stateCard.className = `card workspace-card density-${view.density}`;
   stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.acceptedState}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p></div>
-    <p>${M.acceptedDetail} ${M.inspectionIntro}</p><p class="muted revision">${M.timetableRevision} <code>${escapeHtml(snapshot.workspace.timetableRevision)}</code></p><h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
+    <p>${M.acceptedDetail} ${M.inspectionIntro}</p><p class="muted revision">${M.timetableRevision} <code>${escapeHtml(snapshot.workspace.timetableRevision)}</code></p>
+    ${view.narrow ? '' : startRepairForm()}<h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
+  bindStartRepair();
   if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
+}
+
+function startRepairForm() {
+  const periods = acceptedModel.definition.periods;
+  return `<details class="repair-entry"><summary>${M.startRepair}</summary><form id="start-repair-form">
+    <p>${M.startRepairIntro}</p><div class="repair-grid">
+    ${selectControl('repair-resource-type', M.resourceType, [['TEACHER', M.teacher], ['ROOM', M.room]], 'TEACHER')}
+    <label><span>${M.resource}</span><select id="repair-resource"></select></label></div>
+    <fieldset class="period-choices"><legend>${M.weeklyUnavailablePeriods}</legend>${periods.map(period => `<label><input type="checkbox" name="period" value="${escapeAttribute(period.id)}"> <span>${escapeHtml(periodLabel(period))} · ${escapeHtml(M.days[period.weekday] || period.weekday)}</span></label>`).join('')}</fieldset>
+    <div class="actions"><button type="submit">${M.stageChange}</button></div><p class="muted">${M.unsupportedRepairActions}</p></form></details>`;
+}
+
+function bindStartRepair() {
+  const form = document.querySelector('#start-repair-form');
+  if (!form) return;
+  const type = form.querySelector('#repair-resource-type');
+  const resource = form.querySelector('#repair-resource');
+  const fill = () => { const source = type.value === 'TEACHER' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms; resource.innerHTML = options(source).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); };
+  fill(); type.addEventListener('change', fill);
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const periodIds = [...form.querySelectorAll('[name=period]:checked')].map(input => input.value);
+    await mutateJson('/api/repair-draft', 'POST', { resourceType: type.value, resourceId: resource.value, periodIds });
+  });
+}
+
+function renderRepair(snapshot, schoolName) {
+  const draft = snapshot.workspace.repairDraft;
+  stateCard.className = `card workspace-card repair-mode density-${view.density}`;
+  if (view.narrow) {
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice}</p><div id="accepted-view"></div>`;
+    renderFocused(); return;
+  }
+  const changes = draft.intent.changes.map(change => repairChange(change)).join('');
+  const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h3>${M.blockingConflicts}</h3>${draft.conflicts.map(item => `<p><strong>${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))}</strong> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
+  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div>
+    <p>${M.repairDraftIntro}</p><div class="draft-summary"><section><h3>${M.weeklyChanges}</h3>${changes || `<p>${M.noWeeklyChanges}</p>`}</section><section><h3>${M.draftCounts}</h3><dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd id="attempt-pin-count">${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd id="draft-conflict-count">${draft.conflicts.length}</dd></div></dl></section></div>${conflicts}
+    <div class="repair-controls"><h3>${M.bulkPin}</h3><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></div>
+    <div class="repair-day"><label><span>${M.weekdayLabel}</span><select id="repair-weekday">${acceptedModel.weekdays.map(day => `<option value="${escapeAttribute(day)}"${day === view.day ? ' selected' : ''}>${escapeHtml(M.days[day] || day)}</option>`).join('')}</select></label></div>
+    ${matrix(acceptedModel.definition.cohorts, periodsForDay(view.day), acceptedModel.assignmentsByCell, false)}
+    <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(acceptedModel.assignmentMap.get(view.selectedLessonId)) : ''}</div>
+    <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div>
+    <label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft" disabled="${!draft.readyToSolve}">${draft.readyToSolve ? M.readyForRepair : M.resolveConflicts}</button></div>`;
+  bindRepairControls();
+}
+
+function repairChange(change) {
+  const map = change.resourceType === 'TEACHER' ? acceptedModel.maps.teachers : acceptedModel.maps.rooms;
+  const periods = change.unavailablePeriodIds.map(id => entityName(acceptedModel.maps.periods.get(id), id)).join(', ');
+  return `<p><span class="state direct-state">${M.directIntent}</span> <strong>${escapeHtml(entityName(map.get(change.resourceId), change.resourceId))}</strong> · ${escapeHtml(periods)}</p>`;
+}
+
+function pinDimensionControls(prefix) {
+  return `<fieldset class="pin-dimensions"><legend>${M.pinDimensions}</legend><label><input type="checkbox" name="${prefix}-dimension" value="PERIOD" checked> ${M.acceptedPeriod}</label><label><input type="checkbox" name="${prefix}-dimension" value="ROOM"> ${M.acceptedRoom}</label></fieldset>`;
+}
+
+function bulkPreviewHtml() {
+  if (!bulkPreview) return '';
+  return `<section class="bulk-preview" aria-live="polite"><h4>${M.bulkPreview}</h4><p>${M.previewCount(bulkPreview.count)} · ${bulkPreview.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</p><ul>${bulkPreview.lessonIds.map(id => `<li>${escapeHtml(entityName(acceptedModel.maps.lessons.get(id), id))}</li>`).join('')}</ul>${bulkPreview.conflicts.length ? `<p class="error">${M.previewConflicts(bulkPreview.conflicts.length)}</p>` : ''}<div class="actions"><button id="confirm-bulk" type="button">${M.confirmSnapshot}</button><button id="cancel-bulk" type="button" class="secondary">${M.cancelPreview}</button></div></section>`;
+}
+
+function bindRepairControls() {
+  document.querySelector('#repair-weekday').addEventListener('change', event => { view.day = event.target.value; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); });
+  document.querySelectorAll('[data-lesson-id]').forEach(button => button.addEventListener('click', () => selectLesson(button)));
+  bindCloseDetails(); bindPinActions();
+  const scope = document.querySelector('#bulk-scope'); const scopeId = document.querySelector('#bulk-scope-id');
+  const fillScope = () => { const values = scope.value === 'DAY' ? acceptedModel.weekdays.map(day => [day, M.days[day] || day]) : scope.value === 'CLASS' ? options(acceptedModel.definition.cohorts) : [['', M.snapshotCurrentUnaffected]]; scopeId.innerHTML = values.map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); scopeId.disabled = scope.value === 'UNAFFECTED'; };
+  fillScope(); scope.addEventListener('change', fillScope);
+  document.querySelector('#preview-bulk').addEventListener('click', async () => {
+    const dimensions = [...document.querySelectorAll('[name=bulk-dimension]:checked')].map(input => input.value);
+    const payload = { scope: scope.value, dimensions }; if (scope.value !== 'UNAFFECTED') payload.scopeId = scopeId.value;
+    const response = await commandJson('/api/repair-draft/bulk-pin-preview', 'POST', payload);
+    if (response) { bulkPreview = response; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); }
+  });
+  document.querySelector('#confirm-bulk')?.addEventListener('click', () => { const preview = bulkPreview; bulkPreview = null; mutateJson('/api/repair-draft', 'PATCH', { action: 'CONFIRM_BULK_PIN', preview }); });
+  document.querySelector('#cancel-bulk')?.addEventListener('click', () => { bulkPreview = null; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); });
+  document.querySelectorAll('[data-undo-bulk]').forEach(button => button.addEventListener('click', () => mutateJson('/api/repair-draft', 'PATCH', { action: 'UNDO_BULK_PIN', bulkActionId: button.dataset.undoBulk })));
+  const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
+  confirmation.addEventListener('change', () => { discard.disabled = !confirmation.checked; });
+  discard.addEventListener('click', () => mutateJson('/api/repair-draft', 'DELETE', { confirmed: true }));
 }
 
 function renderWholeSchool() {
@@ -144,14 +234,59 @@ function matrix(cohorts, periods, assignmentsByCell, filtered) {
 
 function lessonButton(item, matched) {
   const selected = item.lessonId === view.selectedLessonId;
-  return `<button type="button" class="lesson-cell${matched ? ' match' : ''}${selected ? ' selected' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span><em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  const draftState = repairLessonState(item.lessonId);
+  return `<button type="button" class="lesson-cell${matched ? ' match' : ''}${selected ? ' selected' : ''}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function lessonDetails(item) {
   if (!item) return '';
+  const draftState = repairLessonState(item.lessonId);
+  const repairActions = currentSnapshot?.state === 'REPAIR_DRAFT' ? `<section class="pin-actions"><h4>${M.protectAcceptedAssignment}</h4>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${draftState.labels || `<span class="state unpinned-state">${M.unpinned}</span>`}</p></section>` : '';
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div><span class="state accepted">✓ ${M.acceptedAssignment}</span><h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
-    <details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+    ${repairActions}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+}
+
+function repairLessonState(lessonId) {
+  if (currentSnapshot?.state !== 'REPAIR_DRAFT') return { direct: false, conflict: false, labels: '' };
+  const draft = currentSnapshot.workspace.repairDraft;
+  const direct = draft.directEffectLessonIds.includes(lessonId);
+  const conflict = draft.conflicts.some(item => item.lessonId === lessonId);
+  const pin = draft.intent.pins.find(item => item.lessonId === lessonId);
+  const lesson = acceptedModel.maps.lessons.get(lessonId);
+  const manifestLock = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(item => item.lessonId === lessonId);
+  const labels = [];
+  if (direct) labels.push(`<em class="direct-label">${M.directlyAffected}</em>`);
+  if (conflict) labels.push(`<em class="conflict-label">${M.conflict}</em>`);
+  if (lesson?.periodLock || manifestLock?.periodLockOrigin === 'PERSISTENT_POLICY') labels.push(`<em class="policy-label">${M.policyPeriodLock}</em>`);
+  if (lesson?.roomLock || manifestLock?.roomLockOrigin === 'PERSISTENT_POLICY') labels.push(`<em class="policy-label">${M.policyRoomLock}</em>`);
+  if (pin?.periodSources?.length) labels.push(`<em class="pin-label">${M.periodPinned}</em>`);
+  if (pin?.roomSources?.length) labels.push(`<em class="pin-label">${M.roomPinned}</em>`);
+  return { direct, conflict, labels: labels.join('') };
+}
+
+function bindPinActions() {
+  const item = acceptedModel.assignmentMap.get(view.selectedLessonId);
+  if (!item) return;
+  const dimensions = () => [...document.querySelectorAll('[name=lesson-dimension]:checked')].map(input => input.value);
+  document.querySelector('#apply-pin')?.addEventListener('click', () => mutatePin({ action: 'PIN', lessonId: item.lessonId, dimensions: dimensions() }));
+  document.querySelector('#remove-pin')?.addEventListener('click', () => mutatePin({ action: 'UNPIN', lessonId: item.lessonId, dimensions: dimensions() }));
+}
+
+async function mutatePin(payload) {
+  const response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const result = await response.json();
+  if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
+  etag = response.headers.get('ETag'); currentSnapshot = result;
+  if (acceptedModel.assignments.length < 200 || result.workspace.repairDraft.conflicts.length) { render(result); return; }
+  const item = acceptedModel.assignmentMap.get(payload.lessonId);
+  const oldButton = document.querySelector(`[data-lesson-id="${CSS.escape(payload.lessonId)}"]`);
+  if (oldButton) { const holder = document.createElement('div'); holder.innerHTML = lessonButton(item, false); const replacement = holder.firstElementChild; replacement.addEventListener('click', () => selectLesson(replacement)); oldButton.replaceWith(replacement); }
+  const host = document.querySelector('#lesson-details-host');
+  host.innerHTML = lessonDetails(item); bindCloseDetails(); bindPinActions();
+  document.querySelector('#attempt-pin-count').textContent = result.workspace.repairDraft.intent.pins.length;
+  document.querySelector('#draft-conflict-count').textContent = result.workspace.repairDraft.conflicts.length;
+  document.querySelector('#lesson-panel-title')?.focus();
 }
 
 function renderFocused() {
@@ -202,7 +337,7 @@ function selectLesson(button) {
     candidate.querySelector('.selected-label').hidden = !selected;
   });
   document.querySelector('#lesson-details-host').innerHTML = lessonDetails(acceptedModel.assignmentMap.get(view.selectedLessonId));
-  bindCloseDetails();
+  bindCloseDetails(); bindPinActions();
   document.querySelector('#lesson-panel-title')?.focus();
 }
 
@@ -294,10 +429,23 @@ function bindInitialActions() {
 async function cancelRun(id) { await mutate(`/api/runs/${encodeURIComponent(id)}`, 'DELETE'); }
 
 async function mutate(path, method, body) {
-  const response = await fetch(path, { method, headers: { [csrf.headerName]: csrf.token, 'If-Match': etag }, body });
+  const headers = { [csrf.headerName]: csrf.token, 'If-Match': etag };
+  if (typeof body === 'string') headers['Content-Type'] = 'application/json';
+  const response = await fetch(path, { method, headers, body });
   const result = await response.json();
   if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
   etag = response.headers.get('ETag'); render(result);
+}
+
+async function mutateJson(path, method, payload) {
+  return mutate(path, method, JSON.stringify(payload));
+}
+
+async function commandJson(path, method, payload) {
+  const response = await fetch(path, { method, headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const result = await response.json();
+  if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return null; }
+  return result;
 }
 
 async function submit(form) {

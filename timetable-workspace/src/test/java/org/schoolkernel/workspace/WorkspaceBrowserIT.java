@@ -298,6 +298,79 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("UC-4 main/extensions/G4/RULE-19/20/24: real keyboard browser stages, pins, previews, resolves conflict, and discards safely")
+    void preparesProtectedRepairDraftInRealBrowser() throws Exception {
+        storeAccepted(acceptedDocument(false));
+        JsonNode acceptedBefore = JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single()).path("acceptedBaseline").deepCopy();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(15));
+            cdp.evaluate("""
+                    document.querySelector('.repair-entry').open=true;
+                    document.querySelector('[name=period][value="mon-1"]').checked=true;
+                    document.querySelector('#start-repair-form').requestSubmit();
+                    """);
+            String draft = cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            assertTrue(draft.contains("Directly affected lessons\n1"));
+            assertTrue(draft.contains("Accepted baseline remains current"));
+            assertTrue(draft.contains("Mathematics 1") || draft.contains("Mathematics"));
+
+            ObjectNode narrowMetrics = JSON.createObjectNode().put("width", 390).put("height", 844)
+                    .put("deviceScaleFactor", 1).put("mobile", true);
+            cdp.command("Emulation.setDeviceMetricsOverride", narrowMetrics);
+            String narrow = cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(5));
+            assertFalse(narrow.contains("Apply selected pins"));
+            assertFalse(narrow.contains("Discard repair draft"));
+            assertFalse(cdp.evaluateValue("Boolean(document.querySelector('.matrix-wrap'))")
+                    .path("result").path("result").path("value").booleanValue());
+            ObjectNode desktopMetrics = JSON.createObjectNode().put("width", 1280).put("height", 800)
+                    .put("deviceScaleFactor", 1).put("mobile", false);
+            cdp.command("Emulation.setDeviceMetricsOverride", desktopMetrics);
+            cdp.awaitText("Bulk-protect accepted assignments", Duration.ofSeconds(5));
+
+            cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').focus()");
+            cdp.pressKey(" ", "Space");
+            cdp.awaitText("Protect accepted assignment dimensions", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#apply-pin').focus()");
+            cdp.pressKey(" ", "Space");
+            String conflict = cdp.awaitText("Resolve blocking conflicts before solving", Duration.ofSeconds(10));
+            assertTrue(conflict.contains("Blocking conflict"));
+
+            cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').click()");
+            cdp.evaluate("document.querySelector('#remove-pin').click()");
+            cdp.awaitText("Draft is durably saved with no blocking conflict", Duration.ofSeconds(10));
+
+            cdp.evaluate("document.querySelector('#preview-bulk').click()");
+            String preview = cdp.awaitText("Bulk pin preview · no changes applied yet", Duration.ofSeconds(10));
+            assertTrue(preview.contains("1 lesson in this immutable snapshot"));
+            cdp.evaluate("document.querySelector('#confirm-bulk').click()");
+            cdp.awaitText("Confirmed bulk snapshot · 1 lesson", Duration.ofSeconds(10));
+            cdp.evaluate("document.querySelector('[data-undo-bulk]').click()");
+            cdp.awaitText("Attempt-scoped pins\n0", Duration.ofSeconds(10));
+
+            cdp.evaluate("document.querySelector('#confirm-discard-draft').click()");
+            cdp.evaluate("document.querySelector('#discard-draft').click()");
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(10));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        JsonNode after = JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single());
+        assertEquals("ACCEPTED_BASELINE", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1").query(String.class).single());
+        assertEquals(acceptedBefore, after.path("acceptedBaseline"));
+        assertFalse(after.has("repairDraft"));
+    }
+
+    @Test
     @DisplayName("UC-3 G5 and RULE-25: target-scale post-load inspection interactions remain below 250 ms p95")
     void measuresTargetScaleInspectionInteractionsInRealBrowser() throws Exception {
         ObjectNode document = scaleDocument();
@@ -353,6 +426,57 @@ class WorkspaceBrowserIT {
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument());
+    }
+
+    @Test
+    @DisplayName("UC-4 G6 and RULE-25: target-scale persisted pin feedback remains below 250 ms p95")
+    void measuresTargetScalePinFeedbackInRealBrowser() throws Exception {
+        storeAccepted(scaleDocument());
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            cdp.evaluate("""
+                    document.querySelector('.repair-entry').open=true;
+                    document.querySelector('#repair-resource-type').value='TEACHER';
+                    document.querySelector('#repair-resource-type').dispatchEvent(new Event('change',{bubbles:true}));
+                    document.querySelector('#repair-resource').value='teacher-99';
+                    document.querySelector('[name=period][value="period-59"]').checked=true;
+                    document.querySelector('#start-repair-form').requestSubmit();
+                    """);
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            JsonNode samples = cdp.evaluateValue("""
+                    (async () => {
+                      const samples=[];
+                      for(let i=0;i<20;i++) {
+                        document.querySelector('[data-lesson-id="lesson-0"]').click();
+                        await new Promise(resolve => requestAnimationFrame(resolve));
+                        const applying=i%2===0;
+                        const started=performance.now();
+                        document.querySelector(applying?'#apply-pin':'#remove-pin').click();
+                        const expected=applying?'Accepted period pinned':'Unpinned · kernel stability ordering applies';
+                        while(!document.body.innerText.includes(expected)) await new Promise(resolve => setTimeout(resolve,2));
+                        samples.push(Number((performance.now()-started).toFixed(3)));
+                      }
+                      return samples;
+                    })()
+                    """).path("result").path("result").path("value");
+            assertBelowTarget("pin feedback", samples);
+            System.out.printf("UC-4 scale pin-feedback samples=%s; solver time excluded%n", samples);
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        JsonNode stored = JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single());
+        assertEquals(1_000, stored.path("acceptedBaseline").path("result").path("timetable").path("assignments").size());
+        assertEquals("REPAIR_DRAFT", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1").query(String.class).single());
     }
 
     private static JsonNode measured(Cdp cdp, String operation) throws Exception {
@@ -562,6 +686,13 @@ class WorkspaceBrowserIT {
                 Thread.sleep(100);
             }
             throw new AssertionError("Browser did not render: " + expected);
+        }
+
+        String text() throws Exception {
+            ObjectNode params = object("expression", "document.body?.innerText || ''");
+            params.put("returnByValue", true);
+            return command("Runtime.evaluate", params)
+                    .path("result").path("result").path("value").stringValue();
         }
 
         CopyOnWriteArrayList<String> errors() {

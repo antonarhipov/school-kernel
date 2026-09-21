@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: none
-- Status: none
-- Next eligible: UC-4, UC-8
+- Use case: UC-4
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none while UC-4 convergence is pending
 
 ## Progress
 
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | none | `854493f`; revises `2671b2a` for C-1 through C-3 and G-1 through G-10 | `convergence/UC-1.md` - APPROVED |
 | UC-2 | APPROVED | UC-1 | `b7180a9`; started from `dfe0e75` | `convergence/UC-2.md` - APPROVED WITH NOTES |
 | UC-3 | APPROVED | UC-1 | `1a796d2`; walkthrough startup `2523205`; started from `a9ab56a` | `convergence/UC-3.md` - APPROVED |
-| UC-4 | NOT_STARTED | UC-1 | - | - |
+| UC-4 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence; started from `f3b9253` | pending |
 | UC-5 | NOT_STARTED | UC-4 | - | - |
 | UC-6 | NOT_STARTED | UC-5 | - | - |
 | UC-7 | NOT_STARTED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | - | - |
@@ -100,6 +100,30 @@
 | UC-3 minimal guarantee | Empty/no-match/presentation changes compare the exact unchanged PostgreSQL document and invent no assignments |
 | Requires UC-1 | Approved UC-1 accepted pair consumed by complete production snapshot test at `WorkspaceBrowserIT.java:280` |
 | RULE-1, RULE-2, RULE-4, RULE-19 through RULE-25 | Reactor, architecture, Flyway, snapshot, catalog, security, safe failure/logging, PostgreSQL/browser, and scale evidence in `checkpoints/UC-3.md` |
+
+## UC-4 Evidence
+
+- Started: 2026-09-21; base `f3b9253b67f9be528cd6b6ff90343ba9b4992f28`.
+- Pre-existing dirty files: none.
+- Implementation submission: HEAD at convergence.
+- Changed files: repair draft service, controller/mutation/security/problem handling, native workspace UI/catalog/styles,
+  PostgreSQL/HTTP and real-browser tests, status, checkpoint, and 35-item Jev bundle.
+- Commands and results: focused `WorkspaceRepairDraftIT` - 9 tests PASS; real-Chrome UC-4 journey - PASS;
+  deterministic DAY/CLASS/filter/altered/stale/empty bulk snapshots - PASS; `./mvnw -q clean verify` - 152 tests,
+  0 failures, 0 errors, 0 skipped, with final pin-feedback p95 166.3 ms; `git diff --check` - PASS; Jev compiled helper `--validate-only` - valid,
+  35 items; external Jev - REVIEW because disclosure was not authorized.
+
+| Contract element | Evidence |
+|---|---|
+| UC-4 main steps 1-7 | Teacher and room real HTTP/PostgreSQL journeys at `WorkspaceRepairDraftIT.java:68,102`; complete real-Chrome desktop/narrow journey at `WorkspaceBrowserIT.java:301` |
+| UC-4 extensions 1a, 2a, 7b, 7c | Unsupported/no-effect/durable-reload/confirmed-discard assertions at `WorkspaceRepairDraftIT.java:186` |
+| UC-4 extensions 4a and 7a | Attempt/policy conflict and resolution matrix at `WorkspaceRepairDraftIT.java:128` |
+| UC-4 extensions 5a and 6a | Non-mutating preview, full server-recomputed confirmation, DAY/CLASS/filter selection, altered/stale refusal, overlapping provenance, and source-scoped undo at `WorkspaceRepairDraftIT.java:152` |
+| UC-4 extension 6b | PostgreSQL autosave failure injection, rollback, safe 503, and refused run at `WorkspaceRepairDraftIT.java:233` |
+| UC-4 G1-G5 and both postconditions | Overlay compilation, canonical intent/effect revisions, immutable snapshots, visible states, and exact accepted-bundle comparisons recorded in `checkpoints/UC-4.md` |
+| UC-4 G6 | 1,000-lesson persisted pin-feedback test at `WorkspaceBrowserIT.java:432`; final p95 166.3 ms below 250 ms |
+| Requires UC-1 | Approved exact accepted definition/result/manifest is consumed through the production singleton aggregate in every UC-4 integration journey |
+| RULE-1 through RULE-25 applicable to UC-4 | Reactor, lifecycle, concurrency, fidelity, overlay/snapshot, browser, accessibility, security, failure, observability, PostgreSQL, and scale evidence recorded by rule in `checkpoints/UC-4.md` |
 
 ## Blockers
 

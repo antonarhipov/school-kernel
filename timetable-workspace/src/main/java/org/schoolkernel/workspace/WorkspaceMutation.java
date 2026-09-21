@@ -79,6 +79,18 @@ public class WorkspaceMutation {
         return repository.load();
     }
 
+    @Transactional
+    public WorkspaceAggregate replaceRepair(
+            long expectedVersion,
+            WorkspaceState expectedState,
+            WorkspaceState nextState,
+            JsonNode document) {
+        if (repository.replace(expectedVersion, expectedState, nextState, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "The repair draft changed. Reload it before continuing.");
+        }
+        return repository.load();
+    }
+
     private WorkspaceProblem transitionProblem(long expectedVersion, String message) {
         WorkspaceAggregate current = repository.load();
         if (current.version() != expectedVersion) {

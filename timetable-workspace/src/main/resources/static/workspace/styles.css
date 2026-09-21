@@ -98,6 +98,34 @@ code { overflow-wrap: anywhere; }
 .focused-lesson div span { color: #5b6962; font-size: .82rem; }
 .accepted-text { color: #1b6841; font-size: .74rem; font-weight: 800; }
 .narrow-banner { padding: 12px; border-left: 4px solid #476b84; background: #edf5fa; color: #294c63; font-weight: 700; }
+.repair-entry { margin: 20px 0; padding: 16px; border: 1px solid #b9d5c5; border-radius: 12px; background: #f7fbf8; }
+.repair-entry > summary { cursor: pointer; font-size: 1.05rem; font-weight: 800; }
+.repair-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 12px; }
+.repair-grid label { margin: 0; }
+.repair-grid select, .repair-day select { width: 100%; padding: 9px; border: 1px solid #bfcac4; border-radius: 8px; background: white; font: inherit; }
+.period-choices, .pin-dimensions { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.period-choices label, .pin-dimensions label { display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 600; }
+.draft-state { background: #fff1ce; color: #674800; }
+.draft-summary { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin: 18px 0; }
+.draft-summary section, .repair-controls, .bulk-preview { padding: 16px; border: 1px solid #d7dfda; border-radius: 12px; background: #fafcfb; }
+.draft-summary h3, .repair-controls h3 { margin-top: 0; }
+.direct-state, .direct-label { background: #e7f0fa !important; color: #274f6c !important; }
+.ready-state { padding: 12px; border-left: 4px solid #2d7750; background: #eaf6ee; color: #225a3d; font-weight: 750; }
+.conflict-list { padding: 12px 16px; border-left: 4px solid #a62d2d; background: #fff0f0; color: #782222; }
+.repair-controls { margin-bottom: 16px; }
+.repair-controls > button { margin-top: 10px; }
+.bulk-preview { margin-top: 14px; background: #fffaf0; }
+.bulk-preview h4 { margin-top: 0; }
+.repair-day { max-width: 320px; margin: 16px 0 10px; }
+.bulk-history p { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px; background: #f3f6f4; border-radius: 9px; }
+.pin-actions { grid-column: 1 / -1; padding: 12px; border-top: 1px solid #d4ddd8; }
+.lesson-cell.directly-affected { border-left-color: #3276a5; background: #f0f7fc; }
+.lesson-cell.conflicting { border-color: #a62d2d; box-shadow: inset 0 0 0 1px #a62d2d; }
+.lesson-cell .direct-label, .lesson-cell .conflict-label, .lesson-cell .policy-label, .lesson-cell .pin-label { display: inline-flex; }
+.lesson-cell .conflict-label { background: #ffe2e2; color: #7c2020; }
+.lesson-cell .policy-label { background: #eee8fa; color: #51427a; }
+.lesson-cell .pin-label { background: #dff3e7; color: #1b5c39; }
+.unpinned-state { background: #edf0ee; color: #4c5953; }
 
 @media (max-width: 600px) {
   header { padding-top: 28px; }
@@ -118,4 +146,5 @@ code { overflow-wrap: anywhere; }
   .view-tabs button { flex: 1; }
   .focused-day { grid-template-columns: 1fr; }
   .focused-lesson { grid-column: 1; grid-template-columns: 1fr; gap: 7px; }
+  .repair-entry, .repair-controls, .draft-summary, .repair-day, .repair-mode > .matrix-wrap, .repair-mode > .confirmation, .repair-mode > .actions { display: none; }
 }
