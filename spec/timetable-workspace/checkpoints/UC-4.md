@@ -57,14 +57,12 @@
 - Full relevant suite: `./mvnw -q clean verify` - 152 tests, 0 failures, 0 errors, 0 skipped.
 - Working tree impact from tests: none; `git diff --check` passes.
 - Runtime evidence: real Chrome over ephemeral HTTP/PostgreSQL stages teacher unavailability, exposes direct/conflict/pin state, resolves a conflict, previews/confirms/undoes a bulk snapshot, verifies narrow read-only behavior, and explicitly discards the draft with zero browser errors.
-- Changed files: workspace repair service/controller/mutation/security/problem mapping; native `app.js`, `messages.js`, and `styles.css`; PostgreSQL/HTTP and browser tests; status, checkpoint, and Jev bundle.
+- Changed files: workspace repair service/controller/mutation/security/problem mapping; native `app.js`, `messages.js`, and `styles.css`; PostgreSQL/HTTP and browser tests; status and checkpoint.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-3 and kernel UC-1/UC-2 all pass in the 152-test clean reactor.
-- Jev preflight: `UC-4.jev-bundle.json` validates locally with 35 atomic items for pinned `jev-1.13.0`; external review is `REVIEW` because this turn did not authorize disclosure of repository paths, excerpts, test observations, and project claims to TypeSafe. No report was produced and no semantic approval is claimed.
 
 ## Notes
 
 - The first target-scale implementation rebuilt the complete matrix after every persisted pin and missed G6 at 369.8 ms p95. The submitted incremental response path updates only the confirmed lesson/panel/count state; the final clean run measured 166.3 ms p95.
 - The required administrator walkthrough remains the independent convergence gate; this checkpoint claims automated technical readiness only.
-- Jev `REVIEW` is an authorization limitation rather than counterevidence; every deterministic claim remains backed by the clean suite and cited real HTTP/PostgreSQL/browser evidence.
 
 READY FOR CONVERGENCE: UC-4

@@ -11,7 +11,7 @@
 ## Protocol Gate
 
 1. PASS - exactly UC-2 is `READY_FOR_CONVERGENCE`.
-2. PASS - implementation, checkpoint, Jev artifacts, tests, and runtime evidence are committed together at `b7180a9` from base `dfe0e75`.
+2. PASS - implementation, checkpoint, tests, and runtime evidence are committed together at `b7180a9` from base `dfe0e75`.
 3. PASS - required UC-1 is `APPROVED` at `dfe0e75`.
 4. PASS - no other use case is `IN_PROGRESS` or `READY_FOR_CONVERGENCE`.
 5. PASS - the checkpoint has rows for all six main steps, eight extensions, six guarantees, both postconditions, the UC-1 relation, and all twenty applicable rules.

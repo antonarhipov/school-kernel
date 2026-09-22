@@ -49,11 +49,8 @@
 - Full relevant suite: escalated `./mvnw -q clean verify` - 170 tests, 0 failures, 0 errors, 0 skipped. The initial sandboxed attempt could not open the Docker socket; the unchanged approved rerun is authoritative and green.
 - Working tree impact from tests: none; `git diff --check` passes.
 - Runtime evidence: real Chrome renders the accepted school, input revision, timetable revision, and download action, then receives `200 application/zip` with an attachment filename and non-zero bytes over the loopback server; browser errors are empty.
-- Changed files: `AcceptedBaselineExportService`, `AcceptedBundleArchiver`, `ZipAcceptedBundleArchiver`, `SafeImportReader`, controller/security route, native UI/messages/styles, HTTP/browser tests, status, checkpoint, and Jev bundle.
+- Changed files: `AcceptedBaselineExportService`, `AcceptedBundleArchiver`, `ZipAcceptedBundleArchiver`, `SafeImportReader`, controller/security route, native UI/messages/styles, HTTP/browser tests, status, and checkpoint.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-7 and kernel UC-1/UC-2 all pass in the 170-test clean reactor.
-- Jev preflight: `UC-8.jev-bundle.json` validates locally with 26 atomic items using the already-built pinned helper.
-  External TypeSafe disclosure is not authorized, so the network review is recorded as `REVIEW`; no semantic approval
-  is claimed.
 
 ## Notes
 

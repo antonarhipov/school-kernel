@@ -60,15 +60,13 @@
 - Full relevant suite: `./mvnw -q clean verify` - 159 tests, 0 failures, 0 errors, 0 skipped; UC-4 target-scale pin-feedback samples `[227.2,72.3,54.4,86.3,74,30.8,26.9,22.1,107.4,64.4,28.9,26.2,27.2,29.4,26.5,25.6,27.7,25.8,34.2,29.5]`, p95 107.4 ms - PASS below 250 ms.
 - Working tree impact from tests: none; `git diff --check` passes.
 - Runtime evidence: real Chrome over ephemeral HTTP/PostgreSQL starts a protected teacher repair, keeps accepted timetable inspection available during the packaged 30-second run, renders a verified feasible repair proposal with priority/execution/change evidence, and leaves the accepted baseline unchanged.
-- Changed files: `RepairPlanningService.java`; planner, repair compiler guard, controller, mutation, recovery, and repository integration; native `app.js` and `messages.js`; planner, PostgreSQL/HTTP, and Chrome tests; accepted-result fixture; status, checkpoint, and Jev bundle.
+- Changed files: `RepairPlanningService.java`; planner, repair compiler guard, controller, mutation, recovery, and repository integration; native `app.js` and `messages.js`; planner, PostgreSQL/HTTP, and Chrome tests; accepted-result fixture; status and checkpoint.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-4 and kernel UC-1/UC-2 all pass in the 159-test clean reactor. Pin mutations use `Prefer: return=minimal`, merge the returned durable repair-draft delta, and avoid serializing/parsing the complete 1,000-lesson snapshot on every pin.
-- Jev preflight: `UC-5.jev-bundle.json` validates locally with 37 atomic items for pinned `jev-1.13.0`; the prescribed npm wrapper could not rebuild under read-only `.agents`, so the already-built pinned helper performed validation. External review is `REVIEW` because the turn did not authorize disclosure of repository excerpts and claims to TypeSafe; no report was produced and no semantic approval is claimed.
 
 ## Notes
 
 - Clean verification emitted Hikari connection-validation warnings from previously stopped Testcontainers contexts during the long browser phase; the reactor exited 0 and all 159 reports record zero failures/errors/skips.
 - Revision resolves convergence C-1 and G-1 through G-3 with a minimal persisted-pin response and production-boundary negative repair journeys; no contract or rule was weakened.
 - The required administrator walkthrough and independent evidence audit remain convergence responsibilities; this checkpoint claims automated technical readiness only.
-- Jev `REVIEW` is an authorization limitation rather than counterevidence; deterministic checks and convergence remain authoritative.
 
 READY FOR CONVERGENCE: UC-5

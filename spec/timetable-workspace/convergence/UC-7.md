@@ -12,8 +12,8 @@
 
 - Exactly UC-7 was `READY_FOR_CONVERGENCE`; no other use case was `IN_PROGRESS` or `READY_FOR_CONVERGENCE`.
 - The immutable submission is committed at `b02ce5f`; the original implementation, C-1 and C-2 repairs, user-selected
-  non-blocking performance decision, specification/rule revision, checkpoint, and advisory Jev bundle are attributable
-  through that commit. The worktree was clean before verification.
+  non-blocking performance decision, specification/rule revision, and checkpoint are attributable through that commit.
+  The worktree was clean before verification.
 - Required UC-1 and included UC-3, UC-4, UC-5, and UC-6 are all recorded `APPROVED`.
 - The checkpoint has evidence for all seven main steps, five extensions, five guarantees, both postconditions, every
   relationship, every applicable rule, changed files, focused commands, full regression, and repository hygiene.

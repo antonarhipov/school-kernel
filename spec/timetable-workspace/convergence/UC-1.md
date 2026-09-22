@@ -11,10 +11,10 @@
 ## Protocol Gate
 
 1. PASS — exactly UC-1 is `READY_FOR_CONVERGENCE`.
-2. PASS — the revised checkpoint, implementation, tests, Jev bundle, and browser artifact are committed together at `854493f` from revision base `d0e9031`.
+2. PASS — the revised checkpoint, implementation, tests, and browser artifact are committed together at `854493f` from revision base `d0e9031`.
 3. PASS — UC-1 has no `Requires`, `Includes`, or `Extends` dependency.
 4. PASS — every other use case is `NOT_STARTED`.
-5. PASS — the checkpoint has rows for every scenario, extension, guarantee, postcondition, relationship, applicable rule, command, changed file, prior finding, and regression. The 33-item Jev bundle validates locally and is correctly recorded as `REVIEW`, not pass evidence.
+5. PASS — the checkpoint has rows for every scenario, extension, guarantee, postcondition, relationship, applicable rule, command, changed file, prior finding, and regression.
 6. PASS — the shared kernel tests and workspace changes are attributable to resolving C-1 through C-3 and G-1 through G-10; no later workspace use-case route or actor behavior is implemented.
 
 ## Runtime Reproduction

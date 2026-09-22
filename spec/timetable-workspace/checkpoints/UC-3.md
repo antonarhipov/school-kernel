@@ -51,18 +51,12 @@
 - Full relevant suite: `./mvnw -q clean verify` — 140 tests, 0 failures, 0 errors, 0 skipped.
 - Working tree impact from tests: none; `git diff --check` passed.
 - Runtime evidence: real Chrome over ephemeral HTTP/PostgreSQL rendered complete, filtered, no-match, assignment-detail, focused, empty, narrow-screen, and target-scale accepted views; the browser reported no errors.
-- Changed files: `status.md`, this checkpoint and Jev artifacts; workspace `app.js`, `index.html`, `messages.js`, and `styles.css`; `ArchitectureTest.java`, `WorkspaceBrowserIT.java`, and `WorkspaceImportIT.java`.
+- Changed files: `status.md`, this checkpoint; workspace `app.js`, `index.html`, `messages.js`, and `styles.css`; `ArchitectureTest.java`, `WorkspaceBrowserIT.java`, and `WorkspaceImportIT.java`.
 - Approved UCs regression-tested: timetable-workspace UC-1 and UC-2 plus kernel UC-1/UC-2 all passed in the 140-test clean reactor.
-- Jev preflight: `UC-3.jev-bundle.json` validates locally with 28 items for pinned `jev-1.13.0`; external review is
-  `REVIEW` because authorization to disclose repository paths, implementation excerpts, test results, and project
-  claims to TypeSafe was not granted. No report was produced and no semantic approval is claimed.
 
 ## Notes
 
 - The first cold sample in the latest selection series was 458.6 ms and one day sample was 261.7 ms; the declared target is p95, whose nearest-rank values were 81.1 ms and 172.6 ms respectively. Raw samples remain in the Maven run output.
 - The required administrator walkthrough remains the independent convergence gate; this checkpoint claims automated technical readiness only.
-- Jev `REVIEW` was independently inspected as an authorization limitation, not substantive counterevidence. The local
-  bundle is complete and all deterministic claims remain backed by the cited clean suite, real browser, HTTP,
-  PostgreSQL, architecture, immutability, and raw performance evidence.
 
 READY FOR CONVERGENCE: UC-3

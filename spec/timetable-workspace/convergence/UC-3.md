@@ -12,8 +12,7 @@
 ## Protocol Gate
 
 - Exactly UC-3 was `READY_FOR_CONVERGENCE`; no other UC was in progress or ready.
-- The checkpoint, implementation, tests, status, and locally validated 28-item Jev bundle are committed together at
-  `1a796d2`; the external Jev review was appropriately recorded as `REVIEW` because disclosure was not authorized.
+- The checkpoint, implementation, tests, and status are committed together at `1a796d2`.
 - Required UC-1 is `APPROVED`; the production complete-snapshot test consumes its accepted definition/result state.
 - The checkpoint has distinct rows for all five main steps, four extensions, six guarantees, both postconditions,
   `Requires UC-1`, and RULE-1, RULE-2, RULE-4, and RULE-19 through RULE-25.

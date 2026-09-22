@@ -111,6 +111,8 @@ Produce direct evidence for every contract element:
   system response.
 - Exercise every extension. For negative paths, prove the response and the absence of prohibited disclosure, mutation,
   persistence, emission, or collaborator invocation.
+- For external-process failures such as interruption, timeout, transport failure, or rejected output, drive the outcome
+  through the production actor boundary and prove the durable terminal state. Adapter-only evidence is insufficient.
 - Verify every guarantee and both postconditions.
 - Verify lifecycle transitions against real state and every refused transition at the domain or service boundary.
 - Verify normative data and produced/stored/displayed values by value, not by count or non-null checks.
@@ -145,11 +147,6 @@ Write `<feature-dir>/checkpoints/UC-n.md` using the format below, set the UC to 
 coherent commit named `UC-n: <actor goal>` containing the UC implementation, its tests, status update, and checkpoint
 report. The report identifies this immutable submission as `HEAD at convergence`; converge resolves the actual hash.
 Do not include unrelated changes.
-
-When `.agents/skills/jev-checkpoint/SKILL.md` is present, use it on the completed checkpoint before submission. Include
-its advisory report with the checkpoint. Independently inspect every flag and resolve confirmed defects before marking
-the UC ready. A clean Jev report is not approval; missing credentials, service failure, or low confidence is recorded as
-`REVIEW` in checkpoint notes and never weakens the ordinary verification or convergence gates.
 
 Then invoke `converge` for `UC-n` immediately. This is part of execution, not an optional later review. Do not
 implement, investigate, or prepare another UC while convergence is pending.
@@ -263,7 +260,6 @@ Write a concise blocker with type `SPEC_AMBIGUITY`, `SPEC_CONFLICT`, `TECHNICAL`
 - Runtime evidence: <actor, path/action, observed result>
 - Changed files: <actual paths>
 - Approved UCs regression-tested: <ids and results>
-- Jev preflight: <report path, pinned model, and flagged count | REVIEW with reason>
 
 ## Notes
 

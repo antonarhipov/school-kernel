@@ -11,13 +11,11 @@
 ## Protocol Gate
 
 1. Exactly UC-5 was submitted with status `READY_FOR_CONVERGENCE`: PASS.
-2. Checkpoint, Jev bundle, implementation, and tests are committed together at `75a6c22`: PASS.
+2. Checkpoint, implementation, and tests are committed together at `75a6c22`: PASS.
 3. Required UC-4 is `APPROVED`: PASS.
 4. No other use case is `IN_PROGRESS` or `READY_FOR_CONVERGENCE`: PASS.
 5. The checkpoint covers the complete UC-5 contract, applicable technical surfaces, commands, changed files, and approved-UC regressions: PASS.
 6. Diff `ade3ae3..75a6c22` is attributable to the UC-5 convergence revision: PASS.
-
-The 37-item Jev bundle validates locally. External Jev remains advisory `REVIEW` because repository-excerpt disclosure to TypeSafe was not authorized; it did not affect any evidence grade.
 
 ## Runtime Reproduction
 

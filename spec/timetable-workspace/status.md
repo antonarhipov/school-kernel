@@ -29,11 +29,10 @@
 - Implementation submission: HEAD at convergence
 - Changed files in this revision: kernel verification/publication architecture tests; workspace process, security, problem,
   archive, import, credential, and UI production files; Flyway/process/browser/archive/HTTP tests; decisions, status,
-  checkpoint, Jev bundle, and `output/playwright/uc1-display-name.png`.
+  checkpoint, and `output/playwright/uc1-display-name.png`.
 - Commands and results: `mvn -q clean verify` — 120 tests, 0 failures, 0 errors, 0 skipped; focused malformed
   multipart test — PASS; independent kernel suites and packaged plan -> replan -> verify — PASS; `git diff --check` —
-  PASS; visible Playwright import — `Demo School`, exact revision, zero console errors/warnings; Jev bundle local
-  validation — valid, 33 items; external Jev preflight — REVIEW because disclosure was not authorized.
+  PASS; visible Playwright import — `Demo School`, exact revision, zero console errors/warnings.
 
 | Contract element | Evidence |
 |---|---|
@@ -58,8 +57,8 @@
 - Started: 2026-09-21; base `dfe0e75`.
 - Pre-existing dirty files: none.
 - Implementation submission: HEAD at convergence.
-- Changed files: initial-planning service, packaged planner adapter, recovery hook, repository/mutation/controller/security/import/problem extensions, native workspace UI, planner/HTTP/browser tests, two Playwright screenshots, status, checkpoint, and Jev advisory artifacts.
-- Commands and results: focused `KernelPlannerTest` — 6 tests PASS; focused `WorkspaceInitialPlanningIT` — 8 tests PASS; `./mvnw -q clean verify` — 135 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` — PASS; Jev bundle validation — valid, 38 items; authorized external `jev-1.13.0` preflight — 13 findings, 22 reviews, 3 clear, with every flag independently dispositioned in `checkpoints/UC-2.md`.
+- Changed files: initial-planning service, packaged planner adapter, recovery hook, repository/mutation/controller/security/import/problem extensions, native workspace UI, planner/HTTP/browser tests, two Playwright screenshots, status, and checkpoint.
+- Commands and results: focused `KernelPlannerTest` — 6 tests PASS; focused `WorkspaceInitialPlanningIT` — 8 tests PASS; `./mvnw -q clean verify` — 135 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` — PASS.
 - Runtime evidence: visible real-browser import -> production 30-second plan -> feasible initial proposal -> checkbox-confirmed acceptance opened `Demo School` at timetable revision `sha256:232c53bcf2ee6b373cb3965afc87849d245040c9c171f0cc543dff8742bf6b3c`; browser console reported 0 messages, errors, or warnings; screenshots are `output/playwright/uc2-initial-proposal.png` and `output/playwright/uc2-accepted-baseline.png`.
 
 | Contract element | Evidence |
@@ -80,8 +79,7 @@
 - Pre-existing dirty files: none.
 - Implementation submission: HEAD at convergence.
 - Changed files: native accepted-inspection UI and centralized message catalog; architecture, HTTP, real-browser,
-  empty-state, immutability, keyboard, narrow-screen, complete-snapshot, and target-scale tests; status, checkpoint, and
-  Jev advisory artifacts.
+  empty-state, immutability, keyboard, narrow-screen, complete-snapshot, and target-scale tests; status and checkpoint.
 - Commands and results: focused real-browser keyboard journey — PASS; `./mvnw -q clean verify` — 140 tests, 0
   failures, 0 errors, 0 skipped; `git diff --check` — PASS. Latest target-scale p95: search 69.5 ms, filter 38.8 ms,
   day 172.6 ms, selection 81.1 ms; solver time excluded.
@@ -107,11 +105,10 @@
 - Pre-existing dirty files: none.
 - Implementation submission: HEAD at convergence.
 - Changed files: repair draft service, controller/mutation/security/problem handling, native workspace UI/catalog/styles,
-  PostgreSQL/HTTP and real-browser tests, status, checkpoint, and 35-item Jev bundle.
+  PostgreSQL/HTTP and real-browser tests, status, and checkpoint.
 - Commands and results: focused `WorkspaceRepairDraftIT` - 9 tests PASS; real-Chrome UC-4 journey - PASS;
   deterministic DAY/CLASS/filter/altered/stale/empty bulk snapshots - PASS; `./mvnw -q clean verify` - 152 tests,
-  0 failures, 0 errors, 0 skipped, with final pin-feedback p95 166.3 ms; `git diff --check` - PASS; Jev compiled helper `--validate-only` - valid,
-  35 items; external Jev - REVIEW because disclosure was not authorized.
+  0 failures, 0 errors, 0 skipped, with final pin-feedback p95 166.3 ms; `git diff --check` - PASS.
 
 | Contract element | Evidence |
 |---|---|
@@ -130,8 +127,8 @@
 - Started: 2026-09-21; base `c7ea4f82045db1c156b667ed7881e6d1e29d4fec`.
 - Pre-existing dirty files: none.
 - Implementation submission: HEAD at convergence.
-- Changed files: repair-planning service; planner, repair compiler guard, controller, mutation, recovery, and repository integration; native workspace UI/messages; planner, PostgreSQL/HTTP, and real-browser tests; accepted-result fixture; status, checkpoint, and Jev bundle.
-- Commands and results: expanded `WorkspaceRepairPlanningIT` - 5 tests PASS; real-Chrome UC-5 journey - PASS; focused UC-4 pin-feedback p95 149.0 ms - PASS; `./mvnw -q clean verify` - 159 tests, 0 failures, 0 errors, 0 skipped, with UC-4 pin-feedback p95 107.4 ms; `git diff --check` - PASS; Jev bundle validation through the already-built pinned helper - valid, 37 items; external Jev - REVIEW because disclosure was not authorized.
+- Changed files: repair-planning service; planner, repair compiler guard, controller, mutation, recovery, and repository integration; native workspace UI/messages; planner, PostgreSQL/HTTP, and real-browser tests; accepted-result fixture; status and checkpoint.
+- Commands and results: expanded `WorkspaceRepairPlanningIT` - 5 tests PASS; real-Chrome UC-5 journey - PASS; focused UC-4 pin-feedback p95 149.0 ms - PASS; `./mvnw -q clean verify` - 159 tests, 0 failures, 0 errors, 0 skipped, with UC-4 pin-feedback p95 107.4 ms; `git diff --check` - PASS.
 
 | Contract element | Evidence |
 |---|---|
@@ -150,11 +147,10 @@
 - Pre-existing dirty files: none.
 - Implementation submission: HEAD at convergence.
 - Changed files: attempt-lock manifest guard, manifest regression, composite two-repair PostgreSQL/HTTP and real-Chrome
-  journeys, status, checkpoint, and Jev advisory bundle.
+  journeys, status, and checkpoint.
 - Commands and results: focused manifest unit suite - PASS; focused two-repair HTTP/PostgreSQL/packaged-kernel journey -
   PASS; focused two-repair real-Chrome journey - PASS; `./mvnw -q clean verify` - 167 tests, 0 failures, 0 errors, 0
-  skipped; `git diff --check` - PASS; Jev bundle local validation - valid, 46 items; external Jev - REVIEW because
-  disclosure was not authorized.
+  skipped; `git diff --check` - PASS.
 - Runtime evidence: real Chrome accepts a protected teacher repair, opens the exact accepted result as current, starts a
   later room repair with no inherited attempt pin, distinguishes direct and ripple effects, and accepts the second
   independently verified packaged-kernel proposal with zero browser errors.
@@ -172,15 +168,13 @@
   authoritative repair-draft JSONB subtree after reading the selected accepted assignment and lock from that same
   aggregate. Test Spring contexts close after each Testcontainers-backed class.
 - Changed files in C-2 revision: scoped repair-draft persistence and ETag helpers; native cached day-matrix rendering;
-  Testcontainers context lifecycle annotations in all five Spring integration classes; status, checkpoint, and Jev
-  advisory bundle.
+  Testcontainers context lifecycle annotations in all five Spring integration classes; status and checkpoint.
 - C-3 revision started: 2026-09-22; base `1240cdc`; pre-existing dirty files: none. The administrator explicitly
   revised the product contract so the 250 ms interaction and one-second review values remain diagnostic evidence but
   no longer block functional delivery or convergence; fixtures, raw samples, p95 calculations, actor behavior, and
   persistence assertions remain unchanged.
 - C-3 revision validation: clean complete 10-test real-Chrome class - PASS; final `./mvnw -q clean verify` - 167 tests,
-  0 failures, 0 errors, 0 skipped; `git diff --check` - PASS; revised 46-item Jev bundle - locally valid; external Jev -
-  REVIEW because disclosure was not authorized. Full-reactor diagnostic p95 was search 56.4 ms, filter 49.5 ms, day
+  0 failures, 0 errors, 0 skipped; `git diff --check` - PASS. Full-reactor diagnostic p95 was search 56.4 ms, filter 49.5 ms, day
   44.1 ms, selection 47.5 ms, persisted pin feedback 86.6 ms, and proposal review 370.6 ms. The relaxed contract does
   not invalidate approved UC-3, UC-4, or UC-6: their functional implementations and evidence remain unchanged and
   their earlier approvals were obtained under the stronger threshold contract.
@@ -200,12 +194,10 @@
 - Implementation submission: HEAD at convergence.
 - Changed files: accepted-baseline export service and ZIP adapter; shared bounded archive reader; controller and security
   route; native accepted-state export UI/messages/styles; PostgreSQL/HTTP and real-Chrome tests; status, checkpoint, and
-  Jev advisory bundle.
+  convergence evidence.
 - Commands and results: focused `WorkspaceImportIT` - PASS; focused real-Chrome UC-8 journey - PASS; escalated
   `./mvnw -q clean verify` - 170 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` - PASS. The first sandboxed
-  clean attempt was blocked by Docker-socket permission and was rerun unchanged with approved Docker access. The
-  26-item Jev bundle validates locally with the already-built pinned helper; external review is `REVIEW` because
-  disclosure was not authorized.
+  clean attempt was blocked by Docker-socket permission and was rerun unchanged with approved Docker access.
 
 | Contract element | Evidence |
 |---|---|

@@ -12,8 +12,7 @@
 ## Protocol Gate
 
 - Exactly UC-4 was `READY_FOR_CONVERGENCE`; UC-1 is approved and no later use case has started.
-- The checkpoint, implementation, tests, status, and locally valid 35-item Jev bundle are committed together at
-  `5f545ee`; external Jev review is correctly recorded as `REVIEW` because repository disclosure was not authorized.
+- The checkpoint, implementation, tests, and status are committed together at `5f545ee`.
 - The checkpoint separately covers main steps 1-7, every extension, G1-G6, both postconditions, `Requires UC-1`, and
   every applicable rule: RULE-1 through RULE-6, RULE-8, RULE-15, RULE-16, and RULE-19 through RULE-25.
 - Diff inspection from base `f3b9253b67f9be528cd6b6ff90343ba9b4992f28` found only UC-4 implementation,

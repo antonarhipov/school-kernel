@@ -32,14 +32,11 @@ walkthrough before approval.
 - Applicable constraints and verification strategy: `<feature-dir>/rules.md`
 - Executor ledger: `<feature-dir>/status.md`
 - Executor submission: `<feature-dir>/checkpoints/UC-n.md`
-- Optional advisory Jev preflight: `<feature-dir>/checkpoints/UC-n.jev.json`
 - Earlier convergence reports: `<feature-dir>/convergence/UC-*.md`
 - Git history and diff, code, tests, configuration, migrations, templates, messages, and runtime data
 
 Read the detailed UC, not only the use-case map. The contract consists of every main-scenario step, extension,
 guarantee, success and minimal postcondition, state transition, normative-data dependency, and relationship.
-The Jev preflight may identify places to inspect, but it is neither executor evidence nor a verifier finding. Never
-upgrade an evidence grade or approve a use case because the preflight is clean.
 
 ## Per-UC Protocol Gate
 
@@ -112,7 +109,8 @@ the actor boundary, or checks only the final response is insufficient.
 
 Exercise every extension at its branch point and confirm its declared continuation. Negative paths must prove both the
 response and absence of prohibited disclosure, mutation, persistence, emission, or collaborator invocation. Confirm
-failures preserve the minimal guarantee.
+failures preserve the minimal guarantee. For external-process interruption, timeout, transport, or rejected-output
+paths, require production actor-boundary evidence of the durable terminal state; adapter-only coverage is `MISPLACED`.
 
 ### 3. Relationships and regression
 

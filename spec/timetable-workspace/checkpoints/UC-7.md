@@ -84,9 +84,8 @@
 - Changed files: `ManifestService` and its regression; the composite repair HTTP/PostgreSQL and Chrome journeys;
   headless-Chrome process-output isolation; scoped repair-draft controller/service/repository/mutation persistence;
   cached native weekday matrices; Testcontainers Spring-context lifecycle annotations; diagnostic performance contract
-  and browser reporting; decisions, status, checkpoint, and Jev advisory bundle.
+  and browser reporting; decisions, status, and checkpoint.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-6 and kernel UC-1/UC-2 all pass in the 167-test clean reactor.
-- Jev preflight: revised `UC-7.jev-bundle.json` validates locally with 46 atomic items using the already-built pinned `jev-1.13.0` helper. External review requires disclosure of narrow repository excerpts to TypeSafe and is `REVIEW` because this turn did not authorize that disclosure; no report was produced and no semantic approval is claimed.
 
 ## Notes
 

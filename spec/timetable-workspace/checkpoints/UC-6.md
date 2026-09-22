@@ -56,9 +56,8 @@
 - Full relevant suite: `./mvnw -q clean verify` - 165 tests, 0 failures, 0 errors, 0 skipped; proposal-review opening 337.700 ms with solver time excluded.
 - Working tree impact from tests: none; `git diff --check` passes.
 - Runtime evidence: real Chrome over ephemeral HTTP/PostgreSQL creates a repair through packaged School Kernel, renders all six categories with before/after impact, accepts using keyboard-native explicit confirmation, and opens the exact new baseline.
-- Changed files in this revision: `WorkspaceController`, `RepairProposalService`, `WorkspaceRepairPlanningIT`, `WorkspaceBrowserIT`, status, checkpoint, and Jev advisory bundle.
+- Changed files in this revision: `WorkspaceController`, `RepairProposalService`, `WorkspaceRepairPlanningIT`, `WorkspaceBrowserIT`, status, and checkpoint.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-5 and kernel UC-1/UC-2 all pass in the 165-test clean reactor.
-- Jev preflight: revised `UC-6.jev-bundle.json` validates locally with 33 atomic items using the already-built pinned `jev-1.13.0` helper. External review requires disclosure of narrow repository excerpts to TypeSafe and is `REVIEW` because this turn did not authorize that disclosure; no report was produced and no semantic approval is claimed.
 
 ## Notes
 

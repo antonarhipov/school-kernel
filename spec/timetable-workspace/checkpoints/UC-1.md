@@ -58,9 +58,8 @@
 - Full relevant suite: `mvn -q clean verify` — 120 tests, 0 failures, 0 errors, 0 skipped (85 kernel and 35 workspace).
 - Working tree impact from tests: none; status after the run contains only intentional UC-1 revision files.
 - Runtime evidence: a visible browser imported `examples/initial-school.json` and observed `Initial draft`, `No accepted timetable`, `Demo School`, and revision `sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14`, with zero console errors/warnings; screenshot `output/playwright/uc1-display-name.png`.
-- Changed files: shared kernel verification tests; workspace security/problem/process/archive/import/UI production files; Flyway/process/browser/archive/HTTP/architecture tests; feature decision/status/checkpoint and Jev bundle; `output/playwright/uc1-display-name.png`.
+- Changed files: shared kernel verification tests; workspace security/problem/process/archive/import/UI production files; Flyway/process/browser/archive/HTTP/architecture tests; feature decision/status/checkpoint; `output/playwright/uc1-display-name.png`.
 - Approved UCs regression-tested: kernel-v1 UC-1 and UC-2, both independently reconverged and approved; all 85 kernel tests passed.
-- Jev preflight: REVIEW — the 33-item bundle validated locally for pinned `jev-1.13.0`, but the external call was denied because sending project-derived excerpts to TypeSafe requires separate disclosure authorization. No semantic result or pass is claimed.
 
 ## Notes
 
