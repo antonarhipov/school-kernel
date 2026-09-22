@@ -2,7 +2,7 @@
 
 ## Summary
 
-- Submission: revised `spec/timetable-workspace/checkpoints/UC-7.md` at `433ea70aab9b6d21ff266e9cd411caa754f0b792`
+- Submission: revised `spec/timetable-workspace/checkpoints/UC-7.md` at `ccfc5d1f1e558f16987b8a61cbed1ac90c2fd321`
 - Verdict: REJECT
 - Findings: 1 critical; 0 gap; 0 protocol
 - Suite: complete real-Chrome class - 10 run, 0 failed, 0 errors, 0 skipped; clean reactor - 167 run, 1 failure, 0 errors, 0 skipped
@@ -11,18 +11,18 @@
 ## Protocol Gate
 
 - Exactly UC-7 was `READY_FOR_CONVERGENCE`; no other UC was in progress or ready.
-- Original checkpoint is `4acf363`; rejected convergence is `7c76b2e`; the attributable C-1 revision and revised checkpoint are committed at `433ea70`. The pre/post verification worktree is clean.
+- Original checkpoint is `4acf363`; rejected convergences are `7c76b2e` and `dcf486c`; the attributable C-1 and C-2 revisions and revised checkpoint are committed through `ccfc5d1`. The pre/post verification worktree is clean.
 - UC-1 and included UC-3, UC-4, UC-5, and UC-6 are recorded `APPROVED`.
 - The checkpoint covers the main scenario, every extension and guarantee, both postconditions, all relationships, RULE-1/RULE-2 and every UC-7 rule, changed files, commands, and approved-UC regression claims.
-- The diff contains one manifest lock-dimension guard, its regression, two composite actor journeys, and checkpoint artifacts. It contains no later-UC behavior or unrelated user change.
+- The C-2 diff closes the five Testcontainers-backed Spring contexts, caches metadata-ordered weekday matrices, scopes the minimal pin read/update to the authoritative JSONB aggregate, and adds direct success, stale-ETag, storage-failure, rollback, and immutability assertions. It contains no later-UC behavior or unrelated user change.
 
 ## Runtime Reproduction
 
 | Actor | Step or extension | Executor reported | Converge observed |
 |---|---|---|---|
 | Administrator over HTTP/PostgreSQL/packaged kernel | Inspect, stage teacher outage plus room pin, solve, accept, stage later room outage, solve, accept | PASS | Focused production journey passed. Both 30-second replans returned `FEASIBLE`, independent verification returned `VERIFIED`, exact first/second accepted bundles and direct lineage matched, prior attempt pin was absent, and two `replan` invocations were recorded. |
-| Administrator in real Chrome | Complete two-repair native-control journey | PASS | Focused real-Chrome journey passed with both proposals reviewed/accepted and zero browser errors. The later room draft visibly reported zero direct effects and zero attempt pins. |
-| Administrator in included UC-4 browser journey | Stage, conflict, resolve, bulk preview/confirm/undo, discard | C-1 revision PASS | The complete 10-test Chrome class passed in actor order with the original 15-second CDP timeout, including UC-7 followed by UC-4. C-1 is resolved. |
+| Administrator in real Chrome | Complete two-repair native-control journey | PASS | Both independent browser runs completed both proposals and acceptances with verified `FEASIBLE` packaged results and zero actor-journey failures. The later room draft visibly reported zero direct effects and zero attempt pins. |
+| Administrator in included UC-4 browser journey | Stage, conflict, resolve, bulk preview/confirm/undo, discard | C-2 revision PASS | The focused complete 10-test Chrome class passed in actor order. In the clean reactor every actor assertion also passed, but the separate UC-4 scale pin-feedback test failed RULE-25 at p95 286.7 ms. |
 | Administrator failure paths | Conflict, failed/cancelled solve, discard, stale proposal, storage rollback | PASS | Clean runs reached and passed the PostgreSQL/HTTP negative matrices before the browser error; logs showed the expected safe cancellation, no-feasible, invalid, internal, transport, interruption, timeout, rejected-output, and terminated-database branches. |
 
 ## Evidence Ledger
@@ -75,7 +75,7 @@
 | RULE-22 | Stable safe failures | Expected problem-code and disclosure regressions passed. | PASS |
 | RULE-23 | Safe observability | Safe run evidence/log capture passed; no logging code changed. | PASS |
 | RULE-24 | PostgreSQL-only isolated real-boundary verification | Complete independent Chrome class and real PostgreSQL/packaged-kernel journeys pass; C-1 is resolved. | PASS |
-| RULE-25 | Separate scale interaction measurements | Complete Chrome class passes, but the clean reactor records UC-3 day-change p95 282.9 ms under accumulated prior-context load, above 250 ms. | FAIL |
+| RULE-25 | Separate scale interaction measurements | Focused Chrome passed pin feedback at p95 101.5 ms, day change at 62.3 ms, and proposal review at 334.5 ms. The clean reactor passed search 61.8 ms, filter 19.5 ms, day change 69.3 ms, selection 52.9 ms, and proposal review 280.6 ms, but pin feedback was p95 286.7 ms against 250 ms. | FAIL |
 | RULE-26 | Shared typed kernel boundary | Architecture/typed-handler checks passed; no parallel mapper/status switch added. | PASS |
 | RULE-27 | Controlled metadata and solver APIs | Kernel metadata/catalog/solver guard suites passed; no source changed. | PASS |
 | RULE-28 | Bounded race-safe input/publication boundaries | Missing/malformed/mismatched/late-output matrix passed; exact successful identities passed. | PASS |
@@ -87,29 +87,29 @@
 |---|---|---|---|
 | UC-1 | Accepted aggregate, verification, import | Clean suites passed import/verification/security/fidelity cases. | PASS |
 | UC-2 | Async process/run lifecycle and acceptance | Clean suites passed initial planning success/failure/cancel/recovery/acceptance cases. | PASS |
-| UC-3 | Accepted browser inspection and scale | Complete Chrome class passes, but full reactor day-change p95 is 282.9 ms against the 250 ms target. | FAIL |
-| UC-4 | Draft browser, conflict, pin, bulk snapshot, discard | Complete 10-test Chrome class passes after the C-1 output-backpressure fix. | PASS |
+| UC-3 | Accepted browser inspection and scale | Focused and clean-reactor Chrome checks passed; clean p95 was search 61.8 ms, filter 19.5 ms, day 69.3 ms, and selection 52.9 ms. | PASS |
+| UC-4 | Draft browser, conflict, pin, bulk snapshot, discard | Actor behavior and focused p95 101.5 ms passed, but clean-reactor pin-feedback p95 was 286.7 ms against 250 ms. | FAIL |
 | UC-5 | Repair generation and failure matrix | Packaged success/failure/cancel/retry/late completion suites passed. | PASS |
-| UC-6 | Review, identity guard, atomic accept/rollback, scale | Review/decision/rollback cases passed; review opening 294.700 ms. | PASS |
+| UC-6 | Review, identity guard, atomic accept/rollback, scale | Review/decision/rollback cases passed; clean-reactor review opening was 280.6 ms. | PASS |
 | Kernel UC-1/UC-2 | Shared plan/replan/verify contracts and corpus | Kernel modules and corpus passed before workspace browser failure. | PASS |
 
 ## Findings
 
-### C-2 CRITICAL - UC-3 validation-scale browser timing is unstable under the complete lifecycle
+### C-3 CRITICAL - Persisted pin feedback is still unstable under the complete lifecycle
 
-- Contract: UC-7 includes approved UC-3 at step 1. RULE-25 requires validation-scale post-load interactions to remain below 250 ms p95 and verification to separate them from solving.
-- Evidence: the independently run complete `WorkspaceBrowserIT` class passed all 10 tests, including UC-3 day-change p95 below 250 ms. The subsequent independent `./mvnw -q clean verify` reached the same test after several cached Spring/Testcontainers contexts and failed at `WorkspaceBrowserIT.java:542`: day p95 282.9 ms with samples `[129.9,282.9,89.1,10.6,232.8,15.1,14.2,45.9,198.1,66.4,23.3,25.3,7.1,10.3,82.1,91.5,27,316.8,21.2,18.5]`. The reactor ended 167 tests, 1 failure, 0 errors, 0 skipped.
-- Why it fails: the required full lifecycle leaves earlier Spring contexts and their stopped-container Hikari pools alive while the browser scale test runs, producing continuous connection retries and scheduler/logging load. The same production UI meets the target when the browser class owns an isolated lifecycle, but related approved-UC evidence is not stable in the standard reactor.
-- Revision outcome: close each Testcontainers-backed Spring context after its class so stale pools cannot load later browser measurements; preserve the real browser, 1,000-lesson fixture, 20 wall-clock samples, p95 calculation, and 250 ms threshold, then pass the complete Chrome class and clean reactor.
+- Contract: UC-7 includes approved UC-4 at step 3. UC-4 G6 requires visible pin feedback below 250 ms p95 at validation scale, and RULE-25 requires post-load pin feedback to meet that limit separately from solver time.
+- Evidence: the independent focused `WorkspaceBrowserIT` run passed all 10 tests with pin-feedback p95 101.5 ms. The subsequent independent `./mvnw -q clean verify` closed each earlier Testcontainers-backed context and passed every other scale gate, but failed at `WorkspaceBrowserIT.java:594`: pin-feedback p95 286.7 ms with samples `[286.7,159.4,52.3,92.8,102.1,25.7,24.1,22.8,14.7,14.2,23.3,14.6,13.8,14.1,11.5,13,14.5,12.6,13.8,328.3]`. The reactor ended 167 tests, 1 failure, 0 errors, 0 skipped.
+- Why it fails: C-2 removed the stopped-container connection-pool load and restored the day-change margin, but the persisted pin command still has insufficient full-lifecycle p95 margin. Two of the 20 measured production round trips exceeded 250 ms, so the 95th-percentile rank is above the contract even though the focused class passes.
+- Revision outcome: reduce or isolate the remaining production pin-feedback latency without weakening persistence-before-feedback, CSRF, ETag/conditional SQL, conflict derivation, accepted-bundle immutability, the real browser, the 1,000-lesson fixture, 20 wall-clock samples, percentile calculation, or 250 ms threshold; then pass the focused complete Chrome class and clean reactor.
 
 ## Walkthrough
 
-Automated convergence is blocked by C-2, so no administrator walkthrough is requested yet. After the regression is repaired and automated convergence passes, the UC-7 walkthrough must follow the specified two-repair main scenario and later-room extension.
+Automated convergence is blocked by C-3, so no administrator walkthrough is requested yet. After the regression is repaired and automated convergence passes, the UC-7 walkthrough must follow the specified two-repair main scenario and later-room extension.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE -> NEEDS_REVISION`; C-1 is resolved and next eligible work is the UC-7 C-2 revision. UC-8 is not started.
+`READY_FOR_CONVERGENCE -> NEEDS_REVISION`; C-1 and C-2 are resolved and next eligible work is the UC-7 C-3 revision. UC-8 is not started.
 
 ## Response to execute
 
-REVISE UC-7: C-2 isolate Testcontainers-backed Spring contexts so the unchanged UC-3 validation-scale p95 gate is stable in the complete clean reactor.
+REVISE UC-7: C-3 restore persisted pin-feedback p95 below 250 ms in the complete clean reactor without weakening the actor, persistence, or scale gates.
