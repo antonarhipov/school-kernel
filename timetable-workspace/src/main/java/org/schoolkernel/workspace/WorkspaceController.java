@@ -32,6 +32,7 @@ public class WorkspaceController {
     private final RepairPlanningService repairPlanning;
     private final RepairDraftService repairs;
     private final RepairProposalService repairProposals;
+    private final ProposalReviewService proposalReviews;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -41,6 +42,7 @@ public class WorkspaceController {
             RepairPlanningService repairPlanning,
             RepairDraftService repairs,
             RepairProposalService repairProposals,
+            ProposalReviewService proposalReviews,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -48,6 +50,7 @@ public class WorkspaceController {
         this.repairPlanning = repairPlanning;
         this.repairs = repairs;
         this.repairProposals = repairProposals;
+        this.proposalReviews = proposalReviews;
         this.json = json;
     }
 
@@ -226,7 +229,17 @@ public class WorkspaceController {
             case ACCEPTED_BASELINE, REPAIR_DRAFT, SOLVING_REPAIR, REPAIR_PROPOSAL -> true;
             default -> false;
         });
-        body.set("workspace", aggregate.document());
+        ObjectNode workspace = (ObjectNode) aggregate.document().deepCopy();
+        if (aggregate.state() == WorkspaceState.REPAIR_PROPOSAL
+                && workspace.path("proposal") instanceof ObjectNode proposal
+                && proposal.path("review").isMissingNode()) {
+            proposal.set("review", proposalReviews.create(
+                    workspace.path("acceptedBaseline"),
+                    workspace.path("repairDraft"),
+                    proposal.path("definition"),
+                    proposal.path("result")));
+        }
+        body.set("workspace", workspace);
         return body;
     }
 

@@ -415,6 +415,13 @@ class WorkspaceBrowserIT {
             assertTrue(proposal.contains("Cancellations\n0"));
             assertTrue(proposal.contains("Old assignment"));
             assertTrue(proposal.contains("Proposed assignment"));
+            jdbc.sql("UPDATE workspace_aggregate SET document = document #- '{proposal,review}' WHERE workspace_id=1")
+                    .update();
+            cdp.command("Page.navigate", object("url", page));
+            String restoredLegacyProposal = cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(15));
+            assertTrue(restoredLegacyProposal.contains("Unique changed lessons"));
+            assertTrue(restoredLegacyProposal.contains("Old assignment"));
+            assertTrue(restoredLegacyProposal.contains("Proposed assignment"));
             cdp.evaluate("document.querySelector('#confirm-repair-accept').focus()");
             cdp.pressKey(" ", "Space");
             cdp.evaluate("document.querySelector('#accept-repair').focus()");

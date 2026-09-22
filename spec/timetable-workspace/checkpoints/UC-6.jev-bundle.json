@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "useCase": "UC-6",
-  "submission": "exact-diff-from-a48259f17dce3ece2730779e00e439fd1a9eaa60",
+  "submission": "exact-revision-diff-from-129727a",
   "items": [
     {
       "id": "UC-6 main",
       "contract": "Review direct and ripple impact, inspect exact changes, explicitly accept, atomically advance the complete verified bundle, clear transient state, and use it as the next repair parent.",
       "rules": ["RULE-7", "RULE-17", "RULE-18", "RULE-19"],
       "actorBoundary": "Real Chrome over HTTP/PostgreSQL and packaged School Kernel",
-      "claim": "The production actor journey reviews the server-authored proposal and keyboard-confirms exact atomic acceptance into a reusable baseline.",
+      "claim": "The production actor journey reloads a persisted UC-5 proposal without the later derived review, receives the server-authored review, and keyboard-confirms exact atomic acceptance into a reusable baseline.",
       "evidence": [
         {"kind":"browser-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java:376-432","observation":"Real Chrome creates the packaged repair, asserts six-category/unique/direct/ripple and old/proposed text, activates confirmation and acceptance with Space, then observes the current accepted timetable; PostgreSQL has ACCEPTED_BASELINE and no proposal/draft."},
         {"kind":"postgresql-http-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:137-185","observation":"Assertions cross-check every proposal identity and regenerated review, compare accepted definition/result to the proposal after POST accept, prove proposal/draft absence, and compile the next repair from the new parent without the old attempt pin."}
@@ -131,7 +131,7 @@
       "contract": "Proposal review opens within one second at validation scale, separate from solver time.",
       "rules": ["RULE-25"],
       "actorBoundary": "Real Chrome with approximately 1,000 lessons",
-      "claim": "The clean-run browser instrumentation records review rendering at 333.800 ms and excludes solving.",
+      "claim": "The clean-run browser instrumentation records review rendering at 337.700 ms and excludes solving.",
       "evidence": [{"kind":"performance-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java:545-596","observation":"The fixture persists a complete 1,000-lesson proposal before navigation; window timing ends after review binding, asserts below 1000 ms, and prints solver time excluded."}],
       "negativeObligations": ["Solver duration is not included", "A smaller unit fixture is not substituted for validation scale"],
       "counterEvidence": []
@@ -171,8 +171,8 @@
       "contract": "UC-6 consumes a complete verified proposal produced by approved UC-5.",
       "rules": ["RULE-17"],
       "actorBoundary": "Production packaged repair followed by review decision",
-      "claim": "Acceptance and browser tests create their proposal through UC-5's real packaged process path before deciding it.",
-      "evidence": [{"kind":"packaged-integration-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:434-525; WorkspaceBrowserIT.java:376-432","observation":"Fixtures establish the accepted baseline/draft, POST the production run, await REPAIR_PROPOSAL, then pass the resulting exact proposal to UC-6 actions."}],
+      "claim": "Acceptance and browser tests create their proposal through UC-5's real packaged process path, remove the later derived review, and still review and decide it through UC-6.",
+      "evidence": [{"kind":"packaged-integration-test","source":"timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceRepairPlanningIT.java:140-180,473-500; WorkspaceBrowserIT.java:376-440","observation":"Fixtures POST the production run and await REPAIR_PROPOSAL; tests remove proposal.review in PostgreSQL without changing version, assert the complete derived snapshot, reload it in Chrome, and accept the exact proposal."}],
       "negativeObligations": ["Browser-authored candidate is not accepted", "Unverified result is not accepted"],
       "counterEvidence": []
     },
@@ -241,7 +241,7 @@
       "contract": "Kernel documents stay lossless and identity comparison uses canonical JSON.",
       "rules": ["RULE-8"],
       "actorBoundary": "JSONB round trip and proposal identity guard",
-      "claim": "Acceptance deep-copies source documents and canonicalizes regenerated/stored review before equality.",
+      "claim": "Acceptance deep-copies source documents, permits only a missing legacy derived review, and canonicalizes every present stored review before equality.",
       "evidence": [{"kind":"code-and-test","source":"RepairProposalService.java:58-127; WorkspaceRepairPlanningIT.java:139-185","observation":"Production compares canonical review bytes and stores deep copies; PostgreSQL round-trip acceptance compares proposal definition/result exactly."}],
       "negativeObligations": ["JSONB property ordering does not invalidate a valid proposal", "Display models do not reconstruct kernel documents"],
       "counterEvidence": []
@@ -251,7 +251,7 @@
       "contract": "Acceptance revalidates every proposal identity and independently verifies the candidate.",
       "rules": ["RULE-17"],
       "actorBoundary": "RepairProposalService and KernelVerifier",
-      "claim": "All persisted identities, six counts, regenerated review, and verified revisions must match before acceptance.",
+      "claim": "All authoritative persisted identities, six counts, and verified revisions must match; a present stored review must match its regeneration while a missing legacy derived review is accepted from the same authoritative inputs.",
       "evidence": [{"kind":"identity-matrix","source":"RepairProposalService.java:58-127; WorkspaceRepairPlanningIT.java:203-239","observation":"Twelve independent persisted corruptions are refused and invalidated; success additionally compares verifier definition/timetable revisions."}],
       "negativeObligations": ["Mismatched proposal cannot remain eligible", "Unverified candidate cannot become current"],
       "counterEvidence": []
@@ -261,7 +261,7 @@
       "contract": "Review uses the exact six normative categories with unique/direct/ripple and old/proposed grouped impact.",
       "rules": ["RULE-18"],
       "actorBoundary": "ProposalReviewService",
-      "claim": "A single server-authored review derives all required impact data from complete accepted/proposed documents and authoritative report arrays.",
+      "claim": "A single server-authored review derives all required impact data from complete accepted/proposed documents and authoritative report arrays, including for a persisted UC-5 proposal without the later derived member.",
       "evidence": [{"kind":"unit-test","source":"ProposalReviewServiceTest.java:17-88","observation":"Assertions cover normative order, empty categories, overlap, unique/direct/ripple totals, changed dimensions, and OLD/BOTH class/day group contexts."}],
       "negativeObligations": ["Browser does not reclassify kernel categories", "Overlap is not double-counted in headline"],
       "counterEvidence": []
@@ -271,8 +271,8 @@
       "contract": "One complete browser snapshot supports native proposal inspection and context navigation.",
       "rules": ["RULE-19"],
       "actorBoundary": "Workspace snapshot API to dependency-free browser UI",
-      "claim": "The browser renders accepted/proposed models, changed/unchanged details, and focused contexts from one snapshot.",
-      "evidence": [{"kind":"browser-test","source":"WorkspaceBrowserIT.java:376-432,545-596","observation":"Real Chrome reviews the packaged proposal, opens unchanged detail, enters review context, and returns without another scheduling computation."}],
+      "claim": "The server completes the snapshot for a legacy proposal and the browser renders accepted/proposed models, changed/unchanged details, and focused contexts from that one snapshot.",
+      "evidence": [{"kind":"browser-test","source":"WorkspaceController.java:224-243; WorkspaceBrowserIT.java:376-440,545-596","observation":"The snapshot derives only a missing review from authoritative inputs. Real Chrome reloads that persisted proposal, reviews it, opens unchanged detail, enters review context, and returns without scheduling computation."}],
       "negativeObligations": ["Browser does not invent scheduling facts"],
       "counterEvidence": []
     },
@@ -331,7 +331,7 @@
       "contract": "Proposal opening is measured below one second at full validation scale and separately from solver duration.",
       "rules": ["RULE-25"],
       "actorBoundary": "Target-scale Chrome instrumentation",
-      "claim": "The 1,000-lesson persisted proposal opens in 333.800 ms in the clean run, with solver time excluded.",
+      "claim": "The 1,000-lesson persisted proposal opens in 337.700 ms in the clean run, with solver time excluded.",
       "evidence": [{"kind":"performance-test","source":"WorkspaceBrowserIT.java:545-596","observation":"The fixture comes from the existing approximately 1,000 lesson/100 teacher/60 class/100 room/60 period scale model; opening timing is asserted below 1000 ms and printed separately."}],
       "negativeObligations": ["Solver time is not used to excuse rendering latency", "Measurement is not a small-fixture unit benchmark"],
       "counterEvidence": []

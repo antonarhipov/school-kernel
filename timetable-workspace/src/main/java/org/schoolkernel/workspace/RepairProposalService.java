@@ -121,8 +121,9 @@ public class RepairProposalService {
                 return false;
             }
         }
-        return Arrays.equals(
-                CanonicalJson.bytes(proposal.path("review")),
+        JsonNode storedReview = proposal.path("review");
+        return storedReview.isMissingNode() || Arrays.equals(
+                CanonicalJson.bytes(storedReview),
                 CanonicalJson.bytes(reviews.create(accepted, draft, definition, result)));
     }
 

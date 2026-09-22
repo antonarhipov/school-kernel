@@ -159,6 +159,14 @@ class WorkspaceRepairPlanningIT {
                         proposal.path("definition"), proposal.path("result"))),
                 CanonicalJson.bytes(proposal.path("review"))), "review identity");
 
+        jdbc.sql("UPDATE workspace_aggregate SET document = document #- '{proposal,review}' WHERE workspace_id=1")
+                .update();
+        JsonNode legacySnapshot = body(get("/api/workspace"));
+        assertEquals(proposal.path("review"), legacySnapshot.path("workspace").path("proposal").path("review"),
+                "complete snapshot derives review for a persisted UC-5 proposal");
+        assertFalse(storedDocument().path("proposal").has("review"),
+                "reading the complete snapshot does not rewrite the persisted proposal");
+
         HttpResponse<String> acceptedResponse = command("POST", "/api/proposal/accept", session(), null);
         assertEquals(200, acceptedResponse.statusCode(), acceptedResponse.body());
         JsonNode accepted = body(acceptedResponse);
