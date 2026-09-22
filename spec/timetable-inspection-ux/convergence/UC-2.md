@@ -43,7 +43,7 @@
 | RULE-7, RULE-8 | Exact stable-ID cues/counts and authoritative availability | `app.js:648-715`; real-browser assertions at `WorkspaceBrowserIT.java:328-392` | PASS |
 | RULE-9-RULE-12 | Catalogued safe presentation, native controls, and no boundary/security delta | `messages.js`, `styles.css`, submitted diff, durable-state comparison | PASS |
 | RULE-14 | UC-2 begins from shared UC-1 production path and covers required browser branches | Targeted real-browser path passed | PASS |
-| RULE-16 | Isolated fixture and walkthrough gate | Isolated fixture used; human walkthrough remains pending | PENDING |
+| RULE-16 | Isolated fixture and walkthrough gate | Isolated fixture used; user confirmed the manual UC-2 walkthrough as `LGTM` on 2026-09-23 | PASS |
 
 ## Related-UC Regression
 
@@ -58,10 +58,14 @@
 
 UC-2's executor protocol requires the full relevant suite and approved related-UC regression. The focused UC-2 and direct UC-1 Chrome/PostgreSQL journeys are strong, but the complete `WorkspaceBrowserIT` class is still absent because the environment terminates its command window after 30 seconds. Re-run `mvn -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT verify` in a persistent execution environment, inspect its final count, and reconverge.
 
+## Walkthrough
+
+User result: `LGTM`, confirmed manually on 2026-09-23.
+
 ## Status Update
 
 `READY_FOR_CONVERGENCE` -> `NEEDS_REVISION`; UC-3 is not eligible while G-1 remains open.
 
 ## Response to execute
 
-REVISE UC-2: G-1 full WorkspaceBrowserIT regression is required before the UI walkthrough gate.
+REVISE UC-2: G-1 full WorkspaceBrowserIT regression is required before approval.
