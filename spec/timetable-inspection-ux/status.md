@@ -3,15 +3,15 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: UC-3
+- Status: NEEDS_REVISION
+- Next eligible: UC-2
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | Revision C-1 through C-3 technically converged; user walkthrough PASS | convergence/UC-1.md — APPROVE |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | Exact subject/teacher investigation, explicit intersection filters, and authoritative teacher ribbon | checkpoints/UC-2.md — READY FOR CONVERGENCE |
+| UC-2 | NEEDS_REVISION | UC-1 | Exact subject/teacher investigation, explicit intersection filters, and authoritative teacher ribbon | convergence/UC-2.md — REJECT (G-1) |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
@@ -48,6 +48,10 @@
 | UC-2 G1-G7 | Stable IDs and immutable indexes: `accepted-model.js:3-45`; state reset/no durable preference expansion: `inspection-state.js:4-63`; visible non-color cue markup, accessible names, and authoritative ribbon: `app.js:678-715`. |
 | UC-2 G8, success, minimal guarantee | Packaged Chrome/Testcontainers path compares the exact database document before/after at `WorkspaceBrowserIT.java:313-400`; it observes subject-only, teacher-only, combined, clear-one, clear-all, Day change, zero range, single/intersected filters, filtered selection, all ribbon states, and no console errors. |
 | RULE-1, RULE-2, RULE-4, RULE-6-RULE-12, RULE-14, RULE-16 | Existing native module boundary remains; model indexes identities once, the state owner rejects unknown identities and retains only range/day in local storage, all text is catalogued, and the real browser uses only the approved snapshot/read path. The UC-2 fixture is isolated in `WorkspaceBrowserIT`. |
+
+### UC-2 Convergence Findings
+
+- G-1: The mandatory complete `WorkspaceBrowserIT` regression class was not completed after the UC-2 change. The targeted UC-2 and shared UC-1 journeys pass, but the feature's applicable rules require the full relevant suite and approved related-UC regression. Re-run the full browser class in an environment that permits a command to outlive 30 seconds, then reconverge without changing the contract.
 
 ## Blockers
 
