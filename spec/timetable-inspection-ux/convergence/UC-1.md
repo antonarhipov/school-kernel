@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-inspection-ux/checkpoints/UC-1.md` at `36fe7d1`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Suite: 26 unit tests and 12 Chrome/Testcontainers PostgreSQL tests; 0 failures, 0 errors, 0 skips
 - Working tree impact from verification: convergence report and status update only
@@ -56,7 +56,7 @@
 | RULE-9, RULE-10 | Safe catalog presentation and native pointer controls | Renderers use existing escaping boundary; browser triggers native buttons/select/lesson button and passes | PASS |
 | RULE-11, RULE-12 | No backend/security/lifecycle delta | Commit diff contains no Java production route/migration/security files; browser durable-document comparisons pass | PASS |
 | RULE-13 | Real packaged-browser coverage of all UC-1 cases | Command `mvn -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT verify`; 12 Chrome/Testcontainers tests passed at the real actor boundary | PASS |
-| RULE-16 | Human approval gate needs five professionals from three schools | Automated isolated fixture is green, but no five-professional walkthrough record exists | PENDING WALKTHROUGH |
+| RULE-16 | Human approval gate needs five professionals from three schools | The user confirmed the pending administrator walkthrough with `PASS` on 2026-09-23. | PASS |
 
 ## Related-UC Regression
 
@@ -68,12 +68,12 @@
 
 Perform the UC-1 tasks from `spec.md` with five timetable professionals from at least three schools: identify the `Current · accepted` Week context; change to Day and navigate it; inspect an occupied lesson; confirm the empty/narrow presentation as applicable; change to a Day that excludes a selected lesson; and select an off-viewport lesson. Record each participant's six task results, serious errors/corrections, school distribution, and whether all identified `Current · accepted` throughout. Approval needs at least four of five to complete every task without serious error or facilitator correction, and all five to identify the accepted baseline.
 
-User result: not yet supplied.
+User result: PASS, confirmed by the user on 2026-09-23.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; UC-2 and UC-3 remain ineligible until UC-1 is administrator-approved.
+`PENDING_WALKTHROUGH` -> `APPROVED`; UC-2 and UC-3 are now eligible.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-1 automated convergence passes; await the normative five-professional walkthrough result.
+APPROVED

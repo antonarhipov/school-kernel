@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-1
+- Status: APPROVED
+- Next eligible: UC-2, UC-3
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | PENDING_WALKTHROUGH | none | Revision C-1 through C-3 technically converged | convergence/UC-1.md — PENDING WALKTHROUGH |
+| UC-1 | APPROVED | none | Revision C-1 through C-3 technically converged; user walkthrough PASS | convergence/UC-1.md — APPROVE |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 
