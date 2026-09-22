@@ -333,6 +333,59 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("UC-1 extensions 2b, 5a, and 5b: invalid or blocked device preferences never alter accepted inspection")
+    void handlesInvalidAndBlockedInspectionPreferencesInRealBrowser() throws Exception {
+        storeAccepted(acceptedDocument(false));
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(15));
+
+            cdp.evaluate("localStorage.setItem('school-kernel.inspection.v1.opaque-school-id', '{bad')");
+            cdp.command("Page.navigate", object("url", page));
+            assertTrue(cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5)).contains("Week"));
+
+            for (String invalidPreference : java.util.List.of(
+                    "JSON.stringify({version:2,range:'DAY',weekdayId:'MONDAY'})",
+                    "JSON.stringify({version:1,range:'OTHER',weekdayId:'MONDAY'})",
+                    "JSON.stringify({version:1,range:'DAY',weekdayId:'UNKNOWN'})",
+                    "'x'.repeat(1025)")) {
+                cdp.evaluate("localStorage.setItem('school-kernel.inspection.v1.opaque-school-id', " + invalidPreference + ")");
+                cdp.command("Page.navigate", object("url", page));
+                cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5));
+            }
+            cdp.evaluate("localStorage.removeItem('school-kernel.inspection.v1.opaque-school-id'); localStorage.setItem('school-kernel.inspection.v1.other-school', JSON.stringify({version:1,range:'DAY',weekdayId:'TUESDAY'}))");
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5));
+
+            cdp.evaluate("localStorage.setItem('school-kernel.inspection.v1.opaque-school-id', JSON.stringify({version:1,range:'DAY',weekdayId:'MONDAY'}))");
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertTrue(cdp.evaluateValue("Object.keys(JSON.parse(localStorage.getItem('school-kernel.inspection.v1.opaque-school-id'))).sort().join(',')")
+                    .path("result").path("result").path("value").stringValue().equals("range,version,weekdayId"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').click(); document.querySelector('#weekday').value='TUESDAY'; document.querySelector('#weekday').dispatchEvent(new Event('change',{bubbles:true}))");
+            String exclusion = cdp.awaitText("outside the represented Day", Duration.ofSeconds(5));
+            assertFalse(exclusion.contains("Accepted assignment"));
+            assertFalse(cdp.evaluateValue("Boolean(document.querySelector('#lesson-details-host .lesson-panel'))")
+                    .path("result").path("result").path("value").booleanValue());
+
+            cdp.evaluate("Object.getPrototypeOf(localStorage).setItem = () => { throw new Error('blocked'); }; document.querySelector('[data-range=\"WEEK\"]').click()");
+            assertTrue(cdp.awaitText("could not save the display preference", Duration.ofSeconds(5)).contains("Current · accepted"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-1 preference failures must not mutate accepted workspace state");
+    }
+
+    @Test
     @DisplayName("UC-3 and RULE-19: one GET returns the complete accepted display snapshot without mutation")
     void returnsCompleteAcceptedSnapshotWithoutMutation() throws Exception {
         ObjectNode document = acceptedDocument(false);
@@ -567,8 +620,13 @@ class WorkspaceBrowserIT {
             cdp.command("Runtime.enable", JSON.createObjectNode());
             cdp.command("Page.navigate", object("url", page));
             cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            cdp.evaluate("const matrix=document.querySelector('.matrix-wrap'); matrix.scrollTop=matrix.scrollHeight; document.querySelector('[data-lesson-id=\"lesson-999\"]').click()");
+            String offViewport = cdp.awaitText("Accepted assignment", Duration.ofSeconds(5));
+            assertTrue(offViewport.contains("Declared lesson 999"));
+            assertTrue(cdp.evaluateValue("document.querySelector('.matrix-wrap').scrollTop > 0")
+                    .path("result").path("result").path("value").booleanValue());
             cdp.evaluate("document.querySelector('[data-range=\"DAY\"]').click()");
-            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            cdp.awaitText("Day · Thursday", Duration.ofSeconds(5));
 
             JsonNode search = measured(cdp, """
                     const element=document.querySelector('#lesson-search');
@@ -726,6 +784,8 @@ class WorkspaceBrowserIT {
 
     private ObjectNode acceptedDocument(boolean empty) throws Exception {
         ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        definition.withArray("periods").addObject().put("id", "tue-1").put("displayName", "Tuesday 1")
+                .put("weekday", "TUESDAY").put("order", 1);
         if (empty) definition.putArray("lessons");
         ObjectNode result = JSON.createObjectNode();
         result.put("status", "FEASIBLE");

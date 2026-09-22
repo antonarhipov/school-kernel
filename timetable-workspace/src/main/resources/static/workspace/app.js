@@ -1,5 +1,9 @@
 import { M } from './messages.js';
 import { makeAcceptedModel } from './accepted-model.js';
+import { createInspectionState } from './inspection-state.js';
+import { renderDayMatrix } from './day-renderer.js';
+import { renderFocusedSchedule } from './focused-renderer.js';
+import { renderWeekMatrix } from './week-renderer.js';
 
 let etag;
 let csrf;
@@ -10,6 +14,7 @@ let currentSnapshot;
 let bulkPreview;
 let dayMatrices = new Map();
 let preferenceSchoolId;
+let inspectionState;
 const boundLessonButtons = new WeakSet();
 
 const view = {
@@ -200,51 +205,28 @@ function makeModel(baseline) {
   return { definition, assignments, assignmentMap, assignmentsByCell, maps, weekdays };
 }
 
-function preferenceKey(schoolId) { return `school-kernel.inspection.v1.${schoolId}`; }
-
 function initializeInspectionState(schoolId) {
-  const firstDay = acceptedModel.weekdays[0] || null;
-  if (preferenceSchoolId === schoolId && view.day && acceptedModel.weekdays.includes(view.day)) return;
+  if (preferenceSchoolId === schoolId && inspectionState) return;
   preferenceSchoolId = schoolId;
-  view.range = 'WEEK';
-  view.day = firstDay;
-  if (!schoolId || !firstDay) return;
-  try {
-    const raw = window.localStorage.getItem(preferenceKey(schoolId));
-    if (!raw || raw.length > 1024) return;
-    const preference = JSON.parse(raw);
-    if (Object.keys(preference).length !== 3 || preference.version !== 1
-        || !['WEEK', 'DAY'].includes(preference.range)
-        || typeof preference.weekdayId !== 'string'
-        || !acceptedModel.weekdays.includes(preference.weekdayId)) return;
-    view.range = preference.range;
-    view.day = preference.weekdayId;
-  } catch (_) {
-    // Browser storage is an optional presentation enhancement, never workspace authority.
-  }
+  inspectionState = createInspectionState({ schoolId, weekdays: acceptedModel.weekdays });
+  syncInspectionState(inspectionState.current());
 }
 
-function persistInspectionPreference() {
-  if (!preferenceSchoolId || !view.day) return true;
-  try {
-    window.localStorage.setItem(preferenceKey(preferenceSchoolId), JSON.stringify({ version: 1, range: view.range, weekdayId: view.day }));
-    return true;
-  } catch (_) { return false; }
+function syncInspectionState(state) {
+  view.range = state.range;
+  view.day = state.weekdayId;
+  view.selectedLessonId = state.selectedLessonId;
 }
 
 function setRange(range, day = view.day, manualDay = false) {
-  if (!['WEEK', 'DAY'].includes(range) || !acceptedModel.weekdays.includes(day)) return;
-  const hadSelection = Boolean(view.selectedLessonId);
-  let selectionCleared = false;
-  view.range = range;
-  view.day = day;
-  if (manualDay && view.selectedLessonId) {
-    const selected = acceptedModel.assignmentMap.get(view.selectedLessonId);
-    if (selected?.period?.weekday !== day) { view.selectedLessonId = null; selectionCleared = true; }
-  }
-  const persisted = persistInspectionPreference();
+  if (!inspectionState) return;
+  const selectedWeekday = acceptedModel.assignmentMap.get(view.selectedLessonId)?.period?.weekday;
+  const transition = manualDay ? inspectionState.selectDay(day, selectedWeekday) : inspectionState.selectRange(range, day);
+  if (!transition.changed) return;
+  syncInspectionState(transition.state);
+  const persisted = inspectionState.persist();
   renderWholeSchool();
-  if (manualDay && hadSelection && selectionCleared) {
+  if (manualDay && transition.selectionCleared) {
     const notice = document.querySelector('#inspection-notice');
     if (notice) notice.textContent = M.lessonOutsideDay;
   }
@@ -391,7 +373,7 @@ function renderWholeSchool() {
     <p id="inspection-notice" class="notice" role="status"></p>
     ${model.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
     <p id="no-matches" class="empty-message" role="status"${active.length && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
-    ${view.range === 'WEEK' ? weekMatrix(model.definition.cohorts, model.weekdays, model.assignmentsByCell) : matrix(model.definition.cohorts, dayPeriods, model.assignmentsByCell, false)}
+    ${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: model.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: model.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}
     <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : ''}</div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
   if (view.range === 'WEEK') { bindInspectionControls(); applyFiltersInPlace(); return; }
@@ -399,7 +381,7 @@ function renderWholeSchool() {
   for (const day of model.weekdays) {
     if (day === view.day) continue;
     const template = document.createElement('template');
-    template.innerHTML = matrix(model.definition.cohorts, periodsForDay(day), model.assignmentsByCell, false);
+    template.innerHTML = renderDayMatrix({ cohorts: model.definition.cohorts, periods: periodsForDay(day), assignmentsByCell: model.assignmentsByCell, periodId: '', labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml });
     dayMatrices.set(day, template.content.firstElementChild);
   }
   bindInspectionControls();
@@ -409,18 +391,6 @@ function renderWholeSchool() {
 function switchWholeSchoolDay(day) {
   view.periodId = '';
   setRange('DAY', day, true);
-}
-
-function weekMatrix(cohorts, weekdays, assignmentsByCell) {
-  const headers = weekdays.map(day => `<th scope="col">${escapeHtml(M.days[day] || day)}</th>`).join('');
-  const rows = cohorts.map(cohort => `<tr><th scope="row"><span>${escapeHtml(entityName(cohort))}</span><small>${escapeHtml(cohort.id)}</small></th>${weekdays.map(day => {
-    const slots = periodsForDay(day).map(period => {
-      const items = assignmentsByCell.get(`${cohort.id}\u0000${period.id}`) || [];
-      return `<div class="week-slot"><span class="week-period">${escapeHtml(period.displayName)}</span>${items.length ? items.map(item => weekLessonButton(item)).join('') : `<span class="empty-cell">${M.emptyCell}</span>`}</div>`;
-    }).join('');
-    return `<td data-weekday="${escapeAttribute(day)}">${slots}</td>`;
-  }).join('')}</tr>`).join('');
-  return `<div class="matrix-wrap week-wrap" aria-label="${M.weekRange}"><table class="matrix week-matrix"><thead><tr><th scope="col">${M.class}</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 function weekLessonButton(item) {
@@ -503,20 +473,10 @@ function renderFocused() {
   const type = view.focusedType || 'cohortId';
   const source = type === 'cohortId' ? acceptedModel.definition.cohorts : type === 'teacherId' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms;
   if (!source.some(item => item.id === view.focusedId)) view.focusedId = source[0]?.id || null;
-  const title = type === 'cohortId' ? M.classSchedule : type === 'teacherId' ? M.teacherSchedule : M.roomSchedule;
-  const choose = type === 'cohortId' ? M.chooseClass : type === 'teacherId' ? M.chooseTeacher : M.chooseRoom;
-  const items = acceptedModel.assignments.filter(item => item[type] === view.focusedId).sort((a, b) => acceptedModel.weekdays.indexOf(a.period?.weekday) - acceptedModel.weekdays.indexOf(b.period?.weekday) || (a.period?.order ?? 0) - (b.period?.order ?? 0));
-  host.innerHTML = `${view.narrow ? `<p class="narrow-banner" role="status">${M.narrowNotice}</p>` : `<button id="return-matrix" type="button" class="secondary">← ${M.returnWholeSchool}</button>`}
-    <div class="focused-toolbar"><div class="view-tabs" role="group" aria-label="${M.focusedSchedules}"><button type="button" data-focus-type="cohortId" aria-pressed="${type === 'cohortId'}">${M.classes}</button><button type="button" data-focus-type="teacherId" aria-pressed="${type === 'teacherId'}">${M.teachers}</button><button type="button" data-focus-type="roomId" aria-pressed="${type === 'roomId'}">${M.rooms}</button></div>${selectControl('focus-entity', choose, options(source), view.focusedId)}</div>
-    <section class="focused-schedule"><h3>${title} · ${escapeHtml(entityName(source.find(item => item.id === view.focusedId), view.focusedId))}</h3>${items.length ? acceptedModel.weekdays.map(day => focusedDay(day, items)).join('') : `<p class="empty-message">${M.noFocusedLessons}</p>`}</section>`;
+  host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, assignments: acceptedModel.assignments, weekdays: acceptedModel.weekdays, labels: M, entityName, periodLabel, selectControl, options, escapeHtml });
   document.querySelector('#return-matrix')?.addEventListener('click', () => { view.focusedType = null; renderWholeSchool(); });
   document.querySelectorAll('[data-focus-type]').forEach(button => button.addEventListener('click', () => { view.focusedType = button.dataset.focusType; view.focusedId = null; renderFocused(); }));
   document.querySelector('#focus-entity')?.addEventListener('change', event => { view.focusedId = event.target.value; renderFocused(); });
-}
-
-function focusedDay(day, items) {
-  const dayItems = items.filter(item => item.period?.weekday === day);
-  return `<div class="focused-day"><h4>${escapeHtml(M.days[day] || day)}</h4>${dayItems.length ? dayItems.map(item => `<article class="focused-lesson"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">✓ ${M.acceptedAssignment}</span></article>`).join('') : `<p class="empty-cell">${M.emptyCell}</p>`}</div>`;
 }
 
 function bindInspectionControls() {
@@ -569,7 +529,8 @@ function syncSelectedLesson(root) {
 }
 
 function selectLesson(button) {
-  view.selectedLessonId = button.dataset.lessonId;
+  if (currentSnapshot?.state === 'ACCEPTED_BASELINE' && inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId));
+  else view.selectedLessonId = button.dataset.lessonId;
   document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
     const selected = candidate === button;
     candidate.classList.toggle('selected', selected);
@@ -583,7 +544,8 @@ function selectLesson(button) {
 
 function bindCloseDetails() {
   document.querySelector('#close-details')?.addEventListener('click', () => {
-    view.selectedLessonId = null;
+    if (currentSnapshot?.state === 'ACCEPTED_BASELINE' && inspectionState) syncInspectionState(inspectionState.closeLesson());
+    else view.selectedLessonId = null;
     document.querySelector('#lesson-details-host').replaceChildren();
     document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
       candidate.classList.remove('selected');
