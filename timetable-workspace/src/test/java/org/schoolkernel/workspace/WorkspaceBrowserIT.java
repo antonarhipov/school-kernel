@@ -308,6 +308,99 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("UC-2 main/extensions/G1-G8/RULE-14: real browser traces exact subject teaching and teacher load without mutation")
+    void tracesSubjectTeachingAndTeacherLoadInRealBrowser() throws Exception {
+        storeAccepted(acceptedDocument(false));
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Complete school population", Duration.ofSeconds(15));
+
+            cdp.evaluate("""
+                    const subject=document.querySelector('#subject-investigation');
+                    subject.value='math'; subject.dispatchEvent(new Event('change',{bubbles:true}));
+                    """);
+            String subjectOnly = cdp.awaitText("Subject matches: 1", Duration.ofSeconds(5));
+            assertTrue(subjectOnly.contains("Teacher matches: 0"));
+            assertTrue(cdp.evaluateValue("[...document.querySelectorAll('[data-lesson-id]')].every(button => !button.hidden)")
+                    .path("result").path("result").path("value").booleanValue(), "subject highlighting must retain nonmatches");
+            assertTrue(cdp.evaluateValue("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').classList.contains('subject-match')")
+                    .path("result").path("result").path("value").booleanValue());
+
+            cdp.evaluate("""
+                    const teacher=document.querySelector('#teacher-investigation');
+                    teacher.value='teacher-alex'; teacher.dispatchEvent(new Event('change',{bubbles:true}));
+                    """);
+            String combined = cdp.awaitText("Dual matches: 1", Duration.ofSeconds(5));
+            assertTrue(combined.contains("Teacher matches: 2"));
+            assertTrue(combined.contains("Teacher load by period · Alex"));
+            assertTrue(combined.contains("Monday 1\nAssigned"));
+            assertTrue(combined.contains("Monday 2\nAssigned"));
+            assertTrue(combined.contains("Monday 3\nUnavailable"));
+            assertTrue(combined.contains("Tuesday 1\nAvailable · unassigned"));
+            assertTrue(cdp.evaluateValue("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').classList.contains('dual-match')")
+                    .path("result").path("result").path("value").booleanValue());
+
+            cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-science-1\"]').click(); document.querySelector('#subject-only').click()");
+            String selectionCleared = cdp.awaitText("outside the active filters", Duration.ofSeconds(5));
+            assertTrue(selectionCleared.contains("Subject: Mathematics"));
+            assertFalse(cdp.evaluateValue("Boolean(document.querySelector('#lesson-details-host .lesson-panel'))")
+                    .path("result").path("result").path("value").booleanValue());
+            assertTrue(cdp.evaluateValue("document.querySelector('[data-lesson-id=\"lesson-science-1\"]').hidden")
+                    .path("result").path("result").path("value").booleanValue());
+
+            cdp.evaluate("document.querySelector('#teacher-only').click()");
+            cdp.awaitText("Represented lessons: 1", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('[data-range=\"DAY\"]').click()");
+            String day = cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertTrue(day.contains("Subject matches: 1"));
+            assertTrue(day.contains("Teacher matches: 2"));
+
+            cdp.evaluate("document.querySelector('#clear-subject').click()");
+            String teacherRetained = cdp.awaitText("Teacher matches: 2", Duration.ofSeconds(5));
+            assertTrue(teacherRetained.contains("Subject matches: 0"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#teacher-investigation').value")
+                    .path("result").path("result").path("value").stringValue().equals("teacher-alex"));
+
+            cdp.evaluate("""
+                    const weekday=document.querySelector('#weekday');
+                    weekday.value='TUESDAY'; weekday.dispatchEvent(new Event('change',{bubbles:true}));
+                    """);
+            cdp.awaitText("Day · Tuesday", Duration.ofSeconds(5));
+            cdp.evaluate("""
+                    const subject=document.querySelector('#subject-investigation');
+                    subject.value='math'; subject.dispatchEvent(new Event('change',{bubbles:true}));
+                    """);
+            cdp.awaitText("Subject matches: 0", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#subject-only').click()");
+            String emptyIntersection = cdp.awaitText("No lessons match the active criteria", Duration.ofSeconds(5));
+            assertTrue(emptyIntersection.contains("Subject matches: 0"));
+            assertTrue(emptyIntersection.contains("Teacher matches: 0"));
+
+            cdp.evaluate("document.querySelector('#clear-subject').click()");
+            String noTeacherAssignments = cdp.awaitText("Teacher matches: 0", Duration.ofSeconds(5));
+            assertTrue(noTeacherAssignments.contains("Teacher load by period · Alex"));
+            assertTrue(noTeacherAssignments.contains("Available · unassigned"));
+
+            cdp.evaluate("document.querySelector('#clear-teacher').click(); document.querySelector('#reset-view').click()");
+            String cleared = cdp.awaitText("No active filters", Duration.ofSeconds(5));
+            assertTrue(cleared.contains("Subject matches: 0"));
+            assertTrue(cleared.contains("Teacher matches: 0"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-2 investigation must not mutate accepted workspace state");
+    }
+
+    @Test
     @DisplayName("UC-3 extension 2a: an accepted school with no lessons retains declared classes and empty periods")
     void showsDeclaredEmptyAcceptedTimetableInRealBrowser() throws Exception {
         storeAccepted(acceptedDocument(true));
@@ -786,6 +879,7 @@ class WorkspaceBrowserIT {
         ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
         definition.withArray("periods").addObject().put("id", "tue-1").put("displayName", "Tuesday 1")
                 .put("weekday", "TUESDAY").put("order", 1);
+        ((ObjectNode) definition.path("teachers").get(0)).putArray("availablePeriodIds").add("mon-1").add("tue-1");
         if (empty) definition.putArray("lessons");
         ObjectNode result = JSON.createObjectNode();
         result.put("status", "FEASIBLE");
@@ -1024,7 +1118,7 @@ class WorkspaceBrowserIT {
                 }
                 Thread.sleep(100);
             }
-            throw new AssertionError("Browser did not render: " + expected);
+            throw new AssertionError("Browser did not render: " + expected + "\nRendered: " + text());
         }
 
         String text() throws Exception {

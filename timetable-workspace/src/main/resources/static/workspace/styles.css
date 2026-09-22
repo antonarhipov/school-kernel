@@ -55,6 +55,22 @@ code { overflow-wrap: anywhere; }
 .inspection-toolbar { display: grid; grid-template-columns: minmax(220px, 1.6fr) repeat(5, minmax(135px, 1fr)); gap: 12px; align-items: end; padding: 16px; border: 1px solid #d9dfdb; border-radius: 13px; background: #f8faf8; }
 .inspection-toolbar label, .focused-toolbar label { margin: 0; font-size: .77rem; color: #4b5f55; }
 .inspection-toolbar input, .inspection-toolbar select, .focused-toolbar select { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #bfcac4; border-radius: 8px; background: white; color: #1d2925; font: inherit; }
+.investigation-panel { margin: 16px 0; padding: 16px; border: 1px solid #b9d5c5; border-radius: 13px; background: #f7fbf8; }
+.investigation-panel h3, .investigation-panel h4 { margin: 0; }
+.investigation-controls { display: grid; grid-template-columns: minmax(190px, 1fr) auto auto minmax(190px, 1fr) auto auto; gap: 10px; align-items: end; margin-top: 12px; }
+.investigation-controls label { margin: 0; font-size: .77rem; color: #4b5f55; }
+.investigation-controls select { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #bfcac4; border-radius: 8px; background: white; color: #1d2925; font: inherit; }
+.investigation-controls button { min-height: 40px; padding: 8px 10px; font-size: .78rem; }
+.investigation-controls .match-mode { display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 8px; color: #294c3b; font-weight: 750; }
+.investigation-summary { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 13px; font-size: .82rem; }
+.investigation-summary span { padding: 4px 7px; border-radius: 6px; background: #e8efe9; color: #294c3b; font-weight: 750; }
+.teacher-ribbon { margin-top: 15px; padding-top: 14px; border-top: 1px solid #cfded5; }
+.teacher-ribbon ul { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 10px 0 0; list-style: none; }
+.teacher-ribbon li { display: grid; gap: 3px; min-width: 118px; padding: 8px 10px; border: 1px solid #cbd6d0; border-radius: 8px; font-size: .75rem; }
+.teacher-ribbon li span { font-weight: 800; }
+.teacher-ribbon .ribbon-assigned { border-left: 4px solid #276b4a; background: #eaf6ee; }
+.teacher-ribbon .ribbon-available { border-left: 4px solid #b47813; background: #fff8e9; }
+.teacher-ribbon .ribbon-unavailable { border-left: 4px solid #6c5c96; background: #f0edf8; }
 .range-control { display: flex; gap: 4px; margin: 0; padding: 3px; border: 0; border-radius: 9px; background: #e7ece9; }
 .range-control legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .range-control button, .view-tabs button { min-height: 34px; padding: 7px 10px; background: transparent; color: #44564d; font-size: .8rem; }
@@ -79,6 +95,12 @@ code { overflow-wrap: anywhere; }
 .lesson-cell span { color: #53625b; }
 .lesson-cell em { margin-top: 3px; padding: 2px 5px; border-radius: 4px; background: #fff0c7; color: #6b4a00; font-size: .65rem; font-style: normal; font-weight: 800; text-transform: uppercase; }
 .lesson-cell.selected { border-color: #7e5b08; box-shadow: inset 0 0 0 2px #e7b13d; }
+.lesson-cell.subject-match { border-top: 3px solid #246da3; }
+.lesson-cell.teacher-match { border-right: 3px solid #7a4f9d; }
+.lesson-cell.dual-match { background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(79, 113, 151, .10) 5px, rgba(79, 113, 151, .10) 10px); }
+.lesson-cell .subject-match-label { background: #e4f1fa; color: #245778; }
+.lesson-cell .teacher-match-label { background: #f0e8f8; color: #593b73; }
+.lesson-cell .dual-match-label { background: #e8eee0; color: #39592a; }
 .compact-density .matrix td { height: 78px; }
 .compact-density .lesson-cell { min-height: 61px; padding: 6px; }
 .compact-density .lesson-cell span { display: inline; font-size: .7rem; }
@@ -174,6 +196,7 @@ code { overflow-wrap: anywhere; }
 @media (max-width: 1180px) {
   .inspection-toolbar { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
   .search-control { grid-column: span 2; }
+  .investigation-controls { grid-template-columns: minmax(190px, 1fr) auto auto; }
   .review-categories { grid-template-columns: repeat(2, minmax(180px, 1fr)); }
   .before-after dl { grid-template-columns: repeat(3, minmax(100px, 1fr)); }
 }
@@ -183,6 +206,7 @@ code { overflow-wrap: anywhere; }
   .accepted-heading, .focused-toolbar { align-items: stretch; flex-direction: column; }
   .mode-note { align-self: start; }
   .inspection-toolbar, .matrix-wrap, .focused-entry { display: none; }
+  .investigation-panel { display: none; }
   .view-tabs { width: 100%; }
   .view-tabs button { flex: 1; }
   .focused-day { grid-template-columns: 1fr; }

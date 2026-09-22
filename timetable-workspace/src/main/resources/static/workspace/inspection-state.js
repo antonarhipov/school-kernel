@@ -1,9 +1,10 @@
 const PREFERENCE_VERSION = 1;
 const PREFERENCE_LIMIT = 1024;
 
-export function createInspectionState({ schoolId, weekdays, storage = window.localStorage }) {
+export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], storage = window.localStorage }) {
   const firstWeekday = weekdays[0] || null;
-  let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null };
+  let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null,
+    subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false };
 
   if (schoolId && firstWeekday) {
     try {
@@ -21,6 +22,30 @@ export function createInspectionState({ schoolId, weekdays, storage = window.loc
     current: () => Object.freeze({ ...state }),
     selectLesson: lessonId => { state = { ...state, selectedLessonId: lessonId || null }; return state; },
     closeLesson: () => { state = { ...state, selectedLessonId: null }; return state; },
+    selectSubject: subjectId => {
+      if (subjectId !== null && !subjectIds.includes(subjectId)) return { changed: false, state };
+      state = { ...state, subjectId, subjectOnly: subjectId ? state.subjectOnly : false };
+      return { changed: true, state };
+    },
+    selectTeacher: teacherId => {
+      if (teacherId !== null && !teacherIds.includes(teacherId)) return { changed: false, state };
+      state = { ...state, teacherId, teacherOnly: teacherId ? state.teacherOnly : false };
+      return { changed: true, state };
+    },
+    setSubjectOnly: subjectOnly => {
+      if (typeof subjectOnly !== 'boolean' || (subjectOnly && !state.subjectId)) return { changed: false, state };
+      state = { ...state, subjectOnly };
+      return { changed: true, state };
+    },
+    setTeacherOnly: teacherOnly => {
+      if (typeof teacherOnly !== 'boolean' || (teacherOnly && !state.teacherId)) return { changed: false, state };
+      state = { ...state, teacherOnly };
+      return { changed: true, state };
+    },
+    resetInvestigationFilters: () => {
+      state = { ...state, subjectOnly: false, teacherOnly: false };
+      return { changed: true, state };
+    },
     selectRange: (range, selectedWeekday) => {
       if (!['WEEK', 'DAY'].includes(range)) return { changed: false, state };
       const weekdayId = range === 'DAY' && weekdays.includes(selectedWeekday) ? selectedWeekday : state.weekdayId;

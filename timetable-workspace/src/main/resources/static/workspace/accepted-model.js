@@ -12,13 +12,30 @@ export function makeAcceptedModel(baseline) {
     room: maps.rooms.get(assignment.roomId), period: maps.periods.get(assignment.periodId), lesson: maps.lessons.get(assignment.lessonId) })));
   const assignmentMap = new Map(assignments.map(item => [item.lessonId, item]));
   const assignmentsByCell = new Map();
+  const assignmentsBySubject = new Map();
+  const assignmentsByTeacher = new Map();
   for (const assignment of assignments) {
     const key = `${assignment.cohortId}\u0000${assignment.periodId}`;
     const cell = assignmentsByCell.get(key) || [];
     cell.push(assignment);
-    assignmentsByCell.set(key, Object.freeze(cell));
+    assignmentsByCell.set(key, cell);
+    addIndexed(assignmentsBySubject, assignment.subjectId, assignment);
+    addIndexed(assignmentsByTeacher, assignment.teacherId, assignment);
   }
-  return Object.freeze({ definition, assignments, assignmentMap, assignmentsByCell, maps, weekdays });
+  freezeIndex(assignmentsByCell);
+  freezeIndex(assignmentsBySubject);
+  freezeIndex(assignmentsByTeacher);
+  return Object.freeze({ definition, assignments, assignmentMap, assignmentsByCell, assignmentsBySubject, assignmentsByTeacher, maps, weekdays });
+}
+
+function addIndexed(index, key, assignment) {
+  const values = index.get(key) || [];
+  values.push(assignment);
+  index.set(key, values);
+}
+
+function freezeIndex(index) {
+  for (const [key, values] of index) index.set(key, Object.freeze(values));
 }
 
 function deepFreeze(value) {
