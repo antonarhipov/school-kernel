@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-7.md` at `b02ce5f6bc09da9253cc46da8c4ed07adf164b19`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical; 0 gap; 0 protocol; 0 drift; 0 cosmetic
 - Suite: focused complete real-Chrome class - 10 run, 0 failed, 0 errors, 0 skipped; clean reactor - 167 run, 0 failed, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -106,7 +106,7 @@ separation remain mandatory and passed.
 
 ## Walkthrough
 
-Automated evidence is strong, but UC-7 is a UI use case and cannot be approved before administrator confirmation.
+Automated evidence was strong; as a UI use case, UC-7 additionally required administrator confirmation of this script:
 
 1. Open the accepted whole-school timetable and locate a teacher with recurring assignments.
 2. Start a repair, make that teacher unavailable for a recurring period, protect one accepted placement with a room
@@ -117,13 +117,12 @@ Automated evidence is strong, but UC-7 is a UI use case and cannot be approved b
    generate/review the proposal, and either accept it or exercise the declared discard path.
 6. Confirm the final accepted timetable is identifiable, complete, and available for another repair.
 
-Administrator result: pending.
+On 2026-09-22, the administrator completed the two-repair walkthrough and replied `PASS`.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE -> PENDING_WALKTHROUGH`; UC-7 awaits the administrator walkthrough above. UC-8 remains blocked
-from execution until UC-7 is approved.
+`PENDING_WALKTHROUGH -> APPROVED`; UC-8 is now eligible. No later use case was started.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-7 automated convergence passed; confirm the administrator two-repair walkthrough before approval or UC-8.
+APPROVED
