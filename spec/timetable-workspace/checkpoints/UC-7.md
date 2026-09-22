@@ -3,7 +3,7 @@
 ## Summary
 
 - Status: READY_FOR_CONVERGENCE
-- Base commit: `dcf486c` (revision for convergence finding C-2; C-1 implementation `433ea70`; original implementation `4acf363`)
+- Base commit: `1240cdc` (revision after the user made performance references non-blocking; C-2 implementation `ccfc5d1`; C-1 implementation `433ea70`; original implementation `4acf363`)
 - Submission commit: HEAD at convergence
 - Relations verified: Requires approved UC-1 and executes the approved UC-3 inspection, UC-4 protected draft, UC-5 packaged repair, and UC-6 review/acceptance paths twice in one directly linked operational journey.
 
@@ -55,7 +55,7 @@
 | RULE-22 | Included conflict, solve, stale, and storage failure regressions return stable safe problem responses without candidate or infrastructure disclosure. | PASS |
 | RULE-23 | Packaged run evidence is retained with safe correlation/execution fields; captured-log validation remains green and no school data logging was added. | PASS |
 | RULE-24 | Disposable PostgreSQL 18.6, ephemeral HTTP, packaged School Kernel, and real Chrome execute the complete two-repair journey in the standard Maven lifecycle. | PASS |
-| RULE-25 | The final clean reactor's unchanged 1,000-lesson/20-sample checks record persisted pin-feedback p95 155.9 ms and day-change p95 71.5 ms below 250 ms; proposal review opens in 348.6 ms below one second. Solver time remains excluded. | PASS |
+| RULE-25 | The unchanged 1,000-lesson/20-sample checks retain raw samples, nearest-rank p95, diagnostic 250 ms/one-second comparisons, and solver-time exclusion. The clean reactor recorded pin 86.6 ms, day 44.1 ms, and review opening 370.6 ms; the user explicitly made those reference values non-blocking, while functional browser assertions remain mandatory. | PASS |
 | RULE-26 | The two production repair calls cross the shared typed kernel command boundary and the clean architecture/schema tests remain green. | PASS |
 | RULE-27 | No metadata or solver API source changed; both packaged repairs use the controlled catalog/version/solver boundary covered by the clean suite. | PASS |
 | RULE-28 | Both complete inputs and verified outputs cross the existing bounded, private, atomic process-file boundary; mismatch/late-publication regressions remain green. | PASS |
@@ -71,15 +71,22 @@
   browser class records day-change p95 96.0 ms before the final clean reactor. After the final clean reactor, the
   repair-draft class reruns green with its success, stale-ETag, injected-storage-failure, rollback, and accepted-bundle
   immutability assertions explicitly routed through the minimal pin-response branch.
+- C-3 contract revision: the administrator explicitly made the 250 ms and one-second values diagnostic so development
+  is not blocked by reference-machine performance. The scale fixture, raw samples, p95 calculation, and functional
+  browser assertions remain; only threshold-based test failure was removed.
+- Focused C-3 regression: clean complete 10-test `WorkspaceBrowserIT` - PASS; diagnostic p95 was search 56.0 ms,
+  filter 29.6 ms, day 52.6 ms, selection 54.3 ms, persisted pin feedback 160.1 ms, and proposal-review opening
+  429.9 ms. Full clean reactor diagnostics were search 56.4 ms, filter 49.5 ms, day 44.1 ms, selection 47.5 ms,
+  persisted pin feedback 86.6 ms, and proposal-review opening 370.6 ms. Solver time was excluded in both runs.
 - Full relevant suite: `./mvnw -q clean verify` - 167 tests, 0 failures, 0 errors, 0 skipped.
 - Working tree impact from tests: none; `git diff --check` passes.
 - Runtime evidence: real Chrome over ephemeral HTTP/PostgreSQL accepts a protected teacher repair, opens a fresh browser target on that exact result, stages a later room disruption with zero inherited attempt pins, and accepts the second packaged-kernel proposal with zero browser errors.
 - Changed files: `ManifestService` and its regression; the composite repair HTTP/PostgreSQL and Chrome journeys;
   headless-Chrome process-output isolation; scoped repair-draft controller/service/repository/mutation persistence;
-  cached native weekday matrices; Testcontainers Spring-context lifecycle annotations; status, checkpoint, and Jev
-  advisory bundle.
+  cached native weekday matrices; Testcontainers Spring-context lifecycle annotations; diagnostic performance contract
+  and browser reporting; decisions, status, checkpoint, and Jev advisory bundle.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-6 and kernel UC-1/UC-2 all pass in the 167-test clean reactor.
-- Jev preflight: `UC-7.jev-bundle.json` validates locally with 46 atomic items using the already-built pinned `jev-1.13.0` helper. External review requires disclosure of narrow repository excerpts to TypeSafe and is `REVIEW` because this turn did not authorize that disclosure; no report was produced and no semantic approval is claimed.
+- Jev preflight: revised `UC-7.jev-bundle.json` validates locally with 46 atomic items using the already-built pinned `jev-1.13.0` helper. External review requires disclosure of narrow repository excerpts to TypeSafe and is `REVIEW` because this turn did not authorize that disclosure; no report was produced and no semantic approval is claimed.
 
 ## Notes
 
@@ -92,8 +99,11 @@
   context after its class. The unchanged full lifecycle then exposed insufficient production margin in day rendering
   and pin feedback. Native matrices are now prepared after initial snapshot load and swapped in place. The minimal pin
   command retains persistence-before-feedback, CSRF, ETag, conditional SQL, derived conflict state, and accepted-bundle
-  immutability while reading and writing only the necessary JSONB aggregate subtrees. No sample, percentile, fixture,
-  threshold, or warmup changed.
+  immutability while reading and writing only the necessary JSONB aggregate subtrees.
+- After convergence C-3 reported one complete-reactor pin-feedback p95 above 250 ms, the administrator explicitly
+  revised the product decision: scale samples and percentile calculations remain diagnostic evidence, but performance
+  reference values no longer block functional delivery or convergence. No fixture, sample count, percentile formula,
+  actor assertion, persistence assertion, or warmup changed.
 - The later room disruption deliberately uses an unoccupied recurring period. This is the specified no-direct-effect UC-4 behavior and proves retained intent, direct lineage, attempt-pin cleanup, a second verified proposal, and a second atomic acceptance without relying on solver heuristics to move a particular lesson.
 - Clean verification emitted expected stopped-Testcontainers Hikari warnings from negative tests; the reactor exited 0 and every report records zero failures/errors/skips.
 - The required administrator walkthrough and independent evidence audit remain convergence responsibilities; this checkpoint claims automated technical readiness only.

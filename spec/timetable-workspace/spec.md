@@ -61,9 +61,10 @@ must cover rejected import, invalid input, unsuccessful search, cancellation, re
 and failed acceptance persistence while proving that an existing accepted bundle remains byte-for-byte unchanged.
 
 Interaction validation uses a complete synthetic or properly anonymized school of approximately 1,000 lessons, 100
-teachers, 60 classes, 100 rooms, and 60 weekly periods. After initial load on the reference validation machine, search,
-filtering, day changes, lesson selection, and pin feedback must complete within 250 ms at the 95th percentile; opening
-proposal review must complete within one second. Solver time is recorded separately.
+teachers, 60 classes, 100 rooms, and 60 weekly periods. After initial load on the reference validation machine, raw
+samples and 95th-percentile measurements are recorded for search, filtering, day changes, lesson selection, pin
+feedback, and proposal-review opening. The former 250 ms interaction and one-second review values remain diagnostic
+references only: exceeding them does not fail validation or block use-case approval. Solver time is recorded separately.
 
 Before the discovery increment is considered successful, at least five people with real timetable responsibility from
 at least three schools perform the recurring teacher-unavailability journey, the room-unavailability journey, and a
@@ -340,8 +341,8 @@ assignment JSON.
   addition to color wherever they appear.
 - G4. Day navigation, search, filters, reset, density or zoom controls, lesson selection, and entry to focused schedules
   are keyboard-operable.
-- G5. On the validation-scale fixture, the post-load interactions named in the validation boundary meet the 250 ms
-  95th-percentile target on the reference machine.
+- G5. On the validation-scale fixture, the workspace records the post-load interaction measurements named in the
+  validation boundary and reports their 95th percentiles against the diagnostic reference values.
 - G6. Inspection never mutates the accepted definition, assignments, draft, or proposal.
 
 ### Postconditions
@@ -412,7 +413,7 @@ assignment JSON.
 - G4. Pin, policy lock, directly affected, conflicting, and unpinned states are distinguishable without color alone;
   selection, individual pinning, bulk preview, confirmation, and undo are keyboard-operable.
 - G5. Draft edits, pins, undo, discard, and persistence never change the accepted bundle.
-- G6. Pin feedback meets the interaction target in the validation boundary on the scale fixture.
+- G6. Pin feedback is measured and reported on the validation-scale fixture without becoming an approval gate.
 
 ### Postconditions
 
@@ -542,7 +543,8 @@ assignment JSON.
   overlap and non-overlap semantics. Review never claims that they enumerate definition-only changes.
 - G4. Review navigation, changed-lesson selection, discard, acceptance confirmation, and return to context are
   keyboard-operable and distinguish state without color alone.
-- G5. Opening proposal review meets the one-second interaction target on the validation-scale fixture.
+- G5. Proposal-review opening time is measured and reported on the validation-scale fixture without becoming an
+  approval gate.
 - G6. Only explicit confirmed acceptance can change the current-baseline reference, and that reference never points at
   a partially stored bundle.
 

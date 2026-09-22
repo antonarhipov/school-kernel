@@ -222,9 +222,11 @@ Repair draft -- discard draft -> Accepted baseline
 - **D051 — Whole-school comprehension measure:** On the scale fixture, at least four of five participants must find all
   lessons directly affected by each scenario and explain the period-move versus room-only ripple totals without missing
   or inventing a change. Preference surveys alone do not establish usability.
-- **D052 — Interaction performance gate:** After initial load on the reference validation machine, search, filters, day
-  changes, selection, and pin feedback must complete within 250 ms at the 95th percentile; opening proposal review must
-  complete within one second. Solver time is measured separately and is not disguised as UI latency.
+- **D052 — Interaction performance evidence (revised 2026-09-22):** After initial load on the reference validation
+  machine, record raw samples and 95th-percentile results for search, filters, day changes, selection, pin feedback, and
+  proposal-review opening. The former 250 ms interaction and one-second review values are diagnostic references, not
+  release or convergence gates. Solver time is measured separately and is not disguised as UI latency. This revision
+  prioritizes functional delivery now and leaves observed performance issues for explicit follow-up work.
 - **D053 — Solver evidence, not a fixed promise:** Record time limit, termination reason, whether a feasible result was
   found, and change counts for every validation run. The feature must handle slow or unsuccessful searches safely, but
   the discovery study does not invent a universal 30-second feasibility guarantee.

@@ -415,19 +415,20 @@ tracked files, example data, or a runtime workspace.
   the packaged kernel and browser journeys per use case, leaves runtime and tracked data unchanged, and fails if Docker
   is unavailable rather than silently substituting another database.
 
-### RULE-25 - Scale and interaction measurements are separate from solving
+### RULE-25 - Scale measurements are diagnostic and separate from solving
 
 - Applies to: UC-3, UC-4, UC-6, UC-7
 - Constraint: A complete synthetic or properly anonymized fixture of approximately 1,000 lessons, 100 teachers, 60
   classes, 100 rooms, and 60 periods MUST drive browser performance measurement. Search, filters, day changes,
-  selection, and pin feedback MUST be measured after initial snapshot load at the 95th percentile against 250 ms;
-  proposal review opening MUST be measured against one second. Solver duration MUST be recorded separately and MUST NOT
-  be included in or used to excuse interaction latency.
-- Reason: The product hypothesis depends on whole-school comprehension and responsive inspection, not merely solver
-  throughput.
+  selection, pin feedback, and proposal-review opening MUST record raw samples and 95th-percentile results after the
+  initial snapshot load. The former 250 ms interaction and one-second review values MAY be reported as diagnostic
+  references but MUST NOT fail automated verification or block convergence. Solver duration MUST be recorded separately
+  and MUST NOT be included in the interaction measurements.
+- Reason: Scale evidence remains useful for prioritizing later performance work, while functional delivery is not held
+  behind a reference-machine latency threshold during this development period.
 - Verification: A repeatable reference-machine browser script records raw samples, percentile calculation, fixture
-  cardinalities, review time, and separate kernel evidence; release evidence includes the administrator walkthrough
-  required by `spec.md`.
+  cardinalities, review time, diagnostic reference comparisons, and separate kernel evidence without threshold
+  assertions; release evidence includes the administrator walkthrough required by `spec.md`.
 
 ### RULE-26 - Kernel commands share typed application boundaries
 

@@ -415,12 +415,12 @@
     },
     {
       "id": "RULE-25",
-      "contract": "Scale interaction measurements remain separate from solver time.",
+      "contract": "Scale interaction measurements remain diagnostic and separate from solver time.",
       "rules": ["RULE-25"],
       "actorBoundary": "Validation-scale real Chrome regressions",
-      "claim": "Inspection, pin feedback, and proposal review targets remain independently green.",
-      "evidence": [{"kind":"browser-performance-test","source":"WorkspaceBrowserIT.java:493-648; ./mvnw -q clean verify","observation":"The unchanged 1,000-lesson and 20-sample clean run records persisted pin-feedback p95 155.9 ms and day-change p95 71.5 ms below 250 ms, plus proposal review opening 348.6 ms below one second; each explicitly excludes solver time."}],
-      "negativeObligations": ["Solver duration is not counted as interaction latency", "Small fixture is not substituted for scale fixture"],
+      "claim": "Inspection, pin feedback, and proposal review retain raw samples and p95 reporting without blocking functional convergence on diagnostic reference values.",
+      "evidence": [{"kind":"browser-performance-test","source":"WorkspaceBrowserIT.java:493-655; spec/timetable-workspace/rules.md RULE-25","observation":"The unchanged 1,000-lesson and 20-sample checks record raw values, nearest-rank p95, diagnostic 250 ms and one-second comparisons, and explicit solver-time exclusion without threshold assertions."}],
+      "negativeObligations": ["Solver duration is not counted as interaction latency", "Small fixture is not substituted for scale fixture", "A diagnostic reference exceedance does not fail functional verification"],
       "counterEvidence": []
     },
     {

@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-7
-- Status: NEEDS_REVISION
-- Next eligible: UC-7 C-3 revision
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: UC-7 convergence
 
 ## Progress
 
@@ -16,7 +16,7 @@
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
-| UC-7 | NEEDS_REVISION | UC-1; includes UC-3, UC-4, UC-5, UC-6 | `ccfc5d1` resolves C-2; `433ea70` resolves C-1; original `4acf363` | `convergence/UC-7.md` - REJECT C-3 |
+| UC-7 | READY_FOR_CONVERGENCE | UC-1; includes UC-3, UC-4, UC-5, UC-6 | HEAD at convergence incorporates the non-blocking performance decision after C-3; `ccfc5d1` resolves C-2; `433ea70` resolves C-1; original `4acf363` | pending reconvergence |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
@@ -148,7 +148,7 @@
 - Started: 2026-09-22T08:36:00Z
 - Started from: `c53b1a624bfd7bda319bb28bdff0fec9095fab40`
 - Pre-existing dirty files: none.
-- Implementation submission: pending checkpoint commit.
+- Implementation submission: HEAD at convergence.
 - Changed files: attempt-lock manifest guard, manifest regression, composite two-repair PostgreSQL/HTTP and real-Chrome
   journeys, status, checkpoint, and Jev advisory bundle.
 - Commands and results: focused manifest unit suite - PASS; focused two-repair HTTP/PostgreSQL/packaged-kernel journey -
@@ -174,6 +174,16 @@
 - Changed files in C-2 revision: scoped repair-draft persistence and ETag helpers; native cached day-matrix rendering;
   Testcontainers context lifecycle annotations in all five Spring integration classes; status, checkpoint, and Jev
   advisory bundle.
+- C-3 revision started: 2026-09-22; base `1240cdc`; pre-existing dirty files: none. The administrator explicitly
+  revised the product contract so the 250 ms interaction and one-second review values remain diagnostic evidence but
+  no longer block functional delivery or convergence; fixtures, raw samples, p95 calculations, actor behavior, and
+  persistence assertions remain unchanged.
+- C-3 revision validation: clean complete 10-test real-Chrome class - PASS; final `./mvnw -q clean verify` - 167 tests,
+  0 failures, 0 errors, 0 skipped; `git diff --check` - PASS; revised 46-item Jev bundle - locally valid; external Jev -
+  REVIEW because disclosure was not authorized. Full-reactor diagnostic p95 was search 56.4 ms, filter 49.5 ms, day
+  44.1 ms, selection 47.5 ms, persisted pin feedback 86.6 ms, and proposal review 370.6 ms. The relaxed contract does
+  not invalidate approved UC-3, UC-4, or UC-6: their functional implementations and evidence remain unchanged and
+  their earlier approvals were obtained under the stronger threshold contract.
 
 | Contract element | Evidence |
 |---|---|
