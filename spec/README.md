@@ -17,7 +17,13 @@ spec/<feature>/
 Current feature directories:
 
 - [`kernel-v1`](kernel-v1/) contains the approved headless scheduling and replanning runtime.
-- [`timetable-workspace`](timetable-workspace/) contains the proposal for the administrator-facing product slice.
+- [`timetable-workspace`](timetable-workspace/) contains the approved first administrator-facing product slice.
+- [`ux-evolution`](ux-evolution/) contains the non-normative, forward-looking timetable-workspace UX
+  [`roadmap proposal`](ux-evolution/proposal.md) and its cross-feature [`design draft`](ux-evolution/spec.md); executable
+  behavior is extracted into independently gated feature directories.
+- [`timetable-inspection-ux`](timetable-inspection-ux/) contains the first independently gated feature extracted from
+  that roadmap: the focused [`proposal`](timetable-inspection-ux/proposal.md) and declarative
+  [`specification`](timetable-inspection-ux/spec.md) for accepted-timetable Week/Day inspection.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.
