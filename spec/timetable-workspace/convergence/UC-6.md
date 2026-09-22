@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: revised `spec/timetable-workspace/checkpoints/UC-6.md` at `844b3d13a3fae36d96a30a90427a95fa36825a15`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic; prior C-1 resolved
 - Suite: focused legacy PostgreSQL/HTTP/Chrome 2/0/0/0; clean reactor 165/0/0/0 (run/failures/errors/skipped)
 - Working tree impact from verification: none before convergence artifacts
@@ -102,8 +102,10 @@ also renders the existing Merivälja Kool proposal with zero console errors or w
 
 ## Walkthrough
 
-The prior walkthrough failure is repaired and independently reproduced through page opening. User confirmation of the
-remaining interaction script is pending. On the now-open desktop-width workspace with the repair proposal:
+The prior walkthrough failure was repaired and independently reproduced through page opening. On 2026-09-22, the
+administrator completed the repaired walkthrough and replied: `ok. it looks like it works now. PASS`.
+
+The confirmed script was:
 
 1. Confirm the page says the prior accepted baseline is still current and shows the unique changed-lesson total, all six category totals including zeros, and direct versus solver-ripple counts.
 2. Expand class, teacher, room, and day groupings; confirm every grouping says old, proposed, or both and no cross-group grand total is implied.
@@ -116,8 +118,8 @@ remaining interaction script is pending. On the now-open desktop-width workspace
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; UC-8 remains independently eligible, but execution stays on UC-6. UC-7 remains ineligible because it includes UC-6.
+`PENDING_WALKTHROUGH` -> `APPROVED`; UC-7 and UC-8 are now eligible. No later use case was started.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm the repaired UC-6 administrator review, context, keyboard acceptance, and discard/revise script.
+APPROVED
