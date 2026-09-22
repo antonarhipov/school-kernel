@@ -7,6 +7,8 @@ let acceptedModel;
 let proposedModel;
 let currentSnapshot;
 let bulkPreview;
+let dayMatrices = new Map();
+const boundLessonButtons = new WeakSet();
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
@@ -329,7 +331,27 @@ function renderWholeSchool() {
     ${matrix(model.definition.cohorts, dayPeriods, model.assignmentsByCell, false)}
     <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : ''}</div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
+  dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
+  for (const day of model.weekdays) {
+    if (day === view.day) continue;
+    const template = document.createElement('template');
+    template.innerHTML = matrix(model.definition.cohorts, periodsForDay(day), model.assignmentsByCell, false);
+    dayMatrices.set(day, template.content.firstElementChild);
+  }
   bindInspectionControls();
+  applyFiltersInPlace();
+}
+
+function switchWholeSchoolDay(day) {
+  view.day = day;
+  view.periodId = '';
+  const periodFocus = document.querySelector('#period-focus');
+  periodFocus.innerHTML = [['', M.allPeriods], ...periodsForDay(day).map(period => [period.id, periodLabel(period)])]
+    .map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join('');
+  const matrix = dayMatrices.get(day);
+  document.querySelector('.matrix-wrap').replaceWith(matrix);
+  bindLessonButtons(matrix);
+  syncSelectedLesson(matrix);
   applyFiltersInPlace();
 }
 
@@ -427,11 +449,12 @@ function bindInspectionControls() {
   const rerender = () => renderWholeSchool();
   document.querySelector('#lesson-search').addEventListener('input', event => { view.search = event.target.value; applyFiltersInPlace(); });
   for (const [id, key] of [['cohort-filter', 'cohortId'], ['teacher-filter', 'teacherId'], ['room-filter', 'roomId']]) document.querySelector(`#${id}`).addEventListener('change', event => { view[key] = event.target.value; applyFiltersInPlace(); });
-  for (const [id, key] of [['weekday', 'day'], ['period-focus', 'periodId']]) document.querySelector(`#${id}`).addEventListener('change', event => { view[key] = event.target.value; if (key === 'day') view.periodId = ''; rerender(); });
+  document.querySelector('#weekday').addEventListener('change', event => switchWholeSchoolDay(event.target.value));
+  document.querySelector('#period-focus').addEventListener('change', event => { view.periodId = event.target.value; rerender(); });
   document.querySelectorAll('[data-density]').forEach(button => button.addEventListener('click', () => { view.density = button.dataset.density; stateCard.className = `card workspace-card density-${view.density}`; rerender(); }));
   document.querySelector('#reset-view').addEventListener('click', resetView);
   document.querySelector('#reset-empty')?.addEventListener('click', resetView);
-  document.querySelectorAll('[data-lesson-id]').forEach(button => button.addEventListener('click', () => selectLesson(button)));
+  bindLessonButtons(document.querySelector('.matrix-wrap'));
   bindCloseDetails();
   document.querySelectorAll('[data-open-focus]').forEach(button => button.addEventListener('click', () => {
     view.focusedType = button.dataset.openFocus;
@@ -439,6 +462,23 @@ function bindInspectionControls() {
     view.focusedId = view[view.focusedType] || acceptedModel.definition[key][0]?.id || null;
     renderFocused();
   }));
+}
+
+function bindLessonButtons(root) {
+  root.querySelectorAll('[data-lesson-id]').forEach(button => {
+    if (boundLessonButtons.has(button)) return;
+    boundLessonButtons.add(button);
+    button.addEventListener('click', () => selectLesson(button));
+  });
+}
+
+function syncSelectedLesson(root) {
+  root.querySelectorAll('[data-lesson-id]').forEach(button => {
+    const selected = button.dataset.lessonId === view.selectedLessonId;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+    button.querySelector('.selected-label').hidden = !selected;
+  });
 }
 
 function selectLesson(button) {

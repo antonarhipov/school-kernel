@@ -91,18 +91,22 @@ public class ImportService {
     }
 
     static long requireMatchingVersion(String ifMatch, WorkspaceAggregate current) {
+        return requireMatchingVersion(ifMatch, current.version());
+    }
+
+    static long requireMatchingVersion(String ifMatch, long version) {
         if (ifMatch == null || ifMatch.isBlank()) {
             throw new WorkspaceProblem(
                     HttpStatus.PRECONDITION_REQUIRED,
                     "PRECONDITION_REQUIRED",
                     "Reload the workspace and retry with its current version.");
         }
-        if (!current.etag().equals(ifMatch)) {
+        if (!("\"ws-" + version + "\"").equals(ifMatch)) {
             throw new WorkspaceProblem(
                     HttpStatus.PRECONDITION_FAILED,
                     "STALE_WORKSPACE_VERSION",
                     "The workspace changed. Reload it before importing.");
         }
-        return current.version();
+        return version;
     }
 }

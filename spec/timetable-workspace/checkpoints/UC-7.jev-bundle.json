@@ -249,7 +249,7 @@
       "rules": ["RULE-1"],
       "actorBoundary": "Clean Maven reactor architecture",
       "claim": "UC-7 adds no kernel linkage or duplicate orchestration API.",
-      "evidence": [{"kind":"clean-build","source":"./mvnw -q clean verify","observation":"The full reactor exits 0 with 167 tests and existing dependency/ArchUnit/archive checks green; changed production code is confined to workspace manifest handling."}],
+      "evidence": [{"kind":"clean-build","source":"./mvnw -q clean verify","observation":"The full reactor exits 0 with 167 tests and existing dependency/ArchUnit/archive checks green; workspace changes retain the packaged kernel boundary and add no kernel implementation dependency."}],
       "negativeObligations": ["Workspace does not compile against kernel implementation"],
       "counterEvidence": []
     },
@@ -419,7 +419,7 @@
       "rules": ["RULE-25"],
       "actorBoundary": "Validation-scale real Chrome regressions",
       "claim": "Inspection, pin feedback, and proposal review targets remain independently green.",
-      "evidence": [{"kind":"browser-performance-test","source":"WorkspaceBrowserIT.java:493-648; ./mvnw -q clean verify","observation":"The clean run measures 1,000-lesson inspection separately, pin feedback below 250 ms p95, and proposal review opening 346.100 ms below one second; each explicitly excludes solver time."}],
+      "evidence": [{"kind":"browser-performance-test","source":"WorkspaceBrowserIT.java:493-648; ./mvnw -q clean verify","observation":"The unchanged 1,000-lesson and 20-sample clean run records persisted pin-feedback p95 155.9 ms and day-change p95 71.5 ms below 250 ms, plus proposal review opening 348.6 ms below one second; each explicitly excludes solver time."}],
       "negativeObligations": ["Solver duration is not counted as interaction latency", "Small fixture is not substituted for scale fixture"],
       "counterEvidence": []
     },

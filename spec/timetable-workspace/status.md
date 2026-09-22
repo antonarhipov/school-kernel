@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-7
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: UC-7 revision
 
 ## Progress
@@ -16,7 +16,7 @@
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
-| UC-7 | NEEDS_REVISION | UC-1; includes UC-3, UC-4, UC-5, UC-6 | `433ea70` resolves C-1; original `4acf363`; revise C-2 | `convergence/UC-7.md` - REJECT |
+| UC-7 | READY_FOR_CONVERGENCE | UC-1; includes UC-3, UC-4, UC-5, UC-6 | HEAD at convergence resolves C-2; `433ea70` resolves C-1; original `4acf363` | pending reconvergence |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
@@ -163,6 +163,17 @@
 - Revision validation: complete 10-test real-Chrome class - PASS; final `./mvnw -q clean verify` - 167 tests, 0
   failures, 0 errors, 0 skipped; `git diff --check` - PASS. Chrome diagnostics are discarded instead of accumulating
   in an unread child-process pipe; actor assertions and the 15-second CDP command timeout are unchanged.
+- C-2 revision started: 2026-09-22; base `dcf486c`; closes each Testcontainers-backed Spring context after its test
+  class so stopped-container connection pools cannot load later validation-scale browser measurements.
+- C-2 revision validation: complete repair-draft plus 10-test real-Chrome classes - PASS; final `./mvnw -q clean
+  verify` - 167 tests, 0 failures, 0 errors, 0 skipped; validation-scale p95 was 155.9 ms for persisted pin feedback
+  and 71.5 ms for day changes, with proposal review opening in 348.6 ms; `git diff --check` - PASS. Day matrices are
+  prepared after initial load and swapped in place, while the minimal pin command conditionally updates only the
+  authoritative repair-draft JSONB subtree after reading the selected accepted assignment and lock from that same
+  aggregate. Test Spring contexts close after each Testcontainers-backed class.
+- Changed files in C-2 revision: scoped repair-draft persistence and ETag helpers; native cached day-matrix rendering;
+  Testcontainers context lifecycle annotations in all five Spring integration classes; status, checkpoint, and Jev
+  advisory bundle.
 
 | Contract element | Evidence |
 |---|---|

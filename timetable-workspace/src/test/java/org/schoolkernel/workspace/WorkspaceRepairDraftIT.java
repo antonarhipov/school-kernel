@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Container;
@@ -33,6 +34,7 @@ import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @Testcontainers
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest(classes = WorkspaceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WorkspaceRepairDraftIT {
     private static final ObjectMapper JSON = JsonMapper.builder().build();
@@ -79,14 +81,14 @@ class WorkspaceRepairDraftIT {
         assertTrue(draft.path("directEffectRevision").stringValue().matches("sha256:[0-9a-f]{64}"));
         assertTrue(draft.path("readyToSolve").booleanValue());
 
-        JsonNode pinned = body(command("PATCH", "/api/repair-draft", session(), """
+        HttpResponse<String> pinnedResponse = commandMinimal("PATCH", "/api/repair-draft", session(), """
                 {"action":"PIN","lessonId":"lesson-science-1","dimensions":["PERIOD","ROOM"]}
-                """));
-        JsonNode pin = pinned.path("workspace").path("repairDraft").path("intent").path("pins").get(0);
+                """);
+        assertEquals("\"ws-9\"", pinnedResponse.headers().firstValue("ETag").orElseThrow());
+        JsonNode pin = body(pinnedResponse).path("repairDraft").path("intent").path("pins").get(0);
         assertEquals("lesson-science-1", pin.path("lessonId").stringValue());
         assertEquals("INDIVIDUAL", pin.path("periodSources").get(0).stringValue());
         assertEquals("INDIVIDUAL", pin.path("roomSources").get(0).stringValue());
-        assertEquals(acceptedBefore, pinned.path("workspace").path("acceptedBaseline"));
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
 
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
@@ -284,7 +286,7 @@ class WorkspaceRepairDraftIT {
         HttpResponse<String> first = command("POST", "/api/repair-draft", accepted, teacherUnavailable("mon-1"));
         assertEquals(200, first.statusCode());
         JsonNode afterFirst = storedDocument();
-        HttpResponse<String> stale = command("PATCH", "/api/repair-draft", accepted, """
+        HttpResponse<String> stale = commandMinimal("PATCH", "/api/repair-draft", accepted, """
                 {"action":"PIN","lessonId":"lesson-science-1","dimensions":["ROOM"]}
                 """);
         assertEquals(412, stale.statusCode());
@@ -312,7 +314,7 @@ class WorkspaceRepairDraftIT {
                 FOR EACH ROW EXECUTE FUNCTION reject_repair_autosave()
                 """).update();
         try {
-            HttpResponse<String> failed = command("PATCH", "/api/repair-draft", session(), """
+            HttpResponse<String> failed = commandMinimal("PATCH", "/api/repair-draft", session(), """
                     {"action":"PIN","lessonId":"lesson-science-1","dimensions":["ROOM"]}
                     """);
             assertEquals(503, failed.statusCode());
@@ -370,6 +372,13 @@ class WorkspaceRepairDraftIT {
                 .header("If-Match", session.etag()).header("Origin", "http://localhost:" + port)
                 .header("Content-Type", "application/json").method(method, HttpRequest.BodyPublishers.ofString(body))
                 .build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    private HttpResponse<String> commandMinimal(String method, String path, Session session, String body) throws Exception {
+        return client.send(HttpRequest.newBuilder(uri(path)).header(session.csrfHeader(), session.csrfToken())
+                .header("If-Match", session.etag()).header("Origin", "http://localhost:" + port)
+                .header("Content-Type", "application/json").header("Prefer", "return=minimal")
+                .method(method, HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
     }
 
     private HttpResponse<String> commandWithoutVersion(String method, String path, Session session, String body) throws Exception {

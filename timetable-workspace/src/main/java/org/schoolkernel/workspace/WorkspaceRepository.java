@@ -34,6 +34,37 @@ public class WorkspaceRepository {
                 .single();
     }
 
+    public RepairPinContext loadRepairPinContext(String lessonId) {
+        return jdbc.sql("""
+                        SELECT lifecycle_state,
+                               version,
+                               (document -> 'repairDraft')::text,
+                               (SELECT a.value
+                                FROM jsonb_array_elements(document #> '{acceptedBaseline,result,timetable,assignments}') AS a(value)
+                                WHERE a.value ->> 'lessonId' = :lesson_id
+                                LIMIT 1)::text,
+                               (SELECT l.value
+                                FROM jsonb_array_elements(document #> '{acceptedBaseline,definition,lessons}') AS l(value)
+                                WHERE l.value ->> 'id' = :lesson_id
+                                LIMIT 1)::text,
+                               (SELECT m.value
+                                FROM jsonb_array_elements(COALESCE(document #> '{acceptedBaseline,manifest,locks}', '[]'::jsonb)) AS m(value)
+                                WHERE m.value ->> 'lessonId' = :lesson_id
+                                LIMIT 1)::text
+                        FROM workspace_aggregate
+                        WHERE workspace_id = 1
+                        """)
+                .param("lesson_id", lessonId)
+                .query((row, ignored) -> new RepairPinContext(
+                        WorkspaceState.valueOf(row.getString(1)),
+                        row.getLong(2),
+                        (tools.jackson.databind.node.ObjectNode) readNullable(row.getString(3)),
+                        readNullable(row.getString(4)),
+                        readNullable(row.getString(5)),
+                        readNullable(row.getString(6))))
+                .single();
+    }
+
     public Optional<Long> replace(
             long expectedVersion,
             WorkspaceState expectedState,
@@ -95,6 +126,22 @@ public class WorkspaceRepository {
             WorkspaceState expectedState,
             JsonNode document) {
         return update(expectedVersion, expectedState, WorkspaceState.INITIAL_DRAFT, null, document, true);
+    }
+
+    public Optional<Long> replaceRepairDraft(long expectedVersion, JsonNode repairDraft) {
+        return jdbc.sql("""
+                        UPDATE workspace_aggregate
+                        SET version = version + 1,
+                            document = jsonb_set(document, '{repairDraft}', CAST(:repair_draft AS jsonb), false)
+                        WHERE workspace_id = 1
+                          AND version = :expected_version
+                          AND lifecycle_state = 'REPAIR_DRAFT'
+                        RETURNING version
+                        """)
+                .param("repair_draft", serialize(repairDraft))
+                .param("expected_version", expectedVersion)
+                .query(Long.class)
+                .optional();
     }
 
     public Optional<Long> acceptInitialProposal(long expectedVersion, JsonNode document) {
@@ -176,4 +223,24 @@ public class WorkspaceRepository {
             throw new IllegalStateException("Stored workspace document is invalid JSON", exception);
         }
     }
+
+    private JsonNode readNullable(String value) {
+        return value == null ? null : readTree(value);
+    }
+
+    private String serialize(JsonNode value) {
+        try {
+            return json.writeValueAsString(value);
+        } catch (JacksonException exception) {
+            throw new IllegalStateException("Workspace document could not be serialized", exception);
+        }
+    }
+
+    public record RepairPinContext(
+            WorkspaceState state,
+            long version,
+            tools.jackson.databind.node.ObjectNode repairDraft,
+            JsonNode assignment,
+            JsonNode lesson,
+            JsonNode manifestLock) {}
 }

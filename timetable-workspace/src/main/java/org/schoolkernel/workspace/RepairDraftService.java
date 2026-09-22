@@ -85,6 +85,37 @@ public class RepairDraftService {
         }
     }
 
+    public MinimalUpdate updateMinimalPin(String ifMatch, JsonNode request) {
+        String requestedLessonId = request.path("lessonId").isTextual()
+                ? request.path("lessonId").stringValue() : "";
+        WorkspaceRepository.RepairPinContext current = repository.loadRepairPinContext(requestedLessonId);
+        long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current.version());
+        if (current.state() != WorkspaceState.REPAIR_DRAFT) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
+                    "A repair draft can be edited only while no solve is running.");
+        }
+        String lessonId = requiredText(request, "lessonId");
+        ObjectNode draft = current.repairDraft();
+        ObjectNode intent = (ObjectNode) draft.path("intent");
+        switch (requiredText(request, "action")) {
+            case "PIN" -> {
+                if (current.assignment() == null) throw invalid("Only an accepted lesson can be pinned.");
+                applyIndividualPin(intent, request);
+            }
+            case "UNPIN" -> removeIndividualPin(intent, request);
+            default -> throw invalid("This repair action is not supported in the current increment.");
+        }
+        refreshPin(draft, lessonId, current.assignment(), current.lesson(), current.manifestLock());
+        try {
+            long version = mutation.replaceRepairDraft(expectedVersion, draft);
+            failedAutosaveVersion = -1;
+            return new MinimalUpdate(draft, version);
+        } catch (RuntimeException failure) {
+            failedAutosaveVersion = expectedVersion;
+            throw failure;
+        }
+    }
+
     public BulkPinPreview preview(String ifMatch, JsonNode request) {
         WorkspaceAggregate current = repository.load();
         ImportService.requireMatchingVersion(ifMatch, current);
@@ -223,7 +254,19 @@ public class RepairDraftService {
 
     private void applyIndividualPin(ObjectNode intent, JsonNode request, JsonNode assignments) {
         String lessonId = requiredText(request, "lessonId");
-        if (!byId(assignments, "lessonId").containsKey(lessonId)) throw invalid("Only an accepted lesson can be pinned.");
+        boolean accepted = false;
+        for (JsonNode assignment : assignments) {
+            if (lessonId.equals(assignment.path("lessonId").stringValue())) {
+                accepted = true;
+                break;
+            }
+        }
+        if (!accepted) throw invalid("Only an accepted lesson can be pinned.");
+        applyIndividualPin(intent, request);
+    }
+
+    private void applyIndividualPin(ObjectNode intent, JsonNode request) {
+        String lessonId = requiredText(request, "lessonId");
         List<String> dimensions = requiredDimensions(request.path("dimensions"));
         ObjectNode pin = pin(intent, lessonId, true);
         dimensions.forEach(dimension -> addSource(pin, dimension, "INDIVIDUAL"));
@@ -301,6 +344,50 @@ public class RepairDraftService {
         draft.put("directEffectRevision", revision(directIds));
         ArrayNode conflicts = draft.putArray("conflicts");
         conflictsFor(definition, assignments, intent, manifest, null, null).forEach(conflicts::add);
+        draft.put("readyToSolve", conflicts.isEmpty());
+        draft.put("persisted", true);
+    }
+
+    private void refreshPin(ObjectNode draft, String lessonId, JsonNode assignment, JsonNode lesson, JsonNode manifestLock) {
+        ObjectNode intent = (ObjectNode) draft.path("intent");
+        sortObjects((ArrayNode) intent.path("pins"), node -> node.path("lessonId").stringValue());
+        draft.put("intentRevision", revision(intent));
+        List<JsonNode> retained = new ArrayList<>();
+        for (JsonNode conflict : draft.path("conflicts")) {
+            if (!lessonId.equals(conflict.path("lessonId").stringValue())) retained.add(conflict);
+        }
+        ArrayNode conflicts = draft.putArray("conflicts");
+        retained.forEach(conflicts::add);
+        if (assignment != null) {
+            ObjectNode selectedPin = pin(intent, lessonId, false);
+            boolean periodPinned = manifestLock != null
+                            && "PERSISTENT_POLICY".equals(text(manifestLock.path("periodLockOrigin")))
+                    || sourceCount(selectedPin, "PERIOD") > 0;
+            boolean roomPinned = manifestLock != null
+                            && "PERSISTENT_POLICY".equals(text(manifestLock.path("roomLockOrigin")))
+                    || sourceCount(selectedPin, "ROOM") > 0;
+            for (JsonNode change : intent.path("changes")) {
+                boolean atPeriod = textSet(change.path("unavailablePeriodIds"))
+                        .contains(assignment.path("periodId").stringValue());
+                boolean conflict = atPeriod && (("TEACHER".equals(change.path("resourceType").stringValue())
+                        && change.path("resourceId").stringValue().equals(assignment.path("teacherId").stringValue())
+                        && periodPinned) || ("ROOM".equals(change.path("resourceType").stringValue())
+                        && change.path("resourceId").stringValue().equals(assignment.path("roomId").stringValue())
+                        && roomPinned));
+                if (conflict) {
+                    ObjectNode item = conflicts.addObject();
+                    item.put("lessonId", lessonId);
+                    item.put("code", "PIN_CONTRADICTS_UNAVAILABILITY");
+                    item.put("message", "The accepted "
+                            + ("TEACHER".equals(change.path("resourceType").stringValue()) ? "period" : "room")
+                            + " is pinned while that resource is unavailable.");
+                    item.put("resourceType", change.path("resourceType").stringValue());
+                    item.put("resourceId", change.path("resourceId").stringValue());
+                    if (lesson != null) item.put("lessonDisplayName", lesson.path("displayName").stringValue());
+                }
+            }
+        }
+        sortObjects(conflicts, node -> node.path("lessonId").stringValue());
         draft.put("readyToSolve", conflicts.isEmpty());
         draft.put("persisted", true);
     }
@@ -491,4 +578,10 @@ public class RepairDraftService {
     }
 
     public record BulkPinPreview(ObjectNode document, String etag) {}
+
+    public record MinimalUpdate(ObjectNode repairDraft, long version) {
+        public String etag() {
+            return "\"ws-" + version + "\"";
+        }
+    }
 }
