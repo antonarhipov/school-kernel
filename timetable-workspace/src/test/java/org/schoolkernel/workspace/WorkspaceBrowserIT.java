@@ -805,6 +805,7 @@ class WorkspaceBrowserIT {
                 "--user-data-dir=" + browserProfile,
                 "about:blank")
                 .redirectErrorStream(true)
+                .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                 .start();
         Path activePort = browserProfile.resolve("DevToolsActivePort");
         long deadline = System.nanoTime() + Duration.ofSeconds(15).toNanos();

@@ -3,7 +3,7 @@
 ## Summary
 
 - Status: READY_FOR_CONVERGENCE
-- Base commit: `c53b1a624bfd7bda319bb28bdff0fec9095fab40`
+- Base commit: `7c76b2e` (revision for convergence finding C-1; original implementation based on `c53b1a624bfd7bda319bb28bdff0fec9095fab40`)
 - Submission commit: HEAD at convergence
 - Relations verified: Requires approved UC-1 and executes the approved UC-3 inspection, UC-4 protected draft, UC-5 packaged repair, and UC-6 review/acceptance paths twice in one directly linked operational journey.
 
@@ -64,16 +64,23 @@
 ## Validation
 
 - Focused suites: `ManifestServiceTest` passes; the two-repair HTTP/PostgreSQL/packaged-kernel journey passes; the two-repair real-Chrome journey passes.
+- Focused C-1 regression: the complete 10-test `WorkspaceBrowserIT` class passes in actor order, including the UC-7
+  two-repair journey followed by the approved UC-4 discard journey.
 - Full relevant suite: `./mvnw -q clean verify` - 167 tests, 0 failures, 0 errors, 0 skipped.
 - Working tree impact from tests: none; `git diff --check` passes.
 - Runtime evidence: real Chrome over ephemeral HTTP/PostgreSQL accepts a protected teacher repair, opens a fresh browser target on that exact result, stages a later room disruption with zero inherited attempt pins, and accepts the second packaged-kernel proposal with zero browser errors.
-- Changed files: `ManifestService`, its regression test, the composite repair HTTP/PostgreSQL and Chrome journeys, status, checkpoint, and Jev advisory bundle.
+- Changed files: `ManifestService`, its regression test, the composite repair HTTP/PostgreSQL and Chrome journeys,
+  headless-Chrome process-output isolation, status, checkpoint, and Jev advisory bundle.
 - Approved UCs regression-tested: timetable-workspace UC-1 through UC-6 and kernel UC-1/UC-2 all pass in the 167-test clean reactor.
 - Jev preflight: `UC-7.jev-bundle.json` validates locally with 46 atomic items using the already-built pinned `jev-1.13.0` helper. External review requires disclosure of narrow repository excerpts to TypeSafe and is `REVIEW` because this turn did not authorize that disclosure; no report was produced and no semantic approval is claimed.
 
 ## Notes
 
 - The second acceptance found a production defect in `ManifestService.lockIds`: a prior manifest entry containing only `roomLockOrigin` was read through absent `periodLockOrigin`. The guarded field lookup now treats absent lock dimensions independently, and unit, packaged HTTP, and real-browser regressions cover the exact failure.
+- Convergence C-1 reproduced the approved UC-4 Chrome test stalling after the longer UC-7 test in two full reactors
+  while passing alone. Each launched Chrome merged output into an unread process pipe. Redirecting that diagnostic
+  output to `DISCARD` removes process backpressure while preserving the real browser, every actor assertion, and the
+  original 15-second CDP command timeout. The complete browser class and clean reactor then pass.
 - The later room disruption deliberately uses an unoccupied recurring period. This is the specified no-direct-effect UC-4 behavior and proves retained intent, direct lineage, attempt-pin cleanup, a second verified proposal, and a second atomic acceptance without relying on solver heuristics to move a particular lesson.
 - Clean verification emitted expected stopped-Testcontainers Hikari warnings from negative tests; the reactor exited 0 and every report records zero failures/errors/skips.
 - The required administrator walkthrough and independent evidence audit remain convergence responsibilities; this checkpoint claims automated technical readiness only.

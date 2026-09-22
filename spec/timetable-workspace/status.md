@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-7
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: UC-7 revision
 
 ## Progress
@@ -16,7 +16,7 @@
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
-| UC-7 | NEEDS_REVISION | UC-1; includes UC-3, UC-4, UC-5, UC-6 | `4acf363`; started from `c53b1a6`; revise C-1 | `convergence/UC-7.md` - REJECT |
+| UC-7 | READY_FOR_CONVERGENCE | UC-1; includes UC-3, UC-4, UC-5, UC-6 | revision pending; resolves C-1; original `4acf363` | `convergence/UC-7.md` - REJECT, revision submitted |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
@@ -158,6 +158,11 @@
 - Runtime evidence: real Chrome accepts a protected teacher repair, opens the exact accepted result as current, starts a
   later room repair with no inherited attempt pin, distinguishes direct and ripple effects, and accepts the second
   independently verified packaged-kernel proposal with zero browser errors.
+- Revision started: 2026-09-22; base `7c76b2e`; resolves convergence C-1 without weakening the approved UC-4 actor
+  assertions or real-browser boundary.
+- Revision validation: complete 10-test real-Chrome class - PASS; final `./mvnw -q clean verify` - 167 tests, 0
+  failures, 0 errors, 0 skipped; `git diff --check` - PASS. Chrome diagnostics are discarded instead of accumulating
+  in an unread child-process pipe; actor assertions and the 15-second CDP command timeout are unchanged.
 
 | Contract element | Evidence |
 |---|---|
