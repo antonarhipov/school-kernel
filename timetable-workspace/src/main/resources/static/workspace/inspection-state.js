@@ -1,10 +1,12 @@
 const PREFERENCE_VERSION = 1;
 const PREFERENCE_LIMIT = 1024;
 
-export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], storage = window.localStorage }) {
+export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], cohortIds = [], roomIds = [], periodIds = [], storage = window.localStorage }) {
   const firstWeekday = weekdays[0] || null;
   let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null,
-    subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false };
+    subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false,
+    searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
+    focusedType: null, focusedId: null, scrollContext: null };
 
   if (schoolId && firstWeekday) {
     try {
@@ -44,6 +46,41 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
     },
     resetInvestigationFilters: () => {
       state = { ...state, subjectOnly: false, teacherOnly: false };
+      return { changed: true, state };
+    },
+    setSearch: searchQuery => {
+      if (typeof searchQuery !== 'string') return { changed: false, state };
+      state = { ...state, searchQuery };
+      return { changed: true, state };
+    },
+    selectFilter: (filter, id) => {
+      const validIds = filter === 'cohortId' ? cohortIds : filter === 'teacherFilterId' ? teacherIds
+        : filter === 'roomId' ? roomIds : filter === 'periodId' ? periodIds : null;
+      if (!validIds || (id !== null && !validIds.includes(id))) return { changed: false, state };
+      state = { ...state, [filter]: id };
+      return { changed: true, state };
+    },
+    resetFilters: () => {
+      state = { ...state, searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
+        subjectOnly: false, teacherOnly: false };
+      return { changed: true, state };
+    },
+    openFocused: (focusedType, focusedId, scrollContext) => {
+      const validIds = focusedType === 'cohortId' ? cohortIds : focusedType === 'teacherId' ? teacherIds
+        : focusedType === 'roomId' ? roomIds : null;
+      if (!validIds || !validIds.includes(focusedId)) return { changed: false, state };
+      state = { ...state, focusedType, focusedId, scrollContext: scrollContext || null };
+      return { changed: true, state };
+    },
+    changeFocusedType: (focusedType, focusedId) => {
+      const validIds = focusedType === 'cohortId' ? cohortIds : focusedType === 'teacherId' ? teacherIds
+        : focusedType === 'roomId' ? roomIds : null;
+      if (!validIds || !validIds.includes(focusedId)) return { changed: false, state };
+      state = { ...state, focusedType, focusedId };
+      return { changed: true, state };
+    },
+    returnToWholeSchool: () => {
+      state = { ...state, focusedType: null, focusedId: null };
       return { changed: true, state };
     },
     selectRange: (range, selectedWeekday) => {

@@ -265,16 +265,18 @@ class WorkspaceBrowserIT {
 
             cdp.evaluate("document.querySelector('#lesson-search').focus()");
             cdp.command("Input.insertText", object("text", "Science"));
-            String filtered = cdp.awaitText("Filtered whole-school matrix", Duration.ofSeconds(5));
-            assertTrue(filtered.contains("Search: Science"));
-            assertTrue(cdp.evaluateValue("Boolean(document.querySelector('.lesson-cell.match'))")
+            String searched = cdp.awaitText("Search matches: 1", Duration.ofSeconds(5));
+            assertTrue(searched.contains("Complete school population"));
+            assertTrue(cdp.evaluateValue("Boolean(document.querySelector('.lesson-cell.search-match'))")
+                    .path("result").path("result").path("value").booleanValue());
+            assertTrue(cdp.evaluateValue("[...document.querySelectorAll('[data-lesson-id]')].every(button => !button.hidden)")
                     .path("result").path("result").path("value").booleanValue());
 
             cdp.evaluate("document.querySelector('#lesson-search').value='not-present'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true}))");
-            String noMatch = cdp.awaitText("No lessons match the active criteria", Duration.ofSeconds(5));
-            assertTrue(noMatch.contains("Search: not-present"));
-            assertTrue(noMatch.contains("Reset view"));
-            cdp.evaluate("document.querySelector('#reset-empty').click()");
+            String noMatch = cdp.awaitText("Search matches: 0", Duration.ofSeconds(5));
+            assertTrue(noMatch.contains("Complete school population"));
+            assertFalse(noMatch.contains("This narrowed view is empty"));
+            cdp.evaluate("document.querySelector('#reset-view').click()");
             cdp.awaitText("Complete school population", Duration.ofSeconds(5));
 
             cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').focus()");
@@ -398,6 +400,152 @@ class WorkspaceBrowserIT {
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument(), "UC-2 investigation must not mutate accepted workspace state");
+    }
+
+    @Test
+    @DisplayName("UC-3 main/extensions/G1-G8/RULE-15: real browser highlights search, narrows explicitly, and returns from focused accepted schedules")
+    void narrowsAndFocusesAcceptedTimetableInRealBrowser() throws Exception {
+        storeAccepted(scaleDocument());
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+
+            cdp.evaluate("document.querySelector('#lesson-search').value='Subject 0'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true}))");
+            String search = cdp.awaitText("Search matches: 60", Duration.ofSeconds(5));
+            assertTrue(search.contains("Complete school population"));
+            assertTrue(cdp.evaluateValue("document.querySelectorAll('.lesson-cell.search-match').length === 60 && [...document.querySelectorAll('[data-lesson-id]')].every(button => !button.hidden)")
+                    .path("result").path("result").path("value").booleanValue(), "search must highlight without narrowing");
+
+            cdp.evaluate("document.querySelector('#lesson-search').value='not present'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true}))");
+            String emptySearch = cdp.awaitText("Search matches: 0", Duration.ofSeconds(5));
+            assertTrue(emptySearch.contains("Complete school population"));
+            assertFalse(emptySearch.contains("This narrowed view is empty"));
+            cdp.evaluate("document.querySelector('#reset-view').click()");
+            cdp.awaitText("No active filters", Duration.ofSeconds(5));
+
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            cdp.evaluate("""
+                    (() => {
+                    const choose=(id,value) => { const control=document.querySelector(id); control.value=value; control.dispatchEvent(new Event('change',{bubbles:true})); };
+                    choose('#cohort-filter','cohort-0');
+                    choose('#teacher-filter','teacher-0');
+                    choose('#room-filter','room-0');
+                    choose('#period-focus','period-0');
+                    })()
+                    """);
+            String narrowed = cdp.awaitText("Represented lessons: 1", Duration.ofSeconds(5));
+            assertTrue(narrowed.contains("Filtered whole-school matrix"));
+            assertTrue(narrowed.contains("Class: Class 0"));
+            assertTrue(narrowed.contains("Teacher: Teacher 0"));
+            assertTrue(narrowed.contains("Room: Room 0"));
+            assertTrue(narrowed.contains("Period: Declared period 0"));
+
+            cdp.evaluate("document.querySelector('#room-filter').value='room-1'; document.querySelector('#room-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            String emptyFiltered = cdp.awaitText("This narrowed view is empty", Duration.ofSeconds(5));
+            assertTrue(emptyFiltered.contains("Filtered whole-school matrix"));
+            assertTrue(emptyFiltered.contains("Reset view"));
+            cdp.evaluate("document.querySelector('#reset-empty').click()");
+            cdp.awaitText("Complete school population", Duration.ofSeconds(5));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-3 search and narrowing must not mutate accepted workspace state");
+    }
+
+    @Test
+    @DisplayName("UC-3 focused schedules/G4-G8/RULE-15: real browser returns from class, teacher, room, empty, and narrow agendas")
+    void opensFocusedAcceptedSchedulesInRealBrowser() throws Exception {
+        storeAccepted(scaleDocument());
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            cdp.evaluate("""
+                    (() => {
+                    const choose=(id,value) => { const control=document.querySelector(id); control.value=value; control.dispatchEvent(new Event('change',{bubbles:true})); };
+                    choose('#cohort-filter','cohort-0');
+                    choose('#teacher-filter','teacher-0');
+                    choose('#room-filter','room-0');
+                    })()
+                    """);
+            cdp.awaitText("Represented lessons: 12", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0]').click()");
+            String details = cdp.awaitText("Accepted assignment", Duration.ofSeconds(5));
+            assertTrue(details.contains("Declared lesson 0"));
+            assertTrue(details.contains("Class 0"));
+
+            cdp.evaluate("document.querySelector('[data-open-focus=cohortId]').click()");
+            assertTrue(cdp.awaitText("Class schedule · Class 0", Duration.ofSeconds(5)).contains("Monday"));
+            cdp.evaluate("document.querySelector('[data-focus-type=teacherId]').click()");
+            cdp.awaitText("Teacher schedule · Teacher 0", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('[data-focus-type=roomId]').click()");
+            cdp.awaitText("Room schedule · Room 0", Duration.ofSeconds(5));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-3 focused schedules must not mutate accepted workspace state");
+    }
+
+    @Test
+    @DisplayName("UC-3 focused extensions/G4-G8/RULE-15: real browser returns from empty and narrow room agendas")
+    void returnsFromEmptyAndNarrowFocusedSchedulesInRealBrowser() throws Exception {
+        storeAccepted(scaleDocument());
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            cdp.evaluate("""
+                    (() => {
+                    const choose=(id,value) => { const control=document.querySelector(id); control.value=value; control.dispatchEvent(new Event('change',{bubbles:true})); };
+                    choose('#cohort-filter','cohort-0');
+                    choose('#teacher-filter','teacher-0');
+                    choose('#room-filter','room-0');
+                    })()
+                    """);
+            cdp.awaitText("Represented lessons: 12", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('[data-open-focus=roomId]').click()");
+            cdp.evaluate("document.querySelector('#focus-entity').value='room-99'; document.querySelector('#focus-entity').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(cdp.awaitText("No accepted lessons are scheduled for this selection.", Duration.ofSeconds(5)).contains("Room 99"));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            String returned = cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertTrue(returned.contains("Filtered whole-school matrix"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('#teacher-filter').value === 'teacher-0' && document.querySelector('#room-filter').value === 'room-0'")
+                    .path("result").path("result").path("value").booleanValue(), "return must retain the whole-school context");
+
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-3 empty focused inspection must not mutate accepted workspace state");
     }
 
     @Test

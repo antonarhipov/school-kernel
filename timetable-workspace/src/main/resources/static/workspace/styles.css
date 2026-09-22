@@ -95,12 +95,14 @@ code { overflow-wrap: anywhere; }
 .lesson-cell span { color: #53625b; }
 .lesson-cell em { margin-top: 3px; padding: 2px 5px; border-radius: 4px; background: #fff0c7; color: #6b4a00; font-size: .65rem; font-style: normal; font-weight: 800; text-transform: uppercase; }
 .lesson-cell.selected { border-color: #7e5b08; box-shadow: inset 0 0 0 2px #e7b13d; }
+.lesson-cell.search-match { outline: 3px dashed #a34f18; outline-offset: -5px; }
 .lesson-cell.subject-match { border-top: 3px solid #246da3; }
 .lesson-cell.teacher-match { border-right: 3px solid #7a4f9d; }
 .lesson-cell.dual-match { background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(79, 113, 151, .10) 5px, rgba(79, 113, 151, .10) 10px); }
 .lesson-cell .subject-match-label { background: #e4f1fa; color: #245778; }
 .lesson-cell .teacher-match-label { background: #f0e8f8; color: #593b73; }
 .lesson-cell .dual-match-label { background: #e8eee0; color: #39592a; }
+.lesson-cell .search-match-label { background: #fff0df; color: #7b3a12; }
 .compact-density .matrix td { height: 78px; }
 .compact-density .lesson-cell { min-height: 61px; padding: 6px; }
 .compact-density .lesson-cell span { display: inline; font-size: .7rem; }

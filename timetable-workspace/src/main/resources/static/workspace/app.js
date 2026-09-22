@@ -90,7 +90,9 @@ function render(snapshot) {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
-    if (view.narrow && !view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
+    if (view.narrow && !view.focusedType) {
+      syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
+    }
     renderAccepted(snapshot, schoolName);
   } else if (snapshot.state === 'REPAIR_DRAFT') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
@@ -211,7 +213,10 @@ function initializeInspectionState(schoolId) {
   preferenceSchoolId = schoolId;
   inspectionState = createInspectionState({ schoolId, weekdays: acceptedModel.weekdays,
     subjectIds: acceptedModel.definition.subjects.map(subject => subject.id),
-    teacherIds: acceptedModel.definition.teachers.map(teacher => teacher.id) });
+    teacherIds: acceptedModel.definition.teachers.map(teacher => teacher.id),
+    cohortIds: acceptedModel.definition.cohorts.map(cohort => cohort.id),
+    roomIds: acceptedModel.definition.rooms.map(room => room.id),
+    periodIds: acceptedModel.definition.periods.map(period => period.id) });
   syncInspectionState(inspectionState.current());
 }
 
@@ -223,6 +228,14 @@ function syncInspectionState(state) {
   view.teacherInvestigationId = state.teacherId;
   view.subjectOnly = state.subjectOnly;
   view.teacherOnly = state.teacherOnly;
+  view.search = state.searchQuery;
+  view.cohortId = state.cohortId || '';
+  view.teacherId = state.teacherFilterId || '';
+  view.roomId = state.roomId || '';
+  view.periodId = state.periodId || '';
+  view.focusedType = state.focusedType;
+  view.focusedId = state.focusedId;
+  view.scrollContext = state.scrollContext;
 }
 
 function setRange(range, day = view.day, manualDay = false) {
@@ -365,9 +378,10 @@ function renderWholeSchool() {
   const model = acceptedModel;
   const dayPeriods = periodsForDay(view.day);
   const active = activeCriteria();
+  const narrowed = hasNarrowingCriteria();
   const investigation = investigationSummary();
-  const matches = active.length ? investigation.represented : model.assignments.filter(isInSelectedRange);
-  const visibleCohorts = active.length === 0 ? model.definition.cohorts : model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id));
+  const matches = narrowed ? investigation.represented : model.assignments.filter(isInSelectedRange);
+  const visibleCohorts = narrowed ? model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id)) : model.definition.cohorts;
   host.innerHTML = `<div class="inspection-toolbar" aria-label="${M.wholeSchool}">
       <fieldset class="range-control"><legend>${M.rangeLabel}</legend><button type="button" data-range="WEEK" aria-pressed="${view.range === 'WEEK'}">${M.week}</button><button type="button" data-range="DAY" aria-pressed="${view.range === 'DAY'}">${M.dayView}</button></fieldset>
       <label class="search-control"><span>${M.searchLabel}</span><input id="lesson-search" type="search" value="${escapeAttribute(view.search)}" placeholder="${M.searchPlaceholder}"></label>
@@ -386,13 +400,13 @@ function renderWholeSchool() {
         <label class="match-mode"><input id="teacher-only" type="checkbox"${view.teacherOnly ? ' checked' : ''}${view.teacherInvestigationId ? '' : ' disabled'}> <span>${M.showOnlyMatches}</span></label>
         <button id="clear-teacher" type="button" class="secondary"${view.teacherInvestigationId ? '' : ' disabled'}>${M.clearTeacher}</button>
       </div>
-      <div class="investigation-summary" role="status"><strong>${M.activeInvestigation}</strong><span>${M.subjectMatchCount(investigation.subjectCount)}</span><span>${M.teacherMatchCount(investigation.teacherCount)}</span><span>${M.dualMatchCount(investigation.dualCount)}</span><span>${M.representedLessonCount(investigation.represented.length)}</span></div>
+      <div class="investigation-summary" role="status"><strong>${M.activeInvestigation}</strong><span>${M.subjectMatchCount(investigation.subjectCount)}</span><span>${M.teacherMatchCount(investigation.teacherCount)}</span><span>${M.dualMatchCount(investigation.dualCount)}</span><span id="represented-lesson-count">${M.representedLessonCount(investigation.represented.length)}</span></div>
       ${renderTeacherRibbon(investigation.periods)}
     </section>
-    <div class="filter-status" role="status"><strong id="filter-title">${active.length ? M.filteredMatrix : M.completePopulation}</strong><span id="range-summary">${view.range === 'WEEK' ? M.weekRange : M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
+    <div class="filter-status" role="status"><strong id="filter-title">${narrowed ? M.filteredMatrix : M.completePopulation}</strong><span id="range-summary">${view.range === 'WEEK' ? M.weekRange : M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span id="search-summary"${view.search.trim() ? '' : ' hidden'}>${view.search.trim() ? M.searchMatchCount(investigation.searchCount) : ''}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
     <p id="inspection-notice" class="notice" role="status"></p>
     ${model.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
-    <p id="no-matches" class="empty-message" role="status"${active.length && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
+    <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
     ${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: model.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: model.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}
     <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : ''}</div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
@@ -409,7 +423,7 @@ function renderWholeSchool() {
 }
 
 function switchWholeSchoolDay(day) {
-  view.periodId = '';
+  if (inspectionState) syncInspectionState(inspectionState.selectFilter('periodId', null).state); else view.periodId = '';
   setRange('DAY', day, true);
 }
 
@@ -494,19 +508,52 @@ function renderFocused() {
   const host = document.querySelector('#accepted-view');
   const type = view.focusedType || 'cohortId';
   const source = type === 'cohortId' ? acceptedModel.definition.cohorts : type === 'teacherId' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms;
-  if (!source.some(item => item.id === view.focusedId)) view.focusedId = source[0]?.id || null;
+  if (!source.some(item => item.id === view.focusedId)) {
+    const fallback = source[0]?.id || null;
+    if (inspectionState && fallback) syncInspectionState(inspectionState.changeFocusedType(type, fallback).state);
+    else view.focusedId = fallback;
+  }
   host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, assignments: acceptedModel.assignments, weekdays: acceptedModel.weekdays, labels: M, entityName, periodLabel, selectControl, options, escapeHtml });
-  document.querySelector('#return-matrix')?.addEventListener('click', () => { view.focusedType = null; renderWholeSchool(); });
-  document.querySelectorAll('[data-focus-type]').forEach(button => button.addEventListener('click', () => { view.focusedType = button.dataset.focusType; view.focusedId = null; renderFocused(); }));
-  document.querySelector('#focus-entity')?.addEventListener('change', event => { view.focusedId = event.target.value; renderFocused(); });
+  document.querySelector('#return-matrix')?.addEventListener('click', () => {
+    if (inspectionState) syncInspectionState(inspectionState.returnToWholeSchool().state); else view.focusedType = null;
+    renderWholeSchool();
+    const matrix = document.querySelector('.matrix-wrap');
+    if (matrix && view.scrollContext) matrix.scrollTo(view.scrollContext.left, view.scrollContext.top);
+  });
+  document.querySelectorAll('[data-focus-type]').forEach(button => button.addEventListener('click', () => {
+    const nextType = button.dataset.focusType;
+    const nextSource = nextType === 'cohortId' ? acceptedModel.definition.cohorts : nextType === 'teacherId' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms;
+    if (inspectionState) syncInspectionState(inspectionState.changeFocusedType(nextType, nextSource[0]?.id).state);
+    else { view.focusedType = nextType; view.focusedId = nextSource[0]?.id || null; }
+    renderFocused();
+  }));
+  document.querySelector('#focus-entity')?.addEventListener('change', event => {
+    if (inspectionState) syncInspectionState(inspectionState.changeFocusedType(type, event.target.value).state);
+    else view.focusedId = event.target.value;
+    renderFocused();
+  });
 }
 
 function bindInspectionControls() {
   const rerender = () => renderWholeSchool();
-  document.querySelector('#lesson-search').addEventListener('input', event => { view.search = event.target.value; applyFiltersInPlace(); });
-  for (const [id, key] of [['cohort-filter', 'cohortId'], ['teacher-filter', 'teacherId'], ['room-filter', 'roomId']]) document.querySelector(`#${id}`).addEventListener('change', event => { view[key] = event.target.value; applyFiltersInPlace(); });
+  document.querySelector('#lesson-search').addEventListener('input', event => {
+    if (inspectionState) syncInspectionState(inspectionState.setSearch(event.target.value).state); else view.search = event.target.value;
+    applyFiltersInPlace();
+  });
+  for (const [id, key] of [['cohort-filter', 'cohortId'], ['teacher-filter', 'teacherFilterId'], ['room-filter', 'roomId']]) document.querySelector(`#${id}`).addEventListener('change', event => {
+    if (inspectionState) syncInspectionState(inspectionState.selectFilter(key, event.target.value || null).state);
+    else view[key === 'teacherFilterId' ? 'teacherId' : key] = event.target.value;
+    const selectionCleared = clearSelectedLessonOutsideRepresentation();
+    applyFiltersInPlace();
+    if (selectionCleared) document.querySelector('#inspection-notice').textContent = M.selectionOutsideFilters;
+  });
   document.querySelector('#weekday')?.addEventListener('change', event => switchWholeSchoolDay(event.target.value));
-  document.querySelector('#period-focus')?.addEventListener('change', event => { view.periodId = event.target.value; rerender(); });
+  document.querySelector('#period-focus')?.addEventListener('change', event => {
+    if (inspectionState) syncInspectionState(inspectionState.selectFilter('periodId', event.target.value || null).state); else view.periodId = event.target.value;
+    const selectionCleared = clearSelectedLessonOutsideRepresentation();
+    rerender();
+    if (selectionCleared) document.querySelector('#inspection-notice').textContent = M.selectionOutsideFilters;
+  });
   document.querySelector('#subject-investigation')?.addEventListener('change', event => setInvestigation('subject', event.target.value || null));
   document.querySelector('#teacher-investigation')?.addEventListener('change', event => setInvestigation('teacher', event.target.value || null));
   document.querySelector('#subject-only')?.addEventListener('change', event => setInvestigationMode('subject', event.target.checked));
@@ -532,9 +579,14 @@ function bindInspectionControls() {
   bindLessonButtons(document.querySelector('.matrix-wrap'));
   bindCloseDetails();
   document.querySelectorAll('[data-open-focus]').forEach(button => button.addEventListener('click', () => {
-    view.focusedType = button.dataset.openFocus;
-    const key = view.focusedType === 'cohortId' ? 'cohorts' : view.focusedType === 'teacherId' ? 'teachers' : 'rooms';
-    view.focusedId = view[view.focusedType] || acceptedModel.definition[key][0]?.id || null;
+    const type = button.dataset.openFocus;
+    const key = type === 'cohortId' ? 'cohorts' : type === 'teacherId' ? 'teachers' : 'rooms';
+    const selected = type === 'cohortId' ? view.cohortId : type === 'teacherId' ? view.teacherId : view.roomId;
+    const focusedId = selected || acceptedModel.definition[key][0]?.id || null;
+    const matrix = document.querySelector('.matrix-wrap');
+    const scrollContext = matrix ? { left: matrix.scrollLeft, top: matrix.scrollTop } : null;
+    if (inspectionState) syncInspectionState(inspectionState.openFocused(type, focusedId, scrollContext).state);
+    else { view.focusedType = type; view.focusedId = focusedId; view.scrollContext = scrollContext; }
     renderFocused();
   }));
 }
@@ -603,19 +655,26 @@ function bindCloseDetails() {
 
 function applyFiltersInPlace() {
   const active = activeCriteria();
+  const narrowed = hasNarrowingCriteria();
   const investigation = investigationSummary();
   let visibleRows = 0;
   document.querySelectorAll('.lesson-cell[data-lesson-id]').forEach(button => {
     const item = acceptedModel.assignmentMap.get(button.dataset.lessonId);
     const matches = isRepresented(item);
+    const cues = lessonCues(item);
     button.hidden = !matches;
-    button.classList.toggle('match', active.length > 0 && matches);
+    button.classList.toggle('search-match', searchMatches(item));
+    button.setAttribute('aria-label', lessonAccessibleName(item, cues.accessible));
+    const searchLabel = button.querySelector('.search-match-label');
+    if (searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', `<em class="search-match-label">${M.searchMatch}</em>`);
+    if (!searchMatches(item)) searchLabel?.remove();
+    button.classList.toggle('match', narrowed && matches);
     const matchLabel = button.querySelector('.match-label');
-    if (matchLabel) matchLabel.hidden = active.length === 0 || !matches;
+    if (matchLabel) matchLabel.hidden = !narrowed || !matches;
   });
   document.querySelectorAll('.matrix tbody tr').forEach(row => {
     const hasMatch = Boolean(row.querySelector('.lesson-cell:not([hidden])'));
-    row.hidden = active.length > 0 && !hasMatch;
+    row.hidden = narrowed && !hasMatch;
     if (!row.hidden) visibleRows++;
     row.querySelectorAll('td').forEach(cell => {
       const visibleLesson = cell.querySelector('.lesson-cell:not([hidden])');
@@ -623,16 +682,19 @@ function applyFiltersInPlace() {
       if (empty) empty.hidden = Boolean(visibleLesson);
     });
   });
-  document.querySelector('#filter-title').textContent = active.length ? M.filteredMatrix : M.completePopulation;
+  document.querySelector('#filter-title').textContent = narrowed ? M.filteredMatrix : M.completePopulation;
   document.querySelector('#matrix-summary').textContent = M.matrixSummary(visibleRows, acceptedModel.definition.cohorts.length);
+  document.querySelector('#represented-lesson-count').textContent = M.representedLessonCount(investigation.represented.length);
   document.querySelector('#active-criteria').innerHTML = active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters;
-  document.querySelector('#no-matches').hidden = !(active.length > 0 && investigation.represented.length === 0);
-  document.querySelector('.matrix-wrap').setAttribute('aria-label', active.length ? M.filteredMatrix : M.completeMatrix);
+  document.querySelector('#search-summary').textContent = view.search.trim() ? M.searchMatchCount(investigation.searchCount) : '';
+  document.querySelector('#search-summary').hidden = !view.search.trim();
+  document.querySelector('#no-matches').hidden = !(narrowed && investigation.represented.length === 0);
+  document.querySelector('.matrix-wrap').setAttribute('aria-label', narrowed ? M.filteredMatrix : M.completeMatrix);
 }
 
 function resetView() {
-  view.search = ''; view.cohortId = ''; view.teacherId = ''; view.roomId = ''; view.periodId = '';
-  if (inspectionState) syncInspectionState(inspectionState.resetInvestigationFilters().state);
+  if (inspectionState) syncInspectionState(inspectionState.resetFilters().state);
+  else { view.search = ''; view.cohortId = ''; view.teacherId = ''; view.roomId = ''; view.periodId = ''; }
   renderWholeSchool();
 }
 
@@ -641,8 +703,8 @@ function filteredAssignments() {
 }
 
 function baseFilterMatches(item) {
-  const query = view.search.trim().toLocaleLowerCase();
-  return (!view.cohortId || item.cohortId === view.cohortId) && (!view.teacherId || item.teacherId === view.teacherId) && (!view.roomId || item.roomId === view.roomId) && (!view.periodId || item.periodId === view.periodId) && (!query || searchable(item).some(value => value.toLocaleLowerCase().includes(query)));
+  return (!view.cohortId || item.cohortId === view.cohortId) && (!view.teacherId || item.teacherId === view.teacherId)
+    && (!view.roomId || item.roomId === view.roomId) && (!view.periodId || item.periodId === view.periodId);
 }
 
 function isInSelectedRange(item) { return view.range === 'WEEK' || item.period?.weekday === view.day; }
@@ -675,6 +737,10 @@ function activeCriteria() {
   return criteria;
 }
 
+function hasNarrowingCriteria() {
+  return Boolean(view.cohortId || view.teacherId || view.roomId || view.periodId || view.subjectOnly || view.teacherOnly);
+}
+
 function investigationSummary() {
   const rangeAndOtherFilters = acceptedModel.assignments.filter(item => isInSelectedRange(item) && baseFilterMatches(item));
   const represented = rangeAndOtherFilters.filter(isInvestigationMatch);
@@ -682,17 +748,25 @@ function investigationSummary() {
   const teacherMatches = rangeAndOtherFilters.filter(item => view.teacherInvestigationId && item.teacherId === view.teacherInvestigationId);
   const dualMatches = rangeAndOtherFilters.filter(item => view.subjectInvestigationId && view.teacherInvestigationId
     && item.subjectId === view.subjectInvestigationId && item.teacherId === view.teacherInvestigationId);
-  return { represented, subjectCount: subjectMatches.length, teacherCount: teacherMatches.length, dualCount: dualMatches.length,
+  const searchCount = rangeAndOtherFilters.filter(searchMatches).length;
+  return { represented, subjectCount: subjectMatches.length, teacherCount: teacherMatches.length, dualCount: dualMatches.length, searchCount,
     periods: acceptedModel.definition.periods.filter(period => view.range === 'WEEK' || period.weekday === view.day) };
 }
 
+function searchMatches(item) {
+  const query = view.search.trim().toLocaleLowerCase();
+  return Boolean(query) && searchable(item).some(value => value.toLocaleLowerCase().includes(query));
+}
+
 function lessonCues(item) {
+  const search = searchMatches(item);
   const subject = Boolean(view.subjectInvestigationId && item.subjectId === view.subjectInvestigationId);
   const teacher = Boolean(view.teacherInvestigationId && item.teacherId === view.teacherInvestigationId);
-  const accessible = teacher && subject ? [M.dualMatch] : [...(subject ? [M.subjectMatch] : []), ...(teacher ? [M.teacherMatch] : [])];
-  const classes = `${subject ? ' subject-match' : ''}${teacher ? ' teacher-match' : ''}${subject && teacher ? ' dual-match' : ''}`;
-  const markup = subject && teacher ? `<em class="dual-match-label">${M.dualMatch}</em>`
+  const accessible = [...(search ? [M.searchMatch] : []), ...(teacher && subject ? [M.dualMatch] : []), ...(teacher || subject ? [] : []), ...(subject && !teacher ? [M.subjectMatch] : []), ...(teacher && !subject ? [M.teacherMatch] : [])];
+  const classes = `${search ? ' search-match' : ''}${subject ? ' subject-match' : ''}${teacher ? ' teacher-match' : ''}${subject && teacher ? ' dual-match' : ''}`;
+  const investigationMarkup = subject && teacher ? `<em class="dual-match-label">${M.dualMatch}</em>`
     : `${subject ? `<em class="subject-match-label">${M.subjectMatch}</em>` : ''}${teacher ? `<em class="teacher-match-label">${M.teacherMatch}</em>` : ''}`;
+  const markup = `${search ? `<em class="search-match-label">${M.searchMatch}</em>` : ''}${investigationMarkup}`;
   return { accessible, classes, markup };
 }
 
@@ -779,8 +853,13 @@ document.querySelector('#archive-import').addEventListener('submit', event => { 
 window.matchMedia('(max-width: 700px)').addEventListener('change', event => {
   view.narrow = event.matches;
   if (acceptedModel) {
-    if (event.matches && !view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
-    if (!event.matches) view.focusedType = null;
+    if (inspectionState) {
+      if (event.matches && !view.focusedType) syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
+      if (!event.matches) syncInspectionState(inspectionState.returnToWholeSchool().state);
+    } else {
+      if (event.matches && !view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
+      if (!event.matches) view.focusedType = null;
+    }
     load();
   }
 });

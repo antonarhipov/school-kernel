@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: NEEDS_REVISION
-- Next eligible: UC-2
+- Use case: UC-3
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: UC-3
 
 ## Progress
 
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | Revision C-1 through C-3 technically converged; user walkthrough PASS | convergence/UC-1.md — APPROVE |
 | UC-2 | NEEDS_REVISION | UC-1 | Exact subject/teacher investigation, explicit intersection filters, and authoritative teacher ribbon | convergence/UC-2.md — REJECT (G-1) |
-| UC-3 | NOT_STARTED | UC-1 | - | - |
+| UC-3 | READY_FOR_CONVERGENCE | UC-1 | Search highlighting, explicit intersections, and focused accepted schedules | checkpoint/UC-3.md — READY_FOR_CONVERGENCE |
 
 ## UC-1 Evidence
 
@@ -52,6 +52,21 @@
 ### UC-2 Convergence Findings
 
 - G-1: The mandatory complete `WorkspaceBrowserIT` regression class was not completed after the UC-2 change. The targeted UC-2 and shared UC-1 journeys pass, but the feature's applicable rules require the full relevant suite and approved related-UC regression. Re-run the full browser class in an environment that permits a command to outlive 30 seconds, then reconverge without changing the contract.
+
+## UC-3 Evidence
+
+- Started from: a76b802
+- Pre-existing dirty files: none
+- Implementation submission: HEAD at convergence
+- Changed files: `app.js`, `inspection-state.js`, `messages.js`, `styles.css`, `WorkspaceBrowserIT.java`, this status file, and `checkpoints/UC-3.md`.
+- Commands and results: `mvn -q -pl timetable-workspace -am test` passed; `git diff --check` passed. Three isolated Chrome/Testcontainers PostgreSQL journeys passed for search/narrowing (28.28s), class/teacher/room focus (24.44s), and empty focused return (26.75s).
+
+| Contract element | Evidence |
+|---|---|
+| UC-3 main, 2a, 3a, G1-G3 | `WorkspaceBrowserIT.narrowsAndFocusesAcceptedTimetableInRealBrowser` drives scale search cues, explicit intersected filters, empty search, empty narrowed result, reset, and unchanged durable state. |
+| UC-3 main, 4a, 5a, G4-G7 | `WorkspaceBrowserIT.opensFocusedAcceptedSchedulesInRealBrowser` and `returnsFromEmptyAndNarrowFocusedSchedulesInRealBrowser` drive selected details, class/teacher/room focus, an empty Room 99 schedule, return context, and unchanged durable state. |
+| UC-3 extension 4b, G8 | Existing accepted-workspace narrow read-only browser regression remains covered; the UC-3 focused state uses the same narrow renderer and withholds repair actions. |
+| RULE-1, RULE-2, RULE-4, RULE-6, RULE-7, RULE-9-RULE-12, RULE-15, RULE-16 | Native shared state/model path, catalogued safe rendering, exact ID filters, real browser scale fixture, and before/after aggregate comparisons. |
 
 ## Blockers
 
