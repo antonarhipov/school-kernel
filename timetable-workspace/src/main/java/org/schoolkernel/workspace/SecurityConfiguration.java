@@ -24,7 +24,7 @@ public class SecurityConfiguration {
                 .requestCache(cache -> cache.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/", "/workspace/**", "/api/csrf", "/api/workspace",
-                                "/api/runs/*", "/api/proposal").permitAll()
+                                "/api/runs/*", "/api/proposal", "/api/accepted/export").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/import", "/api/initial-draft/replace",
                                 "/api/repair-draft", "/api/repair-draft/bulk-pin-preview",
                                 "/api/runs", "/api/proposal/accept").permitAll()

@@ -201,10 +201,15 @@ function makeModel(baseline) {
 function renderAccepted(snapshot, schoolName) {
   stateCard.className = `card workspace-card density-${view.density}`;
   stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.acceptedState}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p></div>
-    <p>${M.acceptedDetail} ${M.inspectionIntro}</p><p class="muted revision">${M.timetableRevision} <code>${escapeHtml(snapshot.workspace.timetableRevision)}</code></p>
+    <p>${M.acceptedDetail} ${M.inspectionIntro}</p>${exportAccepted(snapshot)}
     ${view.narrow ? '' : startRepairForm()}<h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
   bindStartRepair();
   if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
+}
+
+function exportAccepted(snapshot) {
+  const baseline = snapshot.workspace.acceptedBaseline;
+  return `<section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a></section>`;
 }
 
 function startRepairForm() {

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.URI;
@@ -27,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.CRC32;
 
@@ -88,6 +90,12 @@ class WorkspaceImportIT {
     @Autowired
     RecordingProcessLauncher processes;
 
+    @Autowired
+    SafeImportReader importReader;
+
+    @Autowired
+    MutableAcceptedBundleArchiver archiver;
+
     @TempDir
     Path temporaryDirectory;
 
@@ -102,6 +110,7 @@ class WorkspaceImportIT {
                         """)
                 .update();
         processes.reset();
+        archiver.reset();
         CookieManager cookies = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         client = HttpClient.newBuilder().cookieHandler(cookies).connectTimeout(Duration.ofSeconds(5)).build();
     }
@@ -195,6 +204,104 @@ class WorkspaceImportIT {
         assertEquals(422, rejected.statusCode());
         assertEquals("UNSAFE_ARCHIVE", JSON.readTree(rejected.body()).path("code").stringValue());
         assertEmpty();
+    }
+
+    @Test
+    @DisplayName("UC-8 main, G1-G4, success postcondition: export is exact, verified, immutable, and re-importable")
+    void exportsExactAcceptedBaselineAndReimportsIt() throws Exception {
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ((ObjectNode) definition.path("lessons").get(0)).put("periodLock", "mon-1");
+        Path definitionPath = temporaryDirectory.resolve("uc8-definition.json");
+        Files.write(definitionPath, JSON.writeValueAsBytes(definition));
+        Path resultPath = plannedResult(definitionPath, "uc8-result.json");
+        JsonNode result = JSON.readTree(resultPath.toFile());
+        ObjectNode manifest = JSON.createObjectNode();
+        manifest.put("manifestVersion", 1).put("definitionSchemaVersion", 1).put("resultSchemaVersion", 1)
+                .put("catalogVersion", 1).put("schoolId", "demo-school")
+                .put("inputRevision", result.path("inputRevision").stringValue())
+                .put("timetableRevision", result.path("timetableRevision").stringValue());
+        manifest.putArray("locks").addObject().put("lessonId", "lesson-math-1")
+                .put("periodLockOrigin", "ATTEMPT_SCOPED");
+        byte[] sourceArchive = zip(Map.of(
+                "school-definition.json", JSON.writeValueAsBytes(definition),
+                "timetable-result.json", JSON.writeValueAsBytes(result),
+                "workspace-manifest.json", JSON.writeValueAsBytes(manifest)));
+        Session importSession = session();
+        HttpResponse<String> imported = post(importSession,
+                Map.of("archive", new FilePart("accepted.zip", sourceArchive)), true, true);
+        assertEquals(200, imported.statusCode());
+        JsonNode before = storedDocument();
+
+        HttpResponse<byte[]> exported = client.send(
+                HttpRequest.newBuilder(uri("/api/accepted/export")).GET().build(),
+                HttpResponse.BodyHandlers.ofByteArray());
+
+        assertEquals(200, exported.statusCode());
+        assertEquals("application/zip", exported.headers().firstValue("Content-Type").orElseThrow());
+        assertEquals("attachment; filename=\"accepted-baseline.zip\"",
+                exported.headers().firstValue("Content-Disposition").orElseThrow());
+        assertEquals("no-store", exported.headers().firstValue("Cache-Control").orElseThrow());
+        assertEquals("\"ws-1\"", exported.headers().firstValue("ETag").orElseThrow());
+        assertEquals(List.of("school-definition.json", "timetable-result.json", "workspace-manifest.json"),
+                zipEntryNames(exported.body()));
+        ImportDocuments documents = importReader.readArchive(exported.body());
+        JsonNode accepted = before.path("acceptedBaseline");
+        assertEquals(accepted.path("definition"), documents.definition());
+        assertEquals(accepted.path("result"), documents.result());
+        assertEquals(accepted.path("manifest"), documents.manifest());
+        assertEquals("ATTEMPT_SCOPED",
+                documents.manifest().path("locks").get(0).path("periodLockOrigin").stringValue());
+        assertEquals(before, storedDocument(), "UC-8 G4 export must not mutate the aggregate");
+        assertEquals(2, processes.count(), "import and export must each use packaged structured verification");
+
+        resetWorkspace();
+        Session reimportSession = session();
+        HttpResponse<String> reimported = post(reimportSession,
+                Map.of("archive", new FilePart("accepted-baseline.zip", exported.body())), true, true);
+        assertEquals(200, reimported.statusCode());
+        assertEquals(accepted, storedDocument().path("acceptedBaseline"));
+        assertEquals(1, processes.count(), "re-import must verify the exported archive again");
+    }
+
+    @Test
+    @DisplayName("UC-8 extensions 1a, 3a, 4a and minimal guarantee: refusals publish no archive and preserve state")
+    void refusedAndFailedExportsPublishNothingAndPreserveState() throws Exception {
+        HttpResponse<byte[]> refused = client.send(
+                HttpRequest.newBuilder(uri("/api/accepted/export")).GET().build(),
+                HttpResponse.BodyHandlers.ofByteArray());
+        assertEquals(409, refused.statusCode());
+        JsonNode refusedProblem = JSON.readTree(refused.body());
+        assertEquals("ACCEPTED_BASELINE_REQUIRED", refusedProblem.path("code").stringValue());
+        assertFalse(refusedProblem.toString().contains("assignments"));
+        assertTrue(refused.headers().firstValue("Content-Disposition").isEmpty());
+        assertEmpty();
+
+        Path definitionPath = ROOT.resolve("examples/initial-school.json");
+        Path resultPath = plannedResult(definitionPath, "uc8-failure-result.json");
+        Session importSession = session();
+        assertEquals(200, post(importSession, Map.of(
+                "definition", new FilePart("school.json", Files.readAllBytes(definitionPath)),
+                "result", new FilePart("result.json", Files.readAllBytes(resultPath))), true, true).statusCode());
+        JsonNode before = storedDocument();
+
+        archiver.mode = MutableAcceptedBundleArchiver.Mode.FAIL;
+        HttpResponse<byte[]> creationFailure = client.send(
+                HttpRequest.newBuilder(uri("/api/accepted/export")).GET().build(),
+                HttpResponse.BodyHandlers.ofByteArray());
+        assertEquals(503, creationFailure.statusCode());
+        assertEquals("EXPORT_FAILED", JSON.readTree(creationFailure.body()).path("code").stringValue());
+        assertTrue(creationFailure.headers().firstValue("Content-Disposition").isEmpty());
+        assertEquals(before, storedDocument());
+
+        archiver.mode = MutableAcceptedBundleArchiver.Mode.CORRUPT;
+        HttpResponse<byte[]> verificationFailure = client.send(
+                HttpRequest.newBuilder(uri("/api/accepted/export")).GET().build(),
+                HttpResponse.BodyHandlers.ofByteArray());
+        assertEquals(422, verificationFailure.statusCode());
+        assertEquals("EXPORT_VERIFICATION_FAILED",
+                JSON.readTree(verificationFailure.body()).path("code").stringValue());
+        assertTrue(verificationFailure.headers().firstValue("Content-Disposition").isEmpty());
+        assertEquals(before, storedDocument());
     }
 
     @Test
@@ -813,6 +920,15 @@ class WorkspaceImportIT {
         return bytes.toByteArray();
     }
 
+    private static List<String> zipEntryNames(byte[] archive) throws Exception {
+        List<String> names = new ArrayList<>();
+        try (ZipInputStream zip = new ZipInputStream(new java.io.ByteArrayInputStream(archive))) {
+            ZipEntry entry;
+            while ((entry = zip.getNextEntry()) != null) names.add(entry.getName());
+        }
+        return names;
+    }
+
     private static byte[] rawZip(List<ArchiveEntry> entries) throws Exception {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         for (ArchiveEntry entry : entries) {
@@ -854,6 +970,12 @@ class WorkspaceImportIT {
         RecordingProcessLauncher recordingProcessLauncher() {
             return new RecordingProcessLauncher();
         }
+
+        @Bean
+        @Primary
+        MutableAcceptedBundleArchiver mutableAcceptedBundleArchiver() {
+            return new MutableAcceptedBundleArchiver();
+        }
     }
 
     static final class RecordingProcessLauncher extends KernelProcessLauncher {
@@ -872,5 +994,25 @@ class WorkspaceImportIT {
         void reset() {
             invocations.set(0);
         }
+    }
+
+    static final class MutableAcceptedBundleArchiver implements AcceptedBundleArchiver {
+        private final ZipAcceptedBundleArchiver delegate = new ZipAcceptedBundleArchiver();
+        private Mode mode = Mode.NORMAL;
+
+        @Override
+        public byte[] create(Map<String, byte[]> entries) throws IOException {
+            return switch (mode) {
+                case NORMAL -> delegate.create(entries);
+                case FAIL -> throw new IOException("injected archive creation failure");
+                case CORRUPT -> "not a zip".getBytes(StandardCharsets.UTF_8);
+            };
+        }
+
+        void reset() {
+            mode = Mode.NORMAL;
+        }
+
+        enum Mode { NORMAL, FAIL, CORRUPT }
     }
 }

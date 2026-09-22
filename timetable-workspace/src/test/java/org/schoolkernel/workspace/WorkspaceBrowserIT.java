@@ -188,6 +188,45 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("UC-8 browser journey: administrator sees exact accepted identity and receives a verified ZIP")
+    void exportsAcceptedBaselineInRealBrowser() throws Exception {
+        storeAccepted(validAcceptedDocument());
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            String rendered = cdp.awaitText("Download verified accepted bundle", Duration.ofSeconds(15));
+            JsonNode expected = validAcceptedDocument().path("acceptedBaseline");
+            assertTrue(rendered.contains("Export accepted baseline"));
+            assertTrue(rendered.contains("Demo School"));
+            assertTrue(rendered.contains(expected.path("result").path("inputRevision").stringValue()));
+            assertTrue(rendered.contains(expected.path("result").path("timetableRevision").stringValue()));
+            JsonNode response = cdp.evaluateValue("""
+                    fetch('/api/accepted/export').then(async response => ({
+                      status: response.status,
+                      type: response.headers.get('Content-Type'),
+                      disposition: response.headers.get('Content-Disposition'),
+                      size: (await response.arrayBuffer()).byteLength
+                    }))
+                    """).path("result").path("result").path("value");
+            assertEquals(200, response.path("status").intValue());
+            assertEquals("application/zip", response.path("type").stringValue());
+            assertTrue(response.path("disposition").stringValue().contains("accepted-baseline.zip"));
+            assertTrue(response.path("size").intValue() > 0);
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-8 browser export must preserve accepted state exactly");
+    }
+
+    @Test
     @DisplayName("UC-3 main, extensions, guarantees: accepted whole-school inspection is local, keyboard-native, narrow-safe, and immutable")
     void inspectsAcceptedWholeSchoolTimetableInRealBrowser() throws Exception {
         ObjectNode accepted = acceptedDocument(false);

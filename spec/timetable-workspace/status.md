@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-7
-- Status: APPROVED
-- Next eligible: UC-8
+- Use case: UC-8
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
@@ -17,7 +17,7 @@
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
 | UC-7 | APPROVED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | `b02ce5f` incorporates the non-blocking performance decision after C-3; `ccfc5d1` resolves C-2; `433ea70` resolves C-1; original `4acf363` | `convergence/UC-7.md` - APPROVED after walkthrough confirmation |
-| UC-8 | NOT_STARTED | UC-1 | - | - |
+| UC-8 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence; started from `bcce1c443385ac4b231b1eae75f5c30b0c601608` | pending |
 
 ## UC-1 Evidence
 
@@ -192,6 +192,28 @@
 | UC-7 G1-G5 and both postconditions | Exact accepted JSON comparisons, visible state labels, native browser-only journey, direct/ripple separation, revision equality, transient-state cleanup, and failure invariants are recorded in `checkpoints/UC-7.md` |
 | Requires/Includes UC-1, UC-3, UC-4, UC-5, UC-6 | All dependencies are approved; the composite tests use their production snapshot, draft, packaged-run, review, and acceptance paths without adding a duplicate orchestrator |
 | RULE-1 through RULE-29 applicable to UC-7 | Reactor, lifecycle, concurrency, atomic acceptance, process, overlay, identity, browser/accessibility, security, failure, observability, PostgreSQL, scale, typed-kernel, and corpus evidence is recorded by rule in `checkpoints/UC-7.md` |
+
+## UC-8 Evidence
+
+- Started: 2026-09-22; base `bcce1c443385ac4b231b1eae75f5c30b0c601608`.
+- Pre-existing dirty files: none.
+- Implementation submission: HEAD at convergence.
+- Changed files: accepted-baseline export service and ZIP adapter; shared bounded archive reader; controller and security
+  route; native accepted-state export UI/messages/styles; PostgreSQL/HTTP and real-Chrome tests; status, checkpoint, and
+  Jev advisory bundle.
+- Commands and results: focused `WorkspaceImportIT` - PASS; focused real-Chrome UC-8 journey - PASS; escalated
+  `./mvnw -q clean verify` - 170 tests, 0 failures, 0 errors, 0 skipped; `git diff --check` - PASS. The first sandboxed
+  clean attempt was blocked by Docker-socket permission and was rerun unchanged with approved Docker access. The
+  26-item Jev bundle validates locally with the already-built pinned helper; external review is `REVIEW` because
+  disclosure was not authorized.
+
+| Contract element | Evidence |
+|---|---|
+| UC-8 main steps 1-5 | Real HTTP/PostgreSQL/package export and exact re-import at `WorkspaceImportIT.java:209`; real Chrome identity and ZIP receipt at `WorkspaceBrowserIT.java:190` |
+| UC-8 extensions 1a, 3a, 4a | Empty-state refusal plus injected archive-creation and completed-archive corruption paths at `WorkspaceImportIT.java:266`; all return safe problems with no attachment and exact state preservation |
+| UC-8 G1-G4 and both postconditions | Exact normative entry order, canonical accepted documents, `ATTEMPT_SCOPED` provenance, packaged `verify`, re-import equality, same-origin browser receipt, and complete aggregate before/after assertions recorded in `checkpoints/UC-8.md` |
+| Requires UC-1 | Approved UC-1 production import and packaged verification path re-imports the exported archive to the exact accepted baseline |
+| RULE-1, RULE-2, RULE-3, RULE-8, RULE-9, RULE-13, RULE-14, RULE-18, RULE-21 through RULE-24, RULE-26 through RULE-28 | Reactor, canonical JSON, structured verify, bounded private files/archive parsing, exact manifest/ZIP, local security, safe failure/logging, PostgreSQL/browser, typed kernel, controlled metadata, and bounded publication evidence recorded by rule in `checkpoints/UC-8.md` |
 
 ## Blockers
 

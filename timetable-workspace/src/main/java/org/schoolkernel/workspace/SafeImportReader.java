@@ -65,7 +65,13 @@ public class SafeImportReader {
         if (archive.getSize() > ARCHIVE_LIMIT) {
             throw tooLarge("Accepted-bundle archive exceeds 25 MiB.");
         }
-        byte[] bytes = readBounded(archive, ARCHIVE_LIMIT, "archive");
+        return readArchive(readBounded(archive, ARCHIVE_LIMIT, "archive"));
+    }
+
+    ImportDocuments readArchive(byte[] bytes) {
+        if (bytes.length > ARCHIVE_LIMIT) {
+            throw tooLarge("Accepted-bundle archive exceeds 25 MiB.");
+        }
         if (bytes.length < 4 || bytes[0] != 'P' || bytes[1] != 'K'
                 || (bytes[2] != 3 && bytes[2] != 5 && bytes[2] != 7)
                 || (bytes[3] != 4 && bytes[3] != 6 && bytes[3] != 8)) {

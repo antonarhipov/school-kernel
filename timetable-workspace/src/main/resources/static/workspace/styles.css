@@ -21,7 +21,7 @@ legend { font-weight: 700; }
 label { display: grid; gap: 7px; margin: 12px 0; font-weight: 600; }
 input[type=file] { max-width: 100%; padding: 10px; border: 1px solid #cbd3ce; border-radius: 9px; background: #fafbf9; }
 button { border: 0; border-radius: 9px; padding: 11px 16px; background: #1f5d42; color: white; font: inherit; font-weight: 700; cursor: pointer; }
-button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, .matrix-wrap:focus-visible { outline: 3px solid #f0b44d; outline-offset: 2px; }
+button:focus-visible, .button-link:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, .matrix-wrap:focus-visible { outline: 3px solid #f0b44d; outline-offset: 2px; }
 button[disabled] { opacity: .6; cursor: wait; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
 .secondary { background: #e8efe9; color: #234c38; }
@@ -49,6 +49,9 @@ code { overflow-wrap: anywhere; }
 .accepted-heading h2 { margin: 10px 0 0; }
 .mode-note { margin: 0; padding: 8px 12px; border: 1px solid #cdd9d2; border-radius: 9px; color: #40554b; background: #f7faf8; font-weight: 700; font-size: .82rem; }
 .revision { margin-bottom: 22px; }
+.export-baseline { margin: 20px 0; padding: 16px; border: 1px solid #b9d5c5; border-radius: 12px; background: #f7fbf8; }
+.export-baseline h3 { margin-top: 0; }
+.button-link { display: inline-flex; margin-top: 8px; border-radius: 9px; padding: 11px 16px; background: #1f5d42; color: white; font-weight: 700; text-decoration: none; }
 .inspection-toolbar { display: grid; grid-template-columns: minmax(220px, 1.6fr) repeat(5, minmax(135px, 1fr)); gap: 12px; align-items: end; padding: 16px; border: 1px solid #d9dfdb; border-radius: 13px; background: #f8faf8; }
 .inspection-toolbar label, .focused-toolbar label { margin: 0; font-size: .77rem; color: #4b5f55; }
 .inspection-toolbar input, .inspection-toolbar select, .focused-toolbar select { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #bfcac4; border-radius: 8px; background: white; color: #1d2925; font: inherit; }

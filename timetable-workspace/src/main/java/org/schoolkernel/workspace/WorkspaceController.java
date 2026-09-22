@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.CacheControl;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,7 @@ public class WorkspaceController {
     private final RepairDraftService repairs;
     private final RepairProposalService repairProposals;
     private final ProposalReviewService proposalReviews;
+    private final AcceptedBaselineExportService exports;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -43,6 +46,7 @@ public class WorkspaceController {
             RepairDraftService repairs,
             RepairProposalService repairProposals,
             ProposalReviewService proposalReviews,
+            AcceptedBaselineExportService exports,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -51,6 +55,7 @@ public class WorkspaceController {
         this.repairs = repairs;
         this.repairProposals = repairProposals;
         this.proposalReviews = proposalReviews;
+        this.exports = exports;
         this.json = json;
     }
 
@@ -121,6 +126,21 @@ public class WorkspaceController {
     @ResponseBody
     public ResponseEntity<JsonNode> workspace() {
         return response(repository.load());
+    }
+
+    @GetMapping("/api/accepted/export")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportAcceptedBaseline() {
+        AcceptedBaselineExportService.ExportedBaseline exported = exports.export();
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/zip"))
+                .contentLength(exported.archive().length)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment().filename("accepted-baseline.zip").build().toString())
+                .header(HttpHeaders.ETAG, exported.etag())
+                .cacheControl(CacheControl.noStore())
+                .header("X-Content-Type-Options", "nosniff")
+                .body(exported.archive());
     }
 
     @PostMapping(path = "/api/import", consumes = "multipart/form-data")
