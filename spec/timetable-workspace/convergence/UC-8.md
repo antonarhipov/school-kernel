@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-8.md` at `b1e8077`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical; 0 gap; 0 protocol; 0 drift; 0 cosmetic
 - Suite: focused HTTP/PostgreSQL - PASS; focused real Chrome - PASS; clean reactor - 170 run, 0 failed, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -91,12 +91,12 @@ Automated evidence is strong. As a UI use case, administrator confirmation is st
 4. In a fresh empty workspace, import that ZIP and confirm the same school, definition revision, timetable revision, and accepted timetable reappear.
 5. Return to the exporting workspace and confirm it remained on the same accepted baseline throughout.
 
-User result: pending.
+On 2026-09-22, the administrator completed the walkthrough and replied that it looks like a `PASS`.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE -> PENDING_WALKTHROUGH`; no next use case is eligible.
+`PENDING_WALKTHROUGH -> APPROVED`; every specified UC is now approved.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: perform the five-step UC-8 accepted-baseline export/import walkthrough and reply PASS or describe any deviation.
+APPROVED
