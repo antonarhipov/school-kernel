@@ -1,4 +1,5 @@
 import { M } from './messages.js';
+import { makeAcceptedModel } from './accepted-model.js';
 
 let etag;
 let csrf;
@@ -8,11 +9,12 @@ let proposedModel;
 let currentSnapshot;
 let bulkPreview;
 let dayMatrices = new Map();
+let preferenceSchoolId;
 const boundLessonButtons = new WeakSet();
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
-  density: 'comfortable', selectedLessonId: null, focusedType: null, focusedId: null,
+  range: 'WEEK', selectedLessonId: null, focusedType: null, focusedId: null,
   narrow: window.matchMedia('(max-width: 700px)').matches
 };
 
@@ -80,8 +82,8 @@ function render(snapshot) {
     document.querySelector('#discard-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
   } else if (snapshot.state === 'ACCEPTED_BASELINE') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
-    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
-    if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
+    acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
+    initializeInspectionState(snapshot.workspace.school?.id);
     if (view.narrow && !view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
     renderAccepted(snapshot, schoolName);
   } else if (snapshot.state === 'REPAIR_DRAFT') {
@@ -94,7 +96,7 @@ function render(snapshot) {
     acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
     if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
     const run = snapshot.workspace.run;
-    stateCard.className = `card workspace-card density-${view.density}`;
+    stateCard.className = 'card workspace-card compact-density';
     stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state running">${M.repairRunning}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairRunningDetail}</p><dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div><div id="accepted-view"></div>`;
     document.querySelector('#cancel-run').addEventListener('click', () => cancelRun(run.id));
     renderWholeSchool();
@@ -182,25 +184,80 @@ function showReviewContext(lessonId, focusType) {
 
 function makeModel(baseline) {
   const definition = baseline.definition;
-  const assignments = baseline.result.timetable.assignments;
-  const maps = Object.fromEntries(['subjects', 'teachers', 'cohorts', 'rooms', 'periods', 'lessons'].map(key => [key, new Map(definition[key].map(item => [item.id, item]))]));
+  const maps = Object.fromEntries(['subjects', 'teachers', 'cohorts', 'rooms', 'periods', 'lessons']
+    .map(key => [key, new Map(definition[key].map(item => [item.id, item]))]));
   const weekdays = [...new Set(definition.periods.map(period => period.weekday))];
-  const enriched = assignments.map(assignment => ({ ...assignment,
+  const assignments = baseline.result.timetable.assignments.map(assignment => ({ ...assignment,
     subject: maps.subjects.get(assignment.subjectId), teacher: maps.teachers.get(assignment.teacherId), cohort: maps.cohorts.get(assignment.cohortId),
     room: maps.rooms.get(assignment.roomId), period: maps.periods.get(assignment.periodId), lesson: maps.lessons.get(assignment.lessonId) }));
-  const assignmentMap = new Map(enriched.map(item => [item.lessonId, item]));
+  const assignmentMap = new Map(assignments.map(item => [item.lessonId, item]));
   const assignmentsByCell = new Map();
-  for (const assignment of enriched) {
+  for (const assignment of assignments) {
     const key = `${assignment.cohortId}\u0000${assignment.periodId}`;
     const cell = assignmentsByCell.get(key);
     if (cell) cell.push(assignment); else assignmentsByCell.set(key, [assignment]);
   }
-  return { definition, assignments: enriched, assignmentMap, assignmentsByCell, maps, weekdays };
+  return { definition, assignments, assignmentMap, assignmentsByCell, maps, weekdays };
+}
+
+function preferenceKey(schoolId) { return `school-kernel.inspection.v1.${schoolId}`; }
+
+function initializeInspectionState(schoolId) {
+  const firstDay = acceptedModel.weekdays[0] || null;
+  if (preferenceSchoolId === schoolId && view.day && acceptedModel.weekdays.includes(view.day)) return;
+  preferenceSchoolId = schoolId;
+  view.range = 'WEEK';
+  view.day = firstDay;
+  if (!schoolId || !firstDay) return;
+  try {
+    const raw = window.localStorage.getItem(preferenceKey(schoolId));
+    if (!raw || raw.length > 1024) return;
+    const preference = JSON.parse(raw);
+    if (Object.keys(preference).length !== 3 || preference.version !== 1
+        || !['WEEK', 'DAY'].includes(preference.range)
+        || typeof preference.weekdayId !== 'string'
+        || !acceptedModel.weekdays.includes(preference.weekdayId)) return;
+    view.range = preference.range;
+    view.day = preference.weekdayId;
+  } catch (_) {
+    // Browser storage is an optional presentation enhancement, never workspace authority.
+  }
+}
+
+function persistInspectionPreference() {
+  if (!preferenceSchoolId || !view.day) return true;
+  try {
+    window.localStorage.setItem(preferenceKey(preferenceSchoolId), JSON.stringify({ version: 1, range: view.range, weekdayId: view.day }));
+    return true;
+  } catch (_) { return false; }
+}
+
+function setRange(range, day = view.day, manualDay = false) {
+  if (!['WEEK', 'DAY'].includes(range) || !acceptedModel.weekdays.includes(day)) return;
+  const hadSelection = Boolean(view.selectedLessonId);
+  let selectionCleared = false;
+  view.range = range;
+  view.day = day;
+  if (manualDay && view.selectedLessonId) {
+    const selected = acceptedModel.assignmentMap.get(view.selectedLessonId);
+    if (selected?.period?.weekday !== day) { view.selectedLessonId = null; selectionCleared = true; }
+  }
+  const persisted = persistInspectionPreference();
+  renderWholeSchool();
+  if (manualDay && hadSelection && selectionCleared) {
+    const notice = document.querySelector('#inspection-notice');
+    if (notice) notice.textContent = M.lessonOutsideDay;
+  }
+  if (!persisted) {
+    const notice = document.querySelector('#inspection-notice');
+    if (notice) notice.textContent = M.preferenceUnavailable;
+  }
 }
 
 function renderAccepted(snapshot, schoolName) {
-  stateCard.className = `card workspace-card density-${view.density}`;
-  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.acceptedState}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p></div>
+  stateCard.className = 'card workspace-card compact-density';
+  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.currentAccepted}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p></div>
+    <p class="accepted-context">${M.acceptedState}</p>
     <p>${M.acceptedDetail} ${M.inspectionIntro}</p>${exportAccepted(snapshot)}
     ${view.narrow ? '' : startRepairForm()}<h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
   bindStartRepair();
@@ -238,7 +295,7 @@ function bindStartRepair() {
 
 function renderRepair(snapshot, schoolName) {
   const draft = snapshot.workspace.repairDraft;
-  stateCard.className = `card workspace-card repair-mode density-${view.density}`;
+  stateCard.className = 'card workspace-card repair-mode compact-density';
   if (view.narrow) {
     stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice}</p><div id="accepted-view"></div>`;
     renderFocused(); return;
@@ -322,20 +379,22 @@ function renderWholeSchool() {
   const matches = active.length ? filteredAssignments() : model.assignments;
   const visibleCohorts = active.length === 0 ? model.definition.cohorts : model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id));
   host.innerHTML = `<div class="inspection-toolbar" aria-label="${M.wholeSchool}">
+      <fieldset class="range-control"><legend>${M.rangeLabel}</legend><button type="button" data-range="WEEK" aria-pressed="${view.range === 'WEEK'}">${M.week}</button><button type="button" data-range="DAY" aria-pressed="${view.range === 'DAY'}">${M.dayView}</button></fieldset>
       <label class="search-control"><span>${M.searchLabel}</span><input id="lesson-search" type="search" value="${escapeAttribute(view.search)}" placeholder="${M.searchPlaceholder}"></label>
-      ${selectControl('weekday', M.weekdayLabel, model.weekdays.map(id => [id, M.days[id] || id]), view.day)}
+      ${view.range === 'DAY' ? `<button type="button" id="previous-day" class="secondary">${M.previousDay}</button>${selectControl('weekday', M.weekdayLabel, model.weekdays.map(id => [id, M.days[id] || id]), view.day)}<button type="button" id="next-day" class="secondary">${M.nextDay}</button>` : ''}
       ${selectControl('cohort-filter', M.classFilter, [['', M.allClasses], ...options(model.definition.cohorts)], view.cohortId)}
       ${selectControl('teacher-filter', M.teacherFilter, [['', M.allTeachers], ...options(model.definition.teachers)], view.teacherId)}
       ${selectControl('room-filter', M.roomFilter, [['', M.allRooms], ...options(model.definition.rooms)], view.roomId)}
-      ${selectControl('period-focus', M.periodFocus, [['', M.allPeriods], ...dayPeriods.map(period => [period.id, periodLabel(period)])], view.periodId)}
-      <fieldset class="density-control"><legend>${M.density}</legend><button type="button" data-density="comfortable" aria-pressed="${view.density === 'comfortable'}">${M.comfortable}</button><button type="button" data-density="compact" aria-pressed="${view.density === 'compact'}">${M.compact}</button></fieldset>
+      ${view.range === 'DAY' ? selectControl('period-focus', M.periodFocus, [['', M.allPeriods], ...dayPeriods.map(period => [period.id, periodLabel(period)])], view.periodId) : ''}
       <button id="reset-view" type="button" class="secondary">${M.reset}</button></div>
-    <div class="filter-status" role="status"><strong id="filter-title">${active.length ? M.filteredMatrix : M.completeMatrix}</strong><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
+    <div class="filter-status" role="status"><strong id="filter-title">${active.length ? M.filteredMatrix : M.completePopulation}</strong><span id="range-summary">${view.range === 'WEEK' ? M.weekRange : M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
+    <p id="inspection-notice" class="notice" role="status"></p>
     ${model.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
     <p id="no-matches" class="empty-message" role="status"${active.length && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
-    ${matrix(model.definition.cohorts, dayPeriods, model.assignmentsByCell, false)}
+    ${view.range === 'WEEK' ? weekMatrix(model.definition.cohorts, model.weekdays, model.assignmentsByCell) : matrix(model.definition.cohorts, dayPeriods, model.assignmentsByCell, false)}
     <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : ''}</div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
+  if (view.range === 'WEEK') { bindInspectionControls(); applyFiltersInPlace(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
   for (const day of model.weekdays) {
     if (day === view.day) continue;
@@ -348,16 +407,26 @@ function renderWholeSchool() {
 }
 
 function switchWholeSchoolDay(day) {
-  view.day = day;
   view.periodId = '';
-  const periodFocus = document.querySelector('#period-focus');
-  periodFocus.innerHTML = [['', M.allPeriods], ...periodsForDay(day).map(period => [period.id, periodLabel(period)])]
-    .map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join('');
-  const matrix = dayMatrices.get(day);
-  document.querySelector('.matrix-wrap').replaceWith(matrix);
-  bindLessonButtons(matrix);
-  syncSelectedLesson(matrix);
-  applyFiltersInPlace();
+  setRange('DAY', day, true);
+}
+
+function weekMatrix(cohorts, weekdays, assignmentsByCell) {
+  const headers = weekdays.map(day => `<th scope="col">${escapeHtml(M.days[day] || day)}</th>`).join('');
+  const rows = cohorts.map(cohort => `<tr><th scope="row"><span>${escapeHtml(entityName(cohort))}</span><small>${escapeHtml(cohort.id)}</small></th>${weekdays.map(day => {
+    const slots = periodsForDay(day).map(period => {
+      const items = assignmentsByCell.get(`${cohort.id}\u0000${period.id}`) || [];
+      return `<div class="week-slot"><span class="week-period">${escapeHtml(period.displayName)}</span>${items.length ? items.map(item => weekLessonButton(item)).join('') : `<span class="empty-cell">${M.emptyCell}</span>`}</div>`;
+    }).join('');
+    return `<td data-weekday="${escapeAttribute(day)}">${slots}</td>`;
+  }).join('')}</tr>`).join('');
+  return `<div class="matrix-wrap week-wrap" aria-label="${M.weekRange}"><table class="matrix week-matrix"><thead><tr><th scope="col">${M.class}</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function weekLessonButton(item) {
+  const selected = item.lessonId === view.selectedLessonId;
+  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), periodLabel(item.period), item.lessonId].join(' · ');
+  return `<button type="button" class="lesson-cell week-lesson${selected ? ' selected' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function matrix(cohorts, periods, assignmentsByCell, filtered) {
@@ -454,9 +523,22 @@ function bindInspectionControls() {
   const rerender = () => renderWholeSchool();
   document.querySelector('#lesson-search').addEventListener('input', event => { view.search = event.target.value; applyFiltersInPlace(); });
   for (const [id, key] of [['cohort-filter', 'cohortId'], ['teacher-filter', 'teacherId'], ['room-filter', 'roomId']]) document.querySelector(`#${id}`).addEventListener('change', event => { view[key] = event.target.value; applyFiltersInPlace(); });
-  document.querySelector('#weekday').addEventListener('change', event => switchWholeSchoolDay(event.target.value));
-  document.querySelector('#period-focus').addEventListener('change', event => { view.periodId = event.target.value; rerender(); });
-  document.querySelectorAll('[data-density]').forEach(button => button.addEventListener('click', () => { view.density = button.dataset.density; stateCard.className = `card workspace-card density-${view.density}`; rerender(); }));
+  document.querySelector('#weekday')?.addEventListener('change', event => switchWholeSchoolDay(event.target.value));
+  document.querySelector('#period-focus')?.addEventListener('change', event => { view.periodId = event.target.value; rerender(); });
+  document.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
+    const requested = button.dataset.range;
+    const selected = view.selectedLessonId && acceptedModel.assignmentMap.get(view.selectedLessonId);
+    const day = requested === 'DAY' && selected ? selected.period?.weekday : view.day;
+    setRange(requested, day, false);
+  }));
+  document.querySelector('#previous-day')?.addEventListener('click', () => {
+    const index = acceptedModel.weekdays.indexOf(view.day);
+    switchWholeSchoolDay(acceptedModel.weekdays[(index - 1 + acceptedModel.weekdays.length) % acceptedModel.weekdays.length]);
+  });
+  document.querySelector('#next-day')?.addEventListener('click', () => {
+    const index = acceptedModel.weekdays.indexOf(view.day);
+    switchWholeSchoolDay(acceptedModel.weekdays[(index + 1) % acceptedModel.weekdays.length]);
+  });
   document.querySelector('#reset-view').addEventListener('click', resetView);
   document.querySelector('#reset-empty')?.addEventListener('click', resetView);
   bindLessonButtons(document.querySelector('.matrix-wrap'));
@@ -520,7 +602,8 @@ function applyFiltersInPlace() {
     const matches = assignmentMatches(item);
     button.hidden = active.length > 0 && !matches;
     button.classList.toggle('match', active.length > 0 && matches);
-    button.querySelector('.match-label').hidden = active.length === 0 || !matches;
+    const matchLabel = button.querySelector('.match-label');
+    if (matchLabel) matchLabel.hidden = active.length === 0 || !matches;
     if (matches) matchingLessons++;
   });
   document.querySelectorAll('.matrix tbody tr').forEach(row => {
@@ -533,7 +616,7 @@ function applyFiltersInPlace() {
       if (empty) empty.hidden = Boolean(visibleLesson);
     });
   });
-  document.querySelector('#filter-title').textContent = active.length ? M.filteredMatrix : M.completeMatrix;
+  document.querySelector('#filter-title').textContent = active.length ? M.filteredMatrix : M.completePopulation;
   document.querySelector('#matrix-summary').textContent = M.matrixSummary(visibleRows, acceptedModel.definition.cohorts.length);
   document.querySelector('#active-criteria').innerHTML = active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters;
   document.querySelector('#no-matches').hidden = !(active.length > 0 && matchingLessons === 0);

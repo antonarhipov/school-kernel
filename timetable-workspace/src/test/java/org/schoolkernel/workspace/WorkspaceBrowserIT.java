@@ -227,7 +227,7 @@ class WorkspaceBrowserIT {
     }
 
     @Test
-    @DisplayName("UC-3 main, extensions, guarantees: accepted whole-school inspection is local, keyboard-native, narrow-safe, and immutable")
+    @DisplayName("Timetable inspection regression: accepted whole-school inspection remains local, narrow-safe, and immutable")
     void inspectsAcceptedWholeSchoolTimetableInRealBrowser() throws Exception {
         ObjectNode accepted = acceptedDocument(false);
         storeAccepted(accepted);
@@ -244,13 +244,24 @@ class WorkspaceBrowserIT {
             cdp.command("Page.enable", JSON.createObjectNode());
             cdp.command("Runtime.enable", JSON.createObjectNode());
             cdp.command("Page.navigate", object("url", page));
-            String complete = cdp.awaitText("Complete whole-school matrix", Duration.ofSeconds(15));
+            String complete = cdp.awaitText("Complete school population", Duration.ofSeconds(15));
             assertTrue(complete.contains("Accepted baseline · current timetable"));
             assertTrue(complete.contains("Mathematics"));
-            assertTrue(complete.contains("Alex"));
             assertTrue(complete.contains("Room 102"));
             assertTrue(complete.contains("Empty"));
             assertTrue(complete.contains("Showing 1 of 1 classes"));
+            assertTrue(cdp.evaluateValue("Boolean(document.querySelector('.week-matrix'))")
+                    .path("result").path("result").path("value").booleanValue());
+
+            cdp.evaluate("document.querySelector('[data-range=\"DAY\"]').click()");
+            String day = cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertTrue(day.contains("Alex"));
+            assertTrue(cdp.evaluateValue("Boolean(document.querySelector('.matrix:not(.week-matrix)'))")
+                    .path("result").path("result").path("value").booleanValue());
+            assertTrue(cdp.evaluateValue("localStorage.getItem('school-kernel.inspection.v1.opaque-school-id')")
+                    .path("result").path("result").path("value").stringValue().contains("\"range\":\"DAY\""));
+            cdp.evaluate("document.querySelector('[data-range=\"WEEK\"]').click()");
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5));
 
             cdp.evaluate("document.querySelector('#lesson-search').focus()");
             cdp.command("Input.insertText", object("text", "Science"));
@@ -264,7 +275,7 @@ class WorkspaceBrowserIT {
             assertTrue(noMatch.contains("Search: not-present"));
             assertTrue(noMatch.contains("Reset view"));
             cdp.evaluate("document.querySelector('#reset-empty').click()");
-            cdp.awaitText("Complete whole-school matrix", Duration.ofSeconds(5));
+            cdp.awaitText("Complete school population", Duration.ofSeconds(5));
 
             cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').focus()");
             cdp.pressKey(" ", "Space");
@@ -279,8 +290,8 @@ class WorkspaceBrowserIT {
             String focused = cdp.awaitText("Teacher schedule · Alex", Duration.ofSeconds(5));
             assertTrue(focused.contains("Monday"));
             assertTrue(focused.contains("Return to whole-school matrix"));
-            cdp.evaluate("document.querySelector('#return-matrix').click(); document.querySelector('[data-density=\"compact\"]').click()");
-            assertTrue(cdp.evaluateValue("document.querySelector('[data-density=\"compact\"]').getAttribute('aria-pressed') === 'true'")
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(cdp.evaluateValue("document.querySelector('.workspace-card').classList.contains('compact-density') && !document.querySelector('[data-density]')")
                     .path("result").path("result").path("value").booleanValue());
 
             ObjectNode metrics = JSON.createObjectNode().put("width", 390).put("height", 844)
@@ -556,6 +567,8 @@ class WorkspaceBrowserIT {
             cdp.command("Runtime.enable", JSON.createObjectNode());
             cdp.command("Page.navigate", object("url", page));
             cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            cdp.evaluate("document.querySelector('[data-range=\"DAY\"]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
 
             JsonNode search = measured(cdp, """
                     const element=document.querySelector('#lesson-search');
@@ -568,11 +581,8 @@ class WorkspaceBrowserIT {
                     element.dispatchEvent(new Event('change',{bubbles:true}));
                     """);
             cdp.evaluate("document.querySelector('#reset-view').click()");
-            JsonNode days = measured(cdp, """
-                    const element=document.querySelector('#weekday');
-                    element.selectedIndex=i%element.options.length;
-                    element.dispatchEvent(new Event('change',{bubbles:true}));
-                    """);
+            cdp.evaluate("document.querySelector('#weekday').value='TUESDAY'; document.querySelector('#weekday').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.awaitText("Day · Tuesday", Duration.ofSeconds(5));
             JsonNode selections = measured(cdp, """
                     const element=document.querySelector('[data-lesson-id]');
                     element.click();
@@ -580,10 +590,9 @@ class WorkspaceBrowserIT {
 
             recordPerformance("search", search, 250.0);
             recordPerformance("filter", filters, 250.0);
-            recordPerformance("day", days, 250.0);
             recordPerformance("selection", selections, 250.0);
-            System.out.printf("UC-3 scale samples search=%s filter=%s day=%s selection=%s; solver time excluded%n",
-                    search, filters, days, selections);
+            System.out.printf("UC-3 scale samples search=%s filter=%s selection=%s; solver time excluded%n",
+                    search, filters, selections);
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument());
@@ -659,7 +668,14 @@ class WorkspaceBrowserIT {
             cdp.command("Page.enable", JSON.createObjectNode());
             cdp.command("Runtime.enable", JSON.createObjectNode());
             cdp.command("Page.navigate", object("url", page));
-            String rendered = cdp.awaitText("Unique changed lessons\n100", Duration.ofSeconds(20));
+            String rendered;
+            try {
+                rendered = cdp.awaitText("Unique changed lessons", Duration.ofSeconds(20));
+            } catch (AssertionError failure) {
+                throw new AssertionError(failure.getMessage() + "\nConsole: " + cdp.errors()
+                        + "\nRendered: " + cdp.evaluateValue("document.body.innerText"), failure);
+            }
+            assertTrue(rendered.contains("100"));
             assertTrue(rendered.contains("Direct effects of your intent: 50"));
             assertTrue(rendered.contains("Solver ripple effects: 50"));
             assertTrue(rendered.contains("By class"));
