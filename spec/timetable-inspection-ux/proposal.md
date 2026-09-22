@@ -24,8 +24,8 @@ which timetable and population are represented.
 
 - Week is the default desktop time range when the device has no valid preference for this school.
 - Week is a complete-data overview; Day remains the precise operational matrix.
-- Compact tiles are the default. Existing density or zoom accommodation remains available until representative
-  validation proves it unnecessary.
+- The operational timetable uses one Compact lesson-tile density. It exposes no Comfortable/Compact switch or custom
+  zoom setting.
 - Day tiles visibly retain subject, teacher, and room. Week tiles keep subject and room visible while the exact teacher
   remains available through accessible text and selection details.
 - Subject and teacher selectors highlight by default. An explicit `Show only matches` action converts the selected
@@ -34,8 +34,8 @@ which timetable and population are represented.
   definition data; timetable emptiness is never called teacher availability.
 - Search, class/room/period narrowing, one-action filter reset, and focused class/teacher/room schedules remain
   available.
-- Selection, range switching, counts, scrolling, virtualization, keyboard operation, and narrow-screen behavior have
-  deterministic semantics.
+- Selection, range switching, counts, scrolling, virtualization, pointing-device operation, and narrow-screen behavior
+  have deterministic semantics.
 - Inspection remains presentation-only and cannot mutate the accepted baseline, repair draft, proposal, or policy
   state.
 
@@ -59,12 +59,11 @@ which timetable and population are represented.
 Use a complete synthetic or properly anonymized school with at least 60 classes, 100 teachers, 100 rooms, and between
 900 and 1,100 accepted lessons. Five timetable professionals from at least three schools perform the critical inspection
 tasks. At least four of five must complete every task without a serious error, all five must identify the current
-accepted timetable correctly, and median completion time for behavior shared with the accepted UI must be lower than
-the accepted UI baseline.
+accepted timetable correctly.
 
-Record real-browser behavior, accessibility, complete-population counts, raw interaction timings, and exact durable
-state before and after inspection. Raw timings beyond the comparative usability result remain diagnostic evidence, not
-standalone release thresholds.
+Record real-browser pointing-device behavior, accessible labeling and non-color cues, complete-population counts, raw
+functional outcomes, and exact durable state before and after inspection. This feature makes no comparative completion-
+time or interaction-latency claim.
 
 ## Non-goals
 
@@ -73,5 +72,7 @@ standalone release thresholds.
 - primary-room policies or soft room preferences;
 - kernel contract or scheduling-semantic changes;
 - mobile editing, repair generation, or proposal acceptance;
+- presentation density or custom zoom settings;
+- dedicated keyboard-only navigation, shortcuts, or walkthrough guarantees;
 - changing accepted assignments through inspection;
 - authentication, multi-school hosting, publication, or substitute-teacher workflows.

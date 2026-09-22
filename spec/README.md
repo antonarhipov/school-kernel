@@ -23,7 +23,8 @@ Current feature directories:
   behavior is extracted into independently gated feature directories.
 - [`timetable-inspection-ux`](timetable-inspection-ux/) contains the first independently gated feature extracted from
   that roadmap: the focused [`proposal`](timetable-inspection-ux/proposal.md) and declarative
-  [`specification`](timetable-inspection-ux/spec.md) for accepted-timetable Week/Day inspection.
+  [`specification`](timetable-inspection-ux/spec.md), plus its confirmed [`technical rules`](timetable-inspection-ux/rules.md),
+  for accepted-timetable Week/Day inspection.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.

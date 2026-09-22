@@ -19,8 +19,7 @@ these inspection surfaces with Draft and Proposal is owned by the separate persi
 - Day remains the precise operational range: classes are rows and the selected weekday's periods are columns.
 - Week is an overview of the same accepted assignments, not a second timetable and not a claim that every detail fits
   without scrolling.
-- Compact lesson tiles are the default. A density or zoom accommodation remains available during the session and is
-  not persisted until representative validation justifies removing it.
+- The timetable uses one Compact lesson-tile density and exposes no density or custom zoom control.
 - Existing search, narrowing, reset, and focused class, teacher, and room schedules remain available. A narrowed view
   is always labelled as narrowed and is never called the complete school.
 - Subject and teacher selections highlight without removing lessons. `Show only matches` is a separate, explicit
@@ -30,8 +29,8 @@ these inspection surfaces with Draft and Proposal is owned by the separate persi
   Absence of an assignment is never sufficient to call a teacher available.
 - Counts cover the complete represented population and time range after explicit filters, regardless of scrolling or
   virtualization. They count unique lesson identities, not rendered elements.
-- Only the time range and last weekday are stored locally per school and device. Search, highlights, filters, density,
-  focused schedule, and lesson selection reset on reload.
+- Only the time range and last weekday are stored locally per school and device. Search, highlights, filters, focused
+  schedule, and lesson selection reset on reload.
 - Narrow screens provide read-only Day or focused agendas, withhold editing and acceptance actions, preserve the
   desktop range preference, and do not claim to provide the complete operational workbench.
 - The administrator-facing term is `Class`; technical details may identify its kernel term `cohort`. Display names,
@@ -79,7 +78,6 @@ Presentation state is local and never changes a workspace lifecycle state.
 |---|---|---|---|
 | Desktop time range | `Week`, `Day` | Restore the valid per-school local value; otherwise `Week` | Administrator switches range |
 | Last weekday | Any definition-declared weekday | Restore the valid per-school local value; otherwise the first definition-ordered weekday | Administrator chooses a Day, or Week-to-Day follows the selected lesson |
-| Density accommodation | Compact default plus available density or zoom accommodation | Compact | Administrator changes presentation density or zoom |
 | Subject investigation | No selection, exact subject identity; highlight or filter mode | No selection | Administrator selects, filters, clears, or resets |
 | Teacher investigation | No selection, exact teacher identity; highlight or filter mode | No selection | Administrator selects, filters, clears, or resets |
 | Search and other filters | Empty or explicit criteria | Empty | Administrator applies, clears, or resets criteria |
@@ -123,8 +121,8 @@ Rules for all presentation-state transitions:
    opens Week, and renders the complete represented population.
 3. In Week, the workspace shows classes as rows and weekdays in definition order, with each class-day containing the
    definition-ordered period sequence; in Day, it shows classes as rows and the selected weekday's periods as columns.
-4. The administrator switches Week or Day, navigates the selected weekday, adjusts the available density or zoom, or
-   chooses one of the independent investigations at extension point 4a or 4b.
+4. The administrator switches Week or Day, navigates the selected weekday, or chooses one of the independent
+   investigations at extension point 4a or 4b.
 5. The workspace applies the presentation-state transition rules, derives the exact assignments for the selected range
    from the same accepted baseline, and labels the represented range and whether it is complete or narrowed.
 6. The administrator selects an occupied lesson tile.
@@ -164,14 +162,13 @@ Rules for all presentation-state transitions:
   lesson identity.
 - G6. A full display name may be clamped visually but remains complete in accessible text and the inspector. No
   abbreviation or display meaning is derived from an opaque ID.
-- G7. Whole-school controls, range and weekday navigation, density or zoom accommodation, lesson selection, closing the
-  inspector, and returning from focused schedules are keyboard-operable and have the same outcome as pointer use.
+- G7. Whole-school controls, range and weekday navigation, lesson selection, closing the inspector, and returning from
+  focused schedules are operable with a pointing device. This feature makes no keyboard-only completion guarantee.
 - G8. Color is not the only indication of range, selection, focus, or accepted state.
 - G9. School/state controls, weekday and period headers, and the class-name context remain available while the
-  administrator scrolls. Logical keyboard movement follows class, weekday, and period order even when content is
-  virtualized.
-- G10. The compact tile is the default on every reload. The available density or zoom accommodation does not change
-  represented data, counts, selection identity, or durable workspace state.
+  administrator scrolls, including when content is virtualized.
+- G10. Every operational timetable uses the single Compact lesson-tile density. No Comfortable/Compact switch or
+  custom zoom setting is presented.
 - G11. An accepted definition without authoritative group metadata produces ordinary lesson tiles and no disabled,
   empty, or inferred group UI.
 - G12. Real-browser verification exercises desktop Week and Day plus the narrow read-only extension against the
@@ -241,8 +238,8 @@ Rules for all presentation-state transitions:
   are never written to the durable workspace aggregate.
 - G6. Subject cue, teacher cue, dual match, selection, and accepted state remain mutually distinguishable and are all
   enumerated by the tile's accessible name and inspector where applicable.
-- G7. Selector operation, `Show only matches`, clearing either identity, range switching, and filter reset are
-  keyboard-operable and produce the same represented population as pointer operation.
+- G7. Selector operation, `Show only matches`, clearing either identity, range switching, and filter reset are visible
+  pointing-device controls. This use case makes no keyboard-only completion guarantee.
 - G8. Real-browser verification covers subject-only, teacher-only, combined, zero-match, clear-one, clear-all,
   single-filter, and intersected-filter paths against the validation-scale snapshot without durable workspace mutation.
 
@@ -307,7 +304,7 @@ Rules for all presentation-state transitions:
 - G5. Returning from a focused schedule restores the retained time range, last weekday, highlights, filters, and scroll
   context where still representable. Application reload follows the presentation state model instead.
 - G6. Search, filters, active criteria, counts, reset, focused-view entry and return, empty results, and selected details
-  are keyboard-operable and perceivable without color alone.
+  are operable with a pointing device and perceivable without color alone.
 - G7. Narrowing, search, focused schedules, and reset never mutate the accepted definition/result pair or any draft,
   proposal, or policy state.
 - G8. Real-browser verification covers search highlight, each applicable filter, intersected filters, empty search,
@@ -349,13 +346,11 @@ The feature gate requires:
 1. five participants with real timetable responsibility drawn from at least three schools;
 2. at least four of five participants completing every table row without a serious error or facilitator correction;
 3. all five participants identifying Current · accepted correctly throughout every task;
-4. lower median completion time than the accepted timetable-workspace UI for each materially equivalent task;
-5. success and accuracy evidence, without fabricated baseline timing, for behavior the accepted UI cannot perform;
-6. real-browser keyboard and pointer evidence at operational desktop widths and the narrow read-only boundary;
-7. exact comparison showing no durable workspace mutation across inspection journeys; and
-8. recorded raw samples and 95th-percentile observations for initial Week rendering, Day/Week change, highlighting,
-   filtering, lesson selection, and focused-schedule opening. These interaction observations are diagnostic unless a
-   separately accepted rule establishes a release threshold.
+4. real-browser pointing-device evidence at operational desktop widths and the narrow read-only boundary; and
+5. exact comparison showing no durable workspace mutation across inspection journeys.
+
+This feature makes no comparative completion-time or interaction-latency claim and requires no timing evidence for
+approval.
 
 ## Out of scope
 
@@ -366,6 +361,8 @@ The feature gate requires:
 - adding `shortDisplayName` or any other kernel field;
 - changing kernel validation, hard constraints, solver behavior, result identity, or public contract version;
 - mobile or narrow-screen editing, repair generation, or proposal acceptance;
+- presentation density modes and custom in-application zoom controls;
+- dedicated keyboard-only matrix navigation, keyboard shortcuts, and keyboard-only walkthrough guarantees;
 - direct manipulation of accepted assignments;
 - new authentication, roles, hosted multi-school behavior, publication, notification, substitution, or attendance
   workflows.
