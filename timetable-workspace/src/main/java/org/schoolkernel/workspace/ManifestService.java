@@ -137,7 +137,9 @@ public class ManifestService {
     private static Set<String> lockIds(JsonNode manifest, String field, String origin) {
         Set<String> result = new HashSet<>();
         for (JsonNode lock : manifest.path("locks")) {
-            if (origin.equals(lock.path(field).stringValue())) result.add(lock.path("lessonId").stringValue());
+            if (lock.has(field) && origin.equals(lock.path(field).stringValue())) {
+                result.add(lock.path("lessonId").stringValue());
+            }
         }
         return result;
     }

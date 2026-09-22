@@ -193,6 +193,97 @@ class WorkspaceRepairPlanningIT {
     }
 
     @Test
+    @DisplayName("UC-7 main/7a/G1-G5: a protected teacher repair is accepted and directly parents a later room repair")
+    void keepsWeeklyTimetableOperationalAcrossTeacherAndRoomDisruptions() throws Exception {
+        establishAcceptedBaseline();
+        JsonNode originalAccepted = storedDocument().path("acceptedBaseline").deepCopy();
+        JsonNode inspected = body(get("/api/workspace"));
+        assertEquals("ACCEPTED_BASELINE", inspected.path("state").stringValue());
+        assertEquals(originalAccepted, inspected.path("workspace").path("acceptedBaseline"));
+
+        HttpResponse<String> teacherDraftResponse = command("POST", "/api/repair-draft", session(),
+                "{\"resourceType\":\"TEACHER\",\"resourceId\":\"teacher-alex\",\"periodIds\":[\"mon-1\"]}");
+        assertEquals(200, teacherDraftResponse.statusCode(), teacherDraftResponse.body());
+        HttpResponse<String> protectedDraftResponse = command("PATCH", "/api/repair-draft", session(),
+                "{\"action\":\"PIN\",\"lessonId\":\"lesson-science-1\",\"dimensions\":[\"ROOM\"]}");
+        assertEquals(200, protectedDraftResponse.statusCode(), protectedDraftResponse.body());
+        JsonNode firstDraft = body(protectedDraftResponse).path("workspace").path("repairDraft");
+        assertEquals(List.of("lesson-math-1"), firstDraft.path("directEffectLessonIds").valueStream()
+                .map(JsonNode::stringValue).toList());
+        assertEquals(1, firstDraft.path("intent").path("pins").size());
+        assertTrue(firstDraft.path("conflicts").isEmpty());
+        assertEquals(originalAccepted, storedDocument().path("acceptedBaseline"));
+
+        HttpResponse<String> firstStarted = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        assertEquals(202, firstStarted.statusCode(), firstStarted.body());
+        JsonNode firstProposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        JsonNode firstProposal = firstProposalSnapshot.path("workspace").path("proposal").deepCopy();
+        assertEquals(originalAccepted.path("result").path("timetableRevision"),
+                firstProposal.path("acceptedTimetableRevision"));
+        assertEquals(originalAccepted.path("result").path("inputRevision"),
+                firstProposal.path("definition").path("basedOnRevision"));
+        assertEquals(originalAccepted, firstProposalSnapshot.path("workspace").path("acceptedBaseline"));
+        assertTrue(firstProposal.path("review").path("directEffectChangedCount").intValue() > 0);
+
+        HttpResponse<String> firstAcceptedResponse = command("POST", "/api/proposal/accept", session(), null);
+        assertEquals(200, firstAcceptedResponse.statusCode(), firstAcceptedResponse.body());
+        JsonNode firstAcceptedSnapshot = body(firstAcceptedResponse);
+        JsonNode firstAccepted = firstAcceptedSnapshot.path("workspace").path("acceptedBaseline").deepCopy();
+        assertEquals(firstProposal.path("definition"), firstAccepted.path("definition"));
+        assertEquals(firstProposal.path("result"), firstAccepted.path("result"));
+        assertFalse(firstAcceptedSnapshot.path("workspace").has("repairDraft"));
+        assertFalse(firstAcceptedSnapshot.path("workspace").has("proposal"));
+
+        String laterRoomId = "room-102";
+        var occupiedRoomPeriods = firstAccepted.path("result").path("timetable").path("assignments").valueStream()
+                .filter(assignment -> laterRoomId.equals(assignment.path("roomId").stringValue()))
+                .map(assignment -> assignment.path("periodId").stringValue()).collect(java.util.stream.Collectors.toSet());
+        String unavailablePeriodId = firstAccepted.path("definition").path("periods").valueStream()
+                .map(period -> period.path("id").stringValue()).filter(id -> !occupiedRoomPeriods.contains(id))
+                .findFirst().orElseThrow();
+        String secondDraftRequest = "{\"resourceType\":\"ROOM\",\"resourceId\":\"" + laterRoomId
+                + "\",\"periodIds\":[\""
+                + unavailablePeriodId + "\"]}";
+        HttpResponse<String> roomDraftResponse = command("POST", "/api/repair-draft", session(), secondDraftRequest);
+        assertEquals(200, roomDraftResponse.statusCode(), roomDraftResponse.body());
+        JsonNode roomDraftSnapshot = body(roomDraftResponse);
+        JsonNode roomDraft = roomDraftSnapshot.path("workspace").path("repairDraft");
+        assertEquals(firstAccepted, roomDraftSnapshot.path("workspace").path("acceptedBaseline"));
+        assertTrue(roomDraft.path("intent").path("pins").isEmpty(),
+                "the later repair must not inherit the prior attempt-scoped room pin");
+        assertTrue(roomDraft.path("directEffectLessonIds").isEmpty(),
+                "an unoccupied room outage is retained without inventing direct effects");
+        assertTrue(roomDraft.path("conflicts").isEmpty());
+        JsonNode secondDefinition = drafts.compiledDefinition(storedDocument());
+        assertEquals(firstAccepted.path("result").path("inputRevision"), secondDefinition.path("basedOnRevision"));
+        JsonNode previouslyPinnedLesson = secondDefinition.path("lessons").valueStream()
+                .filter(lesson -> "lesson-science-1".equals(lesson.path("id").stringValue()))
+                .findFirst().orElseThrow();
+        assertFalse(previouslyPinnedLesson.has("roomLock"));
+
+        HttpResponse<String> secondStarted = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        assertEquals(202, secondStarted.statusCode(), secondStarted.body());
+        JsonNode secondProposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        JsonNode secondProposal = secondProposalSnapshot.path("workspace").path("proposal").deepCopy();
+        assertEquals(firstAccepted.path("result").path("timetableRevision"),
+                secondProposal.path("acceptedTimetableRevision"));
+        assertEquals(firstAccepted.path("result").path("inputRevision"),
+                secondProposal.path("definition").path("basedOnRevision"));
+        assertEquals(firstAccepted, secondProposalSnapshot.path("workspace").path("acceptedBaseline"));
+
+        HttpResponse<String> secondAcceptedResponse = command("POST", "/api/proposal/accept", session(), null);
+        assertEquals(200, secondAcceptedResponse.statusCode(), secondAcceptedResponse.body());
+        JsonNode current = body(secondAcceptedResponse);
+        assertEquals("ACCEPTED_BASELINE", current.path("state").stringValue());
+        assertEquals(secondProposal.path("definition"), current.path("workspace").path("acceptedBaseline").path("definition"));
+        assertEquals(secondProposal.path("result"), current.path("workspace").path("acceptedBaseline").path("result"));
+        assertFalse(current.path("workspace").has("repairDraft"));
+        assertFalse(current.path("workspace").has("proposal"));
+        assertEquals(2, processes.commands().stream()
+                .filter(arguments -> arguments.size() > 1 && "replan".equals(arguments.get(1))).count());
+    }
+
+    @Test
     @DisplayName("UC-6 extensions 5a/5b and minimal guarantee: discard or revise removes only the proposal and retains exact draft and baseline")
     void discardsOnlyProposalAndRetainsRepairDraft() throws Exception {
         JsonNode proposalSnapshot = createRepairProposal(false);

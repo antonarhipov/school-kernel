@@ -374,7 +374,7 @@ class WorkspaceBrowserIT {
     }
 
     @Test
-    @DisplayName("UC-5 plus UC-6 main/G4/G6/RULE-24: real browser reviews every repair impact and explicitly accepts the packaged proposal")
+    @DisplayName("UC-7 main/7a/G1-G4/RULE-24: real browser accepts a protected teacher repair then a directly parented room repair")
     void generatesRepairProposalInRealBrowser() throws Exception {
         ObjectNode document = validAcceptedDocument();
         JsonNode acceptedBefore = document.path("acceptedBaseline").deepCopy();
@@ -397,6 +397,14 @@ class WorkspaceBrowserIT {
                     document.querySelector('#start-repair-form').requestSubmit();
                     """);
             cdp.awaitText("Generate 30-second repair proposal", Duration.ofSeconds(15));
+            cdp.evaluate("""
+                    document.querySelector('[data-lesson-id="lesson-science-1"]').click();
+                    document.querySelector('[name=lesson-dimension][value="PERIOD"]').checked=false;
+                    document.querySelector('[name=lesson-dimension][value="ROOM"]').checked=true;
+                    document.querySelector('#apply-pin').click();
+                    """);
+            String protectedDraft = cdp.awaitText("Accepted room pinned", Duration.ofSeconds(10));
+            assertTrue(protectedDraft.contains("Attempt-scoped pins\n1"));
             cdp.evaluate("document.querySelector('#solve-draft').click()");
             String solving = cdp.awaitText("Repair generation · running", Duration.ofSeconds(10));
             assertTrue(solving.contains("Accepted baseline remains current"));
@@ -430,12 +438,54 @@ class WorkspaceBrowserIT {
             assertTrue(accepted.contains("Start a protected repair"));
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
+
+        JsonNode firstAccepted = JSON.readTree(jdbc.sql(
+                        "SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single()).path("acceptedBaseline").deepCopy();
+        assertTrue(firstAccepted.path("manifest").path("locks").valueStream()
+                .anyMatch(lock -> "lesson-science-1".equals(lock.path("lessonId").stringValue())
+                        && "ATTEMPT_SCOPED".equals(lock.path("roomLockOrigin").stringValue())));
+
+        String laterTarget = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(laterTarget).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(15));
+            cdp.evaluate("""
+                    document.querySelector('.repair-entry').open=true;
+                    const type = document.querySelector('#repair-resource-type');
+                    type.value='ROOM';
+                    type.dispatchEvent(new Event('change', {bubbles:true}));
+                    document.querySelector('#repair-resource').value='room-102';
+                    document.querySelector('[name=period][value="mon-1"]').checked=true;
+                    document.querySelector('#start-repair-form').requestSubmit();
+                    """);
+            String roomDraft = cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            assertTrue(roomDraft.contains("Accepted baseline remains current"));
+            assertTrue(roomDraft.contains("Directly affected lessons\n0"));
+            assertTrue(roomDraft.contains("Attempt-scoped pins\n0"));
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            String secondProposal = cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(50));
+            assertTrue(secondProposal.contains("Accepted baseline remains current"));
+            assertTrue(secondProposal.contains("Direct effects of your intent"));
+            assertTrue(secondProposal.contains("Solver ripple effects"));
+            cdp.evaluate("document.querySelector('#confirm-repair-accept').click(); document.querySelector('#accept-repair').click()");
+            String secondAccepted = cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(15));
+            assertTrue(secondAccepted.contains("Start a protected repair"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
         JsonNode stored = JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
                 .query(String.class).single());
         assertEquals("ACCEPTED_BASELINE", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1")
                 .query(String.class).single());
         assertFalse(acceptedBefore.equals(stored.path("acceptedBaseline")));
         assertEquals("FEASIBLE", stored.path("acceptedBaseline").path("result").path("status").stringValue());
+        assertTrue(stored.path("acceptedBaseline").path("manifest").path("locks").isEmpty());
         assertFalse(stored.has("proposal"));
         assertFalse(stored.has("repairDraft"));
     }

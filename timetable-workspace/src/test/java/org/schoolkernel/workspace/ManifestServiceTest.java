@@ -1,6 +1,7 @@
 package org.schoolkernel.workspace;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
@@ -50,5 +51,28 @@ class ManifestServiceTest {
                 new ImportDocuments(definition, result, manifest, ImportDocuments.ImportMode.ACCEPTED_BASELINE)));
 
         assertEquals("INVALID_WORKSPACE_MANIFEST", problem.code());
+    }
+
+    @Test
+    @DisplayName("UC-7 step 7/G4: a later repair can remove a prior attempt-scoped lock dimension")
+    void laterRepairDropsPriorAttemptScopedLockWithoutManifestFailure() throws Exception {
+        var definition = json.readTree("""
+                {"schemaVersion":1,"catalogVersion":1,"schoolId":"school","lessons":[{"id":"a"}]}
+                """);
+        var result = json.readTree("""
+                {"schemaVersion":1,"inputRevision":"sha256:%s","timetableRevision":"sha256:%s"}
+                """.formatted("1".repeat(64), "2".repeat(64)));
+        var previousManifest = json.readTree("""
+                {"locks":[{"lessonId":"a","roomLockOrigin":"ATTEMPT_SCOPED"}]}
+                """);
+        var repairDraft = json.readTree("""
+                {"intent":{"pins":[]}}
+                """);
+
+        var manifest = manifests.forAcceptedRepair(definition, result, previousManifest, repairDraft);
+
+        assertTrue(manifest.path("locks").isEmpty());
+        assertEquals("sha256:" + "1".repeat(64), manifest.path("inputRevision").stringValue());
+        assertEquals("sha256:" + "2".repeat(64), manifest.path("timetableRevision").stringValue());
     }
 }

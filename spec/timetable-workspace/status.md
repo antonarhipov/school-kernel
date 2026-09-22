@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-6
-- Status: APPROVED
-- Next eligible: UC-7, UC-8
+- Use case: UC-7
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: UC-8
 
 ## Progress
 
@@ -16,7 +16,7 @@
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
-| UC-7 | NOT_STARTED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | - | - |
+| UC-7 | READY_FOR_CONVERGENCE | UC-1; includes UC-3, UC-4, UC-5, UC-6 | submission pending; started from `c53b1a6` | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
@@ -142,6 +142,30 @@
 | UC-5 G1-G7 and both postconditions | Frozen controls, exact identity/evidence, accepted immutability, safe diagnostics, and proposal/minimal-state assertions recorded in `checkpoints/UC-5.md` |
 | Requires UC-4 | Approved UC-4 production draft/compiler path supplies the exact intent revision and complete successor definition in every UC-5 success journey |
 | RULE-3 through RULE-29 applicable to UC-5 | JSONB lifecycle, ETag, canonical process, async/conflict/cancel/watchdog/stale completion, overlay/identity, security/failure/logging, PostgreSQL/browser, typed kernel, metadata/input, and corpus evidence recorded by rule in `checkpoints/UC-5.md` |
+
+## UC-7 Evidence
+
+- Started: 2026-09-22T08:36:00Z
+- Started from: `c53b1a624bfd7bda319bb28bdff0fec9095fab40`
+- Pre-existing dirty files: none.
+- Implementation submission: pending checkpoint commit.
+- Changed files: attempt-lock manifest guard, manifest regression, composite two-repair PostgreSQL/HTTP and real-Chrome
+  journeys, status, checkpoint, and Jev advisory bundle.
+- Commands and results: focused manifest unit suite - PASS; focused two-repair HTTP/PostgreSQL/packaged-kernel journey -
+  PASS; focused two-repair real-Chrome journey - PASS; `./mvnw -q clean verify` - 167 tests, 0 failures, 0 errors, 0
+  skipped; `git diff --check` - PASS; Jev bundle local validation - valid, 46 items; external Jev - REVIEW because
+  disclosure was not authorized.
+- Runtime evidence: real Chrome accepts a protected teacher repair, opens the exact accepted result as current, starts a
+  later room repair with no inherited attempt pin, distinguishes direct and ripple effects, and accepts the second
+  independently verified packaged-kernel proposal with zero browser errors.
+
+| Contract element | Evidence |
+|---|---|
+| UC-7 main steps 1-7 and extension 7a | Two-repair production journeys at `WorkspaceRepairPlanningIT.java:195` and `WorkspaceBrowserIT.java:376` inspect the accepted timetable, stage teacher unavailability plus a room pin, generate/review/accept, then stage a different-room disruption from the exact new result and generate/review/accept again |
+| UC-7 extensions 3a, 4a, 5a, 5b | Approved conflict, process-failure/cancellation/retry, proposal discard/revise, and PostgreSQL acceptance rollback regressions rerun green in the clean reactor; exact references are recorded in `checkpoints/UC-7.md` |
+| UC-7 G1-G5 and both postconditions | Exact accepted JSON comparisons, visible state labels, native browser-only journey, direct/ripple separation, revision equality, transient-state cleanup, and failure invariants are recorded in `checkpoints/UC-7.md` |
+| Requires/Includes UC-1, UC-3, UC-4, UC-5, UC-6 | All dependencies are approved; the composite tests use their production snapshot, draft, packaged-run, review, and acceptance paths without adding a duplicate orchestrator |
+| RULE-1 through RULE-29 applicable to UC-7 | Reactor, lifecycle, concurrency, atomic acceptance, process, overlay, identity, browser/accessibility, security, failure, observability, PostgreSQL, scale, typed-kernel, and corpus evidence is recorded by rule in `checkpoints/UC-7.md` |
 
 ## Blockers
 
