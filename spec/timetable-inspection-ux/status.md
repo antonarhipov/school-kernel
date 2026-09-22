@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-3
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: UC-3
+- Status: APPROVED
+- Next eligible: UC-2
 
 ## Progress
 
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | Revision C-1 through C-3 technically converged; user walkthrough PASS | convergence/UC-1.md — APPROVE |
 | UC-2 | NEEDS_REVISION | UC-1 | Exact subject/teacher investigation, explicit intersection filters, and authoritative teacher ribbon | convergence/UC-2.md — REJECT (G-1) |
-| UC-3 | READY_FOR_CONVERGENCE | UC-1 | Search highlighting, explicit intersections, and focused accepted schedules | checkpoint/UC-3.md — READY_FOR_CONVERGENCE |
+| UC-3 | APPROVED | UC-1 | Search highlighting, explicit intersections, and focused accepted schedules | convergence/UC-3.md — APPROVE |
 
 ## UC-1 Evidence
 
