@@ -3,8 +3,8 @@
 ## Summary
 
 - Submission: `spec/timetable-workspace/checkpoints/UC-6.md` at `f02223d67f6f1bc4cd5fae2f2697f486783bc3da`
-- Verdict: PENDING WALKTHROUGH
-- Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
+- Verdict: REJECT
+- Findings: 1 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Suite: focused review unit 1/0/0/0; focused PostgreSQL/HTTP/Chrome 19/0/0/0; clean reactor 165/0/0/0 (run/failures/errors/skipped)
 - Working tree impact from verification: none before convergence artifacts
 
@@ -21,7 +21,7 @@
 
 | Actor | Step or extension | Executor reported | Converge observed |
 |---|---|---|---|
-| Administrator in real Chrome | Open repair, generate proposal, review direct/ripple and six categories, confirm with keyboard, accept | Packaged proposal becomes exact accepted baseline | Independent focused run used PostgreSQL 18.6, packaged School Kernel, ephemeral HTTP, and Chrome; visible proposal included unique/direct/ripple, zeros, old/proposed detail, then keyboard Space confirmation/acceptance reached `Accepted baseline · current timetable` with no console errors. |
+| Administrator in real Chrome | Open an already persisted UC-5 repair proposal after installing UC-6 | Proposal impact review opens | User walkthrough and independent Playwright reproduction showed `Workspace unavailable`. Both `/api/csrf` and `/api/workspace` returned 200, then `renderRepairProposal` failed because the persisted UC-5 proposal has no `review` member. |
 | Administrator over protected HTTP | Exact acceptance and later repair | Bundle advances atomically and prior attempt pin does not carry | `WorkspaceRepairPlanningIT` independently passed: exact proposal definition/result became accepted, proposal/draft disappeared, manifest recorded attempt provenance, and next compiled definition used the new parent without the prior room pin. |
 | Administrator over protected HTTP | Extension 5a/5b discard or revise | Only proposal is removed | Independent integration run returned `REPAIR_DRAFT`, compared the complete accepted baseline/draft, and proved proposal absence. |
 | Administrator over protected HTTP | Extension 6a stale identity | Refuse, invalidate, retain prior baseline | Twelve independent corruptions each returned `409 STALE_PROPOSAL`, retained exact accepted data, removed proposal eligibility, and returned to the draft. |
@@ -92,11 +92,24 @@ The first focused Docker attempt was sandbox-denied before container initializat
 
 ## Findings
 
-No critical, gap, protocol, drift, or cosmetic findings. Automated convergence is complete; approval is withheld only for the mandatory user-confirmed UI walkthrough.
+### C-1 CRITICAL - A persisted UC-5 proposal cannot open in UC-6
+
+UC-6 requires UC-5 and is triggered when the administrator opens a repair proposal. The live proposal was validly
+persisted by the approved UC-5 implementation before UC-6 introduced the derived `proposal.review` member. On
+2026-09-22, the administrator saw `Workspace unavailable` / `The local workspace could not be loaded.` Independent
+Playwright reproduction observed successful 200 responses for `/api/csrf` and `/api/workspace`, followed by
+`TypeError: Cannot read properties of undefined (reading 'categories')` at `app.js:118`. The returned proposal
+contained the complete UC-5 identity, definition, result, and change counts but no `review` member. The browser
+unconditionally reads `proposal.review.categories`, and acceptance would also reject the missing derived review.
+
+Revision outcome: derive the authoritative review server-side for legacy persisted UC-5 proposals, keep tampered
+present reviews ineligible, cover the exact no-review persistence shape in HTTP/real-browser acceptance tests, and
+reproduce the live walkthrough before resubmission.
 
 ## Walkthrough
 
-User confirmation is pending. On a desktop-width workspace with a repair proposal:
+The walkthrough failed at page opening: the administrator observed the unavailable fallback before step 1. The
+remaining walkthrough must be repeated after revision. On a desktop-width workspace with a repair proposal:
 
 1. Confirm the page says the prior accepted baseline is still current and shows the unique changed-lesson total, all six category totals including zeros, and direct versus solver-ripple counts.
 2. Expand class, teacher, room, and day groupings; confirm every grouping says old, proposed, or both and no cross-group grand total is implied.
@@ -109,8 +122,8 @@ User confirmation is pending. On a desktop-width workspace with a repair proposa
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; next eligible remains UC-8 until UC-6 is approved. UC-7 remains ineligible because it includes UC-6.
+`PENDING_WALKTHROUGH` -> `NEEDS_REVISION`; UC-8 remains independently eligible, but execution stays on UC-6. UC-7 remains ineligible because it includes UC-6.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm the eight-step UC-6 administrator review, context, keyboard acceptance, and discard/revise script.
+REVISE UC-6: C-1 make the complete review and acceptance path work for an already persisted approved UC-5 proposal that has no derived review member.
