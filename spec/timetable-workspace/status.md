@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-7
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: UC-7 revision
 
 ## Progress
@@ -16,7 +16,7 @@
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
-| UC-7 | READY_FOR_CONVERGENCE | UC-1; includes UC-3, UC-4, UC-5, UC-6 | revision pending; resolves C-1; original `4acf363` | `convergence/UC-7.md` - REJECT, revision submitted |
+| UC-7 | NEEDS_REVISION | UC-1; includes UC-3, UC-4, UC-5, UC-6 | `433ea70` resolves C-1; original `4acf363`; revise C-2 | `convergence/UC-7.md` - REJECT |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
