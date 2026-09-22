@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none (UC-1 awaiting convergence)
+- Status: NEEDS_REVISION
+- Next eligible: UC-1
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | Week/Day inspection implemented | pending |
+| UC-1 | NEEDS_REVISION | none | Revise C-1 through C-3 | convergence/UC-1.md — REJECT |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 
@@ -31,7 +31,7 @@
 
 ## Blockers
 
-none
+- C-1, C-2, C-3 from `convergence/UC-1.md` require implementation and browser-evidence revision before UC-1 can be resubmitted.
 
 ## Deviations
 
