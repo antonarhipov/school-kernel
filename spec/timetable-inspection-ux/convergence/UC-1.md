@@ -2,75 +2,78 @@
 
 ## Summary
 
-- Submission: `spec/timetable-inspection-ux/checkpoints/UC-1.md` at `71d02c6`
-- Verdict: REJECT
-- Findings: 0 critical, 3 gaps, 0 protocol, 0 drift, 0 cosmetic
-- Suite: 11 real-browser tests, 0 failures, 0 errors, 0 skips; 26 focused unit tests, 0 failures, 0 errors, 0 skips
+- Submission: `spec/timetable-inspection-ux/checkpoints/UC-1.md` at `36fe7d1`
+- Verdict: PENDING WALKTHROUGH
+- Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
+- Suite: 26 unit tests and 12 Chrome/Testcontainers PostgreSQL tests; 0 failures, 0 errors, 0 skips
 - Working tree impact from verification: convergence report and status update only
 
 ## Protocol Gate
 
-1. UC-1 was the only target and was `READY_FOR_CONVERGENCE`: pass before this audit.
-2. The checkpoint was committed with the submitted implementation at `71d02c6`: pass.
-3. UC-1 has no dependency: pass.
-4. No other feature UC was in progress or ready: pass.
-5. The checkpoint contains scenario and rule claims: pass, but the evidence is insufficient where recorded below.
-6. The implementation diff is confined to the inspection slice and its test/status artifacts: pass.
+1. UC-1 was the only target and was `READY_FOR_CONVERGENCE`: pass.
+2. Its checkpoint and implementation are committed together at `36fe7d1`: pass.
+3. UC-1 has no `Requires`, `Includes`, or `Extends` dependency: pass.
+4. UC-2 and UC-3 remain `NOT_STARTED`; no other feature UC is active: pass.
+5. The checkpoint covers every UC-1 scenario, extension, guarantee, postcondition, applicable rule, command, and changed file: pass.
+6. `git show 1d9f761..36fe7d1` contains only the C-1 through C-3 browser modules, boundary tests, and feature evidence: pass.
 
 ## Runtime Reproduction
 
 | Actor | Step or extension | Executor reported | Converge observed |
 |---|---|---|---|
-| Administrator | Open accepted timetable, inspect Week, switch to Day, select lesson | `WorkspaceBrowserIT` passed | Current report records 11 Chrome/Testcontainers tests passing; the journey asserts Week/Day, a lesson inspector, narrow mode, and unchanged aggregate. |
-| Administrator | Empty accepted timetable | Browser test passed | Existing browser journey asserts declared class and empty period output. |
-| Administrator | Invalid, blocked, or cross-school preference | Browser test passed | No test or runtime evidence found. |
+| Administrator | Open Week, change to Day, inspect accepted lesson | Packaged Chrome journey | `WorkspaceBrowserIT:230-307` starts real Chrome against Testcontainers PostgreSQL and asserts accepted labels, native Week/Day matrix structure, stable inspector content, narrow surface, and unchanged document. |
+| Administrator | Invalid, isolated, and blocked local preference | New browser journey | `WorkspaceBrowserIT:335-385` writes malformed, stale, bad-enum, unknown-weekday, oversized, and other-school storage through Chrome, observes Week fallback, valid Monday restore, manual Day exclusion, blocked write notice, and unchanged document. |
+| Administrator | Off-viewport lesson | Scale browser journey | `WorkspaceBrowserIT:598-650` scrolls the 60-class Week matrix, selects `lesson-999`, verifies its inspector detail, then verifies the selected Thursday follows into Day. |
 
 ## Evidence Ledger
 
 | Contract element | Executor claim | Evidence obtained | Strength | Verified |
 |---|---|---|---|---|
-| UC-1 main steps 1-3 | Week default and Day rendering | `WorkspaceBrowserIT.java:247-264`; `app.js:356-429` | STRONG | yes |
-| UC-1 main steps 4-7 | Range switch and lesson inspector | `WorkspaceBrowserIT.java:256-286`; `app.js:510-563` | STRONG | yes |
-| UC-1 extension 2a | Empty assignments retain structure | `WorkspaceBrowserIT.java:311-342` | STRONG | yes |
-| UC-1 extension 2b, 5b | Invalid/blocked preference fallback and failed store | no matching browser evidence | ABSENT | no |
-| UC-1 extension 5a | Excluding manual Day clears selection and announces why | implementation at `app.js:238-257`; no browser assertion | WEAK | no |
-| UC-1 extension 7a | Off-viewport selection | no matching browser evidence | ABSENT | no |
-| UC-1 extension 2c | Narrow read-only agenda | `WorkspaceBrowserIT.java:297-305` | STRONG | yes |
-| UC-1 G1, success/minimal postconditions | Aggregate unchanged | before/after assertion at `WorkspaceBrowserIT.java:307` | STRONG | yes |
-| RULE-1 | Separate immutable model, state owner, Day/Week/focused renderers | immutable model exists at `accepted-model.js`, but state and both renderers remain in `app.js` | WEAK | no |
-| RULE-3 | Complete semantic Week with fixed compact density | `app.js:410-427`, `styles.css`; basic browser assertion only | WEAK | no |
-| RULE-5 | Bounded and robust local preference | validation code at `app.js:205-235`; no full invalid/failure/cross-school/browser-storage suite | WEAK | no |
-| RULE-11 | No backend/lifecycle mutation | diff inspection plus aggregate comparison | STRONG | yes |
-| RULE-13 | Every UC-1 extension at real browser boundary | browser report passes but omits specified cases above | ABSENT | no |
+| UC-1 main steps 1-3 | Accepted desktop opens Week and has complete Week/Day structures | Real Chrome at `WorkspaceBrowserIT:230-264`; complete/accepted labels, Week table, Day Monday, compact density, and authoritative tile text are asserted | STRONG | yes |
+| UC-1 main steps 4-5 | Range changes derive same accepted population | Real Chrome uses native range buttons and state transition at `app.js:221-237`; Week-to-Day with a selected lesson is asserted at `WorkspaceBrowserIT:623-629` | STRONG | yes |
+| UC-1 main steps 6-7 | Stable lesson selection opens exact accepted details | Browser inspector assertions at `WorkspaceBrowserIT:280-286`; selection delegates by `lessonId` at `app.js:532-548` | STRONG | yes |
+| UC-1 extension 2a | Empty accepted baseline retains declared structure | `WorkspaceBrowserIT:310-332` asserts class, period, explicit empty cell, and no browser errors | STRONG | yes |
+| UC-1 extension 2b | Bad preference falls back without blocked inspection | `WorkspaceBrowserIT:353-368` drives malformed, stale, bad-range, unknown-weekday, oversized, and other-school storage and observes Week fallback | STRONG | yes |
+| UC-1 extension 2c | Narrow surface is read-only agenda | `WorkspaceBrowserIT:297-305` asserts narrow schedule, notice, withheld acceptance action, and no matrix | STRONG | yes |
+| UC-1 extensions 4a/4b | Extension controls preserve the UC-1 postcondition before their dependent UCs run | Browser opens and returns from focused context at `WorkspaceBrowserIT:288-295`; UC-2/UC-3 behavior is not claimed or approved by this UC | STRONG | yes |
+| UC-1 extension 5a | Excluding manual Day clears selection and announces reason | `WorkspaceBrowserIT:375-379` asserts announcement and absent inspector; state owner implements it at `inspection-state.js:30-35`, `app.js:229-232` | STRONG | yes |
+| UC-1 extension 5b | Failed storage preserves rendered result without workspace mutation | `WorkspaceBrowserIT:381-385` blocks `setItem`, asserts notice and exact before/after durable document | STRONG | yes |
+| UC-1 extension 7a | Off-viewport selection opens its accepted details | `WorkspaceBrowserIT:623-629` scrolls then selects `lesson-999`, asserts exact identity and retained represented view | STRONG | yes |
+| UC-1 G1, success, minimal guarantee | Inspection remains presentation-only with no invented/persisted timetable change | Every browser journey takes an exact database document snapshot before/after; `WorkspaceBrowserIT:307`, `332`, `385`, and scale test completion are green | STRONG | yes |
+| UC-1 G2-G11 | Accepted identity/range/population, empty slots, authoritative labels, controls, sticky/compact treatment, and no group UI remain visible | Browser assertions and unchanged original UC-1 coverage passed in the same real suite; extracted renderers continue escaping model-derived data | STRONG | yes |
+| UC-1 G12 | Desktop Week/Day and narrow proof use validation-scale accepted snapshot | Full packaged `WorkspaceBrowserIT` run passed 12/12 against Docker PostgreSQL and Chrome | STRONG | yes |
 
 ## Rule Conformance
 
 | Rule | Constraint | Evidence | Result |
 |---|---|---|---|
-| RULE-2 | One accepted snapshot read/model | `app.js:29-33`, `accepted-model.js:3-21` | PASS |
-| RULE-9 | Safe catalog text and tile detail | catalog additions and escaped interpolation in Week/Day renderer | PASS |
-| RULE-10 | Visible native pointing controls; no custom keyboard grid | native buttons/selects; no new key handler | PASS |
-| RULE-12 | Existing security surface retained | presentation-only diff; no route/security Java changes | PASS |
-| RULE-16 | Exact normative fixture and human gate | no five-professional walkthrough record | PENDING after automated gaps are closed |
+| RULE-1 | Separate native state owner and Day/Week/focused renderers | `inspection-state.js:4-38`; `day-renderer.js:1-9`; `week-renderer.js:1-11`; `focused-renderer.js:1-13`; renderers take shared inputs and make no state writes | PASS |
+| RULE-2 | One accepted read/model and no alternate display source | Existing single load remains at `app.js:33-39`; accepted model is built once at `app.js:88-93`; this revision adds no route | PASS |
+| RULE-3 | Complete native compact Week table | `week-renderer.js:1-11`, plus scale Chrome matrix selection at `WorkspaceBrowserIT:622-629` | PASS |
+| RULE-4 | One transition authority; renderer intent only | Accepted-baseline range/day/selection delegate to `inspection-state.js` via `app.js:208-237`, `532-548`; extracted renderers have no state import | PASS |
+| RULE-5 | Bounded, versioned, namespaced, exact local record with robust fallback | `inspection-state.js:1-18,41-55`; real Chrome storage matrix at `WorkspaceBrowserIT:353-385` checks invalid/failure, cross-school isolation, valid restore, allowed key fields, and no aggregate mutation | PASS |
+| RULE-6 | Stable lesson identity | `app.js:223,532-548`; off-viewport identity assertion at `WorkspaceBrowserIT:623-629` | PASS |
+| RULE-9, RULE-10 | Safe catalog presentation and native pointer controls | Renderers use existing escaping boundary; browser triggers native buttons/select/lesson button and passes | PASS |
+| RULE-11, RULE-12 | No backend/security/lifecycle delta | Commit diff contains no Java production route/migration/security files; browser durable-document comparisons pass | PASS |
+| RULE-13 | Real packaged-browser coverage of all UC-1 cases | Command `mvn -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT verify`; 12 Chrome/Testcontainers tests passed at the real actor boundary | PASS |
+| RULE-16 | Human approval gate needs five professionals from three schools | Automated isolated fixture is green, but no five-professional walkthrough record exists | PENDING WALKTHROUGH |
 
 ## Related-UC Regression
 
 | Use case | Relationship/shared surface | Evidence | Result |
 |---|---|---|---|
-| Earlier accepted-workspace behavior | Existing Chrome browser suite | Current `WorkspaceBrowserIT` report: 11 passed | PASS |
+| Earlier accepted workspace, repair, proposal, and scale behavior | Shared workspace assets and model | The full 12-test `WorkspaceBrowserIT` suite passed after the extraction | PASS |
 
-## Findings
+## Walkthrough
 
-### Gaps
+Perform the UC-1 tasks from `spec.md` with five timetable professionals from at least three schools: identify the `Current · accepted` Week context; change to Day and navigate it; inspect an occupied lesson; confirm the empty/narrow presentation as applicable; change to a Day that excludes a selected lesson; and select an off-viewport lesson. Record each participant's six task results, serious errors/corrections, school distribution, and whether all identified `Current · accepted` throughout. Approval needs at least four of five to complete every task without serious error or facilitator correction, and all five to identify the accepted baseline.
 
-- **C-1 GAP — RULE-13 browser coverage is incomplete.** RULE-13 requires invalid and blocked preference storage, manual Day exclusion, and off-viewport selection through the real packaged browser boundary. The submitted browser journey covers Week/Day, empty timetable, narrow mode, and a selected tile, but has no evidence for those required branches. Add these actor-boundary journeys with aggregate/version and storage assertions.
-- **C-2 GAP — RULE-1 component boundary is not implemented.** RULE-1 requires a separate presentation-state owner and Day, Week, and focused renderers. The submitted immutable model is separate, but state transitions and both `matrix`/`weekMatrix` renderers remain together in `app.js`. Extract the required modules and prove that renderers emit intent rather than write shared state directly.
-- **C-3 GAP — RULE-5 preference proof is incomplete.** The implementation has defensive parsing, but there is no real-browser evidence for malformed, oversized, stale, unknown-school, unknown-weekday, blocked storage, or cross-school isolation, nor proof that no disallowed values are stored. Add an explicit storage test matrix.
+User result: not yet supplied.
 
 ## Status Update
 
-`READY_FOR_CONVERGENCE` -> `NEEDS_REVISION`; next eligible use case: UC-1.
+`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; UC-2 and UC-3 remain ineligible until UC-1 is administrator-approved.
 
 ## Response to execute
 
-REVISE UC-1: C-1 through C-3
+PENDING WALKTHROUGH: UC-1 automated convergence passes; await the normative five-professional walkthrough result.
