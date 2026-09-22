@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-7
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: UC-7 convergence
+- Status: PENDING_WALKTHROUGH
+- Next eligible: UC-7 administrator walkthrough
 
 ## Progress
 
@@ -16,7 +16,7 @@
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
 | UC-6 | APPROVED | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - APPROVED after repaired walkthrough confirmation |
-| UC-7 | READY_FOR_CONVERGENCE | UC-1; includes UC-3, UC-4, UC-5, UC-6 | HEAD at convergence incorporates the non-blocking performance decision after C-3; `ccfc5d1` resolves C-2; `433ea70` resolves C-1; original `4acf363` | pending reconvergence |
+| UC-7 | PENDING_WALKTHROUGH | UC-1; includes UC-3, UC-4, UC-5, UC-6 | `b02ce5f` incorporates the non-blocking performance decision after C-3; `ccfc5d1` resolves C-2; `433ea70` resolves C-1; original `4acf363` | `convergence/UC-7.md` - PENDING WALKTHROUGH |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 
 ## UC-1 Evidence
