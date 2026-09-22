@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-6
-- Status: READY_FOR_CONVERGENCE
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-8
 
 ## Progress
@@ -15,7 +15,7 @@
 | UC-3 | APPROVED | UC-1 | `1a796d2`; walkthrough startup `2523205`; started from `a9ab56a` | `convergence/UC-3.md` - APPROVED |
 | UC-4 | APPROVED | UC-1 | `5f545ee`; started from `f3b9253` | `convergence/UC-4.md` - APPROVED |
 | UC-5 | APPROVED | UC-4 | `75a6c22`; revises `340cf31` for C-1 and G-1 through G-3; started from `c7ea4f8` | `convergence/UC-5.md` - APPROVED after walkthrough confirmation |
-| UC-6 | READY_FOR_CONVERGENCE | UC-5 | revision at HEAD; started from `129727a` for C-1; original `f02223d` | pending revised convergence |
+| UC-6 | PENDING_WALKTHROUGH | UC-5 | `844b3d1` resolves C-1; original `f02223d` | `convergence/UC-6.md` - PENDING WALKTHROUGH |
 | UC-7 | NOT_STARTED | UC-1; includes UC-3, UC-4, UC-5, UC-6 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 

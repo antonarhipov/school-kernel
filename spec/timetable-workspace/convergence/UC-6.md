@@ -2,16 +2,16 @@
 
 ## Summary
 
-- Submission: `spec/timetable-workspace/checkpoints/UC-6.md` at `f02223d67f6f1bc4cd5fae2f2697f486783bc3da`
-- Verdict: REJECT
-- Findings: 1 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
-- Suite: focused review unit 1/0/0/0; focused PostgreSQL/HTTP/Chrome 19/0/0/0; clean reactor 165/0/0/0 (run/failures/errors/skipped)
+- Submission: revised `spec/timetable-workspace/checkpoints/UC-6.md` at `844b3d13a3fae36d96a30a90427a95fa36825a15`
+- Verdict: PENDING WALKTHROUGH
+- Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic; prior C-1 resolved
+- Suite: focused legacy PostgreSQL/HTTP/Chrome 2/0/0/0; clean reactor 165/0/0/0 (run/failures/errors/skipped)
 - Working tree impact from verification: none before convergence artifacts
 
 ## Protocol Gate
 
 1. Exactly one target is ready: status named only UC-6 as `READY_FOR_CONVERGENCE`; UC-8 is `NOT_STARTED` and no other UC was active.
-2. The checkpoint and implementation are committed together at immutable submission `f02223d`, based on `a48259f17dce3ece2730779e00e439fd1a9eaa60`.
+2. The revised checkpoint and C-1 implementation are committed together at immutable submission `844b3d1`, based on rejection checkpoint `129727a`; original submission was `f02223d`.
 3. Required UC-5 is `APPROVED`; its production packaged repair proposal is consumed directly by the UC-6 browser and HTTP journeys.
 4. No other use case is `IN_PROGRESS` or `READY_FOR_CONVERGENCE`.
 5. The checkpoint has rows for the main scenario, every extension and guarantee, both postconditions, Requires UC-5, RULE-1/2 and all 14 UC-6-specific rules, commands, changed files, and UC-1 through UC-5 regression.
@@ -21,7 +21,7 @@
 
 | Actor | Step or extension | Executor reported | Converge observed |
 |---|---|---|---|
-| Administrator in real Chrome | Open an already persisted UC-5 repair proposal after installing UC-6 | Proposal impact review opens | User walkthrough and independent Playwright reproduction showed `Workspace unavailable`. Both `/api/csrf` and `/api/workspace` returned 200, then `renderRepairProposal` failed because the persisted UC-5 proposal has no `review` member. |
+| Administrator in real Chrome | Open an already persisted UC-5 repair proposal after installing revised UC-6 | Proposal impact review opens | Independent Playwright against the packaged `844b3d1` build and existing Merivälja Kool volume rendered the feasible proposal, unique total 1, all six categories, direct/ripple totals, old/proposed values, group/context controls, and confirmation/decision controls with 0 console errors or warnings. |
 | Administrator over protected HTTP | Exact acceptance and later repair | Bundle advances atomically and prior attempt pin does not carry | `WorkspaceRepairPlanningIT` independently passed: exact proposal definition/result became accepted, proposal/draft disappeared, manifest recorded attempt provenance, and next compiled definition used the new parent without the prior room pin. |
 | Administrator over protected HTTP | Extension 5a/5b discard or revise | Only proposal is removed | Independent integration run returned `REPAIR_DRAFT`, compared the complete accepted baseline/draft, and proved proposal absence. |
 | Administrator over protected HTTP | Extension 6a stale identity | Refuse, invalidate, retain prior baseline | Twelve independent corruptions each returned `409 STALE_PROPOSAL`, retained exact accepted data, removed proposal eligibility, and returned to the draft. |
@@ -34,13 +34,13 @@ The first focused Docker attempt was sandbox-denied before container initializat
 
 | Contract element | Executor claim | Evidence obtained | Strength | Verified |
 |---|---|---|---|---|
-| Main step 1 | Separates direct from ripple and preserves six categories | `ProposalReviewService.java:28-51,66-96`; overlap unit assertions; real Chrome visible labels | STRONG | yes |
+| Main step 1 | Separates direct from ripple and preserves six categories | `ProposalReviewService.java:28-51,66-96`; legacy snapshot derivation at `WorkspaceController.java:224-243`; overlap unit assertions; live Merivälja Chrome visible labels | STRONG | yes |
 | Main step 2 | Shows unique/category totals and class/teacher/room/day old/proposed groupings | Server review arrays at `ProposalReviewService.java:61-96,122-166`; unit group-context assertions; Chrome category/total text | STRONG | yes |
 | Main step 3 | Shows exact old/proposed dimensions, emphasizes changes, links contexts | `ProposalReviewService.java:67-88,100-120`; `app.js` before/after cards and native context buttons; Chrome old/proposed/context reproduction | STRONG | yes |
 | Main step 4 | Shows status, unique, move/forced, termination, and advancement warning | Real Chrome assertions at `WorkspaceBrowserIT.java:406-417`; centralized proposal facts/warning in `app.js`/`messages.js` | STRONG | yes |
-| Main step 5 | Explicitly confirms acceptance | Native checkbox disables accept until selected; real Chrome focuses both controls and presses Space at `WorkspaceBrowserIT.java:418-421` | STRONG | yes |
-| Main step 6 | Revalidates identity, stores complete bundle, then advances current | Full identity/verification guard at `RepairProposalService.java:48-126`; exact acceptance assertions at `WorkspaceRepairPlanningIT.java:145-170` | STRONG | yes |
-| Main step 7 | Clears transient state/pins and shows reusable new baseline | `WorkspaceRepairPlanningIT.java:165-184` asserts proposal/draft cleanup, manifest provenance, next-parent revision, and prior pin removal; Chrome observes current baseline | STRONG | yes |
+| Main step 5 | Explicitly confirms acceptance | Native checkbox disables accept until selected; real Chrome focuses both controls and presses Space at `WorkspaceBrowserIT.java:425-428` | STRONG | yes |
+| Main step 6 | Revalidates identity, stores complete bundle, then advances current | Full identity/verification guard including missing-derived-review compatibility at `RepairProposalService.java:48-127`; exact legacy-shape acceptance assertions at `WorkspaceRepairPlanningIT.java:140-178` | STRONG | yes |
+| Main step 7 | Clears transient state/pins and shows reusable new baseline | `WorkspaceRepairPlanningIT.java:173-192` asserts proposal/draft cleanup, manifest provenance, next-parent revision, and prior pin removal; Chrome observes current baseline | STRONG | yes |
 | Extension 1a | Overlap appears in both explanations but once in unique total | Unit fixture places l1 in teacher and period categories plus direct effects while asserting two unique lessons across three entries | STRONG | yes |
 | Extension 2a | Empty categories/groupings show zero | Server always emits six category/group arrays; unit asserts empty entries and Chrome observes `Additions 0` and `Cancellations 0` | STRONG | yes |
 | Extension 3a | Unchanged lesson is accepted, quiet, and excluded | Scale Chrome first observes total 100, opens an unchanged lesson, and observes explicit exclusion plus accepted-assignment detail at `WorkspaceBrowserIT.java:564-570` | STRONG | yes |
@@ -54,9 +54,9 @@ The first focused Docker attempt was sandbox-denied before container initializat
 | G4 | Keyboard-operable review/selection/discard/confirmation/context | Native buttons/select/checkbox with explicit text; keyboard acceptance and context-return Chrome journeys pass with no color-only state | STRONG | yes |
 | G5 | Review opens below one second at validation scale | Independent Chrome measurements 318.600 ms focused and 343.200 ms clean; 1,000 lessons and solver excluded | STRONG | yes |
 | G6 | Only confirmed atomic acceptance changes reference | Disabled-before-confirmation UI, server identity/verification guard, single conditional SQL update, and injected rollback evidence | STRONG | yes |
-| Success postcondition | Exact bundle current; no proposal/draft; subsequent direct repair possible | Exact definition/result equality, transient absence, new parent revision, and removed attempt lock at `WorkspaceRepairPlanningIT.java:162-184` | STRONG | yes |
+| Success postcondition | Exact bundle current; no proposal/draft; subsequent direct repair possible | Exact definition/result equality, transient absence, new parent revision, and removed attempt lock at `WorkspaceRepairPlanningIT.java:170-192` | STRONG | yes |
 | Minimal guarantee | Non-success preserves prior baseline and never current-labels proposal | Discard, twelve stale cases, and storage rollback compare complete accepted/document state and proper proposal eligibility | STRONG | yes |
-| Requires UC-5 | Consumes approved UC-5 verified proposal | Browser and integration tests create the proposal through production packaged replan before invoking UC-6; UC-5 regression is green | STRONG | yes |
+| Requires UC-5 | Consumes approved UC-5 verified proposal | Browser and integration tests create the proposal through production packaged replan, remove the later derived review to reproduce the pre-UC-6 persistence shape, then reload and accept it; the live persisted UC-5 proposal also renders | STRONG | yes |
 
 ## Rule Conformance
 
@@ -69,7 +69,7 @@ The first focused Docker attempt was sandbox-denied before container initializat
 | RULE-6 | Strong ETag/If-Match and same conditional SQL version | Accept/discard call `requireMatchingVersion`; expected version appears in guarded repository update; real HTTP commands use CSRF/ETag | PASS |
 | RULE-7 | Accepted-state change is one transaction | Complete accepted document is prepared then conditionally updated once; trigger failure proves document/version rollback and retry | PASS |
 | RULE-8 | Preserve lossless canonical JSON fidelity | Kernel documents are deep-copied; review identity uses canonical bytes to survive JSONB property ordering; exact tree comparisons pass | PASS |
-| RULE-17 | Full proposal identity and acceptance guard | `RepairProposalService.java:94-126` checks every identity/count/review and independent verifier revisions; corruption matrix passes | PASS |
+| RULE-17 | Full proposal identity and acceptance guard | `RepairProposalService.java:94-127` checks every authoritative identity/count and independent verifier revision; present review tampering remains rejected, while only an absent derived legacy review is regenerated; corruption matrix and legacy acceptance pass | PASS |
 | RULE-18 | Exact categories and unique/direct/ripple/group review | Server-authored fixed category list, unit overlap/zero/group assertions, and Chrome old/proposed presentation pass | PASS |
 | RULE-19 | Complete native browser snapshot | Browser renders accepted/proposed/unchanged/focused context from complete snapshot; real Chrome journeys pass | PASS |
 | RULE-20 | Accessible English-localized conventions | Central catalog, semantic controls, keyboard acceptance, explicit state text, and architecture/browser tests pass | PASS |
@@ -92,24 +92,18 @@ The first focused Docker attempt was sandbox-denied before container initializat
 
 ## Findings
 
-### C-1 CRITICAL - A persisted UC-5 proposal cannot open in UC-6
+No active critical, gap, protocol, drift, or cosmetic findings.
 
-UC-6 requires UC-5 and is triggered when the administrator opens a repair proposal. The live proposal was validly
-persisted by the approved UC-5 implementation before UC-6 introduced the derived `proposal.review` member. On
-2026-09-22, the administrator saw `Workspace unavailable` / `The local workspace could not be loaded.` Independent
-Playwright reproduction observed successful 200 responses for `/api/csrf` and `/api/workspace`, followed by
-`TypeError: Cannot read properties of undefined (reading 'categories')` at `app.js:118`. The returned proposal
-contained the complete UC-5 identity, definition, result, and change counts but no `review` member. The browser
-unconditionally reads `proposal.review.categories`, and acceptance would also reject the missing derived review.
-
-Revision outcome: derive the authoritative review server-side for legacy persisted UC-5 proposals, keep tampered
-present reviews ineligible, cover the exact no-review persistence shape in HTTP/real-browser acceptance tests, and
-reproduce the live walkthrough before resubmission.
+Prior C-1 is resolved. The complete snapshot now derives only a missing legacy review from authoritative accepted,
+draft, definition, and result inputs without rewriting persistence. Acceptance permits that missing derived member but
+still canonical-compares every present review, so the existing tamper case remains ineligible. PostgreSQL/HTTP and real
+Chrome tests remove the review from a packaged UC-5 proposal before reload and acceptance. The packaged live build
+also renders the existing Merivälja Kool proposal with zero console errors or warnings.
 
 ## Walkthrough
 
-The walkthrough failed at page opening: the administrator observed the unavailable fallback before step 1. The
-remaining walkthrough must be repeated after revision. On a desktop-width workspace with a repair proposal:
+The prior walkthrough failure is repaired and independently reproduced through page opening. User confirmation of the
+remaining interaction script is pending. On the now-open desktop-width workspace with the repair proposal:
 
 1. Confirm the page says the prior accepted baseline is still current and shows the unique changed-lesson total, all six category totals including zeros, and direct versus solver-ripple counts.
 2. Expand class, teacher, room, and day groupings; confirm every grouping says old, proposed, or both and no cross-group grand total is implied.
@@ -122,8 +116,8 @@ remaining walkthrough must be repeated after revision. On a desktop-width worksp
 
 ## Status Update
 
-`PENDING_WALKTHROUGH` -> `NEEDS_REVISION`; UC-8 remains independently eligible, but execution stays on UC-6. UC-7 remains ineligible because it includes UC-6.
+`READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`; UC-8 remains independently eligible, but execution stays on UC-6. UC-7 remains ineligible because it includes UC-6.
 
 ## Response to execute
 
-REVISE UC-6: C-1 make the complete review and acceptance path work for an already persisted approved UC-5 proposal that has no derived review member.
+PENDING WALKTHROUGH: confirm the repaired UC-6 administrator review, context, keyboard acceptance, and discard/revise script.
