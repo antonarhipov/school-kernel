@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-ux-polish/checkpoints/UC-3.md` at immutable revision `3f96d79f5f838642874389c82c3b165e0e57c700`, based on previous verifier commit `d44501e20d68a44399a494198ee1c624c08229d2`; original implementation `7e35c40829c8e1265439afbd17c39c1b6eca497a` based on `71c7c0a8f40254dd650279d6d2486ffab4b85022`.
-- Verdict: PENDING WALKTHROUGH. Findings: 0 critical, 0 gaps, 0 protocol, 0 drift/cosmetic; previous G-1/G-2 resolved by independently exercised evidence. No user confirmation yet.
+- Verdict: APPROVE. Findings: 0 critical, 0 gaps, 0 protocol, 0 drift/cosmetic; previous G-1/G-2 resolved by independently exercised evidence. User confirmed the UC-3 walkthrough passed after the PENDING WALKTHROUGH verdict.
 - Independently rerun: revised focused (26 unit + 2 browser), original focused (26 unit + 3 browser), full `./mvnw -pl timetable-workspace -am verify` (26 unit + 75 integration, including 27 browser); each 0 failed, 0 errors, 0 skipped, exit 0. The full suite includes approved related use cases. Flyway checksum-failure test logs its intentionally refused startup; app-stop test logs a committed-response broken pipe; neither failed a test.
 - Working tree: `git status --short` before testing showed only pre-existing `.idea/encodings.xml`; after testing it showed that file and generated `.output.txt`, which was removed. Final pre-report status again showed only `.idea/encodings.xml`; no tracked runtime file changed.
 
@@ -94,19 +94,19 @@ None. Prior G-1 is closed by an actual old-application close and new-application
 
 ## Walkthrough
 
-User confirmation **pending**. Please perform or confirm this UC-3-derived browser walkthrough as local timetable administrator, using an accepted baseline and a durable conflict-free protected Draft:
+UC-3-derived browser walkthrough as local timetable administrator, using an accepted baseline and a durable conflict-free protected Draft:
 
 1. Generate a repair; while it runs, check the Solving mode, inspector status/limit and Cancel control. Inspect an accepted lesson, change Day/Week, switch among Current/frozen Draft/Solving and use a focused schedule/return; confirm Current remains the accepted timetable, the draft is frozen, and navigation does not restart the run or claim optimality.
 2. Cancel a run; confirm editable Draft returns without a proposal and accepted lessons remain unchanged. On another run, stop and restart the application, reopen the workbench, and confirm Draft default, an interrupted diagnostic and no proposal.
 3. Try an unsuccessful/failed or rejected result; inspect its safe explanation in the inspector and Utilities, with no candidate on the canvas. If the result permits unchanged-intent retry, retry and confirm a new bounded run rather than a prior proposal. On a narrow viewport during a run, confirm Solving is identified but cancellation and editing are unavailable.
 4. Complete a feasible repair; check Proposal is offered on the retained accepted canvas with Current still the previous accepted timetable and the originating draft identifiable; do not accept it as part of UC-3.
 
-Please report whether this walkthrough passes or identify any discrepancy. Human confirmation, not automated tests or the separate five-participant feature gate, is the remaining UC-3 approval gate.
+User response to this exact walkthrough: **“Walkthrough passed.”** This closes the UC-3 human confirmation gate; the separate five-participant feature gate (`spec.md:569-592`) is not claimed passed.
 
 ## Status Update
 
-UC-3 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; `Current` remains UC-3 (`PENDING_WALKTHROUGH`), `Next eligible` remains none pending user confirmation. UC-1/UC-2 remain `APPROVED`; UC-4/UC-5 remain `NOT_STARTED`.
+UC-3 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH` → `APPROVED` after the user-confirmed walkthrough; `Current` remains UC-3 (`APPROVED`), `Next eligible` is UC-4. UC-1/UC-2 remain `APPROVED`; UC-4/UC-5 remain `NOT_STARTED`.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-3 automated evidence passes, including actual restart and verified full-school repair; request user confirmation of the UC-3 walkthrough before approval or UC-4.
+APPROVED
