@@ -3,15 +3,15 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none
+- Status: APPROVED
+- Next eligible: UC-3
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: APPROVE; G-1–G-3 resolved, walkthrough passed |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence | pending |
+| UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
 | UC-3 | NOT_STARTED | UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
