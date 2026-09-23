@@ -1,5 +1,6 @@
 import { M } from './messages.js';
 import { makeAcceptedModel } from './accepted-model.js';
+import { createProposalComparison } from './proposal-comparison.js';
 import { createInspectionState } from './inspection-state.js';
 import { renderDayMatrix } from './day-renderer.js';
 import { renderFocusedSchedule } from './focused-renderer.js';
@@ -10,6 +11,7 @@ let csrf;
 let pollTimer;
 let acceptedModel;
 let proposedModel;
+let comparison;
 let currentSnapshot;
 let bulkPreview;
 let dayMatrices = new Map();
@@ -17,6 +19,7 @@ let preferenceSchoolId;
 let inspectionState;
 let canvasScroll;
 let draftSaveFailed = false;
+let selectionResetNotice = false;
 const boundLessonButtons = new WeakSet();
 
 const view = {
@@ -99,6 +102,10 @@ function render(snapshot) {
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
+    if (view.selectedLessonId && !acceptedModel.assignmentMap.has(view.selectedLessonId)) {
+      syncInspectionState(inspectionState.closeLesson());
+      selectionResetNotice = true;
+    }
     if (view.narrow && !view.focusedType) {
       syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
     }
@@ -128,11 +135,19 @@ function render(snapshot) {
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
-    proposedModel = makeModel({ definition: snapshot.workspace.proposal.definition, result: snapshot.workspace.proposal.result });
+    if (view.narrow) syncInspectionState(inspectionState.selectMode('PROPOSAL').state);
+    proposedModel = makeAcceptedModel({ definition: snapshot.workspace.proposal.definition, result: snapshot.workspace.proposal.result });
+    comparison = createProposalComparison(acceptedModel, proposedModel, snapshot.workspace.proposal.review);
     if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
+    else if (inspectionState.current().mode === 'DRAFT') renderRepair(snapshot, schoolName);
     else renderRepairProposal(snapshot, schoolName);
   }
   renderModeNavigation();
+  if (selectionResetNotice) {
+    const notice = document.querySelector('#inspection-notice') || document.querySelector('.narrow-banner');
+    if (notice) notice.textContent = M.comparisonSelectionCleared;
+    selectionResetNotice = false;
+  }
 }
 
 function renderModeNavigation() {
@@ -143,6 +158,10 @@ function renderModeNavigation() {
   stateCard.querySelector('.accepted-heading')?.insertAdjacentHTML('afterend', `<nav id="workbench-modes" aria-label="${M.presentationModes}">${modes.map(mode => `<button type="button" data-mode="${mode}" aria-pressed="${inspectionState.current().mode === mode}">${labels[mode]}</button>`).join('')}</nav>`);
   stateCard.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
     if (!inspectionState.selectMode(button.dataset.mode).changed) return;
+    if (button.dataset.mode !== 'PROPOSAL' && view.selectedLessonId && !acceptedModel.assignmentMap.has(view.selectedLessonId)) {
+      syncInspectionState(inspectionState.closeLesson());
+      selectionResetNotice = true;
+    }
     render(currentSnapshot);
   }));
 }
@@ -152,47 +171,49 @@ function renderRepairProposal(snapshot, schoolName) {
   const proposal = snapshot.workspace.proposal;
   if (view.narrow) {
     stateCard.className = 'card workspace-card';
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice}</p><div id="accepted-view"></div>`;
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice} ${M.acceptedStillCurrent}</p><div id="accepted-view"></div>`;
     if (!view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
     renderFocused(); return;
   }
-  const review = proposal.review;
-  const categoryHtml = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
-  const changedHtml = review.changedLessons.map(change => reviewLessonCard(change)).join('');
-  const unchanged = acceptedModel.assignments.filter(item => !review.changedLessons.some(change => change.lessonId === item.lessonId));
-  stateCard.className = 'card workspace-card review-mode';
-  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairProposalDetail}</p><div id="accepted-view"></div><p class="notice">${M.repairPriority}</p>
-    <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.periodMoves}</dt><dd>${categoryCount(review, 'periodMoves')}</dd></div><div><dt>${M.roomOnlyMoves}</dt><dd>${categoryCount(review, 'roomOnlyMoves')}</dd></div><div><dt>${M.forcedChanges}</dt><dd>${categoryCount(review, 'forcedMoves')}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
-    <section aria-labelledby="impact-title"><h3 id="impact-title">${M.proposalImpact}</h3><div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div>
-    <h3>${M.changeCategories}</h3><div class="review-categories">${categoryHtml}</div>
-    <h3>${M.impactGroups}</h3>${reviewGroup('classes', M.groupClasses)}${reviewGroup('teachers', M.groupTeachers)}${reviewGroup('rooms', M.groupRooms)}${reviewGroup('days', M.groupDays)}
-    <h3>${M.changedLessonDetails}</h3><div class="changed-lessons">${changedHtml || `<p>${M.emptyCategory}</p>`}</div></section>
-    ${unchanged.length ? `<section class="unchanged-review"><h3>${M.unchangedLesson}</h3><div class="actions"><select id="unchanged-lesson">${unchanged.map(item => `<option value="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(item.lesson, item.lessonId))}</option>`).join('')}</select><button type="button" id="show-unchanged" class="secondary">${M.showUnchanged}</button></div><div id="unchanged-host"></div></section>` : ''}
-    <p class="acceptance-warning"><strong>${M.acceptanceAdvancesBaseline}</strong></p><label class="confirmation"><input id="confirm-repair-accept" type="checkbox"> ${M.confirmRepairAcceptance}</label><div class="actions"><button id="accept-repair" disabled>${M.acceptRepair}</button><button id="revise-proposal" class="secondary">${M.reviseIntent}</button><button id="discard-proposal" class="danger">${M.discardRepairProposal}</button></div>`;
-  bindRepairReview();
+  stateCard.className = 'card workspace-card review-mode compact-density';
+  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairProposalDetail}</p><div id="accepted-view"></div>`;
   if (view.focusedType) renderFocused(); else renderWholeSchool();
   window.__workspaceProposalReviewMs = performance.now() - reviewStarted;
 }
 
-function categoryCount(review, id) { return review.categories.find(category => category.id === id)?.count || 0; }
-function reviewLessonName(id) { return entityName(proposedModel.maps.lessons.get(id) || acceptedModel.maps.lessons.get(id), id); }
+function reviewLessonName(id) { return entityName(proposalModeActive() ? proposedModel.maps.lessons.get(id) || acceptedModel.maps.lessons.get(id) : acceptedModel.maps.lessons.get(id), id); }
+function proposalModeActive() { return currentSnapshot.state === 'REPAIR_PROPOSAL' && inspectionState.current().mode === 'PROPOSAL'; }
+function representedAssignment(id) { return proposalModeActive() ? comparison.entries.get(id)?.old || comparison.entries.get(id)?.proposed : acceptedModel.assignmentMap.get(id); }
 function reviewGroup(key, title) {
   const groups = currentSnapshot.workspace.proposal.review.groupings[key];
   const label = value => value === 'OLD' ? M.oldContext : value === 'PROPOSED' ? M.proposedContext : M.bothContexts;
   const map = key === 'classes' ? proposedModel.maps.cohorts : key === 'teachers' ? proposedModel.maps.teachers : key === 'rooms' ? proposedModel.maps.rooms : null;
-  return `<details class="review-groups"><summary>${title} · ${groups.length}</summary>${groups.length ? `<ul>${groups.map(group => `<li><strong>${escapeHtml(key === 'days' ? (M.days[group.id] || group.id) : entityName(map?.get(group.id) || acceptedGroupEntity(key, group.id), group.id))}</strong> <span class="context-label">${label(group.context)}</span> · ${group.lessonIds.length}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>`;
+  return `<details class="review-groups"><summary>${title} · ${groups.length}</summary>${groups.length ? `<ul>${groups.map(group => `<li><strong>${escapeHtml(key === 'days' ? (M.days[group.id] || group.id) : entityName(map?.get(group.id) || acceptedGroupEntity(key, group.id), group.id))}</strong> <span class="context-label">${label(group.context)}</span> · ${group.lessonIds.length}<ul>${group.lessonIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button></li>`).join('')}</ul></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>`;
 }
 function acceptedGroupEntity(key, id) { const map = key === 'classes' ? acceptedModel.maps.cohorts : key === 'teachers' ? acceptedModel.maps.teachers : acceptedModel.maps.rooms; return map.get(id); }
-
-function reviewLessonCard(change) {
-  const direct = change.directEffect ? `<span class="direct-label">${M.directEffectChanges}</span>` : `<span class="ripple-label">${M.rippleEffectChanges}</span>`;
-  return `<article class="change-card" id="review-${escapeAttribute(change.lessonId)}"><header><h4>${escapeHtml(reviewLessonName(change.lessonId))}</h4>${direct}</header><div class="before-after">${reviewSide(M.oldAssignment, change.old, change.changedDimensions, acceptedModel)}${reviewSide(M.proposedAssignment, change.proposed, change.changedDimensions, proposedModel)}</div><div class="context-actions"><button type="button" class="secondary" data-review-context="${escapeAttribute(change.lessonId)}">${M.openWholeContext}</button><button type="button" class="secondary" data-review-focus="cohortId" data-review-context="${escapeAttribute(change.lessonId)}">${M.openClassContext}</button><button type="button" class="secondary" data-review-focus="teacherId" data-review-context="${escapeAttribute(change.lessonId)}">${M.openTeacherContext}</button><button type="button" class="secondary" data-review-focus="roomId" data-review-context="${escapeAttribute(change.lessonId)}">${M.openRoomContext}</button></div></article>`;
-}
 
 function reviewSide(title, side, changed, model) {
   if (!side) return `<section><h5>${title}</h5><p>${M.notPresent}</p></section>`;
   const values = [['subjectId', M.subject, model.maps.subjects], ['cohortId', M.class, model.maps.cohorts], ['teacherId', M.teacher, model.maps.teachers], ['periodId', M.period, model.maps.periods], ['roomId', M.room, model.maps.rooms]];
-  return `<section><h5>${title}</h5><dl>${values.map(([field, label, map]) => `<div class="${changed.includes(field) ? 'changed-dimension' : ''}"><dt>${label}${changed.includes(field) ? ` · ${M.changedDimension}` : ''}</dt><dd>${escapeHtml(entityName(map.get(side[field]), side[field] || ''))}</dd></div>`).join('')}</dl></section>`;
+  const day = model.maps.periods.get(side.periodId)?.weekday;
+  return `<section><h5>${title}</h5><dl>${detail(M.weekdayLabel, day ? M.days[day] || day : M.nameUnavailable)}${values.map(([field, label, map]) => `<div class="${changed.includes(field) ? 'changed-dimension' : ''}"><dt>${label}${changed.includes(field) ? ` · ${M.changedDimension}` : ''}</dt><dd>${escapeHtml(entityName(map.get(side[field]), side[field] || ''))}<small>${escapeHtml(side[field] || M.nameUnavailable)}</small></dd></div>`).join('')}</dl></section>`;
+}
+
+function proposalContext() {
+  const proposal = currentSnapshot.workspace.proposal;
+  const review = proposal.review;
+  const protectedIds = [...new Set([...currentSnapshot.workspace.repairDraft.intent.pins.map(pin => pin.lessonId),
+    ...acceptedModel.assignments.filter(item => comparisonProtection(item.lessonId)).map(item => item.lessonId)])].sort();
+  const categories = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
+  const unchanged = acceptedModel.assignments.filter(item => !comparison.entries.get(item.lessonId)?.change);
+  return `<section id="proposal-context" aria-label="${M.proposalImpact}"><h3>${M.proposalImpact}</h3><p class="notice">${M.repairPriority}</p>
+    <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
+    <details class="review-groups"><summary>${M.protectedAssignments} · ${protectedIds.length}</summary>${protectedIds.length ? `<ul>${protectedIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button> · ${escapeHtml(comparisonProtection(id))}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>
+    <div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div><p>${M.overlappingTotals}</p>
+    <h4>${M.changeCategories}</h4><div class="review-categories">${categories}</div>
+    <h4>${M.impactGroups}</h4>${reviewGroup('classes', M.groupClasses)}${reviewGroup('teachers', M.groupTeachers)}${reviewGroup('rooms', M.groupRooms)}${reviewGroup('days', M.groupDays)}
+    ${unchanged.length ? `<section class="unchanged-review"><h4>${M.unchangedLesson}</h4><select id="unchanged-lesson">${unchanged.map(item => `<option value="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(item.lesson, item.lessonId))}</option>`).join('')}</select><button type="button" id="show-unchanged" class="secondary">${M.showUnchanged}</button></section>` : ''}
+    <p class="acceptance-warning"><strong>${M.acceptanceAdvancesBaseline}</strong></p><label class="confirmation"><input id="confirm-repair-accept" type="checkbox"> ${M.confirmRepairAcceptance}</label><div class="actions"><button id="accept-repair" disabled>${M.acceptRepair}</button><button id="revise-proposal" class="secondary">${M.reviseIntent}</button><button id="discard-proposal" class="danger">${M.discardRepairProposal}</button></div></section>`;
 }
 
 function bindRepairReview() {
@@ -201,42 +222,23 @@ function bindRepairReview() {
   accept.addEventListener('click', () => mutate('/api/proposal/accept', 'POST'));
   document.querySelector('#revise-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
   document.querySelector('#discard-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
-  document.querySelectorAll('[data-review-lesson]').forEach(button => button.addEventListener('click', () => { document.querySelector(`#review-${CSS.escape(button.dataset.reviewLesson)}`)?.scrollIntoView(); document.querySelector(`#review-${CSS.escape(button.dataset.reviewLesson)} h4`)?.focus(); }));
-  document.querySelectorAll('[data-review-context]').forEach(button => button.addEventListener('click', () => showReviewContext(button.dataset.reviewContext, button.dataset.reviewFocus)));
-  document.querySelector('#show-unchanged')?.addEventListener('click', () => { const item = acceptedModel.assignmentMap.get(document.querySelector('#unchanged-lesson').value); document.querySelector('#unchanged-host').innerHTML = `<p class="quiet-state">${M.visuallyQuiet}</p>${lessonDetails(item)}`; bindCloseDetails(); });
+  document.querySelectorAll('[data-review-lesson]').forEach(button => button.addEventListener('click', () => selectReviewLesson(button.dataset.reviewLesson)));
+  document.querySelector('#show-unchanged')?.addEventListener('click', () => selectReviewLesson(document.querySelector('#unchanged-lesson').value));
 }
 
-function showReviewContext(lessonId, focusType) {
-  const change = currentSnapshot.workspace.proposal.review.changedLessons.find(item => item.lessonId === lessonId);
-  const side = change?.proposed || change?.old;
-  const model = change?.proposed ? proposedModel : acceptedModel;
-  const item = model.assignmentMap.get(lessonId);
-  stateCard.innerHTML = `<button id="return-review" type="button" class="secondary">← ${M.returnImpactReview}</button><h2>${M.reviewContext}</h2><p class="mode-note">${M.acceptedStillCurrent}</p><div id="review-context-host"></div>`;
-  const host = document.querySelector('#review-context-host');
-  if (focusType && side) {
-    const field = focusType; const selected = side[field];
-    const items = model.assignments.filter(candidate => candidate[field] === selected);
-    host.innerHTML = `<h3>${escapeHtml(entityName((field === 'cohortId' ? model.maps.cohorts : field === 'teacherId' ? model.maps.teachers : model.maps.rooms).get(selected), selected))}</h3>${items.map(candidate => `<p>${escapeHtml(reviewLessonName(candidate.lessonId))} · ${escapeHtml(periodLabel(candidate.period))}</p>`).join('')}`;
-  } else host.innerHTML = item ? lessonDetails(item) : `<p>${M.notPresent}</p>`;
-  document.querySelector('#return-review').addEventListener('click', () => renderRepairProposal(currentSnapshot, currentSnapshot.workspace.school.displayName));
-}
-
-function makeModel(baseline) {
-  const definition = baseline.definition;
-  const maps = Object.fromEntries(['subjects', 'teachers', 'cohorts', 'rooms', 'periods', 'lessons']
-    .map(key => [key, new Map(definition[key].map(item => [item.id, item]))]));
-  const weekdays = [...new Set(definition.periods.map(period => period.weekday))];
-  const assignments = baseline.result.timetable.assignments.map(assignment => ({ ...assignment,
-    subject: maps.subjects.get(assignment.subjectId), teacher: maps.teachers.get(assignment.teacherId), cohort: maps.cohorts.get(assignment.cohortId),
-    room: maps.rooms.get(assignment.roomId), period: maps.periods.get(assignment.periodId), lesson: maps.lessons.get(assignment.lessonId) }));
-  const assignmentMap = new Map(assignments.map(item => [item.lessonId, item]));
-  const assignmentsByCell = new Map();
-  for (const assignment of assignments) {
-    const key = `${assignment.cohortId}\u0000${assignment.periodId}`;
-    const cell = assignmentsByCell.get(key);
-    if (cell) cell.push(assignment); else assignmentsByCell.set(key, [assignment]);
+function selectReviewLesson(id) {
+  const representations = comparison.assignmentsById.get(id) || [];
+  const representation = representations.find(item => isRepresented(item)) || representations[0];
+  if (!representation || !isRepresented(representation) || view.focusedType) {
+    syncInspectionState(inspectionState.resetFilters().state);
+    if (view.focusedType) syncInspectionState(inspectionState.returnToWholeSchool().state);
+    if (representation && view.range === 'DAY' && view.day !== representation.period?.weekday && representation.period?.weekday) syncInspectionState(inspectionState.selectDay(representation.period.weekday, representation.period.weekday).state);
+    renderWholeSchool();
+    document.querySelector('#inspection-notice').textContent = M.comparisonNavigationReset;
   }
-  return { definition, assignments, assignmentMap, assignmentsByCell, maps, weekdays };
+  const button = document.querySelector(`[data-lesson-id="${CSS.escape(id)}"]`);
+  if (button) { button.scrollIntoView({ block: 'nearest', inline: 'nearest' }); selectLesson(button); }
+  else { syncInspectionState(inspectionState.selectLesson(id)); document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(id); toggleInspector(true); }
 }
 
 function initializeInspectionState(schoolId) {
@@ -271,7 +273,8 @@ function syncInspectionState(state) {
 
 function setRange(range, day = view.day, manualDay = false) {
   if (!inspectionState) return;
-  const selectedWeekday = acceptedModel.assignmentMap.get(view.selectedLessonId)?.period?.weekday;
+  const selectedWeekday = proposalModeActive() && comparison.assignmentsById.get(view.selectedLessonId)?.some(item => item.period?.weekday === day)
+    ? day : representedAssignment(view.selectedLessonId)?.period?.weekday;
   const transition = manualDay ? inspectionState.selectDay(day, selectedWeekday) : inspectionState.selectRange(range, day);
   if (!transition.changed) return;
   syncInspectionState(transition.state);
@@ -367,7 +370,7 @@ function renderRepair(snapshot, schoolName) {
     renderFocused(); return;
   }
   stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${runUtilities(snapshot.workspace.lastRun)}</div></div>
-    <p>${M.repairDraftIntro}</p><div id="accepted-view"></div>`;
+    <p>${snapshot.state === 'REPAIR_PROPOSAL' ? M.proposalDraftDetail : M.repairDraftIntro}</p><div id="accepted-view"></div>`;
   bindUtilities();
   if (view.focusedType) renderFocused(); else renderWholeSchool();
 }
@@ -477,15 +480,18 @@ function changeCountSummary(counts) {
 function renderWholeSchool() {
   const host = document.querySelector('#accepted-view');
   const model = acceptedModel;
+  const proposalMode = currentSnapshot.state === 'REPAIR_PROPOSAL' && inspectionState.current().mode === 'PROPOSAL';
+  const displayed = proposalMode ? comparison : model;
   const dayPeriods = periodsForDay(view.day);
   const active = activeCriteria();
   const narrowed = hasNarrowingCriteria();
   const investigation = investigationSummary();
-  const matches = narrowed ? investigation.represented : model.assignments.filter(isInSelectedRange);
+  const matches = narrowed ? investigation.represented : displayed.assignments.filter(isInSelectedRange);
   const visibleCohorts = narrowed ? model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id)) : model.definition.cohorts;
   const mode = inspectionState.current().mode;
   const draftMode = currentSnapshot.state === 'REPAIR_DRAFT' && mode === 'DRAFT';
   const frozenMode = currentSnapshot.state === 'SOLVING_REPAIR' && mode !== 'CURRENT';
+  const proposalDraft = currentSnapshot.state === 'REPAIR_PROPOSAL' && mode === 'DRAFT';
   host.innerHTML = `<div class="inspection-toolbar" aria-label="${M.wholeSchool}">
       <fieldset class="range-control"><legend>${M.rangeLabel}</legend><button type="button" data-range="WEEK" aria-pressed="${view.range === 'WEEK'}">${M.week}</button><button type="button" data-range="DAY" aria-pressed="${view.range === 'DAY'}">${M.dayView}</button></fieldset>
       <label class="search-control"><span>${M.searchLabel}</span><input id="lesson-search" type="search" value="${escapeAttribute(view.search)}" placeholder="${M.searchPlaceholder}"></label>
@@ -509,25 +515,26 @@ function renderWholeSchool() {
     </section>
     <div class="filter-status" role="status"><strong id="filter-title">${narrowed ? M.filteredMatrix : M.completePopulation}</strong><span id="range-summary">${view.range === 'WEEK' ? M.weekRange : M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span id="search-summary"${view.search.trim() ? '' : ' hidden'}>${view.search.trim() ? M.searchMatchCount(investigation.searchCount) : ''}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
     <p id="inspection-notice" class="notice" role="status"></p>
-    ${model.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
+    ${displayed.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
     <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
     <div class="workbench-layout${inspectionState.current().inspectorOpen ? '' : ' inspector-collapsed'}">
-      <div class="canvas-region">${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: model.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: model.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div>
-      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : `<p>${M.noLessonSelected}</p>`}</div>${draftMode ? draftContext() : frozenMode ? draftContext(true) : ''}${currentSnapshot.state === 'SOLVING_REPAIR' ? runContext() : ''}</aside>
-      <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(entityName(model.maps.lessons.get(view.selectedLessonId), view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
+      <div class="canvas-region">${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: displayed.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: displayed.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div>
+      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</div>${draftMode ? draftContext() : frozenMode ? draftContext(true) : proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}${currentSnapshot.state === 'SOLVING_REPAIR' ? runContext() : ''}${proposalMode ? proposalContext() : ''}</aside>
+      <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(reviewLessonName(view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
     </div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
-  if (view.range === 'WEEK') { bindInspectionControls(); if (draftMode) bindRepairControls(); bindRunControls(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
+  if (view.range === 'WEEK') { bindInspectionControls(); if (draftMode) bindRepairControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
   for (const day of model.weekdays) {
     if (day === view.day) continue;
     const template = document.createElement('template');
-    template.innerHTML = renderDayMatrix({ cohorts: model.definition.cohorts, periods: periodsForDay(day), assignmentsByCell: model.assignmentsByCell, periodId: '', labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml });
+    template.innerHTML = renderDayMatrix({ cohorts: model.definition.cohorts, periods: periodsForDay(day), assignmentsByCell: displayed.assignmentsByCell, periodId: '', labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml });
     dayMatrices.set(day, template.content.firstElementChild);
   }
   bindInspectionControls();
   if (draftMode) bindRepairControls();
   bindRunControls();
+  if (proposalMode) bindRepairReview();
   applyFiltersInPlace();
   restoreCanvasScroll();
 }
@@ -549,6 +556,7 @@ function switchWholeSchoolDay(day) {
 }
 
 function weekLessonButton(item) {
+  if (proposalModeActive()) return comparisonLessonButton(item, true);
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draft = repairLessonState(item.lessonId);
@@ -567,10 +575,57 @@ function matrix(cohorts, periods, assignmentsByCell, filtered) {
 }
 
 function lessonButton(item, matched) {
+  if (proposalModeActive()) return comparisonLessonButton(item, false);
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draftState = repairLessonState(item.lessonId);
   return `<button type="button" class="lesson-cell${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+}
+
+function comparisonLessonButton(item, week) {
+  const side = item.comparisonSide;
+  const selected = item.lessonId === view.selectedLessonId;
+  const cues = lessonCues(item);
+  const matched = comparisonMatchedSides(item.lessonId);
+  const state = side === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue
+    : side === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue
+      : side === 'combined' ? M.combinedChange : M.visuallyQuiet;
+  const effects = item.change ? `${item.change.directEffect ? `<em class="direct-label">${M.directlyAffected}</em>` : ''}${item.change.rippleEffect ? `<em class="ripple-label">${M.rippleEffectChanges}</em>` : ''}` : '';
+  const protection = comparisonProtection(item.lessonId);
+  const label = [lessonAccessibleName(item, [...cues.accessible, state, ...matched]), protection].filter(Boolean).join(' · ');
+  return `<button type="button" class="lesson-cell${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}<em class="comparison-cue">${state}</em>${effects}${protection ? `<em class="pin-label">${escapeHtml(protection)}</em>` : ''}${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+}
+
+function comparisonProtection(id) {
+  const pin = currentSnapshot.workspace.repairDraft?.intent?.pins?.find(item => item.lessonId === id);
+  const lesson = acceptedModel.maps.lessons.get(id);
+  const lock = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(item => item.lessonId === id);
+  return [pin?.periodSources?.length ? M.periodPinned : null, pin?.roomSources?.length ? M.roomPinned : null,
+    lesson?.periodLock || lock?.periodLockOrigin === 'PERSISTENT_POLICY' ? M.policyPeriodLock : null,
+    lesson?.roomLock || lock?.roomLockOrigin === 'PERSISTENT_POLICY' ? M.policyRoomLock : null].filter(Boolean).join(' · ');
+}
+
+function comparisonMatchedSides(id) {
+  const pair = comparison.entries.get(id);
+  if (!view.search.trim() && !hasNarrowingCriteria() && !view.subjectInvestigationId && !view.teacherInvestigationId) return [];
+  const matches = item => item && sideMatches(item) && (!view.search.trim() || searchMatches(item))
+    && (!view.subjectInvestigationId || item.subjectId === view.subjectInvestigationId)
+    && (!view.teacherInvestigationId || item.teacherId === view.teacherInvestigationId);
+  const old = matches(pair?.old);
+  const proposed = matches(pair?.proposed);
+  return [old && M.acceptedSideMatch, proposed && M.proposedSideMatch].filter(Boolean);
+}
+
+function selectedLessonDetails(id) {
+  if (!proposalModeActive()) return lessonDetails(acceptedModel.assignmentMap.get(id));
+  const pair = comparison.entries.get(id);
+  if (!pair) return '';
+  const change = pair.change;
+  return `<section class="comparison-details">${pair.old ? `<span class="state accepted">✓ ${M.acceptedAssignment}</span>` : ''}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(reviewLessonName(id))}</h3><p>${change ? M.proposalChange : M.visuallyQuiet}</p><p>${escapeHtml(id)}</p>
+    ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}
+    ${change ? `<p>${change.categories.map(category => M[category]).join(', ')}</p>` : ''}${comparisonMatchedSides(id).length ? `<p>${comparisonMatchedSides(id).join(' · ')}</p>` : ''}${comparisonProtection(id) ? `<p>${escapeHtml(comparisonProtection(id))}</p>` : ''}
+    <div class="before-after">${reviewSide(M.oldAssignment, change ? change.old : pair.old, change?.changedDimensions || [], acceptedModel)}${reviewSide(M.proposedAssignment, change ? change.proposed : pair.proposed, change?.changedDimensions || [], proposedModel)}</div>
+    <button id="close-details" type="button" class="secondary">${M.closeDetails}</button></section>`;
 }
 
 function lessonDetails(item) {
@@ -645,10 +700,17 @@ function renderFocused() {
     if (inspectionState && fallback) syncInspectionState(inspectionState.changeFocusedType(type, fallback).state);
     else view.focusedId = fallback;
   }
-  host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, assignments: acceptedModel.assignments, weekdays: acceptedModel.weekdays, labels: M, entityName, periodLabel, selectControl, options, escapeHtml });
+  host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source,
+    assignments: proposalModeActive() ? comparison.assignments : acceptedModel.assignments, weekdays: acceptedModel.weekdays,
+    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span></article>` : null,
+    labels: M, entityName, periodLabel, selectControl, options, escapeHtml });
   if (!view.narrow && currentSnapshot.state === 'SOLVING_REPAIR') {
     host.insertAdjacentHTML('beforeend', `<aside id="workbench-inspector" aria-label="${M.inspector}">${inspectionState.current().mode === 'DRAFT' ? draftContext(true) : ''}${runContext()}</aside>`);
     bindRunControls();
+  }
+  if (!view.narrow && proposalModeActive()) {
+    host.insertAdjacentHTML('beforeend', `<aside id="workbench-inspector" aria-label="${M.inspector}">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : ''}${proposalContext()}</aside>`);
+    bindRepairReview(); bindCloseDetails();
   }
   document.querySelector('#return-matrix')?.addEventListener('click', () => {
     if (inspectionState) syncInspectionState(inspectionState.returnToWholeSchool().state); else view.focusedType = null;
@@ -700,7 +762,7 @@ function bindInspectionControls() {
   document.querySelector('#clear-teacher')?.addEventListener('click', () => setInvestigation('teacher', null));
   document.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
     const requested = button.dataset.range;
-    const selected = view.selectedLessonId && acceptedModel.assignmentMap.get(view.selectedLessonId);
+    const selected = view.selectedLessonId && representedAssignment(view.selectedLessonId);
     const day = requested === 'DAY' && selected ? selected.period?.weekday : view.day;
     setRange(requested, day, false);
   }));
@@ -768,13 +830,13 @@ function selectLesson(button) {
   if (inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId));
   else view.selectedLessonId = button.dataset.lessonId;
   if (document.querySelector('#workbench-inspector')) toggleInspector(true);
-  document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
-    const selected = candidate === button;
+  document.querySelectorAll('.lesson-cell[data-lesson-id]').forEach(candidate => {
+    const selected = candidate.dataset.lessonId === view.selectedLessonId;
     candidate.classList.toggle('selected', selected);
     candidate.setAttribute('aria-pressed', String(selected));
     candidate.querySelector('.selected-label').hidden = !selected;
   });
-  document.querySelector('#lesson-details-host').innerHTML = lessonDetails(acceptedModel.assignmentMap.get(view.selectedLessonId));
+  document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(view.selectedLessonId);
   bindCloseDetails(); bindPinActions();
   document.querySelector('#lesson-panel-title')?.focus();
 }
@@ -784,19 +846,19 @@ function toggleInspector(open) {
   document.querySelector('.workbench-layout')?.classList.toggle('inspector-collapsed', !open);
   document.querySelector('#workbench-inspector').hidden = !open;
   document.querySelector('#inspector-summary').hidden = open;
-  const item = acceptedModel.maps.lessons.get(view.selectedLessonId);
-  document.querySelector('#inspector-summary span').textContent = item ? M.selectedSummary(entityName(item, view.selectedLessonId)) : M.noLessonSelected;
+  document.querySelector('#inspector-summary span').textContent = view.selectedLessonId ? M.selectedSummary(reviewLessonName(view.selectedLessonId)) : M.noLessonSelected;
 }
 
 function bindCloseDetails() {
   document.querySelector('#close-details')?.addEventListener('click', () => {
     if (inspectionState) syncInspectionState(inspectionState.closeLesson());
     else view.selectedLessonId = null;
-    document.querySelector('#lesson-details-host').textContent = M.noLessonSelected;
+    if (document.querySelector('#lesson-details-host')) document.querySelector('#lesson-details-host').textContent = M.noLessonSelected;
+    else document.querySelector('.comparison-details')?.remove();
     document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
       candidate.classList.remove('selected');
       candidate.setAttribute('aria-pressed', 'false');
-      candidate.querySelector('.selected-label').hidden = true;
+      if (candidate.querySelector('.selected-label')) candidate.querySelector('.selected-label').hidden = true;
     });
   });
 }
@@ -807,15 +869,19 @@ function applyFiltersInPlace() {
   const investigation = investigationSummary();
   let visibleRows = 0;
   document.querySelectorAll('.lesson-cell[data-lesson-id]').forEach(button => {
-    const item = acceptedModel.assignmentMap.get(button.dataset.lessonId);
+    const item = proposalModeActive() ? comparison.assignmentsById.get(button.dataset.lessonId)?.find(candidate => candidate.comparisonSide === button.dataset.comparisonSide) : acceptedModel.assignmentMap.get(button.dataset.lessonId);
     const matches = isRepresented(item);
     const cues = lessonCues(item);
     button.hidden = !matches;
-    button.classList.toggle('search-match', searchMatches(item));
-    button.setAttribute('aria-label', lessonAccessibleName(item, [...cues.accessible, ...repairLessonState(item.lessonId).accessible]));
+    button.classList.toggle('search-match', proposalModeActive() ? Boolean(comparison.entries.get(item.lessonId)?.old && searchMatches(comparison.entries.get(item.lessonId).old) || comparison.entries.get(item.lessonId)?.proposed && searchMatches(comparison.entries.get(item.lessonId).proposed)) : searchMatches(item));
+    button.setAttribute('aria-label', proposalModeActive() ? lessonAccessibleName(item, [...cues.accessible, ...comparisonMatchedSides(item.lessonId)]) : lessonAccessibleName(item, [...cues.accessible, ...repairLessonState(item.lessonId).accessible]));
     const searchLabel = button.querySelector('.search-match-label');
-    if (searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', `<em class="search-match-label">${M.searchMatch}</em>`);
-    if (!searchMatches(item)) searchLabel?.remove();
+    if (view.search.trim() && searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', `<em class="search-match-label">${M.searchMatch}</em>`);
+    if (!view.search.trim() || !searchMatches(item)) searchLabel?.remove();
+    if (proposalModeActive()) {
+      button.querySelector('.side-match-label')?.remove();
+      if (comparisonMatchedSides(item.lessonId).length) button.insertAdjacentHTML('beforeend', `<em class="side-match-label">${comparisonMatchedSides(item.lessonId).join(' · ')}</em>`);
+    }
     button.classList.toggle('match', narrowed && matches);
     const matchLabel = button.querySelector('.match-label');
     if (matchLabel) matchLabel.hidden = !narrowed || !matches;
@@ -847,7 +913,8 @@ function resetView() {
 }
 
 function filteredAssignments() {
-  return acceptedModel.assignments.filter(isRepresented);
+  return proposalModeActive() ? [...new Map(comparison.assignments.filter(isRepresented).map(item => [item.lessonId, item])).values()]
+    : acceptedModel.assignments.filter(isRepresented);
 }
 
 function baseFilterMatches(item) {
@@ -860,11 +927,17 @@ function isInvestigationMatch(item) {
   return (!view.subjectOnly || item.subjectId === view.subjectInvestigationId)
     && (!view.teacherOnly || item.teacherId === view.teacherInvestigationId);
 }
-function isRepresented(item) { return isInSelectedRange(item) && baseFilterMatches(item) && isInvestigationMatch(item); }
+function sideMatches(item) { return item && baseFilterMatches(item) && isInvestigationMatch(item); }
+function isRepresented(item) {
+  if (!item || !isInSelectedRange(item)) return false;
+  if (!proposalModeActive()) return sideMatches(item);
+  const pair = comparison.entries.get(item.lessonId);
+  return sideMatches(pair.old) || sideMatches(pair.proposed);
+}
 
 function clearSelectedLessonOutsideRepresentation() {
-  const selected = acceptedModel.assignmentMap.get(view.selectedLessonId);
-  if (!selected || isRepresented(selected)) return false;
+  const selected = proposalModeActive() ? comparison.assignmentsById.get(view.selectedLessonId) || [] : [acceptedModel.assignmentMap.get(view.selectedLessonId)];
+  if (!selected.some(Boolean) || selected.some(isRepresented)) return false;
   if (inspectionState) syncInspectionState(inspectionState.closeLesson()); else view.selectedLessonId = null;
   return true;
 }
@@ -891,14 +964,16 @@ function hasNarrowingCriteria() {
 
 function investigationSummary() {
   const represented = filteredAssignments();
-  const count = predicate => new Set(represented.filter(predicate).map(item => item.lessonId)).size;
+  const count = predicate => new Set(represented.filter(item => proposalModeActive()
+    ? [comparison.entries.get(item.lessonId)?.old, comparison.entries.get(item.lessonId)?.proposed].filter(Boolean).some(predicate)
+    : predicate(item)).map(item => item.lessonId)).size;
   const subjectCount = count(item => view.subjectInvestigationId && item.subjectId === view.subjectInvestigationId);
   const teacherCount = count(item => view.teacherInvestigationId && item.teacherId === view.teacherInvestigationId);
   const dualCount = count(item => view.subjectInvestigationId && view.teacherInvestigationId
     && item.subjectId === view.subjectInvestigationId && item.teacherId === view.teacherInvestigationId);
   const searchCount = count(searchMatches);
   return { represented, subjectCount, teacherCount, dualCount, searchCount,
-    periods: acceptedModel.definition.periods.filter(period => view.range === 'WEEK' || period.weekday === view.day) };
+    periods: (proposalModeActive() ? proposedModel : acceptedModel).definition.periods.filter(period => view.range === 'WEEK' || period.weekday === view.day) };
 }
 
 function searchMatches(item) {
@@ -925,22 +1000,23 @@ function lessonAccessibleName(item, cues) {
 
 function renderTeacherRibbon(periods) {
   if (!view.teacherInvestigationId) return '';
-  const teacher = acceptedModel.maps.teachers.get(view.teacherInvestigationId);
+  const model = proposalModeActive() ? proposedModel : acceptedModel;
+  const teacher = model.maps.teachers.get(view.teacherInvestigationId);
   const availability = Array.isArray(teacher?.availablePeriodIds) ? new Set(teacher.availablePeriodIds) : null;
-  const slots = periods.slice().sort((a, b) => acceptedModel.weekdays.indexOf(a.weekday) - acceptedModel.weekdays.indexOf(b.weekday) || a.order - b.order)
+  const slots = periods.slice().sort((a, b) => model.weekdays.indexOf(a.weekday) - model.weekdays.indexOf(b.weekday) || a.order - b.order)
     .map(period => {
-      const assigned = acceptedModel.assignments.some(item => item.teacherId === view.teacherInvestigationId && item.periodId === period.id);
+      const assigned = model.assignments.some(item => item.teacherId === view.teacherInvestigationId && item.periodId === period.id);
       const state = assigned ? 'assigned' : availability === null || availability.has(period.id) ? 'available' : 'unavailable';
       const label = state === 'assigned' ? M.assigned : state === 'available' ? M.availableUnassigned : M.unavailable;
       return `<li class="ribbon-${state}"><strong>${escapeHtml(periodLabel(period))}</strong><span>${label}</span></li>`;
     }).join('');
-  return `<section class="teacher-ribbon" aria-labelledby="teacher-ribbon-title"><h4 id="teacher-ribbon-title">${M.teacherRibbon} · ${escapeHtml(entityName(teacher, view.teacherInvestigationId))}</h4><ul>${slots}</ul></section>`;
+  return `<section class="teacher-ribbon" aria-labelledby="teacher-ribbon-title"><h4 id="teacher-ribbon-title">${proposalModeActive() ? M.proposedAvailability : M.teacherRibbon} · ${escapeHtml(entityName(teacher, view.teacherInvestigationId))}</h4><ul>${slots}</ul></section>`;
 }
 
 function periodsForDay(day) { return acceptedModel.definition.periods.filter(period => period.weekday === day).sort((a, b) => a.order - b.order); }
 function options(items) { return items.map(item => [item.id, entityName(item)]); }
 function entityName(item, fallback = '') { return item?.displayName || `${fallback} (${M.nameUnavailable})`; }
-function periodLabel(period) { return period ? `${period.displayName}${period.startTime ? ` · ${M.optionalTime(period.startTime, period.endTime)}` : ''}` : M.nameUnavailable; }
+function periodLabel(period) { return period ? `${entityName(period, period.id)}${period.startTime ? ` · ${M.optionalTime(period.startTime, period.endTime)}` : ''}` : M.nameUnavailable; }
 function detail(label, value) { return `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`; }
 function idDetail(label, value) { return detail(M.idLabel(label), value); }
 function selectControl(id, label, values, selected) { return `<label><span>${label}</span><select id="${id}">${values.map(([value, text]) => `<option value="${escapeAttribute(value)}"${value === selected ? ' selected' : ''}>${escapeHtml(text)}</option>`).join('')}</select></label>`; }
@@ -966,7 +1042,12 @@ async function mutate(path, method, body) {
     const result = await response.json();
     if (!response.ok) {
       if (path === '/api/repair-draft' && method !== 'DELETE') { draftSaveFailed = true; document.querySelector('#solve-draft')?.setAttribute('disabled', ''); }
-      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${path === '/api/repair-draft' && method !== 'DELETE' ? M.draftSaveFailed + ' ' : ''}${escapeHtml(result.message || M.actionFailed)}</p>`);
+      if (path === '/api/proposal/accept' && result.code === 'STALE_PROPOSAL') {
+        await load(true);
+        stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${M.acceptedStillCurrent}</p>`);
+        return;
+      }
+      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${path === '/api/repair-draft' && method !== 'DELETE' ? M.draftSaveFailed + ' ' : ''}${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
       if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return;
     }
     if (path === '/api/repair-draft') draftSaveFailed = false;

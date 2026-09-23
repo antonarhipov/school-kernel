@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-3
-- Status: APPROVED
-- Next eligible: UC-4
+- Use case: UC-4
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: APPROVE; G-1–G-3 resolved, walkthrough passed |
 | UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
 | UC-3 | APPROVED | UC-2 | `3f96d79` | `convergence/UC-3.md`: APPROVE; earlier G-1/G-2 resolved, UC-3 walkthrough passed |
-| UC-4 | NOT_STARTED | UC-3 | - | - |
+| UC-4 | READY_FOR_CONVERGENCE | UC-3 | HEAD at convergence | pending `convergence/UC-4.md` |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
 ## UC-1 Evidence
@@ -97,6 +97,27 @@
 |---|---|
 | G-1; UC-3 2b, G7, RULE-3, RULE-11 | `WorkspaceBrowserIT.restoresInterruptedRepairAfterActualApplicationRestartInRealBrowser` (`:1573–1627`): real application on random port with isolated PostgreSQL, browser-started blocked repair, application stop, fresh application startup/recovery, browser navigation to new port, exact original accepted/Draft, original run ID/`INTERRUPTED` status, version increment, no proposal, late-result release with no write. |
 | G-2; UC-3 G8, RULE-9, RULE-11 | `WorkspaceBrowserIT.followsAndRefusesWholeSchoolRepairOnVerifiedNormativeSnapshotInRealBrowser` (`:1629–1706`): independently verified accepted pair and revisions; 1,000 lesson IDs, 60 cohorts, 100 teachers, 100 rooms, 60 periods; real teacher-16/period-0 Draft, selected lesson-960, blocked run and mode transitions with exact accepted/Draft/Day IDs, cancellation, and rejected kernel output with no proposal or mutation. |
+
+## UC-4 Evidence
+
+- Started from: `4bc2c64042fe54ed2309c408d8f96df703372566` (2026-09-23); prior convergence findings: none.
+- Pre-existing dirty files: `.idea/encodings.xml` (unrelated; preserve).
+- Implementation submission: HEAD at convergence.
+- Changed files: `timetable-workspace/src/main/resources/static/workspace/{app.js,proposal-comparison.js,focused-renderer.js,messages.js,styles.css}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`, `spec/timetable-ux-polish/{status.md,checkpoints/UC-4.md}`.
+- Commands and results: red real-browser reproducer for absent whole-school accepted/proposed tiles; `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#measuresTargetScaleProposalReviewOpeningInRealBrowser+comparesOneSidedAndSameSlotChangesInRealBrowser+generatesRepairProposalInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 3 browser); `./mvnw -pl timetable-workspace -am verify` PASS (26 unit, 77 integration including 29 browser, 0 failures/errors/skips); final full suite after compilation correction PASS (26 unit, 77 integration, 0 failures/errors/skips). `git diff --check` PASS. Test-generated `.output.txt` removed; no tracked runtime data changed.
+
+| Contract element | Evidence |
+|---|---|
+| UC-4 main 1–2; Requires UC-3; 1a, 1b, 1c, 2a; G1, G2, G4 | `proposal-comparison.js:1–33` joins actual accepted/proposed assignments and authoritative review by ID with accepted/destination/combined/one-sided/unchanged representations. `app.js:128–166,189–205,467–527,553–612` renders them through shared Week/Day/focused/inspector structures with exact authoritative totals and guarded decision controls. `WorkspaceBrowserIT.java:1313–1387,1859–1920,1923–1973` exercises packaged verified repair and each presentation shape, category overlap/zero, direct/ripple totals and protected/unchanged lessons. |
+| UC-4 main 3–5; 3a, 3b, 4a; G3, G5, G6 | `app.js:206–226,467–527,553–612,850–997` retains identity, selection and both sides through search/filter/investigation/Day/Week/focused return, derives exact side labels and unmappable metadata cues; `WorkspaceBrowserIT.java:1371–1378,1859–1920,1923–1973` checks selected sides, matching-side cue, grouped navigation, fallback ID, mode-only durable equality, collapse/reopen/focus, plus unit regression. |
+| UC-4 main 6; success; G7, G8 | `WorkspaceBrowserIT.generatesRepairProposalInRealBrowser` (`:1313–1466`) uses actual packaged kernel and verified proposal, prior exact accepted/draft/bundle and persisted no-mutation mode checks, explicit confirmation, exact successor definition/result, only Current available; `RepairProposalService` already guards identity, atomic durable acceptance, and rollback. |
+| UC-4 5a, 5b, 6a; minimal | `WorkspaceBrowserIT.revisesDiscardsAndRejectsStaleProposalInRealBrowser` (`:1977–2021`): three browser journeys compare exact prior accepted/draft, show Draft without proposal, and preserve service refusal for stale identity; existing `WorkspaceRepairPlanningIT` covers service denial codes. |
+| UC-4 6b; G7, minimal | `WorkspaceBrowserIT.generatesRepairProposalInRealBrowser` (`:1388–1428`) triggers real PostgreSQL write failure through browser, compares entire document/version, verifies Proposal is still shown and retryable, then explicitly retries and verifies accepted successor; `app.js:1021–1043` reports non-advance without false success. |
+| UC-4 6c; G4, G9 | `WorkspaceBrowserIT.comparesOneSidedAndSameSlotChangesInRealBrowser` (`:1963–1973`): narrow browser shows both labelled sides in read-only focused agenda, hides decision/matrix controls, preserves exact stored document; existing approved UC-1/UC-2/UC-3 desktop/narrow journeys remain green. |
+| RULE-1, RULE-2, RULE-5, RULE-12 | `app.js:1–7,128–166,467–527,850–997`; `proposal-comparison.js:1–33`; accepted model/state owner and native assets preserved. Verified repair from UC-3 is consumed only in `REPAIR_PROPOSAL`; three-mode switching does not change durable bytes/version. |
+| RULE-3, RULE-8 | `app.js:199–226,1021–1043`, existing `RepairProposalService` and secured routes; verified failed/rejected/stale actions and exact rollback in browser and unchanged HTTP suite; no new endpoints/storage/imports/dependencies. |
+| RULE-6, RULE-7 | `app.js:178–205,553–612,667–712,850–997`, `messages.js:124–140`, `styles.css:193–210`; exact IDs plus escaped display fallback, proposed availability, text cues, inspector and narrow safeguards; browser assertions cover missing proposed name, native actions and focused return. |
+| RULE-9 | `WorkspaceBrowserIT.java:1313–1466,1859–2021,2250–2310`: isolated PostgreSQL and actual kernel-produced feasible repair plus explicit synthetic DOM-only edge-case snapshots, target-scale fixture, exact bundle comparisons, browser UI assertions; full relevant suite green and no tracked runtime-data changes. |
 
 ## Blockers
 

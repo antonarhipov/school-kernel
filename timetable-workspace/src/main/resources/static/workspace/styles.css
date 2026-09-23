@@ -190,6 +190,24 @@ code { overflow-wrap: anywhere; }
 .lesson-cell .conflict-label { background: #ffe2e2; color: #7c2020; }
 .lesson-cell .policy-label { background: #eee8fa; color: #51427a; }
 .lesson-cell .pin-label { background: #dff3e7; color: #1b5c39; }
+.lesson-cell.comparison-accepted { border-left-color: #216c46; background: #eaf6ee; }
+.lesson-cell.comparison-proposed { border-left-color: #7752a0; background: #f3edfa; }
+.lesson-cell.comparison-combined { border-left-color: #9b670e; background: #fff5dd; }
+.lesson-cell.comparison-unchanged { border-left-color: #a3b1a8; background: #f6f8f7; }
+.lesson-cell .comparison-cue { background: #eef1fa; color: #393e64; white-space: normal; text-transform: none; }
+.comparison-details { padding: 12px; border: 1px solid #b9d5c5; border-radius: 10px; }
+.comparison-details .before-after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.comparison-details .before-after section { min-width: 0; }
+.comparison-details .before-after dl { display: block; }
+.comparison-details dd, .comparison-details small { overflow-wrap: anywhere; }
+.comparison-details small { display: block; font-size: .72rem; }
+.review-mode #workbench-inspector { max-height: 80vh; overflow: auto; }
+.review-mode .review-categories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.review-mode .review-category { min-width: 0; overflow-wrap: anywhere; }
+.review-mode .review-category ul { max-height: 150px; overflow: auto; }
+.review-mode .focused-lesson[data-comparison-side=accepted] { border-left: 4px solid #216c46; }
+.review-mode .focused-lesson[data-comparison-side=proposed] { border-left: 4px solid #7752a0; }
+.review-mode .focused-lesson[data-comparison-side=combined] { border-left: 4px solid #9b670e; }
 .unpinned-state { background: #edf0ee; color: #4c5953; }
 .proposal-facts { margin: 18px 0 24px; }
 .impact-totals { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 20px; }
@@ -246,4 +264,5 @@ code { overflow-wrap: anywhere; }
   .focused-lesson { grid-column: 1; grid-template-columns: 1fr; gap: 7px; }
   .repair-entry, .repair-controls, .draft-summary, .repair-day, .repair-mode > .matrix-wrap, .repair-mode > .confirmation, .repair-mode > .actions { display: none; }
   .review-mode .review-categories, .review-mode .changed-lessons, .review-mode .confirmation, .review-mode > .actions { display: none; }
+  .review-mode #workbench-inspector { display: none; }
 }

@@ -48,6 +48,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
 @Testcontainers
@@ -1312,6 +1313,7 @@ class WorkspaceBrowserIT {
         ObjectNode document = validAcceptedDocument();
         JsonNode acceptedBefore = document.path("acceptedBaseline").deepCopy();
         storeAccepted(document);
+        JsonNode proposedDocument = null;
         int debuggingPort = startBrowser();
         String page = "http://localhost:" + port + "/workspace/";
         String target = HttpClient.newHttpClient().send(
@@ -1360,7 +1362,7 @@ class WorkspaceBrowserIT {
             assertTrue(proposal.contains("Old assignment"));
             assertTrue(proposal.contains("Proposed assignment"));
             assertEquals("REPAIR_PROPOSAL", storedLifecycle());
-            JsonNode proposedDocument = storedWorkspaceDocument();
+            proposedDocument = storedWorkspaceDocument();
             assertEquals(acceptedBefore, proposedDocument.path("acceptedBaseline"));
             assertEquals(frozenDraft, proposedDocument.path("repairDraft"));
             assertEquals("REPAIR", proposedDocument.path("proposal").path("kind").stringValue());
@@ -1369,25 +1371,60 @@ class WorkspaceBrowserIT {
             assertFalse(proposedDocument.has("run"));
             assertEquals(Set.of("lesson-math-1", "lesson-science-1"), renderedLessonIds(cdp));
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=PROPOSAL]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=SOLVING]') && document.querySelector('#lesson-panel-title')?.textContent === 'Science 1' && document.querySelector('.state.accepted')?.textContent.includes('Accepted assignment')"));
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector .before-after')?.textContent.includes('Old assignment') && document.querySelector('#workbench-inspector .before-after')?.textContent.includes('Proposed assignment') && document.querySelector('#accept-repair')?.disabled === true"),
+                    "UC-4 main 1-5: accepted and proposed fields stay inspectable and acceptance remains gated");
+            JsonNode beforeDecision = storedWorkspaceDocument();
+            cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click(); document.querySelector('[data-mode=DRAFT]').click(); document.querySelector('[data-mode=PROPOSAL]').click()");
+            assertEquals(beforeDecision, storedWorkspaceDocument(), "UC-4 G3: mode navigation must not change durable proposal or accepted baseline");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=PROPOSAL]')?.getAttribute('aria-pressed') === 'true'"));
             jdbc.sql("UPDATE workspace_aggregate SET document = document #- '{proposal,review}' WHERE workspace_id=1")
                     .update();
             cdp.command("Page.navigate", object("url", page));
             String restoredLegacyProposal = cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(15));
             assertTrue(restoredLegacyProposal.contains("Unique changed lessons"));
-            assertTrue(restoredLegacyProposal.contains("Old assignment"));
-            assertTrue(restoredLegacyProposal.contains("Proposed assignment"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-science-1]').click()");
+            assertTrue(cdp.awaitText("Old assignment", Duration.ofSeconds(5)).contains("Proposed assignment"));
             cdp.evaluate("document.querySelector('#confirm-repair-accept').focus()");
             cdp.pressKey(" ", "Space");
+            String beforeFailedAccept = storedDocument();
+            jdbc.sql("""
+                    CREATE FUNCTION fail_browser_repair_accept() RETURNS trigger AS $$
+                    BEGIN
+                      IF NEW.lifecycle_state = 'ACCEPTED_BASELINE' THEN RAISE EXCEPTION 'test: acceptance unavailable'; END IF;
+                      RETURN NEW;
+                    END; $$ LANGUAGE plpgsql
+                    """).update();
+            jdbc.sql("""
+                    CREATE TRIGGER fail_browser_repair_accept_trigger BEFORE UPDATE ON workspace_aggregate
+                    FOR EACH ROW EXECUTE FUNCTION fail_browser_repair_accept()
+                    """).update();
+            try {
+                cdp.evaluate("document.querySelector('#accept-repair').click()");
+                assertTrue(cdp.awaitText("Current did not advance", Duration.ofSeconds(10))
+                        .contains("Repair proposal · feasible"), "UC-4 6b: failed durable acceptance cannot present Current");
+                assertEquals(beforeFailedAccept, storedDocument(), "UC-4 6b: failed acceptance preserves entire accepted/draft/proposal document and version");
+                assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=PROPOSAL]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('#accept-repair').disabled"));
+            } finally {
+                jdbc.sql("DROP TRIGGER IF EXISTS fail_browser_repair_accept_trigger ON workspace_aggregate").update();
+                jdbc.sql("DROP FUNCTION IF EXISTS fail_browser_repair_accept()").update();
+            }
             cdp.evaluate("document.querySelector('#accept-repair').focus()");
             cdp.pressKey(" ", "Space");
             String accepted = cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(15));
             assertTrue(accepted.contains("Start a protected repair"));
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=PROPOSAL], [data-mode=DRAFT]') && document.querySelector('[data-range=WEEK]')?.getAttribute('aria-pressed') === 'true'"),
+                    "UC-4 success: only Current remains on the retained range after durable acceptance");
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
 
         JsonNode firstAccepted = JSON.readTree(jdbc.sql(
                         "SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
                 .query(String.class).single()).path("acceptedBaseline").deepCopy();
+        assertEquals(proposedDocument.path("proposal").path("definition"), firstAccepted.path("definition"));
+        assertEquals(proposedDocument.path("proposal").path("result"), firstAccepted.path("result"));
+        assertEquals("ACCEPTED_BASELINE", storedLifecycle());
+        assertFalse(storedWorkspaceDocument().has("proposal"));
+        assertFalse(storedWorkspaceDocument().has("repairDraft"));
         assertTrue(firstAccepted.path("manifest").path("locks").valueStream()
                 .anyMatch(lock -> "lesson-science-1".equals(lock.path("lessonId").stringValue())
                         && "ATTEMPT_SCOPED".equals(lock.path("roomLockOrigin").stringValue())));
@@ -1847,13 +1884,29 @@ class WorkspaceBrowserIT {
             assertTrue(rendered.contains("Direct effects of your intent: 50"));
             assertTrue(rendered.contains("Solver ripple effects: 50"));
             assertTrue(rendered.contains("By class"));
+            assertTrue(browserTrue(cdp, "document.querySelector('.workbench-layout .matrix-wrap [data-lesson-id=lesson-0][data-comparison-side=accepted]') !== null && document.querySelector('.workbench-layout .matrix-wrap [data-lesson-id=lesson-0][data-comparison-side=proposed]') !== null"),
+                    "UC-4 main/1a: accepted origin and proposed destination must coexist on the whole-school canvas");
+            String durable = storedDocument();
+            cdp.evaluate("document.querySelector('#teacher-filter').value='teacher-0'; document.querySelector('#teacher-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "!document.querySelector('[data-lesson-id=lesson-0][data-comparison-side=accepted]').hidden && !document.querySelector('[data-lesson-id=lesson-0][data-comparison-side=proposed]').hidden && document.querySelector('#represented-lesson-count').textContent.includes('60')"),
+                    "UC-4 extension 3a: filtering must retain both representations and count unique lesson IDs");
+            cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('[data-lesson-id=lesson-0][data-comparison-side=proposed]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelectorAll('[data-lesson-id=lesson-0].selected').length === 2 && document.querySelector('.comparison-details')?.textContent.includes('Declared period 0') && document.querySelector('.comparison-details')?.textContent.includes('Declared period 1')"),
+                    "UC-4 G1/G5: either side selects one identity and exposes both exact periods");
+            cdp.evaluate("document.querySelector('#toggle-inspector').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector').hidden && document.querySelector('#inspector-summary').textContent.includes('Declared lesson 0')"));
+            cdp.evaluate("document.querySelector('#reopen-inspector').click(); document.querySelector('[data-range=DAY]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=PROPOSAL]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#workbench-inspector .before-after')?.textContent.includes('Declared period 1')"));
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click(); document.querySelector('[data-open-focus=cohortId]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.focused-schedule [data-lesson-id=lesson-0][data-comparison-side=accepted]') !== null && document.querySelector('.focused-schedule [data-lesson-id=lesson-0][data-comparison-side=proposed]') !== null"));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.workbench-layout .matrix-wrap [data-lesson-id=lesson-0]') !== null"));
             cdp.evaluate("document.querySelector('#show-unchanged').click()");
             assertTrue(cdp.awaitText("Accepted and unchanged · not included in change totals", Duration.ofSeconds(5))
-                    .contains("Accepted assignment"));
-            cdp.evaluate("document.querySelector('[data-review-context]').click()");
-            cdp.awaitText("Review context", Duration.ofSeconds(5));
-            cdp.evaluate("document.querySelector('#return-review').click()");
-            cdp.awaitText("Proposal impact review", Duration.ofSeconds(5));
+                    .contains("Old assignment"));
+            cdp.evaluate("document.querySelector('[data-review-lesson=lesson-0]').click()");
+            assertTrue(cdp.awaitText("Proposed change · not current", Duration.ofSeconds(5)).contains("Proposal impact review"));
+            assertEquals(durable, storedDocument(), "UC-4 G6: comparison, filter, focus, and inspector actions are presentation-only");
             double openingMs = cdp.evaluateValue("window.__workspaceProposalReviewMs")
                     .path("result").path("result").path("value").doubleValue();
             assertTrue(Double.isFinite(openingMs) && openingMs >= 0.0,
@@ -1861,6 +1914,108 @@ class WorkspaceBrowserIT {
             System.out.printf("UC-6 scale proposal-review opening=%.3f ms; solver time excluded%n", openingMs);
             System.out.printf("proposal review reference=1000.0 ms; diagnostic only; exceeded=%s%n",
                     openingMs >= 1_000.0);
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
+    @DisplayName("UC-4 extensions 1b/1c/2a/3a/3b/4a/6c: comparison shapes and narrow read-only agenda in real browser")
+    void comparesOneSidedAndSameSlotChangesInRealBrowser() throws Exception {
+        ObjectNode document = comparisonShapeDocument();
+        storeAccepted(document);
+        jdbc.sql("UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=10 WHERE workspace_id=1").update();
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                        .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            String rendered = cdp.awaitText("Unique changed lessons", Duration.ofSeconds(15));
+            assertTrue(rendered.contains("103"), "overlapping category membership counts each changed ID once");
+            assertTrue(rendered.contains("Teacher changes"));
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-category=teacherChanges] span')?.textContent === '0' && document.querySelector('[data-category=forcedMoves] span')?.textContent === '1'"),
+                    "empty categories and overlapping explanations retain independent meanings");
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.proposal-facts div')].some(row => row.textContent.includes('Protected accepted assignments') && row.textContent.includes('1'))"));
+            assertTrue(browserTrue(cdp, "document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-100]').length === 1 && document.querySelector('[data-lesson-id=lesson-100]')?.dataset.comparisonSide === 'combined' && document.querySelector('[data-lesson-id=lesson-101]')?.dataset.comparisonSide === 'accepted' && document.querySelector('[data-lesson-id=lesson-added]')?.dataset.comparisonSide === 'proposed'"),
+                    "UC-4 extensions 1b/1c: same-slot change, cancellation and addition have exactly their existing sides");
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-100]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Room 1') && document.querySelector('.comparison-details')?.textContent.includes('room-2 (Name unavailable)')"),
+                    "UC-4 4a: missing proposal display name retains the stable room ID and unavailable-name cue");
+            cdp.evaluate("document.querySelector('#room-filter').value='room-2'; document.querySelector('#room-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "!document.querySelector('[data-lesson-id=lesson-100]').hidden && document.querySelector('[data-lesson-id=lesson-100]')?.textContent.includes('Proposed-side match') && document.querySelector('#represented-lesson-count')?.textContent.includes('61')"),
+                    "UC-4 3a: proposal-only resource filter retains the changed lesson as one identity");
+            cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('[data-lesson-id=lesson-101]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Not present') && document.querySelector('.comparison-details')?.textContent.includes('Cancellations')"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-added]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Additions') && document.querySelector('.comparison-details')?.textContent.includes('Not present')"));
+            cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#inspection-notice')?.textContent.includes('not present') && !document.querySelector('#lesson-panel-title')"),
+                    "UC-4 mode navigation clears a proposal-only identity without inventing it in Current");
+            cdp.evaluate("document.querySelector('[data-mode=PROPOSAL]').click()");
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-200]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Accepted and unchanged') && document.querySelector('.comparison-details')?.textContent.includes('Declared lesson 200')"));
+            ObjectNode narrow = JSON.createObjectNode().put("width", 390).put("height", 844)
+                    .put("deviceScaleFactor", 1).put("mobile", true);
+            cdp.command("Emulation.setDeviceMetricsOverride", narrow);
+            String agenda = cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(5));
+            assertTrue(agenda.contains("Repair proposal") && agenda.contains("Accepted origin") && agenda.contains("Proposed destination"));
+            assertFalse(browserTrue(cdp, "document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, .matrix-wrap') !== null"),
+                    "UC-4 6c: narrow proposal agenda must not expose mutation or full-desktop controls");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "comparison and narrow viewing cannot mutate durable workspace data");
+    }
+
+    @Test
+    @DisplayName("UC-4 extensions 5a/5b/6a: browser revision, discard and stale acceptance preserve exact accepted bundle")
+    void revisesDiscardsAndRejectsStaleProposalInRealBrowser() throws Exception {
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                        .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            for (String action : new String[] { "#revise-proposal", "#discard-proposal" }) {
+                storeAccepted(scaleProposalDocument());
+                jdbc.sql("UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=10 WHERE workspace_id=1").update();
+                JsonNode before = storedWorkspaceDocument();
+                cdp.command("Page.navigate", object("url", page));
+                cdp.awaitText("Unique changed lessons", Duration.ofSeconds(15));
+                cdp.evaluate("document.querySelector('" + action + "').click()");
+                cdp.awaitText("Repair draft · not current", Duration.ofSeconds(5));
+                JsonNode after = storedWorkspaceDocument();
+                assertEquals("REPAIR_DRAFT", storedLifecycle());
+                assertEquals(before.path("acceptedBaseline"), after.path("acceptedBaseline"));
+                assertEquals(before.path("repairDraft"), after.path("repairDraft"));
+                assertFalse(after.has("proposal"));
+                assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=PROPOSAL]') && !document.querySelector('#accept-repair')"));
+            }
+            ObjectNode document = scaleProposalDocument();
+            ((ObjectNode) document.path("proposal")).put("sourceWorkspaceVersion", -1);
+            storeAccepted(document);
+            jdbc.sql("UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=10 WHERE workspace_id=1").update();
+            JsonNode before = storedWorkspaceDocument();
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Unique changed lessons", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('#confirm-repair-accept').click(); document.querySelector('#accept-repair').click()");
+            assertTrue(cdp.awaitText("Repair draft · not current", Duration.ofSeconds(10))
+                    .contains("no longer matches"), "UC-4 6a: stale identity must be refused and proposal presentation removed");
+            JsonNode after = storedWorkspaceDocument();
+            assertEquals("REPAIR_DRAFT", storedLifecycle());
+            assertEquals(before.path("acceptedBaseline"), after.path("acceptedBaseline"));
+            assertEquals(before.path("repairDraft"), after.path("repairDraft"));
+            assertFalse(after.has("proposal"));
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('#accept-repair')"));
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
     }
@@ -2119,6 +2274,35 @@ class WorkspaceBrowserIT {
                 .put("terminationReason", "TIME_LIMIT").put("elapsedTimeMs", 30_000);
         proposal.set("definition", definition); proposal.set("result", result);
         ObjectNode counts = proposal.putObject("changeCounts");
+        ProposalReviewService.CATEGORIES.forEach(category -> counts.put(category, report.path(category).size()));
+        proposal.set("review", reviews.create(baseline, draft, definition, result));
+        return document;
+    }
+
+    private ObjectNode comparisonShapeDocument() {
+        ObjectNode document = scaleProposalDocument();
+        JsonNode baseline = document.path("acceptedBaseline");
+        ObjectNode draft = (ObjectNode) document.path("repairDraft");
+        ObjectNode proposal = (ObjectNode) document.path("proposal");
+        ObjectNode definition = (ObjectNode) proposal.path("definition");
+        ObjectNode result = (ObjectNode) proposal.path("result");
+        var report = result.path("changeReport");
+        ((ArrayNode) report.path("forcedMoves")).addObject().put("lessonId", "lesson-0");
+        ((ObjectNode) result.path("timetable").path("assignments").get(100)).put("roomId", "room-2");
+        ((ArrayNode) draft.path("intent").path("pins")).addObject().put("lessonId", "lesson-100")
+                .putArray("roomSources").add("INDIVIDUAL");
+        ((ArrayNode) report.path("roomOnlyMoves")).addObject().put("lessonId", "lesson-100");
+        ((ObjectNode) definition.path("rooms").get(2)).remove("displayName");
+        ((ArrayNode) result.path("timetable").path("assignments")).remove(101);
+        ((ArrayNode) definition.path("lessons")).remove(101);
+        ((ArrayNode) report.path("cancellations")).addObject().put("lessonId", "lesson-101");
+        ((ArrayNode) definition.path("lessons")).addObject().put("id", "lesson-added")
+                .put("displayName", "Additional school lesson").put("subjectId", "subject-0")
+                .put("cohortId", "cohort-0").put("teacherId", "teacher-0");
+        ((ArrayNode) result.path("timetable").path("assignments")).add(assignment(
+                "lesson-added", "subject-0", "cohort-0", "teacher-0", "period-59", "room-0"));
+        ((ArrayNode) report.path("additions")).addObject().put("lessonId", "lesson-added");
+        ObjectNode counts = (ObjectNode) proposal.path("changeCounts");
         ProposalReviewService.CATEGORIES.forEach(category -> counts.put(category, report.path(category).size()));
         proposal.set("review", reviews.create(baseline, draft, definition, result));
         return document;
