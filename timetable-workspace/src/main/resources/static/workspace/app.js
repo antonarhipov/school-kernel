@@ -608,9 +608,9 @@ function comparisonProtection(id) {
 function comparisonMatchedSides(id) {
   const pair = comparison.entries.get(id);
   if (!view.search.trim() && !hasNarrowingCriteria() && !view.subjectInvestigationId && !view.teacherInvestigationId) return [];
+  const investigationOnly = !view.search.trim() && !hasNarrowingCriteria();
   const matches = item => item && sideMatches(item) && (!view.search.trim() || searchMatches(item))
-    && (!view.subjectInvestigationId || item.subjectId === view.subjectInvestigationId)
-    && (!view.teacherInvestigationId || item.teacherId === view.teacherInvestigationId);
+    && (!investigationOnly || item.subjectId === view.subjectInvestigationId || item.teacherId === view.teacherInvestigationId);
   const old = matches(pair?.old);
   const proposed = matches(pair?.proposed);
   return [old && M.acceptedSideMatch, proposed && M.proposedSideMatch].filter(Boolean);
@@ -700,9 +700,10 @@ function renderFocused() {
     if (inspectionState && fallback) syncInspectionState(inspectionState.changeFocusedType(type, fallback).state);
     else view.focusedId = fallback;
   }
-  host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source,
+  const relatedLessonIds = proposalModeActive() ? new Set(comparison.assignments.filter(item => item[type] === view.focusedId).map(item => item.lessonId)) : null;
+  host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, relatedLessonIds,
     assignments: proposalModeActive() ? comparison.assignments : acceptedModel.assignments, weekdays: acceptedModel.weekdays,
-    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span></article>` : null,
+    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>` : null,
     labels: M, entityName, periodLabel, selectControl, options, escapeHtml });
   if (!view.narrow && currentSnapshot.state === 'SOLVING_REPAIR') {
     host.insertAdjacentHTML('beforeend', `<aside id="workbench-inspector" aria-label="${M.inspector}">${inspectionState.current().mode === 'DRAFT' ? draftContext(true) : ''}${runContext()}</aside>`);

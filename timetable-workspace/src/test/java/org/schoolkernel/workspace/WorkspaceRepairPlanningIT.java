@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -641,6 +642,8 @@ class WorkspaceRepairPlanningIT {
         private final CopyOnWriteArrayList<List<String>> commands = new CopyOnWriteArrayList<>();
         volatile RepairFailure failure;
         volatile boolean blockReplan;
+        volatile Function<List<String>, ObjectNode> verifiedFeasibleResult;
+        volatile RuntimeException verifiedFeasibleFailure;
         volatile BlockingRepairProcess lastBlocking;
 
         @Override
@@ -656,6 +659,16 @@ class WorkspaceRepairPlanningIT {
             if (blockReplan) {
                 lastBlocking = new BlockingRepairProcess(false);
                 return lastBlocking;
+            }
+            if (verifiedFeasibleResult != null) {
+                Path output = Path.of(arguments.get(arguments.indexOf("--output") + 1));
+                try {
+                    Files.write(output, JSON.writeValueAsBytes(verifiedFeasibleResult.apply(arguments)));
+                } catch (RuntimeException failure) {
+                    verifiedFeasibleFailure = failure;
+                    throw new java.io.IOException("test candidate generation failed", failure);
+                }
+                return new CompletedRepairProcess(0);
             }
             if (failure != null) {
                 Path output = Path.of(arguments.get(arguments.indexOf("--output") + 1));
@@ -706,6 +719,8 @@ class WorkspaceRepairPlanningIT {
             if (lastBlocking != null) lastBlocking.release(137);
             failure = null;
             blockReplan = false;
+            verifiedFeasibleResult = null;
+            verifiedFeasibleFailure = null;
             lastBlocking = null;
             commands.clear();
         }

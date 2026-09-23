@@ -1,7 +1,7 @@
-export function renderFocusedSchedule({ narrow, type, focusedId, source, assignments, weekdays, lessonMarkup, labels, entityName, periodLabel, selectControl, options, escapeHtml }) {
+export function renderFocusedSchedule({ narrow, type, focusedId, source, assignments, weekdays, lessonMarkup, relatedLessonIds, labels, entityName, periodLabel, selectControl, options, escapeHtml }) {
   const title = type === 'cohortId' ? labels.classSchedule : type === 'teacherId' ? labels.teacherSchedule : labels.roomSchedule;
   const choose = type === 'cohortId' ? labels.chooseClass : type === 'teacherId' ? labels.chooseTeacher : labels.chooseRoom;
-  const items = assignments.filter(item => item[type] === focusedId)
+  const items = assignments.filter(item => item[type] === focusedId || relatedLessonIds?.has(item.lessonId))
     .sort((a, b) => weekdays.indexOf(a.period?.weekday) - weekdays.indexOf(b.period?.weekday) || (a.period?.order ?? 0) - (b.period?.order ?? 0));
   const dayMarkup = day => {
     const dayItems = items.filter(item => item.period?.weekday === day);

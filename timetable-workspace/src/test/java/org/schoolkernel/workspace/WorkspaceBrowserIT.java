@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -1973,6 +1974,280 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("UC-4 C-1: focusing either teacher or room retains the joined accepted/proposed lesson")
+    void retainsBothSidesInFocusedResourceSchedulesInRealBrowser() throws Exception {
+        ObjectNode document = comparisonShapeDocument();
+        ObjectNode proposal = (ObjectNode) document.path("proposal");
+        ObjectNode result = (ObjectNode) proposal.path("result");
+        ((ObjectNode) result.path("timetable").path("assignments").get(0)).put("roomId", "room-90");
+        ((ObjectNode) result.path("timetable").path("assignments").get(1)).put("teacherId", "teacher-21")
+                .put("subjectId", "subject-1").put("cohortId", "cohort-21");
+        ((ArrayNode) result.path("changeReport").path("teacherChanges")).addObject().put("lessonId", "lesson-1");
+        proposal.set("review", reviews.create(document.path("acceptedBaseline"), document.path("repairDraft"),
+                proposal.path("definition"), result));
+        storeAccepted(document);
+        jdbc.sql("UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=10 WHERE workspace_id=1").update();
+        String durable = storedDocument();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Unique changed lessons", Duration.ofSeconds(15));
+            for (String[] focus : new String[][] {
+                    { "teacherId", "teacher-0", "teacher-21", "lesson-1" },
+                    { "roomId", "room-0", "room-90", "lesson-0" } }) {
+                String filter = focus[0].equals("teacherId") ? "#teacher-filter" : "#room-filter";
+                cdp.evaluate("document.querySelector('" + filter + "').value='" + focus[1] + "'; document.querySelector('" + filter + "').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('[data-open-focus=" + focus[0] + "]').click()");
+                for (String resource : new String[] { focus[1], focus[2] }) {
+                    cdp.evaluate("document.querySelector('#focus-entity').value='" + resource + "'; document.querySelector('#focus-entity').dispatchEvent(new Event('change',{bubbles:true}))");
+                    String selector = ".focused-schedule [data-lesson-id=" + focus[3] + "]";
+                    assertTrue(browserTrue(cdp, "document.querySelectorAll('" + selector + "').length === 2 && document.querySelector('" + selector + "[data-comparison-side=accepted]') && document.querySelector('" + selector + "[data-comparison-side=proposed]') && [...document.querySelectorAll('" + selector + "')].some(item => item.textContent.includes('Related comparison side'))"),
+                            "UC-4 C-1: old/new " + focus[0] + " focus " + resource + " retains both exact sides without calling both current");
+                }
+                cdp.evaluate("document.querySelector('#return-matrix').click(); document.querySelector('#reset-view').click()");
+            }
+            cdp.evaluate("document.querySelector('#subject-investigation').value='subject-1'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.textContent.includes('Proposed-side match'))"),
+                    "UC-4 3a: proposed-only subject investigation retains accepted origin");
+            cdp.evaluate("document.querySelector('#subject-investigation').value='subject-0'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.textContent.includes('Accepted-side match'))"),
+                    "UC-4 3a: accepted-only subject investigation retains proposed destination");
+            cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('#cohort-filter').value='cohort-21'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.textContent.includes('Proposed-side match'))"),
+                    "UC-4 3a: one-sided class filter retains both placements: " + cdp.evaluateValue("[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].map(el=>[el.dataset.comparisonSide,el.hidden,el.textContent,el.closest('tr')?.hidden])"));
+            cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('#lesson-search').value='Room 90'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-0]')].every(el=>!el.hidden && el.textContent.includes('Proposed-side match')) && document.querySelector('#search-summary')?.textContent.includes('1')"),
+                    "UC-4 3a: a proposed-only search name highlights exactly one joined identity and retains the accepted origin");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(durable, storedDocument());
+    }
+
+    @Test
+    @DisplayName("UC-4 G-1/G-2 and RULE-9/12: full verified 1,000-lesson repair has exact two-sided overlay, review and durable decision")
+    void reviewsIndependentlyVerifiedNormativeRepairInRealBrowser() throws Exception {
+        ObjectNode document = investigationScaleDocument();
+        JsonNode baseline = document.path("acceptedBaseline").deepCopy();
+        assertEquals(60, baseline.path("definition").path("cohorts").size());
+        assertEquals(100, baseline.path("definition").path("teachers").size());
+        assertEquals(100, baseline.path("definition").path("rooms").size());
+        assertEquals(60, baseline.path("definition").path("periods").size());
+        assertEquals(1_000, baseline.path("result").path("timetable").path("assignments").size());
+        assertEquals("Subject Zero with a deliberately long authoritative display name for timetable tiles",
+                baseline.path("definition").path("subjects").get(0).path("displayName").stringValue());
+        assertEquals("Room Sixteen with a deliberately long authoritative display name for timetable tiles",
+                baseline.path("definition").path("rooms").get(16).path("displayName").stringValue());
+        assertEquals(document.path("timetableRevision").stringValue(), verifier.verify(new ImportDocuments(
+                baseline.path("definition"), baseline.path("result"), null,
+                ImportDocuments.ImportMode.ACCEPTED_BASELINE)).timetableRevision());
+        storeAccepted(document);
+        AtomicReference<ObjectNode> independentlyVerified = new AtomicReference<>();
+        processes.verifiedFeasibleResult = arguments -> {
+            ObjectNode result = verifiedNormativeRepairResult(arguments);
+            independentlyVerified.set(result.deepCopy());
+            return result;
+        };
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#repair-resource').value='teacher-16'; document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            assertEquals(Set.of("lesson-960"), jsonStrings(storedWorkspaceDocument().path("repairDraft").path("directEffectLessonIds")));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-500]').click(); document.querySelector('[name=lesson-dimension][value=ROOM]').checked=true; document.querySelector('#apply-pin').click()");
+            cdp.awaitText("Accepted room pinned", Duration.ofSeconds(15));
+            JsonNode draft = assertDraftUnchangedBaseline(baseline).deepCopy();
+            assertEquals("lesson-500", draft.path("intent").path("pins").get(0).path("lessonId").stringValue());
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), draft.path("intent").path("pins").get(0).path("roomSources"));
+            assertTrue(draft.path("readyToSolve").booleanValue());
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0]').click(); document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            try {
+                cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(30));
+            } catch (AssertionError failure) {
+                throw new AssertionError("The normative candidate must pass the independent production verifier: "
+                        + processes.verifiedFeasibleFailure, processes.verifiedFeasibleFailure == null ? failure : processes.verifiedFeasibleFailure);
+            }
+            JsonNode stored = storedWorkspaceDocument();
+            assertEquals("REPAIR_PROPOSAL", storedLifecycle());
+            assertEquals(baseline, stored.path("acceptedBaseline"));
+            assertEquals(draft, stored.path("repairDraft"));
+            JsonNode proposal = stored.path("proposal");
+            assertEquals(independentlyVerified.get(), proposal.path("result"),
+                    "the real planner must persist only the result independently verified by the production kernel");
+            JsonNode review = proposal.path("review");
+            assertEquals(2, review.path("uniqueChangedLessonCount").intValue());
+            assertEquals(1, review.path("directEffectChangedCount").intValue());
+            assertEquals(1, review.path("rippleEffectCount").intValue());
+            assertEquals(JSON.readTree("[\"lesson-960\"]"), review.path("directEffectLessonIds"));
+            assertEquals(JSON.readTree("""
+                    [{"id":"additions","count":0,"lessonIds":[]},{"id":"cancellations","count":0,"lessonIds":[]},
+                    {"id":"teacherChanges","count":0,"lessonIds":[]},{"id":"forcedMoves","count":0,"lessonIds":[]},
+                    {"id":"periodMoves","count":1,"lessonIds":["lesson-960"]},
+                    {"id":"roomOnlyMoves","count":1,"lessonIds":["lesson-0"]}]
+                    """), review.path("categories"));
+            assertEquals(JSON.readTree("""
+                    [{"lessonId":"lesson-0","directEffect":false,"rippleEffect":true,"categories":["roomOnlyMoves"],
+                    "old":{"subjectId":"subject-0","cohortId":"cohort-0","teacherId":"teacher-0","periodId":"period-0","roomId":"room-0"},
+                    "proposed":{"subjectId":"subject-0","cohortId":"cohort-0","teacherId":"teacher-0","periodId":"period-0","roomId":"room-50"},"changedDimensions":["roomId"]},
+                    {"lessonId":"lesson-960","directEffect":true,"rippleEffect":false,"categories":["periodMoves"],
+                    "old":{"subjectId":"subject-0","cohortId":"cohort-16","teacherId":"teacher-16","periodId":"period-0","roomId":"room-16"},
+                    "proposed":{"subjectId":"subject-0","cohortId":"cohort-16","teacherId":"teacher-16","periodId":"period-40","roomId":"room-16"},"changedDimensions":["periodId"]}]
+                    """), review.path("changedLessons"));
+            assertEquals(JSON.readTree("""
+                    {"classes":[{"id":"cohort-0","context":"BOTH","lessonIds":["lesson-0"]},
+                    {"id":"cohort-16","context":"BOTH","lessonIds":["lesson-960"]}],
+                    "teachers":[{"id":"teacher-0","context":"BOTH","lessonIds":["lesson-0"]},
+                    {"id":"teacher-16","context":"BOTH","lessonIds":["lesson-960"]}],
+                    "rooms":[{"id":"room-0","context":"OLD","lessonIds":["lesson-0"]},
+                    {"id":"room-16","context":"BOTH","lessonIds":["lesson-960"]},
+                    {"id":"room-50","context":"PROPOSED","lessonIds":["lesson-0"]}],
+                    "days":[{"id":"MONDAY","context":"BOTH","lessonIds":["lesson-0","lesson-960"]},
+                    {"id":"THURSDAY","context":"PROPOSED","lessonIds":["lesson-960"]}]}
+                    """), review.path("groupings"));
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent.includes('Declared lesson 0') && document.querySelector('.impact-totals')?.textContent.includes('1')"));
+            assertEquals(JSON.readTree("""
+                    [["additions",0],["cancellations",0],["teacherChanges",0],["forcedMoves",0],
+                    ["periodMoves",1],["roomOnlyMoves",1]]
+                    """), cdp.evaluateValue("[...document.querySelectorAll('.review-category')].map(c=>[c.dataset.category,Number(c.querySelector('h4 span').textContent)])")
+                    .path("result").path("result").path("value"));
+            assertEquals(JSON.readTree("""
+                    [["Unique changed lessons","2"],["Protected accepted assignments","1"],
+                    ["Termination reason","TIME_LIMIT"],["Execution limit","PT30S"],["Elapsed time","2004 ms"]]
+                    """), cdp.evaluateValue("[...document.querySelectorAll('.proposal-facts div')].map(row=>[row.querySelector('dt').textContent,row.querySelector('dd').textContent])")
+                    .path("result").path("result").path("value"));
+            assertEquals(JSON.readTree("[\"Direct effects of your intent: 1\",\"Solver ripple effects: 1\"]"),
+                    cdp.evaluateValue("[...document.querySelectorAll('.impact-totals span')].map(el=>el.textContent)")
+                            .path("result").path("result").path("value"));
+            assertEquals(JSON.readTree("[\"Protected accepted assignments · 1\",\"By class · 2\",\"By teacher · 2\",\"By room · 3\",\"By day · 2\"]"),
+                    cdp.evaluateValue("[...document.querySelectorAll('.review-groups summary')].map(el=>el.textContent)")
+                            .path("result").path("result").path("value"));
+            cdp.evaluate("document.querySelector('#teacher-investigation').value='teacher-16'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "document.querySelector('#teacher-ribbon-title')?.textContent.includes('Proposed teacher load by period') && [...document.querySelectorAll('.teacher-ribbon li')].find(el=>el.querySelector('strong')?.textContent==='Declared period 0')?.querySelector('span')?.textContent==='Unavailable'"),
+                    "RULE-6: proposal Monday availability must use the successor definition");
+            cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#teacher-ribbon-title')?.textContent.includes('Teacher load by period') && !document.querySelector('#teacher-ribbon-title')?.textContent.includes('Proposed') && [...document.querySelectorAll('.teacher-ribbon li')].find(el=>el.querySelector('strong')?.textContent==='Declared period 0')?.querySelector('span')?.textContent==='Assigned'"),
+                    "RULE-6: accepted Monday load must still use the accepted definition and assignment");
+            cdp.evaluate("document.querySelector('[data-mode=PROPOSAL]').click(); document.querySelector('#teacher-investigation').value=''; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click()");
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5));
+            var expectedTiles = new ArrayList<String>();
+            for (int i = 0; i < 1_000; i++) {
+                String id = "lesson-" + i;
+                if (i == 960) { expectedTiles.add(id + ":accepted"); expectedTiles.add(id + ":proposed"); }
+                else if (i == 0) expectedTiles.add(id + ":combined");
+                else expectedTiles.add(id + ":unchanged");
+            }
+            expectedTiles.sort(String::compareTo);
+            ArrayNode expectedTileValues = JSON.createArrayNode();
+            expectedTiles.forEach(expectedTileValues::add);
+            assertEquals(expectedTileValues, cdp.evaluateValue("[...document.querySelectorAll('.matrix-wrap [data-lesson-id]')].map(el=>el.dataset.lessonId+':'+el.dataset.comparisonSide).sort()")
+                    .path("result").path("result").path("value"), "all 1,000 stable IDs and exactly one additional period-move side must be present");
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=accepted]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('period-0') && document.querySelector('.comparison-details')?.textContent.includes('period-40') && document.querySelector('.comparison-details')?.textContent.includes('room-16') && document.querySelector('.comparison-details')?.textContent.includes('Directly affected')"));
+            assertDisplayedComparisonSides(cdp, JSON.readTree("""
+                    [["Old assignment",[["Weekday","Monday",null],
+                    ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
+                    ["Class","Class Sixteen with a deliberately long authoritative display name for timetable tiles","cohort-16"],
+                    ["Teacher","Teacher Sixteen with a deliberately long authoritative display name for timetable tiles","teacher-16"],
+                    ["Period · Changed","Declared period 0","period-0"],
+                    ["Room","Room Sixteen with a deliberately long authoritative display name for timetable tiles","room-16"]]],
+                    ["Proposed assignment",[["Weekday","Thursday",null],
+                    ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
+                    ["Class","Class Sixteen with a deliberately long authoritative display name for timetable tiles","cohort-16"],
+                    ["Teacher","Teacher Sixteen with a deliberately long authoritative display name for timetable tiles","teacher-16"],
+                    ["Period · Changed","Declared period 40","period-40"],
+                    ["Room","Room Sixteen with a deliberately long authoritative display name for timetable tiles","room-16"]]]]
+                    """));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0][data-comparison-side=combined]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('room-0') && document.querySelector('.comparison-details')?.textContent.includes('room-50') && document.querySelector('.comparison-details')?.textContent.includes('Solver ripple')"));
+            assertDisplayedComparisonSides(cdp, JSON.readTree("""
+                    [["Old assignment",[["Weekday","Monday",null],
+                    ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
+                    ["Class","Class 0","cohort-0"],["Teacher","Teacher 0","teacher-0"],
+                    ["Period","Declared period 0","period-0"],["Room · Changed","Room 0","room-0"]]],
+                    ["Proposed assignment",[["Weekday","Monday",null],
+                    ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
+                    ["Class","Class 0","cohort-0"],["Teacher","Teacher 0","teacher-0"],
+                    ["Period","Declared period 0","period-0"],["Room · Changed","Room 50","room-50"]]]]
+                    """));
+            cdp.evaluate("document.querySelector('[data-review-lesson=lesson-500]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Accepted and unchanged') && document.querySelector('.comparison-details')?.textContent.includes('Accepted room pinned')"));
+            assertEquals("room-8", proposal.path("result").path("timetable").path("assignments").get(500).path("roomId").stringValue());
+            assertEquals("period-20", proposal.path("result").path("timetable").path("assignments").get(500).path("periodId").stringValue());
+            assertEquals(stored, storedWorkspaceDocument(), "inspection and protected-lesson navigation must not change the accepted/draft/proposal bundle");
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0]').click(); document.querySelector('[data-range=DAY]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent.includes('Declared lesson 0')"));
+            cdp.evaluate("document.querySelector('#confirm-repair-accept').click(); document.querySelector('#accept-repair').click()");
+            cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(20));
+            JsonNode accepted = storedWorkspaceDocument();
+            assertEquals("ACCEPTED_BASELINE", storedLifecycle());
+            assertEquals(proposal.path("definition"), accepted.path("acceptedBaseline").path("definition"));
+            assertEquals(proposal.path("result"), accepted.path("acceptedBaseline").path("result"));
+            assertFalse(accepted.has("proposal")); assertFalse(accepted.has("repairDraft"));
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent.includes('Declared lesson 0') && !document.querySelector('[data-mode=PROPOSAL]')"),
+                    "accepted Monday and unchanged lesson-0 selection remain representable on the exact new Current baseline");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
+    @DisplayName("UC-4 G-1: revise and discard two independently verified whole-school proposals without advancing Current")
+    void revisesAndDiscardsVerifiedNormativeRepairInRealBrowser() throws Exception {
+        processes.verifiedFeasibleResult = this::verifiedNormativeRepairResult;
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            for (String decision : new String[] { "#revise-proposal", "#discard-proposal" }) {
+                ObjectNode document = investigationScaleDocument();
+                JsonNode baseline = document.path("acceptedBaseline").deepCopy();
+                storeAccepted(document);
+                cdp.command("Page.navigate", object("url", "http://localhost:" + port + "/workspace/"));
+                cdp.awaitText("Complete school population", Duration.ofSeconds(15));
+                cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#repair-resource').value='teacher-16'; document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+                cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+                cdp.evaluate("document.querySelector('[data-lesson-id=lesson-500]').click(); document.querySelector('[name=lesson-dimension][value=ROOM]').checked=true; document.querySelector('#apply-pin').click()");
+                cdp.awaitText("Accepted room pinned", Duration.ofSeconds(15));
+                JsonNode draft = storedWorkspaceDocument().path("repairDraft").deepCopy();
+                cdp.evaluate("document.querySelector('#solve-draft').click()");
+                cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(30));
+                JsonNode before = storedWorkspaceDocument();
+                assertEquals(baseline, before.path("acceptedBaseline"));
+                assertEquals(draft, before.path("repairDraft"));
+                assertEquals(2, before.path("proposal").path("review").path("uniqueChangedLessonCount").intValue());
+                assertEquals("sha256:", before.path("proposal").path("proposedTimetableRevision").stringValue().substring(0, 7));
+                cdp.evaluate("document.querySelector('" + decision + "').click()");
+                cdp.awaitText("Repair draft · not current", Duration.ofSeconds(10));
+                JsonNode after = storedWorkspaceDocument();
+                assertEquals("REPAIR_DRAFT", storedLifecycle());
+                assertEquals(baseline, after.path("acceptedBaseline"));
+                assertEquals(draft, after.path("repairDraft"));
+                assertFalse(after.has("proposal"));
+                assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=PROPOSAL], #accept-repair')"));
+            }
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
+    @DisplayName("UC-4 extension 2a: a zero-change review retains empty categories and groupings without publishing a proposal")
+    void displaysEmptyComparisonGroupsInRealBrowser() throws Exception {
+        ObjectNode document = scaleProposalDocument();
+        ObjectNode proposal = (ObjectNode) document.path("proposal");
+        ObjectNode result = (ObjectNode) proposal.path("result");
+        ((ObjectNode) result.path("timetable")).set("assignments", document.path("acceptedBaseline").path("result").path("timetable").path("assignments").deepCopy());
+        ((ArrayNode) result.path("changeReport").path("periodMoves")).removeAll();
+        proposal.set("review", reviews.create(document.path("acceptedBaseline"), document.path("repairDraft"),
+                proposal.path("definition"), result));
+        storeAccepted(document);
+        jdbc.sql("UPDATE workspace_aggregate SET lifecycle_state='REPAIR_PROPOSAL', version=10 WHERE workspace_id=1").update();
+        String durable = storedDocument();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Unique changed lessons", Duration.ofSeconds(15));
+            assertEquals(JSON.readTree("[\"By class · 0\",\"By teacher · 0\",\"By room · 0\",\"By day · 0\"]"),
+                    cdp.evaluateValue("[...document.querySelectorAll('.review-groups summary')].slice(1).map(el=>el.textContent)")
+                            .path("result").path("result").path("value"));
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.review-category')].every(el=>el.querySelector('h4 span').textContent==='0' && el.textContent.includes('No lessons in this category')) && [...document.querySelectorAll('.review-groups')].slice(1).every(el=>el.textContent.includes('No lessons in this category')) && document.querySelectorAll('.matrix-wrap [data-comparison-side=unchanged]').length === 1000"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(durable, storedDocument(), "supplemental UI-only zero-group snapshot must not advance Current");
+    }
+
+    @Test
     @DisplayName("UC-4 extensions 5a/5b/6a: browser revision, discard and stale acceptance preserve exact accepted bundle")
     void revisesDiscardsAndRejectsStaleProposalInRealBrowser() throws Exception {
         int debuggingPort = startBrowser();
@@ -2071,6 +2346,12 @@ class WorkspaceBrowserIT {
     private static boolean browserTrue(Cdp cdp, String expression) throws Exception {
         return cdp.evaluateValue("Boolean(" + expression + ")")
                 .path("result").path("result").path("value").booleanValue();
+    }
+
+    private static void assertDisplayedComparisonSides(Cdp cdp, JsonNode expected) throws Exception {
+        JsonNode actual = cdp.evaluateValue("[...document.querySelectorAll('.comparison-details .before-after section')].map(side=>[side.querySelector('h5').textContent,[...side.querySelectorAll('dl > div')].map(row=>[row.querySelector('dt').textContent.trim(),row.querySelector('dd').firstChild.textContent.trim(),row.querySelector('dd small')?.textContent||null])])")
+                .path("result").path("result").path("value");
+        assertEquals(expected, actual, "UC-4 main 4: each displayed weekday, subject, class, teacher, period and room must match independently verified definition/result by name, stable ID and changed cue");
     }
 
     private static void awaitBrowserCondition(Cdp cdp, String expression) throws Exception {
@@ -2239,6 +2520,81 @@ class WorkspaceBrowserIT {
                 .put("schoolId", "opaque-scale-school").put("inputRevision", revision)
                 .put("timetableRevision", timetableRevision).putArray("locks");
         return document;
+    }
+
+    private ObjectNode verifiedNormativeRepairResult(java.util.List<String> arguments) {
+        try {
+            JsonNode acceptedDefinition = JSON.readTree(Path.of(arguments.get(arguments.indexOf("--current-definition") + 1)).toFile());
+            JsonNode acceptedResult = JSON.readTree(Path.of(arguments.get(arguments.indexOf("--current") + 1)).toFile());
+            JsonNode successor = JSON.readTree(Path.of(arguments.get(arguments.indexOf("--definition") + 1)).toFile());
+            KernelVerifier.Verification original = verifier.verify(new ImportDocuments(acceptedDefinition, acceptedResult,
+                    null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+            assertEquals(acceptedResult.path("timetableRevision").stringValue(), original.timetableRevision());
+            assertEquals(original.definitionRevision(), normalizedDefinitionRevision(acceptedDefinition));
+            assertFalse(jsonStrings(successor.path("teachers").get(16).path("availablePeriodIds")).contains("period-0"));
+            assertEquals("room-8", successor.path("lessons").get(500).path("roomLock").stringValue());
+            String revision = normalizedDefinitionRevision(successor);
+            ObjectNode result = (ObjectNode) acceptedResult.deepCopy();
+            result.put("correlationId", arguments.get(arguments.indexOf("--correlation-id") + 1));
+            result.put("inputRevision", revision).put("elapsedTimeMs", 2004).put("terminationReason", "TIME_LIMIT");
+            result.putObject("limit").put("type", "TIME").put("duration", "PT30S");
+            ObjectNode moved = (ObjectNode) result.path("timetable").path("assignments").get(960);
+            ObjectNode roomOnly = (ObjectNode) result.path("timetable").path("assignments").get(0);
+            assertEquals("period-0", moved.path("periodId").stringValue());
+            assertEquals("room-0", roomOnly.path("roomId").stringValue());
+            moved.put("periodId", "period-40");
+            roomOnly.put("roomId", "room-50");
+            result.withObject("score").put("periodMoves", 1).put("roomOnlyMoves", 1);
+            ObjectNode report = result.putObject("changeReport");
+            report.putArray("additions"); report.putArray("cancellations"); report.putArray("teacherChanges");
+            report.putArray("forcedMoves");
+            report.putArray("periodMoves").addObject().put("lessonId", "lesson-960")
+                    .put("oldPeriodId", "period-0").put("newPeriodId", "period-40")
+                    .put("oldRoomId", "room-16").put("newRoomId", "room-16");
+            report.putArray("roomOnlyMoves").addObject().put("lessonId", "lesson-0")
+                    .put("oldRoomId", "room-0").put("newRoomId", "room-50");
+            ObjectNode scope = JSON.createObjectNode().put("schemaVersion", 1).put("schoolId", "opaque-scale-school")
+                    .put("inputRevision", revision);
+            var orderedAssignments = new ArrayList<JsonNode>();
+            result.path("timetable").path("assignments").forEach(orderedAssignments::add);
+            orderedAssignments.sort(Comparator.comparing(item -> item.path("lessonId").stringValue()));
+            var ordered = scope.putArray("assignments");
+            orderedAssignments.forEach(ordered::add);
+            result.put("timetableRevision", "sha256:" + HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                    .digest(CanonicalJson.bytes(scope))));
+            KernelVerifier.Verification verified = verifier.verify(new ImportDocuments(successor, result,
+                    null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+            assertEquals(revision, verified.definitionRevision());
+            assertEquals(result.path("timetableRevision").stringValue(), verified.timetableRevision());
+            return result;
+        } catch (Exception exception) {
+            throw new IllegalStateException("Normative candidate must pass the actual kernel verifier before it reaches the planner", exception);
+        }
+    }
+
+    private String normalizedDefinitionRevision(JsonNode definition) throws Exception {
+        ObjectNode normalized = (ObjectNode) definition.deepCopy();
+        for (String collection : new String[] { "subjects", "teachers", "cohorts", "rooms", "periods", "lessons", "softConstraintOverrides" }) {
+            if (!(normalized.path(collection) instanceof ArrayNode array)) continue;
+            var ordered = new ArrayList<JsonNode>();
+            array.forEach(ordered::add);
+            ordered.sort(Comparator.comparing(item -> item.path(collection.equals("softConstraintOverrides") ? "constraintId" : "id").stringValue()));
+            array.removeAll();
+            ordered.forEach(array::add);
+            for (JsonNode value : array) {
+                for (String field : new String[] { "qualifiedSubjectIds", "availablePeriodIds", "undesirablePeriodIds", "capabilityIds",
+                        "requiredRoomCapabilityIds", "preferredRoomIds" }) {
+                    if (!(value.path(field) instanceof ArrayNode set)) continue;
+                    var entries = new ArrayList<String>();
+                    set.forEach(item -> entries.add(item.stringValue()));
+                    entries.sort(String::compareTo);
+                    set.removeAll();
+                    entries.forEach(set::add);
+                }
+            }
+        }
+        return "sha256:" + HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                .digest(CanonicalJson.bytes(normalized)));
     }
 
     private ObjectNode scaleProposalDocument() {

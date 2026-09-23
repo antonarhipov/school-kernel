@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-4
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none
 
 ## Progress
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: APPROVE; G-1–G-3 resolved, walkthrough passed |
 | UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
 | UC-3 | APPROVED | UC-2 | `3f96d79` | `convergence/UC-3.md`: APPROVE; earlier G-1/G-2 resolved, UC-3 walkthrough passed |
-| UC-4 | NEEDS_REVISION | UC-3 | `6310bc1` | `convergence/UC-4.md`: REJECT; C-1, G-1, G-2 |
+| UC-4 | READY_FOR_CONVERGENCE | UC-3 | HEAD at convergence (revision of `6310bc1`) | `convergence/UC-4.md`: REJECT; C-1, G-1, G-2; reconvergence pending |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
 ## UC-1 Evidence
@@ -101,6 +101,15 @@
 ## UC-4 Evidence
 
 - Started from: `4bc2c64042fe54ed2309c408d8f96df703372566` (2026-09-23); prior convergence findings: none.
+- Revision from: `8c6ac9f3201c961aaa30e09e0ad6036191c2a97f`; findings C-1, G-1, G-2 in `convergence/UC-4.md`; pre-existing dirty `.idea/encodings.xml` excluded.
+- Revision submission: HEAD at convergence. Changed files since `8c6ac9f`: `timetable-workspace/src/main/resources/static/workspace/{app.js,focused-renderer.js,messages.js}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/{WorkspaceBrowserIT.java,WorkspaceRepairPlanningIT.java}`, `spec/timetable-ux-polish/{status.md,checkpoints/UC-4.md}`.
+- Revision commands and results: `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#reviewsIndependentlyVerifiedNormativeRepairInRealBrowser+retainsBothSidesInFocusedResourceSchedulesInRealBrowser+revisesAndDiscardsVerifiedNormativeRepairInRealBrowser+displaysEmptyComparisonGroupsInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 4 browser); `./mvnw -pl timetable-workspace -am verify` PASS (26 unit, 81 integration including 33 browser, 0 failures/errors/skips per `failsafe-summary.xml` and `WorkspaceBrowserIT` report). `git diff --check` PASS. Test-created `.output.txt` removed; no tracked runtime data changed.
+
+| Convergence finding / contract | Revision evidence |
+|---|---|
+| C-1; UC-4 1a, 3a, G4 | `focused-renderer.js:1–14`, `app.js:694–707`: focus gathers matched lesson IDs then retains both comparison representations even if teacher, room, or class differs on the other side, labelling the linked side as belonging to the other resource. `WorkspaceBrowserIT.retainsBothSidesInFocusedResourceSchedulesInRealBrowser` (`:1977–2020`) checks old/new teacher and room focus in both directions, class and subject filters and search while preserving exact durable document. |
+| G-1; UC-4 main 1–6, 2a, G1, G2, G4, G8, RULE-9, RULE-12 | `WorkspaceBrowserIT.reviewsIndependentlyVerifiedNormativeRepairInRealBrowser` (`:2023–2205`): real browser stages teacher-16/period-0 Draft and room pin on lesson-500 from independently verified 1,000-lesson accepted baseline. Test launcher synthesizes deterministic successor result but both original and successor pass the real packaged `KernelVerifier` (`:2470–2560`), and the production `KernelPlanner` persists it after its own verify; exact accepted/draft/proposal retained, result and revision equality, full 1,001-tile roster, six exact category values, direct/ripple/unique counts, group memberships, room-only and period-change inspector sides, honest protected display, explicit accepted successor and cleared proposal/draft. `revisesAndDiscardsVerifiedNormativeRepairInRealBrowser` (`:2208–2255`) exercises both other decisions on the same verified full-school candidate. Supplemental `displaysEmptyComparisonGroupsInRealBrowser` covers all-zero grouping branch without ever submitting the UI-only fixture for acceptance. |
+| G-2; UC-4 main 2–5, 3a, 4a, G1, G2, G5, RULE-6 | `WorkspaceBrowserIT.reviewsIndependentlyVerifiedNormativeRepairInRealBrowser` compares every `review.changedLessons` field, six category IDs/counts/lesson IDs, all four group maps/context memberships, two complete displayed old/proposed records (weekday, subject, class, teacher, period, room by name and ID) and full school roster with fixed expected values; tests real proposed teacher-16 unavailable Monday/accepted teacher-16 assigned Monday, distinct labels and exact selected identity/range after acceptance. Synthetic UI-only fixture still covers one-sided additions/cancellations, same-slot changes and missing proposed names, while `retainsBothSidesInFocusedResourceSchedulesInRealBrowser` now asserts subject investigation, cohort filter, old/new resource focus and one-sided search with opposite side retained and side-specific match cue. |
 - Pre-existing dirty files: `.idea/encodings.xml` (unrelated; preserve).
 - Implementation submission: HEAD at convergence.
 - Changed files: `timetable-workspace/src/main/resources/static/workspace/{app.js,proposal-comparison.js,focused-renderer.js,messages.js,styles.css}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`, `spec/timetable-ux-polish/{status.md,checkpoints/UC-4.md}`.
