@@ -65,6 +65,15 @@ code { overflow-wrap: anywhere; }
 #workbench-inspector .lesson-panel > button { margin-top: 10px; }
 #workbench-inspector .lesson-panel dl { grid-template-columns: 1fr; }
 #workbench-inspector .lesson-panel details { margin-top: 12px; }
+#workbench-inspector .draft-context { margin-top: 16px; padding-top: 12px; border-top: 1px solid #cbd8cf; }
+#workbench-inspector .draft-context h3 { margin: 4px 0 10px; font-size: 1rem; }
+#workbench-inspector .draft-context dl { grid-template-columns: 1fr; }
+#workbench-inspector .draft-context .repair-entry, #workbench-inspector .draft-context .repair-controls { margin: 12px 0; padding: 10px; }
+#workbench-inspector .draft-context .repair-grid { grid-template-columns: 1fr; }
+#workbench-inspector .draft-context .period-choices { max-height: 210px; overflow: auto; }
+#workbench-inspector .draft-context .actions button { width: 100%; }
+#workbench-inspector .draft-context .bulk-history p { display: grid; }
+#workbench-inspector .draft-context .link-button { margin-left: 0; }
 #inspector-summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid #cbd8cf; border-radius: 9px; }
 .accepted-heading { display: flex; justify-content: space-between; align-items: start; gap: 24px; }
 .accepted-heading h2 { margin: 10px 0 0; }

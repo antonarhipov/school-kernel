@@ -87,6 +87,7 @@ export const M = Object.freeze({
   noWeeklyChanges: 'No weekly resource changes are staged.',
   draftCounts: 'Draft summary',
   directEffects: 'Directly affected lessons',
+  noDirectEffects: 'This rule currently conflicts with no accepted assignment. The staged intent remains saved.',
   attemptPins: 'Attempt-scoped pins',
   conflicts: 'Blocking conflicts',
   blockingConflicts: 'Resolve blocking conflicts before solving',
@@ -174,6 +175,10 @@ export const M = Object.freeze({
   policyRoomLock: 'Policy room lock',
   periodPinned: 'Accepted period pinned',
   roomPinned: 'Accepted room pinned',
+  periodUnpinned: 'Accepted period unpinned',
+  roomUnpinned: 'Accepted room unpinned',
+  draftSaveFailed: 'The latest repair change was not durably saved. Repair generation is unavailable until a successful save.',
+  conflictNavigationReset: 'The view was adjusted to show this blocking conflict; the accepted timetable is unchanged.',
 
   wholeSchool: 'Whole school',
   acceptedState: 'Accepted baseline · current timetable',

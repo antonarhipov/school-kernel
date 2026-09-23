@@ -15,6 +15,8 @@ let bulkPreview;
 let dayMatrices = new Map();
 let preferenceSchoolId;
 let inspectionState;
+let canvasScroll;
+let draftSaveFailed = false;
 const boundLessonButtons = new WeakSet();
 
 const view = {
@@ -40,6 +42,8 @@ async function load() {
 }
 
 function render(snapshot) {
+  const matrix = stateCard.querySelector('.matrix-wrap');
+  if (matrix) canvasScroll = { left: matrix.scrollLeft, top: matrix.scrollTop };
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
   const school = snapshot.workspace.school;
@@ -334,7 +338,7 @@ function bindStartRepair() {
   if (!form) return;
   const type = form.querySelector('#repair-resource-type');
   const resource = form.querySelector('#repair-resource');
-  const fill = () => { const source = type.value === 'TEACHER' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms; resource.innerHTML = options(source).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); };
+  const fill = () => { const source = type.value === 'TEACHER' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms; resource.innerHTML = options(source).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const selected = acceptedModel.assignmentMap.get(view.selectedLessonId); const preferred = type.value === 'TEACHER' ? selected?.teacherId || (view.focusedType === 'teacherId' ? view.focusedId : null) : selected?.roomId || (view.focusedType === 'roomId' ? view.focusedId : null); if (preferred) resource.value = preferred; };
   fill(); type.addEventListener('change', fill);
   form.addEventListener('submit', async event => {
     event.preventDefault();
@@ -347,23 +351,34 @@ function renderRepair(snapshot, schoolName) {
   const draft = snapshot.workspace.repairDraft;
   stateCard.className = 'card workspace-card repair-mode compact-density';
   if (view.narrow) {
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice}</p><div id="accepted-view"></div>`;
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice} ${M.acceptedStillCurrent}</p><div id="accepted-view"></div>`;
     renderFocused(); return;
   }
-  const changes = draft.intent.changes.map(change => repairChange(change)).join('');
-  const lastRun = snapshot.workspace.lastRun;
+  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><p class="mode-note">${M.acceptedStillCurrent}</p></div>
+    <p>${M.repairDraftIntro}</p><div id="accepted-view"></div>`;
+  if (view.focusedType) renderFocused(); else renderWholeSchool();
+}
+
+function draftContext() {
+  const draft = currentSnapshot.workspace.repairDraft;
+  const lastRun = currentSnapshot.workspace.lastRun;
   const retryAvailable = lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
-  const runFeedback = lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' ? repairRunFeedback(lastRun) : '';
-  const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h3>${M.blockingConflicts}</h3>${draft.conflicts.map(item => `<p><strong>${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))}</strong> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
-  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div>
-    <p>${M.repairDraftIntro}</p><div class="draft-summary"><section><h3>${M.weeklyChanges}</h3>${changes || `<p>${M.noWeeklyChanges}</p>`}</section><section><h3>${M.draftCounts}</h3><dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd id="attempt-pin-count">${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd id="draft-conflict-count">${draft.conflicts.length}</dd></div></dl></section></div>${conflicts}
-    <div class="repair-controls"><h3>${M.bulkPin}</h3><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></div>
-    <div class="repair-day"><label><span>${M.weekdayLabel}</span><select id="repair-weekday">${acceptedModel.weekdays.map(day => `<option value="${escapeAttribute(day)}"${day === view.day ? ' selected' : ''}>${escapeHtml(M.days[day] || day)}</option>`).join('')}</select></label></div>
-    ${matrix(acceptedModel.definition.cohorts, periodsForDay(view.day), acceptedModel.assignmentsByCell, false)}
-    <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(acceptedModel.assignmentMap.get(view.selectedLessonId)) : ''}</div>
+  const changes = draft.intent.changes.map(change => repairChange(change)).join('');
+  const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h4>${M.blockingConflicts}</h4>${draft.conflicts.map(item => `<p><button type="button" class="link-button" data-draft-conflict="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))}</button> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
+  return `<section class="draft-context" aria-label="${M.draftCounts}"><h3>${M.weeklyChanges}</h3>${changes || `<p>${M.noWeeklyChanges}</p>`}
+    <dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd id="attempt-pin-count">${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd id="draft-conflict-count">${draft.conflicts.length}</dd></div></dl>
+    ${draft.directEffectLessonIds.length ? '' : `<p class="notice">${M.noDirectEffects}</p>`}${conflicts}
+    <details class="repair-entry"><summary>${M.stageChange}</summary>${repairIntentForm(draft)}</details>
+    <details class="repair-controls"${bulkPreview ? ' open' : ''}><summary>${M.bulkPin}</summary><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></details>
     <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div>
-    ${runFeedback}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve ? '' : ' disabled'}>${draft.readyToSolve ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div>`;
-  bindRepairControls();
+    ${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' ? repairRunFeedback(lastRun) : ''}
+    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></section>`;
+}
+
+function repairIntentForm(draft) {
+  const change = draft.intent.changes[0];
+  return `<form id="stage-repair-form"><p>${M.startRepairIntro}</p>${selectControl('stage-resource-type', M.resourceType, [['TEACHER', M.teacher], ['ROOM', M.room]], change?.resourceType || 'TEACHER')}
+    <label><span>${M.resource}</span><select id="stage-resource"></select></label><fieldset class="period-choices"><legend>${M.weeklyUnavailablePeriods}</legend>${acceptedModel.definition.periods.map(period => `<label><input type="checkbox" name="stage-period" value="${escapeAttribute(period.id)}"${change?.unavailablePeriodIds.includes(period.id) ? ' checked' : ''}> <span>${escapeHtml(periodLabel(period))} · ${escapeHtml(M.days[period.weekday] || period.weekday)}</span></label>`).join('')}</fieldset><button type="submit">${M.stageChange}</button></form>`;
 }
 
 function repairChange(change) {
@@ -382,9 +397,11 @@ function bulkPreviewHtml() {
 }
 
 function bindRepairControls() {
-  document.querySelector('#repair-weekday').addEventListener('change', event => { view.day = event.target.value; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); });
-  document.querySelectorAll('[data-lesson-id]').forEach(button => button.addEventListener('click', () => selectLesson(button)));
-  bindCloseDetails(); bindPinActions();
+  const form = document.querySelector('#stage-repair-form');
+  const type = form.querySelector('#stage-resource-type'); const resource = form.querySelector('#stage-resource');
+  const fill = () => { const items = type.value === 'TEACHER' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms; resource.innerHTML = options(items).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const staged = currentSnapshot.workspace.repairDraft.intent.changes.find(change => change.resourceType === type.value); if (staged) resource.value = staged.resourceId; };
+  fill(); type.addEventListener('change', fill);
+  form.addEventListener('submit', event => { event.preventDefault(); mutateJson('/api/repair-draft', 'PATCH', { action: 'STAGE_UNAVAILABILITY', resourceType: type.value, resourceId: resource.value, periodIds: [...form.querySelectorAll('[name=stage-period]:checked')].map(input => input.value) }); });
   const scope = document.querySelector('#bulk-scope'); const scopeId = document.querySelector('#bulk-scope-id');
   const fillScope = () => { const values = scope.value === 'DAY' ? acceptedModel.weekdays.map(day => [day, M.days[day] || day]) : scope.value === 'CLASS' ? options(acceptedModel.definition.cohorts) : [['', M.snapshotCurrentUnaffected]]; scopeId.innerHTML = values.map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); scopeId.disabled = scope.value === 'UNAFFECTED'; };
   fillScope(); scope.addEventListener('change', fillScope);
@@ -392,10 +409,10 @@ function bindRepairControls() {
     const dimensions = [...document.querySelectorAll('[name=bulk-dimension]:checked')].map(input => input.value);
     const payload = { scope: scope.value, dimensions }; if (scope.value !== 'UNAFFECTED') payload.scopeId = scopeId.value;
     const response = await commandJson('/api/repair-draft/bulk-pin-preview', 'POST', payload);
-    if (response) { bulkPreview = response; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); }
+    if (response) { bulkPreview = response; render(currentSnapshot); }
   });
   document.querySelector('#confirm-bulk')?.addEventListener('click', () => { const preview = bulkPreview; bulkPreview = null; mutateJson('/api/repair-draft', 'PATCH', { action: 'CONFIRM_BULK_PIN', preview }); });
-  document.querySelector('#cancel-bulk')?.addEventListener('click', () => { bulkPreview = null; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); });
+  document.querySelector('#cancel-bulk')?.addEventListener('click', () => { bulkPreview = null; render(currentSnapshot); });
   document.querySelectorAll('[data-undo-bulk]').forEach(button => button.addEventListener('click', () => mutateJson('/api/repair-draft', 'PATCH', { action: 'UNDO_BULK_PIN', bulkActionId: button.dataset.undoBulk })));
   const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
   confirmation.addEventListener('change', () => { discard.disabled = !confirmation.checked; });
@@ -404,8 +421,22 @@ function bindRepairControls() {
   document.querySelector('#retry-repair')?.addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT2M' }));
   document.querySelectorAll('[data-diagnostic-id]').forEach(button => button.addEventListener('click', () => {
     const id = button.dataset.diagnosticId;
-    if (acceptedModel.assignmentMap.has(id)) { view.selectedLessonId = id; renderRepair(currentSnapshot, currentSnapshot.workspace.school.displayName); }
+    if (acceptedModel.assignmentMap.has(id)) selectDraftLesson(id);
   }));
+  document.querySelectorAll('[data-draft-conflict]').forEach(button => button.addEventListener('click', () => selectDraftLesson(button.dataset.draftConflict)));
+}
+
+function selectDraftLesson(id) {
+  const item = acceptedModel.assignmentMap.get(id);
+  if (!item) return;
+  if (!isRepresented(item)) {
+    syncInspectionState(inspectionState.resetFilters().state);
+    if (view.range === 'DAY' && view.day !== item.period.weekday) syncInspectionState(inspectionState.selectDay(item.period.weekday, item.period.weekday).state);
+    renderWholeSchool();
+    document.querySelector('#inspection-notice').textContent = M.conflictNavigationReset;
+  }
+  const button = document.querySelector(`[data-lesson-id="${CSS.escape(id)}"]`);
+  if (button) { button.scrollIntoView({ block: 'nearest', inline: 'nearest' }); selectLesson(button); }
 }
 
 function repairRunFeedback(run) {
@@ -430,6 +461,7 @@ function renderWholeSchool() {
   const investigation = investigationSummary();
   const matches = narrowed ? investigation.represented : model.assignments.filter(isInSelectedRange);
   const visibleCohorts = narrowed ? model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id)) : model.definition.cohorts;
+  const draftMode = currentSnapshot.state === 'REPAIR_DRAFT' && inspectionState.current().mode === 'DRAFT';
   host.innerHTML = `<div class="inspection-toolbar" aria-label="${M.wholeSchool}">
       <fieldset class="range-control"><legend>${M.rangeLabel}</legend><button type="button" data-range="WEEK" aria-pressed="${view.range === 'WEEK'}">${M.week}</button><button type="button" data-range="DAY" aria-pressed="${view.range === 'DAY'}">${M.dayView}</button></fieldset>
       <label class="search-control"><span>${M.searchLabel}</span><input id="lesson-search" type="search" value="${escapeAttribute(view.search)}" placeholder="${M.searchPlaceholder}"></label>
@@ -457,11 +489,11 @@ function renderWholeSchool() {
     <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
     <div class="workbench-layout${inspectionState.current().inspectorOpen ? '' : ' inspector-collapsed'}">
       <div class="canvas-region">${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: model.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: model.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div>
-      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : `<p>${M.noLessonSelected}</p>`}</div></aside>
+      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : `<p>${M.noLessonSelected}</p>`}</div>${draftMode ? draftContext() : ''}</aside>
       <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(entityName(model.maps.lessons.get(view.selectedLessonId), view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
     </div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
-  if (view.range === 'WEEK') { bindInspectionControls(); applyFiltersInPlace(); return; }
+  if (view.range === 'WEEK') { bindInspectionControls(); if (draftMode) bindRepairControls(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
   for (const day of model.weekdays) {
     if (day === view.day) continue;
@@ -470,7 +502,15 @@ function renderWholeSchool() {
     dayMatrices.set(day, template.content.firstElementChild);
   }
   bindInspectionControls();
+  if (draftMode) bindRepairControls();
   applyFiltersInPlace();
+  restoreCanvasScroll();
+}
+
+function restoreCanvasScroll() {
+  if (!canvasScroll) return;
+  document.querySelector('.matrix-wrap')?.scrollTo(canvasScroll.left, canvasScroll.top);
+  canvasScroll = null;
 }
 
 function switchWholeSchoolDay(day) {
@@ -481,8 +521,9 @@ function switchWholeSchoolDay(day) {
 function weekLessonButton(item) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
-  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), periodLabel(item.period), item.lessonId, ...cues.accessible].join(' · ');
-  return `<button type="button" class="lesson-cell week-lesson${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  const draft = repairLessonState(item.lessonId);
+  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), periodLabel(item.period), item.lessonId, ...cues.accessible, ...draft.accessible].join(' · ');
+  return `<button type="button" class="lesson-cell week-lesson${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${draft.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function matrix(cohorts, periods, assignmentsByCell, filtered) {
@@ -499,23 +540,24 @@ function lessonButton(item, matched) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draftState = repairLessonState(item.lessonId);
-  return `<button type="button" class="lesson-cell${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, cues.accessible))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function lessonDetails(item) {
   if (!item) return '';
   const draftState = repairLessonState(item.lessonId);
-  const repairActions = currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT' ? `<section class="pin-actions"><h4>${M.protectAcceptedAssignment}</h4>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${draftState.labels || `<span class="state unpinned-state">${M.unpinned}</span>`}</p></section>` : '';
+  const repairActions = currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT' ? `<section class="pin-actions"><h4>${M.protectAcceptedAssignment}</h4>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`} <span class="state ${draftState.periodPinned ? 'pin-label' : 'unpinned-state'}">${draftState.periodPinned ? M.periodPinned : M.periodUnpinned}</span> <span class="state ${draftState.roomPinned ? 'pin-label' : 'unpinned-state'}">${draftState.roomPinned ? M.roomPinned : M.roomUnpinned}</span></p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div><span class="state accepted">✓ ${M.acceptedAssignment}</span><h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
     ${repairActions}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
 }
 
 function repairLessonState(lessonId) {
-  if (currentSnapshot?.state !== 'REPAIR_DRAFT' || inspectionState?.current().mode !== 'DRAFT') return { direct: false, conflict: false, labels: '' };
+  if (currentSnapshot?.state !== 'REPAIR_DRAFT' || inspectionState?.current().mode !== 'DRAFT') return { direct: false, conflict: false, labels: '', accessible: [], conflictMessages: [] };
   const draft = currentSnapshot.workspace.repairDraft;
   const direct = draft.directEffectLessonIds.includes(lessonId);
-  const conflict = draft.conflicts.some(item => item.lessonId === lessonId);
+  const conflictMessages = draft.conflicts.filter(item => item.lessonId === lessonId).map(item => item.message);
+  const conflict = conflictMessages.length > 0;
   const pin = draft.intent.pins.find(item => item.lessonId === lessonId);
   const lesson = acceptedModel.maps.lessons.get(lessonId);
   const manifestLock = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(item => item.lessonId === lessonId);
@@ -526,7 +568,12 @@ function repairLessonState(lessonId) {
   if (lesson?.roomLock || manifestLock?.roomLockOrigin === 'PERSISTENT_POLICY') labels.push(`<em class="policy-label">${M.policyRoomLock}</em>`);
   if (pin?.periodSources?.length) labels.push(`<em class="pin-label">${M.periodPinned}</em>`);
   if (pin?.roomSources?.length) labels.push(`<em class="pin-label">${M.roomPinned}</em>`);
-  return { direct, conflict, labels: labels.join('') };
+  const intent = draft.intent.changes.filter(change => change.unavailablePeriodIds.includes(acceptedModel.assignmentMap.get(lessonId)?.periodId)
+    && acceptedModel.assignmentMap.get(lessonId)?.[change.resourceType === 'TEACHER' ? 'teacherId' : 'roomId'] === change.resourceId).map(change => {
+      const resources = change.resourceType === 'TEACHER' ? acceptedModel.maps.teachers : acceptedModel.maps.rooms;
+      return `${M.directIntent}: ${entityName(resources.get(change.resourceId), change.resourceId)} · ${change.unavailablePeriodIds.map(id => entityName(acceptedModel.maps.periods.get(id), id)).join(', ')}`;
+    });
+  return { direct, conflict, labels: labels.join(''), accessible: labels.map(label => label.replace(/<[^>]+>/g, '')), conflictMessages, intent: intent.join('; '), periodPinned: Boolean(pin?.periodSources?.length), roomPinned: Boolean(pin?.roomSources?.length) };
 }
 
 function bindPinActions() {
@@ -540,18 +587,21 @@ function bindPinActions() {
 async function mutatePin(payload) {
   const response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
   const result = await response.json();
-  if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
+  if (!response.ok) { draftSaveFailed = true; stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.draftSaveFailed} ${escapeHtml(result.message || M.actionFailed)}</p>`); document.querySelector('#solve-draft').disabled = true; if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
+  draftSaveFailed = false;
   etag = response.headers.get('ETag');
   if (result.repairDraft) currentSnapshot.workspace.repairDraft = result.repairDraft; else currentSnapshot = result;
   const draft = currentSnapshot.workspace.repairDraft;
   if (acceptedModel.assignments.length < 200 || draft.conflicts.length) { render(currentSnapshot); return; }
   const item = acceptedModel.assignmentMap.get(payload.lessonId);
   const oldButton = document.querySelector(`[data-lesson-id="${CSS.escape(payload.lessonId)}"]`);
-  if (oldButton) { const holder = document.createElement('div'); holder.innerHTML = lessonButton(item, false); const replacement = holder.firstElementChild; replacement.addEventListener('click', () => selectLesson(replacement)); oldButton.replaceWith(replacement); }
+  if (oldButton) { const holder = document.createElement('div'); holder.innerHTML = view.range === 'WEEK' ? weekLessonButton(item) : lessonButton(item, false); const replacement = holder.firstElementChild; replacement.addEventListener('click', () => selectLesson(replacement)); oldButton.replaceWith(replacement); }
   const host = document.querySelector('#lesson-details-host');
   host.innerHTML = lessonDetails(item); bindCloseDetails(); bindPinActions();
   document.querySelector('#attempt-pin-count').textContent = draft.intent.pins.length;
   document.querySelector('#draft-conflict-count').textContent = draft.conflicts.length;
+  const context = document.querySelector('.draft-context');
+  if (context) { const replacement = document.createElement('div'); replacement.innerHTML = draftContext(); context.replaceWith(replacement.firstElementChild); bindRepairControls(); }
   document.querySelector('#lesson-panel-title')?.focus();
 }
 
@@ -727,7 +777,7 @@ function applyFiltersInPlace() {
     const cues = lessonCues(item);
     button.hidden = !matches;
     button.classList.toggle('search-match', searchMatches(item));
-    button.setAttribute('aria-label', lessonAccessibleName(item, cues.accessible));
+    button.setAttribute('aria-label', lessonAccessibleName(item, [...cues.accessible, ...repairLessonState(item.lessonId).accessible]));
     const searchLabel = button.querySelector('.search-match-label');
     if (searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', `<em class="search-match-label">${M.searchMatch}</em>`);
     if (!searchMatches(item)) searchLabel?.remove();
@@ -874,12 +924,23 @@ function bindInitialActions() {
 async function cancelRun(id) { await mutate(`/api/runs/${encodeURIComponent(id)}`, 'DELETE'); }
 
 async function mutate(path, method, body) {
-  const headers = { [csrf.headerName]: csrf.token, 'If-Match': etag };
-  if (typeof body === 'string') headers['Content-Type'] = 'application/json';
-  const response = await fetch(path, { method, headers, body });
-  const result = await response.json();
-  if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
-  etag = response.headers.get('ETag'); render(result);
+  try {
+    const headers = { [csrf.headerName]: csrf.token, 'If-Match': etag };
+    if (typeof body === 'string') headers['Content-Type'] = 'application/json';
+    const response = await fetch(path, { method, headers, body });
+    const result = await response.json();
+    if (!response.ok) {
+      if (path === '/api/repair-draft' && method !== 'DELETE') { draftSaveFailed = true; document.querySelector('#solve-draft')?.setAttribute('disabled', ''); }
+      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${path === '/api/repair-draft' && method !== 'DELETE' ? M.draftSaveFailed + ' ' : ''}${escapeHtml(result.message || M.actionFailed)}</p>`);
+      if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return;
+    }
+    if (path === '/api/repair-draft') draftSaveFailed = false;
+    bulkPreview = null;
+    etag = response.headers.get('ETag'); render(result);
+  } catch (_) {
+    if (path === '/api/repair-draft' && method !== 'DELETE') { draftSaveFailed = true; document.querySelector('#solve-draft')?.setAttribute('disabled', ''); }
+    stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${path === '/api/repair-draft' && method !== 'DELETE' ? M.draftSaveFailed : M.actionFailed}</p>`);
+  }
 }
 
 async function mutateJson(path, method, payload) {

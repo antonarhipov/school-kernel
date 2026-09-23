@@ -1077,6 +1077,225 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("Timetable polish UC-2 main/7b/G1-G5: teacher intent preserves accepted IDs, selection, mode and focused context")
+    void retainsAcceptedCanvasThroughTeacherDraftModesAndReload() throws Exception {
+        ObjectNode accepted = validAcceptedDocument();
+        verifier.verify(new ImportDocuments(accepted.path("acceptedBaseline").path("definition"),
+                accepted.path("acceptedBaseline").path("result"), null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+        storeAccepted(accepted);
+        JsonNode baseline = accepted.path("acceptedBaseline").deepCopy();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(15));
+            assertEquals(Set.of("lesson-math-1", "lesson-science-1"), renderedLessonIds(cdp));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-math-1]').click(); document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#teacher-investigation').value='teacher-alex'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('[name=period][value=\"mon-1\"]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            String draftText = cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            assertTrue(draftText.contains("Accepted baseline remains current"));
+            assertTrue(draftText.contains("Alex"));
+            JsonNode draft = assertDraftUnchangedBaseline(baseline);
+            assertEquals(1, draft.path("intent").path("changes").size());
+            assertEquals("TEACHER", draft.path("intent").path("changes").get(0).path("resourceType").stringValue());
+            assertEquals("teacher-alex", draft.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertEquals(JSON.readTree("[\"mon-1\"]"), draft.path("intent").path("changes").get(0).path("unavailablePeriodIds"));
+            assertEquals(JSON.readTree("[\"lesson-math-1\"]"), draft.path("directEffectLessonIds"));
+            assertEquals(0, draft.path("conflicts").size());
+            assertTrue(draft.path("readyToSolve").booleanValue());
+            assertTrue(draft.path("persisted").booleanValue());
+            assertEquals(0, draft.path("intent").path("pins").size());
+            assertEquals(0, draft.path("intent").path("bulkActions").size());
+            String durable = storedDocument();
+            assertEquals(Set.of("lesson-math-1", "lesson-science-1"), renderedLessonIds(cdp));
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-modes [data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Mathematics 1' && document.querySelector('[data-lesson-id=lesson-math-1]')?.textContent.includes('Directly affected')"));
+
+            cdp.evaluate("document.querySelector('#workbench-modes [data-mode=CURRENT]').click()");
+            cdp.awaitText("Current · accepted", Duration.ofSeconds(5));
+            assertEquals(Set.of("lesson-math-1", "lesson-science-1"), renderedLessonIds(cdp));
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Mathematics 1' && !document.querySelector('#apply-pin') && document.querySelector('#teacher-investigation')?.value === 'teacher-alex' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true'"));
+            cdp.evaluate("document.querySelector('#workbench-modes [data-mode=DRAFT]').click()");
+            cdp.awaitText("Directly affected", Duration.ofSeconds(5));
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Mathematics 1' && document.querySelector('#apply-pin') !== null"));
+            cdp.evaluate("document.querySelector('#toggle-inspector').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.workbench-layout')?.classList.contains('inspector-collapsed') && document.querySelector('#inspector-summary')?.textContent.includes('Mathematics 1')"));
+            cdp.evaluate("document.querySelector('#reopen-inspector').click(); document.querySelector('[data-open-focus=teacherId]').click()");
+            cdp.awaitText("Teacher schedule · Alex", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertEquals(Set.of("lesson-math-1", "lesson-science-1"), renderedLessonIds(cdp));
+            assertEquals(durable, storedDocument(), "mode, range, inspector and focused return are presentation-only");
+
+            cdp.evaluate("window.__uc2ReloadMarker = true");
+            cdp.command("Page.reload", JSON.createObjectNode());
+            awaitBrowserCondition(cdp, "window.__uc2ReloadMarker !== true && document.querySelector('#workbench-modes [data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true'");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-modes [data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('#lesson-panel-title')"));
+            assertEquals(durable, storedDocument(), "reload restores the durable draft, not ephemeral selection or mode");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
+    @DisplayName("Timetable polish UC-2 extensions 4a/4b/5a: conflicting individual pin, canceled preview, confirmed bulk and exact undo")
+    void resolvesConflictingPinAndUndoesOnlyConfirmedBulkSources() throws Exception {
+        ObjectNode accepted = validAcceptedDocument();
+        storeAccepted(accepted);
+        JsonNode baseline = accepted.path("acceptedBaseline").deepCopy();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('[name=period][value=\"mon-1\"]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            JsonNode initial = assertDraftUnchangedBaseline(baseline);
+            assertEquals(JSON.readTree("[\"lesson-math-1\"]"), initial.path("directEffectLessonIds"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-math-1]').click(); document.querySelector('#apply-pin').click()");
+            String conflictText = cdp.awaitText("Resolve blocking conflicts before solving", Duration.ofSeconds(10));
+            assertTrue(conflictText.contains("Blocking conflict"));
+            JsonNode conflicted = assertDraftUnchangedBaseline(baseline);
+            assertEquals(1, conflicted.path("conflicts").size());
+            assertEquals("lesson-math-1", conflicted.path("conflicts").get(0).path("lessonId").stringValue());
+            assertEquals("PIN_CONTRADICTS_UNAVAILABILITY", conflicted.path("conflicts").get(0).path("code").stringValue());
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), conflicted.path("intent").path("pins").get(0).path("periodSources"));
+            assertFalse(conflicted.path("readyToSolve").booleanValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft')?.disabled === true && document.querySelector('[data-lesson-id=lesson-math-1]')?.textContent.includes('Blocking conflict')"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-math-1]').click(); document.querySelector('#remove-pin').click()");
+            cdp.awaitText("Draft is durably saved with no blocking conflict", Duration.ofSeconds(10));
+            JsonNode resolved = assertDraftUnchangedBaseline(baseline);
+            assertEquals(0, resolved.path("conflicts").size());
+            assertEquals(0, resolved.path("intent").path("pins").size());
+            assertTrue(resolved.path("readyToSolve").booleanValue());
+
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-science-1]').click(); document.querySelector('[name=lesson-dimension][value=ROOM]').checked=true; document.querySelector('#apply-pin').click()");
+            cdp.awaitText("Accepted room pinned", Duration.ofSeconds(10));
+            JsonNode individual = assertDraftUnchangedBaseline(baseline);
+            assertEquals(1, individual.path("intent").path("pins").size());
+            JsonNode individualPin = individual.path("intent").path("pins").get(0);
+            assertEquals("lesson-science-1", individualPin.path("lessonId").stringValue());
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), individualPin.path("periodSources"));
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), individualPin.path("roomSources"));
+            String beforePreview = storedDocument();
+            cdp.evaluate("document.querySelector('#preview-bulk').click()");
+            assertTrue(cdp.awaitText("Bulk pin preview · no changes applied yet", Duration.ofSeconds(10)).contains("1 lesson in this immutable snapshot"));
+            assertEquals(beforePreview, storedDocument(), "preview must not write pins or advance version");
+            cdp.evaluate("document.querySelector('#cancel-bulk').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#confirm-bulk') && document.querySelector('#lesson-panel-title')?.textContent === 'Science 1'"));
+            assertEquals(beforePreview, storedDocument(), "cancellation must leave exact individual protection intact");
+
+            cdp.evaluate("document.querySelector('#preview-bulk').click()");
+            cdp.awaitText("Bulk pin preview · no changes applied yet", Duration.ofSeconds(10));
+            assertEquals(beforePreview, storedDocument());
+            cdp.evaluate("document.querySelector('#confirm-bulk').click()");
+            cdp.awaitText("Confirmed bulk snapshot · 1 lesson", Duration.ofSeconds(10));
+            JsonNode bulk = assertDraftUnchangedBaseline(baseline);
+            assertEquals(1, bulk.path("intent").path("bulkActions").size());
+            JsonNode action = bulk.path("intent").path("bulkActions").get(0);
+            assertEquals("UNAFFECTED", action.path("scope").stringValue());
+            assertEquals(JSON.readTree("[\"lesson-science-1\"]"), action.path("lessonIds"));
+            assertEquals(JSON.readTree("[\"PERIOD\"]"), action.path("dimensions"));
+            JsonNode bulkPin = bulk.path("intent").path("pins").get(0);
+            assertEquals("lesson-science-1", bulkPin.path("lessonId").stringValue());
+            assertEquals(Set.of("INDIVIDUAL", action.path("id").stringValue()), jsonStrings(bulkPin.path("periodSources")));
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), bulkPin.path("roomSources"));
+            cdp.evaluate("document.querySelector('[data-undo-bulk]').click()");
+            awaitBrowserCondition(cdp, "!document.querySelector('[data-undo-bulk]') && document.querySelector('#attempt-pin-count')?.textContent === '1'");
+            JsonNode undone = assertDraftUnchangedBaseline(baseline);
+            assertEquals(individual.path("intent"), undone.path("intent"), "undo restores individual dimensions, removing only this bulk source");
+            assertEquals(0, undone.path("conflicts").size());
+            assertTrue(undone.path("readyToSolve").booleanValue());
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
+    @DisplayName("Timetable polish UC-2 extensions 3a/7a/7b/G6: no-effect room intent, narrow read-only draft and confirmed discard")
+    void keepsZeroEffectRoomDraftOnReloadThenDiscardsExplicitly() throws Exception {
+        ObjectNode accepted = validAcceptedDocument();
+        storeAccepted(accepted);
+        JsonNode baseline = accepted.path("acceptedBaseline").deepCopy();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#repair-resource-type').value='ROOM'; document.querySelector('#repair-resource-type').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#repair-resource').value='room-101'; document.querySelector('[name=period][value=\"mon-1\"]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            String zero = cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            assertTrue(zero.contains("Accepted baseline remains current"));
+            assertTrue(zero.contains("This rule currently conflicts with no accepted assignment"));
+            JsonNode noEffect = assertDraftUnchangedBaseline(baseline);
+            assertEquals(0, noEffect.path("directEffectLessonIds").size());
+            assertEquals(0, noEffect.path("conflicts").size());
+            assertEquals("ROOM", noEffect.path("intent").path("changes").get(0).path("resourceType").stringValue());
+            assertEquals("room-101", noEffect.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertEquals(JSON.readTree("[\"mon-1\"]"), noEffect.path("intent").path("changes").get(0).path("unavailablePeriodIds"));
+            assertTrue(noEffect.path("readyToSolve").booleanValue());
+            assertEquals(Set.of("lesson-math-1", "lesson-science-1"), renderedLessonIds(cdp));
+            String beforeNarrow = storedDocument();
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 390)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", true));
+            String narrow = cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(10));
+            assertTrue(narrow.contains("Repair draft · not current"));
+            assertTrue(browserTrue(cdp, "!document.querySelector('#start-repair-form') && !document.querySelector('#apply-pin') && !document.querySelector('#preview-bulk') && !document.querySelector('#discard-draft') && !document.querySelector('#solve-draft') && !document.querySelector('#workbench-modes')"));
+            assertEquals(beforeNarrow, storedDocument());
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.awaitText("Discard repair draft", Duration.ofSeconds(10));
+            cdp.evaluate("window.__uc2ReloadMarker = true");
+            cdp.command("Page.reload", JSON.createObjectNode());
+            awaitBrowserCondition(cdp, "window.__uc2ReloadMarker !== true && document.querySelector('#workbench-modes [data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true'");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-modes [data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#discard-draft')?.disabled === true"));
+            assertEquals(beforeNarrow, storedDocument());
+            cdp.evaluate("document.querySelector('#confirm-discard-draft').click(); document.querySelector('#discard-draft').click()");
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(10));
+            JsonNode discarded = storedWorkspaceDocument();
+            assertEquals("ACCEPTED_BASELINE", storedLifecycle());
+            assertEquals(baseline, discarded.path("acceptedBaseline"));
+            assertFalse(discarded.has("repairDraft"));
+            assertFalse(discarded.has("run"));
+            assertFalse(discarded.has("proposal"));
+            assertTrue(browserTrue(cdp, "document.querySelectorAll('#workbench-modes [data-mode]').length === 1 && document.querySelector('#workbench-modes [data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true'"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
+    @DisplayName("Timetable polish UC-2 extension 2a/minimal guarantee: failed durable pin save cannot enable repair")
+    void refusesSolveAfterRealDraftPersistenceFailure() throws Exception {
+        ObjectNode accepted = validAcceptedDocument();
+        storeAccepted(accepted);
+        JsonNode baseline = accepted.path("acceptedBaseline").deepCopy();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('[name=period][value=\"mon-1\"]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            String durable = storedDocument();
+            jdbc.sql("""
+                    CREATE FUNCTION reject_browser_draft_save() RETURNS trigger AS $$
+                    BEGIN
+                      RAISE EXCEPTION 'test: draft storage unavailable';
+                    END;
+                    $$ LANGUAGE plpgsql
+                    """).update();
+            jdbc.sql("""
+                    CREATE TRIGGER reject_browser_draft_save BEFORE UPDATE ON workspace_aggregate
+                    FOR EACH ROW WHEN (NEW.lifecycle_state = 'REPAIR_DRAFT')
+                    EXECUTE FUNCTION reject_browser_draft_save()
+                    """).update();
+            try {
+                cdp.evaluate("document.querySelector('[data-lesson-id=lesson-science-1]').click(); document.querySelector('[name=lesson-dimension][value=PERIOD]').checked=false; document.querySelector('[name=lesson-dimension][value=ROOM]').checked=true; document.querySelector('#apply-pin').click()");
+                String error = cdp.awaitText("The latest repair change was not durably saved", Duration.ofSeconds(15));
+                assertTrue(error.contains("Accepted baseline remains current"));
+                assertTrue(error.contains("Local storage is unavailable. The action did not complete."));
+                assertEquals(durable, storedDocument(), "failed autosave must roll back version and complete document");
+                assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft')?.disabled === true"),
+                        "the unpersisted revision must not be presented as ready to solve");
+            } finally {
+                jdbc.sql("DROP TRIGGER IF EXISTS reject_browser_draft_save ON workspace_aggregate").update();
+                jdbc.sql("DROP FUNCTION IF EXISTS reject_browser_draft_save()").update();
+            }
+            assertEquals(durable, storedDocument());
+            assertDraftUnchangedBaseline(baseline);
+            assertFalse(storedWorkspaceDocument().has("run"));
+            assertFalse(storedWorkspaceDocument().has("proposal"));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
     @DisplayName("UC-7 main/7a/G1-G4/RULE-24: real browser accepts a protected teacher repair then a directly parented room repair")
     void generatesRepairProposalInRealBrowser() throws Exception {
         ObjectNode document = validAcceptedDocument();
@@ -1351,6 +1570,68 @@ class WorkspaceBrowserIT {
                     openingMs >= 1_000.0);
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
+    }
+
+    private Cdp openWorkspaceBrowser() throws Exception {
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                        .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                HttpResponse.BodyHandlers.ofString()).body();
+        Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue());
+        cdp.command("Page.enable", JSON.createObjectNode());
+        cdp.command("Runtime.enable", JSON.createObjectNode());
+        cdp.command("Page.navigate", object("url", page));
+        return cdp;
+    }
+
+    private JsonNode storedWorkspaceDocument() throws Exception {
+        return JSON.readTree(jdbc.sql("SELECT document::text FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single());
+    }
+
+    private String storedLifecycle() {
+        return jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single();
+    }
+
+    private JsonNode assertDraftUnchangedBaseline(JsonNode baseline) throws Exception {
+        assertEquals("REPAIR_DRAFT", storedLifecycle());
+        JsonNode document = storedWorkspaceDocument();
+        assertEquals(baseline, document.path("acceptedBaseline"), "accepted definition, result and manifest must remain exact");
+        assertFalse(document.has("run"));
+        assertFalse(document.has("proposal"));
+        assertTrue(document.has("repairDraft"));
+        return document.path("repairDraft");
+    }
+
+    private static boolean browserTrue(Cdp cdp, String expression) throws Exception {
+        return cdp.evaluateValue("Boolean(" + expression + ")")
+                .path("result").path("result").path("value").booleanValue();
+    }
+
+    private static void awaitBrowserCondition(Cdp cdp, String expression) throws Exception {
+        long deadline = System.nanoTime() + Duration.ofSeconds(15).toNanos();
+        while (System.nanoTime() < deadline) {
+            if (browserTrue(cdp, expression)) return;
+            Thread.sleep(50);
+        }
+        assertTrue(browserTrue(cdp, expression), "the reloaded browser must restore the durable draft");
+    }
+
+    private static Set<String> renderedLessonIds(Cdp cdp) throws Exception {
+        String ids = cdp.evaluateValue("JSON.stringify([...new Set([...document.querySelectorAll('#accepted-view [data-lesson-id]')].map(button => button.dataset.lessonId))].sort())")
+                .path("result").path("result").path("value").stringValue();
+        return jsonStrings(JSON.readTree(ids));
+    }
+
+    private static Set<String> jsonStrings(JsonNode array) {
+        Set<String> values = new HashSet<>();
+        array.forEach(item -> values.add(item.stringValue()));
+        assertEquals(array.size(), values.size(), "lesson IDs and pin sources must be unique");
+        return values;
     }
 
     private static JsonNode measured(Cdp cdp, String operation) throws Exception {
