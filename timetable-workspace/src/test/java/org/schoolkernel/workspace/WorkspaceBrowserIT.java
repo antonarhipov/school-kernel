@@ -212,6 +212,8 @@ class WorkspaceBrowserIT {
             cdp.command("Page.enable", JSON.createObjectNode());
             cdp.command("Runtime.enable", JSON.createObjectNode());
             cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('#utilities summary').click()");
             String rendered = cdp.awaitText("Download verified accepted bundle", Duration.ofSeconds(15));
             JsonNode expected = validAcceptedDocument().path("acceptedBaseline");
             assertTrue(rendered.contains("Export accepted baseline"));
@@ -316,6 +318,109 @@ class WorkspaceBrowserIT {
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument(), "UC-3 G6 inspection must not mutate accepted workspace state");
+    }
+
+    @Test
+    @DisplayName("Timetable UX polish UC-1: scale Current workbench retains Week/Day, focus, selection, inspector, and Utilities through failed export and narrow view")
+    void inspectsPolishedCurrentWorkbenchInRealBrowser() throws Exception {
+        ObjectNode document = scaleDocument();
+        String acceptedRevision = document.path("acceptedBaseline").path("result").path("timetableRevision")
+                .asText(document.path("timetableRevision").stringValue());
+        storeAccepted(document);
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            String current = cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            assertTrue(current.contains("Scale School"));
+            assertTrue(current.contains("Accepted baseline · current timetable"));
+            assertEquals("Accepted revision: " + acceptedRevision, cdp.evaluateValue("document.querySelector('.accepted-heading .revision')?.textContent")
+                    .path("result").path("result").path("value").stringValue(), "header must identify the accepted revision");
+            assertTrue(cdp.evaluateValue("document.querySelector('#workbench-modes [data-mode=\"CURRENT\"]')?.getAttribute('aria-pressed') === 'true' && document.querySelectorAll('#workbench-modes [data-mode]').length === 1")
+                    .path("result").path("result").path("value").booleanValue(), "only Current is available in accepted state");
+            assertTrue(cdp.evaluateValue("Boolean(document.querySelector('#accepted-view .week-matrix')) && document.querySelectorAll('#accepted-view [data-lesson-id]').length === 1000")
+                    .path("result").path("result").path("value").booleanValue(), "complete whole-school Week must represent every scale lesson");
+
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+            String day = cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertTrue(day.contains("Complete school population"));
+            assertTrue(cdp.evaluateValue("document.querySelectorAll('#accepted-view .matrix:not(.week-matrix) [data-lesson-id]').length === 204")
+                    .path("result").path("result").path("value").booleanValue(), "Monday has 17 groups of 12 assignments");
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click()");
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#subject-investigation').value='subject-0'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(cdp.awaitText("Subject matches: 60", Duration.ofSeconds(5)).contains("Complete school population"));
+            cdp.evaluate("document.querySelector('#subject-investigation').value=''; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('#cohort-filter').value='cohort-0'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.awaitText("Filtered whole-school matrix", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0]').click()");
+            String details = cdp.awaitText("Accepted assignment", Duration.ofSeconds(5));
+            assertTrue(details.contains("Declared lesson 0"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#lesson-details-host')?.contains(document.querySelector('#lesson-panel-title')) && document.querySelector('#workbench-inspector')?.contains(document.querySelector('#lesson-panel-title')) && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 0'")
+                    .path("result").path("result").path("value").booleanValue(), "exact selection belongs to the side inspector");
+            cdp.evaluate("document.querySelector('#lesson-details-host details').open=true");
+            String acceptedFields = cdp.evaluateValue("document.querySelector('#lesson-details-host').innerText")
+                    .path("result").path("result").path("value").stringValue();
+            for (String field : new String[] { "Subject 0", "Class 0", "Teacher 0", "Declared period 0", "Room 0", "lesson-0" }) {
+                assertTrue(acceptedFields.contains(field), field);
+            }
+
+            cdp.evaluate("document.querySelector('[data-open-focus=cohortId]').click()");
+            cdp.awaitText("Class schedule · Class 0", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(cdp.awaitText("Filtered whole-school matrix", Duration.ofSeconds(5)).contains("Class: Class 0"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('[data-range=WEEK]').getAttribute('aria-pressed') === 'true' && document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed') === 'true'")
+                    .path("result").path("result").path("value").booleanValue(), "focused return restores range, filter, and selection");
+
+            JsonNode open = cdp.evaluateValue("({width:document.querySelector('.canvas-region').getBoundingClientRect().width, inspector:document.querySelector('#workbench-inspector').getBoundingClientRect().width, requests:performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length})")
+                    .path("result").path("result").path("value");
+            assertTrue(open.path("inspector").doubleValue() > 200, "open inspector must occupy a fixed desktop column");
+            cdp.evaluate("document.querySelector('#toggle-inspector').click()");
+            JsonNode collapsed = cdp.evaluateValue("({width:document.querySelector('.canvas-region').getBoundingClientRect().width, selected:document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed'), summary:document.querySelector('#inspector-summary')?.innerText, requests:performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length})")
+                    .path("result").path("result").path("value");
+            assertTrue(collapsed.path("width").doubleValue() > open.path("width").doubleValue(), "collapse expands the canvas");
+            assertEquals("true", collapsed.path("selected").stringValue());
+            assertTrue(collapsed.path("summary").stringValue().contains("Declared lesson 0"), "collapsed inspector retains a visible selection summary");
+            assertEquals(open.path("requests").intValue(), collapsed.path("requests").intValue(), "collapse must not reload workspace");
+            cdp.evaluate("document.querySelector('#reopen-inspector').click()");
+            assertTrue(cdp.evaluateValue("document.querySelector('#workbench-inspector').getBoundingClientRect().width === " + open.path("inspector").doubleValue() + " && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 0'")
+                    .path("result").path("result").path("value").booleanValue(), "reopen restores the same width and exact selection");
+
+            assertTrue(cdp.evaluateValue("!document.querySelector('#utilities').open && !document.querySelector('#export-accepted')?.getClientRects().length")
+                    .path("result").path("result").path("value").booleanValue(), "export starts inside the closed Utilities disclosure");
+            cdp.evaluate("document.querySelector('#utilities summary').click()");
+            String utilities = cdp.awaitText("Download verified accepted bundle", Duration.ofSeconds(5));
+            assertTrue(utilities.contains("Export accepted baseline"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#utilities').contains(document.querySelector('#export-accepted')) && !/Discard|Cancel run|Accept as current|Revise|Import/.test(document.querySelector('#utilities').innerText)")
+                    .path("result").path("result").path("value").booleanValue(), "Utilities contains export, not lifecycle or import actions");
+            cdp.command("Network.enable", JSON.createObjectNode());
+            cdp.command("Network.setBlockedURLs", JSON.createObjectNode().set("urls",
+                    JSON.createArrayNode().add("*/api/accepted/export*")));
+            cdp.evaluate("document.querySelector('#export-accepted').click()");
+            assertTrue(cdp.awaitText("No accepted bundle was produced", Duration.ofSeconds(15)).contains("Declared lesson 0"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#workbench-modes [data-mode=\"CURRENT\"]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed') === 'true'")
+                    .path("result").path("result").path("value").booleanValue(), "failed export retains Current, filter, and selection");
+            assertEquals(before, storedDocument(), "failed export cannot change the accepted bundle or workspace version");
+
+            ObjectNode narrowMetrics = JSON.createObjectNode().put("width", 390).put("height", 844)
+                    .put("deviceScaleFactor", 1).put("mobile", true);
+            cdp.command("Emulation.setDeviceMetricsOverride", narrowMetrics);
+            String narrow = cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(5));
+            assertTrue(narrow.contains("Accepted baseline"));
+            assertFalse(narrow.contains("Complete school population"));
+            assertFalse(cdp.evaluateValue("Boolean(document.querySelector('.matrix-wrap, #start-repair-form, #apply-pin, #cancel-run, #accept-repair'))")
+                    .path("result").path("result").path("value").booleanValue(), "narrow view must not expose desktop canvas or mutation controls");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-1 workbench presentation and failed export must preserve exact durable state");
     }
 
     @Test

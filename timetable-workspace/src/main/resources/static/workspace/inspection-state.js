@@ -1,12 +1,15 @@
 const PREFERENCE_VERSION = 1;
 const PREFERENCE_LIMIT = 1024;
+const AVAILABLE_MODES = Object.freeze({ ACCEPTED_BASELINE: ['CURRENT'], REPAIR_DRAFT: ['CURRENT', 'DRAFT'],
+  SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'] });
 
 export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], cohortIds = [], roomIds = [], periodIds = [], storage = window.localStorage }) {
   const firstWeekday = weekdays[0] || null;
   let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null,
     subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false,
     searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-    focusedType: null, focusedId: null, scrollContext: null };
+    focusedType: null, focusedId: null, scrollContext: null,
+    lifecycle: null, mode: 'CURRENT', inspectorOpen: true, utilitiesOpen: false };
 
   if (schoolId && firstWeekday) {
     try {
@@ -22,6 +25,18 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
 
   return Object.freeze({
     current: () => Object.freeze({ ...state }),
+    enterLifecycle: lifecycle => {
+      if (!AVAILABLE_MODES[lifecycle]) return state;
+      if (state.lifecycle !== lifecycle) state = { ...state, lifecycle, mode: AVAILABLE_MODES[lifecycle].at(-1) };
+      return state;
+    },
+    selectMode: mode => {
+      if (!AVAILABLE_MODES[state.lifecycle]?.includes(mode)) return { changed: false, state };
+      state = { ...state, mode };
+      return { changed: true, state };
+    },
+    setInspectorOpen: inspectorOpen => { state = { ...state, inspectorOpen: Boolean(inspectorOpen) }; return state; },
+    setUtilitiesOpen: utilitiesOpen => { state = { ...state, utilitiesOpen: Boolean(utilitiesOpen) }; return state; },
     selectLesson: lessonId => { state = { ...state, selectedLessonId: lessonId || null }; return state; },
     closeLesson: () => { state = { ...state, selectedLessonId: null }; return state; },
     selectSubject: subjectId => {

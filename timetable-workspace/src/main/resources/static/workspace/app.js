@@ -90,31 +90,54 @@ function render(snapshot) {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
+    syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
     if (view.narrow && !view.focusedType) {
       syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
     }
     renderAccepted(snapshot, schoolName);
   } else if (snapshot.state === 'REPAIR_DRAFT') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
-    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
-    if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
-    renderRepair(snapshot, schoolName);
+    acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
+    initializeInspectionState(snapshot.workspace.school?.id);
+    syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
+    if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
+    else renderRepair(snapshot, schoolName);
   } else if (snapshot.state === 'SOLVING_REPAIR') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
-    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
-    if (!view.day || !acceptedModel.weekdays.includes(view.day)) view.day = acceptedModel.weekdays[0] || null;
+    acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
+    initializeInspectionState(snapshot.workspace.school?.id);
+    syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
     const run = snapshot.workspace.run;
-    stateCard.className = 'card workspace-card compact-density';
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state running">${M.repairRunning}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairRunningDetail}</p><dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div><div id="accepted-view"></div>`;
-    document.querySelector('#cancel-run').addEventListener('click', () => cancelRun(run.id));
-    renderWholeSchool();
+    if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
+    else {
+      stateCard.className = 'card workspace-card compact-density';
+      stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state running">${M.repairRunning}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><p>${M.repairRunningDetail}</p><dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div><div id="accepted-view"></div>`;
+      document.querySelector('#cancel-run').addEventListener('click', () => cancelRun(run.id));
+      if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
+    }
     pollTimer = setTimeout(load, 300);
   } else if (snapshot.state === 'REPAIR_PROPOSAL') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
-    acceptedModel = makeModel(snapshot.workspace.acceptedBaseline);
+    acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
+    initializeInspectionState(snapshot.workspace.school?.id);
+    syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
     proposedModel = makeModel({ definition: snapshot.workspace.proposal.definition, result: snapshot.workspace.proposal.result });
-    renderRepairProposal(snapshot, schoolName);
+    if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
+    else renderRepairProposal(snapshot, schoolName);
   }
+  renderModeNavigation();
+}
+
+function renderModeNavigation() {
+  if (!inspectionState || !['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL'].includes(currentSnapshot.state) || view.narrow) return;
+  const modes = { ACCEPTED_BASELINE: ['CURRENT'], REPAIR_DRAFT: ['CURRENT', 'DRAFT'],
+    SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'] }[currentSnapshot.state];
+  const labels = { CURRENT: M.modeCurrent, DRAFT: M.modeDraft, SOLVING: M.modeSolving, PROPOSAL: M.modeProposal };
+  stateCard.querySelector('.accepted-heading')?.insertAdjacentHTML('afterend', `<nav id="workbench-modes" aria-label="${M.presentationModes}">${modes.map(mode => `<button type="button" data-mode="${mode}" aria-pressed="${inspectionState.current().mode === mode}">${labels[mode]}</button>`).join('')}</nav>`);
+  stateCard.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
+    if (!inspectionState.selectMode(button.dataset.mode).changed) return;
+    render(currentSnapshot);
+  }));
 }
 
 function renderRepairProposal(snapshot, schoolName) {
@@ -258,17 +281,42 @@ function setRange(range, day = view.day, manualDay = false) {
 
 function renderAccepted(snapshot, schoolName) {
   stateCard.className = 'card workspace-card compact-density';
-  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.currentAccepted}</span><h2>${escapeHtml(schoolName)}</h2></div><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p></div>
-    <p class="accepted-context">${M.acceptedState}</p>
-    <p>${M.acceptedDetail} ${M.inspectionIntro}</p>${exportAccepted(snapshot)}
-    ${view.narrow ? '' : startRepairForm()}<h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
+  const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
+    SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal }[snapshot.state];
+  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.currentAccepted}</span><h2>${escapeHtml(schoolName)}</h2><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p>${view.narrow || snapshot.state !== 'ACCEPTED_BASELINE' ? '' : exportAccepted(snapshot)}</div></div>
+    <p class="accepted-context">${lifecycle} · ${M.modeCurrent}</p>
+    <p>${M.acceptedDetail} ${M.inspectionIntro}</p>
+    ${view.narrow || snapshot.state !== 'ACCEPTED_BASELINE' ? '' : startRepairForm()}<h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
+  const utilities = document.querySelector('#utilities');
+  if (utilities) {
+    utilities.open = inspectionState.current().utilitiesOpen;
+    utilities.addEventListener('toggle', () => inspectionState.setUtilitiesOpen(utilities.open));
+    document.querySelector('#export-accepted').addEventListener('click', downloadAccepted);
+  }
   bindStartRepair();
   if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
 }
 
 function exportAccepted(snapshot) {
   const baseline = snapshot.workspace.acceptedBaseline;
-  return `<section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a></section>`;
+  return `<details id="utilities" class="utility-disclosure"><summary>${M.utilities}</summary><section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a><p id="export-status" role="status"></p></section></details>`;
+}
+
+async function downloadAccepted(event) {
+  event.preventDefault();
+  const status = document.querySelector('#export-status');
+  try {
+    const response = await fetch('/api/accepted/export');
+    if (!response.ok) throw new Error(M.exportFailed);
+    const archive = await response.blob();
+    if (!archive.size) throw new Error(M.exportFailed);
+    const url = URL.createObjectURL(archive);
+    const link = document.createElement('a');
+    link.href = url; link.download = 'accepted-baseline.zip';
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    status.textContent = '';
+  } catch (_) { status.className = 'error'; status.textContent = M.exportFailed; }
 }
 
 function startRepairForm() {
@@ -407,8 +455,11 @@ function renderWholeSchool() {
     <p id="inspection-notice" class="notice" role="status"></p>
     ${model.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
     <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
-    ${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: model.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: model.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}
-    <div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : ''}</div>
+    <div class="workbench-layout${inspectionState.current().inspectorOpen ? '' : ' inspector-collapsed'}">
+      <div class="canvas-region">${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: model.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: model.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div>
+      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? lessonDetails(model.assignmentMap.get(view.selectedLessonId)) : `<p>${M.noLessonSelected}</p>`}</div></aside>
+      <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(entityName(model.maps.lessons.get(view.selectedLessonId), view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
+    </div>
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
   if (view.range === 'WEEK') { bindInspectionControls(); applyFiltersInPlace(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
@@ -454,14 +505,14 @@ function lessonButton(item, matched) {
 function lessonDetails(item) {
   if (!item) return '';
   const draftState = repairLessonState(item.lessonId);
-  const repairActions = currentSnapshot?.state === 'REPAIR_DRAFT' ? `<section class="pin-actions"><h4>${M.protectAcceptedAssignment}</h4>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${draftState.labels || `<span class="state unpinned-state">${M.unpinned}</span>`}</p></section>` : '';
+  const repairActions = currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT' ? `<section class="pin-actions"><h4>${M.protectAcceptedAssignment}</h4>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${draftState.labels || `<span class="state unpinned-state">${M.unpinned}</span>`}</p></section>` : '';
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div><span class="state accepted">✓ ${M.acceptedAssignment}</span><h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
-    <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
+    <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
     ${repairActions}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
 }
 
 function repairLessonState(lessonId) {
-  if (currentSnapshot?.state !== 'REPAIR_DRAFT') return { direct: false, conflict: false, labels: '' };
+  if (currentSnapshot?.state !== 'REPAIR_DRAFT' || inspectionState?.current().mode !== 'DRAFT') return { direct: false, conflict: false, labels: '' };
   const draft = currentSnapshot.workspace.repairDraft;
   const direct = draft.directEffectLessonIds.includes(lessonId);
   const conflict = draft.conflicts.some(item => item.lessonId === lessonId);
@@ -536,6 +587,8 @@ function renderFocused() {
 
 function bindInspectionControls() {
   const rerender = () => renderWholeSchool();
+  document.querySelector('#toggle-inspector')?.addEventListener('click', () => toggleInspector(false));
+  document.querySelector('#reopen-inspector')?.addEventListener('click', () => toggleInspector(true));
   document.querySelector('#lesson-search').addEventListener('input', event => {
     if (inspectionState) syncInspectionState(inspectionState.setSearch(event.target.value).state); else view.search = event.target.value;
     applyFiltersInPlace();
@@ -627,8 +680,9 @@ function syncSelectedLesson(root) {
 }
 
 function selectLesson(button) {
-  if (currentSnapshot?.state === 'ACCEPTED_BASELINE' && inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId));
+  if (inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId));
   else view.selectedLessonId = button.dataset.lessonId;
+  if (document.querySelector('#workbench-inspector')) toggleInspector(true);
   document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
     const selected = candidate === button;
     candidate.classList.toggle('selected', selected);
@@ -640,11 +694,20 @@ function selectLesson(button) {
   document.querySelector('#lesson-panel-title')?.focus();
 }
 
+function toggleInspector(open) {
+  syncInspectionState(inspectionState.setInspectorOpen(open));
+  document.querySelector('.workbench-layout')?.classList.toggle('inspector-collapsed', !open);
+  document.querySelector('#workbench-inspector').hidden = !open;
+  document.querySelector('#inspector-summary').hidden = open;
+  const item = acceptedModel.maps.lessons.get(view.selectedLessonId);
+  document.querySelector('#inspector-summary span').textContent = item ? M.selectedSummary(entityName(item, view.selectedLessonId)) : M.noLessonSelected;
+}
+
 function bindCloseDetails() {
   document.querySelector('#close-details')?.addEventListener('click', () => {
-    if (currentSnapshot?.state === 'ACCEPTED_BASELINE' && inspectionState) syncInspectionState(inspectionState.closeLesson());
+    if (inspectionState) syncInspectionState(inspectionState.closeLesson());
     else view.selectedLessonId = null;
-    document.querySelector('#lesson-details-host').replaceChildren();
+    document.querySelector('#lesson-details-host').textContent = M.noLessonSelected;
     document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
       candidate.classList.remove('selected');
       candidate.setAttribute('aria-pressed', 'false');
