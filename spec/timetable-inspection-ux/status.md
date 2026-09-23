@@ -2,16 +2,16 @@
 
 ## Current
 
-- Use case: UC-3
-- Status: APPROVED
-- Next eligible: UC-2
+- Use case: UC-2
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: UC-2 reconvergence
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | Revision C-1 through C-3 technically converged; user walkthrough PASS | convergence/UC-1.md — APPROVE |
-| UC-2 | NEEDS_REVISION | UC-1 | Exact subject/teacher investigation, explicit intersection filters, and authoritative teacher ribbon | convergence/UC-2.md — REJECT (G-1) |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | Represented-only unique-ID totals; normative-scale verified fixture and explicit/omitted teacher availability; 17 browser tests passed | convergence/UC-2.md — prior REJECT (C-1, G-2, P-1), pending reconvergence |
 | UC-3 | APPROVED | UC-1 | Search highlighting, explicit intersections, and focused accepted schedules | convergence/UC-3.md — APPROVE |
 
 ## UC-1 Evidence
@@ -35,23 +35,25 @@
 ## UC-2 Evidence
 
 - Started from: be92691
-- Pre-existing dirty files: none
+- Revision started from: 5d426b5 (C-1, G-2, P-1)
+- Pre-existing dirty files for this revision: `.idea/encodings.xml`, `spec/timetable-inspection-ux/convergence/UC-2.md`, `spec/timetable-inspection-ux/checkpoints/UC-2.md`, this status file, `WorkspaceBrowserIT.java`, and untracked `spec/timetable-ux-polish/rules.md`, `spec/timetable-ux-polish/status.md`. The existing G-1 checkpoint/status/test changes belong to this UC-2 revision; unrelated and verifier-owned files remain excluded from the implementation commit.
 - Implementation submission: HEAD at convergence
 - Changed files: `timetable-workspace/src/main/resources/static/workspace/accepted-model.js`, `timetable-workspace/src/main/resources/static/workspace/inspection-state.js`, `timetable-workspace/src/main/resources/static/workspace/app.js`, `timetable-workspace/src/main/resources/static/workspace/messages.js`, `timetable-workspace/src/main/resources/static/workspace/styles.css`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`, this status file, and `checkpoints/UC-2.md`.
-- Commands and results: `node --check` for all changed ES modules and `git diff --check` passed. `mvn -q -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT#tracesSubjectTeachingAndTeacherLoadInRealBrowser verify` passed 26 unit tests and 1 Chrome/Testcontainers PostgreSQL UC-2 journey with 0 failures, errors, or skips. `mvn -q -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT#inspectsAcceptedWholeSchoolTimetableInRealBrowser verify` passed the shared UC-1 browser regression with 26 unit tests and 1 Chrome/Testcontainers journey, 0 failures, errors, or skips. The complete `WorkspaceBrowserIT` class exceeded the command lifetime available to this environment, so it is not claimed as rerun.
+- Commands and results: prior `node --check` for changed ES modules and `git diff --check` passed. The C-1 assertion was updated to reject the prior pre-intersection count of two; it was not run separately before the production fix. The new scale-browser test passed with both kernel verification calls returning `VERIFIED`. After correcting a test-only Jackson compilation error, `./mvnw -q -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT verify` passed 17 real Chrome/Testcontainers PostgreSQL browser tests (0 failures/errors/skips) plus 26 unit tests. `node --check timetable-workspace/src/main/resources/static/workspace/app.js` and `git diff --check` passed. See `checkpoints/UC-2.md` for revision evidence.
 
 | Contract element | Evidence |
 |---|---|
 | UC-2 main steps 1-5 | `WorkspaceBrowserIT.tracesSubjectTeachingAndTeacherLoadInRealBrowser` selects exact Math/Alex identities, asserts non-destructive cues and dual count, checks all three ribbon classifications, and retains identities through Week-to-Day at `WorkspaceBrowserIT.java:328-366`. |
-| UC-2 main steps 6-9 | The same real-browser journey asserts single and intersected filters, narrowed status, clear-one, clear-all/reset behavior at `WorkspaceBrowserIT.java:353-398`; `app.js:542-557,633-686` owns the transitions and exact set counts. |
+| UC-2 main steps 6-9 | The real-browser journey now rejects out-of-population teacher totals at `WorkspaceBrowserIT.java:363-370`; the scale journey computes independent represented/subject/teacher/dual unique-ID sets and compares all rendered IDs and counts across highlight, subject-only, intersected, teacher-only, empty, clear-one and reset. `app.js:744-753` counts only after all explicit filters. |
 | UC-2 extensions 2a, 4a, 6a, 7a | Tuesday asserts exact zero subject/teacher counts and a no-match intersection; filtered science selection is cleared with a status announcement while identities remain selected at `WorkspaceBrowserIT.java:353-392`. |
 | UC-2 G1-G7 | Stable IDs and immutable indexes: `accepted-model.js:3-45`; state reset/no durable preference expansion: `inspection-state.js:4-63`; visible non-color cue markup, accessible names, and authoritative ribbon: `app.js:678-715`. |
-| UC-2 G8, success, minimal guarantee | Packaged Chrome/Testcontainers path compares the exact database document before/after at `WorkspaceBrowserIT.java:313-400`; it observes subject-only, teacher-only, combined, clear-one, clear-all, Day change, zero range, single/intersected filters, filtered selection, all ribbon states, and no console errors. |
-| RULE-1, RULE-2, RULE-4, RULE-6-RULE-12, RULE-14, RULE-16 | Existing native module boundary remains; model indexes identities once, the state owner rejects unknown identities and retains only range/day in local storage, all text is catalogued, and the real browser uses only the approved snapshot/read path. The UC-2 fixture is isolated in `WorkspaceBrowserIT`. |
+| UC-2 G4, G8, success, minimal guarantee | `WorkspaceBrowserIT.tracesScaleInvestigationAndOmittedAvailabilityInRealBrowser` validates 60/100/100/1,000/60 fixture cardinalities, long names, unique lessons, full lesson-to-assignment identities, populated/empty entities and periods, and verifies the complete synthetic accepted pair with `KernelVerifier`. Chrome checks every assigned/available-unassigned/unavailable teacher-16 slot by value and every teacher-17 omitted-availability slot in Day and Week, plus exact durable before/after equality. The small journey retains zero/selection branches and the same mutation check. |
+| RULE-1, RULE-2, RULE-4, RULE-6-RULE-12, RULE-14, RULE-16 | Existing native module boundary remains; state owner retains only range/day locally. `app.js:744-753` counts unique IDs from the represented filtered result; `app.js:778-789` derives ribbon state from accepted assignments and omitted/declared availability. The scale fixture is isolated, kernel-verified, and checked by value against rendered Chrome IDs/ribbon; no route or workspace mutation was introduced. |
 
 ### UC-2 Convergence Findings
 
-- G-1: The mandatory complete `WorkspaceBrowserIT` regression class was not completed after the UC-2 change. The targeted UC-2 and shared UC-1 journeys pass, but the feature's applicable rules require the full relevant suite and approved related-UC regression. Re-run the full browser class in an environment that permits a command to outlive 30 seconds, then reconverge without changing the contract.
+- G-1 revision: The full `WorkspaceBrowserIT` class ran to completion. Its first run exposed a stale UC-2 assertion for `active criteria` after the shared UC-3 empty-view copy became `active filters` (16 browser tests, 1 failure). The assertion was corrected to match the rendered catalog message; `./mvnw -q -pl timetable-workspace -am -Dit.test=WorkspaceBrowserIT verify` then passed all 16 real Chrome/Testcontainers PostgreSQL browser tests with 0 failures, errors, or skips. `git diff --check` passed. The checkpoint now supplies the missing shared browser regression evidence for reconvergence; the previous rejection remains the historical verdict, not an approval.
+- C-1/G-2/P-1 revision: `app.js` counts only unique represented lesson IDs after intersections. `WorkspaceBrowserIT` independently checks those sets and authoritative/omitted ribbon states on a kernel-verified 1,000-assignment accepted baseline. Full class: 17 passed, 0 failed/errors/skipped; the attributable implementation, test, status, and checkpoint form a single commit for reconvergence, without verifier-owned or unrelated changes. The historical REJECT is retained pending independent convergence.
 
 ## UC-3 Evidence
 

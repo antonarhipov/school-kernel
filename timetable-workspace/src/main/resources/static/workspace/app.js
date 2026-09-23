@@ -742,14 +742,14 @@ function hasNarrowingCriteria() {
 }
 
 function investigationSummary() {
-  const rangeAndOtherFilters = acceptedModel.assignments.filter(item => isInSelectedRange(item) && baseFilterMatches(item));
-  const represented = rangeAndOtherFilters.filter(isInvestigationMatch);
-  const subjectMatches = rangeAndOtherFilters.filter(item => view.subjectInvestigationId && item.subjectId === view.subjectInvestigationId);
-  const teacherMatches = rangeAndOtherFilters.filter(item => view.teacherInvestigationId && item.teacherId === view.teacherInvestigationId);
-  const dualMatches = rangeAndOtherFilters.filter(item => view.subjectInvestigationId && view.teacherInvestigationId
+  const represented = filteredAssignments();
+  const count = predicate => new Set(represented.filter(predicate).map(item => item.lessonId)).size;
+  const subjectCount = count(item => view.subjectInvestigationId && item.subjectId === view.subjectInvestigationId);
+  const teacherCount = count(item => view.teacherInvestigationId && item.teacherId === view.teacherInvestigationId);
+  const dualCount = count(item => view.subjectInvestigationId && view.teacherInvestigationId
     && item.subjectId === view.subjectInvestigationId && item.teacherId === view.teacherInvestigationId);
-  const searchCount = rangeAndOtherFilters.filter(searchMatches).length;
-  return { represented, subjectCount: subjectMatches.length, teacherCount: teacherMatches.length, dualCount: dualMatches.length, searchCount,
+  const searchCount = count(searchMatches);
+  return { represented, subjectCount, teacherCount, dualCount, searchCount,
     periods: acceptedModel.definition.periods.filter(period => view.range === 'WEEK' || period.weekday === view.day) };
 }
 

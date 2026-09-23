@@ -13,8 +13,14 @@ import java.net.http.WebSocket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -71,6 +77,9 @@ class WorkspaceBrowserIT {
 
     @Autowired
     ProposalReviewService reviews;
+
+    @Autowired
+    KernelVerifier verifier;
 
     @TempDir
     Path browserProfile;
@@ -361,11 +370,13 @@ class WorkspaceBrowserIT {
                     .path("result").path("result").path("value").booleanValue());
 
             cdp.evaluate("document.querySelector('#teacher-only').click()");
-            cdp.awaitText("Represented lessons: 1", Duration.ofSeconds(5));
+            String filtered = cdp.awaitText("Represented lessons: 1", Duration.ofSeconds(5));
+            assertTrue(filtered.contains("Teacher matches: 1"), "filtered totals must count only represented lessons");
+            assertTrue(filtered.contains("Dual matches: 1"));
             cdp.evaluate("document.querySelector('[data-range=\"DAY\"]').click()");
             String day = cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
             assertTrue(day.contains("Subject matches: 1"));
-            assertTrue(day.contains("Teacher matches: 2"));
+            assertTrue(day.contains("Teacher matches: 1"));
 
             cdp.evaluate("document.querySelector('#clear-subject').click()");
             String teacherRetained = cdp.awaitText("Teacher matches: 2", Duration.ofSeconds(5));
@@ -384,7 +395,7 @@ class WorkspaceBrowserIT {
                     """);
             cdp.awaitText("Subject matches: 0", Duration.ofSeconds(5));
             cdp.evaluate("document.querySelector('#subject-only').click()");
-            String emptyIntersection = cdp.awaitText("No lessons match the active criteria", Duration.ofSeconds(5));
+            String emptyIntersection = cdp.awaitText("No lessons match the active filters", Duration.ofSeconds(5));
             assertTrue(emptyIntersection.contains("Subject matches: 0"));
             assertTrue(emptyIntersection.contains("Teacher matches: 0"));
 
@@ -400,6 +411,179 @@ class WorkspaceBrowserIT {
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument(), "UC-2 investigation must not mutate accepted workspace state");
+    }
+
+    @Test
+    @DisplayName("UC-2 G3/G4/G8/RULE-7/8/16: scale browser compares represented IDs and explicit/omitted teacher availability")
+    void tracesScaleInvestigationAndOmittedAvailabilityInRealBrowser() throws Exception {
+        ObjectNode document = investigationScaleDocument();
+        JsonNode definition = document.path("acceptedBaseline").path("definition");
+        JsonNode assignments = document.path("acceptedBaseline").path("result").path("timetable").path("assignments");
+        KernelVerifier.Verification verified = verifier.verify(new ImportDocuments(definition,
+                document.path("acceptedBaseline").path("result"), null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+        assertEquals(document.path("definitionRevision").stringValue(), verified.definitionRevision());
+        assertEquals(document.path("timetableRevision").stringValue(), verified.timetableRevision());
+        assertTrue(definition.path("cohorts").size() >= 60);
+        assertTrue(definition.path("teachers").size() >= 100);
+        assertTrue(definition.path("rooms").size() >= 100);
+        assertTrue(assignments.size() >= 900 && assignments.size() <= 1_100);
+        assertEquals(60, definition.path("periods").size());
+        assertTrue(definition.path("subjects").get(0).path("displayName").stringValue().length() > 50);
+        assertTrue(definition.path("teachers").get(16).path("displayName").stringValue().length() > 50);
+        assertTrue(definition.path("cohorts").get(16).path("displayName").stringValue().length() > 50);
+        assertTrue(definition.path("rooms").get(16).path("displayName").stringValue().length() > 50);
+        assertEquals("subject-0", definition.path("lessons").get(960).path("subjectId").stringValue());
+        assertEquals("subject-0", assignments.get(960).path("subjectId").stringValue());
+        assertEquals("teacher-16", assignments.get(960).path("teacherId").stringValue());
+        assertEquals(41, definition.path("teachers").get(16).path("availablePeriodIds").size());
+        assertEquals("period-40", definition.path("teachers").get(16).path("availablePeriodIds").get(40).stringValue());
+        assertFalse(definition.path("teachers").get(17).has("availablePeriodIds"));
+        Set<String> lessonIds = new HashSet<>();
+        for (JsonNode assignment : assignments) lessonIds.add(assignment.path("lessonId").stringValue());
+        assertEquals(assignments.size(), lessonIds.size(), "every generated assignment has one unique declared lesson ID");
+        assertEquals(definition.path("lessons").size(), lessonIds.size());
+        for (JsonNode assignment : assignments) {
+            String id = assignment.path("lessonId").stringValue();
+            int ordinal = Integer.parseInt(id.substring("lesson-".length()));
+            assertEquals(definition.path("lessons").get(ordinal).path("id"), assignment.path("lessonId"));
+            assertEquals(definition.path("lessons").get(ordinal).path("subjectId"), assignment.path("subjectId"));
+            assertEquals(definition.path("lessons").get(ordinal).path("cohortId"), assignment.path("cohortId"));
+            assertEquals(definition.path("lessons").get(ordinal).path("teacherId"), assignment.path("teacherId"));
+        }
+        assertEquals("cohort-16", assignments.get(960).path("cohortId").stringValue());
+        assertEquals("room-16", assignments.get(960).path("roomId").stringValue());
+        assertEquals("period-0", assignments.get(960).path("periodId").stringValue());
+        assertEquals("period-39", assignments.get(999).path("periodId").stringValue());
+        Set<String> occupiedTeachers = new HashSet<>(), occupiedCohorts = new HashSet<>(), occupiedRooms = new HashSet<>();
+        for (JsonNode assignment : assignments) {
+            occupiedTeachers.add(assignment.path("teacherId").stringValue());
+            occupiedCohorts.add(assignment.path("cohortId").stringValue());
+            occupiedRooms.add(assignment.path("roomId").stringValue());
+        }
+        assertTrue(occupiedTeachers.contains("teacher-0"));
+        assertFalse(occupiedTeachers.contains("teacher-17"));
+        assertTrue(occupiedCohorts.contains("cohort-0"));
+        assertFalse(occupiedCohorts.contains("cohort-59"));
+        assertTrue(occupiedRooms.contains("room-0"));
+        assertFalse(occupiedRooms.contains("room-99"));
+
+        storeAccepted(document);
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            String complete = cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            assertTrue(complete.contains("Accepted baseline · current timetable"));
+
+            cdp.evaluate("document.querySelector('#subject-investigation').value='subject-0'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertInvestigationPopulation(cdp, document, null, "subject-0", null, false, false);
+            cdp.evaluate("document.querySelector('#teacher-investigation').value='teacher-16'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertInvestigationPopulation(cdp, document, null, "subject-0", "teacher-16", false, false);
+            assertTeacherRibbon(cdp, document, "teacher-16", null);
+            assertTrue(cdp.evaluateValue("document.querySelector('[data-lesson-id=lesson-960]').classList.contains('dual-match')")
+                    .path("result").path("result").path("value").booleanValue());
+
+            cdp.evaluate("document.querySelector('#subject-only').click()");
+            assertInvestigationPopulation(cdp, document, null, "subject-0", "teacher-16", true, false);
+            cdp.evaluate("document.querySelector('#teacher-only').click()");
+            assertInvestigationPopulation(cdp, document, null, "subject-0", "teacher-16", true, true);
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertInvestigationPopulation(cdp, document, "MONDAY", "subject-0", "teacher-16", true, true);
+            assertTeacherRibbon(cdp, document, "teacher-16", "MONDAY");
+
+            cdp.evaluate("document.querySelector('#clear-subject').click()");
+            assertInvestigationPopulation(cdp, document, "MONDAY", null, "teacher-16", false, true);
+            cdp.evaluate("document.querySelector('#clear-teacher').click()");
+            assertInvestigationPopulation(cdp, document, "MONDAY", null, null, false, false);
+
+            cdp.evaluate("document.querySelector('#subject-investigation').value='subject-19'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertInvestigationPopulation(cdp, document, "MONDAY", "subject-19", null, false, false);
+            cdp.evaluate("document.querySelector('#subject-only').click()");
+            assertInvestigationPopulation(cdp, document, "MONDAY", "subject-19", null, true, false);
+            assertTrue(cdp.awaitText("This narrowed view is empty", Duration.ofSeconds(5)).contains("Subject: Subject 19"));
+            cdp.evaluate("document.querySelector('#clear-subject').click()");
+
+            cdp.evaluate("document.querySelector('#teacher-investigation').value='teacher-17'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertInvestigationPopulation(cdp, document, "MONDAY", null, "teacher-17", false, false);
+            assertTeacherRibbon(cdp, document, "teacher-17", "MONDAY");
+            cdp.evaluate("document.querySelector('#teacher-only').click()");
+            assertInvestigationPopulation(cdp, document, "MONDAY", null, "teacher-17", false, true);
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click()");
+            cdp.awaitText("Complete recurring Week", Duration.ofSeconds(5));
+            assertInvestigationPopulation(cdp, document, null, null, "teacher-17", false, true);
+            assertTeacherRibbon(cdp, document, "teacher-17", null);
+            cdp.evaluate("document.querySelector('#clear-teacher').click(); document.querySelector('#reset-view').click()");
+            assertInvestigationPopulation(cdp, document, null, null, null, false, false);
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-2 scale investigation must not mutate accepted workspace state");
+    }
+
+    private static void assertInvestigationPopulation(Cdp cdp, JsonNode document, String weekday, String subject,
+                                                      String teacher, boolean subjectOnly, boolean teacherOnly) throws Exception {
+        JsonNode baseline = document.path("acceptedBaseline");
+        Set<String> periodIds = new HashSet<>();
+        for (JsonNode period : baseline.path("definition").path("periods")) {
+            if (weekday == null || weekday.equals(period.path("weekday").stringValue())) periodIds.add(period.path("id").stringValue());
+        }
+        Set<String> represented = new HashSet<>(), subjectMatches = new HashSet<>(), teacherMatches = new HashSet<>(), dualMatches = new HashSet<>();
+        for (JsonNode assignment : baseline.path("result").path("timetable").path("assignments")) {
+            if (!periodIds.contains(assignment.path("periodId").stringValue())) continue;
+            boolean matchesSubject = subject != null && subject.equals(assignment.path("subjectId").stringValue());
+            boolean matchesTeacher = teacher != null && teacher.equals(assignment.path("teacherId").stringValue());
+            if (subjectOnly && !matchesSubject || teacherOnly && !matchesTeacher) continue;
+            String id = assignment.path("lessonId").stringValue();
+            represented.add(id);
+            if (matchesSubject) subjectMatches.add(id);
+            if (matchesTeacher) teacherMatches.add(id);
+            if (matchesSubject && matchesTeacher) dualMatches.add(id);
+        }
+        String rendered = cdp.awaitText("Represented lessons: " + represented.size(), Duration.ofSeconds(5));
+        assertTrue(rendered.contains("Subject matches: " + subjectMatches.size()));
+        assertTrue(rendered.contains("Teacher matches: " + teacherMatches.size()));
+        assertTrue(rendered.contains("Dual matches: " + dualMatches.size()));
+        JsonNode visible = cdp.evaluateValue("[...document.querySelectorAll('.lesson-cell[data-lesson-id]:not([hidden])')].map(tile => tile.dataset.lessonId)")
+                .path("result").path("result").path("value");
+        Set<String> visibleIds = new HashSet<>();
+        for (JsonNode id : visible) visibleIds.add(id.stringValue());
+        assertEquals(represented, visibleIds, "the displayed population must equal the independently filtered accepted IDs");
+        assertEquals(visible.size(), visibleIds.size(), "no lesson may be counted twice in the represented population");
+    }
+
+    private static void assertTeacherRibbon(Cdp cdp, JsonNode document, String teacher, String weekday) throws Exception {
+        JsonNode baseline = document.path("acceptedBaseline");
+        JsonNode definition = baseline.path("definition");
+        JsonNode availability = null;
+        for (JsonNode candidate : definition.path("teachers")) {
+            if (teacher.equals(candidate.path("id").stringValue())) availability = candidate.path("availablePeriodIds");
+        }
+        JsonNode slots = cdp.evaluateValue("[...document.querySelectorAll('.teacher-ribbon li')].map(li => ({period:li.querySelector('strong').textContent, state:li.querySelector('span').textContent}))")
+                .path("result").path("result").path("value");
+        int index = 0;
+        for (JsonNode period : definition.path("periods")) {
+            if (weekday != null && !weekday.equals(period.path("weekday").stringValue())) continue;
+            boolean assigned = false, available = availability == null || availability.isMissingNode();
+            for (JsonNode assignment : baseline.path("result").path("timetable").path("assignments")) {
+                if (teacher.equals(assignment.path("teacherId").stringValue()) && period.path("id").equals(assignment.path("periodId"))) assigned = true;
+            }
+            if (!available) for (JsonNode allowed : availability) {
+                if (allowed.equals(period.path("id"))) available = true;
+            }
+            assertEquals(period.path("displayName").stringValue(), slots.get(index).path("period").stringValue());
+            assertEquals(assigned ? "Assigned" : available ? "Available · unassigned" : "Unavailable",
+                    slots.get(index).path("state").stringValue(), period.path("id").stringValue());
+            index++;
+        }
+        assertEquals(index, slots.size());
     }
 
     @Test
@@ -1101,6 +1285,44 @@ class WorkspaceBrowserIT {
         document.put("definitionRevision", "sha256:scale-definition").put("timetableRevision", "sha256:scale-timetable");
         ObjectNode baseline = document.putObject("acceptedBaseline");
         baseline.set("definition", definition); baseline.set("result", result); baseline.putObject("manifest").put("manifestVersion", 1);
+        return document;
+    }
+
+    private ObjectNode investigationScaleDocument() throws Exception {
+        ObjectNode document = scaleDocument();
+        JsonNode baseline = document.path("acceptedBaseline");
+        JsonNode definition = baseline.path("definition");
+        ((ObjectNode) definition.path("subjects").get(0)).put("displayName", "Subject Zero with a deliberately long authoritative display name for timetable tiles");
+        ((ObjectNode) definition.path("teachers").get(16)).put("displayName", "Teacher Sixteen with a deliberately long authoritative display name for timetable tiles");
+        ((ObjectNode) definition.path("cohorts").get(16)).put("displayName", "Class Sixteen with a deliberately long authoritative display name for timetable tiles");
+        ((ObjectNode) definition.path("rooms").get(16)).put("displayName", "Room Sixteen with a deliberately long authoritative display name for timetable tiles");
+        ObjectNode selectedTeacher = (ObjectNode) definition.path("teachers").get(16);
+        selectedTeacher.withArray("qualifiedSubjectIds").add("subject-0");
+        var available = selectedTeacher.putArray("availablePeriodIds");
+        for (int i = 0; i <= 40; i++) available.add("period-" + i);
+        ((ObjectNode) definition.path("lessons").get(960)).put("subjectId", "subject-0");
+        ((ObjectNode) baseline.path("result").path("timetable").path("assignments").get(960)).put("subjectId", "subject-0");
+        String revision = verifier.verify(new ImportDocuments(definition, null, null,
+                ImportDocuments.ImportMode.INITIAL_DEFINITION)).definitionRevision();
+        ObjectNode result = (ObjectNode) JSON.readTree(Path.of("src/test/resources/uc5-accepted-result.json").toFile());
+        result.put("schoolId", "opaque-scale-school").put("inputRevision", revision).put("correlationId", "uc2-scale-generated");
+        result.set("timetable", baseline.path("result").path("timetable").deepCopy());
+        var orderedAssignments = new ArrayList<JsonNode>();
+        result.path("timetable").path("assignments").forEach(orderedAssignments::add);
+        orderedAssignments.sort(Comparator.comparing(item -> item.path("lessonId").stringValue()));
+        ObjectNode scope = JSON.createObjectNode().put("schemaVersion", 1).put("schoolId", "opaque-scale-school")
+                .put("inputRevision", revision);
+        var ordered = scope.putArray("assignments");
+        orderedAssignments.forEach(ordered::add);
+        String timetableRevision = "sha256:" + HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+                .digest(CanonicalJson.bytes(scope)));
+        result.put("timetableRevision", timetableRevision);
+        ((ObjectNode) document).put("definitionRevision", revision).put("timetableRevision", timetableRevision);
+        ((ObjectNode) baseline).set("result", result);
+        ObjectNode manifest = (ObjectNode) baseline.path("manifest");
+        manifest.put("definitionSchemaVersion", 1).put("resultSchemaVersion", 1).put("catalogVersion", 1)
+                .put("schoolId", "opaque-scale-school").put("inputRevision", revision)
+                .put("timetableRevision", timetableRevision).putArray("locks");
         return document;
     }
 
