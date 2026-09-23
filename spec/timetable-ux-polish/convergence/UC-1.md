@@ -2,15 +2,15 @@
 
 ## Summary
 
-- Submission: `spec/timetable-ux-polish/checkpoints/UC-1.md` at `1e0fc8a0cc0247827ee50c624130d1e9715f40ac`
-- Verdict: REJECT
-- Findings: 0 critical, 3 gaps, 0 protocol
-- Suite: independently ran focused (26 unit, 1 browser; 0 failed/errors/skipped) and full `./mvnw -pl timetable-workspace -am verify` (66 tests, 0 failed/errors/skipped)
-- Working tree impact from verification: generated `.output.txt` removed; pre-existing `.idea/encodings.xml` and untracked `spec/timetable-ux-polish/rules.md` preserved
+- Submission: revised `spec/timetable-ux-polish/checkpoints/UC-1.md` at `69dad9dd94f14ba9cc1a9a7866b0adbea36e05cb` (prior submission `1e0fc8a`)
+- Verdict: PENDING WALKTHROUGH
+- Findings: 0 critical, 0 gaps, 0 protocol; prior G-1–G-3 resolved by revision and user-approved contract correction
+- Suite: independently reran focused (26 unit, 4 browser; 0 failed/errors/skipped) and full `./mvnw -pl timetable-workspace -am verify` (26 unit, 67 integration including 19 browser; 0 failed/errors/skipped)
+- Working tree impact from verification: generated `.output.txt` removed; no tracked runtime changes; pre-existing `.idea/encodings.xml` preserved. The feature's previously untracked `rules.md` was included in the user-approved revision commit.
 
 ## Protocol Gate
 
-One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, checkpoint and implementation are committed together at `1e0fc8a`, inspection prerequisite UC-2 is `APPROVED`, and no other polish UC is in progress. Base diff `0b27b9d..1e0fc8a` consists of accepted presentation, browser tests, checkpoint, and ledger only. The checkpoint lists scenario, extensions, guarantees, rules, tests, changed files, and regression; evidence gaps below remain subject to audit, not a protocol blocker.
+One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, revised checkpoint and browser tests are committed together at `69dad9d`, inspection prerequisite UC-2 is `APPROVED`, and no other polish UC is in progress. Submission diff `ca4a3f5..69dad9d` contains the user-approved spec/rules correction, browser regression, checkpoint, and ledger; `.idea/encodings.xml` is excluded. All scenarios, extensions, guarantees, postconditions, applicable rules and regression are reported. No later UC behavior was added. This UI UC still requires human confirmation before approval.
 
 ## Runtime Reproduction
 
@@ -19,7 +19,8 @@ One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, checkpoint and implementation are co
 | Administrator (real Chromium/CDP) | Open scale accepted timetable; Week/Day; subject investigation and cohort filter; lesson; focus and return | Complete Week/Day with exact selected lesson and retained filter | Focused real-browser test passed; `WorkspaceBrowserIT.java:341-381` asserts 60 classes, 1,000 lessons, 204 Monday assignments, exact lesson fields and return selection |
 | Administrator | Inspector collapse/reopen; Utilities and failed export; narrow read-only | Canvas expands, selection and durable document remain; explicit export failure | Focused test passed; `WorkspaceBrowserIT.java:383-423` asserts request count, width, visible summary, restored lesson, network-blocked export, exact stored document, and narrow controls absent |
 | Administrator | Empty accepted, invalid preference, empty focused entity | Prior inspection browser tests cover | Full browser regression passed; `WorkspaceBrowserIT.java:840-915` checks empty cells and preference fallback; `WorkspaceBrowserIT.java:807-837` checks empty focus |
-| Administrator | Current chosen from another mode; missing lesson display metadata | Claimed via navigation/fallback code | No browser action/assertion drives either branch (`WorkspaceBrowserIT.java:324-424` and search across tests); gaps G-1 and G-2 |
+| Administrator | Select Current from Draft and return; empty accepted | Claimed through revised browser journeys | Focused tests passed: `WorkspaceBrowserIT.preparesProtectedRepairDraftInRealBrowser` retains exact selection, Week/filter, no workspace request or durable mutation; `showsDeclaredEmptyAcceptedTimetableInRealBrowser` asserts Current/accepted and no invented lesson |
+| Administrator | Import purported accepted pair with missing lesson name (revised extension 1a) | Kernel rejects before acceptance | Browser import with original valid result and missing definition lesson name returned validation refusal, showed no Current/inspector and retained identical empty durable document; `refusesUnmappableAcceptedMetadataInRealBrowser` PASS |
 
 ## Evidence Ledger
 
@@ -33,18 +34,18 @@ One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, checkpoint and implementation are co
 | UC-1 main 6 | Exact contextual inspector without displacement | `WorkspaceBrowserIT.java:364-374`, `app.js:456-460` | STRONG | yes |
 | UC-1 main 7 | Collapse/reopen, Utilities | `WorkspaceBrowserIT.java:383-403` | STRONG | yes |
 | UC-1 main 8 | Preserved selection, expanded canvas, export segregation | `WorkspaceBrowserIT.java:383-411` | STRONG | yes |
-| UC-1 trigger from other available mode | Navigation code exists | `app.js:98-141` and `renderModeNavigation`, but no browser assertion selects Current from Draft, Solving, or Proposal | ABSENT | no (G-1) |
-| UC-1 2a | Empty timetable | `WorkspaceBrowserIT.java:840-862` checks class/period/empty, but not Current/accepted identity for this branch | WEAK | no (G-3) |
+| UC-1 trigger from other available mode | Draft→Current presentation transition | `WorkspaceBrowserIT.preparesProtectedRepairDraftInRealBrowser`: Draft→Current→Draft→Current, accepted lesson, Week, filter and exact durable/request invariants; focused and full PASS | STRONG | yes |
+| UC-1 1a (user-approved revision of 6a) | Invalid metadata refused before acceptance | `WorkspaceBrowserIT.refusesUnmappableAcceptedMetadataInRealBrowser`: real import rejected by packaged kernel, no Current/inspector, unchanged EMPTY document/version; focused and full PASS | STRONG | yes |
+| UC-1 2a | Empty timetable | `WorkspaceBrowserIT.showsDeclaredEmptyAcceptedTimetableInRealBrowser`: accepted identity, pressed Current, declared slots, zero invented lessons | STRONG | yes |
 | UC-1 2b | Narrow read-only | `WorkspaceBrowserIT.java:413-423`, prior narrow regression | STRONG | yes |
 | UC-1 3a | Invalid stored range or selection | `WorkspaceBrowserIT.java:865-915` probes invalid values and selection exclusion with exact stored-document comparison | STRONG | yes |
 | UC-1 4a | Empty focused entity | `WorkspaceBrowserIT.java:807-837`, browser schedule/absence and state | STRONG | yes |
 | UC-1 5a | Supported repair handoff | Existing `startRepairForm` in `app.js:332-344`; full browser repair journeys exercised | STRONG | yes |
-| UC-1 6a | Missing display metadata, ID and unavailable cue | `app.js:857` fallback exists; no accepted missing-metadata browser fixture/assertion | ABSENT | no (G-2) |
 | UC-1 8a | Export failure no bundle/state change | `WorkspaceBrowserIT.java:397-411,423` intercepts network and compares full document | STRONG | yes |
 | UC-1 G1 | Sticky header/scroll boundaries | `styles.css` existing matrix/sticky definitions and prior browser inspection tests | STRONG | yes |
 | UC-1 G2 | Utilities-only export, import hidden, no lifecycle action | `WorkspaceBrowserIT.java:397-403`, `app.js:53,282-300` | STRONG | yes |
 | UC-1 G3 | Fixed width/no request/persistence | `styles.css:57-66`, `WorkspaceBrowserIT.java:383-395`, storage shape test `java:903-904` | STRONG | yes |
-| UC-1 G4 | Navigation read-only | `inspection-state.js:3-38`, `WorkspaceBrowserIT.java:411,423`, previous preference tests; other-mode transition missing | WEAK | no (G-1) |
+| UC-1 G4 | Navigation read-only | `inspection-state.js:3-38`, `WorkspaceBrowserIT.preparesProtectedRepairDraftInRealBrowser` proves Draft→Current round trip without request or mutation; previous preference tests PASS | STRONG | yes |
 | UC-1 G5 | Non-color status and native controls | `app.js:424-460`, `messages.js`, `WorkspaceBrowserIT.java:291-298,383-403` | STRONG | yes |
 | UC-1 G6 | No new access surface | Commit diff has no routes, remote resources, authentication or network dependencies; full HTTP regressions green | STRONG | yes |
 | UC-1 G7 | Normative scale browser journey and durable state | `WorkspaceBrowserIT.java:324-423`, scale fixture generated from validated reference; full browser suite green | STRONG | yes |
@@ -57,12 +58,12 @@ One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, checkpoint and implementation are co
 | Rule | Constraint | Evidence | Result |
 |---|---|---|---|
 | RULE-1 | MUST extend packaged workbench; MUST NOT fork model/add dependencies | `app.js` imports existing accepted model and renderers; commit has no backend/route/dependency changes | PASS |
-| RULE-2 | MUST derive modes in one owner, retain context, reset on reload; MUST NOT mutate via presentation | `inspection-state.js:3-38` owns ephemeral mode; `app.js` switches modes; missing other-mode browser proof | GAP G-1 |
-| RULE-6 | Missing names MUST show stable ID and unavailable-name cue | `app.js:857` fallback; no browser assertion for missing accepted metadata | GAP G-2 |
+| RULE-2 | MUST derive modes in one owner, retain context, reset on reload; MUST NOT mutate via presentation | `inspection-state.js:3-38` owns ephemeral mode; focused real-browser Draft→Current→Draft→Current compares request count and exact durable document | PASS |
+| RULE-6 | Invalid accepted pairs MUST be refused; received snapshot fallback MUST show ID/unavailable-name cue | `WorkspaceBrowserIT.refusesUnmappableAcceptedMetadataInRealBrowser` real verifier rejection; `app.js:857` defensive escaped ID/cue fallback in presentation | PASS |
 | RULE-7 | MUST reuse accepted renderers, fixed inspector and safe Utilities | `app.js:424-460`, `styles.css:48-66`, real-browser collapse/export checks | PASS |
 | RULE-8 | MUST NOT add route/relax protection; export accepted-only | No route/security changes; `app.js:286` only exposes export in accepted state; HTTP regression green | PASS |
-| RULE-9 | MUST use exact isolated normative validation data | `WorkspaceBrowserIT.java:324-423,1357-1430` generated scale fixture and isolated Testcontainers; full suite PASS | PASS |
-| RULE-10 | MUST verify actor boundary and state safety | Real Chromium/CDP plus exact stored document; uncovered 2a and 6a branches | GAP G-2, G-3 |
+| RULE-9 | MUST use exact isolated normative validation data | `WorkspaceBrowserIT` scale fixture and isolated Testcontainers; invalid-pair branch begins from valid reference and refuses deliberately missing lesson name; full suite PASS | PASS |
+| RULE-10 | MUST verify actor boundary and state safety | Real Chromium/CDP plus exact stored document for scale, empty Current, mode switch, failed export, invalid import; full suite PASS | PASS |
 
 ## Related-UC Regression
 
@@ -73,18 +74,16 @@ One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, checkpoint and implementation are co
 
 ## Findings
 
-- **G-1 GAP — Other-mode Current trigger not proven.** UC-1 trigger: “selects Current from another available mode”; RULE-2: “MUST retain representable range, investigation, selection, focus, and scroll on mode changes.” `app.js:98-141` introduces the transition, but the only new mode assertion in `WorkspaceBrowserIT.java:347-348` checks accepted state's one Current button. Drive a real Draft→Current (and return where relevant) browser transition with exact accepted canvas/selection, no mutation/request, and retained context assertions.
-- **G-2 GAP — Missing metadata fallback not proven at actor boundary.** UC-1 extension 6a: “If selected display metadata cannot be mapped, the inspector shows the stable identity with an unavailable-name cue and no guessed label”; RULE-6 requires that cue. `app.js:857` has a fallback, but `WorkspaceBrowserIT.java:364-374` selects fully mapped data only. Add a production-conformant accepted browser case with unavailable metadata and assert exact ID/cue, no guessed name, and unchanged workspace; if verifier excludes such data, establish the genuine product/spec blocker instead.
-- **G-3 GAP — Empty Current identity omitted.** UC-1 extension 2a: “If the accepted timetable has no assignments ... identifies Current as accepted.” `WorkspaceBrowserIT.java:840-862` asserts class, period, and emptiness but not mode or accepted identity. Assert the Current/accepted indicator in that empty-snapshot journey, alongside absence of invented lesson.
+None. Prior G-1 is closed by Draft→Current browser transition; G-3 by accepted empty Current identity; G-2 by the user's explicit contract decision and real browser verifier-refusal evidence. The defensive renderer remains intact.
 
 ## Walkthrough
 
-Deferred until automated evidence is strong: open a verified accepted timetable on desktop; check school, state, revision, Week/Day and whole-school labels; inspect a lesson and focus/return; collapse/reopen the inspector and open Utilities; confirm export and absence of destructive actions; repeat on narrow viewport. User confirmation is required before UI approval.
+Pending user confirmation. Open a verified accepted timetable on a supported desktop. Check school, lifecycle state, accepted revision, Current and Week; change to Day and back, inspect a subject/teacher or filter, select a lesson, and visit and return from a class/teacher/room schedule. Collapse and reopen the inspector, checking that selection stays and the timetable gains width; open Utilities and find export there, with import and lifecycle actions in their proper contexts. On narrow viewport, confirm the read-only focused schedule and absence of desktop mutation controls. An empty accepted timetable should still identify Current and show declared empty slots. An invalid accepted-pair import must be refused before displaying Current; this negative path has automated actor-boundary proof. Please report whether the visual and navigation checks pass or fail; no result has been supplied yet.
 
 ## Status Update
 
-UC-1 `READY_FOR_CONVERGENCE` → `NEEDS_REVISION`; no next UC eligible. Preserve submitted implementation evidence.
+UC-1 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; no next UC eligible until user confirms and convergence approves.
 
 ## Response to execute
 
-REVISE UC-1: G-1 other-mode Current journey, G-2 missing-metadata inspector proof, G-3 empty Current identity proof.
+PENDING WALKTHROUGH: confirm UC-1 accepted desktop/narrow workbench layout, inspection navigation, inspector collapse/reopen, and Utilities placement before approval.

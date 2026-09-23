@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none (awaiting UC-1 convergence)
+- Status: PENDING_WALKTHROUGH
+- Next eligible: none (awaiting UC-1 walkthrough)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | external `timetable-inspection-ux` UC-2 approval (met) | HEAD at convergence (revision) | `convergence/UC-1.md`: prior REJECT G-1–G-3; reconvergence pending |
+| UC-1 | PENDING_WALKTHROUGH | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: PENDING_WALKTHROUGH; G-1–G-3 resolved |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
