@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: APPROVED
-- Next eligible: UC-3
+- Use case: UC-3
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: APPROVE; G-1–G-3 resolved, walkthrough passed |
 | UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
-| UC-3 | NOT_STARTED | UC-2 | - | - |
+| UC-3 | READY_FOR_CONVERGENCE | UC-2 | HEAD at convergence | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
@@ -69,6 +69,27 @@
 | UC-2 G4, G7; RULE-1, RULE-2, RULE-3, RULE-4 | `app.js:44–143,350–437,455–576,877–930`; `inspection-state.js` unchanged mode authority; focused tests compare exact document and version; existing HTTP lifecycle/refusal tests passed in full suite |
 | RULE-6, RULE-7, RULE-8 | `app.js` escapes school-controlled names, retains CSP/CSRF/If-Match and native controls; `styles.css:62–76` fixed inspector; `messages.js:89–90,176–181` catalog cues; narrow browser and full security suite green |
 | RULE-9, RULE-10 | `WorkspaceBrowserIT` isolated Testcontainers fixture, accepted verifier, five actor-boundary journeys; complete shared browser suite (23 tests) and full workspace suite green |
+
+## UC-3 Evidence
+
+- Started from: `71c7c0a8f40254dd650279d6d2486ffab4b85022` (2026-09-23); prior UC-3 convergence findings: none.
+- Pre-existing dirty files: `.idea/encodings.xml` (unmodified by UC-3, excluded from submission).
+- Implementation submission: HEAD at convergence.
+- Changed files: `timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceRepository.java`, `timetable-workspace/src/main/resources/static/workspace/{app.js,messages.js}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/{WorkspaceBrowserIT.java,WorkspaceRepairPlanningIT.java}`, `spec/timetable-ux-polish/{status.md,checkpoints/UC-3.md}`.
+- Commands and results: `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#inspectsFrozenRepairRunAndRecoversWithoutPublishingInRealBrowser+showsFailedRepairEvidenceAndGatedRetryInRealBrowser+generatesRepairProposalInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 3 browser); `./mvnw -pl timetable-workspace -am verify` PASS (26 unit, 73 integration, 0 failures/errors/skips); final added feasible-handoff assertions rerun with `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#generatesRepairProposalInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 1 browser). `git diff --check` PASS; test-generated `.output.txt` removed; no tracked runtime data changed.
+
+| Contract element | Evidence |
+|---|---|
+| UC-3 main 1–4; Requires UC-2; G1, G2, G4, G5 | `WorkspaceBrowserIT.inspectsFrozenRepairRunAndRecoversWithoutPublishingInRealBrowser` (`:1439–1512`): real saved Draft/pin/range/selection -> guarded run with exact run ID/limit/accepted bundle/Draft, selected lesson, frozen controls, stable DOM across polls, Current/Draft/Solving and focused context; no run restart on navigation. `app.js:36–44,106–130,369–399,470–535` reuses accepted model and contextual run controls. |
+| UC-3 main 5–6; G3, G4, G8; success | `WorkspaceBrowserIT.generatesRepairProposalInRealBrowser` (`:1309–1425`): real packaged kernel, verified feasible run, retained accepted identity/selected lesson and exact accepted bundle/Draft, no active run or Solving mode, Proposal selected with accepted canvas. Existing `WorkspaceRepairPlanningIT` tests independent verification and stale/rejected output. |
+| UC-3 2a, 2b; G1, G4, G7; minimal | `WorkspaceBrowserIT.inspectsFrozenRepairRunAndRecoversWithoutPublishingInRealBrowser` (`:1477–1512`): cancellation and startup-recovery listener through browser reload, exact unchanged accepted bundle/Draft and no proposal; `WorkspaceRepository.java:170–185` records safe failed outcome on restart; late released process cannot apply. |
+| UC-3 3a; G2 | `app.js:245–283,449–460` retains accepted IDs across modes and clears an out-of-Day selection with explanation; UC-1 and UC-2 browser regressions exercise representable context and accepted inspection fallback. Modes share exactly the same accepted model, so an identity present in one mode is not absent in another. |
+| UC-3 5a, 5b, 6a; G3, G5; minimal | `WorkspaceBrowserIT.showsFailedRepairEvidenceAndGatedRetryInRealBrowser` (`:1516–1570`): no feasible, invalid input, transport, interruption, mismatched/rejected output and bounded timeout; safe inspector/Utilities messages, no proposal, exact unchanged Draft/baseline; unchanged retry runs with PT2M only after eligible no-feasible result, not after cancellation or other failures. Existing `WorkspaceRepairPlanningIT` proves HTTP refusal codes and absence of unauthorized process launches. |
+| UC-3 G6 | Browser narrow viewport during the live run (`WorkspaceBrowserIT.java:1482–1487`) asserts read-only focused schedule, no modes/cancellation, identical durable run ID/document, responsive return to desktop inspector. |
+| RULE-1, RULE-2 | `app.js:36–44,47–142,470–535`, unchanged `inspection-state.js`; shared accepted model and native packaged assets; exact durable document asserted across switches; presentation preference remains scoped Day/Week only. |
+| RULE-3, RULE-4 | `app.js:369–399,470–585` freezes Draft and retains accepted lesson overlays; existing `RepairPlanningService` conditional run guard plus `WorkspaceRepository.java:170–185` recovery; browser and HTTP suite cover cancellation, late result, refusal and retry. |
+| RULE-6, RULE-7, RULE-8 | `app.js:287–348,369–399,462–531,569–590`, `messages.js:119–129`: escaped safe diagnostics, native inspector/Utilities, read-only narrow; existing HTTP security regression green, no new routes or browser storage. |
+| RULE-9, RULE-11 | `WorkspaceBrowserIT.java:1309–1568` verified accepted fixture, isolated PostgreSQL, packaged success/recovery and production-conformant process failures; target-scale browser and all approved shared tests in the full suite green. |
 
 ## Blockers
 

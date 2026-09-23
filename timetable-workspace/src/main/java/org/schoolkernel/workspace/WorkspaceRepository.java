@@ -173,7 +173,12 @@ public class WorkspaceRepository {
                         SET lifecycle_state = 'REPAIR_DRAFT',
                             version = version + 1,
                             active_run_id = NULL,
-                            document = document - 'run' - 'proposal'
+                            document = jsonb_set(document - 'run' - 'proposal', '{lastRun}',
+                                jsonb_build_object('id', document->'run'->>'id',
+                                    'kind', 'REPAIR', 'limit', document->'run'->>'limit',
+                                    'intentRevision', document->'run'->>'intentRevision',
+                                    'status', 'FAILED', 'feasible', false, 'code', 'INTERRUPTED',
+                                    'message', 'Repair generation was interrupted.'))
                         WHERE workspace_id = 1
                           AND lifecycle_state = 'SOLVING_REPAIR'
                         """)

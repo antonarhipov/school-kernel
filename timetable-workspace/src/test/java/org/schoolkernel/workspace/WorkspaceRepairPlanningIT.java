@@ -633,7 +633,7 @@ class WorkspaceRepairPlanningIT {
         }
     }
 
-    private enum RepairFailure {
+    enum RepairFailure {
         NO_FEASIBLE, INVALID_INPUT, INTERNAL_ERROR, TRANSPORT, INTERRUPTED, MISMATCHED, WATCHDOG
     }
 
