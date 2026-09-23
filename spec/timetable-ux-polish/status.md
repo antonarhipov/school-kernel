@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-3
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none
 
 ## Progress
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: APPROVE; G-1–G-3 resolved, walkthrough passed |
 | UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
-| UC-3 | NEEDS_REVISION | UC-2 | `7e35c40` | `convergence/UC-3.md`: REJECT; G-1, G-2 |
+| UC-3 | READY_FOR_CONVERGENCE | UC-2 | HEAD at convergence | `convergence/UC-3.md`: earlier REJECT; G-1, G-2 addressed |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
@@ -77,6 +77,8 @@
 - Implementation submission: HEAD at convergence.
 - Changed files: `timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceRepository.java`, `timetable-workspace/src/main/resources/static/workspace/{app.js,messages.js}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/{WorkspaceBrowserIT.java,WorkspaceRepairPlanningIT.java}`, `spec/timetable-ux-polish/{status.md,checkpoints/UC-3.md}`.
 - Commands and results: `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#inspectsFrozenRepairRunAndRecoversWithoutPublishingInRealBrowser+showsFailedRepairEvidenceAndGatedRetryInRealBrowser+generatesRepairProposalInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 3 browser); `./mvnw -pl timetable-workspace -am verify` PASS (26 unit, 73 integration, 0 failures/errors/skips); final added feasible-handoff assertions rerun with `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#generatesRepairProposalInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 1 browser). `git diff --check` PASS; test-generated `.output.txt` removed; no tracked runtime data changed.
+- Revision from: `d44501e20d68a44399a494198ee1c624c08229d2` (2026-09-23); findings `G-1` and `G-2` in `convergence/UC-3.md`. Only browser evidence, checkpoint, and status changed; production behavior and spec are unchanged.
+- Revision commands and results: `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#restoresInterruptedRepairAfterActualApplicationRestartInRealBrowser+followsAndRefusesWholeSchoolRepairOnVerifiedNormativeSnapshotInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 2 browser); `./mvnw -pl timetable-workspace -am verify` PASS (26 unit, 75 integration including 27 browser, 0 failures/errors/skips). Test-generated `.output.txt` removed; `git diff --check` PASS; no tracked runtime data changed.
 
 | Contract element | Evidence |
 |---|---|
@@ -90,6 +92,11 @@
 | RULE-3, RULE-4 | `app.js:369–399,470–585` freezes Draft and retains accepted lesson overlays; existing `RepairPlanningService` conditional run guard plus `WorkspaceRepository.java:170–185` recovery; browser and HTTP suite cover cancellation, late result, refusal and retry. |
 | RULE-6, RULE-7, RULE-8 | `app.js:287–348,369–399,462–531,569–590`, `messages.js:119–129`: escaped safe diagnostics, native inspector/Utilities, read-only narrow; existing HTTP security regression green, no new routes or browser storage. |
 | RULE-9, RULE-11 | `WorkspaceBrowserIT.java:1309–1568` verified accepted fixture, isolated PostgreSQL, packaged success/recovery and production-conformant process failures; target-scale browser and all approved shared tests in the full suite green. |
+
+| Convergence finding / contract | Revision evidence |
+|---|---|
+| G-1; UC-3 2b, G7, RULE-3, RULE-11 | `WorkspaceBrowserIT.restoresInterruptedRepairAfterActualApplicationRestartInRealBrowser` (`:1573–1627`): real application on random port with isolated PostgreSQL, browser-started blocked repair, application stop, fresh application startup/recovery, browser navigation to new port, exact original accepted/Draft, original run ID/`INTERRUPTED` status, version increment, no proposal, late-result release with no write. |
+| G-2; UC-3 G8, RULE-9, RULE-11 | `WorkspaceBrowserIT.followsAndRefusesWholeSchoolRepairOnVerifiedNormativeSnapshotInRealBrowser` (`:1629–1706`): independently verified accepted pair and revisions; 1,000 lesson IDs, 60 cohorts, 100 teachers, 100 rooms, 60 periods; real teacher-16/period-0 Draft, selected lesson-960, blocked run and mode transitions with exact accepted/Draft/Day IDs, cancellation, and rejected kernel output with no proposal or mutation. |
 
 ## Blockers
 

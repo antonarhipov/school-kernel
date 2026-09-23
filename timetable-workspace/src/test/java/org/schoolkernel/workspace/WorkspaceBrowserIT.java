@@ -33,8 +33,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -1569,6 +1571,141 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("Timetable polish UC-3 ext 2b/G7/RULE-11: stop the application mid-run and restart on the same durable school")
+    void restoresInterruptedRepairAfterActualApplicationRestartInRealBrowser() throws Exception {
+        ObjectNode accepted = validAcceptedDocument();
+        storeAccepted(accepted);
+        JsonNode baseline = accepted.path("acceptedBaseline").deepCopy();
+        ConfigurableApplicationContext first = startRestartableWorkspace();
+        ConfigurableApplicationContext restarted = null;
+        WorkspaceRepairPlanningIT.SwitchingRepairProcessLauncher blocked = first.getBean(
+                WorkspaceRepairPlanningIT.SwitchingRepairProcessLauncher.class);
+        try (Cdp cdp = openWorkspaceBrowser(first.getEnvironment().getProperty("local.server.port", Integer.class))) {
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('[name=period][value=mon-1]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
+            JsonNode draft = assertDraftUnchangedBaseline(baseline).deepCopy();
+            blocked.blockReplan = true;
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            blocked.awaitBlocked();
+            cdp.awaitText("Repair generation · running", Duration.ofSeconds(15));
+            assertEquals("SOLVING_REPAIR", storedLifecycle());
+            JsonNode running = storedWorkspaceDocument();
+            String originalRunId = running.path("run").path("id").stringValue();
+            long runningVersion = jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
+                    .query(Long.class).single();
+            assertEquals(baseline, running.path("acceptedBaseline"));
+            assertEquals(draft, running.path("repairDraft"));
+            assertFalse(running.has("proposal"));
+
+            cdp.command("Page.navigate", object("url", "about:blank"));
+            awaitBrowserCondition(cdp, "document.location.href === 'about:blank'");
+            first.close();
+            assertFalse(first.isActive(), "the application that started the repair is stopped before recovery");
+            restarted = startRestartableWorkspace();
+            int restoredPort = restarted.getEnvironment().getProperty("local.server.port", Integer.class);
+            cdp.command("Page.navigate", object("url", "http://localhost:" + restoredPort + "/workspace/"));
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            assertEquals("REPAIR_DRAFT", storedLifecycle());
+            assertEquals(runningVersion + 1, jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
+                    .query(Long.class).single());
+            assertEquals(draft, assertDraftUnchangedBaseline(baseline));
+            JsonNode recovered = storedWorkspaceDocument();
+            assertEquals(originalRunId, recovered.path("lastRun").path("id").stringValue());
+            assertEquals("INTERRUPTED", recovered.path("lastRun").path("code").stringValue());
+            assertEquals("FAILED", recovered.path("lastRun").path("status").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=PROPOSAL]') && !document.querySelector('#cancel-run') && document.querySelector('#utilities')?.textContent.includes('Repair generation was interrupted.') && document.querySelector('#solve-draft') !== null"));
+            blocked.reset();
+            Thread.sleep(300);
+            assertEquals(recovered, storedWorkspaceDocument(), "the old process must not publish after a fresh instance recovers its run");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        } finally {
+            blocked.reset();
+            if (first.isActive()) first.close();
+            if (restarted != null) restarted.close();
+        }
+    }
+
+    @Test
+    @DisplayName("Timetable polish UC-3 G8/RULE-9/RULE-11: validated whole-school Draft, run, cancel and rejected output preserve exact 1,000-lesson identity")
+    void followsAndRefusesWholeSchoolRepairOnVerifiedNormativeSnapshotInRealBrowser() throws Exception {
+        ObjectNode document = investigationScaleDocument();
+        JsonNode baseline = document.path("acceptedBaseline").deepCopy();
+        JsonNode definition = baseline.path("definition");
+        JsonNode assignments = baseline.path("result").path("timetable").path("assignments");
+        KernelVerifier.Verification verified = verifier.verify(new ImportDocuments(definition,
+                baseline.path("result"), null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+        assertEquals(document.path("definitionRevision").stringValue(), verified.definitionRevision());
+        assertEquals(document.path("timetableRevision").stringValue(), verified.timetableRevision());
+        assertEquals(60, definition.path("cohorts").size());
+        assertEquals(100, definition.path("teachers").size());
+        assertEquals(100, definition.path("rooms").size());
+        assertEquals(1_000, assignments.size());
+        assertEquals(60, definition.path("periods").size());
+        assertEquals("subject-0", assignments.get(960).path("subjectId").stringValue());
+        assertEquals("teacher-16", assignments.get(960).path("teacherId").stringValue());
+        assertEquals("cohort-16", assignments.get(960).path("cohortId").stringValue());
+        assertEquals("period-0", assignments.get(960).path("periodId").stringValue());
+        assertEquals("room-16", assignments.get(960).path("roomId").stringValue());
+        Set<String> expectedIds = new HashSet<>();
+        Set<String> expectedMondayIds = new HashSet<>();
+        for (JsonNode assignment : assignments) expectedIds.add(assignment.path("lessonId").stringValue());
+        for (JsonNode assignment : assignments) {
+            int periodOrdinal = Integer.parseInt(assignment.path("periodId").stringValue().substring("period-".length()));
+            if (periodOrdinal < 12) expectedMondayIds.add(assignment.path("lessonId").stringValue());
+        }
+        assertEquals(1_000, expectedIds.size());
+        storeAccepted(document);
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            assertEquals(expectedIds, renderedLessonIds(cdp));
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#repair-resource').value='teacher-16'; document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            JsonNode draft = assertDraftUnchangedBaseline(baseline).deepCopy();
+            assertEquals("teacher-16", draft.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertEquals(JSON.readTree("[\"period-0\"]"), draft.path("intent").path("changes").get(0).path("unavailablePeriodIds"));
+            assertTrue(jsonStrings(draft.path("directEffectLessonIds")).contains("lesson-960"));
+            assertEquals(expectedIds, renderedLessonIds(cdp));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click(); document.querySelector('[data-range=DAY]').click()");
+            cdp.awaitText("Day · Monday", Duration.ofSeconds(5));
+            assertEquals(expectedMondayIds, renderedLessonIds(cdp));
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('[data-lesson-id=lesson-960]')?.textContent.includes('Directly affected')"));
+
+            processes.blockReplan = true;
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            processes.awaitBlocked();
+            cdp.awaitText("Repair generation · running", Duration.ofSeconds(20));
+            JsonNode running = storedWorkspaceDocument();
+            assertEquals("SOLVING_REPAIR", storedLifecycle());
+            assertEquals(baseline, running.path("acceptedBaseline"));
+            assertEquals(draft, running.path("repairDraft"));
+            assertFalse(running.has("proposal"));
+            assertEquals("PT30S", running.path("run").path("limit").stringValue());
+            assertEquals(expectedMondayIds, renderedLessonIds(cdp));
+            cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true'"));
+            cdp.evaluate("document.querySelector('[data-mode=DRAFT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector')?.textContent.includes('Frozen repair intent') && !document.querySelector('#solve-draft')"));
+            cdp.evaluate("document.querySelector('[data-mode=SOLVING]').click()");
+            assertEquals(running, storedWorkspaceDocument());
+            cdp.evaluate("document.querySelector('#cancel-run').click()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            assertEquals(draft, assertDraftUnchangedBaseline(baseline));
+            assertEquals("CANCELLED", storedWorkspaceDocument().path("lastRun").path("status").stringValue());
+
+            processes.reset();
+            processes.failure = WorkspaceRepairPlanningIT.RepairFailure.MISMATCHED;
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            cdp.awaitText("School Kernel returned an unverified repair result.", Duration.ofSeconds(20));
+            assertEquals(draft, assertDraftUnchangedBaseline(baseline));
+            assertEquals("FAILED", storedWorkspaceDocument().path("lastRun").path("status").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector .conflict-list')?.textContent.includes('unverified repair result') && document.querySelector('#utilities')?.textContent.includes('unverified repair result') && !document.querySelector('[data-mode=PROPOSAL]')"));
+            assertEquals(expectedMondayIds, renderedLessonIds(cdp));
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    @Test
     @DisplayName("UC-3 G5 and RULE-25: target-scale post-load interactions record diagnostic p95 evidence")
     void measuresTargetScaleInspectionInteractionsInRealBrowser() throws Exception {
         ObjectNode document = scaleDocument();
@@ -1729,8 +1866,12 @@ class WorkspaceBrowserIT {
     }
 
     private Cdp openWorkspaceBrowser() throws Exception {
+        return openWorkspaceBrowser(port);
+    }
+
+    private Cdp openWorkspaceBrowser(int workspacePort) throws Exception {
         int debuggingPort = startBrowser();
-        String page = "http://localhost:" + port + "/workspace/";
+        String page = "http://localhost:" + workspacePort + "/workspace/";
         String target = HttpClient.newHttpClient().send(
                 HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
                                 + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
@@ -1741,6 +1882,15 @@ class WorkspaceBrowserIT {
         cdp.command("Runtime.enable", JSON.createObjectNode());
         cdp.command("Page.navigate", object("url", page));
         return cdp;
+    }
+
+    private ConfigurableApplicationContext startRestartableWorkspace() {
+        return new SpringApplicationBuilder(WorkspaceApplication.class, WorkspaceRepairPlanningIT.ProcessConfiguration.class)
+                .properties(Map.of("server.port", "0", "spring.datasource.url", POSTGRES.getJdbcUrl(),
+                        "spring.datasource.username", POSTGRES.getUsername(),
+                        "spring.datasource.password", POSTGRES.getPassword(),
+                        "workspace.kernel-executable", ROOT.resolve("school-kernel").toString()))
+                .run();
     }
 
     private JsonNode storedWorkspaceDocument() throws Exception {
