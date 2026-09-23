@@ -146,6 +146,52 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("Timetable UX polish UC-1 ext 1a: missing accepted lesson name is refused before Current and leaves workspace unchanged")
+    void refusesUnmappableAcceptedMetadataInRealBrowser() throws Exception {
+        ObjectNode accepted = validAcceptedDocument();
+        ObjectNode definition = ((ObjectNode) accepted.path("acceptedBaseline").path("definition")).deepCopy();
+        ((ObjectNode) definition.path("lessons").get(0)).remove("displayName");
+        Path definitionFile = browserProfile.resolve("missing-lesson-name.json");
+        Path resultFile = browserProfile.resolve("matching-result.json");
+        Files.write(definitionFile, JSON.writeValueAsBytes(definition));
+        Files.write(resultFile, JSON.writeValueAsBytes(accepted.path("acceptedBaseline").path("result")));
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("DOM.enable", JSON.createObjectNode());
+            cdp.command("Page.navigate", object("url", page));
+            cdp.awaitText("Empty workspace", Duration.ofSeconds(15));
+            int rootNode = cdp.command("DOM.getDocument", JSON.createObjectNode())
+                    .path("result").path("root").path("nodeId").intValue();
+            for (String[] input : new String[][] { { "#definition", definitionFile.toString() }, { "#result", resultFile.toString() } }) {
+                ObjectNode query = JSON.createObjectNode().put("nodeId", rootNode).put("selector", input[0]);
+                int inputNode = cdp.command("DOM.querySelector", query).path("result").path("nodeId").intValue();
+                ObjectNode files = JSON.createObjectNode().put("nodeId", inputNode);
+                files.putArray("files").add(input[1]);
+                cdp.command("DOM.setFileInputFiles", files);
+            }
+            cdp.evaluate("document.querySelector('#json-import button').click()");
+            String rejected = cdp.awaitText("Import verification failed", Duration.ofSeconds(30));
+            assertTrue(rejected.contains("Empty workspace"));
+            assertFalse(rejected.contains("Accepted baseline"));
+            assertFalse(cdp.evaluateValue("Boolean(document.querySelector('#workbench-inspector, #workbench-modes, [data-lesson-id]'))")
+                    .path("result").path("result").path("value").booleanValue(), "invalid accepted pair cannot reach a Current lesson or inspector");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "refused accepted pair must not modify workspace document or version");
+        assertEquals("EMPTY", jdbc.sql("SELECT lifecycle_state FROM workspace_aggregate WHERE workspace_id=1")
+                .query(String.class).single());
+    }
+
+    @Test
     @DisplayName("UC-2 browser journey: administrator creates, reviews, confirms, and opens the first accepted timetable")
     void plansReviewsAndAcceptsInitialTimetableInRealBrowser() throws Exception {
         int debuggingPort = startBrowser();
@@ -857,6 +903,9 @@ class WorkspaceBrowserIT {
             assertTrue(rendered.contains("Year 7A"));
             assertTrue(rendered.contains("Monday 1"));
             assertTrue(rendered.contains("Empty"));
+            assertTrue(rendered.contains("Current · accepted"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#workbench-modes [data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && document.querySelectorAll('#accepted-view [data-lesson-id]').length === 0")
+                    .path("result").path("result").path("value").booleanValue(), "empty accepted snapshot retains Current without inventing a lesson");
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument());
@@ -962,6 +1011,25 @@ class WorkspaceBrowserIT {
             assertTrue(draft.contains("Directly affected lessons\n1"));
             assertTrue(draft.contains("Accepted baseline remains current"));
             assertTrue(draft.contains("Mathematics 1") || draft.contains("Mathematics"));
+
+            String durableDraft = storedDocument();
+            cdp.evaluate("document.querySelector('[data-lesson-id=\"lesson-math-1\"]').click()");
+            JsonNode requestsBeforeMode = cdp.evaluateValue("performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length")
+                    .path("result").path("result").path("value");
+            cdp.evaluate("document.querySelector('#workbench-modes [data-mode=CURRENT]').click()");
+            assertTrue(cdp.awaitText("Complete school population", Duration.ofSeconds(5)).contains("Repair draft · not current · Current"));
+            assertTrue(cdp.evaluateValue("document.querySelector('#workbench-modes [data-mode=CURRENT]').getAttribute('aria-pressed') === 'true' && document.querySelector('#accepted-view .week-matrix') !== null && document.querySelector('#workbench-inspector #lesson-panel-title')?.textContent === 'Mathematics 1' && !document.querySelector('#apply-pin')")
+                    .path("result").path("result").path("value").booleanValue(), "Current from Draft shows exact accepted selection without draft mutation controls");
+            cdp.evaluate("document.querySelector('#cohort-filter').value='cohort-7a'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('#workbench-modes [data-mode=DRAFT]').click()");
+            cdp.awaitText("Bulk-protect accepted assignments", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#workbench-modes [data-mode=CURRENT]').click()");
+            assertTrue(cdp.evaluateValue("document.querySelector('#cohort-filter').value === 'cohort-7a' && document.querySelector('[data-range=WEEK]').getAttribute('aria-pressed') === 'true' && document.querySelector('#workbench-inspector #lesson-panel-title')?.textContent === 'Mathematics 1'")
+                    .path("result").path("result").path("value").booleanValue(), "mode round trip retains representable filter, Week, and selection");
+            assertEquals(requestsBeforeMode.intValue(), cdp.evaluateValue("performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length")
+                    .path("result").path("result").path("value").intValue(), "presentation switches do not reload the workspace");
+            assertEquals(durableDraft, storedDocument(), "mode switches cannot mutate draft or accepted state");
+            cdp.evaluate("document.querySelector('#workbench-modes [data-mode=DRAFT]').click()");
 
             ObjectNode narrowMetrics = JSON.createObjectNode().put("width", 390).put("height", 844)
                     .put("deviceScaleFactor", 1).put("mobile", true);

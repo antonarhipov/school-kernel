@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: NEEDS_REVISION
-- Next eligible: UC-1 (revision)
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none (awaiting UC-1 convergence)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | NEEDS_REVISION | external `timetable-inspection-ux` UC-2 approval (met) | `1e0fc8a` | `convergence/UC-1.md`: REJECT G-1–G-3 |
+| UC-1 | READY_FOR_CONVERGENCE | external `timetable-inspection-ux` UC-2 approval (met) | HEAD at convergence (revision) | `convergence/UC-1.md`: prior REJECT G-1–G-3; reconvergence pending |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
@@ -36,9 +36,23 @@
 
 - Convergence verdict: REJECT at `spec/timetable-ux-polish/convergence/UC-1.md`; findings G-1, G-2, G-3 require browser evidence before approval.
 
+## UC-1 Revision Evidence
+
+- Revision from: `ca4a3f5` (prior convergence verdict G-1–G-3); submission: HEAD at convergence.
+- Product decision: user approved revising unreachable extension 6a to pre-acceptance refusal (extension 1a). The verifier cannot accept an entity without a name or an assignment with an unresolved reference; the defensive rendering fallback remains.
+- Changed files for revision: `spec/timetable-ux-polish/{spec.md,rules.md,status.md,checkpoints/UC-1.md}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`.
+- Focused browser runs: `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#preparesProtectedRepairDraftInRealBrowser+showsDeclaredEmptyAcceptedTimetableInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 2 browser); `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#refusesUnmappableAcceptedMetadataInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS (26 unit, 1 browser).
+- Full regression: `./mvnw -pl timetable-workspace -am verify` PASS (26 unit, 67 integration, 0 failures/errors/skips; includes all 19 browser tests). First attempt exceeded a 600-second timeout without an observed test failure; the completed second attempt used 1800 seconds. Generated `.output.txt` removed; no tracked runtime file changed.
+
+| Convergence finding / contract | Revision evidence |
+|---|---|
+| G-1; UC-1 trigger, G4, RULE-2 | `WorkspaceBrowserIT.preparesProtectedRepairDraftInRealBrowser`: real Draft→Current→Draft→Current navigation retains accepted lesson, Week, cohort filter, exact durable draft/accepted document, and workspace request count. |
+| G-2; revised UC-1 1a, RULE-6, RULE-9, RULE-10 | `WorkspaceBrowserIT.refusesUnmappableAcceptedMetadataInRealBrowser`: packaged kernel rejects imported accepted pair lacking a lesson display name; no Current/inspector and exact unchanged EMPTY workspace document/version. `spec.md` and `rules.md` now match verified acceptance. |
+| G-3; UC-1 2a | `WorkspaceBrowserIT.showsDeclaredEmptyAcceptedTimetableInRealBrowser`: asserts pressed Current, accepted identity, zero invented lessons, declared slots and unchanged state. |
+
 ## Blockers
 
-none (inspection UC-2 is APPROVED following the complete browser regression)
+none. Extension 1a reflects the user-approved verifier-refusal decision; all prior findings have revised browser evidence pending reconvergence.
 
 ## Deviations
 

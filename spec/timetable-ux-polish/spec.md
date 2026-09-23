@@ -175,7 +175,8 @@ ignored without changing authoritative workspace data.
 - Supporting actors: none
 - Trigger: The administrator opens a workspace with a verified accepted baseline or selects Current from another
   available mode.
-- Preconditions: A verified accepted definition/result pair exists.
+- Preconditions: A verified accepted definition/result pair exists for the main scenario; extension 1a covers a
+  purported accepted pair rejected before that precondition can be established.
 - Relations:
   - Requires: none
   - Includes: none
@@ -200,6 +201,10 @@ ignored without changing authoritative workspace data.
 
 ### Extensions
 
+- 1a. If an administrator attempts to import a purported accepted definition/result pair with a missing or blank
+  display name or an unmappable assignment reference, verification refuses the pair before acceptance, reports the
+  invalid input without presenting a Current lesson or inspector, and leaves authoritative workspace state unchanged;
+  end.
 - 2a. If the accepted timetable has no assignments, the workbench still renders every declared class, weekday, period,
   and empty position, identifies Current as accepted, and invents no lesson; resume at step 3.
 - 2b. If the viewport is narrow, the workbench presents the existing read-only Day or focused agenda, identifies the
@@ -211,8 +216,6 @@ ignored without changing authoritative workspace data.
   recurring schedule without inventing an assignment; resume at step 4.
 - 5a. If the administrator chooses to stage a supported repair from the selected or whole-school context, continue
   with UC-2; end.
-- 6a. If selected display metadata cannot be mapped, the inspector shows the stable identity with an unavailable-name
-  cue and no guessed label; resume at step 7.
 - 8a. If accepted export fails, the workbench reports that no bundle was produced, preserves Current and the retained
   canvas context, and changes no accepted, draft, run, or proposal data; end.
 
