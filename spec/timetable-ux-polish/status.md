@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none (awaiting UC-1 convergence)
+- Status: NEEDS_REVISION
+- Next eligible: UC-1 (revision)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | external `timetable-inspection-ux` UC-2 approval (met) | HEAD at convergence | pending |
+| UC-1 | NEEDS_REVISION | external `timetable-inspection-ux` UC-2 approval (met) | `1e0fc8a` | `convergence/UC-1.md`: REJECT G-1–G-3 |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
@@ -33,6 +33,8 @@
 | RULE-1, RULE-2 | `app.js` reuses accepted model and snapshot; `inspection-state.js` derives modes without persisting them; real browser preserves exact stored state |
 | RULE-6, RULE-7, RULE-8 | `app.js`, `messages.js`, `styles.css` escaped labels, fixed inspector, Utilities-only export, and narrow read-only; entire browser and HTTP suite green |
 | RULE-9, RULE-10 | Normative scale fixture in `WorkspaceBrowserIT` and isolated DB; new actor-boundary journey plus full browser suite |
+
+- Convergence verdict: REJECT at `spec/timetable-ux-polish/convergence/UC-1.md`; findings G-1, G-2, G-3 require browser evidence before approval.
 
 ## Blockers
 
