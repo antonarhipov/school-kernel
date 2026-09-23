@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: PENDING_WALKTHROUGH
-- Next eligible: none (awaiting UC-1 walkthrough)
+- Status: APPROVED
+- Next eligible: UC-2
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | PENDING_WALKTHROUGH | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: PENDING_WALKTHROUGH; G-1–G-3 resolved |
+| UC-1 | APPROVED | external `timetable-inspection-ux` UC-2 approval (met) | `69dad9d` | `convergence/UC-1.md`: APPROVE; G-1–G-3 resolved, walkthrough passed |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |

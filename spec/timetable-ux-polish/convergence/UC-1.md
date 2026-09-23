@@ -3,14 +3,14 @@
 ## Summary
 
 - Submission: revised `spec/timetable-ux-polish/checkpoints/UC-1.md` at `69dad9dd94f14ba9cc1a9a7866b0adbea36e05cb` (prior submission `1e0fc8a`)
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol; prior G-1–G-3 resolved by revision and user-approved contract correction
 - Suite: independently reran focused (26 unit, 4 browser; 0 failed/errors/skipped) and full `./mvnw -pl timetable-workspace -am verify` (26 unit, 67 integration including 19 browser; 0 failed/errors/skipped)
 - Working tree impact from verification: generated `.output.txt` removed; no tracked runtime changes; pre-existing `.idea/encodings.xml` preserved. The feature's previously untracked `rules.md` was included in the user-approved revision commit.
 
 ## Protocol Gate
 
-One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, revised checkpoint and browser tests are committed together at `69dad9d`, inspection prerequisite UC-2 is `APPROVED`, and no other polish UC is in progress. Submission diff `ca4a3f5..69dad9d` contains the user-approved spec/rules correction, browser regression, checkpoint, and ledger; `.idea/encodings.xml` is excluded. All scenarios, extensions, guarantees, postconditions, applicable rules and regression are reported. No later UC behavior was added. This UI UC still requires human confirmation before approval.
+One UC, `UC-1`, was `READY_FOR_CONVERGENCE`, revised checkpoint and browser tests were committed together at `69dad9d`, inspection prerequisite UC-2 was `APPROVED`, and no other polish UC was in progress. Submission diff `ca4a3f5..69dad9d` contains the user-approved spec/rules correction, browser regression, checkpoint, and ledger; `.idea/encodings.xml` is excluded. All scenarios, extensions, guarantees, postconditions, applicable rules and regression are reported. No later UC behavior was added. Human UI confirmation was subsequently supplied and recorded below.
 
 ## Runtime Reproduction
 
@@ -69,7 +69,7 @@ One UC, `UC-1`, is `READY_FOR_CONVERGENCE`, revised checkpoint and browser tests
 
 | Use case | Relationship/shared surface | Evidence | Result |
 |---|---|---|---|
-| `timetable-inspection-ux` UC-1, UC-2, UC-3 | Shared accepted inspection and focus renderer | Entire workspace suite, 18 browser tests, green | PASS |
+| `timetable-inspection-ux` UC-1, UC-2, UC-3 | Shared accepted inspection and focus renderer | Entire workspace suite, 19 browser tests, green | PASS |
 | Existing repair lifecycle | Shared app shell and accepted snapshot | Full workspace suite, including repair browser journeys, green | PASS |
 
 ## Findings
@@ -78,12 +78,12 @@ None. Prior G-1 is closed by Draft→Current browser transition; G-3 by accepted
 
 ## Walkthrough
 
-Pending user confirmation. Open a verified accepted timetable on a supported desktop. Check school, lifecycle state, accepted revision, Current and Week; change to Day and back, inspect a subject/teacher or filter, select a lesson, and visit and return from a class/teacher/room schedule. Collapse and reopen the inspector, checking that selection stays and the timetable gains width; open Utilities and find export there, with import and lifecycle actions in their proper contexts. On narrow viewport, confirm the read-only focused schedule and absence of desktop mutation controls. An empty accepted timetable should still identify Current and show declared empty slots. An invalid accepted-pair import must be refused before displaying Current; this negative path has automated actor-boundary proof. Please report whether the visual and navigation checks pass or fail; no result has been supplied yet.
+User confirmed **Walkthrough passed** for the accepted desktop identity and Week/Day, lesson selection and focused return, inspector collapse/reopen, Utilities placement, and narrow read-only focused schedule. The empty accepted timetable and invalid accepted-pair refusal have automated actor-boundary evidence; the user did not separately claim to inspect those branches manually.
 
 ## Status Update
 
-UC-1 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; no next UC eligible until user confirms and convergence approves.
+UC-1 `PENDING_WALKTHROUGH` → `APPROVED`; UC-2 becomes next eligible, but is outside the requested UC-1 scope.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm UC-1 accepted desktop/narrow workbench layout, inspection navigation, inspector collapse/reopen, and Utilities placement before approval.
+APPROVED
