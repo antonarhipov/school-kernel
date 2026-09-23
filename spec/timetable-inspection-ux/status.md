@@ -2,16 +2,16 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: UC-2 reconvergence
+- Use case: none
+- Status: APPROVED
+- Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | Revision C-1 through C-3 technically converged; user walkthrough PASS | convergence/UC-1.md — APPROVE |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | Represented-only unique-ID totals; normative-scale verified fixture and explicit/omitted teacher availability; 17 browser tests passed | convergence/UC-2.md — prior REJECT (C-1, G-2, P-1), pending reconvergence |
+| UC-2 | APPROVED | UC-1 | Represented-only unique-ID totals; normative-scale verified fixture and explicit/omitted teacher availability; 17 browser tests passed | convergence/UC-2.md — APPROVE WITH NOTES (C-1, G-2, P-1 closed) |
 | UC-3 | APPROVED | UC-1 | Search highlighting, explicit intersections, and focused accepted schedules | convergence/UC-3.md — APPROVE |
 
 ## UC-1 Evidence
