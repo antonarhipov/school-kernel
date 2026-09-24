@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-ux-polish/checkpoints/UC-4.md` at immutable revision `ae24337dcf28f5d0e2983a0d256e053803dcece3`, based on verifier commit `8c6ac9f3201c961aaa30e09e0ad6036191c2a97f`; original implementation `6310bc1` based on `4bc2c64042fe54ed2309c408d8f96df703372566`.
-- Verdict: PENDING WALKTHROUGH. Findings: 0 critical, 0 gaps, 0 protocol, 0 drift/cosmetic. Prior C-1/G-1/G-2 are closed by the revised, independently rerun browser evidence; administrator confirmation has not yet been received. The separate five-participant feature gate is not claimed passed.
+- Verdict: APPROVE. Findings: 0 critical, 0 gaps, 0 protocol, 0 drift/cosmetic. Prior C-1/G-1/G-2 are closed by the revised, independently rerun browser evidence; the administrator confirmed the UC-4 walkthrough passed. The separate five-participant feature gate is not claimed passed.
 - Independently run: revision focused `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#reviewsIndependentlyVerifiedNormativeRepairInRealBrowser+retainsBothSidesInFocusedResourceSchedulesInRealBrowser+revisesAndDiscardsVerifiedNormativeRepairInRealBrowser+displaysEmptyComparisonGroupsInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify`: 26 unit + 4 browser, 0 failures/errors/skips; full `./mvnw -pl timetable-workspace -am verify`: 26 unit + 81 integration (33 browser), 0 failures/errors/skips. Both exited 0; the expected Flyway checksum-refusal test logged a startup error without failing.
 - Working tree: before the independent focused/full runs only pre-existing `.idea/encodings.xml` was dirty. The generated `.output.txt` was removed; no tracked runtime-data change. Subsequent verifier-created experimental changes to `timetable-workspace/pom.xml` and `WorkspaceBrowserIT.java` were restored to `ae24337`, and verifier-created `Cdp.java` was removed; they are **not** part of the submission or convergence commit and were not used as evidence for the recorded focused/full runs. Only this report and the permitted status update remain verifier edits; `.idea/encodings.xml` is preserved. `git diff --check 8c6ac9f ae24337` passed.
 
@@ -101,7 +101,7 @@ No new critical, gap, protocol, drift, or cosmetic findings. Historical `C-1` (p
 
 ## Walkthrough
 
-Administrator confirmation **pending**. Use a local, feasible UC-3 proposal over an accepted timetable and retained Draft; for mutually exclusive decisions, prepare a fresh proposal for each branch:
+Administrator confirmation: **passed**, reported by the user after receiving the following UC-4 script. Use a local, feasible UC-3 proposal over an accepted timetable and retained Draft; for mutually exclusive decisions, prepare a fresh proposal for each branch:
 
 1. Open Proposal. Confirm it says not Current, with Current and Draft directly selectable; compare accepted/proposed placements. Check unique count, all category totals (including zeros), direct/ripple/protected totals, groupings and run evidence; confirm the explanation that only acceptance changes Current.
 2. Select the accepted origin and proposed destination of a period move and verify two labelled placements share one lesson ID and one unique count. Select a same-slot change and verify one combined tile with both sides. Where present in a received comparison, inspect an addition/cancellation as only its existing side with an explicit cue; do not fabricate a solver-produced addition/cancellation merely to conduct the walkthrough.
@@ -109,12 +109,12 @@ Administrator confirmation **pending**. Use a local, feasible UC-3 proposal over
 4. Change Day/Week, select one-sided subject/teacher/search/filter matches, and focus old and new teacher/room resources and return. Verify the matching side is identified and the other comparison side remains visible; collapse/reopen the inspector and confirm selection/range and accepted data remain unchanged. Compare accepted availability with labelled proposed availability where they differ.
 5. Switch Current → Draft → Proposal and verify the accepted timetable remains Current. On a narrow viewport, verify a labelled read-only accepted/proposed agenda without revise/discard/accept controls.
 6. On separate proposals, revise and then discard: each returns to Draft without advancing Current; revise permits further UC-2 editing and discard preserves Draft unchanged. If a stale/mismatched proposal is encountered, verify refusal and return to Draft without accepted advancement; if durable acceptance fails, verify explicit error, unchanged Current, the same reviewable Proposal and a deliberate retry.
-7. On a valid proposal, explicitly confirm acceptance from a nondefault representable Day/selection. Verify only Current remains, the exact proposed timetable is accepted, and the retained Day/selection can inspect it. Report the observed result of each step before approval. The separate five-participant, three-school feature gate (`spec.md:569-592`) is not yet claimed passed.
+7. On a valid proposal, explicitly confirm acceptance from a nondefault representable Day/selection. Verify only Current remains, the exact proposed timetable is accepted, and the retained Day/selection can inspect it. The user confirmed the walkthrough passed; the separate five-participant, three-school feature gate (`spec.md:569-592`) is not claimed passed.
 
 ## Status Update
 
-UC-4 `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`, next eligible: none until the administrator confirms the UC-4 walkthrough. UC-1/UC-2/UC-3 remain `APPROVED`, UC-5 remains `NOT_STARTED`; only UC-4's status/convergence reference and `Current`/`Next eligible` change. Executor evidence is preserved.
+UC-4 `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH` -> `APPROVED` after the administrator confirmed the walkthrough. Next eligible: UC-5. UC-1/UC-2/UC-3 remain `APPROVED`, UC-5 remains `NOT_STARTED`; only UC-4's status/convergence reference and `Current`/`Next eligible` change. Executor evidence is preserved.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-4 automated convergence passed; administrator must confirm the UC-4 main/extension script above before approval or UC-5.
+APPROVED
