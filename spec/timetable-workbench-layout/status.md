@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-4
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: none (UC-5 requires UC-4)
 
 ## Progress
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | none | `c407a02` | `convergence/UC-1.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | APPROVED | UC-2 | `4bb218a`; `checkpoints/UC-3.md` | `convergence/UC-3.md`: APPROVE; automated gate green and administrator walkthrough accepted 2026-09-24 |
-| UC-4 | READY_FOR_CONVERGENCE | UC-3 | HEAD at convergence; `checkpoints/UC-4.md` | - |
+| UC-4 | NEEDS_REVISION | UC-3 | `fa2323a`; `checkpoints/UC-4.md` | `convergence/UC-4.md`: REJECT; G-1, G-2, G-3 |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
 ## UC-1 Evidence
@@ -148,6 +148,7 @@
 - Focused verification: `./mvnw -q -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#reviewsIndependentlyVerifiedNormativeRepairInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` passed with Docker access: 1 real-browser case, 26 workspace unit tests, 58 kernel tests; 0 failures/errors/skips. An unprivileged attempt could not initialize Testcontainers; a first assertion expected a toolbar search input inside the focused schedule, where no toolbar is rendered, and was corrected before the passing run.
 - Full relevant suite on the final diff: `./mvnw -q -pl timetable-workspace -am verify` passed 195 tests: 58 kernel unit, 27 kernel integration, 26 workspace unit and 84 workspace integration (36 real-browser); 0 failures/errors/skips. `node --check` for all three changed ES modules and `git diff --check` passed. The run changed no tracked runtime data or unrelated file. Pin-feedback p95 was 317.8 ms against a 250 ms diagnostic-only reference; functional assertions passed.
 - Runtime evidence: isolated PostgreSQL, packaged workspace and kernel verifier, real Chrome with independently verified 1,000-lesson school; inspected `target/workbench-layout/uc4-proposal-{1600,1280}.png`. The screenshots show subject/room and protected cues on a selected compact Week tile, accepted/proposed identity, a class row and time headings beside the inspector, and reachable acceptance/revise/discard decisions beneath the canvas.
+- Convergence findings: `convergence/UC-4.md` G-1 (no mutating-request trace), G-2 (missing Proposal viewport/scroll checks), G-3 (independent full reactor had one isolated-passing UC-2 CDP timeout). No observed UC-4 product failure; final gate is incomplete.
 
 | Contract element | Evidence |
 |---|---|
