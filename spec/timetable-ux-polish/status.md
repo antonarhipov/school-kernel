@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-4
-- Status: APPROVED
-- Next eligible: UC-5
+- Use case: UC-5
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
 | UC-3 | APPROVED | UC-2 | `3f96d79` | `convergence/UC-3.md`: APPROVE; earlier G-1/G-2 resolved, UC-3 walkthrough passed |
 | UC-4 | APPROVED | UC-3 | `ae24337` (revision of `6310bc1`) | `convergence/UC-4.md`: APPROVE; previous C-1, G-1, G-2 closed; administrator walkthrough passed |
-| UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
+| UC-5 | READY_FOR_CONVERGENCE | UC-1, UC-2, UC-3, UC-4 | HEAD at convergence | `checkpoints/UC-5.md`; verification pending |
 
 ## UC-1 Evidence
 
@@ -127,6 +127,32 @@
 | RULE-3, RULE-8 | `app.js:199–226,1021–1043`, existing `RepairProposalService` and secured routes; verified failed/rejected/stale actions and exact rollback in browser and unchanged HTTP suite; no new endpoints/storage/imports/dependencies. |
 | RULE-6, RULE-7 | `app.js:178–205,553–612,667–712,850–997`, `messages.js:124–140`, `styles.css:193–210`; exact IDs plus escaped display fallback, proposed availability, text cues, inspector and narrow safeguards; browser assertions cover missing proposed name, native actions and focused return. |
 | RULE-9 | `WorkspaceBrowserIT.java:1313–1466,1859–2021,2250–2310`: isolated PostgreSQL and actual kernel-produced feasible repair plus explicit synthetic DOM-only edge-case snapshots, target-scale fixture, exact bundle comparisons, browser UI assertions; full relevant suite green and no tracked runtime-data changes. |
+
+## UC-5 Evidence
+
+- Started: 2026-09-24 12:03 EEST from `3c473ea390d36e8ac0d49264c6a6299d65a8b7e3`; prior findings: none.
+- Pre-existing dirty files: `.idea/encodings.xml` (unrelated; preserve).
+- Implementation submission: HEAD at convergence. Changed files: `timetable-workspace/src/main/resources/static/workspace/{app.js,messages.js}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`, `spec/timetable-ux-polish/{status.md,checkpoints/UC-5.md}`. The unrelated `.idea/encodings.xml` change is excluded.
+- Commands and results: initial focused browser test failed before fix at missing Draft pin control and then at an unrepresentable accepted selection; `./mvnw -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#completesWholeSchoolRepairAndStartsNextFromAcceptedSuccessorInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` PASS after final assertions (26 unit + 1 browser, 0 failed/errors/skipped); `./mvnw -pl timetable-workspace -am verify` PASS (26 unit + 82 integration including 34 browser, 0 failed/errors/skipped); `git diff --check` PASS. Test-generated `.output.txt` removed; no tracked runtime-data changes.
+
+| Contract element | Evidence |
+|---|---|
+| UC-5 main 1; includes UC-1; G1, G5 | `WorkspaceBrowserIT.java:2300–2325`: production packaged browser/isolated PostgreSQL starts from an independently kernel-verified 1,000-assignment accepted pair, verifies all 1,000 IDs, exact affected assignment and school, selects lesson-960 in Week/Day, inspects details, focuses teacher-16 and returns to the same Day/selection with exact unchanged accepted bundle. Approved UC-1 and inspection-UX suites rerun. |
+| Main 2; includes UC-2; G1, G2, G3 | `WorkspaceBrowserIT.java:2327–2352`: stages teacher-16 period-0 unavailability on the same selected identity and Day, asserts direct set `[lesson-960]`, exact old accepted bundle, conflict after pin and resolution, protects lesson-500 room, tests inspector collapse/reopen and cohort context with exact Draft equality. `app.js:781–788` binds pin controls after Day/Week rerender. |
+| Main 3; includes UC-3; G1–G4 | `WorkspaceBrowserIT.java:2353–2381`: actual run from saved conflict-free Draft, stable original accepted/Draft JSON, no Proposal, `PT30S`, frozen pin controls, Current/Frozen Draft/Solving inspection, unchanged entire run document and one replan through navigation; browser cancels, checks durable `CANCELLED`, unchanged Draft/Current and no Proposal, then explicitly regenerates through real packaged verifier. `WorkspaceBrowserIT.java:1669–1743` also exercises rejected output and exact state at target scale. |
+| Main 4; includes UC-4; G1–G5 | `WorkspaceBrowserIT.java:2382–2410`: independently verified feasible successor, exact accepted/Draft, 2 unique changes/1 direct/1 ripple, period-40 move and room-50 ripple by value, paired origin/destination tiles with a single stable ID, combined same-slot change, protected unchanged lesson, Day and all Current/Draft/Proposal modes, unchanged complete Proposal document before explicit confirmation. `WorkspaceBrowserIT.java:2025–2186` additionally compares all review dimensions/categories/groups and proposal-side availability by value. |
+| Main 5; success; G1–G6 | `WorkspaceBrowserIT.java:2408–2425`: explicit browser-confirmed acceptance makes only Current available with exact previously verified proposed definition/result, advanced revision, no Draft/Proposal and exact 1,000-ID whole-school Week. Day and investigation are retained; moved lesson-960 is correctly deselected with an explanation. `app.js:100–111,145–152` and `messages.js:139–142` handle an unrepresentable Day selection without changing accepted data. |
+| 2a conflict; minimal guarantee | `WorkspaceBrowserIT.java:2329–2348` proves real blocking pin prevents scheduling (zero replans), exact accepted baseline and navigable conflict, then resolves the conflict before the main scenario resumes. Real failed pin persistence/disabled solve is separately exercised at `WorkspaceBrowserIT.java:1268–1308`. |
+| 3a cancelled/failed/no-feasible/rejected; minimal guarantee | `WorkspaceBrowserIT.java:2353–2376,1669–1743,1554–1608,1611–1664` drives cancellation and independently rejected output at normative scale, no-feasible, transport/interruption/timeout/invalid input, recovery after real process restart and bounded retry through browser/packaged process; all preserve exact accepted/Draft and produce no published Proposal. |
+| 4a revise/discard; minimal guarantee | `WorkspaceBrowserIT.java:2191–2223` runs both independent real verified 1,000-lesson proposals via browser, revises/discards, compares exact old accepted/Draft and absent Proposal; approved UC-4 production path unchanged. |
+| 4b stale/failed acceptance; minimal guarantee | `WorkspaceBrowserIT.java:2277–2294` proves stale identity invalidates to Draft with unchanged old accepted/Draft; `WorkspaceBrowserIT.java:1390–1428` forces a real PostgreSQL acceptance write failure, compares entire document/version unchanged, shows Proposal not Current and succeeds only after fault removal and explicit retry. |
+| 5a second repair; success | `WorkspaceBrowserIT.java:2427–2438` stages room-50 period-0 unavailability from the exact new accepted bundle, asserts direct `[lesson-0]`, empty attempt-scoped pins and bulk actions, zero conflicts, retained Day and no unrequested third process. Prior accepted revision differs from successor. |
+| G1–G6, relationships, normative data | `WorkspaceBrowserIT.java:2300–2439,2592–2666,2669–2709` verifies real state after every handoff, stable identities, exact changed fields, state labels, headers and true Current, fixture provenance/verification, no navigation mutation, complete school across modes and second repair. Full approved UC-1–UC-4 plus accepted-inspection regression: 82 integration, 26 unit. Human five-participant, three-school gate (`spec.md:569–592`) has not been claimed passed. |
+| RULE-1, RULE-2 | `app.js:100–111,145–166,781–788`, `inspection-state.js:3–41,118–133`, `WorkspaceBrowserIT.java:2313–2325,2360–2367,2403–2425`: one existing accepted model/snapshot, presentation-only modes, honest selection reset with message, no new endpoint/model/dependency; existing range/weekday preference untouched. |
+| RULE-3, RULE-4 | `app.js:781–788`, `WorkspaceBrowserIT.java:2327–2376,1268–1308,1669–1743,1390–1428,2277–2294`, `WorkspaceRepairPlanningIT.java:90–371`: service-guarded state transitions, durable conflict-free Draft, frozen run, denied mutating failures, atomic acceptance and true rollback. |
+| RULE-5, RULE-6 | `proposal-comparison.js:1–33`, `app.js:100–111,585–628`, `messages.js:124–142`, `WorkspaceBrowserIT.java:2382–2407,2025–2186,1923–2020`: authoritative joined IDs and safe old/proposed values; full browser regression checks missing metadata and old/new availability separately without fake verified accepted input. |
+| RULE-7, RULE-8 | `app.js:781–788`, `messages.js:139–142`, `WorkspaceBrowserIT.java:2313–2325,2345–2348,2408–2425,299–480`, `WorkspaceImportIT.java:459–545`: existing native workbench/Day/Week/focus/inspector and message catalog, no added route/storage/security exception, local Host/Origin/CSRF/If-Match and narrow read-only regression. |
+| RULE-9, RULE-11, RULE-12, RULE-13 | `WorkspaceBrowserIT.java:2300–2439,1669–1743,2025–2223,2250–2295,2592–2709`: generated isolated PostgreSQL fixture, independent verifier and packaged process, exact ID/field/state checks, full end-to-end included-UC browser path and second Draft; failed-run/revise/discard/stale/failed-write alternatives at real boundaries. Complete suite passed with no tracked writes; feature gate awaits independent human evidence. |
 
 ## Blockers
 

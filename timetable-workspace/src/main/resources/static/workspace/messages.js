@@ -138,6 +138,7 @@ export const M = Object.freeze({
   protectedAssignments: 'Protected accepted assignments',
   comparisonNavigationReset: 'The view was adjusted to show this lesson in context; the accepted timetable is unchanged.',
   comparisonSelectionCleared: 'The selected lesson is not present in this timetable; the remaining view context is preserved.',
+  selectionOutsideDay: 'The selected lesson moved outside the represented Day; the remaining view context is preserved.',
   acceptanceNotAdvanced: 'Current did not advance. The unchanged proposal remains available for an explicit retry.',
   repairPriority: 'Kernel priority: period stability, then room-only stability, then ordinary preferences.',
   runDiagnostics: 'Evidence from this run',

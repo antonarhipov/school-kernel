@@ -2295,6 +2295,150 @@ class WorkspaceBrowserIT {
         }
     }
 
+    @Test
+    @DisplayName("Timetable polish UC-5 main/2a/3a/5a/G1-G6: complete verified whole-school repair retains context and parents the next draft")
+    void completesWholeSchoolRepairAndStartsNextFromAcceptedSuccessorInRealBrowser() throws Exception {
+        ObjectNode document = investigationScaleDocument();
+        JsonNode original = document.path("acceptedBaseline").deepCopy();
+        assertEquals(document.path("timetableRevision").stringValue(), verifier.verify(new ImportDocuments(
+                original.path("definition"), original.path("result"), null,
+                ImportDocuments.ImportMode.ACCEPTED_BASELINE)).timetableRevision());
+        assertEquals(60, original.path("definition").path("cohorts").size());
+        assertEquals(100, original.path("definition").path("teachers").size());
+        assertEquals(100, original.path("definition").path("rooms").size());
+        assertEquals(1_000, original.path("result").path("timetable").path("assignments").size());
+        assertEquals(JSON.readTree("{\"lessonId\":\"lesson-960\",\"subjectId\":\"subject-0\",\"cohortId\":\"cohort-16\",\"teacherId\":\"teacher-16\",\"periodId\":\"period-0\",\"roomId\":\"room-16\"}"),
+                original.path("result").path("timetable").path("assignments").get(960));
+        storeAccepted(document);
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
+            assertTrue(browserTrue(cdp, "document.querySelector('.accepted-heading')?.textContent.includes('Scale School') && document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=WEEK]')?.getAttribute('aria-pressed') === 'true'"));
+            Set<String> expectedIds = new HashSet<>();
+            for (int i = 0; i < 1_000; i++) expectedIds.add("lesson-" + i);
+            assertEquals(expectedIds, renderedLessonIds(cdp), "UC-5 main 1: every accepted lesson identity is visible");
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click(); document.querySelector('[data-range=DAY]').click(); document.querySelector('#subject-investigation').value='subject-0'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#teacher-investigation').value='teacher-16'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#workbench-inspector')?.textContent.includes('period-0') && document.querySelector('#workbench-inspector')?.textContent.includes('room-16') && document.querySelector('#range-summary')?.textContent.includes('Monday')"));
+            cdp.evaluate("document.querySelector('[data-open-focus=teacherId]').click(); document.querySelector('#focus-entity').value='teacher-16'; document.querySelector('#focus-entity').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "document.querySelector('#return-matrix') && document.querySelector('.focused-schedule')?.textContent.includes('Teacher Sixteen')"));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"));
+            assertEquals(original, storedWorkspaceDocument().path("acceptedBaseline"));
+
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#repair-resource').value='teacher-16'; document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            JsonNode started = assertDraftUnchangedBaseline(original).deepCopy();
+            assertEquals(JSON.readTree("[\"lesson-960\"]"), started.path("directEffectLessonIds"));
+            assertEquals("teacher-16", started.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#teacher-investigation')?.value === 'teacher-16'"));
+            cdp.evaluate("document.querySelector('[name=lesson-dimension][value=PERIOD]').checked=true; document.querySelector('#apply-pin').click()");
+            cdp.awaitText("Resolve blocking conflicts before solving", Duration.ofSeconds(15));
+            JsonNode conflicted = assertDraftUnchangedBaseline(original);
+            assertFalse(conflicted.path("readyToSolve").booleanValue());
+            assertEquals("lesson-960", conflicted.path("conflicts").get(0).path("lessonId").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-draft-conflict=lesson-960]') && document.querySelector('#solve-draft')?.disabled === true"));
+            assertEquals(0, processes.commands().stream().filter(command -> command.size() > 1 && "replan".equals(command.get(1))).count(), "UC-5 2a: a conflict starts no scheduling process");
+            cdp.evaluate("document.querySelector('#remove-pin').click()");
+            cdp.awaitText("Draft is durably saved with no blocking conflict", Duration.ofSeconds(15));
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click(); document.querySelector('[data-lesson-id=lesson-500]').click(); document.querySelector('[name=lesson-dimension][value=ROOM]').checked=true; document.querySelector('#apply-pin').click()");
+            cdp.awaitText("Accepted room pinned", Duration.ofSeconds(15));
+            JsonNode draft = assertDraftUnchangedBaseline(original).deepCopy();
+            assertTrue(draft.path("readyToSolve").booleanValue());
+            assertEquals(JSON.readTree("[\"lesson-960\"]"), draft.path("directEffectLessonIds"));
+            assertEquals("lesson-500", draft.path("intent").path("pins").get(0).path("lessonId").stringValue());
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), draft.path("intent").path("pins").get(0).path("roomSources"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click(); document.querySelector('[data-range=DAY]').click(); document.querySelector('#cohort-filter').value='cohort-16'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#toggle-inspector').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#inspector-summary')?.textContent.includes('Declared lesson 960') && document.querySelector('#workbench-inspector')?.hidden === true"));
+            cdp.evaluate("document.querySelector('#reopen-inspector').click()");
+            assertEquals(draft, assertDraftUnchangedBaseline(original), "UC-5 main 2: inspector and filter changes cannot edit the durable Draft");
+
+            processes.blockReplan = true;
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            processes.awaitBlocked();
+            cdp.awaitText("Repair generation · running", Duration.ofSeconds(20));
+            JsonNode running = storedWorkspaceDocument();
+            assertEquals("SOLVING_REPAIR", storedLifecycle());
+            assertEquals(original, running.path("acceptedBaseline"));
+            assertEquals(draft, running.path("repairDraft"));
+            assertFalse(running.has("proposal"));
+            assertEquals("PT30S", running.path("run").path("limit").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=SOLVING]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#cancel-run') && !document.querySelector('#apply-pin') && document.querySelector('#cohort-filter')?.value === 'cohort-16' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"));
+            cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"));
+            cdp.evaluate("document.querySelector('[data-mode=DRAFT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector')?.textContent.includes('Frozen repair intent') && !document.querySelector('#solve-draft')"));
+            cdp.evaluate("document.querySelector('[data-mode=SOLVING]').click()");
+            assertEquals(running, storedWorkspaceDocument());
+            assertEquals(1, processes.commands().stream().filter(command -> command.size() > 1 && "replan".equals(command.get(1))).count(), "UC-5 main 3: presentation changes cannot launch another run");
+            cdp.evaluate("document.querySelector('#cancel-run').click()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            assertEquals(draft, assertDraftUnchangedBaseline(original));
+            assertEquals("CANCELLED", storedWorkspaceDocument().path("lastRun").path("status").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=PROPOSAL]') && document.querySelector('#solve-draft') && document.querySelector('#cohort-filter')?.value === 'cohort-16'"));
+
+            processes.blockReplan = false;
+            processes.verifiedFeasibleResult = this::verifiedNormativeRepairResult;
+            cdp.evaluate("document.querySelector('#solve-draft').click()");
+            cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(30));
+            JsonNode proposed = storedWorkspaceDocument();
+            assertEquals("REPAIR_PROPOSAL", storedLifecycle());
+            assertEquals(original, proposed.path("acceptedBaseline"));
+            assertEquals(draft, proposed.path("repairDraft"));
+            assertFalse(proposed.has("run"));
+            assertEquals(2, processes.commands().stream().filter(command -> command.size() > 1 && "replan".equals(command.get(1))).count());
+            JsonNode proposal = proposed.path("proposal");
+            assertEquals(2, proposal.path("review").path("uniqueChangedLessonCount").intValue());
+            assertEquals(1, proposal.path("review").path("directEffectChangedCount").intValue());
+            assertEquals(1, proposal.path("review").path("rippleEffectCount").intValue());
+            assertEquals("period-40", proposal.path("result").path("timetable").path("assignments").get(960).path("periodId").stringValue());
+            assertEquals("room-50", proposal.path("result").path("timetable").path("assignments").get(0).path("roomId").stringValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=PROPOSAL]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#cohort-filter')?.value === 'cohort-16' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('.comparison-details')?.textContent.includes('period-40')"));
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click(); document.querySelector('#reset-view').click()");
+            assertTrue(browserTrue(cdp, "document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-960]').length === 2 && document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-0]').length === 1 && document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=accepted]') && document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=proposed]')"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0][data-comparison-side=combined]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('room-0') && document.querySelector('.comparison-details')?.textContent.includes('room-50') && document.querySelector('.comparison-details')?.textContent.includes('Solver ripple')"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-500]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Accepted and unchanged') && document.querySelector('.comparison-details')?.textContent.includes('Accepted room pinned')"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=accepted]').click(); document.querySelector('[data-range=DAY]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#range-summary')?.textContent.includes('Monday') && document.querySelector('.comparison-details')?.textContent.includes('period-40')"));
+            cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-lesson-id=lesson-960]')?.textContent.includes('Proposed destination')"));
+            cdp.evaluate("document.querySelector('[data-mode=DRAFT]').click(); document.querySelector('[data-mode=PROPOSAL]').click()");
+            assertEquals(proposed, storedWorkspaceDocument(), "UC-5 main 4: review and navigation cannot advance Current");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"));
+            cdp.evaluate("document.querySelector('#confirm-repair-accept').click(); document.querySelector('#accept-repair').click()");
+            cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(20));
+            JsonNode successorDocument = storedWorkspaceDocument();
+            JsonNode successor = successorDocument.path("acceptedBaseline").deepCopy();
+            assertEquals("ACCEPTED_BASELINE", storedLifecycle());
+            assertEquals(proposal.path("definition"), successor.path("definition"));
+            assertEquals(proposal.path("result"), successor.path("result"));
+            assertFalse(successorDocument.has("repairDraft"));
+            assertFalse(successorDocument.has("proposal"));
+            assertEquals(proposal.path("proposedTimetableRevision").stringValue(), successorDocument.path("timetableRevision").stringValue());
+            assertFalse(original.path("result").path("timetableRevision").equals(successorDocument.path("timetableRevision")),
+                    "UC-5 main 5: the accepted revision must advance to the verified successor");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=DRAFT], [data-mode=SOLVING], [data-mode=PROPOSAL]') && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#range-summary')?.textContent.includes('Monday') && !document.querySelector('[data-lesson-id=lesson-960]') && !document.querySelector('#lesson-panel-title') && document.querySelector('#inspection-notice')?.textContent.includes('outside the represented Day')"),
+                    "UC-5 main 5: accepted period move must clear only an unrepresentable Monday selection, with an explanation");
+            assertEquals(1_000, successor.path("result").path("timetable").path("assignments").size());
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click()");
+            assertEquals(expectedIds, renderedLessonIds(cdp), "UC-5 main 5: no accepted lesson can disappear or duplicate after acceptance");
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#repair-resource-type').value='ROOM'; document.querySelector('#repair-resource-type').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#repair-resource').value='room-50'; document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Repair draft · not current", Duration.ofSeconds(20));
+            JsonNode nextDraft = assertDraftUnchangedBaseline(successor).deepCopy();
+            assertEquals("ROOM", nextDraft.path("intent").path("changes").get(0).path("resourceType").stringValue());
+            assertEquals("room-50", nextDraft.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertEquals(JSON.readTree("[\"period-0\"]"), nextDraft.path("intent").path("changes").get(0).path("unavailablePeriodIds"));
+            assertEquals(JSON.readTree("[\"lesson-0\"]"), nextDraft.path("directEffectLessonIds"));
+            assertTrue(nextDraft.path("intent").path("pins").isEmpty(), "UC-5 5a: the next attempt must not inherit previous pins");
+            assertTrue(nextDraft.path("intent").path("bulkActions").isEmpty());
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#draft-conflict-count')?.textContent === '0' && document.querySelector('#attempt-pin-count')?.textContent === '0'"));
+            assertEquals(2, processes.commands().stream().filter(command -> command.size() > 1 && "replan".equals(command.get(1))).count(), "the next Draft must not launch a run without an explicit request");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
     private Cdp openWorkspaceBrowser() throws Exception {
         return openWorkspaceBrowser(port);
     }

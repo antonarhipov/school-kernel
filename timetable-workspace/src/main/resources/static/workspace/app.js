@@ -19,7 +19,7 @@ let preferenceSchoolId;
 let inspectionState;
 let canvasScroll;
 let draftSaveFailed = false;
-let selectionResetNotice = false;
+let selectionResetNotice = null;
 const boundLessonButtons = new WeakSet();
 
 const view = {
@@ -102,9 +102,11 @@ function render(snapshot) {
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
-    if (view.selectedLessonId && !acceptedModel.assignmentMap.has(view.selectedLessonId)) {
+    const selected = acceptedModel.assignmentMap.get(view.selectedLessonId);
+    if (view.selectedLessonId && !isRepresented(selected)) {
+      selectionResetNotice = !selected ? M.comparisonSelectionCleared
+        : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
       syncInspectionState(inspectionState.closeLesson());
-      selectionResetNotice = true;
     }
     if (view.narrow && !view.focusedType) {
       syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
@@ -145,8 +147,8 @@ function render(snapshot) {
   renderModeNavigation();
   if (selectionResetNotice) {
     const notice = document.querySelector('#inspection-notice') || document.querySelector('.narrow-banner');
-    if (notice) notice.textContent = M.comparisonSelectionCleared;
-    selectionResetNotice = false;
+    if (notice) notice.textContent = selectionResetNotice;
+    selectionResetNotice = null;
   }
 }
 
@@ -160,7 +162,7 @@ function renderModeNavigation() {
     if (!inspectionState.selectMode(button.dataset.mode).changed) return;
     if (button.dataset.mode !== 'PROPOSAL' && view.selectedLessonId && !acceptedModel.assignmentMap.has(view.selectedLessonId)) {
       syncInspectionState(inspectionState.closeLesson());
-      selectionResetNotice = true;
+      selectionResetNotice = M.comparisonSelectionCleared;
     }
     render(currentSnapshot);
   }));
@@ -779,6 +781,7 @@ function bindInspectionControls() {
   document.querySelector('#reset-empty')?.addEventListener('click', resetView);
   bindLessonButtons(document.querySelector('.matrix-wrap'));
   bindCloseDetails();
+  bindPinActions();
   document.querySelectorAll('[data-open-focus]').forEach(button => button.addEventListener('click', () => {
     const type = button.dataset.openFocus;
     const key = type === 'cohortId' ? 'cohorts' : type === 'teacherId' ? 'teachers' : 'rooms';
