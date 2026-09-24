@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: APPROVED
-- Next eligible: UC-3
+- Use case: UC-3
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none until UC-3 converges
 
 ## Progress
 
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `c407a02` | `convergence/UC-1.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
-| UC-3 | NOT_STARTED | UC-2 | - | - |
+| UC-3 | READY_FOR_CONVERGENCE | UC-2 | HEAD at convergence; `checkpoints/UC-3.md` | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
@@ -98,6 +98,46 @@
 | RULE-5, RULE-7 | `app.js:377–462,679–684`, `styles.css:331–378`, `WorkspaceBrowserIT.java:660–859`: task owns workflow, inspector retains authoritative details/cues, text escaped and lock provenance distinct, measured desktop/intermediate layout. |
 | RULE-12, RULE-13 | No server/security diff; shared hostile Host/Origin/CSRF and narrow-browser regression passed. New labels are in `messages.js`; visible buttons, native fields/disclosures, text cues and applicable Utilities remain. |
 | RULE-14 | Verifier-checked normative accepted school, exact browser/JDBC state and final-diff 36-case shared browser regression passed; the UC-2 administrator walkthrough remains for convergence. |
+
+## UC-3 Evidence
+
+- Started: 2026-09-24 21:14 EEST
+- Started from: `06e89134600b685304354bf7aa982a4a146819e0`
+- Pre-existing dirty files: none
+- Prior convergence findings: none; UC-2 is `APPROVED`.
+- Implementation submission: HEAD at convergence; see `checkpoints/UC-3.md`.
+- Changed files: `timetable-workspace/src/main/resources/static/workspace/{app.js,messages.js,styles.css}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`, this ledger, and `checkpoints/UC-3.md`.
+- Focused verification: the normative UC-3 browser journey passed alone; four UC-3 browser journeys plus all ten `WorkspaceRepairPlanningIT` cases passed together; the strengthened normative journey and the shared real-repair browser regression passed together. All focused runs had 0 failures/errors/skips. `node --check` for both changed modules and `git diff --check` passed.
+- Full relevant suite on the final diff: `./mvnw -q -pl timetable-workspace -am verify` passed 26 unit + 84 integration tests, including all 36 browser cases; 0 failures/errors/skips. The run changed no tracked runtime or unrelated file. The pin-feedback p95 was 291.4 ms against a 250 ms diagnostic-only reference; the functional assertions passed.
+- Runtime evidence: isolated PostgreSQL, packaged workspace and kernel verifier, real Chrome against the independently verified 1,000-lesson school at 1600×900, 1280×800, 1279×800, 701×844, 700×844, and 390×844 CSS px. Ignored screenshots: `timetable-workspace/target/workbench-layout/uc3-solving-{1600,1280,390}.png` and `uc3-proposal-handoff-1280.png`.
+
+| Contract element | Evidence |
+|---|---|
+| Main 1; Requires UC-2 | `WorkspaceBrowserIT.java:2090–2143` starts from UC-2's saved conflict-free teacher-unavailability Draft with exact room pin, then launches through the existing browser solve action. `WorkspaceRepairPlanningIT.java:93–140` exercises the packaged replan boundary. |
+| Main 2 | `WorkspaceBrowserIT.java:2144–2152,2165–2168` checks the exact accepted bundle/Draft/run ID and PT30S limit, frozen named intent and pin in the wide task area, visible cancellation, and absent editing/decision controls. |
+| Main 3–4 | `WorkspaceBrowserIT.java:2153–2219` changes Week/Day, inspector, frozen detail, modes, responsive width, and selected context; `WorkspaceBrowserIT.java:1925–1942` adds focused teacher schedule return during a live run. Exact document and single process invocation remain unchanged, Current stays accepted, and no Proposal is exposed. |
+| Main 5–6; success | `WorkspaceBrowserIT.java:2229–2272` submits a complete fixture outcome through the production run boundary, independently verifies it with the packaged verifier, checks exact accepted/Draft/proposal fields, removes Solving, opens Proposal's wide task area and measures its handoff geometry. `WorkspaceBrowserIT.java:1731–1794` also runs a genuine packaged feasible replan and checks reviewable Proposal with old Current exact. |
+| Extension 1a | `WorkspaceRepairDraftIT.java:129–160,329–354` and `WorkspaceRepairPlanningIT.java:502–535` refuse conflicting, unsaved, and stale Draft starts at HTTP/service boundaries with exact prior state/version and no scheduler run. |
+| Extension 2a | `WorkspaceBrowserIT.java:2219–2225` cancels a blocked browser run and verifies Draft, cancelled terminal outcome, old Current, and no Proposal. `WorkspaceRepairPlanningIT.java:454–535` tests cancellation and late-output suppression. |
+| Extension 2b | `WorkspaceBrowserIT.java:2033–2085` stops the actual application mid-run, restarts against the same durable school, checks one safe interrupted terminal record, exact accepted/Draft data, editable task, absent Proposal, and no late application. |
+| Extension 3a | `WorkspaceBrowserIT.java:2208–2213` switches a live run to Tuesday from a selected Monday lesson, checks explanatory selection clearing and intact status/cancellation, compares the entire running document, then restores Monday and the same lesson. |
+| Extension 5a | `WorkspaceBrowserIT.java:1976–2030` checks no-feasible, invalid input, transport, interruption, mismatch, and watchdog outcomes with safe Draft/Utilities diagnostics and no candidate; `WorkspaceRepairPlanningIT.java:420–453` asserts exact HTTP/JDBC state for failed and rejected output. |
+| Extension 5b | `WorkspaceBrowserIT.java:1987–2005` retries only unchanged no-feasible intent at PT2M; cancellation and other failures expose no retry. `WorkspaceRepairPlanningIT.java:376–419` verifies service-level retry gating by value. |
+| Extension 6a | `WorkspaceBrowserIT.java:2224–2228` rejects mismatched output before candidate rendering, retains exact Draft/Current and shows safe diagnostics; `WorkspaceRepairPlanningIT.java:420–453` covers incomplete, stale, non-feasible, mismatched and rejected outcomes at the production HTTP boundary. |
+| G1 | `app.js:437–477,595–647`; `WorkspaceBrowserIT.java:2144–2152,2200–2219`: only accepted assignments render, saved intent is frozen, and pin/edit/discard/decision controls are absent while cancel is present. |
+| G2 | `styles.css:337–351,410–412`; `WorkspaceBrowserIT.java:2163–2200,2277–2307`: status/cancel survive detail collapse, 1600/1280 geometry keeps task ≤35% height below canvas, headers and one full row visible, inspector beside, no overflow/clipping; 1279/701 stack. |
+| G3 | `WorkspaceBrowserIT.java:2153–2219` captures mutating fetch methods (none), checks exact document and one replan invocation through range/inspector/task/mode/resize/focus actions, and retains representable selection. |
+| G4 | `WorkspaceBrowserIT.java:1731–1794,2224–2272`; `WorkspaceRepairPlanningIT.java:93–140,420–453`: independently verified complete feasible output alone creates Proposal; failed/rejected output exposes no candidate or Current change. |
+| G5 | `app.js:450–477`; `messages.js:122–137`; `WorkspaceBrowserIT.java:2151–2169,1976–2030`: textual running/limit/accepted/frozen/cancel and safe failure diagnostics, native buttons, no optimality claim. |
+| G6 | `WorkspaceBrowserIT.java:2183–2200`, `WorkspaceImportIT.java:459–534`: 700/390 read-only true Solving state without cancellation or mutations; local access/security and exact stored run preserved. |
+| G7 | `WorkspaceBrowserIT.java:2090–2272,2033–2085,1976–2030`: normative-scale browser and actual restart, exact accepted/Draft/run/Proposal comparisons, cancelled/unsuccessful/rejected/retry/verified branches and all target/boundary viewports. |
+| Success postcondition | `WorkspaceBrowserIT.java:2229–2272`: one independently verified Proposal opens for review; accepted baseline and saved Draft are exact and Current is still accepted. |
+| Minimal guarantee | `WorkspaceBrowserIT.java:1976–2085,2219–2228`; `WorkspaceRepairPlanningIT.java:420–535`: cancellation, restart, failure, timeout and rejected output keep exact old accepted/Draft data and expose no unverified Proposal. |
+| RULE-1, RULE-2 | `app.js:52–174,437–465`, `inspection-state.js:1–104`, `WorkspaceBrowserIT.java:2153–2219`: one snapshot/accepted-model/state owner, per-mode page-session detail, no new route/storage/dependency and no mutation request from presentation actions. |
+| RULE-3, RULE-9 | `WorkspaceRepairPlanningIT.java:376–535`, `WorkspaceBrowserIT.java:1900–2272`: existing service lifecycle/refusal, frozen Solving, bounded cancellation/recovery/failure/retry, independent verification and exact terminal states. |
+| RULE-5, RULE-7 | `app.js:176–257,437–477,595–647`; `styles.css:337–355,410–412`; `WorkspaceBrowserIT.java:2151–2200,2229–2272`: task/inspector split, authoritative names/IDs, safe text, accepted availability, measured solving and Proposal-handoff layout. |
+| RULE-12, RULE-13 | No server/security diff; full hostile Host/Origin/CSRF/`If-Match` regressions passed. `messages.js:122–137`, `app.js:450–465`, `WorkspaceBrowserIT.java:2183–2200`: catalog strings, native/textual controls, read-only narrow agenda and unchanged local routes. |
+| RULE-14 | `WorkspaceBrowserIT.java:2090–2272,3122–3200`: independently verifier-checked normative school and exact durable state; full final-diff 36-case shared browser regression and 84-case integration suite passed. Human UC-3 walkthrough remains for convergence. |
 
 ## Blockers
 
