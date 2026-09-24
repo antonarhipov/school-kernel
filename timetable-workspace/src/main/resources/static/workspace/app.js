@@ -118,6 +118,7 @@ function render(snapshot) {
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
+    if (previousState === 'REPAIR_PROPOSAL') syncInspectionState(inspectionState.setTaskAreaOpen('DRAFT', true).state);
     if (previousState === 'SOLVING_REPAIR' && snapshot.workspace.lastRun?.kind === 'REPAIR'
       && snapshot.workspace.lastRun.status !== 'CANCELLED') {
       syncInspectionState(inspectionState.setInspectorOpen(true));
@@ -283,6 +284,7 @@ function setRange(range, day = view.day, manualDay = false) {
   syncInspectionState(transition.state);
   const persisted = inspectionState.persist();
   renderWholeSchool();
+  refreshDraftSelectedProtection();
   if (manualDay && transition.selectionCleared) {
     const notice = document.querySelector('#inspection-notice');
     if (notice) notice.textContent = M.lessonOutsideDay;
@@ -345,7 +347,7 @@ function startRepairForm() {
     ${selectControl('repair-resource-type', M.resourceType, [['TEACHER', M.teacher], ['ROOM', M.room]], 'TEACHER')}
     <label><span>${M.resource}</span><select id="repair-resource"></select></label></div>
     <fieldset class="period-choices"><legend>${M.weeklyUnavailablePeriods}</legend>${periods.map(period => `<label><input type="checkbox" name="period" value="${escapeAttribute(period.id)}"> <span>${escapeHtml(periodLabel(period))} · ${escapeHtml(M.days[period.weekday] || period.weekday)}</span></label>`).join('')}</fieldset>
-    <div class="actions"><button type="submit">${M.stageChange}</button></div><p class="muted">${M.unsupportedRepairActions}</p></form></details>`;
+    <div class="actions"><button type="submit">${M.stageChange}</button></div><p id="repair-setup-status" class="error" role="alert"></p><p class="muted">${M.unsupportedRepairActions}</p></form></details>`;
 }
 
 function bindStartRepair() {
@@ -362,17 +364,46 @@ function bindStartRepair() {
   });
 }
 
+function prefillRepairResourceFromSelection() {
+  const type = document.querySelector('#repair-resource-type')?.value;
+  const resource = document.querySelector('#repair-resource');
+  if (!type || !resource) return;
+  const selected = acceptedModel.assignmentMap.get(view.selectedLessonId);
+  const preferred = type === 'TEACHER' ? selected?.teacherId || (view.focusedType === 'teacherId' ? view.focusedId : null)
+    : selected?.roomId || (view.focusedType === 'roomId' ? view.focusedId : null);
+  if (preferred) resource.value = preferred;
+}
+
 function renderRepair(snapshot, schoolName) {
-  const draft = snapshot.workspace.repairDraft;
-  stateCard.className = 'card workspace-card repair-mode compact-density';
+  stateCard.className = 'card workspace-card repair-mode current-mode compact-density';
   if (view.narrow) {
     stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice} ${M.acceptedStillCurrent}</p><div id="accepted-view"></div>`;
     renderFocused(); return;
   }
-  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${runUtilities(snapshot.workspace.lastRun)}</div></div>
-    <p>${snapshot.state === 'REPAIR_PROPOSAL' ? M.proposalDraftDetail : M.repairDraftIntro}</p><div id="accepted-view"></div>`;
+  const editable = snapshot.state === 'REPAIR_DRAFT';
+  const taskOpen = inspectionState.current().taskAreaOpen.DRAFT;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairDraft}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${runUtilities(snapshot.workspace.lastRun)}</div></div>
+    ${editable ? '' : `<p>${M.proposalDraftDetail}</p>`}<div id="accepted-view"></div>
+    ${editable ? `<div class="task-launch"><button id="reopen-draft-task" type="button" class="secondary" aria-expanded="false" aria-controls="workbench-task-area"${taskOpen ? ' hidden' : ''}>${M.reopenDraftTask}</button></div><section id="workbench-task-area" class="task-area draft-task-area" aria-label="${M.repairDraft}"${taskOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairDraft}</h3><button id="collapse-draft-task" type="button" class="secondary">${M.collapseDraftTask}</button></div><p id="draft-save-status" class="error" role="alert"></p>${draftContext()}</section>${focusedEntry()}` : ''}`;
   bindUtilities();
   if (view.focusedType) renderFocused(); else renderWholeSchool();
+  if (editable) bindDraftTaskArea();
+}
+
+function bindDraftTaskArea() {
+  document.querySelector('#collapse-draft-task').addEventListener('click', () => {
+    syncInspectionState(inspectionState.setTaskAreaOpen('DRAFT', false).state);
+    document.querySelector('#workbench-task-area').hidden = true;
+    document.querySelector('#reopen-draft-task').hidden = false;
+    document.querySelector('#reopen-draft-task').focus();
+  });
+  document.querySelector('#reopen-draft-task').addEventListener('click', () => {
+    syncInspectionState(inspectionState.setTaskAreaOpen('DRAFT', true).state);
+    document.querySelector('#workbench-task-area').hidden = false;
+    document.querySelector('#reopen-draft-task').hidden = true;
+    document.querySelector('#collapse-draft-task').focus();
+  });
+  bindRepairControls();
 }
 
 function renderSolving(snapshot, schoolName) {
@@ -392,16 +423,40 @@ function draftContext(frozen = false) {
   const lastRun = currentSnapshot.workspace.lastRun;
   const retryAvailable = lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
   const changes = draft.intent.changes.map(change => repairChange(change)).join('');
-  const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h4>${M.blockingConflicts}</h4>${draft.conflicts.map(item => `<p><button type="button" class="link-button" data-draft-conflict="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))}</button> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
+  const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h4>${M.blockingConflicts}</h4>${draft.conflicts.map(item => `<p><button type="button" class="link-button" data-draft-conflict="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))} · ${escapeHtml(item.lessonId)}</button> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
   if (frozen) return `<section class="draft-context" aria-label="${M.frozenDraft}"><h3>${M.frozenDraft}</h3>${changes || `<p>${M.noWeeklyChanges}</p>`}<dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd>${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd>${draft.conflicts.length}</dd></div></dl><p>${M.frozenDraftDetail}</p></section>`;
-  return `<section class="draft-context" aria-label="${M.draftCounts}"><h3>${M.weeklyChanges}</h3>${changes || `<p>${M.noWeeklyChanges}</p>`}
-    <dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd id="attempt-pin-count">${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd id="draft-conflict-count">${draft.conflicts.length}</dd></div></dl>
-    ${draft.directEffectLessonIds.length ? '' : `<p class="notice">${M.noDirectEffects}</p>`}${conflicts}
-    <details class="repair-entry"><summary>${M.stageChange}</summary>${repairIntentForm(draft)}</details>
-    <details class="repair-controls"${bulkPreview ? ' open' : ''}><summary>${M.bulkPin}</summary><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></details>
-    <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div>
-    ${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
-    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></section>`;
+  return `<section class="draft-context" aria-label="${M.draftCounts}"><div class="draft-task-grid">
+    <section class="draft-task-section"><h4>${M.weeklyChanges}</h4>${changes || `<p>${M.noWeeklyChanges}</p>`}<details class="repair-entry"><summary>${M.stageChange}</summary>${repairIntentForm(draft)}</details></section>
+    <section class="draft-task-section"><h4>${M.directEffects}</h4><dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd id="attempt-pin-count">${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd id="draft-conflict-count">${draft.conflicts.length}</dd></div></dl>
+      ${draft.directEffectLessonIds.length ? `<ul class="draft-lesson-list">${draft.directEffectLessonIds.map(id => `<li><button type="button" class="link-button" data-draft-effect="${escapeAttribute(id)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(id), id))} · ${escapeHtml(id)}</button></li>`).join('')}</ul>` : `<p class="notice">${M.noDirectEffects}</p>`}${conflicts}</section>
+    <section class="draft-task-section"><h4>${M.protectAcceptedAssignment}</h4><div id="draft-selected-protection">${draftSelectedProtection()}</div>${draftProtectionSummary(draft)}</section>
+    <section class="draft-task-section"><details class="repair-controls"${bulkPreview ? ' open' : ''}><summary>${M.bulkPin}</summary><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></details>
+      <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)} · ${escapeHtml(action.id)} · ${action.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div></section>
+    </div><div class="draft-task-decisions">${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
+    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></div></section>`;
+}
+
+function draftSelectedProtection() {
+  const item = acceptedModel.assignmentMap.get(view.selectedLessonId);
+  if (!item) return `<p>${M.selectAcceptedToProtect}</p>`;
+  const state = repairLessonState(item.lessonId);
+  return `<div class="pin-actions"><p><strong>${escapeHtml(entityName(item.lesson, item.lessonId))}</strong> · ${escapeHtml(item.lessonId)}</p>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${state.labels}${state.periodPinned || state.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`} <span class="state ${state.periodPinned ? 'pin-label' : 'unpinned-state'}">${state.periodPinned ? M.periodPinned : M.periodUnpinned}</span> <span class="state ${state.roomPinned ? 'pin-label' : 'unpinned-state'}">${state.roomPinned ? M.roomPinned : M.roomUnpinned}</span></p>${state.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</div>`;
+}
+
+function draftProtectionSummary(draft) {
+  const pins = draft.intent.pins.map(pin => `<li><button type="button" class="link-button" data-draft-protection="${escapeAttribute(pin.lessonId)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(pin.lessonId), pin.lessonId))} · ${escapeHtml(pin.lessonId)}</button> · ${[pin.periodSources?.length ? M.periodPinned : null, pin.roomSources?.length ? M.roomPinned : null].filter(Boolean).join(' · ')}</li>`);
+  const protectedIds = new Set(draft.intent.pins.map(pin => pin.lessonId));
+  const locks = [];
+  for (const item of acceptedModel.assignments) {
+    const lesson = acceptedModel.maps.lessons.get(item.lessonId);
+    const policy = policyLocks(item.lessonId);
+    const labels = [policy.period ? M.policyPeriodLock : null, policy.room ? M.policyRoomLock : null].filter(Boolean);
+    if (labels.length) {
+      protectedIds.add(item.lessonId);
+      locks.push(`<li><button type="button" class="link-button" data-draft-protection="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(lesson, item.lessonId))} · ${escapeHtml(item.lessonId)}</button> · ${labels.join(' · ')}</li>`);
+    }
+  }
+  return `<details class="protection-list"><summary>${M.protectedAssignments} · ${protectedIds.size}</summary><ul>${[...pins, ...locks].join('')}</ul></details>`;
 }
 
 function repairIntentForm(draft) {
@@ -422,7 +477,7 @@ function pinDimensionControls(prefix) {
 
 function bulkPreviewHtml() {
   if (!bulkPreview) return '';
-  return `<section class="bulk-preview" aria-live="polite"><h4>${M.bulkPreview}</h4><p>${M.previewCount(bulkPreview.count)} · ${bulkPreview.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</p><ul>${bulkPreview.lessonIds.map(id => `<li>${escapeHtml(entityName(acceptedModel.maps.lessons.get(id), id))}</li>`).join('')}</ul>${bulkPreview.conflicts.length ? `<p class="error">${M.previewConflicts(bulkPreview.conflicts.length)}</p>` : ''}<div class="actions"><button id="confirm-bulk" type="button">${M.confirmSnapshot}</button><button id="cancel-bulk" type="button" class="secondary">${M.cancelPreview}</button></div></section>`;
+  return `<section class="bulk-preview" aria-live="polite"><h4>${M.bulkPreview}</h4><p>${M.previewCount(bulkPreview.count)} · ${bulkPreview.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</p><ul>${bulkPreview.lessonIds.map(id => `<li>${escapeHtml(entityName(acceptedModel.maps.lessons.get(id), id))} · ${escapeHtml(id)}</li>`).join('')}</ul>${bulkPreview.conflicts.length ? `<div class="error"><p>${M.previewConflicts(bulkPreview.conflicts.length)}</p>${bulkPreview.conflicts.map(conflict => `<p>${escapeHtml(conflict.lessonId)} · ${escapeHtml(conflict.message)}</p>`).join('')}</div>` : ''}<div class="actions"><button id="confirm-bulk" type="button">${M.confirmSnapshot}</button><button id="cancel-bulk" type="button" class="secondary">${M.cancelPreview}</button></div></section>`;
 }
 
 function bindRepairControls() {
@@ -440,7 +495,12 @@ function bindRepairControls() {
     const response = await commandJson('/api/repair-draft/bulk-pin-preview', 'POST', payload);
     if (response) { bulkPreview = response; render(currentSnapshot); }
   });
-  document.querySelector('#confirm-bulk')?.addEventListener('click', () => { const preview = bulkPreview; bulkPreview = null; mutateJson('/api/repair-draft', 'PATCH', { action: 'CONFIRM_BULK_PIN', preview }); });
+  document.querySelector('#confirm-bulk')?.addEventListener('click', () => {
+    const preview = bulkPreview;
+    bulkPreview = null;
+    document.querySelector('#bulk-preview-host').replaceChildren();
+    mutateJson('/api/repair-draft', 'PATCH', { action: 'CONFIRM_BULK_PIN', preview });
+  });
   document.querySelector('#cancel-bulk')?.addEventListener('click', () => { bulkPreview = null; render(currentSnapshot); });
   document.querySelectorAll('[data-undo-bulk]').forEach(button => button.addEventListener('click', () => mutateJson('/api/repair-draft', 'PATCH', { action: 'UNDO_BULK_PIN', bulkActionId: button.dataset.undoBulk })));
   const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
@@ -448,17 +508,24 @@ function bindRepairControls() {
   discard.addEventListener('click', () => mutateJson('/api/repair-draft', 'DELETE', { confirmed: true }));
   document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT30S' }));
   document.querySelector('#retry-repair')?.addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT2M' }));
-  document.querySelectorAll('[data-draft-conflict]').forEach(button => button.addEventListener('click', () => selectDraftLesson(button.dataset.draftConflict)));
+  document.querySelectorAll('[data-draft-conflict], [data-draft-effect], [data-draft-protection]').forEach(button => button.addEventListener('click', () => selectDraftLesson(button.dataset.draftConflict || button.dataset.draftEffect || button.dataset.draftProtection)));
+  bindPinActions();
 }
 
 function selectDraftLesson(id) {
   const item = acceptedModel.assignmentMap.get(id);
   if (!item) return;
-  if (!isRepresented(item)) {
-    syncInspectionState(inspectionState.resetFilters().state);
+  if (view.focusedType || !isRepresented(item)) {
+    if (view.focusedType) syncInspectionState(inspectionState.returnToWholeSchool().state);
+    for (const [filter, selected, expected] of [['cohortId', view.cohortId, item.cohortId], ['teacherFilterId', view.teacherId, item.teacherId], ['roomId', view.roomId, item.roomId], ['periodId', view.periodId, item.periodId]]) {
+      if (selected && selected !== expected) syncInspectionState(inspectionState.selectFilter(filter, null).state);
+    }
+    if (view.subjectOnly && item.subjectId !== view.subjectInvestigationId) syncInspectionState(inspectionState.setSubjectOnly(false).state);
+    if (view.teacherOnly && item.teacherId !== view.teacherInvestigationId) syncInspectionState(inspectionState.setTeacherOnly(false).state);
     if (view.range === 'DAY' && view.day !== item.period.weekday) syncInspectionState(inspectionState.selectDay(item.period.weekday, item.period.weekday).state);
     renderWholeSchool();
-    document.querySelector('#inspection-notice').textContent = M.conflictNavigationReset;
+    document.querySelector('#inspection-notice').textContent = currentSnapshot.workspace.repairDraft.conflicts.some(conflict => conflict.lessonId === id)
+      ? M.conflictNavigationReset : M.draftNavigationReset;
   }
   const button = document.querySelector(`[data-lesson-id="${CSS.escape(id)}"]`);
   if (button) { button.scrollIntoView({ block: 'nearest', inline: 'nearest' }); selectLesson(button); }
@@ -520,12 +587,13 @@ function renderWholeSchool() {
     <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
     <div class="workbench-layout${inspectionState.current().inspectorOpen ? '' : ' inspector-collapsed'}">
       <div class="canvas-region">${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: displayed.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: displayed.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div>
-      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</div>${draftMode ? draftContext() : frozenMode ? draftContext(true) : proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}${currentSnapshot.state === 'SOLVING_REPAIR' ? runContext() : ''}${proposalMode ? proposalContext() : ''}</aside>
+      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</div>${frozenMode ? draftContext(true) : proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}${currentSnapshot.state === 'SOLVING_REPAIR' ? runContext() : ''}${proposalMode ? proposalContext() : ''}</aside>
       <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(reviewLessonName(view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
     </div>
     ${repairSetupAvailable ? `<div class="task-launch"><button id="open-repair-setup" type="button" class="secondary" aria-expanded="${repairSetupOpen}" aria-controls="workbench-task-area"${repairSetupOpen ? ' hidden' : ''}>${M.startRepair}</button></div><section id="workbench-task-area" class="task-area" aria-label="${M.repairSetup}"${repairSetupOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairSetup}</h3><button id="close-repair-setup" type="button" class="secondary">${M.closeRepairSetup}</button></div>${startRepairForm()}</section>` : ''}
-    <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
-  if (view.range === 'WEEK') { bindInspectionControls(); if (draftMode) bindRepairControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
+    ${draftMode ? '' : focusedEntry()}`;
+  if (draftMode) document.querySelector('.focused-entry')?.removeAttribute('hidden');
+  if (view.range === 'WEEK') { bindInspectionControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
   for (const day of model.weekdays) {
     if (day === view.day) continue;
@@ -534,11 +602,14 @@ function renderWholeSchool() {
     dayMatrices.set(day, template.content.firstElementChild);
   }
   bindInspectionControls();
-  if (draftMode) bindRepairControls();
   bindRunControls();
   if (proposalMode) bindRepairReview();
   applyFiltersInPlace();
   restoreCanvasScroll();
+}
+
+function focusedEntry() {
+  return `<div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
 }
 
 function bindRunControls() {
@@ -600,11 +671,16 @@ function comparisonLessonButton(item, week) {
 
 function comparisonProtection(id) {
   const pin = currentSnapshot.workspace.repairDraft?.intent?.pins?.find(item => item.lessonId === id);
-  const lesson = acceptedModel.maps.lessons.get(id);
-  const lock = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(item => item.lessonId === id);
+  const policy = policyLocks(id);
   return [pin?.periodSources?.length ? M.periodPinned : null, pin?.roomSources?.length ? M.roomPinned : null,
-    lesson?.periodLock || lock?.periodLockOrigin === 'PERSISTENT_POLICY' ? M.policyPeriodLock : null,
-    lesson?.roomLock || lock?.roomLockOrigin === 'PERSISTENT_POLICY' ? M.policyRoomLock : null].filter(Boolean).join(' · ');
+    policy.period ? M.policyPeriodLock : null, policy.room ? M.policyRoomLock : null].filter(Boolean).join(' · ');
+}
+
+function policyLocks(lessonId) {
+  const lesson = acceptedModel.maps.lessons.get(lessonId);
+  const origin = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(lock => lock.lessonId === lessonId);
+  return { period: origin?.periodLockOrigin ? origin.periodLockOrigin === 'PERSISTENT_POLICY' : Boolean(lesson?.periodLock),
+    room: origin?.roomLockOrigin ? origin.roomLockOrigin === 'PERSISTENT_POLICY' : Boolean(lesson?.roomLock) };
 }
 
 function comparisonMatchedSides(id) {
@@ -633,10 +709,10 @@ function selectedLessonDetails(id) {
 function lessonDetails(item) {
   if (!item) return '';
   const draftState = repairLessonState(item.lessonId);
-  const repairActions = currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT' ? `<section class="pin-actions"><h4>${M.protectAcceptedAssignment}</h4>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`} <span class="state ${draftState.periodPinned ? 'pin-label' : 'unpinned-state'}">${draftState.periodPinned ? M.periodPinned : M.periodUnpinned}</span> <span class="state ${draftState.roomPinned ? 'pin-label' : 'unpinned-state'}">${draftState.roomPinned ? M.roomPinned : M.roomUnpinned}</span></p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
+  const repairCues = currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT' ? `<section class="repair-cues"><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`}</p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div><span class="state accepted">✓ ${M.acceptedAssignment}</span><h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
-    ${repairActions}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+    ${repairCues}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
 }
 
 function repairLessonState(lessonId) {
@@ -647,13 +723,12 @@ function repairLessonState(lessonId) {
   const conflictMessages = draft.conflicts.filter(item => item.lessonId === lessonId).map(item => item.message);
   const conflict = conflictMessages.length > 0;
   const pin = draft.intent.pins.find(item => item.lessonId === lessonId);
-  const lesson = acceptedModel.maps.lessons.get(lessonId);
-  const manifestLock = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(item => item.lessonId === lessonId);
+  const policy = policyLocks(lessonId);
   const labels = [];
   if (direct) labels.push(`<em class="direct-label">${M.directlyAffected}</em>`);
   if (conflict) labels.push(`<em class="conflict-label">${M.conflict}</em>`);
-  if (lesson?.periodLock || manifestLock?.periodLockOrigin === 'PERSISTENT_POLICY') labels.push(`<em class="policy-label">${M.policyPeriodLock}</em>`);
-  if (lesson?.roomLock || manifestLock?.roomLockOrigin === 'PERSISTENT_POLICY') labels.push(`<em class="policy-label">${M.policyRoomLock}</em>`);
+  if (policy.period) labels.push(`<em class="policy-label">${M.policyPeriodLock}</em>`);
+  if (policy.room) labels.push(`<em class="policy-label">${M.policyRoomLock}</em>`);
   if (pin?.periodSources?.length) labels.push(`<em class="pin-label">${M.periodPinned}</em>`);
   if (pin?.roomSources?.length) labels.push(`<em class="pin-label">${M.roomPinned}</em>`);
   const intent = draft.intent.changes.filter(change => change.unavailablePeriodIds.includes(acceptedModel.assignmentMap.get(lessonId)?.periodId)
@@ -672,10 +747,21 @@ function bindPinActions() {
   document.querySelector('#remove-pin')?.addEventListener('click', () => mutatePin({ action: 'UNPIN', lessonId: item.lessonId, dimensions: dimensions() }));
 }
 
+function refreshDraftSelectedProtection() {
+  const host = document.querySelector('#draft-selected-protection');
+  if (!host) return;
+  host.innerHTML = draftSelectedProtection();
+  bindPinActions();
+}
+
 async function mutatePin(payload) {
-  const response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
-  const result = await response.json();
-  if (!response.ok) { draftSaveFailed = true; stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.draftSaveFailed} ${escapeHtml(result.message || M.actionFailed)}</p>`); document.querySelector('#solve-draft').disabled = true; if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
+  let response;
+  let result;
+  try {
+    response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+    result = await response.json();
+  } catch (_) { reportDraftFailure(M.actionFailed); return; }
+  if (!response.ok) { reportDraftFailure(result.message || M.actionFailed); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
   draftSaveFailed = false;
   etag = response.headers.get('ETag');
   if (result.repairDraft) currentSnapshot.workspace.repairDraft = result.repairDraft; else currentSnapshot = result;
@@ -685,16 +771,25 @@ async function mutatePin(payload) {
   const oldButton = document.querySelector(`[data-lesson-id="${CSS.escape(payload.lessonId)}"]`);
   if (oldButton) { const holder = document.createElement('div'); holder.innerHTML = view.range === 'WEEK' ? weekLessonButton(item) : lessonButton(item, false); const replacement = holder.firstElementChild; replacement.addEventListener('click', () => selectLesson(replacement)); oldButton.replaceWith(replacement); }
   const host = document.querySelector('#lesson-details-host');
-  host.innerHTML = lessonDetails(item); bindCloseDetails(); bindPinActions();
-  document.querySelector('#attempt-pin-count').textContent = draft.intent.pins.length;
-  document.querySelector('#draft-conflict-count').textContent = draft.conflicts.length;
+  host.innerHTML = lessonDetails(item); bindCloseDetails();
   const context = document.querySelector('.draft-context');
   if (context) { const replacement = document.createElement('div'); replacement.innerHTML = draftContext(); context.replaceWith(replacement.firstElementChild); bindRepairControls(); }
+  document.querySelector('#draft-save-status').textContent = '';
   document.querySelector('#lesson-panel-title')?.focus();
+}
+
+function reportDraftFailure(message) {
+  draftSaveFailed = true;
+  document.querySelector('#solve-draft')?.setAttribute('disabled', '');
+  document.querySelector('#retry-repair')?.setAttribute('disabled', '');
+  const status = document.querySelector('#draft-save-status') || document.querySelector('#repair-setup-status');
+  if (status) status.textContent = `${status.id === 'draft-save-status' ? `${M.draftSaveFailed} ` : ''}${message}`;
+  else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.draftSaveFailed} ${escapeHtml(message)}</p>`);
 }
 
 function renderFocused() {
   const host = document.querySelector('#accepted-view');
+  if (currentSnapshot.state === 'REPAIR_DRAFT' && inspectionState.current().mode === 'DRAFT') document.querySelector('.focused-entry')?.setAttribute('hidden', '');
   const type = view.focusedType || 'cohortId';
   const source = type === 'cohortId' ? acceptedModel.definition.cohorts : type === 'teacherId' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms;
   if (!source.some(item => item.id === view.focusedId)) {
@@ -742,6 +837,7 @@ function bindInspectionControls() {
   document.querySelector('#filters')?.addEventListener('toggle', event => inspectionState.setFiltersOpen(event.currentTarget.open));
   document.querySelector('#open-repair-setup')?.addEventListener('click', () => {
     syncInspectionState(inspectionState.setTaskAreaOpen('CURRENT', true).state);
+    prefillRepairResourceFromSelection();
     document.querySelector('#workbench-task-area').hidden = false;
     document.querySelector('#open-repair-setup').hidden = true;
     document.querySelector('#close-repair-setup').focus();
@@ -796,7 +892,6 @@ function bindInspectionControls() {
   bindStartRepair();
   bindLessonButtons(document.querySelector('.matrix-wrap'));
   bindCloseDetails();
-  bindPinActions();
   document.querySelectorAll('[data-open-focus]').forEach(button => button.addEventListener('click', () => {
     const type = button.dataset.openFocus;
     const key = type === 'cohortId' ? 'cohorts' : type === 'teacherId' ? 'teachers' : 'rooms';
@@ -859,7 +954,7 @@ function selectLesson(button) {
     candidate.querySelector('.selected-label').hidden = !selected;
   });
   document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(view.selectedLessonId);
-  bindCloseDetails(); bindPinActions();
+  bindCloseDetails(); refreshDraftSelectedProtection();
   document.querySelector('#lesson-panel-title')?.focus();
 }
 
@@ -877,6 +972,7 @@ function bindCloseDetails() {
     else view.selectedLessonId = null;
     if (document.querySelector('#lesson-details-host')) document.querySelector('#lesson-details-host').textContent = M.noLessonSelected;
     else document.querySelector('.comparison-details')?.remove();
+    refreshDraftSelectedProtection();
     document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
       candidate.classList.remove('selected');
       candidate.setAttribute('aria-pressed', 'false');
@@ -968,6 +1064,7 @@ function clearSelectedLessonOutsideRepresentation() {
   const selected = proposalModeActive() ? comparison.assignmentsById.get(view.selectedLessonId) || [] : [acceptedModel.assignmentMap.get(view.selectedLessonId)];
   if (!selected.some(Boolean) || selected.some(isRepresented)) return false;
   if (inspectionState) syncInspectionState(inspectionState.closeLesson()); else view.selectedLessonId = null;
+  refreshDraftSelectedProtection();
   return true;
 }
 
@@ -1042,7 +1139,10 @@ function renderTeacherRibbon(periods) {
       const label = state === 'assigned' ? M.assigned : state === 'available' ? M.availableUnassigned : M.unavailable;
       return `<li class="ribbon-${state}"><strong>${escapeHtml(periodLabel(period))}</strong><span>${label}</span></li>`;
     }).join('');
-  return `<section class="teacher-ribbon" aria-labelledby="teacher-ribbon-title"><h4 id="teacher-ribbon-title">${proposalModeActive() ? M.proposedAvailability : M.teacherRibbon} · ${escapeHtml(entityName(teacher, view.teacherInvestigationId))}</h4><ul>${slots}</ul></section>`;
+  const title = `${proposalModeActive() ? M.proposedAvailability : M.teacherRibbon} · ${escapeHtml(entityName(teacher, view.teacherInvestigationId))}`;
+  if (currentSnapshot.state === 'REPAIR_DRAFT' && inspectionState.current().mode === 'DRAFT')
+    return `<details class="teacher-ribbon"><summary>${title}</summary><ul>${slots}</ul></details>`;
+  return `<section class="teacher-ribbon" aria-labelledby="teacher-ribbon-title"><h4 id="teacher-ribbon-title">${title}</h4><ul>${slots}</ul></section>`;
 }
 
 function periodsForDay(day) { return acceptedModel.definition.periods.filter(period => period.weekday === day).sort((a, b) => a.order - b.order); }
@@ -1073,21 +1173,25 @@ async function mutate(path, method, body) {
     const response = await fetch(path, { method, headers, body });
     const result = await response.json();
     if (!response.ok) {
-      if (path === '/api/repair-draft' && method !== 'DELETE') { draftSaveFailed = true; document.querySelector('#solve-draft')?.setAttribute('disabled', ''); }
+      if (path === '/api/repair-draft' && method !== 'DELETE') {
+        reportDraftFailure(result.message || M.actionFailed);
+        if (response.headers.get('ETag')) etag = response.headers.get('ETag');
+        return;
+      }
       if (path === '/api/proposal/accept' && result.code === 'STALE_PROPOSAL') {
         await load(true);
         stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${M.acceptedStillCurrent}</p>`);
         return;
       }
-      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${path === '/api/repair-draft' && method !== 'DELETE' ? M.draftSaveFailed + ' ' : ''}${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
+      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
       if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return;
     }
     if (path === '/api/repair-draft') draftSaveFailed = false;
     bulkPreview = null;
     etag = response.headers.get('ETag'); render(result);
   } catch (_) {
-    if (path === '/api/repair-draft' && method !== 'DELETE') { draftSaveFailed = true; document.querySelector('#solve-draft')?.setAttribute('disabled', ''); }
-    stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${path === '/api/repair-draft' && method !== 'DELETE' ? M.draftSaveFailed : M.actionFailed}</p>`);
+    if (path === '/api/repair-draft' && method !== 'DELETE') reportDraftFailure(M.actionFailed);
+    else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.actionFailed}</p>`);
   }
 }
 
@@ -1098,7 +1202,7 @@ async function mutateJson(path, method, payload) {
 async function commandJson(path, method, payload) {
   const response = await fetch(path, { method, headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
   const result = await response.json();
-  if (!response.ok) { stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return null; }
+  if (!response.ok) { const status = document.querySelector('#draft-save-status'); if (status) status.textContent = result.message || M.actionFailed; else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return null; }
   return result;
 }
 

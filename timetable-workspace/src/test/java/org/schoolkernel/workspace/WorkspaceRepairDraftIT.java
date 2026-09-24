@@ -137,6 +137,17 @@ class WorkspaceRepairDraftIT {
         assertFalse(draft.path("readyToSolve").booleanValue());
         assertEquals("lesson-math-1", draft.path("conflicts").get(0).path("lessonId").stringValue());
         assertEquals("PIN_CONTRADICTS_UNAVAILABILITY", draft.path("conflicts").get(0).path("code").stringValue());
+        JsonNode beforeRefusal = storedDocument().deepCopy();
+        long versionBeforeRefusal = jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
+                .query(Long.class).single();
+        HttpResponse<String> refusedRun = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        assertEquals(409, refusedRun.statusCode(), "Workbench layout UC-2 ext 7a: conflict is refused below the UI");
+        assertEquals("DRAFT_CONFLICT", body(refusedRun).path("code").stringValue());
+        assertEquals(beforeRefusal, storedDocument(), "conflict refusal preserves Current and the exact Draft");
+        assertEquals(versionBeforeRefusal, jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
+                .query(Long.class).single());
+        assertFalse(storedDocument().has("run"));
+        assertFalse(storedDocument().has("proposal"));
 
         JsonNode resolved = body(command("PATCH", "/api/repair-draft", session(), """
                 {"action":"UNPIN","lessonId":"lesson-math-1","dimensions":["PERIOD"]}
@@ -262,6 +273,20 @@ class WorkspaceRepairDraftIT {
         assertEquals(422, unsupported.statusCode());
         assertEquals("ACCEPTED_BASELINE", lifecycle());
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
+        JsonNode beforeInvalid = storedDocument().deepCopy();
+        long versionBeforeInvalid = jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
+                .query(Long.class).single();
+        for (String invalid : new String[] {
+                "{\"resourceType\":\"TEACHER\",\"resourceId\":\"missing-teacher\",\"periodIds\":[\"mon-1\"]}",
+                "{\"resourceType\":\"ROOM\",\"resourceId\":\"room-101\",\"periodIds\":[\"missing-period\"]}"
+        }) {
+            HttpResponse<String> refused = command("POST", "/api/repair-draft", session(), invalid);
+            assertEquals(422, refused.statusCode(), "Workbench layout UC-2 ext 2a: invalid reference is refused");
+            assertEquals("ACCEPTED_BASELINE", lifecycle());
+            assertEquals(beforeInvalid, storedDocument());
+            assertEquals(versionBeforeInvalid, jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
+                    .query(Long.class).single());
+        }
 
         JsonNode noEffect = body(command("POST", "/api/repair-draft", session(), teacherUnavailable("mon-3")));
         assertTrue(noEffect.path("workspace").path("repairDraft").path("directEffectLessonIds").isEmpty());

@@ -331,12 +331,37 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
 .current-mode .task-launch { display: flex; justify-content: end; margin: 5px 0; }
 .current-mode .task-launch button { padding: 5px 9px; font-size: .76rem; }
 .current-mode .task-area { max-height: 30vh; overflow: auto; margin-top: 5px; padding: 8px 12px; border: 1px solid #b9d5c5; border-radius: 10px; background: #f7fbf8; }
+.repair-mode.current-mode:has(.draft-task-area:not([hidden])) .matrix-wrap { max-height: max(350px, calc(100vh - 570px)); }
+.repair-mode.current-mode:has(.draft-task-area:not([hidden])) #workbench-inspector { max-height: max(350px, calc(100vh - 570px)); }
+.repair-mode.current-mode .draft-task-area { max-height: 24vh; }
+.repair-mode.current-mode .teacher-ribbon > summary { cursor: pointer; font-weight: 750; font-size: .76rem; }
 .current-mode .task-area-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .current-mode .task-area-heading h3 { margin: 0; font-size: .95rem; }
 .current-mode .task-area-heading button { padding: 5px 9px; font-size: .74rem; }
 .current-mode .task-area .repair-entry { margin: 5px 0; padding: 6px 9px; }
 .current-mode .task-area .repair-entry > summary { font-size: .84rem; }
 .current-mode .task-area .period-choices { max-height: 120px; overflow: auto; }
+.current-mode .draft-task-area { width: 100%; }
+.current-mode .draft-context { margin-top: 6px; }
+.current-mode .draft-task-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; align-items: start; }
+.current-mode .draft-task-section { min-width: 0; padding: 8px; border: 1px solid #d7dfda; border-radius: 9px; background: white; overflow-wrap: anywhere; }
+.current-mode .draft-task-section h4 { margin: 0 0 6px; font-size: .83rem; }
+.current-mode .draft-task-section p { margin: 5px 0; font-size: .77rem; }
+.current-mode .draft-task-section dl { gap: 4px; }
+.current-mode .draft-task-section dl div { padding: 5px; }
+.current-mode .draft-task-section .repair-entry, .current-mode .draft-task-section .repair-controls { margin: 6px 0; padding: 6px; }
+.current-mode .draft-task-section .repair-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.current-mode .draft-task-section .period-choices { max-height: 105px; }
+.current-mode .draft-task-section .pin-dimensions { margin: 5px 0; padding: 5px; }
+.current-mode .draft-task-section .pin-actions { padding: 0; border: 0; }
+.current-mode .draft-task-section .actions { margin: 6px 0; }
+.current-mode .draft-task-section button { padding: 5px 8px; font-size: .75rem; }
+.current-mode .draft-task-section .link-button { padding: 0; }
+.current-mode .draft-lesson-list, .current-mode .protection-list ul { max-height: 110px; overflow: auto; margin: 6px 0; padding-left: 18px; }
+.current-mode .protection-list summary, .current-mode .repair-controls summary { cursor: pointer; font-weight: 750; font-size: .78rem; }
+.current-mode .draft-task-decisions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 0 0; }
+.current-mode .draft-task-decisions .confirmation, .current-mode .draft-task-decisions .actions { margin: 0; }
+.current-mode .draft-task-decisions button { padding: 6px 9px; font-size: .75rem; }
 .current-mode .focused-entry { margin-top: 5px; padding-top: 5px; }
 .current-mode .focused-entry h3 { margin: 0; font-size: .85rem; }
 .current-mode .focused-entry button { padding: 5px 9px; font-size: .73rem; }
@@ -347,6 +372,12 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
   .current-mode .inspection-toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .current-mode .inspection-toolbar .search-control { grid-column: auto; }
   .current-mode .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .current-mode .draft-task-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1280px) and (max-width: 1450px) {
+  .current-mode .draft-task-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .repair-mode.current-mode .draft-task-area { max-height: 20vh; }
 }
 
 @media (max-width: 700px) {

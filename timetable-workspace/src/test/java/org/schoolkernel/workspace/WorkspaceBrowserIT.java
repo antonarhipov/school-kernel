@@ -656,6 +656,250 @@ class WorkspaceBrowserIT {
     }
 
     @Test
+    @DisplayName("Workbench layout UC-2 main/1a/1b/2a/3a/4a/4b/5a/6a/6b/G1-G7: normative browser prepares and discards a protected wide Draft")
+    void preparesWideProtectedDraftAtNormativeScaleInRealBrowser() throws Exception {
+        ObjectNode document = investigationScaleDocument();
+        storeAccepted(document);
+        JsonNode baseline = document.path("acceptedBaseline").deepCopy();
+        try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1600)
+                    .put("height", 900).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.command("Page.reload", JSON.createObjectNode());
+            awaitBrowserCondition(cdp, "document.querySelector('[data-lesson-id=lesson-960]') !== null");
+            assertEquals(1_000, renderedLessonIds(cdp).size(), "UC-2 Requires UC-1's complete accepted canvas");
+            String acceptedBefore = storedDocument();
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click(); document.querySelector('#open-repair-setup').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-task-area').hidden && document.querySelector('#repair-resource').value === 'teacher-16' && !document.querySelector('#workbench-inspector #start-repair-form')"));
+            assertEquals(acceptedBefore, storedDocument(), "UC-2 main 1: opening setup is presentation-only");
+            cdp.evaluate("document.querySelector('#close-repair-setup').click()");
+            assertEquals(acceptedBefore, storedDocument(), "UC-2 ext 1a: closing unstaged setup saves nothing");
+            cdp.evaluate("document.querySelector('#open-repair-setup').click(); document.querySelector('#start-repair-form').requestSubmit()");
+            assertTrue(cdp.awaitText("Select one or more weekly periods", Duration.ofSeconds(10)).contains("Select one or more weekly periods"));
+            assertEquals(acceptedBefore, storedDocument(), "UC-2 ext 2a: invalid period selection creates no Draft");
+            cdp.evaluate("document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("Draft is durably saved with no blocking conflict", Duration.ofSeconds(15));
+            JsonNode initial = assertDraftUnchangedBaseline(baseline);
+            assertEquals("TEACHER", initial.path("intent").path("changes").get(0).path("resourceType").stringValue());
+            assertEquals("teacher-16", initial.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertEquals(JSON.readTree("[\"period-0\"]"), initial.path("intent").path("changes").get(0).path("unavailablePeriodIds"));
+            assertEquals(Set.of("lesson-960"), jsonStrings(initial.path("directEffectLessonIds")));
+            assertEquals(1_000, renderedLessonIds(cdp).size(), "Draft decorates, rather than replaces, accepted assignments");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-lesson-id=lesson-960]').textContent.includes('Directly affected') && document.querySelector('#workbench-task-area #stage-repair-form') && document.querySelector('#workbench-task-area #apply-pin') && document.querySelector('#workbench-task-area #preview-bulk') && document.querySelector('#workbench-task-area #solve-draft') && !document.querySelector('#workbench-inspector #stage-repair-form, #workbench-inspector #apply-pin, #workbench-inspector #preview-bulk')"),
+                    "UC-2 main 3/G2: accepted canvas cues and all Draft work belong to the wide task area");
+            cdp.evaluate("window.scrollTo(0, 0)");
+            JsonNode wide = draftTaskGeometry(cdp);
+            assertDraftTaskGeometry(wide, 1600, 900);
+            assertTrue(draftDecisionReachable(cdp), "UC-2 G2: 1600px solve/discard controls are reachable in the task scrollport");
+            captureWorkbenchScreenshot(cdp, "uc2-draft-1600.png");
+
+            cdp.evaluate("document.querySelector('#apply-pin').click()");
+            cdp.awaitText("Resolve blocking conflicts before solving", Duration.ofSeconds(10));
+            JsonNode conflicted = assertDraftUnchangedBaseline(baseline);
+            assertEquals("lesson-960", conflicted.path("conflicts").get(0).path("lessonId").stringValue());
+            assertEquals("PIN_CONTRADICTS_UNAVAILABILITY", conflicted.path("conflicts").get(0).path("code").stringValue());
+            assertFalse(conflicted.path("readyToSolve").booleanValue());
+            assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft').disabled && document.querySelector('[data-lesson-id=lesson-960]').textContent.includes('Blocking conflict')"));
+            String beforeNavigation = storedDocument();
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click(); document.querySelector('#weekday').value='TUESDAY'; document.querySelector('#weekday').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#room-filter').value='room-99'; document.querySelector('#room-filter').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#lesson-search').value='Sixteen'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true})); document.querySelector('#teacher-investigation').value='teacher-16'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('[data-draft-conflict=lesson-960]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#weekday').value === 'MONDAY' && document.querySelector('#room-filter').value === '' && document.querySelector('#lesson-search').value === 'Sixteen' && document.querySelector('#teacher-investigation').value === 'teacher-16' && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && document.querySelector('#inspection-notice').textContent.includes('view was adjusted')"),
+                    "UC-2 ext 4b: navigation changes only excluding context and keeps investigation");
+            assertEquals(beforeNavigation, storedDocument(), "navigation cannot alter the exact durable Draft");
+            cdp.evaluate("document.querySelector('#remove-pin').click()");
+            cdp.awaitText("Draft is durably saved with no blocking conflict", Duration.ofSeconds(10));
+            assertTrue(assertDraftUnchangedBaseline(baseline).path("conflicts").isEmpty());
+
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click(); document.querySelector('[data-lesson-id=lesson-500]').click(); document.querySelector('[name=lesson-dimension][value=PERIOD]').checked=false; document.querySelector('[name=lesson-dimension][value=ROOM]').checked=true; document.querySelector('#apply-pin').click()");
+            cdp.awaitText("Accepted room pinned", Duration.ofSeconds(10));
+            JsonNode individual = assertDraftUnchangedBaseline(baseline);
+            assertEquals("lesson-500", individual.path("intent").path("pins").get(0).path("lessonId").stringValue());
+            assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), individual.path("intent").path("pins").get(0).path("roomSources"));
+            Set<String> classEightLessons = new HashSet<>();
+            for (int number = 480; number < 540; number++) classEightLessons.add("lesson-" + number);
+            String beforePreview = storedDocument();
+            cdp.evaluate("document.querySelector('.repair-controls').open=true; document.querySelector('#bulk-scope').value='CLASS'; document.querySelector('#bulk-scope').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#bulk-scope-id').value='cohort-8'; document.querySelector('#preview-bulk').click()");
+            cdp.awaitText("60 lessons in this immutable snapshot", Duration.ofSeconds(10));
+            assertEquals(beforePreview, storedDocument(), "UC-2 G5: preview has no durable effect");
+            assertTrue(browserTrue(cdp, "Array.from(document.querySelectorAll('#bulk-preview-host li')).length === 60 && Array.from(document.querySelectorAll('#bulk-preview-host li')).every((item, index) => item.textContent.includes('lesson-' + (480 + index))) && document.querySelector('#bulk-preview-host').textContent.includes('Accepted period')"),
+                    "UC-2 main 5: the browser preview names every expected class-eight lesson in order");
+            cdp.evaluate("document.querySelector('#cancel-bulk').click()");
+            assertEquals(beforePreview, storedDocument(), "UC-2 ext 5a: cancel retains exact prior Draft");
+            cdp.evaluate("document.querySelector('#bulk-scope').value='CLASS'; document.querySelector('#bulk-scope').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#bulk-scope-id').value='cohort-8'; document.querySelector('#preview-bulk').click()");
+            cdp.awaitText("60 lessons in this immutable snapshot", Duration.ofSeconds(10));
+            jdbc.sql("""
+                    CREATE FUNCTION reject_wide_bulk_save() RETURNS trigger AS $$
+                    BEGIN RAISE EXCEPTION 'test: wide bulk storage unavailable'; END;
+                    $$ LANGUAGE plpgsql
+                    """).update();
+            jdbc.sql("""
+                    CREATE TRIGGER reject_wide_bulk_save BEFORE UPDATE ON workspace_aggregate
+                    FOR EACH ROW WHEN (NEW.lifecycle_state = 'REPAIR_DRAFT')
+                    EXECUTE FUNCTION reject_wide_bulk_save()
+                    """).update();
+            try {
+                cdp.evaluate("document.querySelector('#confirm-bulk').click()");
+                cdp.awaitText("The latest repair change was not durably saved", Duration.ofSeconds(10));
+                assertEquals(beforePreview, storedDocument(), "UC-2 ext 5b: failed bulk confirmation preserves exact Draft/version");
+                assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft').disabled && !document.querySelector('[data-undo-bulk]')"));
+            } finally {
+                jdbc.sql("DROP TRIGGER IF EXISTS reject_wide_bulk_save ON workspace_aggregate").update();
+                jdbc.sql("DROP FUNCTION IF EXISTS reject_wide_bulk_save()").update();
+            }
+            cdp.evaluate("document.querySelector('#bulk-scope').value='CLASS'; document.querySelector('#bulk-scope').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#bulk-scope-id').value='cohort-8'; document.querySelector('#preview-bulk').click()");
+            cdp.awaitText("60 lessons in this immutable snapshot", Duration.ofSeconds(10));
+            cdp.evaluate("document.querySelector('#confirm-bulk').click()");
+            cdp.awaitText("Confirmed bulk snapshot · 60 lessons", Duration.ofSeconds(10));
+            JsonNode bulk = assertDraftUnchangedBaseline(baseline);
+            JsonNode action = bulk.path("intent").path("bulkActions").get(0);
+            assertEquals("CLASS", action.path("scope").stringValue());
+            assertEquals("cohort-8", action.path("scopeId").stringValue());
+            assertEquals(JSON.readTree("[\"PERIOD\"]"), action.path("dimensions"));
+            assertEquals(classEightLessons, jsonStrings(action.path("lessonIds")),
+                    "UC-2 main 5: confirmation applies the exact previewed class-eight lesson IDs");
+            assertTrue(browserTrue(cdp, "document.querySelector('.bulk-history').textContent.includes('Confirmed bulk snapshot · 60 lessons') && document.querySelector('.bulk-history').textContent.includes('Accepted period')"));
+            String beforeFailedUndo = storedDocument();
+            jdbc.sql("""
+                    CREATE FUNCTION reject_wide_bulk_undo() RETURNS trigger AS $$
+                    BEGIN RAISE EXCEPTION 'test: wide undo storage unavailable'; END;
+                    $$ LANGUAGE plpgsql
+                    """).update();
+            jdbc.sql("""
+                    CREATE TRIGGER reject_wide_bulk_undo BEFORE UPDATE ON workspace_aggregate
+                    FOR EACH ROW WHEN (NEW.lifecycle_state = 'REPAIR_DRAFT')
+                    EXECUTE FUNCTION reject_wide_bulk_undo()
+                    """).update();
+            try {
+                cdp.evaluate("document.querySelector('[data-undo-bulk]').click()");
+                cdp.awaitText("The latest repair change was not durably saved", Duration.ofSeconds(10));
+                assertEquals(beforeFailedUndo, storedDocument(), "UC-2 ext 5b: failed undo retains the named bulk action exactly");
+                assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft').disabled && document.querySelector('[data-undo-bulk]')"));
+            } finally {
+                jdbc.sql("DROP TRIGGER IF EXISTS reject_wide_bulk_undo ON workspace_aggregate").update();
+                jdbc.sql("DROP FUNCTION IF EXISTS reject_wide_bulk_undo()").update();
+            }
+            cdp.evaluate("document.querySelector('[data-undo-bulk]').click()");
+            awaitBrowserCondition(cdp, "!document.querySelector('[data-undo-bulk]')");
+            assertEquals(individual.path("intent"), assertDraftUnchangedBaseline(baseline).path("intent"),
+                    "UC-2 main 5: undo removes only the named bulk action and retains individual room protection");
+            assertTrue(assertDraftUnchangedBaseline(baseline).path("readyToSolve").booleanValue());
+            assertTrue(browserTrue(cdp, "!document.querySelector('#solve-draft').disabled && document.querySelector('.protection-list summary').textContent.endsWith('1')"),
+                    "UC-2 success: the saved conflict-free Draft is ready to solve with one unique protected lesson");
+
+            String beforePresentation = storedDocument();
+            cdp.evaluate("""
+                    window.__draftPresentationMutations = [];
+                    const draftFetch = window.fetch.bind(window);
+                    window.fetch = (input, options = {}) => {
+                      const method = (options.method || input?.method || 'GET').toUpperCase();
+                      if (method !== 'GET' && method !== 'HEAD') window.__draftPresentationMutations.push(method);
+                      return draftFetch(input, options);
+                    };
+                    """);
+            cdp.evaluate("document.querySelector('#collapse-draft-task').click(); document.querySelector('[data-mode=CURRENT]').click(); document.querySelector('[data-mode=DRAFT]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-task-area').hidden && !document.querySelector('#reopen-draft-task').hidden"));
+            cdp.evaluate("document.querySelector('#reopen-draft-task').click(); document.querySelector('[data-open-focus=teacherId]').click()");
+            cdp.awaitText("Teacher schedule", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-task-area').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 500'"));
+            assertTrue(browserTrue(cdp, "window.__draftPresentationMutations.length === 0"),
+                    "UC-2 G3: mode, task collapse, focus and return issue no mutating request");
+            assertEquals(beforePresentation, storedDocument(), "UC-2 main 6/G3: mode, collapse, focus and return save nothing");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.evaluate("window.scrollTo(0, 0)");
+            assertDraftTaskGeometry(draftTaskGeometry(cdp), 1280, 800);
+            assertTrue(draftDecisionReachable(cdp), "UC-2 G2: 1280px solve/discard controls are reachable in the task scrollport");
+            captureWorkbenchScreenshot(cdp, "uc2-draft-1280.png");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1279)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom && document.querySelector('#workbench-task-area').getBoundingClientRect().top >= document.querySelector('#workbench-inspector').getBoundingClientRect().bottom && document.documentElement.scrollWidth <= innerWidth"),
+                    "UC-2 G6: at 1279px the inspector stacks between canvas and wide task area without page-level horizontal scroll");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            jdbc.sql("UPDATE workspace_aggregate SET version=version+1 WHERE workspace_id=1").update();
+            String beforeStale = storedDocument();
+            cdp.evaluate("document.querySelector('.repair-entry').open=true; document.querySelector('#stage-repair-form').requestSubmit()");
+            cdp.awaitText("The latest repair change was not durably saved", Duration.ofSeconds(10));
+            assertEquals(beforeStale, storedDocument(), "UC-2 ext 2b/7a: stale revision preserves the last durable Draft/version");
+            assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft').disabled"));
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 701)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", false));
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom && document.querySelector('#workbench-task-area #stage-repair-form') && document.documentElement.scrollWidth <= innerWidth"),
+                    "UC-2 G6: intermediate width keeps a wide task area and below-canvas inspector");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 700)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(10));
+            assertTrue(browserTrue(cdp, "!document.querySelector('#start-repair-form, #stage-repair-form, #apply-pin, #preview-bulk, #solve-draft, #discard-draft, #workbench-task-area')"),
+                    "UC-2 ext 1b: 700 px is already read-only");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 390)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", true));
+            cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(10));
+            assertTrue(browserTrue(cdp, "!document.querySelector('#start-repair-form, #stage-repair-form, #apply-pin, #preview-bulk, #solve-draft, #discard-draft, #workbench-task-area')"),
+                    "UC-2 ext 1b: narrow Draft is truly read-only");
+            assertEquals(beforeStale, storedDocument());
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.command("Page.reload", JSON.createObjectNode());
+            awaitBrowserCondition(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#workbench-task-area') && !document.querySelector('#workbench-task-area').hidden");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#lesson-panel-title') && document.querySelector('#room-filter').value === '' && document.querySelector('#lesson-search').value === ''"));
+            assertEquals(beforeStale, storedDocument(), "UC-2 ext 6b: reload retains only durable Draft and range preference");
+            cdp.evaluate("document.querySelector('#confirm-discard-draft').click(); document.querySelector('#discard-draft').click()");
+            cdp.awaitText("Start a protected repair", Duration.ofSeconds(10));
+            assertEquals("ACCEPTED_BASELINE", storedLifecycle());
+            assertEquals(baseline, storedWorkspaceDocument().path("acceptedBaseline"));
+            assertFalse(storedWorkspaceDocument().has("repairDraft"));
+
+            cdp.evaluate("document.querySelector('#open-repair-setup').click(); document.querySelector('#repair-resource-type').value='ROOM'; document.querySelector('#repair-resource-type').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#repair-resource').value='room-99'; document.querySelector('[name=period][value=period-0]').checked=true; document.querySelector('#start-repair-form').requestSubmit()");
+            cdp.awaitText("This rule currently conflicts with no accepted assignment", Duration.ofSeconds(15));
+            JsonNode room = assertDraftUnchangedBaseline(baseline);
+            assertEquals("ROOM", room.path("intent").path("changes").get(0).path("resourceType").stringValue());
+            assertEquals("room-99", room.path("intent").path("changes").get(0).path("resourceId").stringValue());
+            assertTrue(room.path("directEffectLessonIds").isEmpty());
+            assertTrue(room.path("readyToSolve").booleanValue());
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+    }
+
+    private static JsonNode draftTaskGeometry(Cdp cdp) throws Exception {
+        return cdp.evaluateValue("""
+                (() => { const task=document.querySelector('#workbench-task-area');
+                  const canvas=document.querySelector('.canvas-region'); const wrap=document.querySelector('.matrix-wrap');
+                  const inspector=document.querySelector('#workbench-inspector');
+                  return {taskHeight:task.getBoundingClientRect().height, taskTop:task.getBoundingClientRect().top,
+                    taskBottom:task.getBoundingClientRect().bottom,
+                    canvasBottom:canvas.getBoundingClientRect().bottom, inspectorLeft:inspector.getBoundingClientRect().left,
+                    canvasRight:canvas.getBoundingClientRect().right, row:document.querySelector('.week-matrix tbody tr').getBoundingClientRect().height,
+                    heading:document.querySelector('.week-matrix thead').getBoundingClientRect().height,
+                    visible:wrap.clientHeight, page:document.documentElement.scrollWidth, viewport:innerWidth,
+                    taskRight:task.getBoundingClientRect().right, shellRight:document.querySelector('.workspace-card').getBoundingClientRect().right,
+                    taskScroll:task.scrollHeight > task.clientHeight}; })()
+                """).path("result").path("result").path("value");
+    }
+
+    private static void assertDraftTaskGeometry(JsonNode geometry, int width, int height) {
+        assertTrue(geometry.path("taskHeight").doubleValue() <= height * .35, "UC-2 G2: task height: " + geometry);
+        assertTrue(geometry.path("taskBottom").doubleValue() <= height, "UC-2 G2: task and canvas remain concurrently visible: " + geometry);
+        assertTrue(geometry.path("taskTop").doubleValue() >= geometry.path("canvasBottom").doubleValue(), "UC-2 G2: task cannot overlay canvas: " + geometry);
+        assertTrue(geometry.path("inspectorLeft").doubleValue() >= geometry.path("canvasRight").doubleValue(), "UC-2 G2: inspector remains beside canvas: " + geometry);
+        assertTrue(geometry.path("visible").doubleValue() >= geometry.path("heading").doubleValue() + geometry.path("row").doubleValue(),
+                "UC-2 G2: time heading and one complete class row remain visible: " + geometry);
+        assertTrue(geometry.path("page").doubleValue() <= width + 1, "UC-2 G2: no page-level horizontal scroll: " + geometry);
+        assertTrue(geometry.path("taskRight").doubleValue() <= geometry.path("shellRight").doubleValue(), "UC-2 G2: task remains within shell: " + geometry);
+        assertTrue(geometry.path("taskScroll").booleanValue(), "UC-2 G2: long task content scrolls independently: " + geometry);
+    }
+
+    private static boolean draftDecisionReachable(Cdp cdp) throws Exception {
+        return browserTrue(cdp, """
+                (() => { const task=document.querySelector('#workbench-task-area'); task.scrollTop=task.scrollHeight;
+                  const bounds=task.getBoundingClientRect();
+                  return ['#solve-draft', '#discard-draft'].every(selector => {
+                    const action=document.querySelector(selector).getBoundingClientRect();
+                    return action.top >= bounds.top && action.bottom <= bounds.bottom && action.bottom <= innerHeight;
+                  }); })()
+                """);
+    }
+
+    @Test
     @DisplayName("UC-2 main/extensions/G1-G8/RULE-14: real browser traces exact subject teaching and teacher load without mutation")
     void tracesSubjectTeachingAndTeacherLoadInRealBrowser() throws Exception {
         storeAccepted(acceptedDocument(false));
@@ -1627,6 +1871,9 @@ class WorkspaceBrowserIT {
             assertTrue(roomDraft.contains("Accepted baseline remains current"));
             assertTrue(roomDraft.contains("Directly affected lessons\n0"));
             assertTrue(roomDraft.contains("Attempt-scoped pins\n0"));
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-science-1]').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#draft-selected-protection')?.textContent.includes('Policy room lock') && !document.querySelector('[data-lesson-id=lesson-science-1]')?.textContent.includes('Policy room lock')"),
+                    "Workbench layout UC-2 G4: an accepted prior attempt-scoped lock is not mislabeled as persistent policy");
             cdp.evaluate("document.querySelector('#solve-draft').click()");
             String secondProposal = cdp.awaitText("Repair proposal · feasible", Duration.ofSeconds(50));
             assertTrue(secondProposal.contains("Accepted baseline remains current"));
@@ -1717,7 +1964,7 @@ class WorkspaceBrowserIT {
             cdp.awaitText("Repair draft · not current", Duration.ofSeconds(15));
             assertEquals(draft, assertDraftUnchangedBaseline(baseline));
             assertEquals("INTERRUPTED", storedWorkspaceDocument().path("lastRun").path("code").stringValue());
-            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector .conflict-list')?.textContent.includes('Repair generation was interrupted.') && document.querySelector('#utilities')?.textContent.includes('Repair generation was interrupted.') && !document.querySelector('#utilities').open"));
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-task-area .conflict-list')?.textContent.includes('Repair generation was interrupted.') && document.querySelector('#utilities')?.textContent.includes('Repair generation was interrupted.') && !document.querySelector('#utilities').open"));
             assertTrue(browserTrue(cdp, "document.querySelector('#solve-draft') !== null && !document.querySelector('#cancel-run')"));
             processes.reset();
             assertEquals(draft, assertDraftUnchangedBaseline(baseline));
@@ -1740,7 +1987,7 @@ class WorkspaceBrowserIT {
             cdp.evaluate("document.querySelector('#solve-draft').click()");
             cdp.awaitText("Retry unchanged draft for two minutes", Duration.ofSeconds(15));
             assertEquals(draft, assertDraftUnchangedBaseline(baseline));
-            assertTrue(browserTrue(cdp, "document.querySelector('#utilities')?.open && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#workbench-inspector .conflict-list')?.textContent.includes('hard.teacher-period') && document.querySelector('#utilities')?.textContent.includes('2 matches')"));
+            assertTrue(browserTrue(cdp, "document.querySelector('#utilities')?.open && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#workbench-task-area .conflict-list')?.textContent.includes('hard.teacher-period') && document.querySelector('#utilities')?.textContent.includes('2 matches')"));
             cdp.evaluate("document.querySelector('#utilities').open=true; document.querySelector('#utilities [data-diagnostic-id=lesson-math-1]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Mathematics 1'"));
             cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
@@ -1911,7 +2158,7 @@ class WorkspaceBrowserIT {
             cdp.awaitText("School Kernel returned an unverified repair result.", Duration.ofSeconds(20));
             assertEquals(draft, assertDraftUnchangedBaseline(baseline));
             assertEquals("FAILED", storedWorkspaceDocument().path("lastRun").path("status").stringValue());
-            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector .conflict-list')?.textContent.includes('unverified repair result') && document.querySelector('#utilities')?.textContent.includes('unverified repair result') && !document.querySelector('[data-mode=PROPOSAL]')"));
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-task-area .conflict-list')?.textContent.includes('unverified repair result') && document.querySelector('#utilities')?.textContent.includes('unverified repair result') && !document.querySelector('[data-mode=PROPOSAL]')"));
             assertEquals(expectedMondayIds, renderedLessonIds(cdp));
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
@@ -2392,6 +2639,8 @@ class WorkspaceBrowserIT {
                 assertEquals(draft, after.path("repairDraft"));
                 assertFalse(after.has("proposal"));
                 assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=PROPOSAL], #accept-repair')"));
+                assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-task-area')?.hidden && document.querySelector('#workbench-task-area #stage-repair-form') && document.querySelector('#workbench-task-area').textContent.includes('Teacher Sixteen') && document.querySelector('#workbench-task-area').textContent.includes('Attempt-scoped pins') && !document.querySelector('#workbench-inspector #stage-repair-form')"),
+                        "Workbench layout UC-2 ext 1c: verified proposal revision reopens the same saved Draft in the wide task area");
             }
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
