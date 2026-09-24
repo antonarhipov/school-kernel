@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.HexFormat;
@@ -248,8 +249,8 @@ class WorkspaceBrowserIT {
 
             cdp.evaluate("document.querySelector('#confirm-accept').click(); document.querySelector('#accept-proposal').click()");
             String accepted = cdp.awaitText("Accepted baseline", Duration.ofSeconds(30));
-            assertTrue(accepted.contains("Accepted timetable · Demo School"));
-            assertTrue(accepted.contains("current accepted timetable"));
+            assertTrue(accepted.contains("Demo School"));
+            assertTrue(accepted.contains("Current · accepted"));
             assertTrue(accepted.contains("Timetable details"));
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
@@ -397,6 +398,8 @@ class WorkspaceBrowserIT {
         try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
             cdp.command("Page.enable", JSON.createObjectNode());
             cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1600)
+                    .put("height", 900).put("deviceScaleFactor", 1).put("mobile", false));
             cdp.command("Page.navigate", object("url", page));
             String current = cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
             assertTrue(current.contains("Scale School"));
@@ -480,6 +483,176 @@ class WorkspaceBrowserIT {
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
         assertEquals(before, storedDocument(), "UC-1 workbench presentation and failed export must preserve exact durable state");
+    }
+
+    @Test
+    @DisplayName("Workbench layout UC-1: compact complete Current, honest Filters, inspector and read-only breakpoints")
+    void inspectsCompactWideCurrentWorkbenchInRealBrowser() throws Exception {
+        ObjectNode document = investigationScaleDocument();
+        storeAccepted(document);
+        String before = storedDocument();
+        int debuggingPort = startBrowser();
+        String page = "http://localhost:" + port + "/workspace/";
+        String target = HttpClient.newHttpClient().send(
+                        HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + debuggingPort
+                                        + "/json/new?" + URLEncoder.encode(page, StandardCharsets.UTF_8)))
+                                .PUT(HttpRequest.BodyPublishers.noBody()).build(),
+                        HttpResponse.BodyHandlers.ofString()).body();
+        try (Cdp cdp = new Cdp(JSON.readTree(target).path("webSocketDebuggerUrl").stringValue())) {
+            cdp.command("Page.enable", JSON.createObjectNode());
+            cdp.command("Runtime.enable", JSON.createObjectNode());
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1600)
+                    .put("height", 900).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.command("Page.navigate", object("url", page));
+            assertTrue(cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20)).contains("Scale School"));
+            Set<String> represented = renderedLessonIds(cdp);
+            assertEquals(1_000, represented.size(), "UC-1 main 2: every verified accepted lesson is represented");
+            for (int index = 0; index < 1_000; index++) {
+                assertTrue(represented.contains("lesson-" + index), "missing lesson-" + index);
+            }
+            JsonNode wide = cdp.evaluateValue("""
+                    (() => {
+                      const shell = document.querySelector('.workspace-card');
+                      const wrap = document.querySelector('.week-wrap');
+                      const slot = document.querySelector('.week-slot:has([data-lesson-id=lesson-1])');
+                      const inspector = document.querySelector('#workbench-inspector');
+                      return {shell:shell.getBoundingClientRect().width, wrap:wrap.clientWidth,
+                        content:wrap.scrollWidth, slot:slot.getBoundingClientRect().height,
+                        inspector:inspector.getBoundingClientRect().width,
+                        days:document.querySelectorAll('.week-matrix thead th').length - 1,
+                        empty:document.querySelectorAll('.week-slot .empty-cell').length,
+                        filters:document.querySelector('#filters').open,
+                        utilities:document.querySelector('#utilities').open,
+                        task:document.querySelector('#workbench-task-area').hidden,
+                        toolbarOutside:!wrap.contains(document.querySelector('.inspection-toolbar'))};
+                    })()
+                    """).path("result").path("result").path("value");
+            assertTrue(wide.path("shell").doubleValue() >= 1520, "UC-1 G1: shell occupies at least 95% of 1600 px");
+            assertTrue(wide.path("content").doubleValue() <= wide.path("wrap").doubleValue() + 1,
+                    "UC-1 G1: five weekdays fit with inspector open");
+            assertTrue(wide.path("slot").doubleValue() <= 36, "UC-1 G2: ordinary occupied Week slot is compact");
+            assertEquals(5, wide.path("days").intValue());
+            assertTrue(browserTrue(cdp, "(() => { const slots=[...document.querySelectorAll('.week-matrix tbody tr:first-child td:first-of-type .week-period')]; return slots.length === 12 && slots[0].textContent.startsWith('1 ·') && slots[11].textContent.startsWith('12 ·') && slots[0].title === 'Declared period 0'; })()"),
+                    "UC-1 G2/G3: Week keeps authoritative period names and visible declared order");
+            assertTrue(wide.path("empty").intValue() > 0, "UC-1 ext 2a: declared empty positions are retained");
+            assertTrue(wide.path("inspector").doubleValue() >= 200);
+            assertFalse(wide.path("filters").booleanValue());
+            assertFalse(wide.path("utilities").booleanValue());
+            assertTrue(wide.path("task").booleanValue(), "Current task area starts closed");
+            assertTrue(wide.path("toolbarOutside").booleanValue());
+            cdp.evaluate("""
+                    window.__inspectionMutations = [];
+                    const originalFetch = window.fetch.bind(window);
+                    window.fetch = (input, options = {}) => {
+                      const method = (options.method || input?.method || 'GET').toUpperCase();
+                      if (method !== 'GET' && method !== 'HEAD') window.__inspectionMutations.push(method);
+                      return originalFetch(input, options);
+                    };
+                    """);
+            captureWorkbenchScreenshot(cdp, "uc1-current-1600.png");
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
+            captureWorkbenchScreenshot(cdp, "uc1-current-day-1600.png");
+            JsonNode ordinaryDay = cdp.evaluateValue("document.querySelector('[data-lesson-id=lesson-60]').closest('td').getBoundingClientRect().height")
+                    .path("result").path("result").path("value");
+            assertTrue(ordinaryDay.doubleValue() <= 60,
+                    "UC-1 G2: ordinary occupied Day cell is compact: " + ordinaryDay);
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click()");
+
+            cdp.evaluate("document.querySelector('#lesson-search').value='Sixteen'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('#subject-investigation').value='subject-0'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('#teacher-investigation').value='teacher-16'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "document.querySelector('#filter-title').textContent === 'Complete school population' && document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 1000' && document.querySelector('.teacher-ribbon').textContent.includes('Unavailable')"),
+                    "UC-1 main 3-4: search and highlights do not narrow and availability is visible");
+            cdp.evaluate("document.querySelector('#filters').open=true; document.querySelector('#cohort-filter').value='cohort-16'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 40' && document.querySelector('#filter-title').textContent === 'Filtered whole-school matrix'"),
+                    "UC-1 main 4: explicit class narrowing intersects with the highlighted subject and teacher only when requested");
+            cdp.evaluate("document.querySelector('#room-filter').value='room-99'; document.querySelector('#room-filter').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#filters').open=false");
+            assertTrue(browserTrue(cdp, "document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 0' && !document.querySelector('#no-matches').hidden && document.querySelectorAll('.week-matrix tbody tr').length === 60 && !document.querySelector('#clear-filters').hidden && document.querySelector('#active-criteria').textContent.includes('Room: Room 99')"),
+                    "UC-1 ext 4a: zero matches retain declared time structure and visible closed-filter summary");
+            cdp.evaluate("document.querySelector('#clear-filters').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 1000' && document.querySelector('#lesson-search').value === 'Sixteen' && document.querySelector('#subject-investigation').value === 'subject-0' && document.querySelector('#teacher-investigation').value === 'teacher-16'"),
+                    "UC-1 main 4: clearing explicit narrowing retains search and highlights");
+
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title').textContent === 'Declared lesson 960' && document.querySelector('#workbench-inspector').textContent.includes('Class Sixteen with a deliberately long authoritative display name') && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-label').includes('Monday · Declared period 0 · lesson-960')"),
+                    "UC-1 main 6: inspector and accessible name retain authoritative full details and identity");
+            cdp.evaluate("document.querySelector('[data-open-focus=teacherId]').click()");
+            cdp.awaitText("Teacher schedule · Teacher Sixteen", Duration.ofSeconds(5));
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-search').value === 'Sixteen'"),
+                    "UC-1 main 5-6: focused return restores selection and investigation");
+            cdp.evaluate("document.querySelector('#toggle-inspector').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector').hidden && document.querySelector('#inspector-summary').textContent.includes('Declared lesson 960')"));
+            cdp.evaluate("document.querySelector('#reopen-inspector').click(); document.querySelector('#open-repair-setup').click()");
+            assertEquals(before, storedDocument(), "UC-1 ext 5a: merely opening repair setup writes nothing");
+            cdp.evaluate("document.querySelector('#close-repair-setup').click()");
+            assertEquals(before, storedDocument(), "UC-1 ext 5a: closing unstaged setup writes nothing");
+            assertTrue(browserTrue(cdp, "window.__inspectionMutations.length === 0"),
+                    "UC-1 G4/RULE-14: inspection and unstaged repair setup issue no mutating request");
+
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.evaluate("document.querySelector('#open-repair-setup').click()");
+            JsonNode medium = cdp.evaluateValue("""
+                    (() => { const wrap=document.querySelector('.matrix-wrap');
+                      const inspector=document.querySelector('#workbench-inspector');
+                      const task=document.querySelector('#workbench-task-area');
+                      return {page:document.documentElement.scrollWidth, viewport:innerWidth,
+                        taskHeight:task.getBoundingClientRect().height, taskTop:task.getBoundingClientRect().top,
+                        matrixBottom:wrap.getBoundingClientRect().bottom,
+                        inspectorLeft:inspector.getBoundingClientRect().left,
+                        canvasRight:document.querySelector('.canvas-region').getBoundingClientRect().right,
+                        row:document.querySelector('.week-matrix tbody tr').getBoundingClientRect().height,
+                        visible:wrap.clientHeight}; })()
+                    """).path("result").path("result").path("value");
+            captureWorkbenchScreenshot(cdp, "uc1-current-1280.png");
+            assertTrue(medium.path("page").doubleValue() <= medium.path("viewport").doubleValue() + 1,
+                    "UC-1 G1: 1280 page has no horizontal scrolling");
+            assertTrue(medium.path("inspectorLeft").doubleValue() >= medium.path("canvasRight").doubleValue(),
+                    "UC-1 G1: inspector stays beside the canvas at 1280");
+            assertTrue(medium.path("taskHeight").doubleValue() <= 280,
+                    "UC-1 G1: task area occupies no more than 35% of 800 px");
+            assertTrue(medium.path("taskTop").doubleValue() >= medium.path("matrixBottom").doubleValue(),
+                    "UC-1 G1: task area does not overlay the canvas");
+            assertTrue(medium.path("visible").doubleValue() >= medium.path("row").doubleValue(),
+                    "UC-1 G1: an entire class row remains visible with setup open: " + medium);
+
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1279)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.command("Page.reload", JSON.createObjectNode());
+            awaitBrowserCondition(cdp, "document.querySelector('.week-wrap') !== null");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-inspector').hidden && document.querySelector('#inspector-summary').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom && !document.querySelector('#filters').open && !document.querySelector('#utilities').open && document.querySelector('#workbench-task-area').hidden && !document.querySelector('#lesson-panel-title')"),
+                    "UC-1 ext 3a/G1: intermediate reload resets presentation state and stacks collapsed inspector below canvas");
+            cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-inspector').hidden && document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom"),
+                    "UC-1 main 6: selection opens below-canvas inspector at 1279");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 701)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", false));
+            assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-inspector').hidden && document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom"),
+                    "UC-1 G1: the 701 px inspector is below the canvas");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 700)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", false));
+            assertTrue(cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(5)).contains("Accepted baseline"));
+            assertFalse(browserTrue(cdp, "document.querySelector('#open-repair-setup, #start-repair-form, #workbench-modes, .matrix-wrap')"),
+                    "UC-1 ext 1b: 700 px is read-only and does not claim the desktop canvas");
+            assertEquals(1, cdp.evaluateValue("document.querySelectorAll('.narrow-banner').length")
+                    .path("result").path("result").path("value").intValue(),
+                    "UC-1 ext 1b: narrow Current has one clear read-only notice");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 390)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", true));
+            assertTrue(cdp.awaitText("Read-only focused schedule", Duration.ofSeconds(5)).contains("Accepted baseline"));
+            captureWorkbenchScreenshot(cdp, "uc1-current-390.png");
+            assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
+        }
+        assertEquals(before, storedDocument(), "UC-1 G4/minimal: every presentation action leaves the exact durable document unchanged");
+    }
+
+    private static void captureWorkbenchScreenshot(Cdp cdp, String filename) throws Exception {
+        Path directory = Path.of("target/workbench-layout");
+        Files.createDirectories(directory);
+        String data = cdp.command("Page.captureScreenshot", JSON.createObjectNode().put("format", "png"))
+                .path("result").path("data").stringValue();
+        Files.write(directory.resolve(filename), Base64.getDecoder().decode(data));
     }
 
     @Test
@@ -1030,7 +1203,8 @@ class WorkspaceBrowserIT {
             JsonNode requestsBeforeMode = cdp.evaluateValue("performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length")
                     .path("result").path("result").path("value");
             cdp.evaluate("document.querySelector('#workbench-modes [data-mode=CURRENT]').click()");
-            assertTrue(cdp.awaitText("Complete school population", Duration.ofSeconds(5)).contains("Repair draft · not current · Current"));
+            String currentView = cdp.awaitText("Complete school population", Duration.ofSeconds(5));
+            assertTrue(currentView.contains("Repair draft · not current") && currentView.contains("Current · accepted"));
             assertTrue(cdp.evaluateValue("document.querySelector('#workbench-modes [data-mode=CURRENT]').getAttribute('aria-pressed') === 'true' && document.querySelector('#accepted-view .week-matrix') !== null && document.querySelector('#workbench-inspector #lesson-panel-title')?.textContent === 'Mathematics 1' && !document.querySelector('#apply-pin')")
                     .path("result").path("result").path("value").booleanValue(), "Current from Draft shows exact accepted selection without draft mutation controls");
             cdp.evaluate("document.querySelector('#cohort-filter').value='cohort-7a'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true}))");
@@ -2663,6 +2837,10 @@ class WorkspaceBrowserIT {
         manifest.put("definitionSchemaVersion", 1).put("resultSchemaVersion", 1).put("catalogVersion", 1)
                 .put("schoolId", "opaque-scale-school").put("inputRevision", revision)
                 .put("timetableRevision", timetableRevision).putArray("locks");
+        KernelVerifier.Verification verified = verifier.verify(new ImportDocuments(definition, result, null,
+                ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+        assertEquals(revision, verified.definitionRevision(), "normative accepted definition must pass the packaged verifier");
+        assertEquals(timetableRevision, verified.timetableRevision(), "normative accepted result must pass the packaged verifier");
         return document;
     }
 
@@ -2831,6 +3009,7 @@ class WorkspaceBrowserIT {
                 chrome.toString(),
                 "--headless",
                 "--disable-gpu",
+                "--window-size=1600,900",
                 "--no-first-run",
                 "--no-default-browser-check",
                 "--remote-debugging-port=0",

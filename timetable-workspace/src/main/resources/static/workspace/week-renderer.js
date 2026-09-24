@@ -3,7 +3,7 @@ export function renderWeekMatrix({ cohorts, weekdays, assignmentsByCell, periods
   const rows = cohorts.map(cohort => `<tr><th scope="row"><span>${escapeHtml(entityName(cohort))}</span><small>${escapeHtml(cohort.id)}</small></th>${weekdays.map(day => {
     const slots = periodsForDay(day).map(period => {
       const items = assignmentsByCell.get(`${cohort.id}\u0000${period.id}`) || [];
-      return `<div class="week-slot"><span class="week-period">${escapeHtml(period.displayName)}</span>${items.length ? items.map(lessonMarkup).join('') : `<span class="empty-cell">${labels.emptyCell}</span>`}</div>`;
+      return `<div class="week-slot"><span class="week-period" title="${escapeAttribute(periodLabel(period))}">${escapeHtml(`${period.order} · ${period.displayName}`)}</span>${items.length ? items.map(lessonMarkup).join('') : `<span class="empty-cell">${labels.emptyCell}</span>`}</div>`;
     }).join('');
     return `<td data-weekday="${escapeAttribute(day)}">${slots}</td>`;
   }).join('')}</tr>`).join('');

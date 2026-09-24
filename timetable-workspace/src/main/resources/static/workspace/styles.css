@@ -266,3 +266,92 @@ code { overflow-wrap: anywhere; }
   .review-mode .review-categories, .review-mode .changed-lessons, .review-mode .confirmation, .review-mode > .actions { display: none; }
   .review-mode #workbench-inspector { display: none; }
 }
+
+/* The accepted workbench has a wide, compact canvas. Import and initial planning keep their own layout. */
+body.operational > header, body.operational > main { width: calc(100% - 24px); max-width: none; }
+body.operational > header { display: flex; align-items: baseline; gap: 12px; padding: 8px 2px 6px; }
+body.operational > header h1 { margin: 0; font-size: 1rem; letter-spacing: -.02em; }
+body.operational > header .eyebrow { font-size: .64rem; }
+body.operational > header .current-label { display: none; }
+body.operational .workspace-card { padding: 10px 12px; margin-bottom: 0; }
+body.operational .accepted-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 10px; }
+body.operational .school-identity { min-width: 0; }
+body.operational .school-identity h2 { display: inline; margin: 0 10px 0 0; font-size: 1.18rem; }
+body.operational .school-identity .state { padding: 3px 7px; font-size: .7rem; }
+body.operational .school-identity .lifecycle-label { margin-left: 7px; color: #4d5b56; font-size: .75rem; font-weight: 700; }
+body.operational .school-identity .revision { margin: 3px 0 0; font-size: .68rem; }
+body.operational #workbench-modes { margin: 0; }
+body.operational #workbench-modes button { padding: 7px 9px; font-size: .77rem; }
+body.operational .header-utilities { justify-self: end; }
+body.operational .utility-disclosure { margin: 0; }
+body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .76rem; }
+.current-mode .inspection-toolbar { grid-template-columns: auto minmax(115px, .65fr) minmax(170px, 1.4fr) minmax(150px, 1fr) minmax(150px, 1fr); gap: 7px; padding: 7px 9px; margin-top: 7px; }
+.current-mode .inspection-toolbar label { min-width: 0; }
+.current-mode .inspection-toolbar input, .current-mode .inspection-toolbar select { min-height: 31px; padding: 4px 7px; font-size: .78rem; }
+.current-mode .inspection-toolbar .search-control { grid-column: auto; }
+.current-mode .inspection-toolbar .range-control button { min-height: 31px; padding: 5px 7px; }
+.current-mode .inspection-toolbar .day-step { min-height: 30px; padding: 5px 8px; font-size: .72rem; }
+.current-mode .filters-disclosure { margin-top: 5px; border: 1px solid #d9dfdb; border-radius: 8px; }
+.current-mode .filters-disclosure > summary { width: fit-content; cursor: pointer; padding: 5px 10px; font-size: .78rem; font-weight: 750; }
+.current-mode .filter-controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px 10px; align-items: end; padding: 5px 9px 9px; border-top: 1px solid #e4e9e5; }
+.current-mode .filter-controls label { min-width: 0; margin: 0; font-size: .75rem; }
+.current-mode .filter-controls select { width: 100%; min-height: 31px; padding: 4px 7px; background: white; border: 1px solid #bfcac4; border-radius: 8px; font: inherit; }
+.current-mode .filter-controls .match-mode { display: flex; align-items: center; gap: 5px; }
+.current-mode .filter-controls button { padding: 6px 8px; font-size: .72rem; }
+.current-mode .filter-status { gap: 4px 10px; min-height: 0; margin: 5px 0 2px; font-size: .74rem; }
+.current-mode .filter-status .criteria span { padding: 2px 5px; }
+.current-mode .investigation-summary { margin: 2px 0 3px; gap: 5px; font-size: .7rem; }
+.current-mode .investigation-summary span { padding: 2px 5px; }
+.current-mode .teacher-ribbon { margin: 3px 0; padding: 4px 0; }
+.current-mode .teacher-ribbon h4 { font-size: .74rem; }
+.current-mode .teacher-ribbon ul { flex-wrap: nowrap; overflow-x: auto; margin: 3px 0 0; }
+.current-mode .teacher-ribbon li { min-width: 105px; padding: 3px 5px; }
+.current-mode #inspection-notice:empty { display: none; }
+.current-mode .workbench-layout { grid-template-columns: minmax(0, 1fr) 240px; gap: 9px; }
+.current-mode .workbench-layout.inspector-collapsed { grid-template-columns: minmax(0, 1fr); }
+.current-mode #workbench-inspector { width: 240px; max-height: min(66vh, 620px); padding: 8px; overflow: auto; }
+.current-mode:has(.task-area:not([hidden])) #workbench-inspector { max-height: calc(100vh - 470px); }
+.current-mode #workbench-inspector > button { padding: 6px 9px; font-size: .75rem; }
+.current-mode #workbench-inspector .lesson-panel { padding: 8px; margin-top: 7px; }
+.current-mode #workbench-inspector .lesson-panel dl div { padding: 5px; }
+.current-mode .matrix-wrap { max-height: calc(100vh - 265px); }
+.current-mode:has(.task-area:not([hidden])) .matrix-wrap { max-height: calc(100vh - 470px); }
+.current-mode .week-matrix { min-width: 1260px; }
+.current-mode .week-matrix thead th:first-child, .current-mode .week-matrix tbody th { width: 140px; }
+.current-mode .week-matrix td { min-width: 190px; padding: 2px 4px; }
+.current-mode .week-slot { min-height: 25px; padding: 2px 0 2px 52px; }
+.current-mode .week-period { top: 6px; width: 48px; font-size: .59rem; }
+.current-mode .week-lesson { display: flex; flex-direction: row; align-items: center; gap: 2px; min-height: 20px; padding: 2px 4px; line-height: 1.05; }
+.current-mode .week-lesson strong { flex: 1; min-width: 0; font-size: .68rem; }
+.current-mode .week-lesson .week-room { flex: 0 1 auto; align-self: center; max-width: 48px; font-size: .62rem; }
+.current-mode .week-lesson em { flex: none; max-width: 100%; margin: 0; padding: 1px 2px; font-size: .55rem; white-space: nowrap; }
+.current-mode .matrix:not(.week-matrix) td { height: 58px; padding: 3px; }
+.current-mode .matrix:not(.week-matrix) .lesson-cell { min-height: 44px; padding: 4px 6px; gap: 1px; line-height: 1.05; }
+.current-mode .matrix:not(.week-matrix) .lesson-cell strong { font-size: .77rem; }
+.current-mode .task-launch { display: flex; justify-content: end; margin: 5px 0; }
+.current-mode .task-launch button { padding: 5px 9px; font-size: .76rem; }
+.current-mode .task-area { max-height: 30vh; overflow: auto; margin-top: 5px; padding: 8px 12px; border: 1px solid #b9d5c5; border-radius: 10px; background: #f7fbf8; }
+.current-mode .task-area-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.current-mode .task-area-heading h3 { margin: 0; font-size: .95rem; }
+.current-mode .task-area-heading button { padding: 5px 9px; font-size: .74rem; }
+.current-mode .task-area .repair-entry { margin: 5px 0; padding: 6px 9px; }
+.current-mode .task-area .repair-entry > summary { font-size: .84rem; }
+.current-mode .task-area .period-choices { max-height: 120px; overflow: auto; }
+.current-mode .focused-entry { margin-top: 5px; padding-top: 5px; }
+.current-mode .focused-entry h3 { margin: 0; font-size: .85rem; }
+.current-mode .focused-entry button { padding: 5px 9px; font-size: .73rem; }
+
+@media (min-width: 701px) and (max-width: 1279px) {
+  .current-mode .workbench-layout, .current-mode .workbench-layout.inspector-collapsed { grid-template-columns: minmax(0, 1fr); }
+  .current-mode #workbench-inspector { width: 100%; max-height: 190px; }
+  .current-mode .inspection-toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .current-mode .inspection-toolbar .search-control { grid-column: auto; }
+  .current-mode .filter-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+  body.operational > header, body.operational > main { width: calc(100% - 20px); }
+  body.operational .accepted-heading { display: flex; flex-direction: column; align-items: start; }
+  .current-mode .filters-disclosure, .current-mode .filter-status, .current-mode .investigation-summary,
+  .current-mode .teacher-ribbon, .current-mode .task-launch, .current-mode .task-area { display: none; }
+}

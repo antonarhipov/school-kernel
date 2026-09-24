@@ -54,6 +54,7 @@ function render(snapshot) {
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
   const school = snapshot.workspace.school;
+  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL'].includes(snapshot.state));
   if (snapshot.state === 'EMPTY') {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
@@ -157,7 +158,7 @@ function renderModeNavigation() {
   const modes = { ACCEPTED_BASELINE: ['CURRENT'], REPAIR_DRAFT: ['CURRENT', 'DRAFT'],
     SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'] }[currentSnapshot.state];
   const labels = { CURRENT: M.modeCurrent, DRAFT: M.modeDraft, SOLVING: M.modeSolving, PROPOSAL: M.modeProposal };
-  stateCard.querySelector('.accepted-heading')?.insertAdjacentHTML('afterend', `<nav id="workbench-modes" aria-label="${M.presentationModes}">${modes.map(mode => `<button type="button" data-mode="${mode}" aria-pressed="${inspectionState.current().mode === mode}">${labels[mode]}</button>`).join('')}</nav>`);
+  stateCard.querySelector('.accepted-heading')?.insertAdjacentHTML('beforeend', `<nav id="workbench-modes" aria-label="${M.presentationModes}">${modes.map(mode => `<button type="button" data-mode="${mode}" aria-pressed="${inspectionState.current().mode === mode}">${labels[mode]}</button>`).join('')}</nav>`);
   stateCard.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
     if (!inspectionState.selectMode(button.dataset.mode).changed) return;
     if (button.dataset.mode !== 'PROPOSAL' && view.selectedLessonId && !acceptedModel.assignmentMap.has(view.selectedLessonId)) {
@@ -293,15 +294,12 @@ function setRange(range, day = view.day, manualDay = false) {
 }
 
 function renderAccepted(snapshot, schoolName) {
-  stateCard.className = 'card workspace-card compact-density';
+  stateCard.className = 'card workspace-card compact-density current-mode';
   const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
     SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal }[snapshot.state];
-  stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state accepted">✓ ${M.currentAccepted}</span><h2>${escapeHtml(schoolName)}</h2><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${view.narrow ? M.narrowNotice : M.desktopNotice}</p>${view.narrow ? '' : snapshot.state === 'ACCEPTED_BASELINE' ? exportAccepted(snapshot) : runUtilities(snapshot.workspace.lastRun)}</div></div>
-    <p class="accepted-context">${lifecycle} · ${M.modeCurrent}</p>
-    <p>${M.acceptedDetail} ${M.inspectionIntro}</p>
-    ${view.narrow || snapshot.state !== 'ACCEPTED_BASELINE' ? '' : startRepairForm()}<h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${lifecycle}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities">${view.narrow ? '' : snapshot.state === 'ACCEPTED_BASELINE' ? exportAccepted(snapshot) : runUtilities(snapshot.workspace.lastRun)}</div></div>
+    <h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
   bindUtilities();
-  bindStartRepair();
   if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
 }
 
@@ -342,7 +340,7 @@ async function downloadAccepted(event) {
 
 function startRepairForm() {
   const periods = acceptedModel.definition.periods;
-  return `<details class="repair-entry"><summary>${M.startRepair}</summary><form id="start-repair-form">
+  return `<details class="repair-entry" open><summary>${M.startRepair}</summary><form id="start-repair-form">
     <p>${M.startRepairIntro}</p><div class="repair-grid">
     ${selectControl('repair-resource-type', M.resourceType, [['TEACHER', M.teacher], ['ROOM', M.room]], 'TEACHER')}
     <label><span>${M.resource}</span><select id="repair-resource"></select></label></div>
@@ -489,33 +487,34 @@ function renderWholeSchool() {
   const narrowed = hasNarrowingCriteria();
   const investigation = investigationSummary();
   const matches = narrowed ? investigation.represented : displayed.assignments.filter(isInSelectedRange);
-  const visibleCohorts = narrowed ? model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id)) : model.definition.cohorts;
+  const visibleCohorts = narrowed && matches.length ? model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id)) : model.definition.cohorts;
   const mode = inspectionState.current().mode;
   const draftMode = currentSnapshot.state === 'REPAIR_DRAFT' && mode === 'DRAFT';
   const frozenMode = currentSnapshot.state === 'SOLVING_REPAIR' && mode !== 'CURRENT';
   const proposalDraft = currentSnapshot.state === 'REPAIR_PROPOSAL' && mode === 'DRAFT';
+  const repairSetupAvailable = currentSnapshot.state === 'ACCEPTED_BASELINE' && mode === 'CURRENT';
+  const repairSetupOpen = repairSetupAvailable && inspectionState.current().taskAreaOpen.CURRENT;
   host.innerHTML = `<div class="inspection-toolbar" aria-label="${M.wholeSchool}">
       <fieldset class="range-control"><legend>${M.rangeLabel}</legend><button type="button" data-range="WEEK" aria-pressed="${view.range === 'WEEK'}">${M.week}</button><button type="button" data-range="DAY" aria-pressed="${view.range === 'DAY'}">${M.dayView}</button></fieldset>
+      ${selectControl('weekday', M.weekdayLabel, model.weekdays.map(id => [id, M.days[id] || id]), view.day)}
       <label class="search-control"><span>${M.searchLabel}</span><input id="lesson-search" type="search" value="${escapeAttribute(view.search)}" placeholder="${M.searchPlaceholder}"></label>
-      ${view.range === 'DAY' ? `<button type="button" id="previous-day" class="secondary">${M.previousDay}</button>${selectControl('weekday', M.weekdayLabel, model.weekdays.map(id => [id, M.days[id] || id]), view.day)}<button type="button" id="next-day" class="secondary">${M.nextDay}</button>` : ''}
-      ${selectControl('cohort-filter', M.classFilter, [['', M.allClasses], ...options(model.definition.cohorts)], view.cohortId)}
-      ${selectControl('teacher-filter', M.teacherFilter, [['', M.allTeachers], ...options(model.definition.teachers)], view.teacherId)}
-      ${selectControl('room-filter', M.roomFilter, [['', M.allRooms], ...options(model.definition.rooms)], view.roomId)}
-      ${view.range === 'DAY' ? selectControl('period-focus', M.periodFocus, [['', M.allPeriods], ...dayPeriods.map(period => [period.id, periodLabel(period)])], view.periodId) : ''}
-      <button id="reset-view" type="button" class="secondary">${M.reset}</button></div>
-    <section class="investigation-panel" aria-labelledby="investigation-title"><h3 id="investigation-title">${M.investigate}</h3>
-      <div class="investigation-controls">
-        ${selectControl('subject-investigation', M.subjectInvestigation, [['', M.noSubjectSelected], ...options(model.definition.subjects)], view.subjectInvestigationId || '')}
+      ${selectControl('subject-investigation', M.subjectInvestigation, [['', M.noSubjectSelected], ...options(model.definition.subjects)], view.subjectInvestigationId || '')}
+      ${selectControl('teacher-investigation', M.teacherInvestigation, [['', M.noTeacherSelected], ...options(model.definition.teachers)], view.teacherInvestigationId || '')}
+      ${view.range === 'DAY' ? `<button type="button" id="previous-day" class="secondary day-step">${M.previousDay}</button><button type="button" id="next-day" class="secondary day-step">${M.nextDay}</button>` : ''}</div>
+    <details id="filters" class="filters-disclosure"${inspectionState.current().filtersOpen ? ' open' : ''}><summary>${M.filters}</summary>
+      <div class="filter-controls">
+        ${selectControl('cohort-filter', M.classFilter, [['', M.allClasses], ...options(model.definition.cohorts)], view.cohortId)}
+        ${selectControl('teacher-filter', M.teacherFilter, [['', M.allTeachers], ...options(model.definition.teachers)], view.teacherId)}
+        ${selectControl('room-filter', M.roomFilter, [['', M.allRooms], ...options(model.definition.rooms)], view.roomId)}
+        ${selectControl('period-focus', M.periodFocus, [['', M.allPeriods], ...(view.range === 'DAY' ? dayPeriods : model.definition.periods).map(period => [period.id, periodLabel(period)])], view.periodId)}
         <label class="match-mode"><input id="subject-only" type="checkbox"${view.subjectOnly ? ' checked' : ''}${view.subjectInvestigationId ? '' : ' disabled'}> <span>${M.showOnlyMatches}</span></label>
-        <button id="clear-subject" type="button" class="secondary"${view.subjectInvestigationId ? '' : ' disabled'}>${M.clearSubject}</button>
-        ${selectControl('teacher-investigation', M.teacherInvestigation, [['', M.noTeacherSelected], ...options(model.definition.teachers)], view.teacherInvestigationId || '')}
         <label class="match-mode"><input id="teacher-only" type="checkbox"${view.teacherOnly ? ' checked' : ''}${view.teacherInvestigationId ? '' : ' disabled'}> <span>${M.showOnlyMatches}</span></label>
+        <button id="clear-subject" type="button" class="secondary"${view.subjectInvestigationId ? '' : ' disabled'}>${M.clearSubject}</button>
         <button id="clear-teacher" type="button" class="secondary"${view.teacherInvestigationId ? '' : ' disabled'}>${M.clearTeacher}</button>
-      </div>
-      <div class="investigation-summary" role="status"><strong>${M.activeInvestigation}</strong><span>${M.subjectMatchCount(investigation.subjectCount)}</span><span>${M.teacherMatchCount(investigation.teacherCount)}</span><span>${M.dualMatchCount(investigation.dualCount)}</span><span id="represented-lesson-count">${M.representedLessonCount(investigation.represented.length)}</span></div>
-      ${renderTeacherRibbon(investigation.periods)}
-    </section>
-    <div class="filter-status" role="status"><strong id="filter-title">${narrowed ? M.filteredMatrix : M.completePopulation}</strong><span id="range-summary">${view.range === 'WEEK' ? M.weekRange : M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span id="search-summary"${view.search.trim() ? '' : ' hidden'}>${view.search.trim() ? M.searchMatchCount(investigation.searchCount) : ''}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span></div>
+      </div></details>
+    <div class="filter-status" role="status"><strong id="filter-title">${narrowed ? M.filteredMatrix : M.completePopulation}</strong><span id="range-summary">${view.range === 'WEEK' ? M.weekRange : M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${M.matrixSummary(visibleCohorts.length, model.definition.cohorts.length)}</span><span id="represented-lesson-count">${M.representedLessonCount(investigation.represented.length)}</span><span id="search-summary"${view.search.trim() ? '' : ' hidden'}>${view.search.trim() ? M.searchMatchCount(investigation.searchCount) : ''}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters}</span><button id="clear-filters" type="button" class="link-button"${narrowed ? '' : ' hidden'}>${M.clearFilters}</button><button id="reset-view" type="button" class="link-button">${M.reset}</button></div>
+    <div class="investigation-summary" role="status"><span>${M.subjectMatchCount(investigation.subjectCount)}</span><span>${M.teacherMatchCount(investigation.teacherCount)}</span><span>${M.dualMatchCount(investigation.dualCount)}</span></div>
+    ${renderTeacherRibbon(investigation.periods)}
     <p id="inspection-notice" class="notice" role="status"></p>
     ${displayed.assignments.length === 0 ? `<p class="empty-message" role="status">${M.emptyAccepted}</p>` : ''}
     <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
@@ -524,6 +523,7 @@ function renderWholeSchool() {
       <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</div>${draftMode ? draftContext() : frozenMode ? draftContext(true) : proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}${currentSnapshot.state === 'SOLVING_REPAIR' ? runContext() : ''}${proposalMode ? proposalContext() : ''}</aside>
       <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(reviewLessonName(view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
     </div>
+    ${repairSetupAvailable ? `<div class="task-launch"><button id="open-repair-setup" type="button" class="secondary" aria-expanded="${repairSetupOpen}" aria-controls="workbench-task-area"${repairSetupOpen ? ' hidden' : ''}>${M.startRepair}</button></div><section id="workbench-task-area" class="task-area" aria-label="${M.repairSetup}"${repairSetupOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairSetup}</h3><button id="close-repair-setup" type="button" class="secondary">${M.closeRepairSetup}</button></div>${startRepairForm()}</section>` : ''}
     <div class="focused-entry"><h3>${M.focusedSchedules}</h3><button type="button" data-open-focus="cohortId" class="secondary">${M.openClass}</button><button type="button" data-open-focus="teacherId" class="secondary">${M.openTeacher}</button><button type="button" data-open-focus="roomId" class="secondary">${M.openRoom}</button></div>`;
   if (view.range === 'WEEK') { bindInspectionControls(); if (draftMode) bindRepairControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
@@ -562,8 +562,8 @@ function weekLessonButton(item) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draft = repairLessonState(item.lessonId);
-  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), periodLabel(item.period), item.lessonId, ...cues.accessible, ...draft.accessible].join(' · ');
-  return `<button type="button" class="lesson-cell week-lesson${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${draft.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable, periodLabel(item.period), item.lessonId, ...cues.accessible, ...draft.accessible].join(' · ');
+  return `<button type="button" class="lesson-cell week-lesson${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${draft.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${cues.weekMarkup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function matrix(cohorts, periods, assignmentsByCell, filtered) {
@@ -739,6 +739,19 @@ function bindInspectionControls() {
   const rerender = () => renderWholeSchool();
   document.querySelector('#toggle-inspector')?.addEventListener('click', () => toggleInspector(false));
   document.querySelector('#reopen-inspector')?.addEventListener('click', () => toggleInspector(true));
+  document.querySelector('#filters')?.addEventListener('toggle', event => inspectionState.setFiltersOpen(event.currentTarget.open));
+  document.querySelector('#open-repair-setup')?.addEventListener('click', () => {
+    syncInspectionState(inspectionState.setTaskAreaOpen('CURRENT', true).state);
+    document.querySelector('#workbench-task-area').hidden = false;
+    document.querySelector('#open-repair-setup').hidden = true;
+    document.querySelector('#close-repair-setup').focus();
+  });
+  document.querySelector('#close-repair-setup')?.addEventListener('click', () => {
+    syncInspectionState(inspectionState.setTaskAreaOpen('CURRENT', false).state);
+    document.querySelector('#workbench-task-area').hidden = true;
+    document.querySelector('#open-repair-setup').hidden = false;
+    document.querySelector('#open-repair-setup').focus();
+  });
   document.querySelector('#lesson-search').addEventListener('input', event => {
     if (inspectionState) syncInspectionState(inspectionState.setSearch(event.target.value).state); else view.search = event.target.value;
     applyFiltersInPlace();
@@ -778,14 +791,19 @@ function bindInspectionControls() {
     switchWholeSchoolDay(acceptedModel.weekdays[(index + 1) % acceptedModel.weekdays.length]);
   });
   document.querySelector('#reset-view').addEventListener('click', resetView);
-  document.querySelector('#reset-empty')?.addEventListener('click', resetView);
+  document.querySelector('#clear-filters').addEventListener('click', clearNarrowing);
+  document.querySelector('#reset-empty')?.addEventListener('click', clearNarrowing);
+  bindStartRepair();
   bindLessonButtons(document.querySelector('.matrix-wrap'));
   bindCloseDetails();
   bindPinActions();
   document.querySelectorAll('[data-open-focus]').forEach(button => button.addEventListener('click', () => {
     const type = button.dataset.openFocus;
     const key = type === 'cohortId' ? 'cohorts' : type === 'teacherId' ? 'teachers' : 'rooms';
-    const selected = type === 'cohortId' ? view.cohortId : type === 'teacherId' ? view.teacherId : view.roomId;
+    const lesson = acceptedModel.assignmentMap.get(view.selectedLessonId);
+    const selected = type === 'cohortId' ? view.cohortId || lesson?.cohortId
+      : type === 'teacherId' ? view.teacherId || view.teacherInvestigationId || lesson?.teacherId
+        : view.roomId || lesson?.roomId;
     const focusedId = selected || acceptedModel.definition[key][0]?.id || null;
     const matrix = document.querySelector('.matrix-wrap');
     const scrollContext = matrix ? { left: matrix.scrollLeft, top: matrix.scrollTop } : null;
@@ -880,7 +898,8 @@ function applyFiltersInPlace() {
     button.classList.toggle('search-match', proposalModeActive() ? Boolean(comparison.entries.get(item.lessonId)?.old && searchMatches(comparison.entries.get(item.lessonId).old) || comparison.entries.get(item.lessonId)?.proposed && searchMatches(comparison.entries.get(item.lessonId).proposed)) : searchMatches(item));
     button.setAttribute('aria-label', proposalModeActive() ? lessonAccessibleName(item, [...cues.accessible, ...comparisonMatchedSides(item.lessonId)]) : lessonAccessibleName(item, [...cues.accessible, ...repairLessonState(item.lessonId).accessible]));
     const searchLabel = button.querySelector('.search-match-label');
-    if (view.search.trim() && searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', `<em class="search-match-label">${M.searchMatch}</em>`);
+    if (view.search.trim() && searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', button.classList.contains('week-lesson')
+      ? `<em class="search-match-label" title="${M.searchMatch}">${M.searchCue}</em>` : `<em class="search-match-label">${M.searchMatch}</em>`);
     if (!view.search.trim() || !searchMatches(item)) searchLabel?.remove();
     if (proposalModeActive()) {
       button.querySelector('.side-match-label')?.remove();
@@ -892,7 +911,7 @@ function applyFiltersInPlace() {
   });
   document.querySelectorAll('.matrix tbody tr').forEach(row => {
     const hasMatch = Boolean(row.querySelector('.lesson-cell:not([hidden])'));
-    row.hidden = narrowed && !hasMatch;
+    row.hidden = narrowed && investigation.represented.length > 0 && !hasMatch;
     if (!row.hidden) visibleRows++;
     row.querySelectorAll('td').forEach(cell => {
       const visibleLesson = cell.querySelector('.lesson-cell:not([hidden])');
@@ -904,6 +923,7 @@ function applyFiltersInPlace() {
   document.querySelector('#matrix-summary').textContent = M.matrixSummary(visibleRows, acceptedModel.definition.cohorts.length);
   document.querySelector('#represented-lesson-count').textContent = M.representedLessonCount(investigation.represented.length);
   document.querySelector('#active-criteria').innerHTML = active.length ? active.map(item => `<span>${escapeHtml(item)}</span>`).join('') : M.noFilters;
+  document.querySelector('#clear-filters').hidden = !narrowed;
   document.querySelector('#search-summary').textContent = view.search.trim() ? M.searchMatchCount(investigation.searchCount) : '';
   document.querySelector('#search-summary').hidden = !view.search.trim();
   document.querySelector('#no-matches').hidden = !(narrowed && investigation.represented.length === 0);
@@ -913,6 +933,11 @@ function applyFiltersInPlace() {
 function resetView() {
   if (inspectionState) syncInspectionState(inspectionState.resetFilters().state);
   else { view.search = ''; view.cohortId = ''; view.teacherId = ''; view.roomId = ''; view.periodId = ''; }
+  renderWholeSchool();
+}
+
+function clearNarrowing() {
+  syncInspectionState(inspectionState.clearNarrowing().state);
   renderWholeSchool();
 }
 
@@ -952,7 +977,6 @@ function searchable(item) {
 
 function activeCriteria() {
   const criteria = [];
-  if (view.search.trim()) criteria.push(M.searchCriterion(view.search.trim()));
   if (view.cohortId) criteria.push(M.classCriterion(entityName(acceptedModel.maps.cohorts.get(view.cohortId), view.cohortId)));
   if (view.teacherId) criteria.push(M.teacherCriterion(entityName(acceptedModel.maps.teachers.get(view.teacherId), view.teacherId)));
   if (view.roomId) criteria.push(M.roomCriterion(entityName(acceptedModel.maps.rooms.get(view.roomId), view.roomId)));
@@ -994,12 +1018,16 @@ function lessonCues(item) {
   const investigationMarkup = subject && teacher ? `<em class="dual-match-label">${M.dualMatch}</em>`
     : `${subject ? `<em class="subject-match-label">${M.subjectMatch}</em>` : ''}${teacher ? `<em class="teacher-match-label">${M.teacherMatch}</em>` : ''}`;
   const markup = `${search ? `<em class="search-match-label">${M.searchMatch}</em>` : ''}${investigationMarkup}`;
-  return { accessible, classes, markup };
+  const weekMarkup = `${search ? `<em class="search-match-label" title="${M.searchMatch}">${M.searchCue}</em>` : ''}${subject && teacher
+    ? `<em class="dual-match-label" title="${M.dualMatch}">${M.dualCue}</em>`
+    : `${subject ? `<em class="subject-match-label" title="${M.subjectMatch}">${M.subjectCue}</em>` : ''}${teacher ? `<em class="teacher-match-label" title="${M.teacherMatch}">${M.teacherCue}</em>` : ''}`}`;
+  return { accessible, classes, markup, weekMarkup };
 }
 
 function lessonAccessibleName(item, cues) {
   return [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId),
-    entityName(item.cohort, item.cohortId), periodLabel(item.period), item.lessonId, ...cues].join(' · ');
+    entityName(item.cohort, item.cohortId), M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable,
+    periodLabel(item.period), item.lessonId, ...cues].join(' · ');
 }
 
 function renderTeacherRibbon(periods) {

@@ -9,7 +9,9 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
     subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false,
     searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
     focusedType: null, focusedId: null, scrollContext: null,
-    lifecycle: null, mode: 'CURRENT', inspectorOpen: true, utilitiesOpen: false };
+    lifecycle: null, mode: 'CURRENT', inspectorOpen: window.matchMedia('(min-width: 1280px)').matches,
+    filtersOpen: false, utilitiesOpen: false,
+    taskAreaOpen: { CURRENT: false, DRAFT: true, SOLVING: true, PROPOSAL: true } };
 
   if (schoolId && firstWeekday) {
     try {
@@ -24,7 +26,7 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
   }
 
   return Object.freeze({
-    current: () => Object.freeze({ ...state }),
+    current: () => Object.freeze({ ...state, taskAreaOpen: Object.freeze({ ...state.taskAreaOpen }) }),
     enterLifecycle: lifecycle => {
       if (!AVAILABLE_MODES[lifecycle]) return state;
       if (state.lifecycle !== lifecycle) state = { ...state, lifecycle, mode: AVAILABLE_MODES[lifecycle].at(-1) };
@@ -36,7 +38,13 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       return { changed: true, state };
     },
     setInspectorOpen: inspectorOpen => { state = { ...state, inspectorOpen: Boolean(inspectorOpen) }; return state; },
+    setFiltersOpen: filtersOpen => { state = { ...state, filtersOpen: Boolean(filtersOpen) }; return state; },
     setUtilitiesOpen: utilitiesOpen => { state = { ...state, utilitiesOpen: Boolean(utilitiesOpen) }; return state; },
+    setTaskAreaOpen: (mode, open) => {
+      if (!AVAILABLE_MODES[state.lifecycle]?.includes(mode)) return { changed: false, state };
+      state = { ...state, taskAreaOpen: { ...state.taskAreaOpen, [mode]: Boolean(open) } };
+      return { changed: true, state };
+    },
     selectLesson: lessonId => { state = { ...state, selectedLessonId: lessonId || null }; return state; },
     closeLesson: () => { state = { ...state, selectedLessonId: null }; return state; },
     selectSubject: subjectId => {
@@ -77,6 +85,11 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
     },
     resetFilters: () => {
       state = { ...state, searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
+        subjectOnly: false, teacherOnly: false };
+      return { changed: true, state };
+    },
+    clearNarrowing: () => {
+      state = { ...state, cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
         subjectOnly: false, teacherOnly: false };
       return { changed: true, state };
     },
