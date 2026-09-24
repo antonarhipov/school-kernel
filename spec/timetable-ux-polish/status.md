@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `11beb7f` | `convergence/UC-2.md`: APPROVE WITH NOTES; manual walkthrough confirmed |
 | UC-3 | APPROVED | UC-2 | `3f96d79` | `convergence/UC-3.md`: APPROVE; earlier G-1/G-2 resolved, UC-3 walkthrough passed |
 | UC-4 | APPROVED | UC-3 | `ae24337` (revision of `6310bc1`) | `convergence/UC-4.md`: APPROVE; previous C-1, G-1, G-2 closed; administrator walkthrough passed |
-| UC-5 | PENDING_WALKTHROUGH | UC-1, UC-2, UC-3, UC-4 | `03de00f` | `convergence/UC-5.md`: PENDING WALKTHROUGH; five-administrator/three-school gate unconfirmed |
+| UC-5 | PENDING_WALKTHROUGH | UC-1, UC-2, UC-3, UC-4 | `03de00f` | `convergence/UC-5.md`: PENDING WALKTHROUGH; completion reported but five-administrator/three-school results not supplied |
 
 ## UC-1 Evidence
 
