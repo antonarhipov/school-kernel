@@ -2627,6 +2627,18 @@ class WorkspaceBrowserIT {
                 throw new AssertionError("The normative candidate must pass the independent production verifier: "
                         + processes.verifiedFeasibleFailure, processes.verifiedFeasibleFailure == null ? failure : processes.verifiedFeasibleFailure);
             }
+            cdp.evaluate("""
+                    window.__proposalReviewMutations = [];
+                    const proposalFetch = window.fetch.bind(window);
+                    window.fetch = (input, options = {}) => {
+                      const method = (options.method || input?.method || 'GET').toUpperCase();
+                      if (method !== 'GET' && method !== 'HEAD') {
+                        window.__proposalReviewMutations.push({method, path: new URL(
+                          typeof input === 'string' ? input : input.url, location.href).pathname});
+                      }
+                      return proposalFetch(input, options);
+                    };
+                    """);
             JsonNode stored = storedWorkspaceDocument();
             assertEquals("REPAIR_PROPOSAL", storedLifecycle());
             assertEquals(baseline, stored.path("acceptedBaseline"));
@@ -2771,7 +2783,7 @@ class WorkspaceBrowserIT {
             assertEquals("room-8", proposal.path("result").path("timetable").path("assignments").get(500).path("roomId").stringValue());
             assertEquals("period-20", proposal.path("result").path("timetable").path("assignments").get(500).path("periodId").stringValue());
             assertEquals(stored, storedWorkspaceDocument(), "inspection and protected-lesson navigation must not change the accepted/draft/proposal bundle");
-            for (int[] viewport : new int[][] { { 1600, 900 }, { 1280, 800 } }) {
+            for (int[] viewport : new int[][] { { 1600, 900 }, { 1280, 800 }, { 1279, 800 }, { 701, 844 } }) {
                 cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", viewport[0])
                         .put("height", viewport[1]).put("deviceScaleFactor", 1).put("mobile", false));
                 JsonNode geometry = cdp.evaluateValue("""
@@ -2782,35 +2794,77 @@ class WorkspaceBrowserIT {
                           const bounds=task.getBoundingClientRect();
                           return {taskHeight:bounds.height, taskBottom:bounds.bottom, taskTop:bounds.top,
                             canvasBottom:canvas.getBoundingClientRect().bottom,
+                            inspectorTop:inspector.getBoundingClientRect().top,
+                            inspectorBottom:inspector.getBoundingClientRect().bottom,
                             inspectorLeft:inspector.getBoundingClientRect().left,
                             canvasRight:canvas.getBoundingClientRect().right,
                             visible:wrap.clientHeight, heading:document.querySelector('.week-matrix thead').getBoundingClientRect().height,
                             row:document.querySelector('.week-matrix tbody tr').getBoundingClientRect().height,
                             page:document.documentElement.scrollWidth,
+                            taskClientWidth:task.clientWidth, taskScrollWidth:task.scrollWidth,
                             decisions:['#accept-repair','#revise-proposal','#discard-proposal'].every(selector => {
                               const action=document.querySelector(selector).getBoundingClientRect();
-                              return action.top >= bounds.top && action.bottom <= bounds.bottom;
+                              return action.top >= bounds.top && action.bottom <= bounds.bottom
+                                && action.left >= bounds.left && action.right <= bounds.right;
                             })}; })()
                         """).path("result").path("result").path("value");
                 assertTrue(geometry.path("taskHeight").doubleValue() <= viewport[1] * .35
-                                && geometry.path("taskBottom").doubleValue() <= viewport[1]
-                                && geometry.path("taskTop").doubleValue() >= geometry.path("canvasBottom").doubleValue()
-                                && geometry.path("inspectorLeft").doubleValue() >= geometry.path("canvasRight").doubleValue()
                                 && geometry.path("visible").doubleValue() >= geometry.path("heading").doubleValue() + geometry.path("row").doubleValue()
                                 && geometry.path("page").doubleValue() <= viewport[0] + 1
+                                && geometry.path("taskScrollWidth").doubleValue() <= geometry.path("taskClientWidth").doubleValue() + 1
                                 && geometry.path("decisions").booleanValue(),
-                        "UC-4 G3: wide review, decisions, inspector, headers and a full class row coexist at " + viewport[0] + ": " + geometry);
-                captureWorkbenchScreenshot(cdp, "uc4-proposal-" + viewport[0] + ".png");
+                        "UC-4 G3: Proposal review controls, headings and a full class row fit without horizontal page/task clipping at " + viewport[0] + ": " + geometry);
+                if (viewport[0] >= 1280) {
+                    assertTrue(geometry.path("taskBottom").doubleValue() <= viewport[1]
+                                    && geometry.path("taskTop").doubleValue() >= geometry.path("canvasBottom").doubleValue()
+                                    && geometry.path("inspectorLeft").doubleValue() >= geometry.path("canvasRight").doubleValue(),
+                            "UC-4 G3: wide Proposal keeps canvas and inspector beside its below-canvas task at " + viewport[0] + ": " + geometry);
+                    captureWorkbenchScreenshot(cdp, "uc4-proposal-" + viewport[0] + ".png");
+                } else {
+                    assertTrue(geometry.path("inspectorTop").doubleValue() >= geometry.path("canvasBottom").doubleValue()
+                                    && geometry.path("taskTop").doubleValue() >= geometry.path("inspectorBottom").doubleValue(),
+                            "UC-4 G3/RULE-5: Proposal inspector stacks between the canvas and wide task at " + viewport[0] + ": " + geometry);
+                }
             }
+            for (int[] viewport : new int[][] { { 700, 844 }, { 390, 844 } }) {
+                cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", viewport[0])
+                        .put("height", viewport[1]).put("deviceScaleFactor", 1).put("mobile", viewport[0] == 390));
+                awaitBrowserCondition(cdp, "document.querySelector('.focused-schedule') !== null && document.querySelector('#workbench-task-area') === null");
+                cdp.evaluate("document.querySelector('#focus-entity').value='cohort-16'; document.querySelector('#focus-entity').dispatchEvent(new Event('change',{bubbles:true}))");
+                assertTrue(browserTrue(cdp, "document.body.innerText.includes('Repair proposal') && document.body.innerText.includes('Accepted baseline remains current') && document.body.innerText.includes('Read-only focused schedule') && document.querySelectorAll('.focused-schedule [data-lesson-id=lesson-960]').length === 2 && document.querySelector('.focused-schedule [data-lesson-id=lesson-960][data-comparison-side=accepted]')?.textContent.includes('Accepted origin') && document.querySelector('.focused-schedule [data-lesson-id=lesson-960][data-comparison-side=proposed]')?.textContent.includes('Proposed destination') && !document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, #workbench-task-area, .matrix-wrap') && document.documentElement.scrollWidth <= innerWidth"),
+                        "UC-4 extension 1b/G7: verified Proposal at " + viewport[0] + "px is a read-only accepted/proposed agenda without page overflow or decisions");
+                assertEquals(stored, storedWorkspaceDocument(), "responsive Proposal reading must not change the durable workspace");
+            }
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            awaitBrowserCondition(cdp, "document.querySelector('.matrix-wrap') !== null && document.querySelector('#workbench-task-area') !== null");
+            JsonNode beforeCollapseScroll = cdp.evaluateValue("(() => { const matrix=document.querySelector('.matrix-wrap'); matrix.scrollTo(140,120); return {left:matrix.scrollLeft, top:matrix.scrollTop}; })()")
+                    .path("result").path("result").path("value");
+            assertTrue(beforeCollapseScroll.path("left").intValue() > 0 && beforeCollapseScroll.path("top").intValue() > 0,
+                    "UC-4 G3: the Proposal matrix must have a real horizontal and vertical scroll position before collapse: " + beforeCollapseScroll);
             cdp.evaluate("document.querySelector('#collapse-proposal-task').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('#workbench-task-area').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 500'"));
             cdp.evaluate("document.querySelector('#reopen-proposal-task').click()");
             assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-task-area').hidden && document.querySelector('#review-selection')?.textContent.includes('Declared lesson 500') && document.querySelector('.proposal-facts')?.textContent.includes('Unique changed lessons')"),
                     "UC-4 G3: task collapse and reopen retain selected protection and authoritative counts");
+            assertEquals(beforeCollapseScroll, cdp.evaluateValue("(() => { const matrix=document.querySelector('.matrix-wrap'); return {left:matrix.scrollLeft, top:matrix.scrollTop}; })()")
+                            .path("result").path("result").path("value"),
+                    "UC-4 G3: task collapse and reopen retain the representable matrix scroll position");
+            assertEquals(JSON.readTree("[]"), cdp.evaluateValue("window.__proposalReviewMutations")
+                            .path("result").path("result").path("value"),
+                    "UC-4 G4/RULE-2: review navigation, mode, search, filter, focus, responsive and task actions issue no mutating request");
+            assertEquals(stored, storedWorkspaceDocument(), "UC-4 G4: review-only actions keep the exact accepted/Draft/Proposal document and version");
             cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0]').click(); document.querySelector('[data-range=DAY]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent.includes('Declared lesson 0')"));
-            cdp.evaluate("document.querySelector('#confirm-repair-accept').click(); document.querySelector('#accept-repair').click()");
+            cdp.evaluate("document.querySelector('#confirm-repair-accept').click()");
+            assertEquals(JSON.readTree("[]"), cdp.evaluateValue("window.__proposalReviewMutations")
+                            .path("result").path("result").path("value"),
+                    "UC-4 G6: confirmation alone cannot send an acceptance request");
+            cdp.evaluate("document.querySelector('#accept-repair').click()");
             cdp.awaitText("Accepted baseline · current timetable", Duration.ofSeconds(20));
+            assertEquals(JSON.readTree("[{\"method\":\"POST\",\"path\":\"/api/proposal/accept\"}]"),
+                    cdp.evaluateValue("window.__proposalReviewMutations").path("result").path("result").path("value"),
+                    "UC-4 G4/G6: only the explicit confirmed acceptance issues a mutation request");
             JsonNode accepted = storedWorkspaceDocument();
             assertEquals("ACCEPTED_BASELINE", storedLifecycle());
             assertEquals(proposal.path("definition"), accepted.path("acceptedBaseline").path("definition"));

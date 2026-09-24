@@ -421,6 +421,10 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
   .review-mode.current-mode .review-categories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+@media (min-width: 701px) and (max-width: 800px) {
+  .review-mode.current-mode .review-selection .before-after { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (min-width: 1280px) and (max-width: 1450px) {
   .current-mode .draft-task-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .repair-mode.current-mode .draft-task-area { max-height: 20vh; }
