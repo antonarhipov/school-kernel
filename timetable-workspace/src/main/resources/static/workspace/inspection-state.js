@@ -5,7 +5,7 @@ const AVAILABLE_MODES = Object.freeze({ ACCEPTED_BASELINE: ['CURRENT'], REPAIR_D
 
 export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], cohortIds = [], roomIds = [], periodIds = [], storage = window.localStorage }) {
   const firstWeekday = weekdays[0] || null;
-  let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null,
+  let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null, reviewTargetSide: null,
     subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false,
     searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
     focusedType: null, focusedId: null, scrollContext: null,
@@ -45,8 +45,11 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       state = { ...state, taskAreaOpen: { ...state.taskAreaOpen, [mode]: Boolean(open) } };
       return { changed: true, state };
     },
-    selectLesson: lessonId => { state = { ...state, selectedLessonId: lessonId || null }; return state; },
-    closeLesson: () => { state = { ...state, selectedLessonId: null }; return state; },
+    selectLesson: (lessonId, reviewTargetSide = null) => {
+      state = { ...state, selectedLessonId: lessonId || null, reviewTargetSide: lessonId ? reviewTargetSide : null };
+      return state;
+    },
+    closeLesson: () => { state = { ...state, selectedLessonId: null, reviewTargetSide: null }; return state; },
     selectSubject: subjectId => {
       if (subjectId !== null && !subjectIds.includes(subjectId)) return { changed: false, state };
       state = { ...state, subjectId, subjectOnly: subjectId ? state.subjectOnly : false };
@@ -120,11 +123,12 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
     selectDay: (weekdayId, selectedLessonWeekday) => {
       if (!weekdays.includes(weekdayId)) return { changed: false, selectionCleared: false, state };
       const selectionCleared = Boolean(state.selectedLessonId && selectedLessonWeekday !== weekdayId);
-      state = { ...state, range: 'DAY', weekdayId, selectedLessonId: selectionCleared ? null : state.selectedLessonId };
+      state = { ...state, range: 'DAY', weekdayId, selectedLessonId: selectionCleared ? null : state.selectedLessonId,
+        reviewTargetSide: selectionCleared ? null : state.reviewTargetSide };
       return { changed: true, selectionCleared, state };
     },
     persist: () => persistPreference(storage, schoolId, state),
-    resetEphemeral: () => { state = { ...state, selectedLessonId: null }; return state; }
+    resetEphemeral: () => { state = { ...state, selectedLessonId: null, reviewTargetSide: null }; return state; }
   });
 }
 

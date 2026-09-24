@@ -208,6 +208,7 @@ code { overflow-wrap: anywhere; }
 .review-mode .focused-lesson[data-comparison-side=accepted] { border-left: 4px solid #216c46; }
 .review-mode .focused-lesson[data-comparison-side=proposed] { border-left: 4px solid #7752a0; }
 .review-mode .focused-lesson[data-comparison-side=combined] { border-left: 4px solid #9b670e; }
+.review-mode .focused-lesson.selected { outline: 2px solid #9b670e; outline-offset: 2px; }
 .unpinned-state { background: #edf0ee; color: #4c5953; }
 .proposal-facts { margin: 18px 0 24px; }
 .impact-totals { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 20px; }
@@ -338,6 +339,7 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
 .review-mode.current-mode:has(.proposal-task-area:not([hidden])) .matrix-wrap { max-height: max(350px, calc(100vh - 570px)); }
 .solving-mode.current-mode:has(.solving-task-area) #workbench-inspector,
 .review-mode.current-mode:has(.proposal-task-area:not([hidden])) #workbench-inspector { max-height: max(350px, calc(100vh - 570px)); }
+.review-mode.current-mode:has(.proposal-task-area:not([hidden])) #workbench-inspector { max-height: 320px; }
 .solving-mode.current-mode .solving-task-area { display: flex; flex-direction: column; max-height: 24vh; overflow: hidden; }
 .solving-mode .run-status-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex: none; }
 .solving-mode .run-status-bar > div:first-child { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; font-size: .78rem; }
@@ -350,11 +352,25 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
 .solving-mode .frozen-draft-context dl { margin: 6px 0; }
 .solving-mode .frozen-draft-context ul { margin: 6px 0; }
 .review-mode.current-mode .proposal-task-area { max-height: 24vh; }
+.review-mode.current-mode:has(.proposal-task-area:not([hidden])) .matrix-wrap { max-height: 320px; }
+.review-mode.current-mode .week-slot { min-height: 23px; padding: 1px 0 1px 50px; }
+.review-mode.current-mode .week-period { top: 4px; width: 46px; }
+.review-mode.current-mode .week-lesson { min-height: 18px; padding: 1px 3px; }
+.review-mode.current-mode .week-lesson strong { min-width: 38px; }
+.review-mode.current-mode .week-lesson em { font-size: .51rem; }
+.review-mode.current-mode .week-lesson .selected-label { display: none !important; }
 .review-mode.current-mode .matrix:not(.week-matrix) { table-layout: auto; min-width: 100%; }
 .review-mode.current-mode .matrix:not(.week-matrix) td,
 .review-mode.current-mode .matrix:not(.week-matrix) thead th:not(:first-child) { min-width: 160px; }
 .review-mode.current-mode #proposal-context { margin-top: 7px; }
 .review-mode.current-mode #proposal-context h3 { margin: 0 0 6px; font-size: .92rem; }
+.review-mode.current-mode .review-selection { margin: 8px 0; padding: 9px; border: 1px solid #b9d5c5; border-radius: 9px; background: #fff; }
+.review-mode.current-mode .review-selection h4 { margin: 0 0 5px; font-size: .86rem; }
+.review-mode.current-mode .review-selection p { margin: 5px 0; font-size: .78rem; overflow-wrap: anywhere; }
+.review-mode.current-mode .review-selection .before-after { margin-top: 7px; }
+.review-mode.current-mode .review-selection .before-after section { padding: 8px; }
+.review-mode.current-mode .review-targets { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 7px; }
+.review-mode.current-mode .review-category li, .review-mode.current-mode .review-groups li { margin: 3px 0; overflow-wrap: anywhere; }
 .review-mode.current-mode .proposal-facts { margin: 8px 0; }
 .review-mode.current-mode .review-categories { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .review-mode.current-mode .review-category { padding: 8px; }
@@ -409,7 +425,7 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
   .current-mode .draft-task-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .repair-mode.current-mode .draft-task-area { max-height: 20vh; }
   .solving-mode.current-mode .solving-task-area { max-height: 20vh; }
-  .review-mode.current-mode .proposal-task-area { max-height: 20vh; }
+  .review-mode.current-mode .proposal-task-area { max-height: 15vh; }
 }
 
 @media (max-width: 700px) {

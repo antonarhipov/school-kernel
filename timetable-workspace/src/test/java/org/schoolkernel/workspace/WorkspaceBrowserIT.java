@@ -2730,11 +2730,83 @@ class WorkspaceBrowserIT {
                     ["Class","Class 0","cohort-0"],["Teacher","Teacher 0","teacher-0"],
                     ["Period","Declared period 0","period-0"],["Room · Changed","Room 50","room-50"]]]]
                     """));
+            assertTrue(browserTrue(cdp, "document.querySelector('#review-selection .before-after')?.textContent.includes('Room 0') && document.querySelector('#review-selection .before-after')?.textContent.includes('Room 50') && document.querySelector('#review-selection')?.textContent.includes('Solver ripple effects')"),
+                    "UC-4 main 4: the wide review area repeats the exact selected before/after and effect explanation");
+            cdp.evaluate("document.querySelector('[data-category=periodMoves] [data-review-lesson=lesson-960][data-review-side=accepted]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#review-selection')?.textContent.includes('Review target: Accepted origin · current') && document.querySelector('#review-selection .before-after')?.textContent.includes('Declared period 40')"),
+                    "UC-4 main 3-4: category origin navigation selects one stable identity and keeps the destination details in the task area");
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click(); document.querySelector('#period-focus').value='period-0'; document.querySelector('#period-focus').dispatchEvent(new Event('change',{bubbles:true}))");
+            cdp.evaluate("document.querySelector('[data-category=periodMoves] [data-review-lesson=lesson-960][data-review-side=proposed]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#range-summary')?.textContent.includes('Thursday') && document.querySelector('#period-focus')?.value === '' && !document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=proposed]')?.hidden && document.querySelector('#inspection-notice')?.textContent.includes('Cleared Period focus')"),
+                    "UC-4 extension 3a: destination navigation clears an origin-only Day period column");
+            cdp.evaluate("document.querySelector('#review-selection [data-review-lesson=lesson-960][data-review-side=accepted]').click()");
+            cdp.evaluate("document.querySelector('#room-filter').value='room-50'; document.querySelector('#room-filter').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#lesson-search').value='Room 50'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true})); document.querySelector('#teacher-investigation').value='teacher-16'; document.querySelector('#teacher-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
+            assertTrue(browserTrue(cdp, "document.querySelector('#room-filter')?.value === 'room-50' && document.querySelector('#range-summary')?.textContent.includes('Monday')"));
+            cdp.evaluate("document.querySelector('[data-category=periodMoves] [data-review-lesson=lesson-960][data-review-side=proposed]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#range-summary')?.textContent.includes('Thursday') && document.querySelector('#room-filter')?.value === '' && document.querySelector('#lesson-search')?.value === 'Room 50' && document.querySelector('#teacher-investigation')?.value === 'teacher-16' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#review-selection')?.textContent.includes('Review target: Proposed destination · not current') && !document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=proposed]')?.hidden && document.querySelector('#inspection-notice')?.textContent.includes('Selected Thursday') && document.querySelector('#inspection-notice')?.textContent.includes('Cleared Room filter')"),
+                    "UC-4 extension 3a: destination navigation changes only Day and excluding room filter, with search and highlight retained");
+            cdp.evaluate("document.querySelector('#review-selection [data-review-lesson=lesson-960][data-review-side=accepted]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#range-summary')?.textContent.includes('Monday') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#review-selection')?.textContent.includes('Review target: Accepted origin · current') && document.querySelector('#lesson-search')?.value === 'Room 50'"),
+                    "UC-4 main 3: review detail can navigate back to accepted origin without losing the investigation");
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click(); document.querySelector('#cohort-filter').value='cohort-0'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('[data-open-focus=cohortId]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.focused-schedule') !== null"),
+                    "UC-4 focused entry must open the selected class schedule");
+            cdp.evaluate("document.querySelectorAll('.review-groups')[1].open=true; document.querySelectorAll('.review-groups')[1].querySelector('[data-review-lesson=lesson-960][data-review-side=proposed]').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('.focused-schedule') && document.querySelector('.matrix-wrap [data-lesson-id=lesson-960][data-comparison-side=proposed]') && document.querySelector('#review-selection')?.textContent.includes('Review target: Proposed destination · not current') && document.querySelector('#lesson-search')?.value === 'Room 50' && document.querySelector('#inspection-notice')?.textContent.includes('Returned to the whole-school canvas')"),
+                    "UC-4 extension 3a: grouping navigation leaves only an excluding focus and retains the search and stable lesson identity");
+            cdp.evaluate("document.querySelector('[data-open-focus=cohortId]').click(); document.querySelector('[data-category=periodMoves] [data-review-lesson=lesson-960][data-review-side=accepted]').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('.focused-schedule [data-lesson-id=lesson-960][data-comparison-side=accepted].selected[aria-current=true] .selected-label')?.textContent === 'Selected' && document.querySelector('#review-selection')?.textContent.includes('Review target: Accepted origin · current') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"),
+                    "UC-4 extension 3a: an in-focus accepted origin remains in the focused schedule with an explicit selected cue");
+            cdp.evaluate("document.querySelector('#return-matrix').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#lesson-search')?.value === 'Room 50'"),
+                    "UC-4 G4: focused review navigation and return retain the search");
+            cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('[data-range=WEEK]').click()");
             cdp.evaluate("document.querySelector('[data-review-lesson=lesson-500]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Accepted and unchanged') && document.querySelector('.comparison-details')?.textContent.includes('Accepted room pinned')"));
+            assertTrue(browserTrue(cdp, "document.querySelector('.matrix-wrap [data-lesson-id=lesson-500] .pin-label')?.textContent === 'Both pinned' && document.querySelector('.matrix-wrap [data-lesson-id=lesson-500]')?.getAttribute('aria-label').includes('Accepted period pinned · Accepted room pinned')"),
+                    "UC-4 G5: compact Week protection remains visible and exposes its full accessible meaning: "
+                            + cdp.evaluateValue("(() => { const tile=document.querySelector('.matrix-wrap [data-lesson-id=lesson-500]'); return {cue:tile?.querySelector('.pin-label')?.textContent, name:tile?.getAttribute('aria-label'), range:document.querySelector('#range-summary')?.textContent}; })()"));
+            assertTrue(browserTrue(cdp, "document.querySelector('.matrix-wrap [data-lesson-id=lesson-500] strong')?.getBoundingClientRect().width >= 38 && document.querySelector('.matrix-wrap [data-lesson-id=lesson-500] .week-room')?.getBoundingClientRect().width > 0 && document.querySelector('.matrix-wrap [data-lesson-id=lesson-500]')?.getAttribute('aria-pressed') === 'true'"),
+                    "UC-4 G5: a selected protected Week tile keeps subject and room visible with structural selection");
             assertEquals("room-8", proposal.path("result").path("timetable").path("assignments").get(500).path("roomId").stringValue());
             assertEquals("period-20", proposal.path("result").path("timetable").path("assignments").get(500).path("periodId").stringValue());
             assertEquals(stored, storedWorkspaceDocument(), "inspection and protected-lesson navigation must not change the accepted/draft/proposal bundle");
+            for (int[] viewport : new int[][] { { 1600, 900 }, { 1280, 800 } }) {
+                cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", viewport[0])
+                        .put("height", viewport[1]).put("deviceScaleFactor", 1).put("mobile", false));
+                JsonNode geometry = cdp.evaluateValue("""
+                        (() => { const task=document.querySelector('#workbench-task-area');
+                          const canvas=document.querySelector('.canvas-region'); const wrap=document.querySelector('.matrix-wrap');
+                          const inspector=document.querySelector('#workbench-inspector');
+                          task.scrollTop=task.scrollHeight;
+                          const bounds=task.getBoundingClientRect();
+                          return {taskHeight:bounds.height, taskBottom:bounds.bottom, taskTop:bounds.top,
+                            canvasBottom:canvas.getBoundingClientRect().bottom,
+                            inspectorLeft:inspector.getBoundingClientRect().left,
+                            canvasRight:canvas.getBoundingClientRect().right,
+                            visible:wrap.clientHeight, heading:document.querySelector('.week-matrix thead').getBoundingClientRect().height,
+                            row:document.querySelector('.week-matrix tbody tr').getBoundingClientRect().height,
+                            page:document.documentElement.scrollWidth,
+                            decisions:['#accept-repair','#revise-proposal','#discard-proposal'].every(selector => {
+                              const action=document.querySelector(selector).getBoundingClientRect();
+                              return action.top >= bounds.top && action.bottom <= bounds.bottom;
+                            })}; })()
+                        """).path("result").path("result").path("value");
+                assertTrue(geometry.path("taskHeight").doubleValue() <= viewport[1] * .35
+                                && geometry.path("taskBottom").doubleValue() <= viewport[1]
+                                && geometry.path("taskTop").doubleValue() >= geometry.path("canvasBottom").doubleValue()
+                                && geometry.path("inspectorLeft").doubleValue() >= geometry.path("canvasRight").doubleValue()
+                                && geometry.path("visible").doubleValue() >= geometry.path("heading").doubleValue() + geometry.path("row").doubleValue()
+                                && geometry.path("page").doubleValue() <= viewport[0] + 1
+                                && geometry.path("decisions").booleanValue(),
+                        "UC-4 G3: wide review, decisions, inspector, headers and a full class row coexist at " + viewport[0] + ": " + geometry);
+                captureWorkbenchScreenshot(cdp, "uc4-proposal-" + viewport[0] + ".png");
+            }
+            cdp.evaluate("document.querySelector('#collapse-proposal-task').click()");
+            assertTrue(browserTrue(cdp, "document.querySelector('#workbench-task-area').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 500'"));
+            cdp.evaluate("document.querySelector('#reopen-proposal-task').click()");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#workbench-task-area').hidden && document.querySelector('#review-selection')?.textContent.includes('Declared lesson 500') && document.querySelector('.proposal-facts')?.textContent.includes('Unique changed lessons')"),
+                    "UC-4 G3: task collapse and reopen retain selected protection and authoritative counts");
             cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0]').click(); document.querySelector('[data-range=DAY]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent.includes('Declared lesson 0')"));
             cdp.evaluate("document.querySelector('#confirm-repair-accept').click(); document.querySelector('#accept-repair').click()");

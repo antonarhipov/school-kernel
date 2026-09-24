@@ -26,7 +26,7 @@ const boundDiagnosticButtons = new WeakSet();
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
-  range: 'WEEK', selectedLessonId: null, focusedType: null, focusedId: null,
+  range: 'WEEK', selectedLessonId: null, reviewTargetSide: null, focusedType: null, focusedId: null,
   subjectInvestigationId: null, teacherInvestigationId: null, subjectOnly: false, teacherOnly: false,
   narrow: window.matchMedia('(max-width: 700px)').matches
 };
@@ -182,7 +182,7 @@ function renderRepairProposal(snapshot, schoolName) {
     renderFocused(); return;
   }
   stateCard.className = 'card workspace-card review-mode current-mode compact-density';
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairProposal}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><p class="mode-note">${M.acceptedStillCurrent}</p></div><div id="accepted-view"></div>${proposalTaskArea()}${focusedEntry()}`;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairProposal}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><p class="mode-note">${M.proposalNotCurrent} ${M.acceptedStillCurrent}</p></div><div id="accepted-view"></div>${proposalTaskArea()}${focusedEntry()}`;
   if (view.focusedType) renderFocused(); else renderWholeSchool();
   bindProposalTaskArea();
   window.__workspaceProposalReviewMs = performance.now() - reviewStarted;
@@ -211,11 +211,20 @@ function bindProposalTaskArea() {
 function reviewLessonName(id) { return entityName(proposalModeActive() ? proposedModel.maps.lessons.get(id) || acceptedModel.maps.lessons.get(id) : acceptedModel.maps.lessons.get(id), id); }
 function proposalModeActive() { return currentSnapshot.state === 'REPAIR_PROPOSAL' && inspectionState.current().mode === 'PROPOSAL'; }
 function representedAssignment(id) { return proposalModeActive() ? comparison.entries.get(id)?.old || comparison.entries.get(id)?.proposed : acceptedModel.assignmentMap.get(id); }
+function reviewLessonActions(id) {
+  const pair = comparison.entries.get(id);
+  const name = escapeHtml(reviewLessonName(id));
+  const button = (side, title) => `<button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}" data-review-side="${side}">${name} · ${title}</button>`;
+  if (pair?.old && pair?.proposed && (pair.old.periodId !== pair.proposed.periodId || pair.old.cohortId !== pair.proposed.cohortId))
+    return `${button('accepted', M.acceptedOrigin)} ${button('proposed', M.proposedDestination)}`;
+  return button(pair?.old && pair?.proposed ? 'combined' : pair?.old ? 'accepted' : 'proposed',
+    pair?.old && pair?.proposed ? pair.change ? M.combinedChange : M.visuallyQuiet : pair?.old ? M.cancellationCue : M.additionCue);
+}
 function reviewGroup(key, title) {
   const groups = currentSnapshot.workspace.proposal.review.groupings[key];
   const label = value => value === 'OLD' ? M.oldContext : value === 'PROPOSED' ? M.proposedContext : M.bothContexts;
   const map = key === 'classes' ? proposedModel.maps.cohorts : key === 'teachers' ? proposedModel.maps.teachers : key === 'rooms' ? proposedModel.maps.rooms : null;
-  return `<details class="review-groups"><summary>${title} · ${groups.length}</summary>${groups.length ? `<ul>${groups.map(group => `<li><strong>${escapeHtml(key === 'days' ? (M.days[group.id] || group.id) : entityName(map?.get(group.id) || acceptedGroupEntity(key, group.id), group.id))}</strong> <span class="context-label">${label(group.context)}</span> · ${group.lessonIds.length}<ul>${group.lessonIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button></li>`).join('')}</ul></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>`;
+  return `<details class="review-groups"><summary>${title} · ${groups.length}</summary>${groups.length ? `<ul>${groups.map(group => `<li><strong>${escapeHtml(key === 'days' ? (M.days[group.id] || group.id) : entityName(map?.get(group.id) || acceptedGroupEntity(key, group.id), group.id))}</strong> <span class="context-label">${label(group.context)}</span> · ${group.lessonIds.length}<ul>${group.lessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>`;
 }
 function acceptedGroupEntity(key, id) { const map = key === 'classes' ? acceptedModel.maps.cohorts : key === 'teachers' ? acceptedModel.maps.teachers : acceptedModel.maps.rooms; return map.get(id); }
 
@@ -231,9 +240,9 @@ function proposalContext() {
   const review = proposal.review;
   const protectedIds = [...new Set([...currentSnapshot.workspace.repairDraft.intent.pins.map(pin => pin.lessonId),
     ...acceptedModel.assignments.filter(item => comparisonProtection(item.lessonId)).map(item => item.lessonId)])].sort();
-  const categories = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button></li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
+  const categories = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
   const unchanged = acceptedModel.assignments.filter(item => !comparison.entries.get(item.lessonId)?.change);
-  return `<section id="proposal-context" aria-label="${M.proposalImpact}"><h3>${M.proposalImpact}</h3><p class="notice">${M.repairPriority}</p>
+  return `<section id="proposal-context" aria-label="${M.proposalImpact}"><h3>${M.proposalImpact}</h3><p class="notice">${M.repairPriority}</p><div id="review-selection">${reviewSelection()}</div>
     <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
     <details class="review-groups"><summary>${M.protectedAssignments} · ${protectedIds.length}</summary>${protectedIds.length ? `<ul>${protectedIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button> · ${escapeHtml(comparisonProtection(id))}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>
     <div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div><p>${M.overlappingTotals}</p>
@@ -241,6 +250,36 @@ function proposalContext() {
     <h4>${M.impactGroups}</h4>${reviewGroup('classes', M.groupClasses)}${reviewGroup('teachers', M.groupTeachers)}${reviewGroup('rooms', M.groupRooms)}${reviewGroup('days', M.groupDays)}
     ${unchanged.length ? `<section class="unchanged-review"><h4>${M.unchangedLesson}</h4><select id="unchanged-lesson">${unchanged.map(item => `<option value="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(item.lesson, item.lessonId))}</option>`).join('')}</select><button type="button" id="show-unchanged" class="secondary">${M.showUnchanged}</button></section>` : ''}
     <p class="acceptance-warning"><strong>${M.acceptanceAdvancesBaseline}</strong></p><label class="confirmation"><input id="confirm-repair-accept" type="checkbox"> ${M.confirmRepairAcceptance}</label><div class="actions"><button id="accept-repair" disabled>${M.acceptRepair}</button><button id="revise-proposal" class="secondary">${M.reviseIntent}</button><button id="discard-proposal" class="danger">${M.discardRepairProposal}</button></div></section>`;
+}
+
+function reviewSelection() {
+  const id = view.selectedLessonId;
+  const pair = comparison.entries.get(id);
+  if (!pair) return `<p>${M.selectReviewLesson}</p>`;
+  const change = pair.change;
+  const target = reviewTargetLabel(pair);
+  return `<section class="review-selection" aria-label="${M.changedLessonDetails}"><h4>${M.changedLessonDetails}: ${escapeHtml(reviewLessonName(id))}</h4><p>${M.reviewTarget}: ${target} · ${escapeHtml(id)}</p>
+    <p>${change ? change.categories.map(category => M[category]).join(' · ') : M.visuallyQuiet}</p>
+    ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}${comparisonProtection(id) ? `<p>${escapeHtml(comparisonProtection(id))}</p>` : ''}
+    <div class="before-after">${reviewSide(M.oldAssignment, pair.old, change?.changedDimensions || [], acceptedModel)}${reviewSide(M.proposedAssignment, pair.proposed, change?.changedDimensions || [], proposedModel)}</div>
+    ${change ? `<div class="review-targets">${reviewLessonActions(id)}</div>` : ''}</section>`;
+}
+
+function reviewTargetLabel(pair) {
+  if (view.reviewTargetSide === 'accepted') return pair.proposed ? M.acceptedOrigin : M.cancellationCue;
+  if (view.reviewTargetSide === 'proposed') return pair.old ? M.proposedDestination : M.additionCue;
+  if (!pair.change) return M.visuallyQuiet;
+  if (!pair.old) return M.additionCue;
+  if (!pair.proposed) return M.cancellationCue;
+  return pair.old.cohortId === pair.proposed.cohortId && pair.old.periodId === pair.proposed.periodId
+    ? M.combinedChange : M.chooseReviewTarget;
+}
+
+function updateReviewSelection() {
+  const host = document.querySelector('#review-selection');
+  if (!host || !proposalModeActive()) return;
+  host.innerHTML = reviewSelection();
+  bindReviewLinks(host);
 }
 
 function bindRepairReview() {
@@ -254,23 +293,77 @@ function bindRepairReview() {
   bind(accept, 'click', () => mutate('/api/proposal/accept', 'POST'));
   bind(document.querySelector('#revise-proposal'), 'click', () => mutate('/api/proposal', 'DELETE'));
   bind(document.querySelector('#discard-proposal'), 'click', () => mutate('/api/proposal', 'DELETE'));
-  document.querySelectorAll('[data-review-lesson]').forEach(button => bind(button, 'click', () => selectReviewLesson(button.dataset.reviewLesson)));
+  bindReviewLinks(document);
   bind(document.querySelector('#show-unchanged'), 'click', () => selectReviewLesson(document.querySelector('#unchanged-lesson').value));
 }
 
-function selectReviewLesson(id) {
+function bindReviewLinks(root) {
+  root.querySelectorAll('[data-review-lesson]').forEach(button => {
+    if (boundReviewControls.has(button)) return;
+    boundReviewControls.add(button);
+    button.addEventListener('click', () => selectReviewLesson(button.dataset.reviewLesson, button.dataset.reviewSide));
+  });
+}
+
+function selectReviewLesson(id, side) {
+  const pair = comparison.entries.get(id);
+  if (!pair) return;
   const representations = comparison.assignmentsById.get(id) || [];
-  const representation = representations.find(item => isRepresented(item)) || representations[0];
-  if (!representation || !isRepresented(representation) || view.focusedType) {
-    syncInspectionState(inspectionState.resetFilters().state);
-    if (view.focusedType) syncInspectionState(inspectionState.returnToWholeSchool().state);
-    if (representation && view.range === 'DAY' && view.day !== representation.period?.weekday && representation.period?.weekday) syncInspectionState(inspectionState.selectDay(representation.period.weekday, representation.period.weekday).state);
-    renderWholeSchool();
-    document.querySelector('#inspection-notice').textContent = M.comparisonNavigationReset;
+  const representation = representations.find(item => item.comparisonSide === side)
+    || representations.find(item => isRepresented(item)) || representations[0];
+  if (!representation) return;
+  const focusTargetSelector = `.focused-schedule [data-lesson-id="${CSS.escape(id)}"][data-comparison-side="${representation.comparisonSide}"]`;
+  if (view.focusedType && document.querySelector(focusTargetSelector)) {
+    syncInspectionState(inspectionState.selectLesson(id, representation.comparisonSide));
+    renderFocused();
+    const target = document.querySelector(focusTargetSelector);
+    target.classList.add('selected');
+    target.setAttribute('aria-current', 'true');
+    target.insertAdjacentHTML('beforeend', `<span class="selected-label">${M.selected}</span>`);
+    target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    updateReviewSelection();
+    document.querySelector('#lesson-panel-title')?.focus();
+    return;
   }
-  const button = document.querySelector(`[data-lesson-id="${CSS.escape(id)}"]`);
+  const adjustments = [];
+  if (view.focusedType) {
+    syncInspectionState(inspectionState.returnToWholeSchool().state);
+    adjustments.push(M.returnedWholeSchool);
+  }
+  if (view.range === 'DAY' && view.day !== representation.period?.weekday && representation.period?.weekday) {
+    syncInspectionState(inspectionState.selectDay(representation.period.weekday, representation.period.weekday).state);
+    adjustments.push(M.switchedReviewDay(M.days[representation.period.weekday] || representation.period.weekday));
+  }
+  // Day renders only the selected period column; a filter matching the other comparison side cannot show this target.
+  if (view.range === 'DAY' && view.periodId && view.periodId !== representation.periodId) {
+    syncInspectionState(inspectionState.selectFilter('periodId', null).state);
+    adjustments.push(M.clearedReviewFilter(M.periodFocus));
+  }
+  if (!isRepresented(representation)) {
+    for (const [filter, selected, expected, label] of [['cohortId', view.cohortId, representation.cohortId, M.classFilter],
+      ['teacherFilterId', view.teacherId, representation.teacherId, M.teacherFilter],
+      ['roomId', view.roomId, representation.roomId, M.roomFilter], ['periodId', view.periodId, representation.periodId, M.periodFocus]]) {
+      if (selected && selected !== expected) {
+        syncInspectionState(inspectionState.selectFilter(filter, null).state);
+        adjustments.push(M.clearedReviewFilter(label));
+      }
+    }
+    if (view.subjectOnly && representation.subjectId !== view.subjectInvestigationId) {
+      syncInspectionState(inspectionState.setSubjectOnly(false).state);
+      adjustments.push(M.clearedReviewFilter(M.subjectInvestigation));
+    }
+    if (view.teacherOnly && representation.teacherId !== view.teacherInvestigationId) {
+      syncInspectionState(inspectionState.setTeacherOnly(false).state);
+      adjustments.push(M.clearedReviewFilter(M.teacherInvestigation));
+    }
+  }
+  if (adjustments.length) renderWholeSchool();
+  const targetSide = representation.comparisonSide;
+  const button = [...document.querySelectorAll(`[data-lesson-id="${CSS.escape(id)}"]`)]
+    .find(item => item.dataset.comparisonSide === targetSide && !item.hidden);
   if (button) { button.scrollIntoView({ block: 'nearest', inline: 'nearest' }); selectLesson(button); }
-  else { syncInspectionState(inspectionState.selectLesson(id)); document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(id); toggleInspector(true); }
+  else { syncInspectionState(inspectionState.selectLesson(id, targetSide)); document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(id); toggleInspector(true); updateReviewSelection(); }
+  if (adjustments.length) document.querySelector('#inspection-notice').textContent = adjustments.join(' ');
 }
 
 function initializeInspectionState(schoolId) {
@@ -289,6 +382,7 @@ function syncInspectionState(state) {
   view.range = state.range;
   view.day = state.weekdayId;
   view.selectedLessonId = state.selectedLessonId;
+  view.reviewTargetSide = state.reviewTargetSide;
   view.subjectInvestigationId = state.subjectId;
   view.teacherInvestigationId = state.teacherId;
   view.subjectOnly = state.subjectOnly;
@@ -710,13 +804,20 @@ function comparisonLessonButton(item, week) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const matched = comparisonMatchedSides(item.lessonId);
-  const state = side === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue
-    : side === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue
-      : side === 'combined' ? M.combinedChange : M.visuallyQuiet;
-  const effects = item.change ? `${item.change.directEffect ? `<em class="direct-label">${M.directlyAffected}</em>` : ''}${item.change.rippleEffect ? `<em class="ripple-label">${M.rippleEffectChanges}</em>` : ''}` : '';
+  const state = comparisonState(item);
+  const shortState = side === 'accepted' ? item.change.proposed ? M.originCue : M.cancelledCue
+    : side === 'proposed' ? item.change.old ? M.destinationCue : M.addedCue : M.sameSlotCue;
+  const effects = item.change ? `${item.change.directEffect ? `<em class="direct-label" title="${M.directlyAffected}">${week ? M.directCue : M.directlyAffected}</em>` : ''}${item.change.rippleEffect ? `<em class="ripple-label" title="${M.rippleEffectChanges}">${week ? M.rippleCue : M.rippleEffectChanges}</em>` : ''}` : '';
   const protection = comparisonProtection(item.lessonId);
+  const compactProtection = comparisonProtectionCue(item.lessonId);
   const label = [lessonAccessibleName(item, [...cues.accessible, state, ...matched]), protection].filter(Boolean).join(' · ');
-  return `<button type="button" class="lesson-cell${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}<em class="comparison-cue">${state}</em>${effects}${protection ? `<em class="pin-label">${escapeHtml(protection)}</em>` : ''}${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span${week ? ' class="week-room"' : ''}>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+}
+
+function comparisonState(item) {
+  return item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue
+    : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue
+      : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet;
 }
 
 function comparisonProtection(id) {
@@ -724,6 +825,14 @@ function comparisonProtection(id) {
   const policy = policyLocks(id);
   return [pin?.periodSources?.length ? M.periodPinned : null, pin?.roomSources?.length ? M.roomPinned : null,
     policy.period ? M.policyPeriodLock : null, policy.room ? M.policyRoomLock : null].filter(Boolean).join(' · ');
+}
+
+function comparisonProtectionCue(id) {
+  const pin = currentSnapshot.workspace.repairDraft?.intent?.pins?.find(item => item.lessonId === id);
+  const policy = policyLocks(id);
+  const period = Boolean(pin?.periodSources?.length || policy.period);
+  const room = Boolean(pin?.roomSources?.length || policy.room);
+  return period && room ? M.bothPinCue : period ? M.periodPinCue : room ? M.roomPinCue : '';
 }
 
 function policyLocks(lessonId) {
@@ -749,7 +858,9 @@ function selectedLessonDetails(id) {
   const pair = comparison.entries.get(id);
   if (!pair) return '';
   const change = pair.change;
+  const target = reviewTargetLabel(pair);
   return `<section class="comparison-details">${pair.old ? `<span class="state accepted">✓ ${M.acceptedAssignment}</span>` : ''}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(reviewLessonName(id))}</h3><p>${change ? M.proposalChange : M.visuallyQuiet}</p><p>${escapeHtml(id)}</p>
+    <p>${M.reviewTarget}: ${target}</p>
     ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}
     ${change ? `<p>${change.categories.map(category => M[category]).join(', ')}</p>` : ''}${comparisonMatchedSides(id).length ? `<p>${comparisonMatchedSides(id).join(' · ')}</p>` : ''}${comparisonProtection(id) ? `<p>${escapeHtml(comparisonProtection(id))}</p>` : ''}
     <div class="before-after">${reviewSide(M.oldAssignment, change ? change.old : pair.old, change?.changedDimensions || [], acceptedModel)}${reviewSide(M.proposedAssignment, change ? change.proposed : pair.proposed, change?.changedDimensions || [], proposedModel)}</div>
@@ -998,8 +1109,8 @@ function syncSelectedLesson(root) {
 }
 
 function selectLesson(button) {
-  if (inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId));
-  else view.selectedLessonId = button.dataset.lessonId;
+  if (inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId, button.dataset.comparisonSide || null));
+  else { view.selectedLessonId = button.dataset.lessonId; view.reviewTargetSide = button.dataset.comparisonSide || null; }
   if (document.querySelector('#workbench-inspector')) toggleInspector(true);
   document.querySelectorAll('.lesson-cell[data-lesson-id]').forEach(candidate => {
     const selected = candidate.dataset.lessonId === view.selectedLessonId;
@@ -1008,6 +1119,7 @@ function selectLesson(button) {
     candidate.querySelector('.selected-label').hidden = !selected;
   });
   document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(view.selectedLessonId);
+  updateReviewSelection();
   bindCloseDetails(); refreshDraftSelectedProtection();
   document.querySelector('#lesson-panel-title')?.focus();
 }
@@ -1026,6 +1138,7 @@ function bindCloseDetails() {
     else view.selectedLessonId = null;
     if (document.querySelector('#lesson-details-host')) document.querySelector('#lesson-details-host').textContent = M.noLessonSelected;
     else document.querySelector('.comparison-details')?.remove();
+    updateReviewSelection();
     refreshDraftSelectedProtection();
     document.querySelectorAll('[data-lesson-id]').forEach(candidate => {
       candidate.classList.remove('selected');
@@ -1046,7 +1159,9 @@ function applyFiltersInPlace() {
     const cues = lessonCues(item);
     button.hidden = !matches;
     button.classList.toggle('search-match', proposalModeActive() ? Boolean(comparison.entries.get(item.lessonId)?.old && searchMatches(comparison.entries.get(item.lessonId).old) || comparison.entries.get(item.lessonId)?.proposed && searchMatches(comparison.entries.get(item.lessonId).proposed)) : searchMatches(item));
-    button.setAttribute('aria-label', proposalModeActive() ? lessonAccessibleName(item, [...cues.accessible, ...comparisonMatchedSides(item.lessonId)]) : lessonAccessibleName(item, [...cues.accessible, ...repairLessonState(item.lessonId).accessible]));
+    button.setAttribute('aria-label', proposalModeActive()
+      ? lessonAccessibleName(item, [...cues.accessible, comparisonState(item), ...comparisonMatchedSides(item.lessonId), comparisonProtection(item.lessonId)].filter(Boolean))
+      : lessonAccessibleName(item, [...cues.accessible, ...repairLessonState(item.lessonId).accessible]));
     const searchLabel = button.querySelector('.search-match-label');
     if (view.search.trim() && searchMatches(item) && !searchLabel) button.insertAdjacentHTML('beforeend', button.classList.contains('week-lesson')
       ? `<em class="search-match-label" title="${M.searchMatch}">${M.searchCue}</em>` : `<em class="search-match-label">${M.searchMatch}</em>`);
@@ -1118,6 +1233,15 @@ function clearSelectedLessonOutsideRepresentation() {
   const selected = proposalModeActive() ? comparison.assignmentsById.get(view.selectedLessonId) || [] : [acceptedModel.assignmentMap.get(view.selectedLessonId)];
   if (!selected.some(Boolean) || selected.some(isRepresented)) return false;
   if (inspectionState) syncInspectionState(inspectionState.closeLesson()); else view.selectedLessonId = null;
+  const details = document.querySelector('#lesson-details-host');
+  if (details) details.textContent = M.noLessonSelected;
+  document.querySelector('#inspector-summary span')?.replaceChildren(M.noLessonSelected);
+  updateReviewSelection();
+  document.querySelectorAll('.lesson-cell.selected').forEach(button => {
+    button.classList.remove('selected');
+    button.setAttribute('aria-pressed', 'false');
+    button.querySelector('.selected-label').hidden = true;
+  });
   refreshDraftSelectedProtection();
   return true;
 }

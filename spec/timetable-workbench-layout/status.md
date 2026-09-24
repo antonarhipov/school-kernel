@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-3
-- Status: APPROVED
-- Next eligible: UC-4
+- Use case: UC-4
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none (UC-5 requires UC-4)
 
 ## Progress
 
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | none | `c407a02` | `convergence/UC-1.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | APPROVED | UC-2 | `4bb218a`; `checkpoints/UC-3.md` | `convergence/UC-3.md`: APPROVE; automated gate green and administrator walkthrough accepted 2026-09-24 |
-| UC-4 | NOT_STARTED | UC-3 | - | - |
+| UC-4 | READY_FOR_CONVERGENCE | UC-3 | HEAD at convergence; `checkpoints/UC-4.md` | - |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
 ## UC-1 Evidence
@@ -138,6 +138,51 @@
 | RULE-5, RULE-7 | `app.js:176–257,437–477,595–647`; `styles.css:337–355,410–412`; `WorkspaceBrowserIT.java:2151–2200,2229–2272`: task/inspector split, authoritative names/IDs, safe text, accepted availability, measured solving and Proposal-handoff layout. |
 | RULE-12, RULE-13 | No server/security diff; full hostile Host/Origin/CSRF/`If-Match` regressions passed. `messages.js:122–137`, `app.js:450–465`, `WorkspaceBrowserIT.java:2183–2200`: catalog strings, native/textual controls, read-only narrow agenda and unchanged local routes. |
 | RULE-14 | `WorkspaceBrowserIT.java:2090–2272,3122–3200`: independently verifier-checked normative school and exact durable state; full final-diff 36-case shared browser regression and 84-case integration suite passed. Human UC-3 walkthrough remains for convergence. |
+
+## UC-4 Evidence
+
+- Started: 2026-09-24 from `7e276394cfc287d0a07d3e50f2642f33b6db8d88`.
+- Pre-existing dirty files: none; prior convergence findings: none; UC-3 is `APPROVED`.
+- Implementation submission: HEAD at convergence; see `checkpoints/UC-4.md`.
+- Changed files: `timetable-workspace/src/main/resources/static/workspace/{app.js,inspection-state.js,messages.js,styles.css}`, `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceBrowserIT.java`, this ledger, and `checkpoints/UC-4.md`.
+- Focused verification: `./mvnw -q -pl timetable-workspace -am '-Dit.test=WorkspaceBrowserIT#reviewsIndependentlyVerifiedNormativeRepairInRealBrowser' -Dfailsafe.failIfNoSpecifiedTests=false verify` passed with Docker access: 1 real-browser case, 26 workspace unit tests, 58 kernel tests; 0 failures/errors/skips. An unprivileged attempt could not initialize Testcontainers; a first assertion expected a toolbar search input inside the focused schedule, where no toolbar is rendered, and was corrected before the passing run.
+- Full relevant suite on the final diff: `./mvnw -q -pl timetable-workspace -am verify` passed 195 tests: 58 kernel unit, 27 kernel integration, 26 workspace unit and 84 workspace integration (36 real-browser); 0 failures/errors/skips. `node --check` for all three changed ES modules and `git diff --check` passed. The run changed no tracked runtime data or unrelated file. Pin-feedback p95 was 317.8 ms against a 250 ms diagnostic-only reference; functional assertions passed.
+- Runtime evidence: isolated PostgreSQL, packaged workspace and kernel verifier, real Chrome with independently verified 1,000-lesson school; inspected `target/workbench-layout/uc4-proposal-{1600,1280}.png`. The screenshots show subject/room and protected cues on a selected compact Week tile, accepted/proposed identity, a class row and time headings beside the inspector, and reachable acceptance/revise/discard decisions beneath the canvas.
+
+| Contract element | Evidence |
+|---|---|
+| Main 1 | `WorkspaceBrowserIT.java:2621–2636,2684–2704`: a saved UC-2 Draft enters UC-3's independently verified Proposal; Current stays the exact old bundle, Proposal is named not current, and the canvas renders all 1,000 IDs with both sides of the period move. |
+| Main 2 | `WorkspaceBrowserIT.java:2637–2683`: exact unique, category, grouping, direct/ripple, protection and safe run values are compared to the persisted authoritative review in the wide task area. |
+| Main 3 | `WorkspaceBrowserIT.java:2735–2762`: category, detail, and grouping links select accepted origin or proposed destination for one stable lesson, including Day and focused return. |
+| Main 4 | `WorkspaceBrowserIT.java:2705–2737,3120–3123`: old/new subject, class, teacher, weekday, period and room names/IDs and changed cues are asserted by value in the inspector; the task area repeats selected before/after, effect, protection and target side. |
+| Main 5 | `WorkspaceBrowserIT.java:1792–1798,2684–2691,2763–2812`: inspects several lessons, switches Current/Proposal, uses Day/focus, and requires explicit confirmation before acceptance. |
+| Main 6; success postcondition | `WorkspaceBrowserIT.java:2812–2820,3057–3058`: confirmed acceptance stores the exact successor definition/result, removes Draft/Proposal, leaves only Current and the retained representable context; an out-of-Day selection clears with explanation. |
+| Extension 1a | `WorkspaceBrowserIT.java:2224–2228`; `WorkspaceRepairPlanningIT.java:420–450`: rejected or invalid production run output returns to exact Draft/Current with no candidate. Existing verifier/import tests reject missing required metadata and unmappable references before operational display. |
+| Extension 1b | `WorkspaceBrowserIT.java:2526–2537`: 390 px Repair proposal is a labelled read-only agenda with accepted/proposed sides and no review decision or desktop matrix. Shared UC-1–3 browser regression covers the 700/701 px boundary. |
+| Extension 2a | `WorkspaceBrowserIT.java:2865–2885`: zero counts and labelled empty categories/groupings remain visible; the presentation-only zero-change fixture does not advance Current. |
+| Extension 3a | `WorkspaceBrowserIT.java:2540–2583,2735–2762`: one-sided filters/search retain both representations; origin/destination and grouping navigation adjust only excluding Day/period/room/focus, explain changes, preserve search/highlights and stable identity. |
+| Extension 3b | `WorkspaceBrowserIT.java:2509–2513,2721–2734`: same-slot room change produces one combined tile with exact old/proposed values. |
+| Extension 3c | `WorkspaceBrowserIT.java:2509–2523`: cancellation has only accepted side and addition only proposed side, both with explicit status; a proposal-only selection is cleared in Current. |
+| Extension 4a | `WorkspaceBrowserIT.java:2523–2526,2764–2773`: an unchanged, protected lesson is named accepted/unchanged and remains outside the two-lesson change total. |
+| Extensions 5a and 5b | `WorkspaceBrowserIT.java:2827–2860,2889–2913`: revise and discard each consume a verified scale Proposal, remove only Proposal, reopen the exact saved editable Draft, and retain the old accepted bundle. |
+| Extension 6a | `WorkspaceBrowserIT.java:2915–2932`; `WorkspaceRepairPlanningIT.java:306–340`: stale identity refuses acceptance, invalidates Proposal to Draft, and preserves exact Current/Draft. |
+| Extension 6b | `WorkspaceBrowserIT.java:1808–1835`; `WorkspaceRepairPlanningIT.java:343–373`: injected PostgreSQL acceptance failure leaves full document/version exact, Proposal reviewable, and explicit retry available. |
+| G1 | `WorkspaceBrowserIT.java:2637–2666,2693–2704,2509–2513`: stable IDs and exact authoritative unique/category/direct/ripple counts distinguish two move tiles from one changed lesson and prevent overlapping sums. |
+| G2 | `app.js:214–370,802–833`; `WorkspaceBrowserIT.java:2540–2583,2707–2762`: both-sided matching, named navigation target, complete before/after IDs, and unavailable optional name cue; verifier refuses invalid candidate output. |
+| G3 | `styles.css:338–380,425–428`; `WorkspaceBrowserIT.java:2774–2809`: measured 1600×900/1280×800 task ≤35% height below canvas, side inspector, headings plus complete row, visible decisions, no page overflow, selected change/count retained after collapse/reopen. |
+| G4 | `inspection-state.js:5–129`; `WorkspaceBrowserIT.java:1795–1798,2473,2760–2762,2773`: mode/filter/search/selection/focus/task actions preserve exact accepted/Draft/Proposal document and version; only guarded decision routes mutate. |
+| G5 | `app.js:802–833,1151–1173`; `messages.js:129–166`; `WorkspaceBrowserIT.java:2684–2689,2757–2770`: compact text/structural origin, destination, same-slot, effect, pin and selection cues with complete accessible names; accepted and proposed availability are distinctly named. |
+| G6; minimal guarantee | `WorkspaceBrowserIT.java:1808–1845,2812–2860,2915–2932`; `WorkspaceRepairPlanningIT.java:306–373`: only confirmed durable acceptance advances exact Current; stale/failed/refused/withdrawn Proposal never partially advances or mislabels it. |
+| G7; Requires UC-3 | `WorkspaceBrowserIT.java:2588–2932`; `WorkspaceRepairPlanningIT.java:306–373`: real browser, packaged process/verifier, isolated JDBC state, comparison shapes and decisions consume UC-3's actual verified Proposal; all 36 shared browser cases passed on the final diff. |
+| RULE-1, RULE-2 | `app.js:26–42,211–349`; `inspection-state.js:5–129`; one packaged snapshot/model and presentation owner; no new API, durable field, runtime dependency or persisted layout state. |
+| RULE-3 | `WorkspaceRepairPlanningIT.java:290–373,420–450`; guarded existing service transitions and exact stale/failure refusals; the UI calls only existing decision routes. |
+| RULE-5 | `styles.css:338–380,425–428`; `WorkspaceBrowserIT.java:2774–2809`: wide task area owns review/decisions; inspector remains concise and separate, with measured geometry. |
+| RULE-6 | `app.js:689–748,1151–1232`; `WorkspaceBrowserIT.java:2540–2583,2693–2704,2735–2762`: complete unique population, intersected either-side narrowing, retained comparison sides and named context adjustments. |
+| RULE-7 | `app.js:802–873,1151–1173`; `WorkspaceBrowserIT.java:2707–2734,2757–2770`: authoritative names/IDs and accepted/proposed availability, escaped text, complete accessible lesson/protection state. |
+| RULE-10 | `app.js:214–370,802–833`; `WorkspaceBrowserIT.java:2637–2762`: stable comparison index, navigable groupings and both move targets, one combined same-slot tile, one-sided additions/cancellations, exact unique and overlap counts. |
+| RULE-11 | `app.js:290–296`; `WorkspaceBrowserIT.java:1808–1845,2812–2860,2915–2932`: existing guarded revise/discard/accept actions and exact acceptance/refusal states. |
+| RULE-12, RULE-13 | No server/security-route diff; `messages.js:129–166`, `WorkspaceBrowserIT.java:2526–2537,2757–2770`: existing local Host/Origin/CSRF/`If-Match` and narrow read-only regression, English catalog strings, native controls and non-color cues. |
+| RULE-14 | `WorkspaceBrowserIT.java:2588–2932,3117–3135`: normative isolated school, independent verifier, exact persisted document/field assertions and real-browser geometry; all 36 shared browser cases and 195 reactor tests passed on the final diff. Administrator walkthrough remains for convergence. |
 
 ## Blockers
 
