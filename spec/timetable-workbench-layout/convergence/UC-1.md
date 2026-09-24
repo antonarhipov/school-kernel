@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workbench-layout/checkpoints/UC-1.md` at `c407a02d2fd2d176e99e6c45b6d5101e11206542`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol; 1 cosmetic evidence-wording note
 - Suite: independent focused run, 26 unit + 1 browser; independent full run, 26 unit + 83 integration including 35 browser; 0 failed, 0 errors, 0 skipped in both
 - Working tree impact from verification: none tracked; `git status --short` was clean before and after tests; browser screenshots remain under ignored `target/`
@@ -80,12 +80,12 @@ One target, UC-1, was `READY_FOR_CONVERGENCE` at the start. The checkpoint, impl
 
 ## Walkthrough
 
-Automated gate passed. User confirmation has not been supplied. The administrator should, on a verified accepted school, (1) identify school, accepted revision, Current and five-day Week/Day count; (2) search and highlight without narrowing, then open Filters, narrow to zero, close it and clear directly; (3) select a lesson, inspect exact subject/class/teacher/day/period/room/ID, open and return from class, teacher and room schedules including an empty entity; (4) collapse/reopen inspector, inspect Utilities, open and close unstaged repair setup, and confirm the accepted timetable remains Current; (5) view 1280 desktop coexistence and the 390 px read-only agenda. Report any clipped control, lost selection, misleading complete label, or unexpected mutation. This is a UC-1 walkthrough only; the five-participant, three-school six-task feature gate belongs to UC-5.
+Automated gate passed. The administrator confirmed “UC-1 walkthrough passed” on 2026-09-24. The confirmed UC-1 script covered (1) identifying school, accepted revision, Current and five-day Week/Day count; (2) search/highlight without narrowing, Filters, zero matches and direct clear; (3) exact lesson inspection, class/teacher/room focus and return, including an empty entity; (4) inspector, Utilities and unstaged repair setup while Current remains accepted; and (5) desktop coexistence and narrow read-only agenda. This confirmation closes only the UC-1 walkthrough; the separate five-participant, three-school six-task feature gate belongs to UC-5.
 
 ## Status Update
 
-UC-1 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; next eligible use case remains none. Only an explicit administrator walkthrough result can promote this UI UC to `APPROVED` before UC-2 begins.
+UC-1 `PENDING_WALKTHROUGH` → `APPROVED` following explicit administrator confirmation; UC-2 is next eligible.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-1 automated evidence passes; administrator confirmation of the script above is required.
+APPROVED
