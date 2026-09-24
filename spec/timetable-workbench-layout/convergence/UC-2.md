@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-workbench-layout/checkpoints/UC-2.md` at `255ab36` (base `5966fab`)
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Suite: independent focused run, 26 unit + 4 browser + 9 Draft integration; independent full reactor, 26 unit + 84 integration including 36 browser; 0 failures, errors, or skips in both
 - Working tree impact from verification: none tracked; `git status --short` was clean before and after both runs. Screenshots are in ignored `timetable-workspace/target/workbench-layout/`.
@@ -93,12 +93,12 @@ None. The full run logged pin-feedback p95 471.9 ms against a 250 ms reference a
 
 ## Walkthrough
 
-Automated convergence passed; administrator confirmation of the UC-2 walkthrough is not yet recorded. Ask the administrator to use the supplied accepted school to: open and close unstaged repair setup; stage a teacher weekly unavailability; identify its direct effect and a blocking conflict while naming accepted Current; resolve the conflict and pin an accepted period or room; inspect an exact bulk preview, cancel it, then confirm and undo one; collapse/reopen Draft, switch Current/Draft, focus and return, and reload; confirm the saved ready Draft still has the intended protection and unchanged Current. Also observe a no-effect room rule, confirmed discard, and the read-only narrow view. The automated fault cases cover invalid, stale and failed writes without asking the administrator to force storage failures. This is the UC-2 walkthrough, not the separate UC-5 five-participant feature gate.
+Automated convergence passed. The administrator confirmed “UC-2 walkthrough passed” on 2026-09-24. The confirmed script covered the supplied accepted school: unstaged repair setup; teacher unavailability, direct effect and blocking conflict while Current stays accepted; conflict resolution and protection; bulk preview/cancel/confirm/undo; Draft collapse, mode switching, focused return and reload; the saved ready Draft; no-effect room rule, discard, and narrow read-only view. Automated fault cases covered invalid, stale and failed writes. This confirmation closes only UC-2, not the separate UC-5 five-participant feature gate.
 
 ## Status Update
 
-UC-2 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; next eligible: none until explicit walkthrough confirmation. UC-1 remains `APPROVED`; UC-3–UC-5 remain `NOT_STARTED`.
+UC-2 `PENDING_WALKTHROUGH` → `APPROVED` following explicit administrator confirmation; UC-3 is next eligible. UC-1 remains `APPROVED`; UC-4–UC-5 remain `NOT_STARTED`.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: confirm UC-2's protected-Draft walkthrough before UC-3 begins.
+APPROVED

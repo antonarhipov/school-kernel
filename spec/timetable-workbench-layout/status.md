@@ -3,15 +3,15 @@
 ## Current
 
 - Use case: UC-2
-- Status: PENDING_WALKTHROUGH
-- Next eligible: none until UC-2's walkthrough is confirmed
+- Status: APPROVED
+- Next eligible: UC-3
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `c407a02` | `convergence/UC-1.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
-| UC-2 | PENDING_WALKTHROUGH | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: PENDING WALKTHROUGH; automated gate green |
+| UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | NOT_STARTED | UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-3 | - | - |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
