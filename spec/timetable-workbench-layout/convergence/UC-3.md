@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `checkpoints/UC-3.md` at `4bb218ae7a4b50db6e5f93553c1b2c81da1e9689` (base `06e89134600b685304354bf7aa982a4a146819e0`)
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic
 - Suite: independent focused run passed 4 browser and 10 repair-planning integration cases; independent full reactor passed 195 tests (kernel CLI 58 unit + 27 integration; workspace 26 unit + 84 integration, including 36 browser), with 0 failures, errors, or skips
 - Working tree impact from verification: none tracked; `git status --short` was clean before and after the successful runs. Screenshots remain ignored under `timetable-workspace/target/workbench-layout/`.
@@ -86,12 +86,12 @@ None. The full run logged a proposal-review opening of 1063.6 ms against a 1000 
 
 ## Walkthrough
 
-Automated convergence passed; administrator confirmation of the UC-3 walkthrough is not yet recorded. From a saved, conflict-free protected Draft, start repair and identify the accepted Current, frozen weekly intent and pin, PT30S limit, status and Cancel run in the wide task area. While it runs, select an accepted lesson; switch Week/Day, Current/Draft/Solving, collapse/reopen frozen detail and inspector, and visit and return from a focused schedule. Confirm these actions neither restart the run nor make its output Current. Cancel one run and confirm editable Draft, unchanged Current and no Proposal. On a subsequent successful run, confirm Solving disappears, Proposal opens its wide task area, the prior Current remains accepted, and the selected representable lesson/context remains available. Check the narrow read-only Solving view. The automated fault journeys cover actual restart, unsuccessful/rejected/timeout outcomes and eligible versus ineligible retry without asking the administrator to force process or storage failures. This is only the UC-3 walkthrough; it does not satisfy the separate five-participant UC-5 feature gate.
+Automated convergence passed. The UC-3 walkthrough script asked the administrator to start from a saved, conflict-free protected Draft and identify accepted Current, frozen weekly intent and pin, PT30S limit, status and Cancel run in the wide task area. During Solving, the script covered lesson selection; Week/Day and Current/Draft/Solving modes; frozen-detail and inspector collapse/reopen; focused schedule return; and confirmation that those actions neither restart the run nor make its output Current. It then covered cancellation back to editable Draft with unchanged Current and no Proposal, a subsequent successful handoff to the open Proposal task area with the prior Current still accepted, and the narrow read-only Solving view. Automated fault journeys covered actual restart, unsuccessful/rejected/timeout outcomes and retry eligibility without asking the administrator to force process or storage failures. On 2026-09-24, the user explicitly replied “WALKTHROUGH accepted.” No additional per-step observations were supplied. This confirms UC-3 only; it does not satisfy the separate five-participant UC-5 feature gate.
 
 ## Status Update
 
-UC-3 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; no next UC is eligible until explicit administrator confirmation. UC-1 and UC-2 remain `APPROVED`; UC-4 and UC-5 remain `NOT_STARTED`.
+UC-3 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH` after the automated audit, then `PENDING_WALKTHROUGH` → `APPROVED` after explicit administrator confirmation. UC-4 is next eligible. UC-1 and UC-2 remain `APPROVED`; UC-4 and UC-5 remain `NOT_STARTED`.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-3 automated convergence passed; await the administrator's UC-3 walkthrough confirmation before approval or UC-4 work.
+APPROVED
