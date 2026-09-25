@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-5
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: none
 
 ## Progress
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | APPROVED | UC-2 | `4bb218a`; `checkpoints/UC-3.md` | `convergence/UC-3.md`: APPROVE; automated gate green and administrator walkthrough accepted 2026-09-24 |
 | UC-4 | APPROVED | UC-3 | `fa2323a`; revised submission `f519d4a` | `convergence/UC-4.md`: APPROVE; automated gate and administrator walkthrough passed 2026-09-25 |
-| UC-5 | READY_FOR_CONVERGENCE | UC-1, UC-2, UC-3, UC-4 | `75d0d89`; revised HEAD at convergence; `checkpoints/UC-5.md` | `convergence/UC-5.md`: prior REJECT C-1, G-1, G-2; re-audit pending |
+| UC-5 | NEEDS_REVISION | UC-1, UC-2, UC-3, UC-4 | `75d0d89`; revised `14e88da`; `checkpoints/UC-5.md` | `convergence/UC-5.md`: REJECT G-2; prior C-1/G-1 resolved |
 
 ## UC-1 Evidence
 
@@ -190,6 +190,7 @@
 
 ## UC-5 Evidence
 
+- Second convergence: `convergence/UC-5.md` verified the visual fix and focused journey but rejected `14e88da` for G-2: independent full reactor reported two Chrome/CDP harness errors in the 36-browser shared suite. The builder's earlier 195-test green run does not substitute for an independent green suite.
 - Revision started: 2026-09-25 08:50 EEST from `d0aeb17`; prior findings C-1, G-1 and G-2. Pre-existing dirty file: `spec/timetable-workbench-layout/spec.md`, excluded from the revision.
 - Revision submission: HEAD at convergence; changed `app.js`, `messages.js`, `styles.css`, `WorkspaceBrowserIT.java`, this ledger and `checkpoints/UC-5.md`. C-1 is addressed by compact Week cues, a reserved room width and contained wrapping; G-1 by all-tile 1600/1280 geometry assertions; G-2 by a clean 195-test full reactor and 36/36 shared browser cases. Final focused UC-5 and two affected UC-4 browser cases passed. `node --check` and `git diff --check` passed. Tests changed no tracked runtime data; the pre-existing `spec.md` edit remains excluded.
 - Convergence: `convergence/UC-5.md` rejected the submitted `75d0d89` boundary for C-1 (Proposal Week tile room/cue visibility), G-1 (missing tile assertions), and G-2 (one independent shared-browser timeout). The next execute revision must address all three findings.
