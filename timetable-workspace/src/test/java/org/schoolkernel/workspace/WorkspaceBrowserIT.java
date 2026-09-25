@@ -2987,7 +2987,7 @@ class WorkspaceBrowserIT {
     }
 
     @Test
-    @DisplayName("Timetable polish UC-5 main/2a/3a/5a/G1-G6: complete verified whole-school repair retains context and parents the next draft")
+    @DisplayName("Workbench layout UC-5 main/2a/3a/5a/G1-G5: one wide workbench completes repair and parents the next Draft")
     void completesWholeSchoolRepairAndStartsNextFromAcceptedSuccessorInRealBrowser() throws Exception {
         ObjectNode document = investigationScaleDocument();
         JsonNode original = document.path("acceptedBaseline").deepCopy();
@@ -3002,6 +3002,9 @@ class WorkspaceBrowserIT {
                 original.path("result").path("timetable").path("assignments").get(960));
         storeAccepted(document);
         try (Cdp cdp = openWorkspaceBrowser()) {
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1600)
+                    .put("height", 900).put("deviceScaleFactor", 1).put("mobile", false));
+            cdp.command("Page.reload", JSON.createObjectNode());
             cdp.awaitText("Showing 60 of 60 classes", Duration.ofSeconds(20));
             assertTrue(browserTrue(cdp, "document.querySelector('.accepted-heading')?.textContent.includes('Scale School') && document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=WEEK]')?.getAttribute('aria-pressed') === 'true'"));
             Set<String> expectedIds = new HashSet<>();
@@ -3037,6 +3040,7 @@ class WorkspaceBrowserIT {
             assertEquals(JSON.readTree("[\"lesson-960\"]"), draft.path("directEffectLessonIds"));
             assertEquals("lesson-500", draft.path("intent").path("pins").get(0).path("lessonId").stringValue());
             assertEquals(JSON.readTree("[\"INDIVIDUAL\"]"), draft.path("intent").path("pins").get(0).path("roomSources"));
+            assertUc5WideJourneyPhase(cdp, "DRAFT", "#solve-draft", "draft");
             cdp.evaluate("document.querySelector('[data-lesson-id=lesson-960]').click(); document.querySelector('[data-range=DAY]').click(); document.querySelector('#cohort-filter').value='cohort-16'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#toggle-inspector').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('#inspector-summary')?.textContent.includes('Declared lesson 960') && document.querySelector('#workbench-inspector')?.hidden === true"));
             cdp.evaluate("document.querySelector('#reopen-inspector').click()");
@@ -3052,6 +3056,9 @@ class WorkspaceBrowserIT {
             assertEquals(draft, running.path("repairDraft"));
             assertFalse(running.has("proposal"));
             assertEquals("PT30S", running.path("run").path("limit").stringValue());
+            cdp.evaluate("document.querySelector('[data-range=WEEK]').click()");
+            assertUc5WideJourneyPhase(cdp, "SOLVING", "#cancel-run", "solving");
+            cdp.evaluate("document.querySelector('[data-range=DAY]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=SOLVING]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#cancel-run') && !document.querySelector('#apply-pin') && document.querySelector('#cohort-filter')?.value === 'cohort-16' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"));
             cdp.evaluate("document.querySelector('[data-mode=CURRENT]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'"));
@@ -3084,6 +3091,16 @@ class WorkspaceBrowserIT {
             assertEquals("room-50", proposal.path("result").path("timetable").path("assignments").get(0).path("roomId").stringValue());
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=PROPOSAL]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#cohort-filter')?.value === 'cohort-16' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('.comparison-details')?.textContent.includes('period-40')"));
             cdp.evaluate("document.querySelector('[data-range=WEEK]').click(); document.querySelector('#reset-view').click()");
+            assertUc5WideJourneyPhase(cdp, "PROPOSAL", "#accept-repair", "proposal");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 390)
+                    .put("height", 844).put("deviceScaleFactor", 1).put("mobile", false));
+            awaitBrowserCondition(cdp, "document.querySelector('.focused-schedule') !== null && document.querySelector('#workbench-task-area') === null");
+            assertTrue(browserTrue(cdp, "document.body.innerText.includes('Repair proposal') && document.body.innerText.includes('Accepted baseline remains current') && !document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, #cancel-run') && document.documentElement.scrollWidth <= innerWidth"),
+                    "UC-5 G3/RULE-12: the same verified Proposal becomes a read-only narrow agenda");
+            assertEquals(proposed, storedWorkspaceDocument(), "narrow reading cannot change the accepted/Draft/Proposal document");
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", 1280)
+                    .put("height", 800).put("deviceScaleFactor", 1).put("mobile", false));
+            awaitBrowserCondition(cdp, "document.querySelector('#workbench-task-area #accept-repair') !== null");
             assertTrue(browserTrue(cdp, "document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-960]').length === 2 && document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-0]').length === 1 && document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=accepted]') && document.querySelector('[data-lesson-id=lesson-960][data-comparison-side=proposed]')"));
             cdp.evaluate("document.querySelector('[data-lesson-id=lesson-0][data-comparison-side=combined]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('room-0') && document.querySelector('.comparison-details')?.textContent.includes('room-50') && document.querySelector('.comparison-details')?.textContent.includes('Solver ripple')"));
@@ -3108,6 +3125,10 @@ class WorkspaceBrowserIT {
             assertEquals(proposal.path("proposedTimetableRevision").stringValue(), successorDocument.path("timetableRevision").stringValue());
             assertFalse(original.path("result").path("timetableRevision").equals(successorDocument.path("timetableRevision")),
                     "UC-5 main 5: the accepted revision must advance to the verified successor");
+            assertTrue(successor.path("manifest").path("locks").valueStream().anyMatch(lock ->
+                            "lesson-500".equals(lock.path("lessonId").stringValue())
+                                    && "ATTEMPT_SCOPED".equals(lock.path("roomLockOrigin").stringValue())),
+                    "UC-5 5a: the accepted successor records the previous attempt's lock provenance");
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('[data-mode=DRAFT], [data-mode=SOLVING], [data-mode=PROPOSAL]') && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#range-summary')?.textContent.includes('Monday') && !document.querySelector('[data-lesson-id=lesson-960]') && !document.querySelector('#lesson-panel-title') && document.querySelector('#inspection-notice')?.textContent.includes('outside the represented Day')"),
                     "UC-5 main 5: accepted period move must clear only an unrepresentable Monday selection, with an explanation");
             assertEquals(1_000, successor.path("result").path("timetable").path("assignments").size());
@@ -3124,10 +3145,69 @@ class WorkspaceBrowserIT {
             assertEquals(JSON.readTree("[\"lesson-0\"]"), nextDraft.path("directEffectLessonIds"));
             assertTrue(nextDraft.path("intent").path("pins").isEmpty(), "UC-5 5a: the next attempt must not inherit previous pins");
             assertTrue(nextDraft.path("intent").path("bulkActions").isEmpty());
+            assertEquals(successor.path("result").path("timetableRevision"), storedWorkspaceDocument().path("timetableRevision"),
+                    "UC-5 5a: the next Draft keeps the successor timetable revision as Current");
+            assertTrue(browserTrue(cdp, "!document.querySelector('#draft-selected-protection')?.textContent.includes('Policy room lock')"),
+                    "UC-5 5a: the previous attempt pin must not appear as a persistent policy lock");
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#draft-conflict-count')?.textContent === '0' && document.querySelector('#attempt-pin-count')?.textContent === '0'"));
             assertEquals(2, processes.commands().stream().filter(command -> command.size() > 1 && "replan".equals(command.get(1))).count(), "the next Draft must not launch a run without an explicit request");
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
+    }
+
+    private void assertUc5WideJourneyPhase(Cdp cdp, String mode, String actionSelector, String screenshotPhase)
+            throws Exception {
+        String beforePresentation = storedDocument();
+        for (int[] viewport : new int[][] { { 1600, 900 }, { 1280, 800 } }) {
+            cdp.command("Emulation.setDeviceMetricsOverride", JSON.createObjectNode().put("width", viewport[0])
+                    .put("height", viewport[1]).put("deviceScaleFactor", 1).put("mobile", false));
+            awaitBrowserCondition(cdp, "document.querySelector('.week-matrix') !== null && document.querySelector('#workbench-task-area') !== null");
+            cdp.evaluate("window.scrollTo(0, 0)");
+            JsonNode geometry = cdp.evaluateValue("""
+                    (() => { const task=document.querySelector('#workbench-task-area');
+                      const canvas=document.querySelector('.canvas-region');
+                      const wrap=document.querySelector('.matrix-wrap');
+                      const inspector=document.querySelector('#workbench-inspector');
+                      task.scrollTop=%s;
+                      const bounds=task.getBoundingClientRect();
+                      const action=document.querySelector('%s').getBoundingClientRect();
+                      return {taskHeight:bounds.height, taskTop:bounds.top, taskBottom:bounds.bottom,
+                        canvasBottom:canvas.getBoundingClientRect().bottom,
+                        inspectorLeft:inspector.getBoundingClientRect().left,
+                        canvasRight:canvas.getBoundingClientRect().right,
+                        visible:wrap.clientHeight,
+                        heading:document.querySelector('.week-matrix thead').getBoundingClientRect().height,
+                        row:[...document.querySelectorAll('.week-matrix tbody tr')]
+                          .find(row => !row.hidden && row.getBoundingClientRect().height > 0)
+                          ?.getBoundingClientRect().height || 0,
+                        page:document.documentElement.scrollWidth,
+                        taskWidth:task.clientWidth, taskScrollWidth:task.scrollWidth,
+                        actionTop:action.top, actionBottom:action.bottom,
+                        actionLeft:action.left, actionRight:action.right,
+                        taskLeft:bounds.left, taskRight:bounds.right}; })()
+                    """.formatted("SOLVING".equals(mode) ? "0" : "task.scrollHeight", actionSelector))
+                    .path("result").path("result").path("value");
+            assertTrue(geometry.path("taskHeight").doubleValue() <= viewport[1] * .35
+                            && geometry.path("taskTop").doubleValue() >= geometry.path("canvasBottom").doubleValue()
+                            && geometry.path("inspectorLeft").doubleValue() >= geometry.path("canvasRight").doubleValue()
+                            && geometry.path("visible").doubleValue() >= geometry.path("heading").doubleValue()
+                                    + geometry.path("row").doubleValue()
+                            && geometry.path("page").doubleValue() <= viewport[0] + 1
+                            && geometry.path("taskScrollWidth").doubleValue() <= geometry.path("taskWidth").doubleValue() + 1
+                            && geometry.path("actionTop").doubleValue() >= geometry.path("taskTop").doubleValue()
+                            && geometry.path("actionBottom").doubleValue() <= geometry.path("taskBottom").doubleValue()
+                            && geometry.path("actionBottom").doubleValue() <= viewport[1]
+                            && geometry.path("actionLeft").doubleValue() >= geometry.path("taskLeft").doubleValue()
+                            && geometry.path("actionRight").doubleValue() <= geometry.path("taskRight").doubleValue(),
+                    "UC-5 G3: " + mode + " must keep canvas, inspector and task action usable at "
+                            + viewport[0] + "px: " + geometry);
+            assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=" + mode
+                            + "]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('.accepted-heading .state.accepted')?.textContent.includes('Current')"),
+                    "UC-5 G2: " + mode + " must keep Current and active mode identifiable");
+            captureWorkbenchScreenshot(cdp, "uc5-" + screenshotPhase + "-" + viewport[0] + ".png");
+        }
+        assertEquals(beforePresentation, storedDocument(),
+                "UC-5 G1/RULE-2: responsive workbench changes cannot mutate the workspace document or version");
     }
 
     private Cdp openWorkspaceBrowser() throws Exception {
