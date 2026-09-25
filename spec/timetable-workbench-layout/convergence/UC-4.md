@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `checkpoints/UC-4.md` at `f519d4a95a8cc1f0df9d061dc546f59930cf775d` (revision base `e2137b1`; initial implementation `fa2323a`)
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gaps, 0 protocol, 0 drift, 0 cosmetic; prior G-1, G-2, G-3 and K-1 resolved
 - Suite: independent focused normative browser passed; independent full reactor passed 195 tests (58 kernel unit, 27 kernel integration, 26 workspace unit, 84 workspace integration including 36 browser), with 0 failures, errors or skips.
 - Working tree impact from verification: none tracked; `git status --short` was clean before and after tests. Screenshots remain ignored under `timetable-workspace/target/workbench-layout/`.
@@ -95,12 +95,12 @@ Automated convergence passed. The administrator should perform this UC-4-derived
 3. Inspect a same-slot room change, an unchanged protected lesson, and the available addition/cancellation demonstration; distinguish each from the unique changed count. Switch Current, Draft and Proposal, use a focused schedule and return, then collapse/reopen the review area and confirm selection/count/canvas context remain understandable.
 4. At a narrow width, confirm the Proposal is a read-only accepted/proposed agenda with no revise, discard or accept control. At desktop width, decide deliberately: verify confirmation alone does not accept, then explicitly accept the verified Proposal and identify only the new Current, with no Draft, Proposal or open repair task. The alternate revise/discard paths and stale/storage failures are covered by automation rather than requiring the administrator to force failures.
 
-User result: pending. This UC-4 walkthrough is separate from the `timetable-ux-polish` UC-5 five-administrator gate and the later `timetable-workbench-layout` UC-5 feature gate.
+User result: on 2026-09-25, the user replied `PASS` to the UC-4 walkthrough request. No additional per-step observations were supplied. This confirms UC-4 only; it does not satisfy the separate `timetable-ux-polish` UC-5 five-administrator gate or the later `timetable-workbench-layout` UC-5 feature gate.
 
 ## Status Update
 
-UC-4 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH`; UC-5 remains `NOT_STARTED` because it requires approved UC-4. UC-1, UC-2 and UC-3 remain `APPROVED`. No other feature's verdict changes.
+UC-4 `READY_FOR_CONVERGENCE` → `PENDING_WALKTHROUGH` after the automated audit, then `PENDING_WALKTHROUGH` → `APPROVED` after explicit administrator confirmation. UC-5 is now eligible but remains `NOT_STARTED`. UC-1, UC-2 and UC-3 remain `APPROVED`. No other feature's verdict changes.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-4 automated evidence passes; obtain administrator confirmation of the script above before approval.
+APPROVED

@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-4
-- Status: PENDING_WALKTHROUGH
-- Next eligible: none (UC-5 requires UC-4)
+- Status: APPROVED
+- Next eligible: UC-5
 
 ## Progress
 
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | none | `c407a02` | `convergence/UC-1.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | APPROVED | UC-2 | `4bb218a`; `checkpoints/UC-3.md` | `convergence/UC-3.md`: APPROVE; automated gate green and administrator walkthrough accepted 2026-09-24 |
-| UC-4 | PENDING_WALKTHROUGH | UC-3 | `fa2323a`; revised submission `f519d4a` | `convergence/UC-4.md`: automated gate passed; administrator walkthrough pending |
+| UC-4 | APPROVED | UC-3 | `fa2323a`; revised submission `f519d4a` | `convergence/UC-4.md`: APPROVE; automated gate and administrator walkthrough passed 2026-09-25 |
 | UC-5 | NOT_STARTED | UC-1, UC-2, UC-3, UC-4 | - | - |
 
 ## UC-1 Evidence
