@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-5
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none
 
 ## Progress
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | APPROVED | UC-2 | `4bb218a`; `checkpoints/UC-3.md` | `convergence/UC-3.md`: APPROVE; automated gate green and administrator walkthrough accepted 2026-09-24 |
 | UC-4 | APPROVED | UC-3 | `fa2323a`; revised submission `f519d4a` | `convergence/UC-4.md`: APPROVE; automated gate and administrator walkthrough passed 2026-09-25 |
-| UC-5 | NEEDS_REVISION | UC-1, UC-2, UC-3, UC-4 | `75d0d89`; `checkpoints/UC-5.md` | `convergence/UC-5.md`: REJECT C-1, G-1, G-2 |
+| UC-5 | READY_FOR_CONVERGENCE | UC-1, UC-2, UC-3, UC-4 | `75d0d89`; revised HEAD at convergence; `checkpoints/UC-5.md` | `convergence/UC-5.md`: prior REJECT C-1, G-1, G-2; re-audit pending |
 
 ## UC-1 Evidence
 
@@ -190,6 +190,8 @@
 
 ## UC-5 Evidence
 
+- Revision started: 2026-09-25 08:50 EEST from `d0aeb17`; prior findings C-1, G-1 and G-2. Pre-existing dirty file: `spec/timetable-workbench-layout/spec.md`, excluded from the revision.
+- Revision submission: HEAD at convergence; changed `app.js`, `messages.js`, `styles.css`, `WorkspaceBrowserIT.java`, this ledger and `checkpoints/UC-5.md`. C-1 is addressed by compact Week cues, a reserved room width and contained wrapping; G-1 by all-tile 1600/1280 geometry assertions; G-2 by a clean 195-test full reactor and 36/36 shared browser cases. Final focused UC-5 and two affected UC-4 browser cases passed. `node --check` and `git diff --check` passed. Tests changed no tracked runtime data; the pre-existing `spec.md` edit remains excluded.
 - Convergence: `convergence/UC-5.md` rejected the submitted `75d0d89` boundary for C-1 (Proposal Week tile room/cue visibility), G-1 (missing tile assertions), and G-2 (one independent shared-browser timeout). The next execute revision must address all three findings.
 
 - Started: 2026-09-25 08:02 EEST from `5542555b9855df55851c9880b7e45ad29ceae79a`.
@@ -214,16 +216,16 @@
 | Extension 5a | `WorkspaceBrowserIT.java:3129–3154,1731–1895`: the second room Draft has the accepted successor, exact new direct effect `[lesson-0]`, no inherited attempt pins or bulk actions, and no unrequested scheduler invocation; prior lock provenance is distinct from policy. |
 | G1 | `WorkspaceBrowserIT.java:2991–3154`: stable 1,000 IDs, authoritative names/revisions and retained lesson relationship through all four modes and both ranges; one accepted model and snapshot path in `app.js` and `inspection-state.js`. |
 | G2 | `WorkspaceBrowserIT.java:3021–3154,3158–3210`: header Current, active mode, direct conflict, frozen run, non-current Proposal and decision controls remain labelled through the journey. |
-| G3 | `WorkspaceBrowserIT.java:3043,3060,3094–3104,3158–3210`: measured 1600/1280 Draft, Solving and Proposal with task ≤35% viewport, canvas header and represented row, side inspector, no page/task horizontal overflow and reachable active decisions; 390 Proposal is read-only. Six screenshots were visually inspected. |
+| G3 | `WorkspaceBrowserIT.java:3043,3060,3094–3104,3158–3245`: measured 1600/1280 Draft, Solving and Proposal with task ≤35% viewport, canvas heading/complete row, side inspector, no page/task horizontal overflow and reachable decisions; all 1,001 Proposal Week tiles retain contained subject, room and badges. Fresh desktop screenshots were inspected; 390 Proposal is read-only. |
 | G4; minimal guarantee | `WorkspaceBrowserIT.java:3027–3036,3068–3084,3114–3123`; approved failure tests above: every blocked/cancelled/refused path keeps the last exact accepted bundle and never calls Draft, run or unaccepted Proposal Current. |
 | G5 | `WorkspaceBrowserIT.java:2991–3154`: one isolated real-browser journey consumes UC-1 through UC-4 postconditions, compares exact persisted snapshots after handoffs and accepts a verified successor; all 36 browser and 195 reactor tests pass. The five-participant feature gate is reserved for convergence. |
 | RULE-1, RULE-2 | `app.js:40–174`; `inspection-state.js:1–133`; `WorkspaceBrowserIT.java:3043,3064–3067,3114–3123,3158–3210`: one snapshot/model; layout/mode/resize and review actions preserve document plus version with no mutation traffic in approved related-UC tests. |
 | RULE-3, RULE-8, RULE-9 | `RepairDraftService.java:35–178`; `RepairPlanningService.java:52–242`; `WorkspaceBrowserIT.java:3021–3084,2090–2250`; `WorkspaceRepairPlanningIT.java:90–535`: guarded Draft/solve/refusal transitions and exact failure outcomes. |
-| RULE-4, RULE-5 | `styles.css:272–437`; `WorkspaceBrowserIT.java:490–648,3158–3210`: compact complete-school canvas and measured below-canvas task/side inspector at both desktops with read-only narrow boundary. |
+| RULE-4, RULE-5 | `app.js:802–818,1160–1180`; `styles.css:325–360`; `WorkspaceBrowserIT.java:490–648,3158–3245`: compact Week cues, reserved visible room space and measured contained badges for all Proposal tiles, plus below-canvas task/side inspector at both desktops and read-only narrow boundary. |
 | RULE-6, RULE-7 | `WorkspaceBrowserIT.java:490–648,2540–2583,2991–3020,3085–3123`; `app.js:689–833`: exact school names/IDs, accepted/proposed values, complete/narrowed population, either-side comparison and separately labelled availability. |
 | RULE-10, RULE-11 | `WorkspaceBrowserIT.java:2588–2985,3085–3154`; `RepairDraftService.java:183–223`: one stable comparison identity, exact review counts and targets, explicit atomic acceptance, and next repair without inherited attempt pins. |
 | RULE-12, RULE-13 | `WorkspaceBrowserIT.java:3094–3104`; `WorkspaceImportIT.java:459–545`; `messages.js:1–260`: narrow read-only Proposal, native/text cues and unchanged local Host/Origin/CSRF/`If-Match` boundary; no route or storage diff. |
-| RULE-14 | `WorkspaceBrowserIT.java:2991–3210` plus the approved UC-1–UC-4 browser journeys: normative school and viewports, exact isolated state, one production-path handoff across four included UCs, complete shared regression. Human gate remains pending. |
+| RULE-14 | `WorkspaceBrowserIT.java:2991–3245` plus the approved UC-1–UC-4 browser journeys: normative school and viewports, exact isolated state, one production-path handoff across four included UCs, and clean final-revision 36-browser/195-reactor regression. Human gate remains pending. |
 
 ## Blockers
 

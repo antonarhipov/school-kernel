@@ -151,6 +151,8 @@ export const M = Object.freeze({
   bothPinCue: 'Both pinned',
   acceptedSideMatch: 'Accepted-side match',
   proposedSideMatch: 'Proposed-side match',
+  acceptedSideMatchCue: 'Accepted match',
+  proposedSideMatchCue: 'Proposed match',
   proposedAvailability: 'Proposed teacher load by period · not current',
   linkedComparisonSide: 'Related comparison side · belongs to the other resource',
   overlappingTotals: 'Categories may overlap; changed lessons are counted once in the unique total.',

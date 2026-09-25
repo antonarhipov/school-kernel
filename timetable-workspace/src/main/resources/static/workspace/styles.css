@@ -352,12 +352,13 @@ body.operational .utility-disclosure > summary { padding: 7px 9px; font-size: .7
 .solving-mode .frozen-draft-context dl { margin: 6px 0; }
 .solving-mode .frozen-draft-context ul { margin: 6px 0; }
 .review-mode.current-mode .proposal-task-area { max-height: 24vh; }
-.review-mode.current-mode:has(.proposal-task-area:not([hidden])) .matrix-wrap { max-height: 320px; }
+.review-mode.current-mode:has(.proposal-task-area:not([hidden])) .matrix-wrap { max-height: 335px; }
 .review-mode.current-mode .week-slot { min-height: 23px; padding: 1px 0 1px 50px; }
 .review-mode.current-mode .week-period { top: 4px; width: 46px; }
-.review-mode.current-mode .week-lesson { min-height: 18px; padding: 1px 3px; }
+.review-mode.current-mode .week-lesson { min-height: 18px; padding: 1px 3px; flex-wrap: wrap; }
 .review-mode.current-mode .week-lesson strong { min-width: 38px; }
-.review-mode.current-mode .week-lesson em { font-size: .51rem; }
+.review-mode.current-mode .week-lesson .week-room { flex: 0 0 40px; min-width: 40px; }
+.review-mode.current-mode .week-lesson em { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; font-size: .51rem; }
 .review-mode.current-mode .week-lesson .selected-label { display: none !important; }
 .review-mode.current-mode .matrix:not(.week-matrix) { table-layout: auto; min-width: 100%; }
 .review-mode.current-mode .matrix:not(.week-matrix) td,

@@ -811,7 +811,7 @@ function comparisonLessonButton(item, week) {
   const protection = comparisonProtection(item.lessonId);
   const compactProtection = comparisonProtectionCue(item.lessonId);
   const label = [lessonAccessibleName(item, [...cues.accessible, state, ...matched]), protection].filter(Boolean).join(' · ');
-  return `<button type="button" class="lesson-cell${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span${week ? ' class="week-room"' : ''}>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span${week ? ' class="week-room"' : ''}>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${week ? cues.weekMarkup : cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function comparisonState(item) {
@@ -1168,7 +1168,14 @@ function applyFiltersInPlace() {
     if (!view.search.trim() || !searchMatches(item)) searchLabel?.remove();
     if (proposalModeActive()) {
       button.querySelector('.side-match-label')?.remove();
-      if (comparisonMatchedSides(item.lessonId).length) button.insertAdjacentHTML('beforeend', `<em class="side-match-label">${comparisonMatchedSides(item.lessonId).join(' · ')}</em>`);
+      const matchedSides = comparisonMatchedSides(item.lessonId);
+      if (matchedSides.length && (!button.classList.contains('week-lesson') || matchedSides.length === 1)) {
+        const fullLabel = matchedSides.join(' · ');
+        const week = button.classList.contains('week-lesson');
+        const visibleLabel = !week ? fullLabel : matchedSides[0] === M.acceptedSideMatch
+          ? M.acceptedSideMatchCue : M.proposedSideMatchCue;
+        button.insertAdjacentHTML('beforeend', `<em class="side-match-label" title="${escapeAttribute(fullLabel)}">${escapeHtml(visibleLabel)}</em>`);
+      }
     }
     button.classList.toggle('match', narrowed && matches);
     const matchLabel = button.querySelector('.match-label');

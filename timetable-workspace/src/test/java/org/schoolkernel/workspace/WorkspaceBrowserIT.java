@@ -2512,7 +2512,7 @@ class WorkspaceBrowserIT {
             assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Room 1') && document.querySelector('.comparison-details')?.textContent.includes('room-2 (Name unavailable)')"),
                     "UC-4 4a: missing proposal display name retains the stable room ID and unavailable-name cue");
             cdp.evaluate("document.querySelector('#room-filter').value='room-2'; document.querySelector('#room-filter').dispatchEvent(new Event('change',{bubbles:true}))");
-            assertTrue(browserTrue(cdp, "!document.querySelector('[data-lesson-id=lesson-100]').hidden && document.querySelector('[data-lesson-id=lesson-100]')?.textContent.includes('Proposed-side match') && document.querySelector('#represented-lesson-count')?.textContent.includes('61')"),
+            assertTrue(browserTrue(cdp, "!document.querySelector('[data-lesson-id=lesson-100]').hidden && document.querySelector('[data-lesson-id=lesson-100]')?.getAttribute('aria-label').includes('Proposed-side match') && document.querySelector('[data-lesson-id=lesson-100] .side-match-label')?.textContent === 'Proposed match' && document.querySelector('#represented-lesson-count')?.textContent.includes('61')"),
                     "UC-4 3a: proposal-only resource filter retains the changed lesson as one identity");
             cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('[data-lesson-id=lesson-101]').click()");
             assertTrue(browserTrue(cdp, "document.querySelector('.comparison-details')?.textContent.includes('Not present') && document.querySelector('.comparison-details')?.textContent.includes('Cancellations')"));
@@ -2567,16 +2567,16 @@ class WorkspaceBrowserIT {
                 cdp.evaluate("document.querySelector('#return-matrix').click(); document.querySelector('#reset-view').click()");
             }
             cdp.evaluate("document.querySelector('#subject-investigation').value='subject-1'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
-            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.textContent.includes('Proposed-side match'))"),
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.getAttribute('aria-label').includes('Proposed-side match') && el.querySelector('.side-match-label')?.textContent === 'Proposed match')"),
                     "UC-4 3a: proposed-only subject investigation retains accepted origin");
             cdp.evaluate("document.querySelector('#subject-investigation').value='subject-0'; document.querySelector('#subject-investigation').dispatchEvent(new Event('change',{bubbles:true}))");
-            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.textContent.includes('Accepted-side match'))"),
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.getAttribute('aria-label').includes('Accepted-side match') && el.querySelector('.side-match-label')?.textContent === 'Accepted match')"),
                     "UC-4 3a: accepted-only subject investigation retains proposed destination");
             cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('#cohort-filter').value='cohort-21'; document.querySelector('#cohort-filter').dispatchEvent(new Event('change',{bubbles:true}))");
-            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.textContent.includes('Proposed-side match'))"),
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].every(el=>!el.hidden && el.getAttribute('aria-label').includes('Proposed-side match') && el.querySelector('.side-match-label')?.textContent === 'Proposed match')"),
                     "UC-4 3a: one-sided class filter retains both placements: " + cdp.evaluateValue("[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')].map(el=>[el.dataset.comparisonSide,el.hidden,el.textContent,el.closest('tr')?.hidden])"));
             cdp.evaluate("document.querySelector('#reset-view').click(); document.querySelector('#lesson-search').value='Room 90'; document.querySelector('#lesson-search').dispatchEvent(new Event('input',{bubbles:true}))");
-            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-0]')].every(el=>!el.hidden && el.textContent.includes('Proposed-side match')) && document.querySelector('#search-summary')?.textContent.includes('1')"),
+            assertTrue(browserTrue(cdp, "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-0]')].every(el=>!el.hidden && el.getAttribute('aria-label').includes('Proposed-side match') && el.querySelector('.side-match-label')?.textContent === 'Proposed match') && document.querySelector('#search-summary')?.textContent.includes('1')"),
                     "UC-4 3a: a proposed-only search name highlights exactly one joined identity and retains the accepted origin");
             assertTrue(cdp.errors().isEmpty(), cdp.errors().toString());
         }
@@ -3204,6 +3204,39 @@ class WorkspaceBrowserIT {
             assertTrue(browserTrue(cdp, "document.querySelector('[data-mode=" + mode
                             + "]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('.accepted-heading .state.accepted')?.textContent.includes('Current')"),
                     "UC-5 G2: " + mode + " must keep Current and active mode identifiable");
+            if ("PROPOSAL".equals(mode)) {
+                JsonNode tiles = cdp.evaluateValue("""
+                        (() => { const buttons=[...document.querySelectorAll('.week-matrix .week-lesson:not([hidden])')]
+                            .filter(button => button.getClientRects().length);
+                          const inside=(child,parent) => child.left>=parent.left-1 && child.right<=parent.right+1
+                            && child.top>=parent.top-1 && child.bottom<=parent.bottom+1;
+                          const violations=[];
+                          for (const button of buttons) {
+                            const box=button.getBoundingClientRect();
+                            const subject=button.querySelector('strong');
+                            const room=button.querySelector('.week-room');
+                            const labels=[...button.querySelectorAll('em:not([hidden])')]
+                              .filter(label => label.getClientRects().length);
+                            const bad=!subject || !room || !subject.textContent.trim() || !room.textContent.trim()
+                              || subject.getBoundingClientRect().width<38 || room.getBoundingClientRect().width<38
+                              || !inside(subject.getBoundingClientRect(),box) || !inside(room.getBoundingClientRect(),box)
+                              || labels.some(label => !inside(label.getBoundingClientRect(),box)
+                                || label.scrollWidth>label.clientWidth+2)
+                              || button.scrollWidth>button.clientWidth+2;
+                            if (bad && violations.length<5) violations.push({id:button.dataset.lessonId,
+                              side:button.dataset.comparisonSide, subjectWidth:subject?.getBoundingClientRect().width,
+                              roomWidth:room?.getBoundingClientRect().width,
+                              room:room?.textContent, buttonWidth:box.width,
+                              badges:labels.map(label => ({text:label.textContent,
+                                width:label.getBoundingClientRect().width, scrollWidth:label.scrollWidth,
+                                contained:inside(label.getBoundingClientRect(),box)}))});
+                          }
+                          return {checked:buttons.length,violations}; })()
+                        """).path("result").path("result").path("value");
+                assertTrue(tiles.path("checked").intValue() >= 1_000 && tiles.path("violations").isEmpty(),
+                        "UC-5 RULE-4: all Proposal Week tiles must visibly contain subject, room and every cue at "
+                                + viewport[0] + "px: " + tiles);
+            }
             captureWorkbenchScreenshot(cdp, "uc5-" + screenshotPhase + "-" + viewport[0] + ".png");
         }
         assertEquals(beforePresentation, storedDocument(),
