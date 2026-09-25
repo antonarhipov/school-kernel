@@ -56,7 +56,7 @@ function render(snapshot) {
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
   const school = snapshot.workspace.school;
-  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL'].includes(snapshot.state));
+  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'INITIAL_PROPOSAL'].includes(snapshot.state));
   if (snapshot.state === 'EMPTY') {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
@@ -90,17 +90,19 @@ function render(snapshot) {
   } else if (snapshot.state === 'INITIAL_PROPOSAL') {
     currentLabel.textContent = M.noAccepted;
     const proposal = snapshot.workspace.proposal;
-    const result = proposal.result;
-    stateCard.className = 'card';
-    stateCard.innerHTML = `<span class="state proposal">${M.initialProposal}</span><h2>${escapeHtml(schoolName)}</h2><p>${M.proposalDetail}</p>
-      <dl><div><dt>${M.lessons}</dt><dd>${result.timetable.assignments.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(result.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(proposal.proposedTimetableRevision)}</code></dd></div></dl>
-      ${assignmentTable(result.timetable.assignments)}
-      <label class="confirmation"><input id="confirm-accept" type="checkbox"> ${M.confirmInitial}</label><div class="actions"><button id="accept-proposal" disabled>${M.acceptCurrent}</button><button id="discard-proposal" class="secondary">${M.discardProposal}</button></div>`;
-    const confirmation = document.querySelector('#confirm-accept');
-    const accept = document.querySelector('#accept-proposal');
-    confirmation.addEventListener('change', () => { accept.disabled = !confirmation.checked; });
-    accept.addEventListener('click', () => mutate('/api/proposal/accept', 'POST'));
-    document.querySelector('#discard-proposal').addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
+    acceptedModel = makeAcceptedModel({ definition: snapshot.workspace.initialDefinition, result: proposal.result });
+    initializeInspectionState(snapshot.workspace.school?.id);
+    syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
+    const selected = acceptedModel.assignmentMap.get(view.selectedLessonId);
+    if (view.selectedLessonId && !isRepresented(selected)) {
+      selectionResetNotice = !selected ? M.comparisonSelectionCleared
+        : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
+      syncInspectionState(inspectionState.closeLesson());
+    }
+    if (view.narrow && !view.focusedType) {
+      syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
+    }
+    renderInitialProposal(snapshot, schoolName);
   } else if (snapshot.state === 'ACCEPTED_BASELINE') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
@@ -172,6 +174,69 @@ function renderModeNavigation() {
     }
     render(currentSnapshot);
   }));
+}
+
+function renderInitialProposal(snapshot, schoolName) {
+  const proposal = snapshot.workspace.proposal;
+  const result = proposal.result;
+  const taskOpen = inspectionState ? inspectionState.current().taskAreaOpen.PROPOSAL : true;
+  stateCard.className = 'card workspace-card compact-density current-mode';
+  stateCard.innerHTML = `
+    <div class="accepted-heading">
+      <div class="school-identity">
+        <h2>${escapeHtml(schoolName)}</h2>
+        <span class="state proposal">${M.initialProposal}</span>
+        <p class="revision">${escapeHtml(proposal.proposedTimetableRevision)}</p>
+      </div>
+      <div class="header-utilities">
+        <p class="mode-note">${M.proposalDetail}</p>
+        ${view.narrow ? '' : renderUtilities(snapshot)}
+      </div>
+    </div>
+    <h3 class="sr-only">${M.timetableDetails}</h3>
+    <div id="accepted-view"></div>
+    <div class="task-launch"><button id="reopen-proposal-task" type="button" class="secondary" aria-expanded="false" aria-controls="workbench-task-area"${taskOpen ? ' hidden' : ''}>${M.reopenProposalTask}</button></div>
+    <section id="workbench-task-area" class="task-area proposal-task-area initial-proposal-task-area" aria-label="${M.initialProposal}"${taskOpen ? '' : ' hidden'}>
+      <div class="task-area-heading">
+        <h3>${M.initialProposal}</h3>
+        <button id="collapse-proposal-task" type="button" class="secondary">${M.collapseProposalTask}</button>
+      </div>
+      <dl class="proposal-facts">
+        <div><dt>${M.lessons}</dt><dd>${result.timetable.assignments.length}</dd></div>
+        <div><dt>${M.terminationReason}</dt><dd>${escapeHtml(result.terminationReason)}</dd></div>
+        <div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div>
+        <div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(proposal.proposedTimetableRevision)}</code></dd></div>
+      </dl>
+      <label class="confirmation"><input id="confirm-accept" type="checkbox"> ${M.confirmInitial}</label>
+      <div class="actions">
+        <button id="accept-proposal" disabled>${M.acceptCurrent}</button>
+        <button id="discard-proposal" class="secondary">${M.discardProposal}</button>
+      </div>
+    </section>
+    ${focusedEntry()}`;
+  bindUtilities();
+  if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
+  bindInitialProposalTaskArea();
+}
+
+function bindInitialProposalTaskArea() {
+  document.querySelector('#collapse-proposal-task')?.addEventListener('click', () => {
+    syncInspectionState(inspectionState.setTaskAreaOpen('PROPOSAL', false).state);
+    document.querySelector('#workbench-task-area').hidden = true;
+    document.querySelector('#reopen-proposal-task').hidden = false;
+    document.querySelector('#reopen-proposal-task').focus();
+  });
+  document.querySelector('#reopen-proposal-task')?.addEventListener('click', () => {
+    syncInspectionState(inspectionState.setTaskAreaOpen('PROPOSAL', true).state);
+    document.querySelector('#workbench-task-area').hidden = false;
+    document.querySelector('#reopen-proposal-task').hidden = true;
+    document.querySelector('#collapse-proposal-task').focus();
+  });
+  const confirmation = document.querySelector('#confirm-accept');
+  const accept = document.querySelector('#accept-proposal');
+  confirmation?.addEventListener('change', () => { accept.disabled = !confirmation.checked; });
+  accept?.addEventListener('click', () => mutate('/api/proposal/accept', 'POST'));
+  document.querySelector('#discard-proposal')?.addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
 }
 
 function renderRepairProposal(snapshot, schoolName) {
@@ -931,7 +996,10 @@ function lessonDetails(item) {
   const repairCues = (currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT')
     || (currentSnapshot?.state === 'SOLVING_REPAIR' && inspectionState?.current().mode !== 'CURRENT')
     ? `<section class="repair-cues"><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`}</p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
-  return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div><span class="state accepted">✓ ${M.acceptedAssignment}</span><h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
+  const stateBadge = currentSnapshot?.state === 'INITIAL_PROPOSAL'
+    ? `<span class="state proposal">${M.initialProposal}</span>`
+    : `<span class="state accepted">✓ ${M.acceptedAssignment}</span>`;
+  return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div>${stateBadge}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
     ${repairCues}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
 }
@@ -1412,11 +1480,6 @@ function idDetail(label, value) { return detail(M.idLabel(label), value); }
 function selectControl(id, label, values, selected) { return `<label><span>${label}</span><select id="${id}">${values.map(([value, text]) => `<option value="${escapeAttribute(value)}"${value === selected ? ' selected' : ''}>${escapeHtml(text)}</option>`).join('')}</select></label>`; }
 
 function summary(definition) { return `<dl><div><dt>${M.lessons}</dt><dd>${definition.lessons.length}</dd></div><div><dt>${M.teachers}</dt><dd>${definition.teachers.length}</dd></div><div><dt>${M.classes}</dt><dd>${definition.cohorts.length}</dd></div><div><dt>${M.rooms}</dt><dd>${definition.rooms.length}</dd></div><div><dt>${M.weeklyPeriods}</dt><dd>${definition.periods.length}</dd></div></dl>`; }
-
-function assignmentTable(assignments) {
-  const rows = assignments.map(item => `<tr><td>${escapeHtml(item.lessonId)}</td><td>${escapeHtml(item.subjectId)}</td><td>${escapeHtml(item.cohortId)}</td><td>${escapeHtml(item.teacherId)}</td><td>${escapeHtml(item.periodId)}</td><td>${escapeHtml(item.roomId)}</td></tr>`).join('');
-  return `<div class="table-wrap"><table><caption>${M.timetableDetails}</caption><thead><tr><th>${M.lesson}</th><th>${M.subject}</th><th>${M.class}</th><th>${M.teacher}</th><th>${M.period}</th><th>${M.room}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
 
 function bindInitialActions() {
   document.querySelector('#start-plan').addEventListener('click', () => mutate('/api/runs', 'POST'));
