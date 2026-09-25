@@ -689,9 +689,6 @@ automated pass alone does not satisfy this feature gate.
 
 ## External dependencies
 
-- The existing `timetable-ux-polish` UC-5 administrator gate is still recorded separately as pending at the time
-  of this specification. This feature neither supplies missing results for that gate nor changes its verdict;
-  execution and approval of the successor must respect the earlier feature's actual recorded state.
 - The new administrator feature gate depends on five timetable professionals from at least three schools and the
   per-participant evidence above. Until that evidence exists, automated convergence cannot be described as
   administrator approval.

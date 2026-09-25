@@ -26,6 +26,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -3649,12 +3650,21 @@ class WorkspaceBrowserIT {
                 .redirectOutput(ProcessBuilder.Redirect.DISCARD)
                 .start();
         Path activePort = browserProfile.resolve("DevToolsActivePort");
-        long deadline = System.nanoTime() + Duration.ofSeconds(15).toNanos();
-        while (!Files.isRegularFile(activePort) && System.nanoTime() < deadline) {
+        long deadline = System.nanoTime() + Duration.ofSeconds(30).toNanos();
+        while (System.nanoTime() < deadline && browser.isAlive()) {
+            if (Files.isRegularFile(activePort)) {
+                try {
+                    var lines = Files.readAllLines(activePort);
+                    if (!lines.isEmpty() && lines.get(0).trim().matches("[0-9]+")) {
+                        return Integer.parseInt(lines.get(0).trim());
+                    }
+                } catch (java.nio.file.NoSuchFileException ignored) {
+                    // Chrome can replace the startup file between the existence and read checks.
+                }
+            }
             Thread.sleep(50);
         }
-        assertTrue(Files.isRegularFile(activePort), () -> "Chrome did not expose DevTools: " + browser.info());
-        return Integer.parseInt(Files.readAllLines(activePort).get(0));
+        throw new AssertionError("Chrome did not publish a complete DevTools port: " + browser.info());
     }
 
     private static Path chromeBinary() {
@@ -3697,12 +3707,20 @@ class WorkspaceBrowserIT {
             request.put("id", id);
             request.put("method", method);
             request.set("params", params);
-            socket.sendText(JSON.writeValueAsString(request), true).join();
-            JsonNode response = reply.get(15, TimeUnit.SECONDS);
-            if (response.has("error")) {
-                throw new IllegalStateException(response.path("error").toString());
+            try {
+                socket.sendText(JSON.writeValueAsString(request), true).get(10, TimeUnit.SECONDS);
+                JsonNode response = reply.get(45, TimeUnit.SECONDS);
+                if (response.has("error")) {
+                    throw new IllegalStateException(response.path("error").toString());
+                }
+                return response;
+            } catch (TimeoutException exception) {
+                throw new TimeoutException("CDP " + method + " reply timed out for command " + id
+                        + "; inputClosed=" + socket.isInputClosed() + "; outputClosed=" + socket.isOutputClosed()
+                        + "; listenerErrors=" + errors);
+            } finally {
+                replies.remove(id);
             }
-            return response;
         }
 
         void evaluate(String expression) throws Exception {
@@ -3786,6 +3804,18 @@ class WorkspaceBrowserIT {
         @Override
         public void onError(WebSocket webSocket, Throwable error) {
             errors.add(error.toString());
+            failPending(error);
+        }
+
+        @Override
+        public java.util.concurrent.CompletionStage<?> onClose(WebSocket webSocket, int statusCode, String reason) {
+            failPending(new IllegalStateException("CDP socket closed: " + statusCode + " " + reason));
+            return CompletableFuture.completedFuture(null);
+        }
+
+        private void failPending(Throwable error) {
+            replies.values().forEach(reply -> reply.completeExceptionally(error));
+            replies.clear();
         }
 
         @Override
