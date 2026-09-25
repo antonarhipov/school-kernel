@@ -17,6 +17,37 @@ public class WorkspaceMutation {
     }
 
     @Transactional
+    public WorkspaceAggregate clear(long expectedVersion) {
+        if (repository.clear(expectedVersion).isEmpty()) {
+            WorkspaceAggregate current = repository.load();
+            if (current.version() != expectedVersion) {
+                throw new WorkspaceProblem(
+                        HttpStatus.PRECONDITION_FAILED,
+                        "STALE_WORKSPACE_VERSION",
+                        "The workspace changed. Reload it before clearing.");
+            }
+        }
+        return repository.load();
+    }
+
+    @Transactional
+    public WorkspaceAggregate resetAndImport(
+            long expectedVersion,
+            WorkspaceState nextState,
+            JsonNode document) {
+        if (repository.resetAndReplace(expectedVersion, nextState, document).isEmpty()) {
+            WorkspaceAggregate current = repository.load();
+            if (current.version() != expectedVersion) {
+                throw new WorkspaceProblem(
+                        HttpStatus.PRECONDITION_FAILED,
+                        "STALE_WORKSPACE_VERSION",
+                        "The workspace changed. Reload it before importing.");
+            }
+        }
+        return repository.load();
+    }
+
+    @Transactional
     public WorkspaceAggregate importVerified(
             long expectedVersion,
             WorkspaceState nextState,

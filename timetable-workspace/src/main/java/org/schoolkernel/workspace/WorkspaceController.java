@@ -128,6 +128,30 @@ public class WorkspaceController {
         return response(repository.load());
     }
 
+    @PostMapping("/api/workspace/clear")
+    @ResponseBody
+    public ResponseEntity<JsonNode> clearWorkspace(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+        return response(imports.clearWorkspace(ifMatch));
+    }
+
+    @DeleteMapping("/api/workspace")
+    @ResponseBody
+    public ResponseEntity<JsonNode> deleteWorkspace(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+        return response(imports.clearWorkspace(ifMatch));
+    }
+
+    @PostMapping(path = "/api/workspace/upload-definition", consumes = "multipart/form-data")
+    @ResponseBody
+    public ResponseEntity<JsonNode> uploadNewDefinition(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestParam(value = "definition", required = false) MultipartFile definition,
+            @RequestParam(value = "result", required = false) MultipartFile result,
+            @RequestParam(value = "archive", required = false) MultipartFile archive) {
+        return response(imports.resetAndUploadDefinition(ifMatch, definition, result, archive));
+    }
+
     @GetMapping("/api/accepted/export")
     @ResponseBody
     public ResponseEntity<byte[]> exportAcceptedBaseline() {

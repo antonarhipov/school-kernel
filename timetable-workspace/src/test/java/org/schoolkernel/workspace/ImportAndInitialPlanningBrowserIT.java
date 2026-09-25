@@ -130,4 +130,36 @@ class ImportAndInitialPlanningBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(document, snapshot.path("workspace"));
         assertEquals(before, storedDocument());
     }
+
+    @Test
+    @DisplayName("Administrator resets workspace from utilities disclosure")
+    void clearsWorkspaceFromUtilities() {
+        storeAccepted(fixtures.validAcceptedDocument());
+
+        workbench.open().awaitText("Accepted baseline · current timetable");
+        workbench.click("#utilities > summary");
+        workbench.awaitText("Clear workspace data");
+        workbench.click("#clear-workspace");
+
+        String rendered = workbench.awaitText("Empty workspace");
+        assertTrue(rendered.contains("No draft or timetable has been imported."));
+        assertEquals("EMPTY", storedLifecycle());
+        assertEquals("{}", storedWorkspaceDocument().toString());
+    }
+
+    @Test
+    @DisplayName("Administrator uploads a new school definition from utilities disclosure to start fresh")
+    void uploadsNewSchoolDefinitionFromUtilities() {
+        storeAccepted(fixtures.validAcceptedDocument());
+
+        workbench.open().awaitText("Accepted baseline · current timetable");
+        workbench.click("#utilities > summary");
+        workbench.awaitText("Upload new school definition");
+        workbench.setFiles("#utilities-definition", ROOT.resolve("examples/initial-school.json"));
+        workbench.click("#utilities-upload-submit");
+
+        String rendered = workbench.awaitText("Initial draft", Workbench.SOLVE);
+        assertTrue(rendered.contains("Demo School"));
+        assertEquals("INITIAL_DRAFT", storedLifecycle());
+    }
 }

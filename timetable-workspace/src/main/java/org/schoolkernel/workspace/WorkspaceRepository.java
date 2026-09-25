@@ -65,6 +65,49 @@ public class WorkspaceRepository {
                 .single();
     }
 
+    public Optional<Long> clear(long expectedVersion) {
+        return jdbc.sql("""
+                        UPDATE workspace_aggregate
+                        SET lifecycle_state = 'EMPTY',
+                            version = version + 1,
+                            active_run_id = NULL,
+                            document = '{}'::jsonb
+                        WHERE workspace_id = 1
+                          AND version = :expected_version
+                        RETURNING version
+                        """)
+                .param("expected_version", expectedVersion)
+                .query(Long.class)
+                .optional();
+    }
+
+    public Optional<Long> resetAndReplace(
+            long expectedVersion,
+            WorkspaceState nextState,
+            JsonNode document) {
+        String serialized;
+        try {
+            serialized = json.writeValueAsString(document);
+        } catch (JacksonException exception) {
+            throw new IllegalStateException("Workspace document could not be serialized", exception);
+        }
+        return jdbc.sql("""
+                        UPDATE workspace_aggregate
+                        SET lifecycle_state = :next_state,
+                            version = version + 1,
+                            active_run_id = NULL,
+                            document = CAST(:document AS jsonb)
+                        WHERE workspace_id = 1
+                          AND version = :expected_version
+                        RETURNING version
+                        """)
+                .param("next_state", nextState.name())
+                .param("document", serialized)
+                .param("expected_version", expectedVersion)
+                .query(Long.class)
+                .optional();
+    }
+
     public Optional<Long> replace(
             long expectedVersion,
             WorkspaceState expectedState,

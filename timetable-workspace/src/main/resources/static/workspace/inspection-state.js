@@ -30,6 +30,7 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
     enterLifecycle: lifecycle => {
       if (!AVAILABLE_MODES[lifecycle]) return state;
       if (state.lifecycle !== lifecycle) state = { ...state, lifecycle, mode: AVAILABLE_MODES[lifecycle].at(-1),
+        utilitiesOpen: false,
         taskAreaOpen: lifecycle === 'SOLVING_REPAIR' ? { ...state.taskAreaOpen, CURRENT: false } : state.taskAreaOpen };
       return state;
     },

@@ -72,13 +72,14 @@ function render(snapshot) {
     const lastRun = snapshot.workspace.lastRun;
     stateCard.className = 'card';
     stateCard.innerHTML = `
-      <span class="state">${M.initialDraft}</span><h2>${escapeHtml(schoolName)}</h2><p>${M.draftDetail}</p>
+      <div class="accepted-heading"><div class="school-identity"><span class="state">${M.initialDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div><p>${M.draftDetail}</p>
       ${summary(definition)}
       ${lastRun?.message ? `<p class="notice" role="status"><strong>${escapeHtml(lastRun.message)}</strong> ${M.noAcceptedAfterFailure}</p>` : ''}
       <p class="muted">${M.definitionRevision} <code>${escapeHtml(snapshot.workspace.definitionRevision)}</code></p>
       <div class="actions"><button id="start-plan">${M.createProposal}</button></div>
       <form id="replace-definition" class="replace-form"><label>${M.replaceDefinition} <input name="definition" type="file" accept="application/json,.json" required></label><button type="submit" class="secondary">${M.validateReplace}</button></form>`;
     bindInitialActions();
+    bindUtilities();
   } else if (snapshot.state === 'SOLVING_INITIAL') {
     currentLabel.textContent = M.noAccepted;
     const run = snapshot.workspace.run;
@@ -123,7 +124,7 @@ function render(snapshot) {
     if (previousState === 'REPAIR_PROPOSAL') syncInspectionState(inspectionState.setTaskAreaOpen('DRAFT', true).state);
     if (previousState === 'SOLVING_REPAIR') syncInspectionState(inspectionState.setTaskAreaOpen('DRAFT', true).state);
     if (previousState === 'SOLVING_REPAIR' && snapshot.workspace.lastRun?.kind === 'REPAIR'
-      && snapshot.workspace.lastRun.status !== 'CANCELLED') {
+      && snapshot.workspace.lastRun.status !== 'CANCELLED' && snapshot.workspace.lastRun.status !== 'FEASIBLE') {
       syncInspectionState(inspectionState.setInspectorOpen(true));
       syncInspectionState(inspectionState.setUtilitiesOpen(true));
     }
@@ -182,7 +183,8 @@ function renderRepairProposal(snapshot, schoolName) {
     renderFocused(); return;
   }
   stateCard.className = 'card workspace-card review-mode current-mode compact-density';
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairProposal}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><p class="mode-note">${M.proposalNotCurrent} ${M.acceptedStillCurrent}</p></div><div id="accepted-view"></div>${proposalTaskArea()}${focusedEntry()}`;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairProposal}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.proposalNotCurrent} ${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${proposalTaskArea()}${focusedEntry()}`;
+  bindUtilities();
   if (view.focusedType) renderFocused(); else renderWholeSchool();
   bindProposalTaskArea();
   window.__workspaceProposalReviewMs = performance.now() - reviewStarted;
@@ -421,28 +423,83 @@ function renderAccepted(snapshot, schoolName) {
   stateCard.className = 'card workspace-card compact-density current-mode';
   const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
     SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal }[snapshot.state];
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${lifecycle}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities">${view.narrow ? '' : snapshot.state === 'ACCEPTED_BASELINE' ? exportAccepted(snapshot) : runUtilities(snapshot.workspace.lastRun)}</div></div>
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${lifecycle}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     <h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
   bindUtilities();
   if (view.focusedType || view.narrow) renderFocused(); else renderWholeSchool();
 }
 
-function exportAccepted(snapshot) {
-  const baseline = snapshot.workspace.acceptedBaseline;
-  return `<details id="utilities" class="utility-disclosure"><summary>${M.utilities}</summary><section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a><p id="export-status" role="status"></p></section></details>`;
+function renderUtilities(snapshot) {
+  const hasAccepted = Boolean(snapshot?.workspace?.acceptedBaseline);
+  const lastRun = snapshot?.workspace?.lastRun;
+  const runFeedback = lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED'
+    ? repairRunFeedback(lastRun)
+    : '';
+  return `<details id="utilities" class="utility-disclosure"><summary>${M.utilities}</summary><div class="utilities-content">${hasAccepted ? exportAcceptedSection(snapshot) : ''}${runFeedback}<section class="utility-section clear-workspace-section" aria-labelledby="clear-title"><h3 id="clear-title">${M.clearDataTitle}</h3><p>${M.clearDataDetail}</p><button id="clear-workspace" type="button" class="danger">${M.clearData}</button><p id="clear-status" role="status"></p></section><section class="utility-section upload-definition-section" aria-labelledby="upload-definition-title"><h3 id="upload-definition-title">${M.uploadDefinitionTitle}</h3><p>${M.uploadDefinitionDetail}</p><form id="utilities-upload-definition" class="upload-form"><label><span>${M.schoolDefinition}</span><input id="utilities-definition" name="definition" type="file" accept="application/json,.json" required></label><button id="utilities-upload-submit" type="submit">${M.uploadDefinitionSubmit}</button><p id="utilities-upload-status" role="status"></p></form></section></div></details>`;
 }
 
-function runUtilities(run) {
-  if (run?.kind !== 'REPAIR' || run.status === 'FEASIBLE' || run.status === 'CANCELLED') return '';
-  return `<details id="utilities" class="utility-disclosure"><summary>${M.utilities}</summary>${repairRunFeedback(run)}</details>`;
+function exportAcceptedSection(snapshot) {
+  const baseline = snapshot.workspace.acceptedBaseline;
+  return `<section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a><p id="export-status" role="status"></p></section>`;
 }
 
 function bindUtilities() {
   const utilities = document.querySelector('#utilities');
   if (!utilities) return;
-  utilities.open = inspectionState.current().utilitiesOpen;
-  utilities.addEventListener('toggle', () => inspectionState.setUtilitiesOpen(utilities.open));
+  utilities.open = inspectionState ? inspectionState.current().utilitiesOpen : false;
+  utilities.addEventListener('toggle', () => {
+    if (inspectionState) inspectionState.setUtilitiesOpen(utilities.open);
+  });
   document.querySelector('#export-accepted')?.addEventListener('click', downloadAccepted);
+  document.querySelector('#clear-workspace')?.addEventListener('click', clearWorkspace);
+  document.querySelector('#utilities-upload-definition')?.addEventListener('submit', uploadNewDefinition);
+}
+
+async function clearWorkspace() {
+  const status = document.querySelector('#clear-status');
+  if (status) { status.className = ''; status.textContent = M.clearing; }
+  const button = document.querySelector('#clear-workspace');
+  if (button) button.disabled = true;
+  try {
+    const response = await fetch('/api/workspace/clear', {
+      method: 'POST',
+      headers: { [csrf.headerName]: csrf.token, 'If-Match': etag }
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || M.actionFailed);
+    etag = response.headers.get('ETag');
+    render(body);
+  } catch (error) {
+    if (status) { status.className = 'error'; status.textContent = error.message; }
+    else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(error.message)}</p>`);
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+async function uploadNewDefinition(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const status = document.querySelector('#utilities-upload-status');
+  if (status) { status.className = ''; status.textContent = M.verifying; }
+  const button = form.querySelector('button[type=submit]');
+  if (button) button.disabled = true;
+  try {
+    const response = await fetch('/api/workspace/upload-definition', {
+      method: 'POST',
+      headers: { [csrf.headerName]: csrf.token, 'If-Match': etag },
+      body: new FormData(form)
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || M.actionFailed);
+    etag = response.headers.get('ETag');
+    render(body);
+  } catch (error) {
+    if (status) { status.className = 'error'; status.textContent = error.message; }
+    else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(error.message)}</p>`);
+  } finally {
+    if (button) button.disabled = false;
+  }
 }
 
 async function downloadAccepted(event) {
@@ -504,7 +561,7 @@ function renderRepair(snapshot, schoolName) {
   }
   const editable = snapshot.state === 'REPAIR_DRAFT';
   const taskOpen = inspectionState.current().taskAreaOpen.DRAFT;
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairDraft}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${runUtilities(snapshot.workspace.lastRun)}</div></div>
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairDraft}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     ${editable ? '' : `<p>${M.proposalDraftDetail}</p>`}<div id="accepted-view"></div>
     ${editable ? `<div class="task-launch"><button id="reopen-draft-task" type="button" class="secondary" aria-expanded="false" aria-controls="workbench-task-area"${taskOpen ? ' hidden' : ''}>${M.reopenDraftTask}</button></div><section id="workbench-task-area" class="task-area draft-task-area" aria-label="${M.repairDraft}"${taskOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairDraft}</h3><button id="collapse-draft-task" type="button" class="secondary">${M.collapseDraftTask}</button></div><p id="draft-save-status" class="error" role="alert"></p>${draftContext()}</section>${focusedEntry()}` : ''}`;
   bindUtilities();
@@ -535,7 +592,7 @@ function renderSolving(snapshot, schoolName) {
     renderFocused(); return;
   }
   stateCard.className = 'card workspace-card solving-mode current-mode compact-density';
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairRunning}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${runUtilities(snapshot.workspace.lastRun)}</div></div><div id="accepted-view"></div>${runTaskArea()}${focusedEntry()}`;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairRunning}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${runTaskArea()}${focusedEntry()}`;
   bindUtilities();
   if (view.focusedType) renderFocused(); else renderWholeSchool();
   bindRunTaskArea();
@@ -674,6 +731,7 @@ function selectDraftLesson(id) {
 }
 
 function repairRunFeedback(run) {
+  if (!run) return '';
   const diagnostics = run.searchDiagnostics?.constraints || [];
   const rows = diagnostics.map(item => `<li><strong>${escapeHtml(item.constraintId)}</strong> · ${M.diagnosticMatches(item.matchCount)} ${item.examples.flat().map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
   const validation = run.validationReport?.errors || [];

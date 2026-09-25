@@ -68,6 +68,43 @@ public class ImportService {
         return mutation.importVerified(expectedVersion, nextState, workspace);
     }
 
+    public WorkspaceAggregate clearWorkspace(String ifMatch) {
+        WorkspaceAggregate current = repository.load();
+        long expectedVersion = requireMatchingVersion(ifMatch, current);
+        return mutation.clear(expectedVersion);
+    }
+
+    public WorkspaceAggregate resetAndUploadDefinition(
+            String ifMatch,
+            MultipartFile definition,
+            MultipartFile result,
+            MultipartFile archive) {
+        WorkspaceAggregate current = repository.load();
+        long expectedVersion = requireMatchingVersion(ifMatch, current);
+        ImportDocuments documents = reader.read(definition, result, archive);
+        KernelVerifier.Verification verification = verifier.verify(documents);
+        var manifest = manifests.validatedOrGenerated(documents);
+        ObjectNode workspace = json.createObjectNode();
+        ObjectNode school = workspace.putObject("school");
+        school.put("id", verification.schoolId());
+        school.put("displayName", documents.definition().path("displayName").stringValue());
+        workspace.put("importMode", documents.mode().name());
+        workspace.put("definitionRevision", verification.definitionRevision());
+        WorkspaceState nextState;
+        if (documents.mode() == ImportDocuments.ImportMode.INITIAL_DEFINITION) {
+            nextState = WorkspaceState.INITIAL_DRAFT;
+            workspace.set("initialDefinition", documents.definition());
+        } else {
+            nextState = WorkspaceState.ACCEPTED_BASELINE;
+            workspace.put("timetableRevision", verification.timetableRevision());
+            ObjectNode accepted = workspace.putObject("acceptedBaseline");
+            accepted.set("definition", documents.definition());
+            accepted.set("result", documents.result());
+            accepted.set("manifest", manifest);
+        }
+        return mutation.resetAndImport(expectedVersion, nextState, workspace);
+    }
+
     public WorkspaceAggregate replaceInitial(String ifMatch, MultipartFile definition) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = requireMatchingVersion(ifMatch, current);

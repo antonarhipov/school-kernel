@@ -813,6 +813,119 @@ class WorkspaceImportIT {
         return client.send(request.build(), HttpResponse.BodyHandlers.ofString());
     }
 
+    private HttpResponse<String> postUploadDefinition(
+            Session session,
+            Map<String, FilePart> parts,
+            boolean includeCsrf,
+            boolean includeVersion) throws Exception {
+        String boundary = "----workspace-" + UUID.randomUUID();
+        byte[] body = multipart(boundary, parts);
+        HttpRequest.Builder request = HttpRequest.newBuilder(uri("/api/workspace/upload-definition"))
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .header("Origin", "http://localhost:" + port)
+                .POST(HttpRequest.BodyPublishers.ofByteArray(body));
+        if (includeCsrf) {
+            request.header(session.csrfHeader(), session.csrfToken());
+        }
+        if (includeVersion) {
+            request.header("If-Match", session.etag());
+        }
+        return client.send(request.build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    private HttpResponse<String> postClear(
+            Session session,
+            boolean includeCsrf,
+            boolean includeVersion) throws Exception {
+        HttpRequest.Builder request = HttpRequest.newBuilder(uri("/api/workspace/clear"))
+                .header("Origin", "http://localhost:" + port)
+                .POST(HttpRequest.BodyPublishers.noBody());
+        if (includeCsrf) {
+            request.header(session.csrfHeader(), session.csrfToken());
+        }
+        if (includeVersion) {
+            request.header("If-Match", session.etag());
+        }
+        return client.send(request.build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    private HttpResponse<String> deleteWorkspace(
+            Session session,
+            boolean includeCsrf,
+            boolean includeVersion) throws Exception {
+        HttpRequest.Builder request = HttpRequest.newBuilder(uri("/api/workspace"))
+                .header("Origin", "http://localhost:" + port)
+                .DELETE();
+        if (includeCsrf) {
+            request.header(session.csrfHeader(), session.csrfToken());
+        }
+        if (includeVersion) {
+            request.header("If-Match", session.etag());
+        }
+        return client.send(request.build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    @Test
+    @DisplayName("Clearing workspace resets data to empty state via POST and DELETE")
+    void clearsWorkspaceViaPostAndDeletes() throws Exception {
+        Session session = session();
+        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        HttpResponse<String> imported = post(session, Map.of("definition", new FilePart("school.json", definition)), true, true);
+        assertEquals(200, imported.statusCode());
+        assertEquals("INITIAL_DRAFT", lifecycle());
+        assertEquals(1L, version());
+
+        Session clearSession = session();
+        HttpResponse<String> cleared = postClear(clearSession, true, true);
+        assertEquals(200, cleared.statusCode());
+        JsonNode snapshot = JSON.readTree(cleared.body());
+        assertEquals("EMPTY", snapshot.path("state").stringValue());
+        assertEquals("EMPTY", lifecycle());
+        assertEquals(2L, version());
+        assertEquals(JSON.readTree("{}"), storedDocument());
+
+        Session deleteSession = session();
+        HttpResponse<String> deleted = deleteWorkspace(deleteSession, true, true);
+        assertEquals(200, deleted.statusCode());
+        JsonNode deleteSnapshot = JSON.readTree(deleted.body());
+        assertEquals("EMPTY", deleteSnapshot.path("state").stringValue());
+        assertEquals("EMPTY", lifecycle());
+        assertEquals(3L, version());
+    }
+
+    @Test
+    @DisplayName("Clearing workspace rejects stale If-Match precondition")
+    void clearsWorkspaceRejectsStalePrecondition() throws Exception {
+        Session session = session();
+        HttpRequest request = HttpRequest.newBuilder(uri("/api/workspace/clear"))
+                .header("Origin", "http://localhost:" + port)
+                .header(session.csrfHeader(), session.csrfToken())
+                .header("If-Match", "\"ws-99\"")
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(412, response.statusCode());
+        assertEquals("STALE_WORKSPACE_VERSION", JSON.readTree(response.body()).path("code").stringValue());
+    }
+
+    @Test
+    @DisplayName("Uploading new school definition resets non-empty workspace to new initial draft")
+    void uploadsNewSchoolDefinitionFromNonEmptyState() throws Exception {
+        Session session = session();
+        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        HttpResponse<String> imported = post(session, Map.of("definition", new FilePart("school.json", definition)), true, true);
+        assertEquals(200, imported.statusCode());
+        assertEquals("INITIAL_DRAFT", lifecycle());
+
+        Session uploadSession = session();
+        HttpResponse<String> reset = postUploadDefinition(uploadSession, Map.of("definition", new FilePart("school.json", definition)), true, true);
+        assertEquals(200, reset.statusCode());
+        JsonNode snapshot = JSON.readTree(reset.body());
+        assertEquals("INITIAL_DRAFT", snapshot.path("state").stringValue());
+        assertEquals(2L, version());
+        assertEquals("Demo School", snapshot.path("workspace").path("school").path("displayName").stringValue());
+    }
+
     private Path plannedResult(Path definition, String name) throws Exception {
         Path result = temporaryDirectory.resolve(name);
         Process process = new ProcessBuilder(
