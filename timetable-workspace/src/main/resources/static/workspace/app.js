@@ -778,7 +778,7 @@ function weekLessonButton(item) {
   const cues = lessonCues(item);
   const draft = repairLessonState(item.lessonId);
   const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable, periodLabel(item.period), item.lessonId, ...cues.accessible, ...draft.accessible].join(' · ');
-  return `<button type="button" class="lesson-cell week-lesson${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${draft.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${cues.weekMarkup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell week-lesson ${subjectColorClass(item)}${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${draft.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${cues.weekMarkup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function matrix(cohorts, periods, assignmentsByCell, filtered) {
@@ -796,7 +796,7 @@ function lessonButton(item, matched) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draftState = repairLessonState(item.lessonId);
-  return `<button type="button" class="lesson-cell${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function comparisonLessonButton(item, week) {
@@ -811,7 +811,7 @@ function comparisonLessonButton(item, week) {
   const protection = comparisonProtection(item.lessonId);
   const compactProtection = comparisonProtectionCue(item.lessonId);
   const label = [lessonAccessibleName(item, [...cues.accessible, state, ...matched]), protection].filter(Boolean).join(' · ');
-  return `<button type="button" class="lesson-cell${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span${week ? ' class="week-room"' : ''}>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${week ? cues.weekMarkup : cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span${week ? ' class="week-room"' : ''}>${escapeHtml(entityName(week ? item.room : item.teacher, week ? item.roomId : item.teacherId))}</span>${week ? '' : `<span>${escapeHtml(entityName(item.room, item.roomId))}</span>`}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${week ? cues.weekMarkup : cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function comparisonState(item) {
@@ -964,8 +964,8 @@ function renderFocused() {
   const relatedLessonIds = proposalModeActive() ? new Set(comparison.assignments.filter(item => item[type] === view.focusedId).map(item => item.lessonId)) : null;
   host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, relatedLessonIds,
     assignments: proposalModeActive() ? comparison.assignments : acceptedModel.assignments, weekdays: acceptedModel.weekdays,
-    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>` : null,
-    labels: M, entityName, periodLabel, selectControl, options, escapeHtml });
+    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson ${subjectColorClass(item)}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>` : null,
+    labels: M, entityName, periodLabel, subjectColorClass, selectControl, options, escapeHtml });
   if (!view.narrow && currentSnapshot.state === 'SOLVING_REPAIR') {
     host.insertAdjacentHTML('beforeend', `<aside id="workbench-inspector" aria-label="${M.inspector}">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</aside>`);
     bindRunControls();
@@ -1181,14 +1181,22 @@ function applyFiltersInPlace() {
     const matchLabel = button.querySelector('.match-label');
     if (matchLabel) matchLabel.hidden = !narrowed || !matches;
   });
-  document.querySelectorAll('.matrix tbody tr').forEach(row => {
-    const hasMatch = Boolean(row.querySelector('.lesson-cell:not([hidden])'));
-    row.hidden = narrowed && investigation.represented.length > 0 && !hasMatch;
-    if (!row.hidden) visibleRows++;
-    row.querySelectorAll('td').forEach(cell => {
-      const visibleLesson = cell.querySelector('.lesson-cell:not([hidden])');
-      const empty = cell.querySelector('.empty-cell');
-      if (empty) empty.hidden = Boolean(visibleLesson);
+  document.querySelectorAll('.matrix tbody').forEach(group => {
+    const week = group.parentElement.classList.contains('week-matrix');
+    if (week) {
+      group.hidden = narrowed && investigation.represented.length > 0 && !group.querySelector('.lesson-cell:not([hidden])');
+      if (!group.hidden) visibleRows++;
+    }
+    group.querySelectorAll('tr').forEach(row => {
+      if (!week) {
+        row.hidden = narrowed && investigation.represented.length > 0 && !row.querySelector('.lesson-cell:not([hidden])');
+        if (!row.hidden) visibleRows++;
+      }
+      row.querySelectorAll('td').forEach(cell => {
+        const visibleLesson = cell.querySelector('.lesson-cell:not([hidden])');
+        const empty = cell.querySelector('.empty-cell');
+        if (empty) empty.hidden = Boolean(visibleLesson);
+      });
     });
   });
   document.querySelector('#filter-title').textContent = narrowed ? M.filteredMatrix : M.completePopulation;
@@ -1331,6 +1339,13 @@ function renderTeacherRibbon(periods) {
 }
 
 function periodsForDay(day) { return acceptedModel.definition.periods.filter(period => period.weekday === day).sort((a, b) => a.order - b.order); }
+function subjectColorClass(item) {
+  const subjects = currentSnapshot.state === 'REPAIR_PROPOSAL'
+    ? [...acceptedModel.definition.subjects, ...proposedModel.definition.subjects.filter(subject => !acceptedModel.maps.subjects.has(subject.id))]
+    : acceptedModel.definition.subjects;
+  const index = subjects.findIndex(subject => subject.id === item.subjectId);
+  return `subject-color-${index < 0 ? 0 : index % 24}`;
+}
 function options(items) { return items.map(item => [item.id, entityName(item)]); }
 function entityName(item, fallback = '') { return item?.displayName || `${fallback} (${M.nameUnavailable})`; }
 function periodLabel(period) { return period ? `${entityName(period, period.id)}${period.startTime ? ` · ${M.optionalTime(period.startTime, period.endTime)}` : ''}` : M.nameUnavailable; }

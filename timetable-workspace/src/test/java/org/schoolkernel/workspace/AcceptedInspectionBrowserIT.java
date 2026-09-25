@@ -74,6 +74,34 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
     }
 
     @Test
+    @DisplayName("Week period number and shared time fit on one line without stretching lesson rows")
+    void displaysSharedWeekTimeBesidePeriodNumber() {
+        ObjectNode document = fixtures.acceptedDocument(false);
+        var periods = document.path("acceptedBaseline").path("definition").path("periods");
+        for (int index : new int[] { 0, 3 }) {
+            ((ObjectNode) periods.get(index)).put("startTime", "08:00:00").put("endTime", "08:40:00");
+        }
+        storeAccepted(document);
+
+        workbench.open().awaitText("Complete recurring Week");
+        JsonNode layout = workbench.value("""
+                (() => {
+                  const period = document.querySelector('.week-matrix tbody .week-period:has(small)');
+                  const number = period.querySelector('span').getBoundingClientRect();
+                  const time = period.querySelector('small').getBoundingClientRect();
+                  const row = period.closest('tr').getBoundingClientRect();
+                  return {text:period.querySelector('small').textContent,
+                    inline:time.left > number.right && time.top < number.bottom,
+                    fits:period.scrollWidth <= period.clientWidth + 1,
+                    rowHeight:row.height};
+                })()""");
+        assertEquals("08:00–08:40", layout.path("text").stringValue());
+        assertTrue(layout.path("inline").booleanValue(), "period number and time share a single line");
+        assertTrue(layout.path("fits").booleanValue(), "period time fits without overlapping weekday columns");
+        assertTrue(layout.path("rowHeight").doubleValue() <= 36, "timed period does not add empty space to lesson rows");
+    }
+
+    @Test
     @DisplayName("Timetable UX polish UC-1: scale Current workbench retains Week/Day, focus, selection, inspector, and Utilities through failed export and narrow view")
     void inspectsPolishedCurrentWorkbench() {
         ObjectNode document = fixtures.scaleDocument();
@@ -174,10 +202,14 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
                   const wrap = document.querySelector('.week-wrap');
                   const slot = document.querySelector('.week-slot:has([data-lesson-id=lesson-1])');
                   const inspector = document.querySelector('#workbench-inspector');
+                  const group = document.querySelector('.week-matrix tbody');
                   return {shell:shell.getBoundingClientRect().width, wrap:wrap.clientWidth,
                     content:wrap.scrollWidth, slot:slot.getBoundingClientRect().height,
+                    row:group.rows[0].getBoundingClientRect().height,
+                    classHeight:group.querySelector('.week-class').getBoundingClientRect().height,
+                    groupHeight:group.getBoundingClientRect().height,
                     inspector:inspector.getBoundingClientRect().width,
-                    days:document.querySelectorAll('.week-matrix thead th').length - 1,
+                    days:document.querySelectorAll('.week-matrix thead th').length - 2,
                     empty:document.querySelectorAll('.week-slot .empty-cell').length,
                     filters:document.querySelector('#filters').open,
                     utilities:document.querySelector('#utilities').open,
@@ -188,9 +220,14 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         assertTrue(wide.path("content").doubleValue() <= wide.path("wrap").doubleValue() + 1,
                 "UC-1 G1: five weekdays fit with inspector open");
         assertTrue(wide.path("slot").doubleValue() <= 36, "UC-1 G2: ordinary occupied Week slot is compact");
+        assertTrue(wide.path("row").doubleValue() <= 42, "Week period rows fit their lesson tiles without a fixed Day-cell height");
+        assertEquals(wide.path("groupHeight").doubleValue(), wide.path("classHeight").doubleValue(), 1,
+                "the Class cell spans the full height of its compact period rows");
         assertEquals(5, wide.path("days").intValue());
-        workbench.expect("(() => { const slots=[...document.querySelectorAll('.week-matrix tbody tr:first-child td:first-of-type .week-period')]; return slots.length === 12 && slots[0].textContent.startsWith('1 ·') && slots[11].textContent.startsWith('12 ·') && slots[0].title === 'Declared period 0'; })()",
-                "UC-1 G2/G3: Week keeps authoritative period names and visible declared order");
+        workbench.expect("(() => { const table=document.querySelector('.week-matrix'); const group=table.tBodies[0]; const periods=[...group.querySelectorAll('.week-period')]; const cohort=group.querySelector('.week-class').getBoundingClientRect(); const period=periods[0].getBoundingClientRect(); return table.tHead.rows[0].cells.length === 7 && table.tBodies.length === 60 && group.querySelectorAll('.week-class').length === 1 && group.querySelector('.week-class').textContent === 'Class 0' && cohort.width <= 110 && period.left >= cohort.right - 2 && periods.length === 12 && periods[0].textContent.includes('1') && periods[11].textContent.includes('12') && periods[0].title === 'Declared period 0' && !table.querySelector('td .week-period') && group.rows[0].cells.length === 7; })()",
+                "Week shows a single class label and one ordered time column alongside five weekdays");
+        workbench.expect("(() => { const first=document.querySelector('[data-lesson-id=lesson-0]'); const other=document.querySelector('[data-lesson-id=lesson-60]'); return first.dataset.subjectId !== other.dataset.subjectId && getComputedStyle(first).backgroundColor !== getComputedStyle(other).backgroundColor && getComputedStyle(first).borderLeftColor !== getComputedStyle(other).borderLeftColor; })()",
+                "distinct subjects have distinct visible Week tile colors");
         assertTrue(wide.path("empty").intValue() > 0, "UC-1 ext 2a: declared empty positions are retained");
         assertTrue(wide.path("inspector").doubleValue() >= 200);
         assertFalse(wide.path("filters").booleanValue());
@@ -216,7 +253,7 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
                 "UC-1 main 4: explicit class narrowing intersects with the highlighted subject and teacher only when requested");
         workbench.filterRoom("room-99");
         workbench.closeDisclosure("#filters");
-        workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 0' && !document.querySelector('#no-matches').hidden && document.querySelectorAll('.week-matrix tbody tr').length === 60 && !document.querySelector('#clear-filters').hidden && document.querySelector('#active-criteria').textContent.includes('Room: Room 99')",
+        workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 0' && !document.querySelector('#no-matches').hidden && document.querySelectorAll('.week-matrix tbody').length === 60 && !document.querySelector('#clear-filters').hidden && document.querySelector('#active-criteria').textContent.includes('Room: Room 99')",
                 "UC-1 ext 4a: zero matches retain declared time structure and visible closed-filter summary");
         workbench.click("#clear-filters");
         workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 1000' && document.querySelector('#lesson-search').value === 'Sixteen' && document.querySelector('#subject-investigation').value === 'subject-0' && document.querySelector('#teacher-investigation').value === 'teacher-16'",
@@ -489,7 +526,8 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         String before = storedDocument();
         String rendered = workbench.open().awaitText("No accepted lessons are scheduled");
         assertTrue(rendered.contains("Year 7A"));
-        assertTrue(rendered.contains("Monday 1"));
+        workbench.expect("document.querySelector('.week-matrix [data-weekday=MONDAY]')?.title === 'Monday 1' && document.querySelector('.week-matrix .week-period')?.textContent.includes('1')",
+                "empty Week retains the declared weekday period name and the shared period order");
         assertTrue(rendered.contains("Empty"));
         assertTrue(rendered.contains("Current · accepted"));
         workbench.expect("document.querySelector('#workbench-modes [data-mode=CURRENT]')?.getAttribute('aria-pressed') === 'true' && document.querySelectorAll('#accepted-view [data-lesson-id]').length === 0",
