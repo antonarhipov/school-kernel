@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-5
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: none
 
 ## Progress
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `255ab36`; `checkpoints/UC-2.md` | `convergence/UC-2.md`: APPROVE; automated gate green and administrator walkthrough passed 2026-09-24 |
 | UC-3 | APPROVED | UC-2 | `4bb218a`; `checkpoints/UC-3.md` | `convergence/UC-3.md`: APPROVE; automated gate green and administrator walkthrough accepted 2026-09-24 |
 | UC-4 | APPROVED | UC-3 | `fa2323a`; revised submission `f519d4a` | `convergence/UC-4.md`: APPROVE; automated gate and administrator walkthrough passed 2026-09-25 |
-| UC-5 | READY_FOR_CONVERGENCE | UC-1, UC-2, UC-3, UC-4 | HEAD at convergence; `checkpoints/UC-5.md` | - |
+| UC-5 | NEEDS_REVISION | UC-1, UC-2, UC-3, UC-4 | `75d0d89`; `checkpoints/UC-5.md` | `convergence/UC-5.md`: REJECT C-1, G-1, G-2 |
 
 ## UC-1 Evidence
 
@@ -189,6 +189,8 @@
 | RULE-14 | `WorkspaceBrowserIT.java:2588–2988,3186–3190`: normative isolated school, independent verifier, exact persisted document/field assertions, request trace, responsive/scroll geometry and clean 36-browser/195-reactor regression. Administrator walkthrough remains for convergence. |
 
 ## UC-5 Evidence
+
+- Convergence: `convergence/UC-5.md` rejected the submitted `75d0d89` boundary for C-1 (Proposal Week tile room/cue visibility), G-1 (missing tile assertions), and G-2 (one independent shared-browser timeout). The next execute revision must address all three findings.
 
 - Started: 2026-09-25 08:02 EEST from `5542555b9855df55851c9880b7e45ad29ceae79a`.
 - Pre-existing dirty files: none in the initial `git status --short`. An out-of-scope edit to `spec/timetable-workbench-layout/spec.md` appeared during execution and is excluded from this submission.
