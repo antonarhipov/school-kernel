@@ -10,10 +10,10 @@ Zero matches are equivalent to the busiest-to-quietest spread being within the t
 which preserves the existing weekly-balance meaning. The value is a non-negative integer.
 
 Catalog versions 1 through 3 retain their exact input and score meanings. Version 4 retains the seven ordinary
-preference rows from version 3 and adds the cohort setting without adding a score row. MVK declares a target of two
-for every cohort and sets the weekly-balance weight to four. One cohort gap still weighs ten and one late start weighs
-five, so both remain costlier than one balance match. A feasible time-limited result is not
-claimed to satisfy every target or to be optimal.
+preference rows from version 3 and adds the cohort setting without adding a score row. MVK uses the exact configuration
+below to favor the smallest practical daily-load spread and earlier starts. A feasible time-limited result is not
+claimed to satisfy every target or to be optimal. The existing late-start preference distinguishes starts after the
+third regular period, but does not score variation among starts in the first three periods.
 
 ## Actors and terms
 
@@ -44,9 +44,9 @@ claimed to satisfy every target or to be optimal.
 ### Main success scenario
 
 1. The administrator supplies a catalog version 4 definition with a daily spread target on at least one cohort and requests planning.
-2. The system validates the definition and searches for a complete hard-feasible timetable, preferring lower weighted weekly-balance excess along with the other catalog preferences.
+2. The system validates the definition and searches for a complete hard-feasible timetable, preferring lower weighted weekly-balance excess and fewer late starts along with the other catalog preferences.
 3. The system publishes a feasible candidate with its effective weights, weekly-balance match count and aggregate penalty.
-4. The administrator inspects each cohort's daily counts and can distinguish a met target from a remaining excess.
+4. The administrator inspects each cohort's daily counts and first lesson, or absence of lessons, on each available weekday, distinguishing a met load target and an early start from remaining excess.
 
 ### Extensions
 
@@ -65,13 +65,30 @@ claimed to satisfy every target or to be optimal.
 - G2. The solver and published score calculate the same weekly-balance match count for a given complete assignment. A value of zero is allowed and means equal daily counts are preferred.
 - G3. Catalog version 4 results identify that version and retain exactly seven ordinary-preference rows in catalog order. Versions 1 through 3 and their existing definition/result pairs retain their earlier rows, meanings, and revisions.
 - G4. Hard feasibility, period stability, and room stability retain priority over ordinary preferences. A repair does not add a period or room move solely to satisfy a daily spread target.
-- G5. MVK's definition declares target two for every cohort and weight four for weekly balance. A normal 30-second run is assessed against the previous `2,5,5,3,4` 6B distribution, but the target is a preference rather than a universal guarantee.
+- G5. MVK's definition contains exactly the cohort targets and overrides in the normative configuration below. A normal 30-second run is assessed against the previous `2,5,5,3,4` 6B distribution by independently inspecting daily counts, first-lesson periods, gaps, and the reported score. The target and absence of late starts are preferences rather than universal guarantees.
 
 ### Postconditions
 
 - Success: A complete, feasible, revision-verifiable candidate exists and its score reports the applicable weekly-balance penalty; acceptance remains a separate action.
 - Minimal guarantee: Invalid, interrupted, or unsuccessful planning publishes no candidate and preserves any accepted predecessor.
 
+## Normative MVK configuration
+
+`examples/mvk.json` has exactly these 23 cohort IDs, each with `maxDailyLessonSpread: 1` and no cohort-specific
+`undesirablePeriodIds`: `1a`, `1b`, `1c`, `2a`, `2b`, `2c`, `3a`, `3b`, `4a`, `4b`, `5a`, `5b`, `5d`, `6a`, `6b`, `6c`,
+`7a`, `7b`, `8a`, `8b`, `9a`, `9b`, `9c`. Its `softConstraintOverrides` has exactly these rows, no more and no fewer:
+
+| Constraint ID | Weight |
+|---|---:|
+| `soft.teacher-gap` | 5 |
+| `soft.cohort-gap` | 20 |
+| `soft.cohort-late-start` | 30 |
+| `soft.cohort-week-balance` | 30 |
+| `soft.non-preferred-room` | 5 |
+
+Other MVK definition fields, including the five school-wide reserved periods, remain unchanged.
+
 ## Out of scope
 
 Hard daily load limits, per-day minimums or maximums, new workspace policy-editing screens, and automatic acceptance.
+An exact first-lesson-time-spread score or hard common start time is also out of scope for this data-only revision.

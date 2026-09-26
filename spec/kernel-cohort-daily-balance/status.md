@@ -3,16 +3,18 @@
 ## Current
 
 - Use case: UC-1
-- Status: APPROVED
-- Next eligible: none
+- Status: NEEDS_REVISION
+- Next eligible: UC-1
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | APPROVED | none | Complete; checkpoint submitted | [APPROVED WITH NOTES](convergence/UC-1.md) |
+| UC-1 | NEEDS_REVISION | none | Prior slice complete; MVK configuration revision pending | [Prior approval, superseded by revised G5](convergence/UC-1.md) |
 
 ## UC-1 Evidence
+
+- Revised contract: 2026-09-27 follow-up tightens MVK's normative target and weights and adds first-start inspection to main step 4 and G5. The prior approval covers the earlier target-two fixture only; UC-1 requires a new submission and convergence.
 
 - Started: 2026-09-26 20:22 UTC
 - Started from: `b207e88b06ff1895e6496cd42af49191a375aa29`

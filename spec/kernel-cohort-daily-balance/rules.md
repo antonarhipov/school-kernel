@@ -31,8 +31,9 @@ Schema and validator tests cover absent, zero, positive, negative, fractional, a
 constraint and evaluator assertions compare different targets on different cohorts, zero-lesson available days, and
 the zero-weight case. Packaged CLI tests plan and verify a catalog 4 definition, replan from a legacy predecessor,
 and assert invalid/unsuccessful outcomes contain no timetable. Workspace repair integration compares predecessor
-bytes or JSON values with its version 4 successor. The MVK example is planned with the normal 30-second bound and
-its per-cohort daily counts are inspected independently. Run the complete kernel module suite, the affected workspace
+bytes or JSON values with its version 4 successor. Check MVK's exact normative cohort targets and override rows by
+value, then plan it with the normal 30-second bound and independently inspect daily counts, first lesson periods,
+cohort and teacher gaps, and preferred-room matches. Run the complete kernel module suite, the affected workspace
 import/repair integration suite, and `git diff --check`; inspect any broader reactor failures for relation to this
 feature.
 
@@ -62,7 +63,7 @@ feature.
 ### RULE-4 - Actor-boundary evidence
 
 - Applies to: UC-1
-- Constraint: Packaged CLI planning and verification MUST demonstrate a feasible catalog 4 candidate and the absence of a timetable for rejected input or unsuccessful search. The MVK fixture MUST be exercised at its normal limit with independent cohort-count inspection. The complete kernel and affected workspace import/repair regression suites MUST pass before convergence.
+- Constraint: Packaged CLI planning and verification MUST demonstrate a feasible catalog 4 candidate and the absence of a timetable for rejected input or unsuccessful search. The MVK fixture MUST match the exact normative configuration in UC-1 and be exercised at its normal limit with independent cohort-count, first-start, gap, and preferred-room inspection. The complete kernel and affected workspace import/repair regression suites MUST pass before convergence.
 - Reason: The administrator needs a real proposal whose reported quality matches its assignments.
 - Verification: Isolated packaged CLI tests, a normal-limit MVK run, workspace integration, `./mvnw -q -pl kernel-cli -am verify`, affected workspace tests, and `git diff --check`.
 
@@ -74,5 +75,5 @@ feature.
 
 ## Design exclusions
 
-No new route, UI screen, authentication mechanism, database migration, dependency, hard constraint, or acceptance
-transition is introduced.
+No new route, UI screen, authentication mechanism, database migration, dependency, hard constraint, score row,
+first-start-spread setting, or acceptance transition is introduced.

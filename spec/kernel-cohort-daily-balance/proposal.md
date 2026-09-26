@@ -10,6 +10,8 @@ bounded search may return a feasible timetable that exceeds the target, with the
 weekly-balance score row. The setting must be usable by initial planning and repair, must not reinterpret previously
 accepted definitions or results, and must keep the existing hard and repair-stability priorities.
 
-For MVK, the target is two lessons for every cohort. The existing gap and late-start priorities remain stronger than
-one weekly-balance match; the weekly-balance weight may be raised from its current value of one to give the new
-target a useful effect within the ordinary-preference score.
+The first delivered MVK configuration used a target of two and a weekly-balance weight of four. The follow-up asks
+for the tightest practical daily load and more even starts. This revision sets the cohort target to one and gives
+weekly balance and late starts greater weight, while retaining explicit gap, teacher-gap, and room preferences.
+It remains a data-only tuning of existing soft preferences: exact variation among starts in the first three regular
+periods is not scored by the current catalog.
