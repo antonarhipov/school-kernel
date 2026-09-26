@@ -43,6 +43,17 @@ class SchoolQualityConstraintTest {
         last.setPeriod(M2);
         verifier.verifyThat(SchoolConstraintProvider::cohortGap).given(first, last).hasNoImpact();
 
+        first.setPeriod(M2);
+        last.setPeriod(M3);
+        verifier.verifyThat(SchoolConstraintProvider::cohortGap).given(first, last).hasNoImpact();
+        assertEquals(0, new ScheduleEvaluator().evaluate(schedule(first, last),
+                KernelCatalog.defaultSoftWeights()).softMatchCounts().get(KernelCatalog.COHORT_GAP.id()));
+
+        last.setPeriod(M4);
+        verifier.verifyThat(SchoolConstraintProvider::cohortGap).given(first, last).penalizesBy(1);
+        assertEquals(1_000_000L, new ScheduleEvaluator().evaluate(schedule(first, last),
+                Map.of(KernelCatalog.COHORT_GAP.id(), 1_000_000L)).ordinaryPreferencePenalty());
+
         var blockedFirst = lesson("c", Set.of("m1", "m3", "t1", "t2", "w1"), M1);
         var blockedLast = lesson("d", Set.of("m1", "m3", "t1", "t2", "w1"), M3);
         verifier.verifyThat(SchoolConstraintProvider::cohortGap)

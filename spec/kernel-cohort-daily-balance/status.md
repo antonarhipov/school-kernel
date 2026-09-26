@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: NEEDS_REVISION
-- Next eligible: UC-1
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | NEEDS_REVISION | none | Prior target-one fixture approved; gap-weight revision pending | [Prior approval superseded](convergence/UC-1.md) |
+| UC-1 | READY_FOR_CONVERGENCE | none | MVK gap-priority revision submitted | [Prior approval superseded](convergence/UC-1.md) |
 
 ## UC-1 Evidence
 
@@ -36,10 +36,10 @@
 | UC-1 extension 2b | Zero-weight branch in `SchoolQualityCliIT.catalogFourPackagedPlanningAndRepairUseTheCohortDailySpread:250` |
 | UC-1 extension 2c | Unsuccessful-search branch in `SchoolQualityCliIT.catalogFourRejectsInvalidDailySpreadWithoutPublishingATimetable:282` |
 | UC-1 extension 3a and G5 | MVK 30-second `FEASIBLE` result: score has four remaining matches and three cohorts with spread 3; no optimality claim |
-| UC-1 G1 and G2 | `SchoolQualityConstraintTest.cohortSpecificDailySpreadChangesTheExactWeeklyBalanceMatches:132` and `incrementalScoreRecognizesMeetingTheConfiguredDailySpread:155`; packaged MVK `verify` and independent tally |
+| UC-1 G1 and G2 | `SchoolQualityConstraintTest.cohortSpecificDailySpreadChangesTheExactWeeklyBalanceMatches:143` and `incrementalScoreRecognizesMeetingTheConfiguredDailySpread:166`; packaged MVK `verify` and independent tally |
 | UC-1 G4 | `PlanningMapper.java:50`, `SchoolConstraintProvider.java:187`, packaged replan's zero period/room moves, and existing solver priority tests |
 | RULE-1 | `school-definition-v1.schema.json:78`, `KernelCatalog.java:12`, `ContractTest.java:51`, `RevisionService.definitionRevision` |
-| RULE-2 | `SchoolConstraintProvider.java:180`, `ScheduleEvaluator.java:103`, `SchoolQualityConstraintTest.java:132`, unchanged conservative bound in `DefinitionValidator.java:313` |
+| RULE-2 | `SchoolConstraintProvider.java:180`, `ScheduleEvaluator.java:103`, `SchoolQualityConstraintTest.java:143`, unchanged conservative bound in `DefinitionValidator.java:313` |
 | RULE-3 | `RepairDraftService.java:188`, `WorkspaceRepairDraftIT.java:128`, `WorkspaceRepairPlanningIT.java:121`, packaged catalog 3 to 4 repair |
 | RULE-4 | Kernel and Docker-backed workspace suites above, MVK plan and verify, `git diff --check` |
 
@@ -68,6 +68,16 @@
 ## UC-1 Cohort-Gap Revision
 
 - The administrator's follow-up makes within-day cohort gaps a dominant MVK preference. The prior convergence covered weight 20 and is superseded by the exact normative weight 1,000,000 and RULE-5. UC-1 must be resubmitted and reconverged; no accepted timetable is changed by this contract revision.
+- Started from: `e589e30`; pre-existing dirty files: none.
+- Contract finalized at `11a9f1d54e9c3246b9363bcd79809e38f5d10814`; implementation submission: HEAD at convergence, with revised `checkpoints/UC-1.md`.
+- Changed files: `README.md`, `examples/mvk.json`, `kernel-cli/src/test/java/org/schoolkernel/contract/ContractTest.java`, `kernel-cli/src/test/java/org/schoolkernel/solver/SchoolQualityConstraintTest.java`, this status file, and the revised checkpoint. No solver, catalog, or workspace production code changed.
+- MVK's 23 cohort targets remain one. Its five exact override weights are teacher gap 5, cohort gap 1,000,000, late start 10,000, weekly balance 1,000, and non-preferred room 5; `ContractTest.mvkHasExactBalancedPreferenceConfiguration:81` asserts these values and the five reservations.
+- `SchoolQualityConstraintTest.cohortGapCountsOnlyAvailablePeriodsInsideTheSchoolDay:36` checks an internal available hole as one match and 1,000,000 ordinary-preference penalty, and leading/trailing empty periods as zero; its reserved-middle-period case remains zero. Existing incremental-score and packaged verification paths remain covered.
+- Packaged `./school-kernel plan --definition examples/mvk.json --output /tmp/mvk-gap-priority-a4rAEA/final-result.json --time-limit PT30S --seed 0`: `FEASIBLE` / `TIME_LIMIT`, catalog 4, 520 assignments. Independent assignment tally: zero internal cohort gaps, zero late starts, three weekly-balance matches, 64 teacher gaps, and 421 non-preferred rooms; all agree with the seven reported score rows and penalties (cohort gap zero, balance 3,000, total ordinary 5,585). Cohorts 5A, 5B, and 6C have spread two; the other 20 meet target one. 6B has `3,4,4,4,4`, first regular slots `1,1,1,3,2`, and zero gaps.
+- Packaged `./school-kernel verify --definition examples/mvk.json --result /tmp/mvk-gap-priority-a4rAEA/final-result.json --output /tmp/mvk-gap-priority-a4rAEA/post-test-verification.json`: `VERIFIED`, catalog 4, matching definition and timetable revisions.
+- `./mvnw -q -pl kernel-cli -am verify`: PASS, 111 tests across 69 unit and 42 packaged CLI cases, zero failures/errors/skips. `./mvnw -q -pl timetable-workspace -am -Dit.test=WorkspaceImportIT,WorkspaceRepairDraftIT,WorkspaceRepairPlanningIT -Dfailsafe.failIfNoSpecifiedTests=false verify`: PASS with Docker access, 45 integration tests, zero failures/errors/skips. Initial sandbox attempt could not connect to the Docker socket and did not run test bodies; the authorized retry passed.
+- `git diff --check`: PASS. Regression tests left no additional tracked changes. Catalog 1-3 packaged journeys and workspace import/repair behavior remain covered by the suites above.
+- UC-1 main steps 1-4, G5, RULE-4 and RULE-5: exact fixture test, 30-second packaged plan, independent daily-count/start/gap/score inspection, and packaged verification. Other scenario, extension, guarantee, postcondition and RULE-1 through RULE-3 evidence remains in the prior UC-1 evidence and the revised checkpoint. The bounded candidate is feasible, not claimed optimal; the spread and gap targets remain soft preferences.
 
 ## Blockers
 

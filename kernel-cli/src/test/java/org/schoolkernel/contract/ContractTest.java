@@ -77,7 +77,7 @@ class ContractTest {
     }
 
     @Test
-    @DisplayName("Cohort balance UC-1 G5: MVK has the exact daily-load and start-time preference configuration")
+    @DisplayName("Cohort balance UC-1 G5/RULE-5: MVK has the exact gap, daily-load and start preference configuration")
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
         var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
@@ -94,9 +94,9 @@ class ContractTest {
         assertEquals(JsonSupport.mapper().readTree("""
                 [
                   {"constraintId":"soft.teacher-gap","weight":5},
-                  {"constraintId":"soft.cohort-gap","weight":20},
-                  {"constraintId":"soft.cohort-late-start","weight":30},
-                  {"constraintId":"soft.cohort-week-balance","weight":30},
+                  {"constraintId":"soft.cohort-gap","weight":1000000},
+                  {"constraintId":"soft.cohort-late-start","weight":10000},
+                  {"constraintId":"soft.cohort-week-balance","weight":1000},
                   {"constraintId":"soft.non-preferred-room","weight":5}
                 ]
                 """), definition.path("softConstraintOverrides"));

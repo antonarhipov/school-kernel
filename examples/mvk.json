@@ -6,9 +6,9 @@
   "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
   "softConstraintOverrides": [
     { "constraintId": "soft.teacher-gap", "weight": 5 },
-    { "constraintId": "soft.cohort-gap", "weight": 20 },
-    { "constraintId": "soft.cohort-late-start", "weight": 30 },
-    { "constraintId": "soft.cohort-week-balance", "weight": 30 },
+    { "constraintId": "soft.cohort-gap", "weight": 1000000 },
+    { "constraintId": "soft.cohort-late-start", "weight": 10000 },
+    { "constraintId": "soft.cohort-week-balance", "weight": 1000 },
     { "constraintId": "soft.non-preferred-room", "weight": 5 }
   ],
   "subjects": [

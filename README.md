@@ -60,9 +60,11 @@ and `130` for interruption before publication.
   begins after the third regular slot (or third declared slot when none are reserved). Catalog `4` allows each cohort
   to declare `maxDailyLessonSpread`, the preferred maximum difference between its busiest and quietest available
   weekdays. Omitting it preserves the one-lesson default; exceeding it adds weekly-balance matches but does not make
-  the timetable infeasible. MVK declares `1` on every cohort and weights weekly balance and late starts at `30`,
-  cohort gaps at `20`, and teacher gaps and non-preferred rooms at `5`. The late-start preference discourages first
-  lessons after the third regular period; it does not compare start times within the first three periods.
+  the timetable infeasible. MVK declares `1` on every cohort and weights cohort gaps at the supported maximum of
+  `1,000,000`, late starts at `10,000`, weekly balance at `1,000`, and teacher gaps and non-preferred rooms at `5`. A cohort gap
+  is an empty available period between that cohort's first and last lesson of the day, not time before or after its
+  lesson block. The late-start preference discourages first lessons after the third regular period; it does not
+  compare start times within the first three periods.
   The preferences default to weight `1`; `softConstraintOverrides` can tune
   them from `0` through `1,000,000`. Workspace repair creates a catalog `4` successor while preserving its accepted
   predecessor. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
