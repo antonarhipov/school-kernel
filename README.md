@@ -62,7 +62,7 @@ and `130` for interruption before publication.
   weekdays. Omitting it preserves the one-lesson default; exceeding it adds weekly-balance matches but does not make
   the timetable infeasible. MVK declares `2` on every cohort and raises the weekly-balance weight to `4`.
   The preferences default to weight `1`; `softConstraintOverrides` can tune
-  them from `0` through `1,000,000`. Workspace repair creates a catalog `3` successor while preserving its accepted
+  them from `0` through `1,000,000`. Workspace repair creates a catalog `4` successor while preserving its accepted
   predecessor. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
   room moves solely to improve class quality.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
