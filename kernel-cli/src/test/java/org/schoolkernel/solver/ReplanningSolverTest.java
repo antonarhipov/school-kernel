@@ -78,6 +78,7 @@ class ReplanningSolverTest {
                 List.of(new SchoolDefinition.Cohort("cohort", "Cohort", 20, periodIds, Set.of())),
                 rooms,
                 periods,
+                Set.of(),
                 List.of(new SchoolDefinition.Lesson(
                         "lesson", "Lesson", "subject", "cohort", "teacher", null,
                         Set.of(), preferredRooms, Set.of(), null, null)),

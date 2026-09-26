@@ -17,13 +17,15 @@ import org.junit.jupiter.api.Test;
 import org.schoolkernel.domain.KernelCatalog;
 
 class SchoolQualityConstraintTest {
-    private static final PeriodValue M1 = new PeriodValue("m1", DayOfWeek.MONDAY, 1);
-    private static final PeriodValue M2 = new PeriodValue("m2", DayOfWeek.MONDAY, 2);
-    private static final PeriodValue M3 = new PeriodValue("m3", DayOfWeek.MONDAY, 3);
+    private static final PeriodValue M1 = new PeriodValue("m1", DayOfWeek.MONDAY, 10);
+    private static final PeriodValue M2 = new PeriodValue("m2", DayOfWeek.MONDAY, 20);
+    private static final PeriodValue M3 = new PeriodValue("m3", DayOfWeek.MONDAY, 30);
+    private static final PeriodValue M4 = new PeriodValue("m4", DayOfWeek.MONDAY, 40);
+    private static final PeriodValue M5 = new PeriodValue("m5", DayOfWeek.MONDAY, 50);
     private static final PeriodValue T1 = new PeriodValue("t1", DayOfWeek.TUESDAY, 1);
     private static final PeriodValue T2 = new PeriodValue("t2", DayOfWeek.TUESDAY, 2);
     private static final PeriodValue W1 = new PeriodValue("w1", DayOfWeek.WEDNESDAY, 1);
-    private static final List<PeriodValue> PERIODS = List.of(M1, M2, M3, T1, T2, W1);
+    private static final List<PeriodValue> PERIODS = List.of(M1, M2, M3, M4, M5, T1, T2, W1);
     private static final Set<String> ALL = PERIODS.stream().map(PeriodValue::id).collect(Collectors.toSet());
     private static final RoomValue ROOM = new RoomValue("r", 30, Set.of(), ALL);
 
@@ -59,6 +61,40 @@ class SchoolQualityConstraintTest {
             director.beforeVariableChanged(last, "period");
             last.setPeriod(M2);
             director.afterVariableChanged(last, "period");
+            BendableScore after = director.calculateScore().raw();
+            assertEquals(1, after.softScore(2) - before.softScore(2));
+        }
+    }
+
+    @Test
+    void lateStartCountsOneTaughtCohortDayBeyondThirdDeclaredSlot() {
+        var third = lesson("third", ALL, M3);
+        verifier.verifyThat(SchoolConstraintProvider::cohortLateStart).given(third).hasNoImpact();
+
+        var fourth = lesson("fourth", ALL, M4);
+        var fifth = lesson("fifth", ALL, M5);
+        verifier.verifyThat(SchoolConstraintProvider::cohortLateStart).given(fourth).penalizesBy(1);
+        verifier.verifyThat(SchoolConstraintProvider::cohortLateStart).given(fourth, fifth).penalizesBy(1);
+        assertEquals(1, new ScheduleEvaluator().evaluate(schedule(fourth, fifth),
+                KernelCatalog.defaultSoftWeights()).softMatchCounts().get(KernelCatalog.COHORT_LATE_START.id()));
+
+        var tuesday = lesson("tuesday", ALL, T2);
+        verifier.verifyThat(SchoolConstraintProvider::cohortLateStart).given(fourth, tuesday).penalizesBy(1);
+        third.setPeriod(M3);
+        verifier.verifyThat(SchoolConstraintProvider::cohortLateStart).given(third, fourth).hasNoImpact();
+    }
+
+    @Test
+    void incrementalScoreRecognizesThirdSlotStart() {
+        var first = lesson("first", ALL, M4);
+        var factory = new DefaultSolverFactory<SchoolSchedule>(
+                SolverAdapter.baseConfig(new SolverAdapter.ExecutionControls(null, 10, 0)));
+        try (var director = factory.<BendableScore>getScoreDirectorFactory().buildScoreDirector()) {
+            director.setWorkingSolution(schedule(first));
+            BendableScore before = director.calculateScore().raw();
+            director.beforeVariableChanged(first, "period");
+            first.setPeriod(M3);
+            director.afterVariableChanged(first, "period");
             BendableScore after = director.calculateScore().raw();
             assertEquals(1, after.softScore(2) - before.softScore(2));
         }

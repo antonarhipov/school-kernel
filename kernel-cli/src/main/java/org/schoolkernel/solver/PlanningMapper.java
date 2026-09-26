@@ -22,6 +22,7 @@ public final class PlanningMapper {
             SchoolDefinition definition,
             Map<String, BaselineAssignment> baselineAssignments) {
         var periods = definition.periods().stream()
+                .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
                 .map(period -> new PeriodValue(period.id(), period.weekday(), period.order()))
                 .toList();
         var rooms = definition.rooms().stream()

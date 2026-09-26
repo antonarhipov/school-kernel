@@ -24,6 +24,7 @@ public final class RevisionService {
         ObjectNode normalized = (ObjectNode) definition.deepCopy();
         ENTITY_ARRAYS.forEach(name -> sortObjectArray(normalized, name, "id"));
         sortObjectArray(normalized, "softConstraintOverrides", "constraintId");
+        sortStringArray(normalized, "reservedPeriodIds");
         normalizeNestedSets(normalized);
         return hash(normalized);
     }

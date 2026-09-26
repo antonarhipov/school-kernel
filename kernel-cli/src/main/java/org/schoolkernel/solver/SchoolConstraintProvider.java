@@ -38,6 +38,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 roomOnlyMove(factory),
                 teacherGap(factory),
                 cohortGap(factory),
+                cohortLateStart(factory),
                 cohortWeekBalance(factory),
                 seriesSameDay(factory),
                 undesirablePeriod(factory),
@@ -165,6 +166,17 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .asConstraint(KernelCatalog.COHORT_GAP.id());
     }
 
+    public Constraint cohortLateStart(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .groupBy(
+                        lesson -> new CohortDay(lesson.getCohortId(), lesson.getPeriod().weekday(),
+                                lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog()),
+                        ConstraintCollectors.toList(PlanningLesson::getPeriod))
+                .penalize(PREFERENCE, (cohortDay, periods) -> countLateStart(
+                        periods, cohortDay.catalog(), cohortDay.weekday()))
+                .asConstraint(KernelCatalog.COHORT_LATE_START.id());
+    }
+
     public Constraint cohortWeekBalance(ConstraintFactory factory) {
         return factory.forEach(PlanningLesson.class)
                 .groupBy(
@@ -214,6 +226,22 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
         PlanningLesson sample = lessons.getFirst();
         return countGaps(lessons.stream().map(PlanningLesson::getPeriod).toList(),
                 sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog(), sample.getPeriod().weekday());
+    }
+
+    static long countCohortLateStart(List<PlanningLesson> lessons) {
+        if (lessons.isEmpty()) return 0;
+        PlanningLesson sample = lessons.getFirst();
+        return countLateStart(lessons.stream().map(PlanningLesson::getPeriod).toList(),
+                sample.getPeriodCatalog(), sample.getPeriod().weekday());
+    }
+
+    private static long countLateStart(List<PeriodValue> assigned, List<PeriodValue> catalog, DayOfWeek day) {
+        if (assigned.isEmpty()) return 0;
+        int firstAssignedOrder = assigned.stream().mapToInt(PeriodValue::order).min().orElseThrow();
+        long earlierSlots = catalog.stream()
+                .filter(period -> period.weekday() == day && period.order() < firstAssignedOrder)
+                .count();
+        return earlierSlots >= 3 ? 1 : 0;
     }
 
     private static long countGaps(

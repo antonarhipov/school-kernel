@@ -1,10 +1,12 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 2,
+  "catalogVersion": 3,
   "schoolId": "merivalja-kool",
   "displayName": "Merivälja Kool",
+  "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
   "softConstraintOverrides": [
-    { "constraintId": "soft.cohort-gap", "weight": 5 }
+    { "constraintId": "soft.cohort-gap", "weight": 10 },
+    { "constraintId": "soft.cohort-late-start", "weight": 5 }
   ],
   "subjects": [
     {

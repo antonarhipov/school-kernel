@@ -14,7 +14,7 @@
     "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
     "elapsedTimeMs": { "type": "integer", "minimum": 0 },
     "schoolId": { "$ref": "#/$defs/id" },
-    "catalogVersion": { "enum": [1, 2] },
+    "catalogVersion": { "enum": [1, 2, 3] },
     "inputRevision": { "$ref": "#/$defs/revision" },
     "effectiveSoftWeights": { "$ref": "#/$defs/effectiveSoftWeights" },
     "seed": { "type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807 },
@@ -83,9 +83,19 @@
       }
     },
     {
+      "if": { "required": ["catalogVersion"], "properties": { "catalogVersion": { "const": 3 } } },
+      "then": { "properties": {
+        "effectiveSoftWeights": { "required": ["soft.cohort-gap", "soft.cohort-late-start", "soft.cohort-week-balance"] },
+        "score": { "properties": { "constraintBreakdown": { "minItems": 7, "maxItems": 7 } } }
+      } }
+    },
+    {
       "if": { "required": ["catalogVersion"], "properties": { "catalogVersion": { "const": 2 } } },
       "then": { "properties": {
-        "effectiveSoftWeights": { "required": ["soft.cohort-gap", "soft.cohort-week-balance"] },
+        "effectiveSoftWeights": {
+          "required": ["soft.cohort-gap", "soft.cohort-week-balance"],
+          "not": { "required": ["soft.cohort-late-start"] }
+        },
         "score": { "properties": { "constraintBreakdown": { "minItems": 6, "maxItems": 6 } } }
       } }
     },
@@ -94,6 +104,7 @@
       "then": { "properties": {
         "effectiveSoftWeights": { "not": { "anyOf": [
           { "required": ["soft.cohort-gap"] },
+          { "required": ["soft.cohort-late-start"] },
           { "required": ["soft.cohort-week-balance"] }
         ] } },
         "score": { "properties": { "constraintBreakdown": { "minItems": 4, "maxItems": 4 } } }
@@ -112,6 +123,7 @@
       "properties": {
         "soft.teacher-gap": { "$ref": "#/$defs/weight" },
         "soft.cohort-gap": { "$ref": "#/$defs/weight" },
+        "soft.cohort-late-start": { "$ref": "#/$defs/weight" },
         "soft.cohort-week-balance": { "$ref": "#/$defs/weight" },
         "soft.series-same-day": { "$ref": "#/$defs/weight" },
         "soft.undesirable-period": { "$ref": "#/$defs/weight" },
@@ -173,7 +185,7 @@
         "constraintBreakdown": {
           "type": "array",
           "minItems": 4,
-          "maxItems": 6,
+          "maxItems": 7,
           "items": { "$ref": "#/$defs/breakdown" }
         }
       }

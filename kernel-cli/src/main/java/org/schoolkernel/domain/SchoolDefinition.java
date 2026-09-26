@@ -17,6 +17,7 @@ public record SchoolDefinition(
         List<Cohort> cohorts,
         List<Room> rooms,
         List<Period> periods,
+        Set<String> reservedPeriodIds,
         List<Lesson> lessons,
         Map<String, Long> softWeights) {
 

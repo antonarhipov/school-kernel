@@ -99,6 +99,7 @@ class TargetScaleBenchmark {
                 cohorts,
                 rooms,
                 periods,
+                Set.of(),
                 lessons,
                 Map.of(
                         "soft.teacher-gap", 0L,

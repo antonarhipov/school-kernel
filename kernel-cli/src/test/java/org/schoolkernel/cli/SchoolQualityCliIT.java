@@ -39,6 +39,103 @@ class SchoolQualityCliIT {
     Path temporaryDirectory;
 
     @Test
+    void catalogThreePackagedPlanReportsLateStartAndZeroWeightWithoutChangingLegacyRows() throws Exception {
+        ObjectNode definition = lateStartDefinition();
+        Path definitionPath = write("late-start-definition.json", definition);
+        Path output = temporaryDirectory.resolve("late-start-result.json");
+
+        ProcessResult process = run("plan", "--definition", definitionPath.toString(),
+                "--output", output.toString(), "--step-limit", "100");
+        assertEquals(0, process.exitCode(), process.stderr());
+        JsonNode result = JsonSupport.mapper().readTree(output);
+        assertEquals("FEASIBLE", result.path("status").stringValue());
+        assertEquals(3, result.path("catalogVersion").intValue());
+        assertEquals(7, result.path("score").path("constraintBreakdown").size());
+        assertEquals(1, matches(result, KernelCatalog.COHORT_LATE_START.id()));
+        assertEquals(1, constraint(result, KernelCatalog.COHORT_LATE_START.id())
+                .path("aggregatePenalty").longValue());
+        assertEquals(1, result.path("effectiveSoftWeights")
+                .path(KernelCatalog.COHORT_LATE_START.id()).longValue());
+
+        Path verification = temporaryDirectory.resolve("late-start-verified.json");
+        ProcessResult verified = run("verify", "--definition", definitionPath.toString(),
+                "--result", output.toString(), "--output", verification.toString());
+        assertEquals(0, verified.exitCode(), verified.stderr());
+        assertEquals("VERIFIED", JsonSupport.mapper().readTree(verification).path("status").stringValue());
+
+        ObjectNode zeroWeight = definition.deepCopy();
+        zeroWeight.putArray("softConstraintOverrides").addObject()
+                .put("constraintId", KernelCatalog.COHORT_LATE_START.id()).put("weight", 0);
+        Path zeroPath = write("late-start-zero-weight.json", zeroWeight);
+        Path zeroOutput = temporaryDirectory.resolve("late-start-zero-weight-result.json");
+        ProcessResult zeroRun = run("plan", "--definition", zeroPath.toString(),
+                "--output", zeroOutput.toString(), "--step-limit", "100");
+        assertEquals(0, zeroRun.exitCode(), zeroRun.stderr());
+        JsonNode zeroResult = JsonSupport.mapper().readTree(zeroOutput);
+        assertEquals(1, matches(zeroResult, KernelCatalog.COHORT_LATE_START.id()));
+        assertEquals(0, constraint(zeroResult, KernelCatalog.COHORT_LATE_START.id())
+                .path("aggregatePenalty").longValue());
+    }
+
+    @Test
+    void catalogThreePackagedRepairKeepsCatalogTwoPredecessorUnchanged() throws Exception {
+        ObjectNode predecessor = lateStartDefinition();
+        predecessor.put("catalogVersion", 2);
+        ((ObjectNode) predecessor.withArray("lessons").get(0)).put("periodLock", "mon-1");
+        Path predecessorPath = write("start-predecessor.json", predecessor);
+        Path currentPath = temporaryDirectory.resolve("start-current.json");
+        ProcessResult initial = run("plan", "--definition", predecessorPath.toString(),
+                "--output", currentPath.toString(), "--step-limit", "100");
+        assertEquals(0, initial.exitCode(), initial.stderr());
+        byte[] currentBytes = Files.readAllBytes(currentPath);
+        JsonNode current = JsonSupport.mapper().readTree(currentPath);
+        assertEquals(2, current.path("catalogVersion").intValue());
+        assertEquals(6, current.path("score").path("constraintBreakdown").size());
+        assertTrue(!current.path("effectiveSoftWeights").has(KernelCatalog.COHORT_LATE_START.id()));
+
+        ObjectNode successor = lateStartDefinition();
+        successor.put("basedOnRevision", current.path("inputRevision").stringValue());
+        Path successorPath = write("start-successor.json", successor);
+        Path output = temporaryDirectory.resolve("start-proposal.json");
+        ProcessResult repair = run("replan", "--current-definition", predecessorPath.toString(),
+                "--current", currentPath.toString(), "--definition", successorPath.toString(),
+                "--output", output.toString(), "--step-limit", "100");
+        assertEquals(0, repair.exitCode(), repair.stderr());
+        JsonNode proposal = JsonSupport.mapper().readTree(output);
+        assertEquals("FEASIBLE", proposal.path("status").stringValue());
+        assertEquals(3, proposal.path("catalogVersion").intValue());
+        assertEquals(1, matches(proposal, KernelCatalog.COHORT_LATE_START.id()));
+        assertArrayEquals(currentBytes, Files.readAllBytes(currentPath));
+    }
+
+    @Test
+    void catalogThreeFailureResultsDoNotPublishTimetables() throws Exception {
+        ObjectNode invalid = lateStartDefinition();
+        invalid.putArray("softConstraintOverrides").addObject()
+                .put("constraintId", KernelCatalog.COHORT_LATE_START.id()).put("weight", 1_000_001);
+        Path invalidPath = write("start-invalid.json", invalid);
+        Path invalidOutput = temporaryDirectory.resolve("start-invalid-result.json");
+        ProcessResult rejected = run("plan", "--definition", invalidPath.toString(),
+                "--output", invalidOutput.toString(), "--step-limit", "10");
+        assertEquals(2, rejected.exitCode(), rejected.stderr());
+        JsonNode invalidResult = JsonSupport.mapper().readTree(invalidOutput);
+        assertEquals("INVALID_INPUT", invalidResult.path("status").stringValue());
+        assertTrue(!invalidResult.has("timetable"));
+
+        ObjectNode impossible = (ObjectNode) JsonSupport.mapper().readTree(
+                Path.of("src", "test", "resources", "fixtures", "no-room-plan.json"));
+        impossible.put("catalogVersion", 3);
+        Path impossiblePath = write("start-impossible.json", impossible);
+        Path impossibleOutput = temporaryDirectory.resolve("start-impossible-result.json");
+        ProcessResult unsuccessful = run("plan", "--definition", impossiblePath.toString(),
+                "--output", impossibleOutput.toString(), "--step-limit", "10");
+        assertEquals(3, unsuccessful.exitCode(), unsuccessful.stderr());
+        JsonNode unsuccessfulResult = JsonSupport.mapper().readTree(impossibleOutput);
+        assertEquals("NO_FEASIBLE_SOLUTION_FOUND", unsuccessfulResult.path("status").stringValue());
+        assertTrue(!unsuccessfulResult.has("timetable"));
+    }
+
+    @Test
     void fullMv5InitialPlanningBalancesFiveAWithoutClassGaps() throws Exception {
         ObjectNode definition = mv5();
         Path definitionPath = write("quality-initial.json", definition);
@@ -260,6 +357,22 @@ class SchoolQualityCliIT {
 
     private static ObjectNode mv5() throws Exception {
         return (ObjectNode) JsonSupport.mapper().readTree(Path.of("..", "examples", "mv5.json"));
+    }
+
+    private static ObjectNode lateStartDefinition() throws Exception {
+        ObjectNode definition = (ObjectNode) JsonSupport.mapper().readTree(
+                Path.of("src", "test", "resources", "fixtures", "valid-plan.json"));
+        definition.put("catalogVersion", 3);
+        ((ObjectNode) definition.withArray("periods").get(0)).put("order", 10);
+        for (int slot = 2; slot <= 4; slot++) {
+            definition.withArray("periods").addObject()
+                    .put("id", "mon-" + slot)
+                    .put("displayName", "Monday " + slot)
+                    .put("weekday", "MONDAY")
+                    .put("order", slot * 10);
+        }
+        ((ObjectNode) definition.withArray("lessons").get(0)).put("periodLock", "mon-4");
+        return definition;
     }
 
     private Path write(String name, JsonNode value) throws Exception {

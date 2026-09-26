@@ -22,15 +22,20 @@ public final class PreflightFeasibilityCheck {
             var teacher = teachers.get(lesson.teacherId());
             var cohort = cohorts.get(lesson.cohortId());
             var candidatePeriods = definition.periods().stream()
+                    .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
                     .filter(period -> lesson.periodLock() == null || lesson.periodLock().equals(period.id()))
                     .filter(period -> teacher.availablePeriodIds().contains(period.id()))
                     .filter(period -> cohort.availablePeriodIds().contains(period.id()))
                     .toList();
             if (candidatePeriods.isEmpty()) {
-                if (definition.periods().stream().noneMatch(period -> teacher.availablePeriodIds().contains(period.id()))) {
+                if (definition.periods().stream()
+                        .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
+                        .noneMatch(period -> teacher.availablePeriodIds().contains(period.id()))) {
                     failures.get(KernelCatalog.TEACHER_AVAILABILITY.id()).add(List.of(lesson.id(), teacher.id()));
                 }
-                if (definition.periods().stream().noneMatch(period -> cohort.availablePeriodIds().contains(period.id()))) {
+                if (definition.periods().stream()
+                        .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
+                        .noneMatch(period -> cohort.availablePeriodIds().contains(period.id()))) {
                     failures.get(KernelCatalog.COHORT_AVAILABILITY.id()).add(List.of(lesson.id(), cohort.id()));
                 }
                 if (lesson.periodLock() != null) {

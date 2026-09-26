@@ -107,6 +107,7 @@ class BaselineVerifierTest {
                 List.of(
                         new SchoolDefinition.Period("p1", "Period 1", DayOfWeek.MONDAY, 1, null, null),
                         new SchoolDefinition.Period("p2", "Period 2", DayOfWeek.MONDAY, 2, null, null)),
+                Set.of(),
                 lessons,
                 KernelCatalog.defaultSoftWeights());
     }

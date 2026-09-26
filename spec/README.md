@@ -27,6 +27,10 @@ Current feature directories:
   for accepted-timetable Week/Day inspection.
 - [`kernel-schedule-quality`](kernel-schedule-quality/) specifies class-day gaps and weekly load balance for the next
   scheduling catalog while retaining version 1 baselines.
+- [`kernel-cohort-start-quality`](kernel-cohort-start-quality/) specifies the catalog 3 late-start measure while
+  preserving catalog 1 and 2 definitions and results.
+- [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
+  planning and repair, with MVK's five `*-0` periods reserved.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.

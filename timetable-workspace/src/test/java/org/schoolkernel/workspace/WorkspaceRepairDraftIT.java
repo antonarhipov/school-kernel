@@ -93,13 +93,34 @@ class WorkspaceRepairDraftIT {
 
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
         assertEquals(1, acceptedBefore.path("definition").path("catalogVersion").intValue());
-        assertEquals(2, compiled.path("catalogVersion").intValue());
+        assertEquals(3, compiled.path("catalogVersion").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
                 compiled.path("teachers").get(0).path("availablePeriodIds"));
         assertEquals("mon-2", compiled.path("lessons").get(1).path("periodLock").stringValue());
         assertEquals("room-101", compiled.path("lessons").get(1).path("roomLock").stringValue());
         assertFalse(acceptedBefore.path("definition").path("teachers").get(0).has("availablePeriodIds"));
+    }
+
+    @Test
+    @DisplayName("Reserved periods UC-1 extension 1a: repair successor retains reservation and accepted predecessor")
+    void compilesReservationAwareRepairWithoutChangingAcceptedPair() throws Exception {
+        ObjectNode document = (ObjectNode) storedDocument();
+        ((ObjectNode) document.path("acceptedBaseline").path("definition"))
+                .putArray("reservedPeriodIds").add("mon-3");
+        jdbc.sql("UPDATE workspace_aggregate SET document=CAST(:document AS jsonb) WHERE workspace_id=1")
+                .param("document", JSON.writeValueAsString(document)).update();
+        JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
+
+        JsonNode started = body(command("POST", "/api/repair-draft", session(), teacherUnavailable("mon-1")));
+        assertEquals("REPAIR_DRAFT", started.path("state").stringValue());
+        ObjectNode successor = repairs.compiledDefinition(repository.load().document());
+
+        assertEquals(JSON.readTree("[\"mon-3\"]"), successor.path("reservedPeriodIds"));
+        assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
+        assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
+                successor.path("teachers").get(0).path("availablePeriodIds"),
+                "reservation remains separate from resource availability");
     }
 
     @Test

@@ -5,10 +5,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/** Versioned constraint catalog, retaining the version 1 preference subset for legacy results. */
+/** Versioned constraint catalog, retaining exact prior preference subsets for legacy results. */
 public final class KernelCatalog {
     public static final int LEGACY_VERSION = 1;
-    public static final int VERSION = 2;
+    public static final int CLASS_QUALITY_VERSION = 2;
+    public static final int VERSION = 3;
 
     public enum Category {
         HARD,
@@ -47,6 +48,7 @@ public final class KernelCatalog {
             new ConstraintDescriptor("stability.room-only-move", Category.ROOM_STABILITY, null);
     public static final ConstraintDescriptor TEACHER_GAP = soft("soft.teacher-gap");
     public static final ConstraintDescriptor COHORT_GAP = soft("soft.cohort-gap");
+    public static final ConstraintDescriptor COHORT_LATE_START = soft("soft.cohort-late-start");
     public static final ConstraintDescriptor COHORT_WEEK_BALANCE = soft("soft.cohort-week-balance");
     public static final ConstraintDescriptor SERIES_SAME_DAY = soft("soft.series-same-day");
     public static final ConstraintDescriptor UNDESIRABLE_PERIOD = soft("soft.undesirable-period");
@@ -67,6 +69,7 @@ public final class KernelCatalog {
             ROOM_ONLY_MOVE,
             TEACHER_GAP,
             COHORT_GAP,
+            COHORT_LATE_START,
             COHORT_WEEK_BALANCE,
             SERIES_SAME_DAY,
             UNDESIRABLE_PERIOD,
@@ -89,7 +92,11 @@ public final class KernelCatalog {
         requireVersion(catalogVersion);
         return softConstraintIds().stream()
                 .filter(id -> catalogVersion == VERSION
-                        || (!id.equals(COHORT_GAP.id()) && !id.equals(COHORT_WEEK_BALANCE.id())))
+                        || (catalogVersion == CLASS_QUALITY_VERSION && !id.equals(COHORT_LATE_START.id()))
+                        || (catalogVersion == LEGACY_VERSION
+                                && !id.equals(COHORT_GAP.id())
+                                && !id.equals(COHORT_LATE_START.id())
+                                && !id.equals(COHORT_WEEK_BALANCE.id())))
                 .toList();
     }
 
@@ -107,7 +114,9 @@ public final class KernelCatalog {
     }
 
     public static boolean supportsVersion(int catalogVersion) {
-        return catalogVersion == LEGACY_VERSION || catalogVersion == VERSION;
+        return catalogVersion == LEGACY_VERSION
+                || catalogVersion == CLASS_QUALITY_VERSION
+                || catalogVersion == VERSION;
     }
 
     private static void requireVersion(int catalogVersion) {

@@ -11,12 +11,18 @@ class KernelCatalogTest {
     @Test
     @DisplayName("RULE-27: catalog version, IDs, order, categories, and defaults are exact")
     void catalogIsExact() {
-        assertEquals(2, KernelCatalog.VERSION);
+        assertEquals(3, KernelCatalog.VERSION);
+        assertEquals(2, KernelCatalog.CLASS_QUALITY_VERSION);
         assertEquals(1, KernelCatalog.LEGACY_VERSION);
         assertEquals(List.of(
                 "soft.teacher-gap", "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"),
                 KernelCatalog.softConstraintIds(KernelCatalog.LEGACY_VERSION));
         assertEquals(4, KernelCatalog.defaultSoftWeights(KernelCatalog.LEGACY_VERSION).size());
+        assertEquals(List.of(
+                "soft.teacher-gap", "soft.cohort-gap", "soft.cohort-week-balance",
+                "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"),
+                KernelCatalog.softConstraintIds(KernelCatalog.CLASS_QUALITY_VERSION));
+        assertEquals(7, KernelCatalog.defaultSoftWeights(KernelCatalog.VERSION).size());
         assertEquals(List.of(
                 row("hard.teacher-period", "HARD", null),
                 row("hard.cohort-period", "HARD", null),
@@ -32,6 +38,7 @@ class KernelCatalogTest {
                 row("stability.room-only-move", "ROOM_STABILITY", null),
                 row("soft.teacher-gap", "ORDINARY_PREFERENCE", 1L),
                 row("soft.cohort-gap", "ORDINARY_PREFERENCE", 1L),
+                row("soft.cohort-late-start", "ORDINARY_PREFERENCE", 1L),
                 row("soft.cohort-week-balance", "ORDINARY_PREFERENCE", 1L),
                 row("soft.series-same-day", "ORDINARY_PREFERENCE", 1L),
                 row("soft.undesirable-period", "ORDINARY_PREFERENCE", 1L),

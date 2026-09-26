@@ -140,6 +140,25 @@ class WorkspaceImportIT {
     }
 
     @Test
+    @DisplayName("Reserved periods UC-1 main: HTTP import retains explicit school reservation without rewriting availability")
+    void importsReservedPeriodDefinition() throws Exception {
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        definition.putArray("reservedPeriodIds").add("mon-3");
+        Session session = session();
+
+        HttpResponse<String> response = post(session, Map.of(
+                "definition", new FilePart("school.json", JSON.writeValueAsBytes(definition))), true, true);
+
+        assertEquals(200, response.statusCode());
+        JsonNode stored = storedDocument().path("initialDefinition");
+        assertEquals(definition, stored);
+        assertEquals("mon-3", stored.path("reservedPeriodIds").get(0).stringValue());
+        assertFalse(stored.path("teachers").get(0).has("availablePeriodIds"));
+        assertFalse(stored.path("cohorts").get(0).has("availablePeriodIds"));
+        assertFalse(stored.path("rooms").get(0).has("availablePeriodIds"));
+    }
+
+    @Test
     @DisplayName("UC-1 main accepted mode: exact definition/result pair becomes one atomic accepted baseline")
     void importsAcceptedPair() throws Exception {
         Path result = plannedResult(ROOT.resolve("examples/initial-school.json"), "accepted-result.json");
@@ -389,7 +408,7 @@ class WorkspaceImportIT {
         unsupportedSchema.put("schemaVersion", 2);
         invalidDefinitions.add(unsupportedSchema);
         ObjectNode unsupportedCatalog = definition.deepCopy();
-        unsupportedCatalog.put("catalogVersion", 3);
+        unsupportedCatalog.put("catalogVersion", 4);
         invalidDefinitions.add(unsupportedCatalog);
         ObjectNode missingName = definition.deepCopy();
         missingName.remove("displayName");

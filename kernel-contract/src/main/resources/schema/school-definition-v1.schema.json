@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "enum": [1, 2] },
+    "catalogVersion": { "enum": [1, 2, 3] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -19,6 +19,7 @@
     "cohorts": { "type": "array", "items": { "$ref": "#/$defs/cohort" } },
     "rooms": { "type": "array", "items": { "$ref": "#/$defs/room" } },
     "periods": { "type": "array", "items": { "$ref": "#/$defs/period" } },
+    "reservedPeriodIds": { "$ref": "#/$defs/idArray" },
     "lessons": { "type": "array", "items": { "$ref": "#/$defs/lesson" } },
     "softConstraintOverrides": {
       "type": "array",
@@ -132,7 +133,7 @@
       "properties": {
         "constraintId": {
           "enum": [
-            "soft.teacher-gap", "soft.cohort-gap", "soft.cohort-week-balance", "soft.series-same-day",
+            "soft.teacher-gap", "soft.cohort-gap", "soft.cohort-late-start", "soft.cohort-week-balance", "soft.series-same-day",
             "soft.undesirable-period", "soft.non-preferred-room"
           ]
         },
@@ -140,10 +141,18 @@
       }
     }
   },
-  "allOf": [{
-    "if": { "properties": { "catalogVersion": { "const": 1 } } },
-    "then": { "properties": { "softConstraintOverrides": { "items": { "properties": {
-      "constraintId": { "enum": ["soft.teacher-gap", "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"] }
-    } } } } }
-  }]
+  "allOf": [
+    {
+      "if": { "properties": { "catalogVersion": { "const": 1 } } },
+      "then": { "properties": { "softConstraintOverrides": { "items": { "properties": {
+        "constraintId": { "enum": ["soft.teacher-gap", "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"] }
+      } } } } }
+    },
+    {
+      "if": { "properties": { "catalogVersion": { "const": 2 } } },
+      "then": { "properties": { "softConstraintOverrides": { "items": { "properties": {
+        "constraintId": { "enum": ["soft.teacher-gap", "soft.cohort-gap", "soft.cohort-week-balance", "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"] }
+      } } } } }
+    }
+  ]
 }

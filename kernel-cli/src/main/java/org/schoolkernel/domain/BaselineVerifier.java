@@ -58,7 +58,11 @@ public final class BaselineVerifier {
             CurrentTimetableReader.Assignment assignment = assignments.get(lesson.getId());
             PeriodValue period = periods.get(assignment.periodId());
             RoomValue room = rooms.get(assignment.roomId());
-            if (period == null) {
+            if (definition.reservedPeriodIds().contains(assignment.periodId())) {
+                errors.add(new ValidationError(
+                        "/timetable/assignments", List.of(lesson.getId(), assignment.periodId()),
+                        "accepted baseline assignment uses a reserved period"));
+            } else if (period == null) {
                 errors.add(new ValidationError(
                         "/timetable/assignments", List.of(lesson.getId(), assignment.periodId()),
                         "accepted baseline references an unknown period"));

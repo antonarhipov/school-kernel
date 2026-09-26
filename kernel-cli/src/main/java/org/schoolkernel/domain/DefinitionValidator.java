@@ -55,6 +55,8 @@ public final class DefinitionValidator {
         var roomIds = ids(input.rooms(), RoomDto::id);
         var periodIds = ids(input.periods(), PeriodDto::id);
 
+        checkReferences("/reservedPeriodIds", input.schoolId(), input.reservedPeriodIds(),
+                periodIds, "period", errors);
         checkTeacherReferences(input.teachers(), subjectIds, periodIds, errors);
         checkCohortReferences(input.cohorts(), periodIds, errors);
         checkRoomReferences(input.rooms(), periodIds, errors);
@@ -292,15 +294,14 @@ public final class DefinitionValidator {
             List<SoftConstraintOverrideDto> overrides,
             SchoolDefinitionDto input,
             List<ValidationError> errors) {
-        if (overrides == null) {
-            return;
-        }
         var seen = new HashSet<String>();
-        for (int i = 0; i < overrides.size(); i++) {
-            var override = overrides.get(i);
-            if (!seen.add(override.constraintId())) {
-                error(errors, "/softConstraintOverrides/" + i + "/constraintId", List.of(override.constraintId()),
-                        "soft constraint may be overridden only once");
+        if (overrides != null) {
+            for (int i = 0; i < overrides.size(); i++) {
+                var override = overrides.get(i);
+                if (!seen.add(override.constraintId())) {
+                    error(errors, "/softConstraintOverrides/" + i + "/constraintId", List.of(override.constraintId()),
+                            "soft constraint may be overridden only once");
+                }
             }
         }
 
@@ -316,6 +317,8 @@ public final class DefinitionValidator {
                     Math.multiplyExact(gapMaximum, weights.get(KernelCatalog.TEACHER_GAP.id())));
             maximum = Math.addExact(maximum,
                     Math.multiplyExact(cohortGapMaximum, weights.getOrDefault(KernelCatalog.COHORT_GAP.id(), 0L)));
+            maximum = Math.addExact(maximum,
+                    Math.multiplyExact(lessonMaximum, weights.getOrDefault(KernelCatalog.COHORT_LATE_START.id(), 0L)));
             maximum = Math.addExact(maximum,
                     Math.multiplyExact(weekBalanceMaximum,
                             weights.getOrDefault(KernelCatalog.COHORT_WEEK_BALANCE.id(), 0L)));
@@ -336,6 +339,7 @@ public final class DefinitionValidator {
         var cohorts = index(input.cohorts(), CohortDto::id);
         var rooms = index(input.rooms(), RoomDto::id);
         Set<String> allPeriods = ids(input.periods(), PeriodDto::id);
+        Set<String> reservedPeriods = set(input.reservedPeriodIds());
         var lockedResources = new HashMap<String, String>();
 
         for (int i = 0; i < input.lessons().size(); i++) {
@@ -370,6 +374,10 @@ public final class DefinitionValidator {
             }
             if (lesson.periodLock() == null || !allPeriods.contains(lesson.periodLock())) {
                 continue;
+            }
+            if (reservedPeriods.contains(lesson.periodLock())) {
+                error(errors, "/lessons/" + i + "/periodLock", List.of(lesson.id(), lesson.periodLock()),
+                        "period lock contradicts school reservation");
             }
             if (teacher != null && !availability(teacher.availablePeriodIds(), allPeriods).contains(lesson.periodLock())) {
                 error(errors, "/lessons/" + i + "/periodLock", List.of(lesson.id(), teacher.id(), lesson.periodLock()),
@@ -447,7 +455,8 @@ public final class DefinitionValidator {
                 input.schemaVersion(), input.catalogVersion(), input.schoolId(), input.displayName(),
                 input.basedOnRevision(),
                 subjects, teachers, cohorts, rooms,
-                periods, lessons, Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())));
+                periods, set(input.reservedPeriodIds()), lessons,
+                Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())));
     }
 
     private static Map<String, Long> effectiveWeights(List<SoftConstraintOverrideDto> overrides, int catalogVersion) {

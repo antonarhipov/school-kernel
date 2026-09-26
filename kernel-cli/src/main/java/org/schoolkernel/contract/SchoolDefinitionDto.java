@@ -13,6 +13,7 @@ public record SchoolDefinitionDto(
         List<CohortDto> cohorts,
         List<RoomDto> rooms,
         List<PeriodDto> periods,
+        List<String> reservedPeriodIds,
         List<LessonDto> lessons,
         List<SoftConstraintOverrideDto> softConstraintOverrides) {
 

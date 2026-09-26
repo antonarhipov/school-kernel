@@ -25,7 +25,7 @@ class ContractTest {
     }
 
     @Test
-    @DisplayName("Schedule quality: catalog 2 accepts class preferences while catalog 1 keeps its exact override set")
+    @DisplayName("Schedule quality: catalogs 1, 2, and 3 keep distinct override sets")
     void catalogVersionsKeepDistinctOverrides() throws Exception {
         var legacy = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
                 .readTree(resource("/fixtures/valid-plan.json"));
@@ -36,6 +36,14 @@ class ContractTest {
         assertTrue(new DefinitionSchemaValidator().validate(versionTwo).isEmpty());
         legacy.set("softConstraintOverrides", versionTwo.path("softConstraintOverrides").deepCopy());
         assertFalse(new DefinitionSchemaValidator().validate(legacy).isEmpty());
+
+        var versionThree = versionTwo.deepCopy();
+        versionThree.put("catalogVersion", 3);
+        versionThree.putArray("softConstraintOverrides").addObject()
+                .put("constraintId", "soft.cohort-late-start").put("weight", 0);
+        assertTrue(new DefinitionSchemaValidator().validate(versionThree).isEmpty());
+        versionTwo.set("softConstraintOverrides", versionThree.path("softConstraintOverrides").deepCopy());
+        assertFalse(new DefinitionSchemaValidator().validate(versionTwo).isEmpty());
     }
 
     @Test
