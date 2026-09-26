@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
+- Status: APPROVED
 - Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | Complete; checkpoint submitted | Pending |
+| UC-1 | APPROVED | none | Complete; checkpoint submitted | [APPROVED WITH NOTES](convergence/UC-1.md) |
 
 ## UC-1 Evidence
 
