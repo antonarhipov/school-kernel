@@ -526,9 +526,8 @@ async function clearWorkspace() {
   const button = document.querySelector('#clear-workspace');
   if (button) button.disabled = true;
   try {
-    const response = await fetch('/api/workspace/clear', {
-      method: 'POST',
-      headers: { [csrf.headerName]: csrf.token, 'If-Match': etag }
+    const response = await fetchWithCsrf('/api/workspace/clear', {
+      method: 'POST'
     });
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || M.actionFailed);
@@ -550,9 +549,8 @@ async function uploadNewDefinition(event) {
   const button = form.querySelector('button[type=submit]');
   if (button) button.disabled = true;
   try {
-    const response = await fetch('/api/workspace/upload-definition', {
+    const response = await fetchWithCsrf('/api/workspace/upload-definition', {
       method: 'POST',
-      headers: { [csrf.headerName]: csrf.token, 'If-Match': etag },
       body: new FormData(form)
     });
     const body = await response.json();
@@ -1047,7 +1045,7 @@ async function mutatePin(payload) {
   let response;
   let result;
   try {
-    response = await fetch('/api/repair-draft', { method: 'PATCH', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+    response = await fetchWithCsrf('/api/repair-draft', { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
     result = await response.json();
   } catch (_) { reportDraftFailure(M.actionFailed); return; }
   if (!response.ok) { reportDraftFailure(result.message || M.actionFailed); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return; }
@@ -1487,11 +1485,33 @@ function bindInitialActions() {
 }
 async function cancelRun(id) { await mutate(`/api/runs/${encodeURIComponent(id)}`, 'DELETE'); }
 
+async function fetchWithCsrf(url, options = {}) {
+  const headers = Object.assign({}, options.headers);
+  if (csrf) headers[csrf.headerName] = csrf.token;
+  if (etag && !headers['If-Match']) headers['If-Match'] = etag;
+  let response = await fetch(url, Object.assign({}, options, { headers }));
+  if (response.status === 403) {
+    const clone = response.clone();
+    try {
+      const errorJson = await clone.json();
+      if (errorJson.code === 'REQUEST_FORBIDDEN') {
+        const csrfResponse = await fetch('/api/csrf');
+        if (csrfResponse.ok) {
+          csrf = await csrfResponse.json();
+          headers[csrf.headerName] = csrf.token;
+          response = await fetch(url, Object.assign({}, options, { headers }));
+        }
+      }
+    } catch (_) {}
+  }
+  return response;
+}
+
 async function mutate(path, method, body) {
   try {
-    const headers = { [csrf.headerName]: csrf.token, 'If-Match': etag };
+    const headers = {};
     if (typeof body === 'string') headers['Content-Type'] = 'application/json';
-    const response = await fetch(path, { method, headers, body });
+    const response = await fetchWithCsrf(path, { method, headers, body });
     const result = await response.json();
     if (!response.ok) {
       if (path === '/api/repair-draft' && method !== 'DELETE') {
@@ -1521,7 +1541,7 @@ async function mutateJson(path, method, payload) {
 }
 
 async function commandJson(path, method, payload) {
-  const response = await fetch(path, { method, headers: { [csrf.headerName]: csrf.token, 'If-Match': etag, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const response = await fetchWithCsrf(path, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
   const result = await response.json();
   if (!response.ok) { const status = document.querySelector('#draft-save-status'); if (status) status.textContent = result.message || M.actionFailed; else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`); if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return null; }
   return result;
@@ -1531,7 +1551,7 @@ async function submit(form) {
   importStatus.className = ''; importStatus.textContent = M.verifying;
   const button = form.querySelector('button'); button.disabled = true;
   try {
-    const response = await fetch('/api/import', { method: 'POST', headers: { [csrf.headerName]: csrf.token, 'If-Match': etag }, body: new FormData(form) });
+    const response = await fetchWithCsrf('/api/import', { method: 'POST', body: new FormData(form) });
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || M.actionFailed);
     etag = response.headers.get('ETag'); render(body); importStatus.textContent = '';
