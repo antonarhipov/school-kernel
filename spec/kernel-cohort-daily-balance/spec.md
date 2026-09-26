@@ -68,7 +68,7 @@ variation among starts in the first three periods.
 - G2. The solver and published score calculate the same weekly-balance match count for a given complete assignment. A value of zero is allowed and means equal daily counts are preferred.
 - G3. Catalog version 4 results identify that version and retain exactly seven ordinary-preference rows in catalog order. Versions 1 through 3 and their existing definition/result pairs retain their earlier rows, meanings, and revisions.
 - G4. Hard feasibility, period stability, and room stability retain priority over ordinary preferences. A repair does not add a period or room move solely to satisfy a daily spread target.
-- G5. MVK's definition contains exactly the cohort targets and overrides in the normative configuration below. Each cohort gap contributes a penalty of 1,000,000 when present. A normal 30-second run is assessed against the previous `2,5,5,3,4` 6B distribution by independently inspecting daily counts, first-lesson periods, gaps, and the reported score. Zero gaps, the daily-load target, and absence of late starts remain preferences rather than universal guarantees.
+- G5. MVK's definition contains exactly the cohort targets and overrides in the normative configuration below. Each cohort gap contributes a penalty of 1,000,000 when present; the higher late-start and weekly-balance weights keep those goals meaningful among gap-free candidates. A normal 30-second run is assessed against the previous `2,5,5,3,4` 6B distribution by independently inspecting daily counts, first-lesson periods, gaps, and the reported score. Zero gaps, the daily-load target, and absence of late starts remain preferences rather than universal guarantees.
 
 ### Postconditions
 
@@ -85,8 +85,8 @@ variation among starts in the first three periods.
 |---|---:|
 | `soft.teacher-gap` | 5 |
 | `soft.cohort-gap` | 1,000,000 |
-| `soft.cohort-late-start` | 30 |
-| `soft.cohort-week-balance` | 30 |
+| `soft.cohort-late-start` | 10,000 |
+| `soft.cohort-week-balance` | 1,000 |
 | `soft.non-preferred-room` | 5 |
 
 Other MVK definition fields, including the five school-wide reserved periods, remain unchanged.
