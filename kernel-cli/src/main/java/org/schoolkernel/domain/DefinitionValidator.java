@@ -432,7 +432,8 @@ public final class DefinitionValidator {
         var cohorts = input.cohorts().stream()
                 .map(value -> new SchoolDefinition.Cohort(
                         value.id(), value.displayName(), value.size(),
-                        availability(value.availablePeriodIds(), allPeriods), set(value.undesirablePeriodIds())))
+                        availability(value.availablePeriodIds(), allPeriods), set(value.undesirablePeriodIds()),
+                        value.maxDailyLessonSpread() == null ? 1 : value.maxDailyLessonSpread()))
                 .toList();
         var rooms = input.rooms().stream()
                 .map(value -> new SchoolDefinition.Room(

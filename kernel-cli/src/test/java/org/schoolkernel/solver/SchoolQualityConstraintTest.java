@@ -128,11 +128,58 @@ class SchoolQualityConstraintTest {
                 .given(monday, tuesday).hasNoImpact();
     }
 
+    @Test
+    void cohortSpecificDailySpreadChangesTheExactWeeklyBalanceMatches() {
+        var a = lesson("a", "class-a", ALL, M1, 2);
+        var b = lesson("b", "class-a", ALL, M2, 2);
+        var c = lesson("c", "class-a", ALL, M3, 2);
+        var d = lesson("d", "class-a", ALL, T1, 2);
+        var e = lesson("e", "class-b", ALL, M1, 0);
+        var f = lesson("f", "class-b", ALL, T1, 0);
+
+        // Class A has 3,1,0 lessons, so only the 3-to-0 pair exceeds its target of two.
+        verifier.verifyThat(SchoolConstraintProvider::cohortWeekBalance).given(a, b, c, d).penalizesBy(1);
+        // Class B has 1,1,0 lessons and a target of zero.
+        verifier.verifyThat(SchoolConstraintProvider::cohortWeekBalance).given(e, f).penalizesBy(2);
+        verifier.verifyThat(SchoolConstraintProvider::cohortWeekBalance)
+                .given(a, b, c, d, e, f).penalizesBy(3);
+        assertEquals(3, new ScheduleEvaluator().evaluate(schedule(a, b, c, d, e, f),
+                KernelCatalog.defaultSoftWeights()).softMatchCounts().get(KernelCatalog.COHORT_WEEK_BALANCE.id()));
+
+        var unavailableWednesday = lesson("g", "class-c", Set.of("m1", "m2", "m3", "t1", "t2"), M1, 0);
+        verifier.verifyThat(SchoolConstraintProvider::cohortWeekBalance)
+                .given(unavailableWednesday).penalizesBy(1);
+    }
+
+    @Test
+    void incrementalScoreRecognizesMeetingTheConfiguredDailySpread() {
+        var a = lesson("a", "class-a", ALL, M1, 2);
+        var b = lesson("b", "class-a", ALL, M2, 2);
+        var c = lesson("c", "class-a", ALL, M3, 2);
+        var d = lesson("d", "class-a", ALL, T1, 2);
+        var factory = new DefaultSolverFactory<SchoolSchedule>(
+                SolverAdapter.baseConfig(new SolverAdapter.ExecutionControls(null, 10, 0)));
+        try (var director = factory.<BendableScore>getScoreDirectorFactory().buildScoreDirector()) {
+            director.setWorkingSolution(schedule(a, b, c, d));
+            BendableScore before = director.calculateScore().raw();
+            director.beforeVariableChanged(c, "period");
+            c.setPeriod(W1);
+            director.afterVariableChanged(c, "period");
+            BendableScore after = director.calculateScore().raw();
+            assertEquals(1, after.softScore(2) - before.softScore(2));
+        }
+    }
+
     private static PlanningLesson lesson(String id, Set<String> cohortAvailability, PeriodValue period) {
+        return lesson(id, "class", cohortAvailability, period, 1);
+    }
+
+    private static PlanningLesson lesson(
+            String id, String cohortId, Set<String> cohortAvailability, PeriodValue period, int maxDailyLessonSpread) {
         var lesson = new PlanningLesson(
-                id, "subject", "class", 20, "teacher-" + id, null,
+                id, "subject", cohortId, 20, "teacher-" + id, null,
                 ALL, Set.of(), cohortAvailability, Set.of(), Set.of(),
-                Set.of(), Set.of(), null, null, PERIODS);
+                Set.of(), Set.of(), null, null, null, null, PERIODS, maxDailyLessonSpread);
         lesson.setPeriod(period);
         lesson.setRoom(ROOM);
         return lesson;

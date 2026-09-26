@@ -140,6 +140,23 @@ class WorkspaceImportIT {
     }
 
     @Test
+    @DisplayName("Cohort balance UC-1: HTTP import preserves a catalog 4 cohort target by value")
+    void importsCohortDailySpreadDefinition() throws Exception {
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        definition.put("catalogVersion", 4);
+        ((ObjectNode) definition.path("cohorts").get(0)).put("maxDailyLessonSpread", 2);
+
+        HttpResponse<String> response = post(session(), Map.of(
+                "definition", new FilePart("school.json", JSON.writeValueAsBytes(definition))), true, true);
+
+        assertEquals(200, response.statusCode());
+        assertEquals("INITIAL_DRAFT", JSON.readTree(response.body()).path("state").stringValue());
+        assertEquals(definition, storedDocument().path("initialDefinition"));
+        assertEquals(2, storedDocument().path("initialDefinition").path("cohorts").get(0)
+                .path("maxDailyLessonSpread").intValue());
+    }
+
+    @Test
     @DisplayName("Reserved periods UC-1 main: HTTP import retains explicit school reservation without rewriting availability")
     void importsReservedPeriodDefinition() throws Exception {
         ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
@@ -408,7 +425,7 @@ class WorkspaceImportIT {
         unsupportedSchema.put("schemaVersion", 2);
         invalidDefinitions.add(unsupportedSchema);
         ObjectNode unsupportedCatalog = definition.deepCopy();
-        unsupportedCatalog.put("catalogVersion", 4);
+        unsupportedCatalog.put("catalogVersion", 5);
         invalidDefinitions.add(unsupportedCatalog);
         ObjectNode missingName = definition.deepCopy();
         missingName.remove("displayName");

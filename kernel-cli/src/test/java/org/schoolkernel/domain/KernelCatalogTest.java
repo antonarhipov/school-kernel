@@ -11,7 +11,8 @@ class KernelCatalogTest {
     @Test
     @DisplayName("RULE-27: catalog version, IDs, order, categories, and defaults are exact")
     void catalogIsExact() {
-        assertEquals(3, KernelCatalog.VERSION);
+        assertEquals(4, KernelCatalog.VERSION);
+        assertEquals(3, KernelCatalog.START_QUALITY_VERSION);
         assertEquals(2, KernelCatalog.CLASS_QUALITY_VERSION);
         assertEquals(1, KernelCatalog.LEGACY_VERSION);
         assertEquals(List.of(
@@ -23,6 +24,8 @@ class KernelCatalogTest {
                 "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"),
                 KernelCatalog.softConstraintIds(KernelCatalog.CLASS_QUALITY_VERSION));
         assertEquals(7, KernelCatalog.defaultSoftWeights(KernelCatalog.VERSION).size());
+        assertEquals(KernelCatalog.softConstraintIds(KernelCatalog.START_QUALITY_VERSION),
+                KernelCatalog.softConstraintIds(KernelCatalog.VERSION));
         assertEquals(List.of(
                 row("hard.teacher-period", "HARD", null),
                 row("hard.cohort-period", "HARD", null),

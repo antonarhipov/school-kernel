@@ -195,6 +195,105 @@ class SchoolQualityCliIT {
     }
 
     @Test
+    void catalogFourPackagedPlanningAndRepairUseTheCohortDailySpread() throws Exception {
+        ObjectNode configured = twoLessonDailySpreadDefinition();
+        Path configuredPath = write("cohort-spread-two.json", configured);
+        Path configuredOutput = temporaryDirectory.resolve("cohort-spread-two-result.json");
+        ProcessResult planned = run("plan", "--definition", configuredPath.toString(),
+                "--output", configuredOutput.toString(), "--step-limit", "100");
+        assertEquals(0, planned.exitCode(), planned.stderr());
+        JsonNode candidate = JsonSupport.mapper().readTree(configuredOutput);
+        assertEquals("FEASIBLE", candidate.path("status").stringValue());
+        assertEquals(4, candidate.path("catalogVersion").intValue());
+        assertEquals(7, candidate.path("score").path("constraintBreakdown").size());
+        assertEquals(0, matches(candidate, KernelCatalog.COHORT_WEEK_BALANCE.id()));
+        Path configuredVerification = temporaryDirectory.resolve("cohort-spread-two-verified.json");
+        ProcessResult verified = run("verify", "--definition", configuredPath.toString(),
+                "--result", configuredOutput.toString(), "--output", configuredVerification.toString());
+        assertEquals(0, verified.exitCode(), verified.stderr());
+        assertEquals("VERIFIED", JsonSupport.mapper().readTree(configuredVerification).path("status").stringValue());
+
+        ObjectNode predecessor = configured.deepCopy();
+        predecessor.put("catalogVersion", 3);
+        cohort(predecessor, "5a").remove("maxDailyLessonSpread");
+        Path predecessorPath = write("cohort-spread-predecessor.json", predecessor);
+        Path currentPath = temporaryDirectory.resolve("cohort-spread-current.json");
+        ProcessResult prior = run("plan", "--definition", predecessorPath.toString(),
+                "--output", currentPath.toString(), "--step-limit", "100");
+        assertEquals(0, prior.exitCode(), prior.stderr());
+        byte[] priorBytes = Files.readAllBytes(currentPath);
+        JsonNode priorResult = JsonSupport.mapper().readTree(currentPath);
+        assertEquals(3, priorResult.path("catalogVersion").intValue());
+        assertEquals(4, matches(priorResult, KernelCatalog.COHORT_WEEK_BALANCE.id()));
+
+        ObjectNode successor = configured.deepCopy();
+        successor.put("basedOnRevision", priorResult.path("inputRevision").stringValue());
+        Path successorPath = write("cohort-spread-successor.json", successor);
+        Path repairOutput = temporaryDirectory.resolve("cohort-spread-repair.json");
+        ProcessResult repaired = run("replan", "--current-definition", predecessorPath.toString(),
+                "--current", currentPath.toString(), "--definition", successorPath.toString(),
+                "--output", repairOutput.toString(), "--step-limit", "100");
+        assertEquals(0, repaired.exitCode(), repaired.stderr());
+        JsonNode proposal = JsonSupport.mapper().readTree(repairOutput);
+        assertEquals("FEASIBLE", proposal.path("status").stringValue());
+        assertEquals(4, proposal.path("catalogVersion").intValue());
+        assertEquals(0, matches(proposal, KernelCatalog.COHORT_WEEK_BALANCE.id()));
+        assertEquals(0, proposal.path("score").path("periodMoves").longValue());
+        assertEquals(0, proposal.path("score").path("roomOnlyMoves").longValue());
+        assertArrayEquals(priorBytes, Files.readAllBytes(currentPath));
+
+        ObjectNode disabled = configured.deepCopy();
+        cohort(disabled, "5a").put("maxDailyLessonSpread", 1);
+        disabled.putArray("softConstraintOverrides").addObject()
+                .put("constraintId", KernelCatalog.COHORT_WEEK_BALANCE.id()).put("weight", 0);
+        Path disabledPath = write("cohort-spread-disabled.json", disabled);
+        Path disabledOutput = temporaryDirectory.resolve("cohort-spread-disabled-result.json");
+        ProcessResult zeroWeighted = run("plan", "--definition", disabledPath.toString(),
+                "--output", disabledOutput.toString(), "--step-limit", "100");
+        assertEquals(0, zeroWeighted.exitCode(), zeroWeighted.stderr());
+        JsonNode zeroResult = JsonSupport.mapper().readTree(disabledOutput);
+        assertEquals(4, matches(zeroResult, KernelCatalog.COHORT_WEEK_BALANCE.id()));
+        assertEquals(0, constraint(zeroResult, KernelCatalog.COHORT_WEEK_BALANCE.id())
+                .path("aggregatePenalty").longValue());
+    }
+
+    @Test
+    void catalogFourRejectsInvalidDailySpreadWithoutPublishingATimetable() throws Exception {
+        ObjectNode configured = twoLessonDailySpreadDefinition();
+        for (int index = 0; index < 3; index++) {
+            ObjectNode invalid = configured.deepCopy();
+            ObjectNode cohort = cohort(invalid, "5a");
+            switch (index) {
+                case 0 -> cohort.put("maxDailyLessonSpread", -1);
+                case 1 -> cohort.put("maxDailyLessonSpread", 1.5);
+                default -> invalid.put("catalogVersion", 3);
+            }
+            Path invalidPath = write("cohort-spread-invalid-" + index + ".json", invalid);
+            Path output = temporaryDirectory.resolve("cohort-spread-invalid-result-" + index + ".json");
+            ProcessResult rejected = run("plan", "--definition", invalidPath.toString(),
+                    "--output", output.toString(), "--step-limit", "10");
+            assertEquals(2, rejected.exitCode(), rejected.stderr());
+            JsonNode result = JsonSupport.mapper().readTree(output);
+            assertEquals("INVALID_INPUT", result.path("status").stringValue());
+            assertTrue(!result.has("timetable"));
+            assertTrue(!rejected.stderr().contains("Solving started"));
+        }
+
+        ObjectNode impossible = (ObjectNode) JsonSupport.mapper().readTree(
+                Path.of("src", "test", "resources", "fixtures", "no-room-plan.json"));
+        impossible.put("catalogVersion", 4);
+        ((ObjectNode) impossible.withArray("cohorts").get(0)).put("maxDailyLessonSpread", 2);
+        Path impossiblePath = write("cohort-spread-impossible.json", impossible);
+        Path impossibleOutput = temporaryDirectory.resolve("cohort-spread-impossible-result.json");
+        ProcessResult unsuccessful = run("plan", "--definition", impossiblePath.toString(),
+                "--output", impossibleOutput.toString(), "--step-limit", "10");
+        assertEquals(3, unsuccessful.exitCode(), unsuccessful.stderr());
+        JsonNode unsuccessfulResult = JsonSupport.mapper().readTree(impossibleOutput);
+        assertEquals("NO_FEASIBLE_SOLUTION_FOUND", unsuccessfulResult.path("status").stringValue());
+        assertTrue(!unsuccessfulResult.has("timetable"));
+    }
+
+    @Test
     void catalogTwoRejectedAndUnsuccessfulPlanningPublishesNoCandidate() throws Exception {
         ObjectNode invalid = mv5();
         invalid.putArray("softConstraintOverrides").addObject()
@@ -373,6 +472,33 @@ class SchoolQualityCliIT {
         }
         ((ObjectNode) definition.withArray("lessons").get(0)).put("periodLock", "mon-4");
         return definition;
+    }
+
+    private static ObjectNode twoLessonDailySpreadDefinition() throws Exception {
+        ObjectNode definition = mv5();
+        definition.put("catalogVersion", 4);
+        var lessons = definition.withArray("lessons");
+        var selected = new ArrayList<JsonNode>();
+        lessons.forEach(lesson -> {
+            String id = lesson.path("id").stringValue();
+            if (id.equals("5a.int-o.01") || id.equals("5a.literature.01")) {
+                ObjectNode copy = (ObjectNode) lesson.deepCopy();
+                copy.put("periodLock", id.equals("5a.int-o.01") ? "mon-0" : "mon-2");
+                copy.put("roomLock", id.equals("5a.int-o.01") ? "b216" : "a119");
+                selected.add(copy);
+            }
+        });
+        lessons.removeAll();
+        selected.forEach(lessons::add);
+        cohort(definition, "5a").put("maxDailyLessonSpread", 2);
+        return definition;
+    }
+
+    private static ObjectNode cohort(ObjectNode definition, String cohortId) {
+        return java.util.stream.StreamSupport.stream(definition.withArray("cohorts").spliterator(), false)
+                .map(ObjectNode.class::cast)
+                .filter(value -> cohortId.equals(value.path("id").stringValue()))
+                .findFirst().orElseThrow();
     }
 
     private Path write(String name, JsonNode value) throws Exception {

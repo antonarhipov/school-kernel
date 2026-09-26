@@ -35,7 +35,13 @@ public record SchoolDefinition(
             String displayName,
             int size,
             Set<String> availablePeriodIds,
-            Set<String> undesirablePeriodIds) {}
+            Set<String> undesirablePeriodIds,
+            int maxDailyLessonSpread) {
+        public Cohort(String id, String displayName, int size, Set<String> availablePeriodIds,
+                Set<String> undesirablePeriodIds) {
+            this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, 1);
+        }
+    }
 
     public record Room(
             String id,

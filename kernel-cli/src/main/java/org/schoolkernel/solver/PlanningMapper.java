@@ -47,7 +47,7 @@ public final class PlanningMapper {
                     lesson.requiredRoomCapabilityIds(), lesson.preferredRoomIds(), lesson.periodLock(), lesson.roomLock(),
                     baseline == null ? null : baseline.periodId(),
                     baseline == null ? null : baseline.roomId(),
-                    periods);
+                    periods, cohort.maxDailyLessonSpread());
             if (baseline != null) {
                 PeriodValue baselinePeriod = periodsById.get(baseline.periodId());
                 RoomValue baselineRoom = roomsById.get(baseline.roomId());

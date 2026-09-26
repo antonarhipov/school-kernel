@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 public final class KernelCatalog {
     public static final int LEGACY_VERSION = 1;
     public static final int CLASS_QUALITY_VERSION = 2;
-    public static final int VERSION = 3;
+    public static final int START_QUALITY_VERSION = 3;
+    public static final int VERSION = 4;
 
     public enum Category {
         HARD,
@@ -91,7 +92,7 @@ public final class KernelCatalog {
     public static List<String> softConstraintIds(int catalogVersion) {
         requireVersion(catalogVersion);
         return softConstraintIds().stream()
-                .filter(id -> catalogVersion == VERSION
+                .filter(id -> catalogVersion >= START_QUALITY_VERSION
                         || (catalogVersion == CLASS_QUALITY_VERSION && !id.equals(COHORT_LATE_START.id()))
                         || (catalogVersion == LEGACY_VERSION
                                 && !id.equals(COHORT_GAP.id())
@@ -116,6 +117,7 @@ public final class KernelCatalog {
     public static boolean supportsVersion(int catalogVersion) {
         return catalogVersion == LEGACY_VERSION
                 || catalogVersion == CLASS_QUALITY_VERSION
+                || catalogVersion == START_QUALITY_VERSION
                 || catalogVersion == VERSION;
     }
 

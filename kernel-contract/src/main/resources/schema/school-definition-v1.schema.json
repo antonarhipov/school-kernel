@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "enum": [1, 2, 3] },
+    "catalogVersion": { "enum": [1, 2, 3, 4] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -74,7 +74,8 @@
         "displayName": { "$ref": "#/$defs/displayName" },
         "size": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
         "availablePeriodIds": { "$ref": "#/$defs/idArray" },
-        "undesirablePeriodIds": { "$ref": "#/$defs/idArray" }
+        "undesirablePeriodIds": { "$ref": "#/$defs/idArray" },
+        "maxDailyLessonSpread": { "type": "integer", "minimum": 0, "maximum": 2147483647 }
       }
     },
     "room": {
@@ -142,6 +143,12 @@
     }
   },
   "allOf": [
+    {
+      "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3] } } },
+      "then": { "properties": { "cohorts": { "items": {
+        "not": { "required": ["maxDailyLessonSpread"] }
+      } } } }
+    },
     {
       "if": { "properties": { "catalogVersion": { "const": 1 } } },
       "then": { "properties": { "softConstraintOverrides": { "items": { "properties": {

@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 3,
+  "catalogVersion": 4,
   "schoolId": "merivalja-kool",
   "displayName": "Merivälja Kool",
   "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
   "softConstraintOverrides": [
     { "constraintId": "soft.cohort-gap", "weight": 10 },
-    { "constraintId": "soft.cohort-late-start", "weight": 5 }
+    { "constraintId": "soft.cohort-late-start", "weight": 5 },
+    { "constraintId": "soft.cohort-week-balance", "weight": 4 }
   ],
   "subjects": [
     {
@@ -493,117 +494,140 @@
     {
       "id": "1a",
       "displayName": "1A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "1b",
       "displayName": "1B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "1c",
       "displayName": "1C",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "2a",
       "displayName": "2A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "2b",
       "displayName": "2B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "2c",
       "displayName": "2C",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "3a",
       "displayName": "3A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "3b",
       "displayName": "3B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "4a",
       "displayName": "4A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "4b",
       "displayName": "4B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "5a",
       "displayName": "5A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "5b",
       "displayName": "5B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "5d",
       "displayName": "5D",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "6a",
       "displayName": "6A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "6b",
       "displayName": "6B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "6c",
       "displayName": "6C",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "7a",
       "displayName": "7A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "7b",
       "displayName": "7B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "8a",
       "displayName": "8A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "8b",
       "displayName": "8B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "9a",
       "displayName": "9A",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "9b",
       "displayName": "9B",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     },
     {
       "id": "9c",
       "displayName": "9C",
-      "size": 24
+      "size": 24,
+      "maxDailyLessonSpread": 2
     }
   ],
   "rooms": [

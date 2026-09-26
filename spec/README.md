@@ -29,6 +29,8 @@ Current feature directories:
   scheduling catalog while retaining version 1 baselines.
 - [`kernel-cohort-start-quality`](kernel-cohort-start-quality/) specifies the catalog 3 late-start measure while
   preserving catalog 1 and 2 definitions and results.
+- [`kernel-cohort-daily-balance`](kernel-cohort-daily-balance/) specifies the catalog 4 cohort-level daily-spread target
+  while preserving the earlier weekly-balance meanings.
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
 

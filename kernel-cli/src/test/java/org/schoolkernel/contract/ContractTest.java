@@ -47,6 +47,33 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("Cohort balance UC-1: catalog 4 accepts a cohort spread target and older catalogs reject it")
+    void cohortDailySpreadSchemaAndRevision() throws Exception {
+        var definition = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        definition.put("catalogVersion", 4);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        String withoutTarget = new RevisionService().definitionRevision(definition);
+
+        var cohort = (tools.jackson.databind.node.ObjectNode) definition.withArray("cohorts").get(0);
+        cohort.put("maxDailyLessonSpread", 2);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        assertNotEquals(withoutTarget, new RevisionService().definitionRevision(definition));
+
+        for (int version : new int[] {1, 2, 3}) {
+            var oldCatalog = definition.deepCopy();
+            oldCatalog.put("catalogVersion", version);
+            assertFalse(new DefinitionSchemaValidator().validate(oldCatalog).isEmpty());
+        }
+        cohort.put("maxDailyLessonSpread", 0);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        cohort.put("maxDailyLessonSpread", -1);
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        cohort.put("maxDailyLessonSpread", 1.5);
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+    }
+
+    @Test
     @DisplayName("UC-1 ext 2a: schema rejects unknown properties")
     void schemaRejectsUnknownProperties() throws Exception {
         var input = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()

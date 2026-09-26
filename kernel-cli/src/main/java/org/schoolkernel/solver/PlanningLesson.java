@@ -13,6 +13,7 @@ public class PlanningLesson {
     private String subjectId;
     private String cohortId;
     private int cohortSize;
+    private int cohortMaxDailyLessonSpread = 1;
     private String teacherId;
     private String seriesId;
     private Set<String> teacherAvailablePeriodIds;
@@ -75,10 +76,38 @@ public class PlanningLesson {
             String baselinePeriodId,
             String baselineRoomId,
             List<PeriodValue> periodCatalog) {
+        this(id, subjectId, cohortId, cohortSize, teacherId, seriesId,
+                teacherAvailablePeriodIds, teacherUndesirablePeriodIds,
+                cohortAvailablePeriodIds, cohortUndesirablePeriodIds, lessonUndesirablePeriodIds,
+                requiredRoomCapabilityIds, preferredRoomIds, periodLock, roomLock,
+                baselinePeriodId, baselineRoomId, periodCatalog, 1);
+    }
+
+    public PlanningLesson(
+            String id,
+            String subjectId,
+            String cohortId,
+            int cohortSize,
+            String teacherId,
+            String seriesId,
+            Set<String> teacherAvailablePeriodIds,
+            Set<String> teacherUndesirablePeriodIds,
+            Set<String> cohortAvailablePeriodIds,
+            Set<String> cohortUndesirablePeriodIds,
+            Set<String> lessonUndesirablePeriodIds,
+            Set<String> requiredRoomCapabilityIds,
+            Set<String> preferredRoomIds,
+            String periodLock,
+            String roomLock,
+            String baselinePeriodId,
+            String baselineRoomId,
+            List<PeriodValue> periodCatalog,
+            int cohortMaxDailyLessonSpread) {
         this.id = id;
         this.subjectId = subjectId;
         this.cohortId = cohortId;
         this.cohortSize = cohortSize;
+        this.cohortMaxDailyLessonSpread = cohortMaxDailyLessonSpread;
         this.teacherId = teacherId;
         this.seriesId = seriesId;
         this.teacherAvailablePeriodIds = teacherAvailablePeriodIds;
@@ -110,6 +139,10 @@ public class PlanningLesson {
 
     public int getCohortSize() {
         return cohortSize;
+    }
+
+    public int getCohortMaxDailyLessonSpread() {
+        return cohortMaxDailyLessonSpread;
     }
 
     public String getTeacherId() {

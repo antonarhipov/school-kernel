@@ -93,7 +93,7 @@ class WorkspaceRepairDraftIT {
 
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
         assertEquals(1, acceptedBefore.path("definition").path("catalogVersion").intValue());
-        assertEquals(3, compiled.path("catalogVersion").intValue());
+        assertEquals(4, compiled.path("catalogVersion").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
                 compiled.path("teachers").get(0).path("availablePeriodIds"));
@@ -121,6 +121,26 @@ class WorkspaceRepairDraftIT {
         assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
                 successor.path("teachers").get(0).path("availablePeriodIds"),
                 "reservation remains separate from resource availability");
+    }
+
+    @Test
+    @DisplayName("Cohort balance UC-1 extension 1a: HTTP repair retains a configured cohort target and accepted pair")
+    void compilesCohortDailySpreadWithoutChangingAcceptedPair() throws Exception {
+        ObjectNode document = (ObjectNode) storedDocument();
+        ObjectNode definition = (ObjectNode) document.path("acceptedBaseline").path("definition");
+        definition.put("catalogVersion", 4);
+        ((ObjectNode) definition.path("cohorts").get(0)).put("maxDailyLessonSpread", 2);
+        jdbc.sql("UPDATE workspace_aggregate SET document=CAST(:document AS jsonb) WHERE workspace_id=1")
+                .param("document", JSON.writeValueAsString(document)).update();
+        JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
+
+        JsonNode started = body(command("POST", "/api/repair-draft", session(), teacherUnavailable("mon-1")));
+        assertEquals("REPAIR_DRAFT", started.path("state").stringValue());
+        ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
+        assertEquals(4, compiled.path("catalogVersion").intValue());
+        assertEquals(2, compiled.path("cohorts").get(0).path("maxDailyLessonSpread").intValue());
+        assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
+        assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
     }
 
     @Test

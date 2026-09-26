@@ -47,6 +47,19 @@ class DefinitionValidatorTest {
     }
 
     @Test
+    void catalogFourCohortDailySpreadDefaultsToOneAndPreservesAnExplicitValue() throws Exception {
+        ObjectNode input = validInput();
+        input.put("catalogVersion", 4);
+        var validator = new DefinitionValidator();
+        assertEquals(1, validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition().cohorts().getFirst().maxDailyLessonSpread());
+
+        ((ObjectNode) input.withArray("cohorts").get(0)).put("maxDailyLessonSpread", 2);
+        assertEquals(2, validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition().cohorts().getFirst().maxDailyLessonSpread());
+    }
+
+    @Test
     @DisplayName("UC-1 validation reporting: details are deterministic and capped while total is preserved")
     void validationReportsAreDeterministicAndCapped() {
         var detected = java.util.stream.IntStream.range(0, 1_005)

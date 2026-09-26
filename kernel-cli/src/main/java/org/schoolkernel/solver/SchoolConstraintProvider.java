@@ -181,10 +181,11 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
         return factory.forEach(PlanningLesson.class)
                 .groupBy(
                         lesson -> new CohortWeek(lesson.getCohortId(),
-                                lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog()),
+                                lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog(),
+                                lesson.getCohortMaxDailyLessonSpread()),
                         ConstraintCollectors.toList(lesson -> lesson.getPeriod().weekday()))
                 .penalize(PREFERENCE, (cohortWeek, weekdays) -> countCohortWeekImbalance(
-                        weekdays, cohortWeek.available(), cohortWeek.catalog()))
+                        weekdays, cohortWeek.available(), cohortWeek.catalog(), cohortWeek.maxDailyLessonSpread()))
                 .asConstraint(KernelCatalog.COHORT_WEEK_BALANCE.id());
     }
 
@@ -294,11 +295,13 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
         PlanningLesson sample = lessons.getFirst();
         return countCohortWeekImbalance(lessons.stream()
                         .map(lesson -> lesson.getPeriod().weekday()).toList(),
-                sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog());
+                sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog(),
+                sample.getCohortMaxDailyLessonSpread());
     }
 
     private static long countCohortWeekImbalance(
-            List<DayOfWeek> assignments, Set<String> available, List<PeriodValue> catalog) {
+            List<DayOfWeek> assignments, Set<String> available, List<PeriodValue> catalog,
+            int maxDailyLessonSpread) {
         List<DayOfWeek> days = catalog.stream()
                 .filter(period -> available.contains(period.id()))
                 .map(PeriodValue::weekday)
@@ -311,7 +314,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
             for (int right = left + 1; right < days.size(); right++) {
                 long difference = Math.abs(dailyCounts.getOrDefault(days.get(left), 0L)
                         - dailyCounts.getOrDefault(days.get(right), 0L));
-                imbalance += Math.max(0L, difference - 1L);
+                imbalance += Math.max(0L, difference - maxDailyLessonSpread);
             }
         }
         return imbalance;
@@ -336,6 +339,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
             String teacherId, DayOfWeek weekday, Set<String> available, List<PeriodValue> catalog) {}
     private record CohortDay(
             String cohortId, DayOfWeek weekday, Set<String> available, List<PeriodValue> catalog) {}
-    private record CohortWeek(String cohortId, Set<String> available, List<PeriodValue> catalog) {}
+    private record CohortWeek(
+            String cohortId, Set<String> available, List<PeriodValue> catalog, int maxDailyLessonSpread) {}
     private record SeriesDay(String seriesId, DayOfWeek weekday) {}
 }
