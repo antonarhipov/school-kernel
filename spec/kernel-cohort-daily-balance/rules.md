@@ -67,11 +67,18 @@ feature.
 - Reason: The administrator needs a real proposal whose reported quality matches its assignments.
 - Verification: Isolated packaged CLI tests, a normal-limit MVK run, workspace integration, `./mvnw -q -pl kernel-cli -am verify`, affected workspace tests, and `git diff --check`.
 
+### RULE-5 - MVK cohort-gap priority
+
+- Applies to: UC-1
+- Constraint: MVK MUST set `soft.cohort-gap` to the catalog's maximum supported weight of 1,000,000 while retaining the other normative weights. Each internal available empty period between a cohort's first and last lesson in a continuous daily availability block MUST contribute one match and 1,000,000 to aggregate cohort-gap penalty; empty periods outside that block MUST NOT count. The weight MUST remain an ordinary preference rather than a hard constraint or a new score row.
+- Reason: Avoidable holes in a cohort's daily schedule are more disruptive than small differences in other ordinary preferences, but must not suppress a hard-feasible proposal.
+- Verification: Exact MVK configuration assertion, gap scoring tests for internal and leading/trailing empty periods, packaged plan/verify, and independent assignment tally against the reported gap match count and penalty.
+
 ## Use-case cross-reference
 
 | Use case | Rules |
 |---|---|
-| UC-1 | RULE-1, RULE-2, RULE-3, RULE-4 |
+| UC-1 | RULE-1, RULE-2, RULE-3, RULE-4, RULE-5 |
 
 ## Design exclusions
 

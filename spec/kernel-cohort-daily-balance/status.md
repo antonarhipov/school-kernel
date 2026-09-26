@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: APPROVED
-- Next eligible: none
+- Status: NEEDS_REVISION
+- Next eligible: UC-1
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | APPROVED | none | [Committed submission](checkpoints/UC-1.md) at 208ec69 | [Convergence approved](convergence/UC-1.md) |
+| UC-1 | NEEDS_REVISION | none | Prior target-one fixture approved; gap-weight revision pending | [Prior approval superseded](convergence/UC-1.md) |
 
 ## UC-1 Evidence
 
@@ -64,6 +64,10 @@
 | UC-1 extension 3a | `SchoolQualityCliIT.catalogFourPackagedPlanningAndRepairUseTheCohortDailySpread:245` retains bounded `FEASIBLE` output with remaining matches; revised MVK run is time-limited without an optimality claim |
 | UC-1 G1/G2 and success postcondition | Zero independently tallied balance matches, 520 complete assignments, packaged `VERIFIED` result |
 | RULE-4 | Exact fixture test, normal 30-second packaged plan and verify, full kernel and affected workspace regression suites, `git diff --check` |
+
+## UC-1 Cohort-Gap Revision
+
+- The administrator's follow-up makes within-day cohort gaps a dominant MVK preference. The prior convergence covered weight 20 and is superseded by the exact normative weight 1,000,000 and RULE-5. UC-1 must be resubmitted and reconverged; no accepted timetable is changed by this contract revision.
 
 ## Blockers
 

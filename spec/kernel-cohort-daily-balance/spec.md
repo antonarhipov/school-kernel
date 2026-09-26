@@ -11,9 +11,10 @@ which preserves the existing weekly-balance meaning. The value is a non-negative
 
 Catalog versions 1 through 3 retain their exact input and score meanings. Version 4 retains the seven ordinary
 preference rows from version 3 and adds the cohort setting without adding a score row. MVK uses the exact configuration
-below to favor the smallest practical daily-load spread and earlier starts. A feasible time-limited result is not
-claimed to satisfy every target or to be optimal. The existing late-start preference distinguishes starts after the
-third regular period, but does not score variation among starts in the first three periods.
+below to strongly discourage empty periods within a cohort's daily block while favoring the smallest practical
+daily-load spread and earlier starts. A feasible time-limited result is not claimed to satisfy every target or to be
+optimal. The existing late-start preference distinguishes starts after the third regular period, but does not score
+variation among starts in the first three periods.
 
 ## Actors and terms
 
@@ -21,6 +22,8 @@ third regular period, but does not score variation among starts in the first thr
 - Available weekday: a weekday with at least one period available to the cohort after school-wide reservations.
 - Daily lesson count: the cohort's assigned lessons on one available weekday, including zero.
 - Daily spread: maximum daily count minus minimum daily count across available weekdays.
+- Cohort gap: an available period with no cohort lesson between that cohort's first and last assigned lessons in one
+  continuous availability block on a weekday; empty periods before or after that block are not gaps.
 - Weekly-balance match: one unit of pairwise lesson-count difference beyond the cohort's configured target.
 
 ## Use-case map
@@ -44,9 +47,9 @@ third regular period, but does not score variation among starts in the first thr
 ### Main success scenario
 
 1. The administrator supplies a catalog version 4 definition with a daily spread target on at least one cohort and requests planning.
-2. The system validates the definition and searches for a complete hard-feasible timetable, preferring lower weighted weekly-balance excess and fewer late starts along with the other catalog preferences.
-3. The system publishes a feasible candidate with its effective weights, weekly-balance match count and aggregate penalty.
-4. The administrator inspects each cohort's daily counts and first lesson, or absence of lessons, on each available weekday, distinguishing a met load target and an early start from remaining excess.
+2. The system validates the definition and searches for a complete hard-feasible timetable, strongly disfavoring cohort gaps while preferring lower weighted weekly-balance excess and fewer late starts along with the other catalog preferences.
+3. The system publishes a feasible candidate with its effective weights, cohort-gap and weekly-balance match counts, and aggregate penalties.
+4. The administrator inspects each cohort's daily counts, first lesson, and internal empty periods, or absence of lessons, on each available weekday, distinguishing met load and gap targets from remaining excess.
 
 ### Extensions
 
@@ -65,7 +68,7 @@ third regular period, but does not score variation among starts in the first thr
 - G2. The solver and published score calculate the same weekly-balance match count for a given complete assignment. A value of zero is allowed and means equal daily counts are preferred.
 - G3. Catalog version 4 results identify that version and retain exactly seven ordinary-preference rows in catalog order. Versions 1 through 3 and their existing definition/result pairs retain their earlier rows, meanings, and revisions.
 - G4. Hard feasibility, period stability, and room stability retain priority over ordinary preferences. A repair does not add a period or room move solely to satisfy a daily spread target.
-- G5. MVK's definition contains exactly the cohort targets and overrides in the normative configuration below. A normal 30-second run is assessed against the previous `2,5,5,3,4` 6B distribution by independently inspecting daily counts, first-lesson periods, gaps, and the reported score. The target and absence of late starts are preferences rather than universal guarantees.
+- G5. MVK's definition contains exactly the cohort targets and overrides in the normative configuration below. Each cohort gap contributes a penalty of 1,000,000 when present. A normal 30-second run is assessed against the previous `2,5,5,3,4` 6B distribution by independently inspecting daily counts, first-lesson periods, gaps, and the reported score. Zero gaps, the daily-load target, and absence of late starts remain preferences rather than universal guarantees.
 
 ### Postconditions
 
@@ -81,7 +84,7 @@ third regular period, but does not score variation among starts in the first thr
 | Constraint ID | Weight |
 |---|---:|
 | `soft.teacher-gap` | 5 |
-| `soft.cohort-gap` | 20 |
+| `soft.cohort-gap` | 1,000,000 |
 | `soft.cohort-late-start` | 30 |
 | `soft.cohort-week-balance` | 30 |
 | `soft.non-preferred-room` | 5 |
@@ -90,5 +93,5 @@ Other MVK definition fields, including the five school-wide reserved periods, re
 
 ## Out of scope
 
-Hard daily load limits, per-day minimums or maximums, new workspace policy-editing screens, and automatic acceptance.
+Hard daily load limits, per-day minimums or maximums, a hard no-gap rule, new workspace policy-editing screens, and automatic acceptance.
 An exact first-lesson-time-spread score or hard common start time is also out of scope for this data-only revision.

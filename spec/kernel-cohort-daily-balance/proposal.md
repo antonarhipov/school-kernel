@@ -15,3 +15,9 @@ for the tightest practical daily load and more even starts. This revision sets t
 weekly balance and late starts greater weight, while retaining explicit gap, teacher-gap, and room preferences.
 It remains a data-only tuning of existing soft preferences: exact variation among starts in the first three regular
 periods is not scored by the current catalog.
+
+The next follow-up shows that the tighter daily-load target can leave empty periods between a cohort's first and last
+lesson. The school treats these within-day holes as far more disruptive than the other ordinary preferences. MVK
+therefore uses the largest supported weight for the existing cohort-gap penalty, while keeping it soft so that a
+hard-feasible candidate remains publishable when a gap cannot be avoided. Empty time before the first lesson or after
+the last lesson is not a cohort gap.
