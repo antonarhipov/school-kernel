@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: NEEDS_REVISION
-- Next eligible: UC-1
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | NEEDS_REVISION | none | Prior slice complete; MVK configuration revision pending | [Prior approval, superseded by revised G5](convergence/UC-1.md) |
+| UC-1 | READY_FOR_CONVERGENCE | none | Revised; checkpoint submitted | Pending; [prior approval superseded](convergence/UC-1.md) |
 
 ## UC-1 Evidence
 
@@ -42,6 +42,28 @@
 | RULE-2 | `SchoolConstraintProvider.java:180`, `ScheduleEvaluator.java:103`, `SchoolQualityConstraintTest.java:132`, unchanged conservative bound in `DefinitionValidator.java:313` |
 | RULE-3 | `RepairDraftService.java:188`, `WorkspaceRepairDraftIT.java:128`, `WorkspaceRepairPlanningIT.java:121`, packaged catalog 3 to 4 repair |
 | RULE-4 | Kernel and Docker-backed workspace suites above, MVK plan and verify, `git diff --check` |
+
+## UC-1 Revision Evidence
+
+- Started: 2026-09-26 21:17 UTC.
+- Started from: `c4e9c8ddf31e081fcc3c555534715022019b09d0`.
+- Pre-existing dirty files: none.
+- Prior convergence: the approved target-two configuration in `444d69c` was superseded by the user's tighter balance request; its README-only K-1 note was corrected in `7dcb956`.
+- Implementation submission: HEAD at convergence, with revised `checkpoints/UC-1.md`.
+- Changed files: `README.md`, `examples/mvk.json`, `kernel-cli/src/test/java/org/schoolkernel/contract/ContractTest.java`, this status file, and the revised checkpoint. The proposal, specification, and rules were updated in base commit `c4e9c8d`.
+- Focused `./mvnw -q -pl kernel-cli -am -Dtest=ContractTest -Dsurefire.failIfNoSpecifiedTests=false test`: PASS, including exact MVK values.
+- Full `./mvnw -q -pl kernel-cli -am verify`: 69 unit and 42 packaged CLI tests, zero failures/errors/skips.
+- Affected `./mvnw -q -pl timetable-workspace -am -Dit.test=WorkspaceImportIT,WorkspaceRepairDraftIT,WorkspaceRepairPlanningIT -Dfailsafe.failIfNoSpecifiedTests=false verify`: 24 import, 11 repair-draft, and 10 repair-planning Docker-backed tests, zero failures/errors/skips.
+- Packaged `./school-kernel plan --definition examples/mvk.json --output /tmp/mvk-balance-JMwsNc/final-result.json --time-limit PT30S --seed 0`: `FEASIBLE` / `TIME_LIMIT`, catalog 4, 520 assignments, seven score rows; 23/23 cohorts have daily spread 0-1, with zero weekly-balance matches and zero late-start matches. 6B counts are `4,4,4,3,4` with first regular slots `3,1,3,1,3`.
+- Independent inspection of assignments reproduced four cohort gaps, seven teacher gaps, zero late starts, and 76 non-preferred rooms. The maximum first-start spread is two slots; no exact first-start-spread preference exists in this data-only revision.
+- Packaged `verify` of the same definition/result pair: `VERIFIED`; `git diff --check`: PASS; tests left no additional tracked changes.
+
+| Revised contract element | Evidence |
+|---|---|
+| UC-1 main steps 1-4 and G5 | `ContractTest.mvkHasExactBalancedPreferenceConfiguration:81`; packaged MVK plan/result; independent 23-cohort daily-count, first-start, gap, and preferred-room tally |
+| UC-1 extension 3a | `SchoolQualityCliIT.catalogFourPackagedPlanningAndRepairUseTheCohortDailySpread:245` retains bounded `FEASIBLE` output with remaining matches; revised MVK run is time-limited without an optimality claim |
+| UC-1 G1/G2 and success postcondition | Zero independently tallied balance matches, 520 complete assignments, packaged `VERIFIED` result |
+| RULE-4 | Exact fixture test, normal 30-second packaged plan and verify, full kernel and affected workspace regression suites, `git diff --check` |
 
 ## Blockers
 

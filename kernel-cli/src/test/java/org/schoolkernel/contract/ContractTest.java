@@ -8,6 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 import com.networknt.schema.SchemaRegistry;
 import com.networknt.schema.SpecificationVersion;
@@ -71,6 +74,35 @@ class ContractTest {
         assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
         cohort.put("maxDailyLessonSpread", 1.5);
         assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+    }
+
+    @Test
+    @DisplayName("Cohort balance UC-1 G5: MVK has the exact daily-load and start-time preference configuration")
+    void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
+        var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        assertEquals(4, definition.path("catalogVersion").intValue());
+        var cohorts = definition.path("cohorts");
+        assertEquals(List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "4a", "4b",
+                        "5a", "5b", "5d", "6a", "6b", "6c", "7a", "7b", "8a", "8b", "9a", "9b", "9c"),
+                StreamSupport.stream(cohorts.spliterator(), false)
+                        .map(cohort -> cohort.path("id").stringValue()).toList());
+        cohorts.forEach(cohort -> {
+            assertEquals(1, cohort.path("maxDailyLessonSpread").intValue());
+            assertFalse(cohort.has("undesirablePeriodIds"));
+        });
+        assertEquals(JsonSupport.mapper().readTree("""
+                [
+                  {"constraintId":"soft.teacher-gap","weight":5},
+                  {"constraintId":"soft.cohort-gap","weight":20},
+                  {"constraintId":"soft.cohort-late-start","weight":30},
+                  {"constraintId":"soft.cohort-week-balance","weight":30},
+                  {"constraintId":"soft.non-preferred-room","weight":5}
+                ]
+                """), definition.path("softConstraintOverrides"));
+        assertEquals(List.of("mon-0", "tue-0", "wed-0", "thu-0", "fri-0"),
+                StreamSupport.stream(definition.path("reservedPeriodIds").spliterator(), false)
+                        .map(period -> period.stringValue()).toList());
     }
 
     @Test
