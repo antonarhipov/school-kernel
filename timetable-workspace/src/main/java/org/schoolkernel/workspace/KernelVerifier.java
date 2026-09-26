@@ -132,7 +132,8 @@ public class KernelVerifier {
                 || schoolId == null
                 || !schoolId.equals(documents.definition().path("schoolId").stringValue())
                 || definitionRevision == null
-                || output.path("catalogVersion").intValue() != 1
+                || output.path("catalogVersion").intValue()
+                        != documents.definition().path("catalogVersion").intValue()
                 || output.path("schemaVersion").intValue() != 1) {
             throw unavailable("School Kernel returned mismatched verification evidence.");
         }

@@ -110,7 +110,7 @@ public final class ResultFactory {
                 });
         result.put("timetableRevision",
                 revisions.timetableRevision(1, definition.schoolId(), inputRevision, assignments));
-        addProductScore(result, definition.softWeights(), evaluation);
+        addProductScore(result, definition.catalogVersion(), definition.softWeights(), evaluation);
         return result;
     }
 
@@ -262,7 +262,7 @@ public final class ResultFactory {
         }
         if (effectiveWeights != null) {
             ObjectNode weights = result.putObject("effectiveSoftWeights");
-            KernelCatalog.softConstraintIds().forEach(id -> weights.put(id, effectiveWeights.get(id)));
+            KernelCatalog.softConstraintIds(catalogVersion).forEach(id -> weights.put(id, effectiveWeights.get(id)));
         }
     }
 
@@ -286,6 +286,7 @@ public final class ResultFactory {
 
     private static void addProductScore(
             ObjectNode result,
+            int catalogVersion,
             Map<String, Long> weights,
             ScheduleEvaluator.Evaluation evaluation) {
         ObjectNode score = result.putObject("score");
@@ -293,7 +294,7 @@ public final class ResultFactory {
         score.put("roomOnlyMoves", evaluation.roomOnlyMoves());
         score.put("ordinaryPreferencePenalty", evaluation.ordinaryPreferencePenalty());
         ArrayNode breakdown = score.putArray("constraintBreakdown");
-        KernelCatalog.softConstraintIds().forEach(id -> {
+        KernelCatalog.softConstraintIds(catalogVersion).forEach(id -> {
             ObjectNode item = breakdown.addObject();
             long weight = weights.get(id);
             long matchCount = evaluation.softMatchCounts().get(id);

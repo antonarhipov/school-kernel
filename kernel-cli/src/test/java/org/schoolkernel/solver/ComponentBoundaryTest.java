@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.schoolkernel.contract.JsonSupport;
 import org.schoolkernel.contract.SchoolDefinitionDto;
 import org.schoolkernel.domain.DefinitionValidator;
 import org.schoolkernel.domain.SchoolDefinition;
+import org.schoolkernel.domain.KernelCatalog;
 
 class ComponentBoundaryTest {
     @Test
@@ -63,6 +65,7 @@ class ComponentBoundaryTest {
         assertEquals(definition.lessons().getFirst().subjectId(), lesson.getSubjectId());
         assertEquals(definition.lessons().getFirst().cohortId(), lesson.getCohortId());
         assertEquals(definition.lessons().getFirst().teacherId(), lesson.getTeacherId());
-        assertEquals(definition.softWeights().keySet(), schedule.getConstraintWeights().getKnownConstraintIds());
+        assertEquals(Set.copyOf(KernelCatalog.softConstraintIds()),
+                schedule.getConstraintWeights().getKnownConstraintIds());
     }
 }

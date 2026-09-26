@@ -25,6 +25,8 @@ Current feature directories:
   that roadmap: the focused [`proposal`](timetable-inspection-ux/proposal.md) and declarative
   [`specification`](timetable-inspection-ux/spec.md), plus its confirmed [`technical rules`](timetable-inspection-ux/rules.md),
   for accepted-timetable Week/Day inspection.
+- [`kernel-schedule-quality`](kernel-schedule-quality/) specifies class-day gaps and weekly load balance for the next
+  scheduling catalog while retaining version 1 baselines.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.

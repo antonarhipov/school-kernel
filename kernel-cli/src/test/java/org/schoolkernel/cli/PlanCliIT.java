@@ -149,7 +149,7 @@ class PlanCliIT {
 
         Path unsupported = copyFixture("valid-plan.json", "unsupported.json");
         var unsupportedJson = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper().readTree(unsupported);
-        unsupportedJson.put("catalogVersion", 2);
+        unsupportedJson.put("catalogVersion", 3);
         Files.write(unsupported, JsonSupport.mapper().writeValueAsBytes(unsupportedJson));
         Path unsupportedOutput = temporaryDirectory.resolve("unsupported-result.json");
         ProcessResult unsupportedProcess = run("plan", "--definition", unsupported.toString(), "--output",

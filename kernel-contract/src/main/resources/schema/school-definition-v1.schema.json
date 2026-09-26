@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "const": 1 },
+    "catalogVersion": { "enum": [1, 2] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -132,12 +132,18 @@
       "properties": {
         "constraintId": {
           "enum": [
-            "soft.teacher-gap", "soft.series-same-day",
+            "soft.teacher-gap", "soft.cohort-gap", "soft.cohort-week-balance", "soft.series-same-day",
             "soft.undesirable-period", "soft.non-preferred-room"
           ]
         },
         "weight": { "type": "integer", "minimum": 0, "maximum": 1000000 }
       }
     }
-  }
+  },
+  "allOf": [{
+    "if": { "properties": { "catalogVersion": { "const": 1 } } },
+    "then": { "properties": { "softConstraintOverrides": { "items": { "properties": {
+      "constraintId": { "enum": ["soft.teacher-gap", "soft.series-same-day", "soft.undesirable-period", "soft.non-preferred-room"] }
+    } } } } }
+  }]
 }

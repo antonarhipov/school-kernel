@@ -5,9 +5,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/** The immutable single source of truth for the version 1 constraint catalog. */
+/** Versioned constraint catalog, retaining the version 1 preference subset for legacy results. */
 public final class KernelCatalog {
-    public static final int VERSION = 1;
+    public static final int LEGACY_VERSION = 1;
+    public static final int VERSION = 2;
 
     public enum Category {
         HARD,
@@ -45,6 +46,8 @@ public final class KernelCatalog {
     public static final ConstraintDescriptor ROOM_ONLY_MOVE =
             new ConstraintDescriptor("stability.room-only-move", Category.ROOM_STABILITY, null);
     public static final ConstraintDescriptor TEACHER_GAP = soft("soft.teacher-gap");
+    public static final ConstraintDescriptor COHORT_GAP = soft("soft.cohort-gap");
+    public static final ConstraintDescriptor COHORT_WEEK_BALANCE = soft("soft.cohort-week-balance");
     public static final ConstraintDescriptor SERIES_SAME_DAY = soft("soft.series-same-day");
     public static final ConstraintDescriptor UNDESIRABLE_PERIOD = soft("soft.undesirable-period");
     public static final ConstraintDescriptor NON_PREFERRED_ROOM = soft("soft.non-preferred-room");
@@ -63,6 +66,8 @@ public final class KernelCatalog {
             PERIOD_MOVE,
             ROOM_ONLY_MOVE,
             TEACHER_GAP,
+            COHORT_GAP,
+            COHORT_WEEK_BALANCE,
             SERIES_SAME_DAY,
             UNDESIRABLE_PERIOD,
             NON_PREFERRED_ROOM);
@@ -80,12 +85,35 @@ public final class KernelCatalog {
         return ids(Category.ORDINARY_PREFERENCE);
     }
 
+    public static List<String> softConstraintIds(int catalogVersion) {
+        requireVersion(catalogVersion);
+        return softConstraintIds().stream()
+                .filter(id -> catalogVersion == VERSION
+                        || (!id.equals(COHORT_GAP.id()) && !id.equals(COHORT_WEEK_BALANCE.id())))
+                .toList();
+    }
+
     public static Map<String, Long> defaultSoftWeights() {
+        return defaultSoftWeights(VERSION);
+    }
+
+    public static Map<String, Long> defaultSoftWeights(int catalogVersion) {
+        List<String> ids = softConstraintIds(catalogVersion);
         return CONSTRAINTS.stream()
-                .filter(descriptor -> descriptor.category() == Category.ORDINARY_PREFERENCE)
+                .filter(descriptor -> ids.contains(descriptor.id()))
                 .collect(Collectors.toUnmodifiableMap(
                         ConstraintDescriptor::id,
                         ConstraintDescriptor::defaultWeight));
+    }
+
+    public static boolean supportsVersion(int catalogVersion) {
+        return catalogVersion == LEGACY_VERSION || catalogVersion == VERSION;
+    }
+
+    private static void requireVersion(int catalogVersion) {
+        if (!supportsVersion(catalogVersion)) {
+            throw new IllegalArgumentException("Unsupported catalog version: " + catalogVersion);
+        }
     }
 
     public static ConstraintDescriptor require(String id) {

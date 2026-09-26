@@ -304,14 +304,21 @@ public final class DefinitionValidator {
             }
         }
 
-        var weights = effectiveWeights(overrides);
+        var weights = effectiveWeights(overrides, input.catalogVersion());
         try {
             long gapMaximum = Math.multiplyExact((long) input.teachers().size(), input.periods().size());
+            long cohortGapMaximum = Math.multiplyExact((long) input.cohorts().size(), input.periods().size());
             long lessonMaximum = input.lessons().size();
+            long weekBalanceMaximum = Math.multiplyExact(21L, lessonMaximum);
             long undesirableMaximum = Math.multiplyExact(3L, lessonMaximum);
             long maximum = 0;
             maximum = Math.addExact(maximum,
                     Math.multiplyExact(gapMaximum, weights.get(KernelCatalog.TEACHER_GAP.id())));
+            maximum = Math.addExact(maximum,
+                    Math.multiplyExact(cohortGapMaximum, weights.getOrDefault(KernelCatalog.COHORT_GAP.id(), 0L)));
+            maximum = Math.addExact(maximum,
+                    Math.multiplyExact(weekBalanceMaximum,
+                            weights.getOrDefault(KernelCatalog.COHORT_WEEK_BALANCE.id(), 0L)));
             maximum = Math.addExact(maximum,
                     Math.multiplyExact(lessonMaximum, weights.get(KernelCatalog.SERIES_SAME_DAY.id())));
             maximum = Math.addExact(maximum,
@@ -440,12 +447,12 @@ public final class DefinitionValidator {
                 input.schemaVersion(), input.catalogVersion(), input.schoolId(), input.displayName(),
                 input.basedOnRevision(),
                 subjects, teachers, cohorts, rooms,
-                periods, lessons, Map.copyOf(effectiveWeights(input.softConstraintOverrides())));
+                periods, lessons, Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())));
     }
 
-    private static Map<String, Long> effectiveWeights(List<SoftConstraintOverrideDto> overrides) {
+    private static Map<String, Long> effectiveWeights(List<SoftConstraintOverrideDto> overrides, int catalogVersion) {
         var weights = new LinkedHashMap<String, Long>();
-        weights.putAll(KernelCatalog.defaultSoftWeights());
+        weights.putAll(KernelCatalog.defaultSoftWeights(catalogVersion));
         if (overrides != null) {
             overrides.forEach(override -> weights.put(override.constraintId(), override.weight()));
         }

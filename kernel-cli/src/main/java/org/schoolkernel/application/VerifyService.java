@@ -56,7 +56,8 @@ public final class VerifyService {
 
             if (request.resultPath() == null) {
                 return new CommandOutcome.Succeeded(results.verifiedInitial(
-                        correlationId, elapsed(started), accepted.dto().schoolId(), definitionRevision));
+                        correlationId, elapsed(started), accepted.dto().schoolId(),
+                        accepted.dto().catalogVersion(), definitionRevision));
             }
 
             JsonNode resultNode = parse(files.read(request.resultPath(), maximumInputBytes()), "result");
@@ -87,6 +88,7 @@ public final class VerifyService {
                     correlationId,
                     elapsed(started),
                     accepted.dto().schoolId(),
+                    accepted.dto().catalogVersion(),
                     definitionRevision,
                     timetableOutcome.timetable().timetableRevision()));
         } catch (InputLimitExceeded exception) {

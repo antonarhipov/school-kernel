@@ -44,17 +44,24 @@ and `130` for interruption before publication.
 - [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
-- Schema and catalog version `1` are the only supported versions.
+- Schema version `1` supports catalog versions `1` and `2`. Catalog `1` remains readable for existing accepted results;
+  new [`MV5`](examples/mv5.json) planning uses catalog `2`.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
 - A feasible result assigns every lesson once and satisfies the exact hard catalog in the specification.
 - Product scoring is lexicographic: feasibility, period stability, room stability, then ordinary preference penalty.
   Initial planning has zero stability penalties.
+- Catalog `2` adds a penalty for each class gap inside an available school-day block and a penalty for weekly class
+  loads that differ by more than one lesson. Both default to weight `1`; `softConstraintOverrides` can reduce either
+  weight to `0`. Workspace repair upgrades a catalog `1` accepted baseline to a catalog `2` successor proposal.
+  In repair, these preferences choose among equally stable proposals; they do not authorize extra period or room moves
+  merely to rebalance an accepted week.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
   infeasibility or optimality.
 
 The complete behavior, constraint catalog, failure semantics, and score definitions are in
-[`spec/kernel-v1/spec.md`](spec/kernel-v1/spec.md).
+[`spec/kernel-v1/spec.md`](spec/kernel-v1/spec.md), with the catalog `2` quality extension in
+[`spec/kernel-schedule-quality/spec.md`](spec/kernel-schedule-quality/spec.md).
 
 ## Operations workspace
 

@@ -92,6 +92,8 @@ class WorkspaceRepairDraftIT {
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
 
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
+        assertEquals(1, acceptedBefore.path("definition").path("catalogVersion").intValue());
+        assertEquals(2, compiled.path("catalogVersion").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
                 compiled.path("teachers").get(0).path("availablePeriodIds"));

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.schoolkernel.domain.KernelCatalog;
 
@@ -78,11 +77,16 @@ public final class ScheduleEvaluator {
         }
 
         var teacherDays = new HashMap<String, List<PlanningLesson>>();
+        var cohortDays = new HashMap<String, List<PlanningLesson>>();
+        var cohorts = new HashMap<String, List<PlanningLesson>>();
         var seriesDays = new HashMap<String, Long>();
         for (var lesson : schedule.getLessons()) {
             String day = lesson.getPeriod().weekday().name();
             teacherDays.computeIfAbsent(lesson.getTeacherId() + "\u0000" + day, ignored -> new ArrayList<>())
                     .add(lesson);
+            cohortDays.computeIfAbsent(lesson.getCohortId() + "\u0000" + day, ignored -> new ArrayList<>())
+                    .add(lesson);
+            cohorts.computeIfAbsent(lesson.getCohortId(), ignored -> new ArrayList<>()).add(lesson);
             if (lesson.getSeriesId() != null) {
                 seriesDays.merge(lesson.getSeriesId() + "\u0000" + day, 1L, Long::sum);
             }
@@ -90,6 +94,12 @@ public final class ScheduleEvaluator {
         teacherDays.values().forEach(lessons -> soft.compute(
                 KernelCatalog.TEACHER_GAP.id(),
                 (key, count) -> count + SchoolConstraintProvider.countTeacherGaps(lessons)));
+        cohortDays.values().forEach(lessons -> soft.compute(
+                KernelCatalog.COHORT_GAP.id(),
+                (key, count) -> count + SchoolConstraintProvider.countCohortGaps(lessons)));
+        cohorts.values().forEach(lessons -> soft.compute(
+                KernelCatalog.COHORT_WEEK_BALANCE.id(),
+                (key, count) -> count + SchoolConstraintProvider.countCohortWeekImbalance(lessons)));
         seriesDays.values().forEach(count -> soft.compute(
                 KernelCatalog.SERIES_SAME_DAY.id(), (key, total) -> total + Math.max(0, count - 1)));
 
@@ -97,7 +107,7 @@ public final class ScheduleEvaluator {
         for (String constraintId : KernelCatalog.softConstraintIds()) {
             ordinaryPenalty = Math.addExact(
                     ordinaryPenalty,
-                    Math.multiplyExact(soft.get(constraintId), weights.get(constraintId)));
+                    Math.multiplyExact(soft.get(constraintId), weights.getOrDefault(constraintId, 0L)));
         }
         boolean feasible = hard.values().stream().allMatch(count -> count == 0);
         return new Evaluation(

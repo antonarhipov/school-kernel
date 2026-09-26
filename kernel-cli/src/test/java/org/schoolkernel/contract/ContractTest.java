@@ -25,6 +25,20 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("Schedule quality: catalog 2 accepts class preferences while catalog 1 keeps its exact override set")
+    void catalogVersionsKeepDistinctOverrides() throws Exception {
+        var legacy = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        var versionTwo = legacy.deepCopy();
+        versionTwo.put("catalogVersion", 2);
+        versionTwo.putArray("softConstraintOverrides").addObject()
+                .put("constraintId", "soft.cohort-week-balance").put("weight", 0);
+        assertTrue(new DefinitionSchemaValidator().validate(versionTwo).isEmpty());
+        legacy.set("softConstraintOverrides", versionTwo.path("softConstraintOverrides").deepCopy());
+        assertFalse(new DefinitionSchemaValidator().validate(legacy).isEmpty());
+    }
+
+    @Test
     @DisplayName("UC-1 ext 2a: schema rejects unknown properties")
     void schemaRejectsUnknownProperties() throws Exception {
         var input = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()

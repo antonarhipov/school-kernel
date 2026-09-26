@@ -1,17 +1,17 @@
 package org.schoolkernel.contract;
 
 import org.schoolkernel.domain.ValidationReport;
-import org.schoolkernel.domain.KernelCatalog;
 
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 
 public final class VerificationResultFactory {
-    public ObjectNode verifiedInitial(String correlationId, long elapsedMillis, String schoolId, String revision) {
+    public ObjectNode verifiedInitial(
+            String correlationId, long elapsedMillis, String schoolId, int catalogVersion, String revision) {
         ObjectNode result = envelope("VERIFIED", correlationId, elapsedMillis);
         result.put("mode", "INITIAL_DEFINITION");
         result.put("schoolId", schoolId);
-        result.put("catalogVersion", KernelCatalog.VERSION);
+        result.put("catalogVersion", catalogVersion);
         result.put("definitionRevision", revision);
         return result;
     }
@@ -20,12 +20,13 @@ public final class VerificationResultFactory {
             String correlationId,
             long elapsedMillis,
             String schoolId,
+            int catalogVersion,
             String definitionRevision,
             String timetableRevision) {
         ObjectNode result = envelope("VERIFIED", correlationId, elapsedMillis);
         result.put("mode", "ACCEPTED_BASELINE");
         result.put("schoolId", schoolId);
-        result.put("catalogVersion", KernelCatalog.VERSION);
+        result.put("catalogVersion", catalogVersion);
         result.put("definitionRevision", definitionRevision);
         result.put("timetableRevision", timetableRevision);
         return result;

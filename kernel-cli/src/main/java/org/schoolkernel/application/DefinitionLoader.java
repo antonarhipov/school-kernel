@@ -72,8 +72,8 @@ public final class DefinitionLoader {
         List<ValidationError> schemaErrors = schema.validate(document);
         if (!schemaErrors.isEmpty()) {
             Integer catalogVersion = document.path("catalogVersion").isInt()
-                            && document.path("catalogVersion").intValue() == KernelCatalog.VERSION
-                    ? KernelCatalog.VERSION
+                            && KernelCatalog.supportsVersion(document.path("catalogVersion").intValue())
+                    ? document.path("catalogVersion").intValue()
                     : null;
             return new Rejected(ValidationReport.from(schemaErrors), null, catalogVersion, null);
         }
@@ -85,7 +85,7 @@ public final class DefinitionLoader {
             dto = JsonSupport.mapper().treeToValue(document, SchoolDefinitionDto.class);
         } catch (JacksonException exception) {
             return rejected("Input could not be bound to schema version 1",
-                    schoolId, KernelCatalog.VERSION, revision);
+                    schoolId, dtoVersion(document), revision);
         }
 
         DefinitionValidator.Outcome validation = switch (mode) {
@@ -96,7 +96,7 @@ public final class DefinitionLoader {
                     : semantics.validateForReplan(dto);
         };
         if (!validation.report().isValid()) {
-            return new Rejected(validation.report(), schoolId, KernelCatalog.VERSION, revision);
+            return new Rejected(validation.report(), schoolId, dto.catalogVersion(), revision);
         }
         return new Accepted(document, dto, validation.definition(), revision);
     }
@@ -111,5 +111,9 @@ public final class DefinitionLoader {
                 schoolId,
                 catalogVersion,
                 revision);
+    }
+
+    private static Integer dtoVersion(JsonNode document) {
+        return document.path("catalogVersion").intValue();
     }
 }

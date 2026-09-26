@@ -14,7 +14,7 @@
     "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
     "elapsedTimeMs": { "type": "integer", "minimum": 0 },
     "schoolId": { "$ref": "#/$defs/id" },
-    "catalogVersion": { "const": 1 },
+    "catalogVersion": { "enum": [1, 2] },
     "inputRevision": { "$ref": "#/$defs/revision" },
     "effectiveSoftWeights": { "$ref": "#/$defs/effectiveSoftWeights" },
     "seed": { "type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807 },
@@ -81,6 +81,23 @@
           { "required": ["searchDiagnostics"] }
         ] }
       }
+    },
+    {
+      "if": { "required": ["catalogVersion"], "properties": { "catalogVersion": { "const": 2 } } },
+      "then": { "properties": {
+        "effectiveSoftWeights": { "required": ["soft.cohort-gap", "soft.cohort-week-balance"] },
+        "score": { "properties": { "constraintBreakdown": { "minItems": 6, "maxItems": 6 } } }
+      } }
+    },
+    {
+      "if": { "required": ["catalogVersion"], "properties": { "catalogVersion": { "const": 1 } } },
+      "then": { "properties": {
+        "effectiveSoftWeights": { "not": { "anyOf": [
+          { "required": ["soft.cohort-gap"] },
+          { "required": ["soft.cohort-week-balance"] }
+        ] } },
+        "score": { "properties": { "constraintBreakdown": { "minItems": 4, "maxItems": 4 } } }
+      } }
     }
   ],
   "$defs": {
@@ -94,6 +111,8 @@
       ],
       "properties": {
         "soft.teacher-gap": { "$ref": "#/$defs/weight" },
+        "soft.cohort-gap": { "$ref": "#/$defs/weight" },
+        "soft.cohort-week-balance": { "$ref": "#/$defs/weight" },
         "soft.series-same-day": { "$ref": "#/$defs/weight" },
         "soft.undesirable-period": { "$ref": "#/$defs/weight" },
         "soft.non-preferred-room": { "$ref": "#/$defs/weight" }
@@ -154,7 +173,7 @@
         "constraintBreakdown": {
           "type": "array",
           "minItems": 4,
-          "maxItems": 4,
+          "maxItems": 6,
           "items": { "$ref": "#/$defs/breakdown" }
         }
       }

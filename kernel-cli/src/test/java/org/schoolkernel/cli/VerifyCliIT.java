@@ -153,7 +153,7 @@ class VerifyCliIT {
         unsupportedSchema.put("schemaVersion", 2);
         invalidDefinitions.add(unsupportedSchema);
         ObjectNode unsupportedCatalog = definition.deepCopy();
-        unsupportedCatalog.put("catalogVersion", 2);
+        unsupportedCatalog.put("catalogVersion", 3);
         invalidDefinitions.add(unsupportedCatalog);
         ObjectNode missingSchoolName = definition.deepCopy();
         missingSchoolName.remove("displayName");
