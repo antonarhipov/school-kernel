@@ -657,7 +657,7 @@ function renderManualDraft(snapshot, schoolName) {
   const publishDisabled = conflictsCount > 0;
   const publishTitle = publishDisabled ? M.publishConflictsWarning(conflictsCount) : '';
   if (view.narrow) {
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div class="task-launch manual-task-launch"><button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button><button id="publish-manual-draft" type="button" class="primary" ${publishDisabled ? 'disabled aria-disabled="true" title="' + escapeHtml(publishTitle) + '"' : ''}>${M.publishDraft}</button></div><div id="accepted-view"></div>`;
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div class="task-launch manual-task-launch"><button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button><button id="publish-manual-draft" type="button" class="primary" ${publishDisabled ? 'disabled aria-disabled="true" title="' + escapeHtml(publishTitle) + '"' : ''}>${M.publishDraft}</button></div><p id="manual-publish-status" class="manual-publish-status" role="alert" hidden></p><div id="accepted-view"></div>`;
     bindManualDraftActions();
     renderFocused(); return;
   }
@@ -666,7 +666,7 @@ function renderManualDraft(snapshot, schoolName) {
       <button id=\"discard-manual-draft\" type=\"button\" class=\"secondary\">${M.discardDraft}</button>
       <button id=\"publish-manual-draft\" type=\"button\" class=\"primary\" ${publishDisabled ? 'disabled aria-disabled=\"true\" title=\"' + escapeHtml(publishTitle) + '\"' : ''}>${M.publishDraft}</button>
     </div>
-    <p id=\"manual-publish-status\" class=\"error\" role=\"alert\" style=\"display:none; margin: 0.5rem 0; color: #cf1322; font-weight: 500;\"></p>
+    <p id="manual-publish-status" class="manual-publish-status" role="alert" hidden></p>
     <div id=\"accepted-view\"></div>${focusedEntry()}`;
   bindUtilities();
   bindManualDraftActions();
@@ -1849,10 +1849,10 @@ async function mutate(path, method, body) {
       if (path === '/api/manual-draft/publish') {
         const publishStatus = document.querySelector('#manual-publish-status');
         if (publishStatus) {
-          publishStatus.style.display = 'block';
+          publishStatus.hidden = false;
           publishStatus.textContent = result.message || M.actionFailed;
         } else {
-          stateCard.insertAdjacentHTML('afterbegin', `<p id="manual-publish-status" class="error" role="alert" style="margin: 0.5rem 0; color: #cf1322; font-weight: 500;">${escapeHtml(result.message || M.actionFailed)}</p>`);
+          stateCard.insertAdjacentHTML('afterbegin', `<p id="manual-publish-status" class="manual-publish-status" role="alert">${escapeHtml(result.message || M.actionFailed)}</p>`);
         }
         if (response.headers.get('ETag')) etag = response.headers.get('ETag');
         return;

@@ -224,6 +224,8 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
 .assignment-editor .editor-actions { display: flex; gap: 8px; margin-top: 5px; }
 .manual-cues { margin: 10px 0; padding: 8px 12px; background: #fdf2f2; border: 1px solid #fad2cf; border-radius: 4px; }
 .manual-cues p.error { margin: 4px 0; color: #c5221f; font-size: .85rem; font-weight: 500; }
+.manual-publish-status { margin: 8px 0; padding: 6px 10px; background: #fdf2f2; border: 1px solid #fad2cf; border-radius: 4px; color: #c5221f; font-size: .85rem; font-weight: 500; }
+.manual-publish-status[hidden] { display: none !important; }
 .lesson-cell .pin-label { background: #daf0e2; border: 1px solid #afd6bd; color: #154e30; }
 .lesson-cell.comparison-accepted { border-color: #1b5e3d; background: #e8f5ec; }
 .lesson-cell.comparison-proposed { border-color: #6a4691; background: #f1eaf8; }
