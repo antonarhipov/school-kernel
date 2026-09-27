@@ -52,7 +52,7 @@ export const M = Object.freeze({
   assignmentEditor: 'Assignment editor',
   saveAssignment: 'Save assignment',
   assignmentSaved: 'Assignment updated.',
-  revertLesson: 'Revert to accepted',
+  revertLesson: 'Revert to baseline',
   modifiedFromBaseline: 'Modified from accepted baseline',
   conflictsDetected: 'Conflicts detected',
   conflictIndicatorLabel: 'View conflict explanation',
