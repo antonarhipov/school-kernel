@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none (UC-1 awaiting convergence)
+- Status: PENDING_WALKTHROUGH
+- Next eligible: none (awaiting user walkthrough confirmation)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | HEAD at convergence | - |
+| UC-1 | PENDING_WALKTHROUGH | none | c309189 | convergence/UC-1.md |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1, UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
