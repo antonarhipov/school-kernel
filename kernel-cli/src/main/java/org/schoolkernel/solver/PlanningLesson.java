@@ -14,6 +14,7 @@ public class PlanningLesson {
     private String cohortId;
     private int cohortSize;
     private int cohortMaxDailyLessonSpread = 1;
+    private int cohortMaxDailyGaps = Integer.MAX_VALUE;
     private String teacherId;
     private String seriesId;
     private Set<String> teacherAvailablePeriodIds;
@@ -103,11 +104,40 @@ public class PlanningLesson {
             String baselineRoomId,
             List<PeriodValue> periodCatalog,
             int cohortMaxDailyLessonSpread) {
+        this(id, subjectId, cohortId, cohortSize, teacherId, seriesId,
+                teacherAvailablePeriodIds, teacherUndesirablePeriodIds,
+                cohortAvailablePeriodIds, cohortUndesirablePeriodIds, lessonUndesirablePeriodIds,
+                requiredRoomCapabilityIds, preferredRoomIds, periodLock, roomLock,
+                baselinePeriodId, baselineRoomId, periodCatalog, cohortMaxDailyLessonSpread, Integer.MAX_VALUE);
+    }
+
+    public PlanningLesson(
+            String id,
+            String subjectId,
+            String cohortId,
+            int cohortSize,
+            String teacherId,
+            String seriesId,
+            Set<String> teacherAvailablePeriodIds,
+            Set<String> teacherUndesirablePeriodIds,
+            Set<String> cohortAvailablePeriodIds,
+            Set<String> cohortUndesirablePeriodIds,
+            Set<String> lessonUndesirablePeriodIds,
+            Set<String> requiredRoomCapabilityIds,
+            Set<String> preferredRoomIds,
+            String periodLock,
+            String roomLock,
+            String baselinePeriodId,
+            String baselineRoomId,
+            List<PeriodValue> periodCatalog,
+            int cohortMaxDailyLessonSpread,
+            int cohortMaxDailyGaps) {
         this.id = id;
         this.subjectId = subjectId;
         this.cohortId = cohortId;
         this.cohortSize = cohortSize;
         this.cohortMaxDailyLessonSpread = cohortMaxDailyLessonSpread;
+        this.cohortMaxDailyGaps = cohortMaxDailyGaps;
         this.teacherId = teacherId;
         this.seriesId = seriesId;
         this.teacherAvailablePeriodIds = teacherAvailablePeriodIds;
@@ -143,6 +173,10 @@ public class PlanningLesson {
 
     public int getCohortMaxDailyLessonSpread() {
         return cohortMaxDailyLessonSpread;
+    }
+
+    public int getCohortMaxDailyGaps() {
+        return cohortMaxDailyGaps;
     }
 
     public String getTeacherId() {

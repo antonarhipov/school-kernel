@@ -185,7 +185,7 @@ public class RepairDraftService {
         JsonNode intent = workspaceDocument.path("repairDraft").path("intent");
         clearPriorAttemptScopedLocks(
                 definition, workspaceDocument.path("acceptedBaseline").path("manifest"));
-        definition.put("catalogVersion", 4);
+        definition.put("catalogVersion", 5);
         definition.put("basedOnRevision", result.path("inputRevision").stringValue());
         Map<String, ObjectNode> teachers = mutableById(definition.path("teachers"));
         Map<String, ObjectNode> rooms = mutableById(definition.path("rooms"));

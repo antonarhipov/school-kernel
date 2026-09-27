@@ -47,7 +47,7 @@ public final class PlanningMapper {
                     lesson.requiredRoomCapabilityIds(), lesson.preferredRoomIds(), lesson.periodLock(), lesson.roomLock(),
                     baseline == null ? null : baseline.periodId(),
                     baseline == null ? null : baseline.roomId(),
-                    periods, cohort.maxDailyLessonSpread());
+                    periods, cohort.maxDailyLessonSpread(), cohort.maxDailyGaps());
             if (baseline != null) {
                 PeriodValue baselinePeriod = periodsById.get(baseline.periodId());
                 RoomValue baselineRoom = roomsById.get(baseline.roomId());
@@ -65,7 +65,7 @@ public final class PlanningMapper {
         var overrides = effectiveWeights.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> BendableScore.ofSoft(1, 3, 2, entry.getValue())));
+                        entry -> BendableScore.ofSoft(2, 3, 2, entry.getValue())));
         return new SchoolSchedule(periods, rooms, lessons, ConstraintWeightOverrides.of(overrides));
     }
 

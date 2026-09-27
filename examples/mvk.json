@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 4,
+  "catalogVersion": 5,
   "schoolId": "merivalja-kool",
   "displayName": "Merivälja Kool",
   "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],

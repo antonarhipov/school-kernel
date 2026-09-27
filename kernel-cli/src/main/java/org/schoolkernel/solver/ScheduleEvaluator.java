@@ -94,6 +94,9 @@ public final class ScheduleEvaluator {
         teacherDays.values().forEach(lessons -> soft.compute(
                 KernelCatalog.TEACHER_GAP.id(),
                 (key, count) -> count + SchoolConstraintProvider.countTeacherGaps(lessons)));
+        cohortDays.values().forEach(lessons -> hard.compute(
+                KernelCatalog.COHORT_DAILY_GAPS.id(),
+                (key, count) -> count + SchoolConstraintProvider.countCohortExcessGaps(lessons)));
         cohortDays.values().forEach(lessons -> soft.compute(
                 KernelCatalog.COHORT_GAP.id(),
                 (key, count) -> count + SchoolConstraintProvider.countCohortGaps(lessons)));

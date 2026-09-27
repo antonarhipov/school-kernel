@@ -32,7 +32,8 @@ public record SchoolDefinitionDto(
             int size,
             List<String> availablePeriodIds,
             List<String> undesirablePeriodIds,
-            Integer maxDailyLessonSpread) {}
+            Integer maxDailyLessonSpread,
+            Integer maxDailyGaps) {}
 
     public record RoomDto(
             String id,

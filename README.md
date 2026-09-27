@@ -44,8 +44,8 @@ and `130` for interruption before publication.
 - [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
-- Schema version `1` supports catalog versions `1` through `4`. Earlier catalogs remain readable for existing accepted
-  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `4`.
+- Schema version `1` supports catalog versions `1` through `5`. Earlier catalogs remain readable for existing accepted
+  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `5`.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
 - A feasible result assigns every lesson once and satisfies the exact hard catalog in the specification.
@@ -54,20 +54,24 @@ and `130` for interruption before publication.
   result never assigns a lesson there. Omitting the field preserves existing definitions and results. Exceptional
   permission to use a reserved period is not yet supported.
 - Product scoring is lexicographic: feasibility, period stability, room stability, then ordinary preference penalty.
-  Initial planning has zero stability penalties.
+  Feasibility has two hard levels, physical conflicts first and cohort gaps second; both must be zero. Initial
+  planning has zero stability penalties.
 - Catalog `2` adds a penalty for each class gap inside an available school-day block and a penalty for weekly class
   loads that differ by more than one lesson. Catalog `3` adds one penalty for each taught class-day whose first lesson
   begins after the third regular slot (or third declared slot when none are reserved). Catalog `4` allows each cohort
   to declare `maxDailyLessonSpread`, the preferred maximum difference between its busiest and quietest available
   weekdays. Omitting it preserves the one-lesson default; exceeding it adds weekly-balance matches but does not make
-  the timetable infeasible. MVK declares `1` on every cohort and weights cohort gaps at the supported maximum of
+  the timetable infeasible. Catalog `5` makes cohort gaps a hard constraint, `hard.cohort-gap`: each cohort-day may
+  contain at most the cohort's `maxDailyGaps` gaps, which defaults to `0`. A gap-free timetable that cannot be found
+  is reported as unsuccessful rather than published with gaps. Catalogs `1` through `4` place no hard limit on gaps,
+  so their accepted results remain verifiable. MVK declares `maxDailyLessonSpread: 1` on every cohort and weights cohort gaps at the supported maximum of
   `1,000,000`, late starts at `10,000`, weekly balance at `1,000`, and teacher gaps and non-preferred rooms at `5`. A cohort gap
   is an empty available period between that cohort's first and last lesson of the day, not time before or after its
   lesson block. The late-start preference discourages first lessons after the third regular period; it does not
   compare start times within the first three periods.
   The preferences default to weight `1`; `softConstraintOverrides` can tune
-  them from `0` through `1,000,000`. Workspace repair creates a catalog `4` successor while preserving its accepted
-  predecessor. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
+  them from `0` through `1,000,000`. Workspace repair creates a catalog `5` successor while preserving its accepted
+  predecessor, so a repair proposal also closes any gaps an older accepted timetable had. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
   room moves solely to improve class quality.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
   infeasibility or optimality.

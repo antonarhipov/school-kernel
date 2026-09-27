@@ -61,6 +61,53 @@ class SchoolQualityConstraintTest {
     }
 
     @Test
+    void cohortGapIsHardFromCatalogFiveUnlessTheCohortAllowsIt() {
+        var first = gapLimited("a", M1, 0);
+        var last = gapLimited("b", M4, 0);
+        verifier.verifyThat(SchoolConstraintProvider::cohortDailyGaps).given(first, last).penalizesBy(2);
+        var evaluation = new ScheduleEvaluator().evaluate(schedule(first, last), KernelCatalog.defaultSoftWeights());
+        assertEquals(2, evaluation.hardMatchCounts().get(KernelCatalog.COHORT_DAILY_GAPS.id()));
+        assertEquals(false, evaluation.feasible());
+        var diagnostics = HardConstraintDiagnostics.from(schedule(first, last), evaluation);
+        assertEquals(List.of(List.of("class", "m2", "m3")), diagnostics.getFirst().examples());
+
+        var allowed = gapLimited("c", M1, 1);
+        var allowedLast = gapLimited("d", M4, 1);
+        verifier.verifyThat(SchoolConstraintProvider::cohortDailyGaps).given(allowed, allowedLast).penalizesBy(1);
+        allowedLast.setPeriod(M3);
+        verifier.verifyThat(SchoolConstraintProvider::cohortDailyGaps).given(allowed, allowedLast).hasNoImpact();
+
+        last.setPeriod(M2);
+        verifier.verifyThat(SchoolConstraintProvider::cohortDailyGaps).given(first, last).hasNoImpact();
+        assertEquals(true, new ScheduleEvaluator().evaluate(schedule(first, last),
+                KernelCatalog.defaultSoftWeights()).feasible());
+
+        var legacyFirst = lesson("e", ALL, M1);
+        var legacyLast = lesson("f", ALL, M4);
+        verifier.verifyThat(SchoolConstraintProvider::cohortDailyGaps).given(legacyFirst, legacyLast).hasNoImpact();
+        assertEquals(0, new ScheduleEvaluator().evaluate(schedule(legacyFirst, legacyLast),
+                KernelCatalog.defaultSoftWeights()).hardMatchCounts().get(KernelCatalog.COHORT_DAILY_GAPS.id()));
+    }
+
+    @Test
+    void cohortGapHardLevelRanksBelowPhysicalConflicts() {
+        var first = gapLimited("a", M1, 0);
+        var last = gapLimited("b", M3, 0);
+        var factory = new DefaultSolverFactory<SchoolSchedule>(
+                SolverAdapter.baseConfig(new SolverAdapter.ExecutionControls(null, 10, 0)));
+        try (var director = factory.<BendableScore>getScoreDirectorFactory().buildScoreDirector()) {
+            director.setWorkingSolution(schedule(first, last));
+            BendableScore score = director.calculateScore().raw();
+            assertEquals(0, score.hardScore(0));
+            assertEquals(-1, score.hardScore(1));
+            director.beforeVariableChanged(last, "period");
+            last.setPeriod(M2);
+            director.afterVariableChanged(last, "period");
+            assertEquals(0, director.calculateScore().raw().hardScore(1));
+        }
+    }
+
+    @Test
     void incrementalScoreRecognizesAWithinDayGapClosure() {
         var first = lesson("a", ALL, M1);
         var last = lesson("b", ALL, M3);
@@ -191,6 +238,16 @@ class SchoolQualityConstraintTest {
                 id, "subject", cohortId, 20, "teacher-" + id, null,
                 ALL, Set.of(), cohortAvailability, Set.of(), Set.of(),
                 Set.of(), Set.of(), null, null, null, null, PERIODS, maxDailyLessonSpread);
+        lesson.setPeriod(period);
+        lesson.setRoom(ROOM);
+        return lesson;
+    }
+
+    private static PlanningLesson gapLimited(String id, PeriodValue period, int maxDailyGaps) {
+        var lesson = new PlanningLesson(
+                id, "subject", "class", 20, "teacher-" + id, null,
+                ALL, Set.of(), ALL, Set.of(), Set.of(),
+                Set.of(), Set.of(), null, null, null, null, PERIODS, 1, maxDailyGaps);
         lesson.setPeriod(period);
         lesson.setRoom(ROOM);
         return lesson;

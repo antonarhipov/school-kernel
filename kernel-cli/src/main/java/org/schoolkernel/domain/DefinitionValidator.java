@@ -433,7 +433,8 @@ public final class DefinitionValidator {
                 .map(value -> new SchoolDefinition.Cohort(
                         value.id(), value.displayName(), value.size(),
                         availability(value.availablePeriodIds(), allPeriods), set(value.undesirablePeriodIds()),
-                        value.maxDailyLessonSpread() == null ? 1 : value.maxDailyLessonSpread()))
+                        value.maxDailyLessonSpread() == null ? 1 : value.maxDailyLessonSpread(),
+                        maxDailyGaps(value, input.catalogVersion())))
                 .toList();
         var rooms = input.rooms().stream()
                 .map(value -> new SchoolDefinition.Room(
@@ -458,6 +459,13 @@ public final class DefinitionValidator {
                 subjects, teachers, cohorts, rooms,
                 periods, set(input.reservedPeriodIds()), lessons,
                 Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())));
+    }
+
+    private static int maxDailyGaps(CohortDto cohort, int catalogVersion) {
+        if (catalogVersion < KernelCatalog.VERSION) {
+            return SchoolDefinition.Cohort.UNLIMITED_GAPS;
+        }
+        return cohort.maxDailyGaps() == null ? 0 : cohort.maxDailyGaps();
     }
 
     private static Map<String, Long> effectiveWeights(List<SoftConstraintOverrideDto> overrides, int catalogVersion) {

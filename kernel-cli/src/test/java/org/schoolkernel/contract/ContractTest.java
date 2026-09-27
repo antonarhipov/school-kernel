@@ -77,11 +77,37 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("Cohort gaps: catalog 5 accepts a non-negative cohort gap allowance and older catalogs reject it")
+    void cohortDailyGapsSchemaAndRevision() throws Exception {
+        var definition = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        definition.put("catalogVersion", 5);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        String withoutAllowance = new RevisionService().definitionRevision(definition);
+        var cohort = (tools.jackson.databind.node.ObjectNode) definition.withArray("cohorts").get(0);
+        cohort.put("maxDailyGaps", 1);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        assertNotEquals(withoutAllowance, new RevisionService().definitionRevision(definition));
+
+        for (int version : new int[] {1, 2, 3, 4}) {
+            var oldCatalog = definition.deepCopy();
+            oldCatalog.put("catalogVersion", version);
+            assertFalse(new DefinitionSchemaValidator().validate(oldCatalog).isEmpty());
+        }
+        cohort.put("maxDailyGaps", 0);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        cohort.put("maxDailyGaps", -1);
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        cohort.put("maxDailyGaps", 1.5);
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+    }
+
+    @Test
     @DisplayName("Cohort balance UC-1 G5/RULE-5: MVK has the exact gap, daily-load and start preference configuration")
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
         var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
-        assertEquals(4, definition.path("catalogVersion").intValue());
+        assertEquals(5, definition.path("catalogVersion").intValue());
         var cohorts = definition.path("cohorts");
         assertEquals(List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "4a", "4b",
                         "5a", "5b", "5d", "6a", "6b", "6c", "7a", "7b", "8a", "8b", "9a", "9b", "9c"),
@@ -90,6 +116,7 @@ class ContractTest {
         cohorts.forEach(cohort -> {
             assertEquals(1, cohort.path("maxDailyLessonSpread").intValue());
             assertFalse(cohort.has("undesirablePeriodIds"));
+            assertFalse(cohort.has("maxDailyGaps"));
         });
         assertEquals(JsonSupport.mapper().readTree("""
                 [

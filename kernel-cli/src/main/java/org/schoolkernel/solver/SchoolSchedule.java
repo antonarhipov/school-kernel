@@ -72,7 +72,7 @@ public class SchoolSchedule {
         this.constraintWeights = constraintWeights;
     }
 
-    @PlanningScore(bendableHardLevelsSize = 1, bendableSoftLevelsSize = 3)
+    @PlanningScore(bendableHardLevelsSize = 2, bendableSoftLevelsSize = 3)
     public BendableScore getScore() {
         return score;
     }

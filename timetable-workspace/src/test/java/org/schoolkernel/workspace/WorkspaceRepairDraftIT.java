@@ -93,7 +93,7 @@ class WorkspaceRepairDraftIT {
 
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
         assertEquals(1, acceptedBefore.path("definition").path("catalogVersion").intValue());
-        assertEquals(4, compiled.path("catalogVersion").intValue());
+        assertEquals(5, compiled.path("catalogVersion").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
                 compiled.path("teachers").get(0).path("availablePeriodIds"));
@@ -137,7 +137,7 @@ class WorkspaceRepairDraftIT {
         JsonNode started = body(command("POST", "/api/repair-draft", session(), teacherUnavailable("mon-1")));
         assertEquals("REPAIR_DRAFT", started.path("state").stringValue());
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
-        assertEquals(4, compiled.path("catalogVersion").intValue());
+        assertEquals(5, compiled.path("catalogVersion").intValue());
         assertEquals(2, compiled.path("cohorts").get(0).path("maxDailyLessonSpread").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));

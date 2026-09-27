@@ -294,6 +294,45 @@ class SchoolQualityCliIT {
     }
 
     @Test
+    void catalogFiveForbidsCohortGapsUnlessTheCohortAllowsThem() throws Exception {
+        ObjectNode forcedGap = twoLessonDailySpreadDefinition();
+        forcedGap.put("catalogVersion", 5);
+        Path forcedPath = write("cohort-gap-forced.json", forcedGap);
+        Path forcedOutput = temporaryDirectory.resolve("cohort-gap-forced-result.json");
+        ProcessResult rejected = run("plan", "--definition", forcedPath.toString(),
+                "--output", forcedOutput.toString(), "--step-limit", "10");
+        assertEquals(3, rejected.exitCode(), rejected.stderr());
+        JsonNode rejectedResult = JsonSupport.mapper().readTree(forcedOutput);
+        assertEquals("NO_FEASIBLE_SOLUTION_FOUND", rejectedResult.path("status").stringValue());
+        assertTrue(!rejectedResult.has("timetable"));
+        JsonNode diagnostic = rejectedResult.path("searchDiagnostics").path("constraints").get(0);
+        assertEquals(KernelCatalog.COHORT_DAILY_GAPS.id(), diagnostic.path("constraintId").stringValue());
+        assertEquals("[\"5a\",\"mon-1\"]", diagnostic.path("examples").get(0).toString());
+
+        cohort(forcedGap, "5a").put("maxDailyGaps", 1);
+        Path allowedPath = write("cohort-gap-allowed.json", forcedGap);
+        Path allowedOutput = temporaryDirectory.resolve("cohort-gap-allowed-result.json");
+        ProcessResult allowed = run("plan", "--definition", allowedPath.toString(),
+                "--output", allowedOutput.toString(), "--step-limit", "10");
+        assertEquals(0, allowed.exitCode(), allowed.stderr());
+        JsonNode allowedResult = JsonSupport.mapper().readTree(allowedOutput);
+        assertEquals(5, allowedResult.path("catalogVersion").intValue());
+        assertEquals(1, matches(allowedResult, KernelCatalog.COHORT_GAP.id()));
+        Path verification = temporaryDirectory.resolve("cohort-gap-allowed-verification.json");
+        ProcessResult verified = run("verify", "--definition", allowedPath.toString(),
+                "--result", allowedOutput.toString(), "--output", verification.toString());
+        assertEquals(0, verified.exitCode(), verified.stderr());
+
+        cohort(forcedGap, "5a").remove("maxDailyGaps");
+        forcedGap.put("catalogVersion", 4);
+        Path legacyPath = write("cohort-gap-legacy.json", forcedGap);
+        Path legacyOutput = temporaryDirectory.resolve("cohort-gap-legacy-result.json");
+        ProcessResult legacy = run("plan", "--definition", legacyPath.toString(),
+                "--output", legacyOutput.toString(), "--step-limit", "10");
+        assertEquals(0, legacy.exitCode(), legacy.stderr());
+    }
+
+    @Test
     void catalogTwoRejectedAndUnsuccessfulPlanningPublishesNoCandidate() throws Exception {
         ObjectNode invalid = mv5();
         invalid.putArray("softConstraintOverrides").addObject()

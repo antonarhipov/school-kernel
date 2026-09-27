@@ -16,10 +16,12 @@ import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
 import ai.timefold.solver.core.api.score.stream.Joiners;
 
 public final class SchoolConstraintProvider implements ConstraintProvider {
-    static final BendableScore HARD = BendableScore.ofHard(1, 3, 0, 1);
-    static final BendableScore PERIOD_MOVE = BendableScore.ofSoft(1, 3, 0, 1);
-    static final BendableScore ROOM_ONLY_MOVE = BendableScore.ofSoft(1, 3, 1, 1);
-    static final BendableScore PREFERENCE = BendableScore.ofSoft(1, 3, 2, 1);
+    static final BendableScore HARD = BendableScore.ofHard(2, 3, 0, 1);
+    // Gaps are infeasible, but a lower hard level lets search resolve physical conflicts first.
+    static final BendableScore COHORT_GAP_HARD = BendableScore.ofHard(2, 3, 1, 1);
+    static final BendableScore PERIOD_MOVE = BendableScore.ofSoft(2, 3, 0, 1);
+    static final BendableScore ROOM_ONLY_MOVE = BendableScore.ofSoft(2, 3, 1, 1);
+    static final BendableScore PREFERENCE = BendableScore.ofSoft(2, 3, 2, 1);
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory factory) {
@@ -34,6 +36,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 roomCapability(factory),
                 periodLock(factory),
                 roomLock(factory),
+                cohortDailyGaps(factory),
                 periodMove(factory),
                 roomOnlyMove(factory),
                 teacherGap(factory),
@@ -121,6 +124,19 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .filter(lesson -> lesson.getRoomLock() != null && !lesson.getRoomLock().equals(lesson.getRoom().id()))
                 .penalize(HARD)
                 .asConstraint(KernelCatalog.ROOM_LOCK.id());
+    }
+
+    public Constraint cohortDailyGaps(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getCohortMaxDailyGaps() != Integer.MAX_VALUE)
+                .groupBy(
+                        lesson -> new CohortDay(lesson.getCohortId(), lesson.getPeriod().weekday(),
+                                lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog()),
+                        ConstraintCollectors.max(PlanningLesson::getCohortMaxDailyGaps),
+                        ConstraintCollectors.toList(PlanningLesson::getPeriod))
+                .filter((cohortDay, maxDailyGaps, periods) -> excessGaps(cohortDay, maxDailyGaps, periods) > 0)
+                .penalize(COHORT_GAP_HARD, SchoolConstraintProvider::excessGaps)
+                .asConstraint(KernelCatalog.COHORT_DAILY_GAPS.id());
     }
 
     public Constraint periodMove(ConstraintFactory factory) {
@@ -229,6 +245,16 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog(), sample.getPeriod().weekday());
     }
 
+    static long countCohortExcessGaps(List<PlanningLesson> lessons) {
+        if (lessons.isEmpty() || lessons.getFirst().getCohortMaxDailyGaps() == Integer.MAX_VALUE) return 0;
+        return Math.max(0L, countCohortGaps(lessons) - lessons.getFirst().getCohortMaxDailyGaps());
+    }
+
+    private static int excessGaps(CohortDay cohortDay, Integer maxDailyGaps, List<PeriodValue> periods) {
+        long gaps = countGaps(periods, cohortDay.available(), cohortDay.catalog(), cohortDay.weekday());
+        return (int) Math.max(0L, gaps - maxDailyGaps);
+    }
+
     static long countCohortLateStart(List<PlanningLesson> lessons) {
         if (lessons.isEmpty()) return 0;
         PlanningLesson sample = lessons.getFirst();
@@ -247,8 +273,20 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
 
     private static long countGaps(
             List<PeriodValue> assigned, Set<String> available, List<PeriodValue> catalog, DayOfWeek day) {
+        return gapPeriods(assigned, available, catalog, day).size();
+    }
+
+    static List<PeriodValue> cohortGapPeriods(List<PlanningLesson> lessons) {
+        if (lessons.isEmpty()) return List.of();
+        PlanningLesson sample = lessons.getFirst();
+        return gapPeriods(lessons.stream().map(PlanningLesson::getPeriod).toList(),
+                sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog(), sample.getPeriod().weekday());
+    }
+
+    private static List<PeriodValue> gapPeriods(
+            List<PeriodValue> assigned, Set<String> available, List<PeriodValue> catalog, DayOfWeek day) {
         if (assigned.size() < 2) {
-            return 0;
+            return List.of();
         }
         var assignedOrders = new HashSet<Integer>();
         assigned.forEach(period -> assignedOrders.add(period.order()));
@@ -256,7 +294,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .filter(period -> period.weekday() == day)
                 .sorted(java.util.Comparator.comparingInt(PeriodValue::order))
                 .toList();
-        long gaps = 0;
+        var gaps = new java.util.ArrayList<PeriodValue>();
         int blockStart = 0;
         while (blockStart < dayPeriods.size()) {
             while (blockStart < dayPeriods.size() && !available.contains(dayPeriods.get(blockStart).id())) {
@@ -279,7 +317,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
             if (firstAssigned >= 0) {
                 for (int index = firstAssigned + 1; index < lastAssigned; index++) {
                     if (!assignedOrders.contains(dayPeriods.get(index).order())) {
-                        gaps++;
+                        gaps.add(dayPeriods.get(index));
                     }
                 }
             }

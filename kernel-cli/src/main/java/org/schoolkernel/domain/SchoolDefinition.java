@@ -36,10 +36,20 @@ public record SchoolDefinition(
             int size,
             Set<String> availablePeriodIds,
             Set<String> undesirablePeriodIds,
-            int maxDailyLessonSpread) {
+            int maxDailyLessonSpread,
+            int maxDailyGaps) {
+        /** Catalogs before version 5 place no hard limit on cohort gaps. */
+        public static final int UNLIMITED_GAPS = Integer.MAX_VALUE;
+
         public Cohort(String id, String displayName, int size, Set<String> availablePeriodIds,
                 Set<String> undesirablePeriodIds) {
             this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, 1);
+        }
+
+        public Cohort(String id, String displayName, int size, Set<String> availablePeriodIds,
+                Set<String> undesirablePeriodIds, int maxDailyLessonSpread) {
+            this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, maxDailyLessonSpread,
+                    UNLIMITED_GAPS);
         }
     }
 

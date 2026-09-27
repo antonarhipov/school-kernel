@@ -70,6 +70,19 @@ public final class HardConstraintDiagnostics {
                     lesson.getId(), roomId, lesson.getRoomLock());
         }
 
+        var cohortDays = new LinkedHashMap<String, List<PlanningLesson>>();
+        lessons.forEach(lesson -> cohortDays.computeIfAbsent(
+                lesson.getCohortId() + "\u0000" + lesson.getPeriod().weekday(), ignored -> new ArrayList<>())
+                .add(lesson));
+        for (List<PlanningLesson> cohortDay : cohortDays.values()) {
+            if (SchoolConstraintProvider.countCohortExcessGaps(cohortDay) > 0) {
+                var entityIds = new ArrayList<String>();
+                entityIds.add(cohortDay.getFirst().getCohortId());
+                SchoolConstraintProvider.cohortGapPeriods(cohortDay).forEach(period -> entityIds.add(period.id()));
+                examples.get(KernelCatalog.COHORT_DAILY_GAPS.id()).add(List.copyOf(entityIds));
+            }
+        }
+
         return KernelCatalog.hardConstraintIds().stream()
                 .filter(id -> evaluation.hardMatchCounts().getOrDefault(id, 0L) > 0)
                 .map(id -> new ConstraintDiagnostic(

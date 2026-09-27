@@ -10,7 +10,8 @@ public final class KernelCatalog {
     public static final int LEGACY_VERSION = 1;
     public static final int CLASS_QUALITY_VERSION = 2;
     public static final int START_QUALITY_VERSION = 3;
-    public static final int VERSION = 4;
+    public static final int DAILY_BALANCE_VERSION = 4;
+    public static final int VERSION = 5;
 
     public enum Category {
         HARD,
@@ -43,6 +44,7 @@ public final class KernelCatalog {
     public static final ConstraintDescriptor ROOM_CAPABILITY = hard("hard.room-capability");
     public static final ConstraintDescriptor PERIOD_LOCK = hard("hard.period-lock");
     public static final ConstraintDescriptor ROOM_LOCK = hard("hard.room-lock");
+    public static final ConstraintDescriptor COHORT_DAILY_GAPS = hard("hard.cohort-gap");
     public static final ConstraintDescriptor PERIOD_MOVE =
             new ConstraintDescriptor("stability.period-move", Category.PERIOD_STABILITY, null);
     public static final ConstraintDescriptor ROOM_ONLY_MOVE =
@@ -66,6 +68,7 @@ public final class KernelCatalog {
             ROOM_CAPABILITY,
             PERIOD_LOCK,
             ROOM_LOCK,
+            COHORT_DAILY_GAPS,
             PERIOD_MOVE,
             ROOM_ONLY_MOVE,
             TEACHER_GAP,
@@ -118,6 +121,7 @@ public final class KernelCatalog {
         return catalogVersion == LEGACY_VERSION
                 || catalogVersion == CLASS_QUALITY_VERSION
                 || catalogVersion == START_QUALITY_VERSION
+                || catalogVersion == DAILY_BALANCE_VERSION
                 || catalogVersion == VERSION;
     }
 

@@ -60,6 +60,24 @@ class DefinitionValidatorTest {
     }
 
     @Test
+    void cohortDailyGapsAreForbiddenByDefaultOnlyFromCatalogFive() throws Exception {
+        ObjectNode input = validInput();
+        var validator = new DefinitionValidator();
+        input.put("catalogVersion", 4);
+        assertEquals(SchoolDefinition.Cohort.UNLIMITED_GAPS,
+                validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                        .definition().cohorts().getFirst().maxDailyGaps());
+
+        input.put("catalogVersion", 5);
+        assertEquals(0, validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition().cohorts().getFirst().maxDailyGaps());
+
+        ((ObjectNode) input.withArray("cohorts").get(0)).put("maxDailyGaps", 2);
+        assertEquals(2, validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition().cohorts().getFirst().maxDailyGaps());
+    }
+
+    @Test
     @DisplayName("UC-1 validation reporting: details are deterministic and capped while total is preserved")
     void validationReportsAreDeterministicAndCapped() {
         var detected = java.util.stream.IntStream.range(0, 1_005)

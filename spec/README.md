@@ -31,6 +31,8 @@ Current feature directories:
   preserving catalog 1 and 2 definitions and results.
 - [`kernel-cohort-daily-balance`](kernel-cohort-daily-balance/) specifies the catalog 4 cohort-level daily-spread target
   while preserving the earlier weekly-balance meanings.
+- [`kernel-cohort-no-gaps`](kernel-cohort-no-gaps/) specifies the catalog 5 hard cohort-gap constraint and per-cohort
+  `maxDailyGaps` allowance, superseding the soft-only gap handling in catalog 4.
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
 
