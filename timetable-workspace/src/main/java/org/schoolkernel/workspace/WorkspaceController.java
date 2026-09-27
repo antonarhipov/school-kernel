@@ -124,6 +124,14 @@ public class WorkspaceController {
         return response(manualDrafts.mutateDraft(ifMatch, request));
     }
 
+    @DeleteMapping("/api/manual-draft")
+    @ResponseBody
+    public ResponseEntity<JsonNode> discardManualDraft(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody(required = false) JsonNode request) {
+        return response(manualDrafts.discard(ifMatch, request));
+    }
+
     @GetMapping("/")
     public ResponseEntity<Void> root() {
         return ResponseEntity.status(302).location(URI.create("/workspace/")).build();

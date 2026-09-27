@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: none (UC-4 approved; ready for UC-5)
-- Status: READY
-- Next eligible: UC-5, UC-6
+- Use case: UC-5
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none (UC-5 ready for convergence)
 
 ## Progress
 
@@ -14,8 +14,34 @@
 | UC-2 | APPROVED | UC-1 | 5273fab | convergence/UC-2.md |
 | UC-3 | APPROVED | UC-1, UC-2 | ae4ba8e | convergence/UC-3.md |
 | UC-4 | APPROVED | UC-1 | 335ee49 | convergence/UC-4.md |
-| UC-5 | NOT_STARTED | UC-1 | - | - |
+| UC-5 | READY_FOR_CONVERGENCE | UC-1 | HEAD | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
+
+## UC-5 Evidence
+
+- Started from: 66a4d3f
+- Pre-existing dirty files: none
+- Implementation submission: HEAD at convergence
+- Changed files:
+  - `timetable-workspace/src/main/java/org/schoolkernel/workspace/ManualDraftService.java`
+  - `timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java`
+  - `timetable-workspace/src/main/resources/static/workspace/app.js`
+  - `timetable-workspace/src/main/resources/static/workspace/messages.js`
+  - `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceManualDraftIT.java`
+  - `spec/timetable-manual-editing/checkpoints/UC-5.md`
+- Commands and results:
+  - `mvn test -pl timetable-workspace -Dtest=WorkspaceManualDraftIT`: 9 run, 0 failures, 0 errors, 0 skipped
+
+| Contract element | Evidence |
+|---|---|
+| UC-5 main steps 1-6 | `WorkspaceManualDraftIT.java:356`, `ManualDraftService.java:55`, `WorkspaceController.java:128`, `app.js:662` |
+| UC-5 extension 3a | `app.js:1578`, `WorkspaceManualDraftIT.java:378` |
+| UC-5 extension 4a | `app.js:1815` |
+| UC-5 G1 | `WorkspaceManualDraftIT.java:395` |
+| UC-5 G2 | `WorkspaceManualDraftIT.java:378` |
+| UC-5 success postcondition | `WorkspaceManualDraftIT.java:395`, `app.js` |
+| UC-5 minimal guarantee | `WorkspaceManualDraftIT.java:378` |
+| RULE-1, RULE-2, RULE-6, RULE-7 | `ManualDraftService.java`, `WorkspaceManualDraftIT.java`, `app.js` |
 
 ## UC-4 Evidence
 

@@ -51,6 +51,27 @@ public class ManualDraftService {
                 document);
     }
 
+    public WorkspaceAggregate discard(String ifMatch, JsonNode payload) {
+        WorkspaceAggregate current = repository.load();
+        long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
+        requireState(current, WorkspaceState.MANUAL_DRAFT,
+                "Discarding manual draft requires MANUAL_DRAFT state.");
+
+        if (payload == null || !payload.path("confirmed").asBoolean(false)) {
+            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "CONFIRMATION_REQUIRED",
+                    "Explicit confirmation is required to discard the manual draft.");
+        }
+
+        ObjectNode document = (ObjectNode) current.document().deepCopy();
+        document.remove("manualDraft");
+
+        return mutation.replaceManualDraft(
+                expectedVersion,
+                WorkspaceState.MANUAL_DRAFT,
+                WorkspaceState.ACCEPTED_BASELINE,
+                document);
+    }
+
     public WorkspaceAggregate mutateDraft(String ifMatch, JsonNode payload) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);

@@ -352,6 +352,63 @@ class WorkspaceManualDraftIT {
         assertEquals(conflicts.size(), inspectedBody.path("workspace").path("manualDraft").path("conflicts").size(), "Conflicts unchanged");
     }
 
+    @Test
+    @DisplayName("UC-5: Discard manual editing draft with confirmation, restoring accepted baseline")
+    void discardsManualDraftWithConfirmationAndRestoresAcceptedBaseline() throws Exception {
+        Session session = session();
+        HttpResponse<String> openResponse = command("POST", "/api/manual-draft", session, "");
+        assertEquals(200, openResponse.statusCode());
+        String draftEtag = openResponse.headers().firstValue("ETag").orElseThrow();
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(), draftEtag);
+
+        // Reassign a lesson to have a pending modification
+        ObjectNode mutatePayload = JSON.createObjectNode();
+        mutatePayload.put("action", "REASSIGN_LESSON");
+        mutatePayload.put("lessonId", "lesson-science-1");
+        mutatePayload.put("periodId", "mon-3");
+        mutatePayload.put("roomId", "room-101");
+        mutatePayload.put("teacherId", "teacher-alex");
+
+        HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(mutatePayload));
+        assertEquals(200, mutateResponse.statusCode());
+        String mutatedEtag = mutateResponse.headers().firstValue("ETag").orElseThrow();
+        Session mutatedSession = new Session(session.csrfHeader(), session.csrfToken(), mutatedEtag);
+
+        // Extension 3a / Guarantee G2: Attempt discard without confirmation payload
+        HttpResponse<String> unconfirmedResponse = command("DELETE", "/api/manual-draft", mutatedSession, "{\"confirmed\":false}");
+        assertEquals(422, unconfirmedResponse.statusCode());
+        assertEquals("CONFIRMATION_REQUIRED", body(unconfirmedResponse).path("code").stringValue());
+
+        // Verify draft is still present with modification
+        HttpResponse<String> verifyDraftResp = client.send(HttpRequest.newBuilder(uri("/api/workspace"))
+                .header("Accept", "application/json").GET().build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals("MANUAL_DRAFT", body(verifyDraftResp).path("state").stringValue());
+        assertFalse(body(verifyDraftResp).path("workspace").path("manualDraft").isMissingNode());
+
+        // Main success step 3-6 / Guarantee G1: Discard with explicit confirmation
+        HttpResponse<String> discardResponse = command("DELETE", "/api/manual-draft", mutatedSession, "{\"confirmed\":true}");
+        assertEquals(200, discardResponse.statusCode());
+
+        JsonNode discardedBody = body(discardResponse);
+        assertEquals("ACCEPTED_BASELINE", discardedBody.path("state").stringValue());
+        assertTrue(discardedBody.path("workspace").path("manualDraft").isMissingNode(), "manualDraft node must be removed");
+
+        // Verify via fresh GET /api/workspace
+        HttpResponse<String> baselineResp = client.send(HttpRequest.newBuilder(uri("/api/workspace"))
+                .header("Accept", "application/json").GET().build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, baselineResp.statusCode());
+        JsonNode baselineBody = body(baselineResp);
+        assertEquals("ACCEPTED_BASELINE", baselineBody.path("state").stringValue());
+        assertTrue(baselineBody.path("workspace").path("manualDraft").isMissingNode());
+
+        // RULE-1: Attempting to discard when already in ACCEPTED_BASELINE is rejected with 409
+        String baselineEtag = baselineResp.headers().firstValue("ETag").orElseThrow();
+        Session baselineSession = new Session(session.csrfHeader(), session.csrfToken(), baselineEtag);
+        HttpResponse<String> invalidTransition = command("DELETE", "/api/manual-draft", baselineSession, "{\"confirmed\":true}");
+        assertEquals(409, invalidTransition.statusCode());
+        assertEquals("INVALID_WORKSPACE_TRANSITION", body(invalidTransition).path("code").stringValue());
+    }
+
     private void storeAccepted() throws Exception {
         ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
         ObjectNode result = JSON.createObjectNode().put("status", "FEASIBLE").put("inputRevision", "sha256:accepted-input")

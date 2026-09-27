@@ -654,13 +654,18 @@ function prefillRepairResourceFromSelection() {
 function renderManualDraft(snapshot, schoolName) {
   stateCard.className = 'card workspace-card manual-draft-mode current-mode compact-density';
   if (view.narrow) {
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div id="accepted-view"></div>`;
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div class="task-launch manual-task-launch"><button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button></div><div id="accepted-view"></div>`;
+    bindManualDraftActions();
     renderFocused(); return;
   }
   const conflictsCount = snapshot.workspace.manualDraft?.conflicts?.length || 0;
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state draft-state">${M.manualDraftState}</span><span id="conflict-summary-badge" class="conflict-badge ${conflictsCount > 0 ? 'has-conflicts' : 'clean'}">${conflictsCount > 0 ? M.conflictCount(conflictsCount) : M.zeroConflicts}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.manualDraftDetail}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
+    <div class="task-launch manual-task-launch">
+      <button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button>
+    </div>
     <div id="accepted-view"></div>${focusedEntry()}`;
   bindUtilities();
+  bindManualDraftActions();
   if (view.focusedType) renderFocused(); else renderWholeSchool();
 }
 
@@ -1562,6 +1567,18 @@ function bindManualEditor() {
           statusEl.textContent = err.message || M.draftSaveError;
         }
       }
+    });
+  }
+}
+
+function bindManualDraftActions() {
+  const discardBtn = document.querySelector('#discard-manual-draft');
+  if (discardBtn && !discardBtn.dataset.bound) {
+    discardBtn.dataset.bound = 'true';
+    discardBtn.addEventListener('click', async () => {
+      const confirmed = window.confirm(M.confirmDiscardDraft);
+      if (!confirmed) return;
+      await mutateJson('/api/manual-draft', 'DELETE', { confirmed: true });
     });
   }
 }
