@@ -69,6 +69,14 @@ public class ProblemHandler {
                 "The requested local resource does not exist.");
     }
 
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ProblemResponse> generalException(Exception ex) {
+        return response(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "INTERNAL_ERROR",
+                ex.getMessage() != null ? ex.getMessage() : "An unexpected server error occurred.");
+    }
+
     private ResponseEntity<ProblemResponse> response(HttpStatus status, String code, String message) {
         return responder.response(status, code, message);
     }

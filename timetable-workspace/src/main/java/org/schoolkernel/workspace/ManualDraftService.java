@@ -203,14 +203,14 @@ public class ManualDraftService {
             String roomId = assignment.path("roomId").stringValue();
 
             JsonNode period = periods.get(periodId);
-            String periodName = period != null ? period.path("displayName").stringValue() : periodId;
+            String periodName = period != null ? textOrDefault(period, "displayName", periodId) : periodId;
 
             // Teacher availability
             JsonNode teacher = teachers.get(teacherId);
             if (teacher != null && teacher.has("availablePeriodIds")) {
                 Set<String> teacherAvail = textSet(teacher.path("availablePeriodIds"));
                 if (!teacherAvail.isEmpty() && !teacherAvail.contains(periodId)) {
-                    String teacherName = teacher.path("displayName").stringValue();
+                    String teacherName = textOrDefault(teacher, "displayName", teacherId);
                     ObjectNode c = json.createObjectNode();
                     c.put("code", "TEACHER_UNAVAILABLE");
                     c.put("lessonId", lessonId);
@@ -228,7 +228,7 @@ public class ManualDraftService {
             if (room != null && room.has("availablePeriodIds")) {
                 Set<String> roomAvail = textSet(room.path("availablePeriodIds"));
                 if (!roomAvail.isEmpty() && !roomAvail.contains(periodId)) {
-                    String roomName = room.path("displayName").stringValue();
+                    String roomName = textOrDefault(room, "displayName", roomId);
                     ObjectNode c = json.createObjectNode();
                     c.put("code", "ROOM_UNAVAILABLE");
                     c.put("lessonId", lessonId);
@@ -253,34 +253,35 @@ public class ManualDraftService {
                     Set<String> roomCaps = textSet(room.path("capabilityIds"));
                     if (!roomCaps.containsAll(requiredCaps)) {
                         roomIncompatible = true;
-                        reason = "Room " + room.path("displayName").stringValue()
-                                + " does not satisfy capability requirements for " + lesson.path("displayName").stringValue() + ".";
+                        reason = "Room " + textOrDefault(room, "displayName", roomId)
+                                + " does not satisfy capability requirements for " + textOrDefault(lesson, "displayName", lessonId) + ".";
                     }
                 }
 
                 // Check definition.roomAssignments
                 if (!roomIncompatible && definition.has("roomAssignments")) {
-                    String subjectId = lesson.path("subjectId").stringValue();
+                    String subjectId = textOrNull(lesson, "subjectId");
                     for (JsonNode policy : definition.path("roomAssignments")) {
-                        if (!subjectId.equals(policy.path("subjectId").stringValue())) continue;
-                        String policyTeacher = policy.path("teacherId").stringValue();
+                        if (subjectId == null || !subjectId.equals(textOrNull(policy, "subjectId"))) continue;
+                        String policyTeacher = textOrNull(policy, "teacherId");
                         if (policyTeacher != null && !policyTeacher.isEmpty() && !policyTeacher.equals(teacherId)) continue;
 
-                        if (policy.path("useHomeRoom").booleanValue()) {
-                            JsonNode cohort = cohorts.get(assignment.path("cohortId").stringValue());
-                            String homeRoomId = cohort != null ? cohort.path("homeRoomId").stringValue() : null;
+                        if (policy.path("useHomeRoom").asBoolean(false)) {
+                            JsonNode cohort = cohorts.get(textOrNull(assignment, "cohortId"));
+                            String homeRoomId = cohort != null ? textOrNull(cohort, "homeRoomId") : null;
                             if (homeRoomId == null || !homeRoomId.equals(roomId)) {
                                 roomIncompatible = true;
-                                reason = "Room " + room.path("displayName").stringValue()
-                                        + " is not the assigned home room for class " + (cohort != null ? cohort.path("displayName").stringValue() : assignment.path("cohortId").stringValue()) + ".";
+                                String cohortName = cohort != null ? textOrDefault(cohort, "displayName", assignment.path("cohortId").stringValue()) : assignment.path("cohortId").stringValue();
+                                reason = "Room " + textOrDefault(room, "displayName", roomId)
+                                        + " is not the assigned home room for class " + cohortName + ".";
                                 break;
                             }
                         } else if (policy.has("allowedRoomIds")) {
                             Set<String> allowed = textSet(policy.path("allowedRoomIds"));
                             if (!allowed.isEmpty() && !allowed.contains(roomId)) {
                                 roomIncompatible = true;
-                                reason = "Room " + room.path("displayName").stringValue()
-                                        + " is not permitted by room assignment policy for " + lesson.path("displayName").stringValue() + ".";
+                                reason = "Room " + textOrDefault(room, "displayName", roomId)
+                                        + " is not permitted by room assignment policy for " + textOrDefault(lesson, "displayName", lessonId) + ".";
                                 break;
                             }
                         }
@@ -292,8 +293,8 @@ public class ManualDraftService {
                     Set<String> allowed = textSet(lesson.path("allowedRoomIds"));
                     if (!allowed.isEmpty() && !allowed.contains(roomId)) {
                         roomIncompatible = true;
-                        reason = "Room " + room.path("displayName").stringValue()
-                                + " is not permitted for lesson " + lesson.path("displayName").stringValue() + ".";
+                        reason = "Room " + textOrDefault(room, "displayName", roomId)
+                                + " is not permitted for lesson " + textOrDefault(lesson, "displayName", lessonId) + ".";
                     }
                 }
             }
@@ -323,8 +324,8 @@ public class ManualDraftService {
                 String periodId = group.get(0).path("periodId").stringValue();
                 JsonNode teacher = teachers.get(teacherId);
                 JsonNode period = periods.get(periodId);
-                String teacherName = teacher != null ? teacher.path("displayName").stringValue() : teacherId;
-                String periodName = period != null ? period.path("displayName").stringValue() : periodId;
+                String teacherName = teacher != null ? textOrDefault(teacher, "displayName", teacherId) : teacherId;
+                String periodName = period != null ? textOrDefault(period, "displayName", periodId) : periodId;
 
                 for (JsonNode a : group) {
                     String lessonId = a.path("lessonId").stringValue();
@@ -336,7 +337,7 @@ public class ManualDraftService {
                             .filter(item -> !item.path("lessonId").stringValue().equals(lessonId))
                             .map(item -> {
                                 JsonNode l = lessons.get(item.path("lessonId").stringValue());
-                                return l != null ? l.path("displayName").stringValue() : item.path("lessonId").stringValue();
+                                return l != null ? textOrDefault(l, "displayName", item.path("lessonId").stringValue()) : item.path("lessonId").stringValue();
                             })
                             .toList();
 
@@ -366,8 +367,8 @@ public class ManualDraftService {
                 String periodId = group.get(0).path("periodId").stringValue();
                 JsonNode room = rooms.get(roomId);
                 JsonNode period = periods.get(periodId);
-                String roomName = room != null ? room.path("displayName").stringValue() : roomId;
-                String periodName = period != null ? period.path("displayName").stringValue() : periodId;
+                String roomName = room != null ? textOrDefault(room, "displayName", roomId) : roomId;
+                String periodName = period != null ? textOrDefault(period, "displayName", periodId) : periodId;
 
                 for (JsonNode a : group) {
                     String lessonId = a.path("lessonId").stringValue();
@@ -379,7 +380,7 @@ public class ManualDraftService {
                             .filter(item -> !item.path("lessonId").stringValue().equals(lessonId))
                             .map(item -> {
                                 JsonNode l = lessons.get(item.path("lessonId").stringValue());
-                                return l != null ? l.path("displayName").stringValue() : item.path("lessonId").stringValue();
+                                return l != null ? textOrDefault(l, "displayName", item.path("lessonId").stringValue()) : item.path("lessonId").stringValue();
                             })
                             .toList();
 
@@ -409,8 +410,8 @@ public class ManualDraftService {
                 String periodId = group.get(0).path("periodId").stringValue();
                 JsonNode cohort = cohorts.get(cohortId);
                 JsonNode period = periods.get(periodId);
-                String cohortName = cohort != null ? cohort.path("displayName").stringValue() : cohortId;
-                String periodName = period != null ? period.path("displayName").stringValue() : periodId;
+                String cohortName = cohort != null ? textOrDefault(cohort, "displayName", cohortId) : cohortId;
+                String periodName = period != null ? textOrDefault(period, "displayName", periodId) : periodId;
 
                 for (JsonNode a : group) {
                     String lessonId = a.path("lessonId").stringValue();
@@ -422,7 +423,7 @@ public class ManualDraftService {
                             .filter(item -> !item.path("lessonId").stringValue().equals(lessonId))
                             .map(item -> {
                                 JsonNode l = lessons.get(item.path("lessonId").stringValue());
-                                return l != null ? l.path("displayName").stringValue() : item.path("lessonId").stringValue();
+                                return l != null ? textOrDefault(l, "displayName", item.path("lessonId").stringValue()) : item.path("lessonId").stringValue();
                             })
                             .toList();
 
@@ -460,7 +461,9 @@ public class ManualDraftService {
         Map<String, JsonNode> result = new HashMap<>();
         if (array != null && array.isArray()) {
             for (JsonNode node : array) {
-                result.put(node.path(field).stringValue(), node);
+                if (node.has(field) && node.path(field).isTextual()) {
+                    result.put(node.path(field).stringValue(), node);
+                }
             }
         }
         return result;
@@ -476,5 +479,17 @@ public class ManualDraftService {
             }
         }
         return result;
+    }
+
+    private static String textOrNull(JsonNode node, String field) {
+        if (node == null) return null;
+        JsonNode child = node.path(field);
+        return child.isTextual() ? child.stringValue() : null;
+    }
+
+    private static String textOrDefault(JsonNode node, String field, String defaultValue) {
+        if (node == null) return defaultValue;
+        JsonNode child = node.path(field);
+        return child.isTextual() ? child.stringValue() : defaultValue;
     }
 }

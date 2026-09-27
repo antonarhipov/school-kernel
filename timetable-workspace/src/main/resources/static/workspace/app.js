@@ -456,7 +456,15 @@ function selectReviewLesson(id, side) {
   const button = [...document.querySelectorAll(`[data-lesson-id="${CSS.escape(id)}"]`)]
     .find(item => item.dataset.comparisonSide === targetSide && !item.hidden);
   if (button) { button.scrollIntoView({ block: 'nearest', inline: 'nearest' }); selectLesson(button); }
-  else { syncInspectionState(inspectionState.selectLesson(id, targetSide)); document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(id); toggleInspector(true); updateReviewSelection(); }
+  else {
+    syncInspectionState(inspectionState.selectLesson(id, targetSide));
+    document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(id);
+    toggleInspector(true);
+    updateReviewSelection();
+    bindCloseDetails();
+    bindManualEditor();
+    bindConflictOverlays();
+  }
   if (adjustments.length) document.querySelector('#inspection-notice').textContent = adjustments.join(' ');
 }
 
@@ -1459,6 +1467,8 @@ function selectLesson(button) {
   document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(view.selectedLessonId);
   updateReviewSelection();
   bindCloseDetails(); refreshDraftSelectedProtection();
+  bindManualEditor();
+  bindConflictOverlays();
   document.querySelector('#lesson-panel-title')?.focus();
 }
 
@@ -1489,7 +1499,8 @@ function bindCloseDetails() {
 
 function bindManualEditor() {
   const form = document.querySelector('#manual-edit-form');
-  if (form) {
+  if (form && !form.dataset.bound) {
+    form.dataset.bound = 'true';
     form.addEventListener('submit', async event => {
       event.preventDefault();
       const statusEl = document.querySelector('#edit-save-status');
@@ -1500,6 +1511,12 @@ function bindManualEditor() {
       const periodId = document.querySelector('#edit-period')?.value;
       const roomId = document.querySelector('#edit-room')?.value;
       const teacherId = document.querySelector('#edit-teacher')?.value;
+      if (periodId && view.range === 'DAY') {
+        const chosenPeriod = acceptedModel?.definition?.periods?.find(p => p.id === periodId);
+        if (chosenPeriod && chosenPeriod.weekday !== view.day) {
+          view.day = chosenPeriod.weekday;
+        }
+      }
       try {
         await mutateJson('/api/manual-draft', 'PATCH', {
           action: 'REASSIGN_LESSON',
@@ -1518,7 +1535,8 @@ function bindManualEditor() {
   }
 
   const revertBtn = document.querySelector('#revert-lesson-btn');
-  if (revertBtn) {
+  if (revertBtn && !revertBtn.dataset.bound) {
+    revertBtn.dataset.bound = 'true';
     revertBtn.addEventListener('click', async () => {
       const statusEl = document.querySelector('#edit-save-status');
       if (statusEl) {
@@ -1637,7 +1655,8 @@ function isRepresented(item) {
 }
 
 function clearSelectedLessonOutsideRepresentation() {
-  const selected = proposalModeActive() ? comparison.assignmentsById.get(view.selectedLessonId) || [] : [acceptedModel.assignmentMap.get(view.selectedLessonId)];
+  const activeModel = (currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT' && manualDraftModel) ? manualDraftModel : acceptedModel;
+  const selected = proposalModeActive() ? comparison.assignmentsById.get(view.selectedLessonId) || [] : [activeModel.assignmentMap.get(view.selectedLessonId)];
   if (!selected.some(Boolean) || selected.some(isRepresented)) return false;
   if (inspectionState) syncInspectionState(inspectionState.closeLesson()); else view.selectedLessonId = null;
   const details = document.querySelector('#lesson-details-host');
@@ -1763,7 +1782,7 @@ async function fetchWithCsrf(url, options = {}) {
     const clone = response.clone();
     try {
       const errorJson = await clone.json();
-      if (errorJson.code === 'REQUEST_FORBIDDEN') {
+      if (errorJson.code === 'REQUEST_FORBIDDEN' || errorJson.code === 'ACCESS_DENIED') {
         const csrfResponse = await fetch('/api/csrf');
         if (csrfResponse.ok) {
           csrf = await csrfResponse.json();
@@ -1781,19 +1800,32 @@ async function mutate(path, method, body) {
     const headers = {};
     if (typeof body === 'string') headers['Content-Type'] = 'application/json';
     const response = await fetchWithCsrf(path, { method, headers, body });
-    const result = await response.json();
+    let result = {};
+    try {
+      result = await response.json();
+    } catch (_) {}
     if (!response.ok) {
       if (path === '/api/repair-draft' && method !== 'DELETE') {
         reportDraftFailure(result.message || M.actionFailed);
         if (response.headers.get('ETag')) etag = response.headers.get('ETag');
         return;
       }
-      if (path === '/api/proposal/accept' && result.code === 'STALE_PROPOSAL') {
-        await load(true);
-        stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${M.acceptedStillCurrent}</p>`);
+      if (path === '/api/manual-draft') {
+        const manualStatus = document.querySelector('#edit-save-status');
+        if (manualStatus) {
+          manualStatus.className = 'error';
+          manualStatus.textContent = result.message || M.draftSaveError;
+        }
+        if (response.headers.get('ETag')) etag = response.headers.get('ETag');
+        stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${escapeHtml(result.message || M.actionFailed)}</p>`);
         return;
       }
-      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
+      if (path === '/api/proposal/accept' && result.code === 'STALE_PROPOSAL') {
+        await load(true);
+        stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${escapeHtml(result.message || M.actionFailed)} ${M.acceptedStillCurrent}</p>`);
+        return;
+      }
+      stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
       if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return;
     }
     if (path === '/api/repair-draft') draftSaveFailed = false;
@@ -1801,7 +1833,14 @@ async function mutate(path, method, body) {
     etag = response.headers.get('ETag'); render(result);
   } catch (_) {
     if (path === '/api/repair-draft' && method !== 'DELETE') reportDraftFailure(M.actionFailed);
-    else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.actionFailed}</p>`);
+    else if (path === '/api/manual-draft') {
+      const manualStatus = document.querySelector('#edit-save-status');
+      if (manualStatus) {
+        manualStatus.className = 'error';
+        manualStatus.textContent = M.draftSaveError;
+      }
+      stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${M.actionFailed}</p>`);
+    } else stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${M.actionFailed}</p>`);
   }
 }
 

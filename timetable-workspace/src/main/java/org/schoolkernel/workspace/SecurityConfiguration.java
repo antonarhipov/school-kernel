@@ -32,9 +32,16 @@ public class SecurityConfiguration {
                                 "/api/manual-draft", "/api/manual-draft/publish").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/repair-draft", "/api/manual-draft").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/repair-draft", "/api/runs/*", "/api/proposal", "/api/workspace", "/api/manual-draft").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().denyAll())
                 .csrf(Customizer.withDefaults())
-                .exceptionHandling(errors -> errors.accessDeniedHandler(accessDeniedHandler(problems)))
+                .exceptionHandling(errors -> errors
+                        .accessDeniedHandler(accessDeniedHandler(problems))
+                        .authenticationEntryPoint((request, response, exception) -> problems.write(
+                                response,
+                                HttpStatus.FORBIDDEN,
+                                "ACCESS_DENIED",
+                                "Access denied: " + exception.getMessage())))
                 .headers(headers -> headers
                         .contentTypeOptions(Customizer.withDefaults())
                         .referrerPolicy(policy -> policy.policy(
