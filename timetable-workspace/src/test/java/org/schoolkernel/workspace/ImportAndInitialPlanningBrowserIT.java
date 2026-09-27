@@ -67,14 +67,14 @@ class ImportAndInitialPlanningBrowserIT extends WorkbenchBrowserSupport {
         workbench.open().awaitText("Empty workspace");
         workbench.setFiles("#definition", ROOT.resolve("examples/initial-school.json"));
         workbench.click("#json-import button[type=submit]");
-        String initial = workbench.awaitText("Create 30-second proposal", Workbench.SOLVE);
+        String initial = workbench.awaitText("Create 1-minute proposal", Workbench.SOLVE);
         assertTrue(initial.contains("Lessons\n2"));
         assertTrue(initial.contains("No accepted timetable"));
 
         workbench.click("#start-plan");
         String proposal = workbench.awaitText("Initial proposal · feasible", Workbench.SOLVE);
         assertTrue(proposal.contains("No timetable is accepted yet"));
-        assertTrue(proposal.contains("Execution limit\nPT30S"));
+        assertTrue(proposal.contains("Execution limit\nPT1M"));
         assertTrue(proposal.contains("Termination reason"));
         assertTrue(proposal.contains("Timetable details"));
 

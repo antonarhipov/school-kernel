@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -87,7 +87,8 @@
         "maxDailyLessonSpread": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
         "maxDailyGaps": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
         "latestStartSlot": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
-        "preferredLatestStartSlot": { "type": "integer", "minimum": 1, "maximum": 2147483647 }
+        "preferredLatestStartSlot": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+        "dailyLessonSpreadLimit": { "type": "integer", "minimum": 0, "maximum": 2147483647 }
       }
     },
     "room": {
@@ -155,6 +156,12 @@
     }
   },
   "allOf": [
+    {
+      "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6] } } },
+      "then": { "properties": { "cohorts": { "items": {
+        "not": { "required": ["dailyLessonSpreadLimit"] }
+      } } } }
+    },
     {
       "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5] } } },
       "then": { "properties": {

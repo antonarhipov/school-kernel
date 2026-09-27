@@ -175,7 +175,7 @@ final class WorkbenchFixtures {
             ObjectNode result = (ObjectNode) acceptedResult.deepCopy();
             result.put("correlationId", arguments.get(arguments.indexOf("--correlation-id") + 1));
             result.put("inputRevision", revision).put("elapsedTimeMs", 2004).put("terminationReason", "TIME_LIMIT");
-            result.putObject("limit").put("type", "TIME").put("duration", "PT30S");
+            result.putObject("limit").put("type", "TIME").put("duration", "PT1M");
             ObjectNode moved = (ObjectNode) result.path("timetable").path("assignments").get(960);
             ObjectNode roomOnly = (ObjectNode) result.path("timetable").path("assignments").get(0);
             assertEquals("period-0", moved.path("periodId").stringValue());
@@ -231,7 +231,7 @@ final class WorkbenchFixtures {
                 .put("acceptedTimetableRevision", "sha256:scale-timetable")
                 .put("successorDefinitionRevision", "sha256:scale-successor")
                 .put("intentRevision", "sha256:scale-intent").put("proposedTimetableRevision", "sha256:scale-proposed")
-                .put("runId", java.util.UUID.randomUUID().toString()).put("limit", "PT30S")
+                .put("runId", java.util.UUID.randomUUID().toString()).put("limit", "PT1M")
                 .put("terminationReason", "TIME_LIMIT").put("elapsedTimeMs", 30_000);
         proposal.set("definition", definition); proposal.set("result", result);
         ObjectNode counts = proposal.putObject("changeCounts");

@@ -51,13 +51,16 @@ public record SchoolDefinition(
             int maxDailyLessonSpread,
             int maxDailyGaps,
             int latestStartSlot,
-            int preferredLatestStartSlot) {
+            int preferredLatestStartSlot,
+            int dailyLessonSpreadLimit) {
         /** Catalogs before version 5 place no hard limit on cohort gaps. */
         public static final int UNLIMITED_GAPS = Integer.MAX_VALUE;
         /** Without a declared bound, any start slot is feasible. */
         public static final int NO_START_BOUND = Integer.MAX_VALUE;
         /** The catalog 3 late-start threshold. */
         public static final int DEFAULT_PREFERRED_START_SLOT = 3;
+        /** Without a declared limit, any daily lesson spread is feasible. */
+        public static final int NO_SPREAD_LIMIT = Integer.MAX_VALUE;
 
         public Cohort(String id, String displayName, int size, Set<String> availablePeriodIds,
                 Set<String> undesirablePeriodIds) {
@@ -74,6 +77,13 @@ public record SchoolDefinition(
                 Set<String> undesirablePeriodIds, int maxDailyLessonSpread, int maxDailyGaps) {
             this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, maxDailyLessonSpread,
                     maxDailyGaps, NO_START_BOUND, DEFAULT_PREFERRED_START_SLOT);
+        }
+
+        public Cohort(String id, String displayName, int size, Set<String> availablePeriodIds,
+                Set<String> undesirablePeriodIds, int maxDailyLessonSpread, int maxDailyGaps,
+                int latestStartSlot, int preferredLatestStartSlot) {
+            this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, maxDailyLessonSpread,
+                    maxDailyGaps, latestStartSlot, preferredLatestStartSlot, NO_SPREAD_LIMIT);
         }
     }
 

@@ -27,7 +27,7 @@ import tools.jackson.databind.json.JsonMapper;
  */
 final class Workbench {
     static final Duration UI = Duration.ofSeconds(10);
-    static final Duration SOLVE = Duration.ofSeconds(50);
+    static final Duration SOLVE = Duration.ofSeconds(80);
     private static final ObjectMapper JSON = JsonMapper.builder().build();
     private static final Path SCREENSHOTS = Path.of("target/workbench-layout");
 

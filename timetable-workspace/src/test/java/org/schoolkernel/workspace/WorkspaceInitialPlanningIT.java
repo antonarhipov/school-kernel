@@ -109,7 +109,7 @@ class WorkspaceInitialPlanningIT {
         JsonNode solving = JSON.readTree(started.body());
         assertEquals("SOLVING_INITIAL", solving.path("state").stringValue());
         assertFalse(solving.path("acceptedTimetable").booleanValue());
-        assertEquals("PT30S", solving.path("workspace").path("run").path("limit").stringValue());
+        assertEquals("PT1M", solving.path("workspace").path("run").path("limit").stringValue());
         UUID runId = UUID.fromString(solving.path("workspace").path("run").path("id").stringValue());
 
         JsonNode proposalSnapshot = awaitState("INITIAL_PROPOSAL", Duration.ofSeconds(20));
@@ -119,7 +119,7 @@ class WorkspaceInitialPlanningIT {
         assertEquals("NO_INTENT", proposal.path("intentRevision").stringValue());
         assertEquals("FEASIBLE", proposal.path("result").path("status").stringValue());
         assertEquals(2, proposal.path("result").path("timetable").path("assignments").size());
-        assertEquals("PT30S", proposal.path("result").path("limit").path("duration").stringValue());
+        assertEquals("PT1M", proposal.path("result").path("limit").path("duration").stringValue());
         assertFalse(proposalSnapshot.path("acceptedTimetable").booleanValue());
         assertEquals("FEASIBLE", JSON.readTree(get("/api/runs/" + runId).body()).path("status").stringValue());
 
@@ -139,7 +139,7 @@ class WorkspaceInitialPlanningIT {
 
         List<String> plan = processes.commands().stream().filter(command -> command.contains("plan")).findFirst().orElseThrow();
         assertEquals("plan", plan.get(1));
-        assertTrue(plan.containsAll(List.of("--definition", "--output", "--time-limit", "30s", "--correlation-id")));
+        assertTrue(plan.containsAll(List.of("--definition", "--output", "--time-limit", "60s", "--correlation-id")));
         assertFalse(plan.contains("--seed"));
         assertFalse(plan.contains("--step-limit"));
         assertNotEquals(plan.get(plan.indexOf("--definition") + 1), plan.get(plan.indexOf("--output") + 1));
@@ -583,7 +583,7 @@ class WorkspaceInitialPlanningIT {
                 accelerated.set(limit + 1, "100");
                 Path output = Path.of(arguments.get(arguments.indexOf("--output") + 1));
                 return new LimitRewritingProcess(
-                        super.start(accelerated), output, mismatchPlanEvidence ? "PT2M" : "PT30S");
+                        super.start(accelerated), output, mismatchPlanEvidence ? "PT2M" : "PT1M");
             }
             return super.start(arguments);
         }

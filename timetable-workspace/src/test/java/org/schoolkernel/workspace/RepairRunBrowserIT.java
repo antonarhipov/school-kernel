@@ -30,7 +30,7 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         storeAccepted(document);
         workbench.open().awaitText("Start a protected repair");
         workbench.startRepair(null, null, "mon-1");
-        workbench.awaitText("Generate 30-second repair proposal");
+        workbench.awaitText("Generate 1-minute repair proposal");
         workbench.pin("lesson-science-1", false, true);
         assertTrue(workbench.awaitText("Accepted room pinned").contains("Attempt-scoped pins\n1"));
         JsonNode frozenDraft = assertDraftUnchangedBaseline(acceptedBefore).deepCopy();
@@ -44,7 +44,7 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
 
         String proposal = workbench.awaitText("Repair proposal · feasible", Workbench.SOLVE);
         for (String expected : new String[] { "Accepted baseline remains current", "period stability, then room-only stability",
-                "Execution limit\nPT30S", "Period moves", "Unique changed lessons", "Direct effects of your intent",
+                "Execution limit\nPT1M", "Period moves", "Unique changed lessons", "Direct effects of your intent",
                 "Solver ripple effects", "Additions\n0", "Cancellations\n0", "Old assignment", "Proposed assignment" }) {
             assertTrue(proposal.contains(expected), expected);
         }
@@ -144,11 +144,11 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         assertEquals("SOLVING_REPAIR", storedLifecycle());
         JsonNode running = storedWorkspaceDocument();
         String runId = running.path("run").path("id").stringValue();
-        assertEquals("PT30S", running.path("run").path("limit").stringValue());
+        assertEquals("PT1M", running.path("run").path("limit").stringValue());
         assertEquals(baseline, running.path("acceptedBaseline"));
         assertEquals(draft, running.path("repairDraft"));
         assertFalse(running.has("proposal"));
-        workbench.expect("document.querySelector('#workbench-task-area #cancel-run')?.textContent === 'Cancel run' && document.querySelector('#workbench-task-area')?.textContent.includes('PT30S') && !document.querySelector('#workbench-inspector #cancel-run') && document.querySelector('#cohort-filter')?.value === 'cohort-7a' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Science 1' && !document.querySelector('#apply-pin')");
+        workbench.expect("document.querySelector('#workbench-task-area #cancel-run')?.textContent === 'Cancel run' && document.querySelector('#workbench-task-area')?.textContent.includes('PT1M') && !document.querySelector('#workbench-inspector #cancel-run') && document.querySelector('#cohort-filter')?.value === 'cohort-7a' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Science 1' && !document.querySelector('#apply-pin')");
         workbench.page().evaluate("void (window.__uc3RunCanvas = document.querySelector('[data-lesson-id=lesson-science-1]'))");
         workbench.page().waitForTimeout(800);
         workbench.expect("window.__uc3RunCanvas === document.querySelector('[data-lesson-id=lesson-science-1]')",
@@ -363,7 +363,7 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(baseline, running.path("acceptedBaseline"));
         assertEquals(draft, running.path("repairDraft"));
         assertFalse(running.has("proposal"));
-        assertEquals("PT30S", running.path("run").path("limit").stringValue());
+        assertEquals("PT1M", running.path("run").path("limit").stringValue());
         assertEquals(expectedMondayIds, workbench.renderedLessonIds());
         workbench.expect("document.querySelector('#workbench-task-area #cancel-run') && !document.querySelector('#workbench-inspector #cancel-run, #workbench-inspector #stage-repair-form, #workbench-inspector #proposal-context') && document.querySelector('#workbench-task-area #run-secondary')?.textContent.includes('Teacher Sixteen with a deliberately long authoritative display name for timetable tiles') && document.querySelector('#workbench-task-area #run-secondary')?.textContent.includes('Declared period 0') && document.querySelector('#workbench-task-area #run-secondary')?.textContent.includes('lesson-500') && !document.querySelector('#apply-pin, #discard-draft, #accept-repair')",
                 "UC-3 main 2/G1: frozen intent, status and cancellation are in the wide task area only");
@@ -373,7 +373,7 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         assertSolvingTaskGeometry(1600, 900);
         workbench.screenshot("uc3-solving-1600.png");
         workbench.click("#toggle-run-detail");
-        workbench.expect("document.querySelector('#run-secondary').hidden && document.querySelector('#cancel-run')?.getBoundingClientRect().bottom <= innerHeight && document.querySelector('#workbench-task-area')?.textContent.includes('PT30S')",
+        workbench.expect("document.querySelector('#run-secondary').hidden && document.querySelector('#cancel-run')?.getBoundingClientRect().bottom <= innerHeight && document.querySelector('#workbench-task-area')?.textContent.includes('PT1M')",
                 "UC-3 G2: collapsed secondary detail cannot hide status, limit or cancellation");
         workbench.click("#toggle-run-detail");
         workbench.viewport(1280, 800);

@@ -44,8 +44,8 @@ and `130` for interruption before publication.
 - [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
-- Schema version `1` supports catalog versions `1` through `6`. Earlier catalogs remain readable for existing accepted
-  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `6`.
+- Schema version `1` supports catalog versions `1` through `7`. Earlier catalogs remain readable for existing accepted
+  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `7`.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
 - A feasible result assigns every lesson once and satisfies the exact hard catalog in the specification.
@@ -70,7 +70,7 @@ and `130` for interruption before publication.
   lesson block. The late-start preference discourages first lessons after the third regular period; it does not
   compare start times within the first three periods.
   The preferences default to weight `1`; `softConstraintOverrides` can tune
-  them from `0` through `1,000,000`. Workspace repair creates a catalog `6` successor while preserving its accepted
+  them from `0` through `1,000,000`. Workspace repair creates a catalog `7` successor while preserving its accepted
   predecessor, so a repair proposal also closes any gaps an older accepted timetable had. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
   room moves solely to improve class quality.
 - Catalog `6` adds per-cohort start bounds and per-subject placement rules. Slots count regular periods from `1` in
@@ -80,8 +80,13 @@ and `130` for interruption before publication.
   declare `reservedPeriodsAllowed`, `maxWeeklyReservedLessonsPerCohort`, `dayEdgeOnly` (each lesson is the cohort's
   first or last of the day), and `maxDailyLessonsPerCohort`; each is a hard rule. An occupied reserved period counts
   as part of the cohort's day for gaps. MVK bounds grades 1 through 3 at slot `2` and lets Õpiabi use slot `0` once a
-  week per cohort, at most once a day, and only at the start or end of the day. Workspace repair creates catalog `6`
-  successors.
+  week per cohort, at most once a day, and only at the start or end of the day.
+- Catalog `7` adds a hard per-cohort `dailyLessonSpreadLimit` (`hard.cohort-daily-spread`). It uses the weekly-balance
+  count with the limit in place of `maxDailyLessonSpread`, so a feasible timetable has no pair of available weekdays
+  whose lesson counts differ by more than the limit. Omitting it imposes no hard limit, and `maxDailyLessonSpread`
+  remains the preferred target. MVK limits grades 1 through 4 to `1` and grades 5 through 9 to `2`. Workspace repair
+  creates catalog `7` successors, and the workspace plans and repairs with a one-minute limit because MVK does not
+  reliably reach a feasible catalog `7` timetable in 30 seconds.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
   infeasibility or optimality.
 

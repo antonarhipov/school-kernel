@@ -88,7 +88,7 @@ public class KernelPlanner {
                     "plan",
                     "--definition", definitionPath.toString(),
                     "--output", outputPath.toString(),
-                    "--time-limit", "30s",
+                    "--time-limit", "60s",
                     "--correlation-id", correlationId);
             Process process = processes.start(arguments);
             holder.process = process;
@@ -98,7 +98,7 @@ public class KernelPlanner {
             }
             Thread stdout = Thread.ofVirtual().start(() -> drain(process.getInputStream()));
             Thread stderr = Thread.ofVirtual().start(() -> drain(process.getErrorStream()));
-            boolean completed = process.waitFor(40, TimeUnit.SECONDS);
+            boolean completed = process.waitFor(70, TimeUnit.SECONDS);
             if (!completed) {
                 terminate(process);
                 join(stdout, stderr);
@@ -119,7 +119,7 @@ public class KernelPlanner {
                         || !definition.path("schoolId").stringValue().equals(result.path("schoolId").stringValue())
                         || result.path("seed").longValue() != 0L
                         || !"TIME".equals(result.path("limit").path("type").stringValue())
-                        || !"PT30S".equals(result.path("limit").path("duration").stringValue())
+                        || !"PT1M".equals(result.path("limit").path("duration").stringValue())
                         || "STEP_LIMIT".equals(result.path("terminationReason").stringValue())
                         || !result.path("timetable").path("assignments").isArray()) {
                     throw new WorkspaceProblem(
@@ -168,7 +168,7 @@ public class KernelPlanner {
             JsonNode currentResult,
             JsonNode successorDefinition,
             String limit) {
-        if (!"PT30S".equals(limit) && !"PT2M".equals(limit)) {
+        if (!"PT1M".equals(limit) && !"PT2M".equals(limit)) {
             throw new IllegalArgumentException("Unsupported repair limit");
         }
         String correlationId = UUID.randomUUID().toString();
@@ -194,7 +194,7 @@ public class KernelPlanner {
             writePrivate(currentDefinitionPath, CanonicalJson.bytes(currentDefinition));
             writePrivate(currentResultPath, CanonicalJson.bytes(currentResult));
             writePrivate(successorPath, CanonicalJson.bytes(successorDefinition));
-            String cliLimit = "PT2M".equals(limit) ? "120s" : "30s";
+            String cliLimit = "PT2M".equals(limit) ? "120s" : "60s";
             List<String> arguments = List.of(
                     executable,
                     "replan",
@@ -212,7 +212,7 @@ public class KernelPlanner {
             }
             Thread stdout = Thread.ofVirtual().start(() -> drain(process.getInputStream()));
             Thread stderr = Thread.ofVirtual().start(() -> drain(process.getErrorStream()));
-            long watchdogSeconds = "PT2M".equals(limit) ? 130 : 40;
+            long watchdogSeconds = "PT2M".equals(limit) ? 130 : 70;
             boolean completed = process.waitFor(watchdogSeconds, TimeUnit.SECONDS);
             if (!completed) {
                 terminate(process);
@@ -366,7 +366,7 @@ public class KernelPlanner {
             String terminationReason,
             boolean feasible) {
         LOG.info(
-                "correlationId={} runId={} kernelCommand=plan exitClass={} elapsedTimeMs={} configuredLimit=PT30S terminationReason={} feasible={}",
+                "correlationId={} runId={} kernelCommand=plan exitClass={} elapsedTimeMs={} configuredLimit=PT1M terminationReason={} feasible={}",
                 correlationId, runId, exitClass,
                 Duration.ofNanos(System.nanoTime() - started).toMillis(),
                 terminationReason == null ? "NONE" : terminationReason,

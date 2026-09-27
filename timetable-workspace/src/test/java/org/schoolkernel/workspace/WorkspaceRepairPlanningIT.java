@@ -99,12 +99,12 @@ class WorkspaceRepairPlanningIT {
         JsonNode draftBefore = storedDocument().path("repairDraft").deepCopy();
         Session draftSession = session();
 
-        HttpResponse<String> started = command("POST", "/api/runs", draftSession, "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> started = command("POST", "/api/runs", draftSession, "{\"limit\":\"PT1M\"}");
         assertEquals(202, started.statusCode(), started.body());
         JsonNode solving = body(started);
         assertEquals("SOLVING_REPAIR", solving.path("state").stringValue());
         assertTrue(solving.path("acceptedTimetable").booleanValue());
-        assertEquals("PT30S", solving.path("workspace").path("run").path("limit").stringValue());
+        assertEquals("PT1M", solving.path("workspace").path("run").path("limit").stringValue());
         assertEquals(acceptedBefore, solving.path("workspace").path("acceptedBaseline"));
         UUID runId = UUID.fromString(solving.path("workspace").path("run").path("id").stringValue());
 
@@ -113,19 +113,19 @@ class WorkspaceRepairPlanningIT {
         assertEquals(409, frozen.statusCode());
         assertEquals("INVALID_WORKSPACE_TRANSITION", body(frozen).path("code").stringValue());
 
-        JsonNode proposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        JsonNode proposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(75));
         JsonNode proposal = proposalSnapshot.path("workspace").path("proposal");
         assertEquals("REPAIR", proposal.path("kind").stringValue());
         assertEquals(acceptedBefore.path("result").path("timetableRevision"), proposal.path("acceptedTimetableRevision"));
         assertEquals(draftBefore.path("intentRevision"), proposal.path("intentRevision"));
         assertEquals(acceptedBefore.path("result").path("inputRevision"), proposal.path("definition").path("basedOnRevision"));
-        assertEquals(6, proposal.path("definition").path("catalogVersion").intValue());
-        assertEquals(6, proposal.path("result").path("catalogVersion").intValue());
+        assertEquals(7, proposal.path("definition").path("catalogVersion").intValue());
+        assertEquals(7, proposal.path("result").path("catalogVersion").intValue());
         assertEquals(7, proposal.path("result").path("score").path("constraintBreakdown").size());
         assertEquals(proposal.path("successorDefinitionRevision"), proposal.path("result").path("inputRevision"));
         assertEquals(proposal.path("proposedTimetableRevision"), proposal.path("result").path("timetableRevision"));
         assertEquals("FEASIBLE", proposal.path("result").path("status").stringValue());
-        assertEquals("PT30S", proposal.path("result").path("limit").path("duration").stringValue());
+        assertEquals("PT1M", proposal.path("result").path("limit").path("duration").stringValue());
         JsonNode changeReport = proposal.path("result").path("changeReport");
         assertEquals(6, changeReport.size());
         for (String category : new String[] {"additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves"}) {
@@ -220,9 +220,9 @@ class WorkspaceRepairPlanningIT {
         assertTrue(firstDraft.path("conflicts").isEmpty());
         assertEquals(originalAccepted, storedDocument().path("acceptedBaseline"));
 
-        HttpResponse<String> firstStarted = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> firstStarted = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         assertEquals(202, firstStarted.statusCode(), firstStarted.body());
-        JsonNode firstProposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        JsonNode firstProposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(75));
         JsonNode firstProposal = firstProposalSnapshot.path("workspace").path("proposal").deepCopy();
         assertEquals(originalAccepted.path("result").path("timetableRevision"),
                 firstProposal.path("acceptedTimetableRevision"));
@@ -267,9 +267,9 @@ class WorkspaceRepairPlanningIT {
                 .findFirst().orElseThrow();
         assertFalse(previouslyPinnedLesson.has("roomLock"));
 
-        HttpResponse<String> secondStarted = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> secondStarted = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         assertEquals(202, secondStarted.statusCode(), secondStarted.body());
-        JsonNode secondProposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        JsonNode secondProposalSnapshot = awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(75));
         JsonNode secondProposal = secondProposalSnapshot.path("workspace").path("proposal").deepCopy();
         assertEquals(firstAccepted.path("result").path("timetableRevision"),
                 secondProposal.path("acceptedTimetableRevision"));
@@ -385,7 +385,7 @@ class WorkspaceRepairPlanningIT {
         JsonNode intentBefore = storedDocument().path("repairDraft").path("intent").deepCopy();
 
         processes.failure = RepairFailure.NO_FEASIBLE;
-        HttpResponse<String> unsuccessful = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> unsuccessful = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         assertEquals(202, unsuccessful.statusCode(), unsuccessful.body());
         awaitState("REPAIR_DRAFT", Duration.ofSeconds(5));
         JsonNode failed = body(get("/api/workspace"));
@@ -435,7 +435,7 @@ class WorkspaceRepairPlanningIT {
                 new FailureExpectation(RepairFailure.INTERRUPTED, "INTERRUPTED"),
                 new FailureExpectation(RepairFailure.MISMATCHED, "REJECTED_OUTPUT"))) {
             processes.failure = expectation.failure();
-            HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+            HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
             assertEquals(202, started.statusCode(), started.body());
             JsonNode snapshot = awaitState("REPAIR_DRAFT", Duration.ofSeconds(5));
             assertEquals(expectation.code(), snapshot.path("workspace").path("lastRun").path("code").stringValue());
@@ -463,10 +463,10 @@ class WorkspaceRepairPlanningIT {
         JsonNode draftBefore = storedDocument().path("repairDraft").deepCopy();
 
         processes.blockReplan = true;
-        HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         processes.awaitBlocked();
         int processCount = processes.commands().size();
-        HttpResponse<String> conflict = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> conflict = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         assertEquals(409, conflict.statusCode());
         assertEquals(processCount, processes.commands().size());
         String runId = body(started).path("workspace").path("run").path("id").stringValue();
@@ -478,7 +478,7 @@ class WorkspaceRepairPlanningIT {
 
         processes.reset();
         processes.failure = RepairFailure.WATCHDOG;
-        command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         JsonNode timedOut = awaitState("REPAIR_DRAFT", Duration.ofSeconds(5));
         assertEquals("KERNEL_TIMEOUT", timedOut.path("workspace").path("lastRun").path("code").stringValue());
         assertTrue(processes.lastBlocking.forceCalled);
@@ -486,7 +486,7 @@ class WorkspaceRepairPlanningIT {
 
         processes.reset();
         processes.blockReplan = true;
-        command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         processes.awaitBlocked();
         ObjectNode changed = (ObjectNode) storedDocument();
         changed.remove("run");
@@ -510,7 +510,7 @@ class WorkspaceRepairPlanningIT {
         JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
         JsonNode draftBefore = storedDocument().path("repairDraft").deepCopy();
         Session beforeStart = session();
-        HttpResponse<String> started = command("POST", "/api/runs", beforeStart, "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> started = command("POST", "/api/runs", beforeStart, "{\"limit\":\"PT1M\"}");
         UUID runId = UUID.fromString(body(started).path("workspace").path("run").path("id").stringValue());
         HttpResponse<String> cancelled = command("DELETE", "/api/runs/" + runId, session(), "");
         assertEquals(200, cancelled.statusCode(), cancelled.body());
@@ -519,7 +519,7 @@ class WorkspaceRepairPlanningIT {
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
         assertFalse(storedDocument().has("proposal"));
 
-        HttpResponse<String> stale = command("POST", "/api/runs", beforeStart, "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> stale = command("POST", "/api/runs", beforeStart, "{\"limit\":\"PT1M\"}");
         assertEquals(412, stale.statusCode());
         JsonNode beforeRecovery = storedDocument();
         UUID interrupted = UUID.randomUUID();
@@ -581,9 +581,9 @@ class WorkspaceRepairPlanningIT {
                     "{\"action\":\"PIN\",\"lessonId\":\"lesson-science-1\",\"dimensions\":[\"ROOM\"]}");
             assertEquals(200, pinned.statusCode(), pinned.body());
         }
-        HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> started = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         assertEquals(202, started.statusCode(), started.body());
-        ObjectNode snapshot = (ObjectNode) awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(45));
+        ObjectNode snapshot = (ObjectNode) awaitState("REPAIR_PROPOSAL", Duration.ofSeconds(75));
         if (addRoomPin) cachedProposalWithPin = snapshot.deepCopy();
         else cachedProposalWithoutPin = snapshot.deepCopy();
         return snapshot;
@@ -696,7 +696,7 @@ class WorkspaceRepairPlanningIT {
                     case MISMATCHED -> {
                         result.put("schemaVersion", 1).put("status", "FEASIBLE")
                                 .put("correlationId", "wrong").put("schoolId", "wrong").put("seed", 0);
-                        result.putObject("limit").put("type", "TIME").put("duration", "PT30S");
+                        result.putObject("limit").put("type", "TIME").put("duration", "PT1M");
                         result.put("terminationReason", "TIME_LIMIT").putObject("timetable").putArray("assignments");
                     }
                     default -> throw new IllegalStateException("Unsupported configured failure " + failure);

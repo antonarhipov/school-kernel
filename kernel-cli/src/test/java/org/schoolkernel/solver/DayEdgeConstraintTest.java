@@ -179,7 +179,7 @@ class DayEdgeConstraintTest {
                 .filter(PeriodValue::reserved).map(PeriodValue::id).collect(Collectors.toSet()));
         var support = permitted.getLessons().stream()
                 .filter(lesson -> lesson.getId().equals("1a.opiabi.01")).findFirst().orElseThrow();
-        assertEquals(new PlacementRules(2, 3, true, 1, true, 1), support.getPlacementRules());
+        assertEquals(new PlacementRules(2, 3, true, 1, true, 1, 1), support.getPlacementRules());
 
         mvk.withArray("subjects").forEach(subject -> {
             ((ObjectNode) subject).remove("reservedPeriodsAllowed");

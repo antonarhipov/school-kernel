@@ -12,7 +12,8 @@ public final class KernelCatalog {
     public static final int START_QUALITY_VERSION = 3;
     public static final int DAILY_BALANCE_VERSION = 4;
     public static final int NO_GAPS_VERSION = 5;
-    public static final int VERSION = 6;
+    public static final int DAY_EDGES_VERSION = 6;
+    public static final int VERSION = 7;
 
     public enum Category {
         HARD,
@@ -51,6 +52,7 @@ public final class KernelCatalog {
     public static final ConstraintDescriptor SUBJECT_DAY_EDGE = hard("hard.subject-day-edge");
     public static final ConstraintDescriptor SUBJECT_DAILY_LIMIT = hard("hard.subject-daily-limit");
     public static final ConstraintDescriptor SUBJECT_RESERVED_LIMIT = hard("hard.subject-reserved-limit");
+    public static final ConstraintDescriptor COHORT_DAILY_SPREAD = hard("hard.cohort-daily-spread");
     public static final ConstraintDescriptor PERIOD_MOVE =
             new ConstraintDescriptor("stability.period-move", Category.PERIOD_STABILITY, null);
     public static final ConstraintDescriptor ROOM_ONLY_MOVE =
@@ -80,6 +82,7 @@ public final class KernelCatalog {
             SUBJECT_DAY_EDGE,
             SUBJECT_DAILY_LIMIT,
             SUBJECT_RESERVED_LIMIT,
+            COHORT_DAILY_SPREAD,
             PERIOD_MOVE,
             ROOM_ONLY_MOVE,
             TEACHER_GAP,
@@ -134,6 +137,7 @@ public final class KernelCatalog {
                 || catalogVersion == START_QUALITY_VERSION
                 || catalogVersion == DAILY_BALANCE_VERSION
                 || catalogVersion == NO_GAPS_VERSION
+                || catalogVersion == DAY_EDGES_VERSION
                 || catalogVersion == VERSION;
     }
 

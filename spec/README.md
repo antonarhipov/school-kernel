@@ -35,6 +35,8 @@ Current feature directories:
   `maxDailyGaps` allowance, superseding the soft-only gap handling in catalog 4.
 - [`kernel-day-edges`](kernel-day-edges/) specifies catalog 6 per-cohort start bounds and per-subject placement
   rules, including the first exception to a period reservation (MVK's Õpiabi in slot 0).
+- [`kernel-cohort-daily-spread`](kernel-cohort-daily-spread/) specifies the catalog 7 hard per-cohort daily lesson
+  spread limit and the one-minute workspace run it requires for MVK.
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
 

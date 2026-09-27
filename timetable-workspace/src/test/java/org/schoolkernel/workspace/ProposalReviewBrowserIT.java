@@ -21,7 +21,7 @@ import tools.jackson.databind.node.ObjectNode;
 /** UC-4 of the workbench specs: reviewing, navigating and deciding a repair proposal beside the timetable. */
 class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
     private static final Duration SCALE = Duration.ofSeconds(20);
-    private static final Duration VERIFIED_SOLVE = Duration.ofSeconds(30);
+    private static final Duration VERIFIED_SOLVE = Duration.ofSeconds(70);
 
     @Test
     @DisplayName("UC-4 extensions 1b/1c/2a/3a/3b/4a/6c: comparison shapes and narrow read-only agenda in real browser")
@@ -171,7 +171,7 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
                 """), workbench.value("[...document.querySelectorAll('.review-category')].map(c=>[c.dataset.category,Number(c.querySelector('h4 span').textContent)])"));
         assertEquals(JSON.readTree("""
                 [["Unique changed lessons","2"],["Protected accepted assignments","1"],
-                ["Termination reason","TIME_LIMIT"],["Execution limit","PT30S"],["Elapsed time","2004 ms"]]
+                ["Termination reason","TIME_LIMIT"],["Execution limit","PT1M"],["Elapsed time","2004 ms"]]
                 """), workbench.value("[...document.querySelectorAll('.proposal-facts div')].map(row=>[row.querySelector('dt').textContent,row.querySelector('dd').textContent])"));
         assertEquals(JSON.readTree("[\"Direct effects of your intent: 1\",\"Solver ripple effects: 1\"]"),
                 workbench.value("[...document.querySelectorAll('.impact-totals span')].map(el=>el.textContent)"));

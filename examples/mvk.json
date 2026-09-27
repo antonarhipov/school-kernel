@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 6,
+  "catalogVersion": 7,
   "schoolId": "merivalja-kool",
   "displayName": "Merivälja Kool",
   "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
@@ -502,6 +502,7 @@
       "displayName": "1A",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -509,6 +510,7 @@
       "displayName": "1B",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -516,6 +518,7 @@
       "displayName": "1C",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -523,6 +526,7 @@
       "displayName": "2A",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -530,6 +534,7 @@
       "displayName": "2B",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -537,6 +542,7 @@
       "displayName": "2C",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -544,6 +550,7 @@
       "displayName": "3A",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
@@ -551,97 +558,113 @@
       "displayName": "3B",
       "size": 24,
       "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2
     },
     {
       "id": "4a",
       "displayName": "4A",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1
     },
     {
       "id": "4b",
       "displayName": "4B",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 1
     },
     {
       "id": "5a",
       "displayName": "5A",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "5b",
       "displayName": "5B",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "5d",
       "displayName": "5D",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "6a",
       "displayName": "6A",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "6b",
       "displayName": "6B",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "6c",
       "displayName": "6C",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "7a",
       "displayName": "7A",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "7b",
       "displayName": "7B",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "8a",
       "displayName": "8A",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "8b",
       "displayName": "8B",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "9a",
       "displayName": "9A",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "9b",
       "displayName": "9B",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     },
     {
       "id": "9c",
       "displayName": "9C",
       "size": 24,
-      "maxDailyLessonSpread": 1
+      "maxDailyLessonSpread": 1,
+      "dailyLessonSpreadLimit": 2
     }
   ],
   "rooms": [

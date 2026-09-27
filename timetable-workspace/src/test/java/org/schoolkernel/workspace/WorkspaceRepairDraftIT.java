@@ -93,7 +93,7 @@ class WorkspaceRepairDraftIT {
 
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
         assertEquals(1, acceptedBefore.path("definition").path("catalogVersion").intValue());
-        assertEquals(6, compiled.path("catalogVersion").intValue());
+        assertEquals(7, compiled.path("catalogVersion").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(JSON.readTree("[\"mon-2\",\"mon-3\"]"),
                 compiled.path("teachers").get(0).path("availablePeriodIds"));
@@ -137,7 +137,7 @@ class WorkspaceRepairDraftIT {
         JsonNode started = body(command("POST", "/api/repair-draft", session(), teacherUnavailable("mon-1")));
         assertEquals("REPAIR_DRAFT", started.path("state").stringValue());
         ObjectNode compiled = repairs.compiledDefinition(repository.load().document());
-        assertEquals(6, compiled.path("catalogVersion").intValue());
+        assertEquals(7, compiled.path("catalogVersion").intValue());
         assertEquals(2, compiled.path("cohorts").get(0).path("maxDailyLessonSpread").intValue());
         assertEquals("sha256:accepted-input", compiled.path("basedOnRevision").stringValue());
         assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
@@ -183,7 +183,7 @@ class WorkspaceRepairDraftIT {
         JsonNode beforeRefusal = storedDocument().deepCopy();
         long versionBeforeRefusal = jdbc.sql("SELECT version FROM workspace_aggregate WHERE workspace_id=1")
                 .query(Long.class).single();
-        HttpResponse<String> refusedRun = command("POST", "/api/runs", session(), "{\"limit\":\"PT30S\"}");
+        HttpResponse<String> refusedRun = command("POST", "/api/runs", session(), "{\"limit\":\"PT1M\"}");
         assertEquals(409, refusedRun.statusCode(), "Workbench layout UC-2 ext 7a: conflict is refused below the UI");
         assertEquals("DRAFT_CONFLICT", body(refusedRun).path("code").stringValue());
         assertEquals(beforeRefusal, storedDocument(), "conflict refusal preserves Current and the exact Draft");

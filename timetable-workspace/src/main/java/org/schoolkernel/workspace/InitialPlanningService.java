@@ -16,7 +16,7 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class InitialPlanningService {
-    private static final String LIMIT = "PT30S";
+    private static final String LIMIT = "PT1M";
 
     private final WorkspaceRepository repository;
     private final WorkspaceMutation mutation;
@@ -266,9 +266,9 @@ public class InitialPlanningService {
                 && proposal.path("runId").isTextual()
                 && text(proposal.path("runId"))
                         .equals(text(current.document().path("lastRun").path("id")))
-                && "PT30S".equals(text(proposal.path("limit")))
+                && LIMIT.equals(text(proposal.path("limit")))
                 && "TIME".equals(text(result.path("limit").path("type")))
-                && "PT30S".equals(text(result.path("limit").path("duration")))
+                && LIMIT.equals(text(result.path("limit").path("duration")))
                 && text(proposal.path("terminationReason")) != null
                 && text(proposal.path("terminationReason"))
                         .equals(text(result.path("terminationReason")))

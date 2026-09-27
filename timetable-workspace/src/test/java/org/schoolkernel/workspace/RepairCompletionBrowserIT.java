@@ -94,7 +94,7 @@ class RepairCompletionBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(original, running.path("acceptedBaseline"));
         assertEquals(draft, running.path("repairDraft"));
         assertFalse(running.has("proposal"));
-        assertEquals("PT30S", running.path("run").path("limit").stringValue());
+        assertEquals("PT1M", running.path("run").path("limit").stringValue());
         workbench.range("WEEK");
         assertWideJourneyPhase("SOLVING", "#cancel-run", "solving");
         workbench.range("DAY");

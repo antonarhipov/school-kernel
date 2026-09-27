@@ -39,7 +39,7 @@ class KernelPlannerTest {
     Path temporaryRoot;
 
     @Test
-    @DisplayName("UC-2 RULE-10/12/13: planner uses explicit private files, the 30-second preset, bounded process channels, and complete cleanup")
+    @DisplayName("UC-2 RULE-10/12/13: planner uses explicit private files, the 1-minute preset, bounded process channels, and complete cleanup")
     void usesPrivateBoundedProcessBoundaryAndCleansIt() throws Exception {
         AtomicBoolean verified = new AtomicBoolean();
         KernelProcessLauncher launcher = new ResultWritingLauncher(false);
@@ -236,7 +236,7 @@ class KernelPlannerTest {
         }
 
         KernelPlanner.Outcome unsuccessful = planner(new StructuredFailureLauncher(3, "NO_FEASIBLE_SOLUTION_FOUND"))
-                .replan(UUID.randomUUID(), definition(), JSON.createObjectNode(), definition(), "PT30S");
+                .replan(UUID.randomUUID(), definition(), JSON.createObjectNode(), definition(), "PT1M");
         assertEquals(KernelPlanner.Kind.FAILED, unsuccessful.kind());
         assertEquals("NO_FEASIBLE_SOLUTION_FOUND", unsuccessful.code());
         assertFalse(unsuccessful.result().has("timetable"));
@@ -295,7 +295,7 @@ class KernelPlannerTest {
         @Override
         public Process start(List<String> arguments) throws java.io.IOException {
             assertEquals("plan", arguments.get(1));
-            assertTrue(arguments.containsAll(List.of("--definition", "--output", "--time-limit", "30s", "--correlation-id")));
+            assertTrue(arguments.containsAll(List.of("--definition", "--output", "--time-limit", "60s", "--correlation-id")));
             assertFalse(arguments.contains("--debug"));
             assertFalse(arguments.contains("--seed"));
             assertFalse(arguments.contains("--step-limit"));
@@ -317,7 +317,7 @@ class KernelPlannerTest {
             result.put("seed", 0);
             ObjectNode limit = result.putObject("limit");
             limit.put("type", "TIME");
-            limit.put("duration", mismatch ? "PT2M" : "PT30S");
+            limit.put("duration", mismatch ? "PT2M" : "PT1M");
             result.put("terminationReason", "TIME_LIMIT");
             result.put("inputRevision", revision('1'));
             result.put("timetableRevision", revision('2'));

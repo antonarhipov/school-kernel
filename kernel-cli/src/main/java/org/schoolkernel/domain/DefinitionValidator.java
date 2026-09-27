@@ -447,7 +447,9 @@ public final class DefinitionValidator {
                                 ? SchoolDefinition.Cohort.NO_START_BOUND : value.latestStartSlot(),
                         value.preferredLatestStartSlot() == null
                                 ? SchoolDefinition.Cohort.DEFAULT_PREFERRED_START_SLOT
-                                : value.preferredLatestStartSlot()))
+                                : value.preferredLatestStartSlot(),
+                        value.dailyLessonSpreadLimit() == null
+                                ? SchoolDefinition.Cohort.NO_SPREAD_LIMIT : value.dailyLessonSpreadLimit()))
                 .toList();
         var rooms = input.rooms().stream()
                 .map(value -> new SchoolDefinition.Room(

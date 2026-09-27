@@ -152,11 +152,34 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("Daily spread RULE-1: catalog 7 accepts a hard daily lesson spread limit; older catalogs reject it")
+    void dailySpreadLimitSchemaAndRevision() throws Exception {
+        var definition = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        definition.put("catalogVersion", 7);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        var cohort = (tools.jackson.databind.node.ObjectNode) definition.withArray("cohorts").get(0);
+        String before = new RevisionService().definitionRevision(definition);
+        cohort.put("dailyLessonSpreadLimit", 0);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        assertNotEquals(before, new RevisionService().definitionRevision(definition));
+        for (int version : new int[] {1, 2, 3, 4, 5, 6}) {
+            var oldCatalog = definition.deepCopy();
+            oldCatalog.put("catalogVersion", version);
+            assertFalse(new DefinitionSchemaValidator().validate(oldCatalog).isEmpty());
+        }
+        cohort.put("dailyLessonSpreadLimit", -1);
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        cohort.put("dailyLessonSpreadLimit", 1.5);
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+    }
+
+    @Test
     @DisplayName("Cohort balance UC-1 G5/RULE-5: MVK has the exact gap, daily-load and start preference configuration")
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
         var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
-        assertEquals(6, definition.path("catalogVersion").intValue());
+        assertEquals(7, definition.path("catalogVersion").intValue());
         var cohorts = definition.path("cohorts");
         assertEquals(List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "4a", "4b",
                         "5a", "5b", "5d", "6a", "6b", "6c", "7a", "7b", "8a", "8b", "9a", "9b", "9c"),
@@ -173,6 +196,8 @@ class ContractTest {
             if (youngest) {
                 assertEquals(2, cohort.path("latestStartSlot").intValue());
             }
+            boolean primary = cohort.path("id").stringValue().charAt(0) <= '4';
+            assertEquals(primary ? 1 : 2, cohort.path("dailyLessonSpreadLimit").intValue());
         });
         definition.path("subjects").forEach(subject -> {
             if (subject.path("id").stringValue().equals("opiabi")) {

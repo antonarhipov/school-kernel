@@ -41,7 +41,8 @@ public record SchoolDefinitionDto(
             Integer maxDailyLessonSpread,
             Integer maxDailyGaps,
             Integer latestStartSlot,
-            Integer preferredLatestStartSlot) {}
+            Integer preferredLatestStartSlot,
+            Integer dailyLessonSpreadLimit) {}
 
     public record RoomDto(
             String id,

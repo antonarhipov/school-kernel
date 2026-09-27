@@ -110,6 +110,11 @@ public final class HardConstraintDiagnostics {
                         .forEach(lesson -> entityIds.add(lesson.getPeriod().id()));
                 examples.get(KernelCatalog.SUBJECT_RESERVED_LIMIT.id()).add(List.copyOf(entityIds));
             });
+            if (SchoolConstraintProvider.countCohortSpreadExcess(cohortWeek) > 0) {
+                var entityIds = new ArrayList<String>(List.of(cohortWeek.getFirst().getCohortId()));
+                SchoolConstraintProvider.dailySpreadExtremes(cohortWeek).forEach(day -> entityIds.add(day.name()));
+                examples.get(KernelCatalog.COHORT_DAILY_SPREAD.id()).add(List.copyOf(entityIds));
+            }
         }
 
         return KernelCatalog.hardConstraintIds().stream()

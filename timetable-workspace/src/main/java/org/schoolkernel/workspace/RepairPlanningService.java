@@ -16,7 +16,7 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class RepairPlanningService {
-    private static final String NORMAL_LIMIT = "PT30S";
+    private static final String NORMAL_LIMIT = "PT1M";
     private static final String RETRY_LIMIT = "PT2M";
     private static final Set<String> CHANGE_CATEGORIES = Set.of(
             "additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves");
@@ -289,7 +289,7 @@ public class RepairPlanningService {
         throw new WorkspaceProblem(
                 HttpStatus.UNPROCESSABLE_ENTITY,
                 "INVALID_RUN_LIMIT",
-                "Choose the 30-second repair run or the available two-minute retry.");
+                "Choose the 1-minute repair run or the available two-minute retry.");
     }
 
     private static WorkspaceProblem transition(String message) {

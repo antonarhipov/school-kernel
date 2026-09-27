@@ -101,6 +101,21 @@ class DefinitionValidatorTest {
     }
 
     @Test
+    void dailySpreadLimitIsUnboundedUnlessDeclared() throws Exception {
+        ObjectNode input = validInput();
+        input.put("catalogVersion", 7);
+        var validator = new DefinitionValidator();
+        var defaults = validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition();
+        assertEquals(SchoolDefinition.Cohort.NO_SPREAD_LIMIT, defaults.cohorts().getFirst().dailyLessonSpreadLimit());
+
+        ((ObjectNode) input.withArray("cohorts").get(0)).put("dailyLessonSpreadLimit", 2);
+        var declared = validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition();
+        assertEquals(2, declared.cohorts().getFirst().dailyLessonSpreadLimit());
+    }
+
+    @Test
     void reservedPeriodLockIsValidOnlyForPermittedSubjects() throws Exception {
         ObjectNode input = validInput();
         input.put("catalogVersion", 6);

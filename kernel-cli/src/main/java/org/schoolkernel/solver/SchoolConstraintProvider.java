@@ -44,6 +44,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 subjectDayEdge(factory),
                 subjectDailyLimit(factory),
                 subjectReservedLimit(factory),
+                cohortDailySpread(factory),
                 periodMove(factory),
                 roomOnlyMove(factory),
                 teacherGap(factory),
@@ -205,6 +206,21 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .filter((subjectWeek, count) -> count > subjectWeek.limit())
                 .penalize(DAY_SHAPE_HARD, (subjectWeek, count) -> count - subjectWeek.limit())
                 .asConstraint(KernelCatalog.SUBJECT_RESERVED_LIMIT.id());
+    }
+
+    public Constraint cohortDailySpread(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getPlacementRules().dailyLessonSpreadLimit() != PlacementRules.UNLIMITED)
+                .groupBy(
+                        lesson -> new CohortWeek(lesson.getCohortId(),
+                                lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog(),
+                                lesson.getPlacementRules().dailyLessonSpreadLimit()),
+                        ConstraintCollectors.toList(lesson -> lesson.getPeriod().weekday()))
+                .filter((cohortWeek, weekdays) -> countCohortWeekImbalance(weekdays, cohortWeek.available(),
+                        cohortWeek.catalog(), cohortWeek.maxDailyLessonSpread()) > 0)
+                .penalize(DAY_SHAPE_HARD, (cohortWeek, weekdays) -> (int) countCohortWeekImbalance(
+                        weekdays, cohortWeek.available(), cohortWeek.catalog(), cohortWeek.maxDailyLessonSpread()))
+                .asConstraint(KernelCatalog.COHORT_DAILY_SPREAD.id());
     }
 
     public Constraint periodMove(ConstraintFactory factory) {
@@ -465,25 +481,57 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 sample.getCohortMaxDailyLessonSpread());
     }
 
+    /** The weekly-balance count against the cohort's hard limit instead of its preferred spread. */
+    static long countCohortSpreadExcess(List<PlanningLesson> lessons) {
+        if (lessons.isEmpty()) {
+            return 0;
+        }
+        PlanningLesson sample = lessons.getFirst();
+        int limit = sample.getPlacementRules().dailyLessonSpreadLimit();
+        if (limit == PlacementRules.UNLIMITED) {
+            return 0;
+        }
+        return countCohortWeekImbalance(lessons.stream().map(lesson -> lesson.getPeriod().weekday()).toList(),
+                sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog(), limit);
+    }
+
+    /** The cohort's busiest and quietest available weekdays, earliest first on ties. */
+    static List<DayOfWeek> dailySpreadExtremes(List<PlanningLesson> lessons) {
+        PlanningLesson sample = lessons.getFirst();
+        Map<DayOfWeek, Long> counts = dailyCounts(
+                lessons.stream().map(lesson -> lesson.getPeriod().weekday()).toList(),
+                sample.getCohortAvailablePeriodIds(), sample.getPeriodCatalog());
+        var byCount = java.util.Comparator.<Map.Entry<DayOfWeek, Long>>comparingLong(Map.Entry::getValue);
+        DayOfWeek busiest = counts.entrySet().stream().sorted(byCount.reversed()).findFirst().orElseThrow().getKey();
+        DayOfWeek quietest = counts.entrySet().stream().sorted(byCount).findFirst().orElseThrow().getKey();
+        return List.of(busiest, quietest);
+    }
+
     private static long countCohortWeekImbalance(
             List<DayOfWeek> assignments, Set<String> available, List<PeriodValue> catalog,
             int maxDailyLessonSpread) {
-        List<DayOfWeek> days = catalog.stream()
-                .filter(period -> !period.reserved() && available.contains(period.id()))
-                .map(PeriodValue::weekday)
-                .distinct()
-                .toList();
-        var dailyCounts = new EnumMap<DayOfWeek, Long>(DayOfWeek.class);
-        assignments.forEach(day -> dailyCounts.merge(day, 1L, Long::sum));
+        List<Long> counts = List.copyOf(dailyCounts(assignments, available, catalog).values());
         long imbalance = 0;
-        for (int left = 0; left < days.size(); left++) {
-            for (int right = left + 1; right < days.size(); right++) {
-                long difference = Math.abs(dailyCounts.getOrDefault(days.get(left), 0L)
-                        - dailyCounts.getOrDefault(days.get(right), 0L));
+        for (int left = 0; left < counts.size(); left++) {
+            for (int right = left + 1; right < counts.size(); right++) {
+                long difference = Math.abs(counts.get(left) - counts.get(right));
                 imbalance += Math.max(0L, difference - maxDailyLessonSpread);
             }
         }
         return imbalance;
+    }
+
+    /** Lesson counts for each weekday with an available regular period, including untaught days. */
+    private static Map<DayOfWeek, Long> dailyCounts(
+            List<DayOfWeek> assignments, Set<String> available, List<PeriodValue> catalog) {
+        var dailyCounts = new EnumMap<DayOfWeek, Long>(DayOfWeek.class);
+        catalog.stream()
+                .filter(period -> !period.reserved() && available.contains(period.id()))
+                .forEach(period -> dailyCounts.put(period.weekday(), 0L));
+        assignments.stream()
+                .filter(dailyCounts::containsKey)
+                .forEach(day -> dailyCounts.merge(day, 1L, Long::sum));
+        return dailyCounts;
     }
 
     static long undesirableMatchCount(PlanningLesson lesson) {

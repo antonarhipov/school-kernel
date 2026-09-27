@@ -111,6 +111,9 @@ public final class ScheduleEvaluator {
         cohorts.values().forEach(lessons -> hard.compute(
                 KernelCatalog.SUBJECT_RESERVED_LIMIT.id(),
                 (key, count) -> count + sum(SchoolConstraintProvider.subjectReservedExcess(lessons))));
+        cohorts.values().forEach(lessons -> hard.compute(
+                KernelCatalog.COHORT_DAILY_SPREAD.id(),
+                (key, count) -> count + SchoolConstraintProvider.countCohortSpreadExcess(lessons)));
         cohortDays.values().forEach(lessons -> soft.compute(
                 KernelCatalog.COHORT_GAP.id(),
                 (key, count) -> count + SchoolConstraintProvider.countCohortGaps(lessons)));
