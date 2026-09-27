@@ -8,5 +8,6 @@ public enum WorkspaceState {
     ACCEPTED_BASELINE,
     REPAIR_DRAFT,
     SOLVING_REPAIR,
-    REPAIR_PROPOSAL
+    REPAIR_PROPOSAL,
+    MANUAL_DRAFT
 }

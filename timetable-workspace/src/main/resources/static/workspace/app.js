@@ -10,6 +10,7 @@ let etag;
 let csrf;
 let pollTimer;
 let acceptedModel;
+let manualDraftModel;
 let proposedModel;
 let comparison;
 let currentSnapshot;
@@ -56,7 +57,7 @@ function render(snapshot) {
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
   const school = snapshot.workspace.school;
-  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'INITIAL_PROPOSAL'].includes(snapshot.state));
+  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'INITIAL_PROPOSAL', 'MANUAL_DRAFT'].includes(snapshot.state));
   if (snapshot.state === 'EMPTY') {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
@@ -151,6 +152,31 @@ function render(snapshot) {
     if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
     else if (inspectionState.current().mode === 'DRAFT') renderRepair(snapshot, schoolName);
     else renderRepairProposal(snapshot, schoolName);
+  } else if (snapshot.state === 'MANUAL_DRAFT') {
+    currentLabel.textContent = M.manualDraft(schoolName);
+    acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
+    manualDraftModel = makeAcceptedModel({
+      definition: snapshot.workspace.acceptedBaseline.definition,
+      result: {
+        timetable: {
+          assignments: snapshot.workspace.manualDraft?.assignments || snapshot.workspace.acceptedBaseline.result.timetable.assignments
+        }
+      }
+    });
+    initializeInspectionState(snapshot.workspace.school?.id);
+    syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
+    const activeModel = inspectionState.current().mode === 'DRAFT' ? manualDraftModel : acceptedModel;
+    const selected = activeModel.assignmentMap.get(view.selectedLessonId);
+    if (view.selectedLessonId && !isRepresented(selected)) {
+      selectionResetNotice = !selected ? M.comparisonSelectionCleared
+        : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
+      syncInspectionState(inspectionState.closeLesson());
+    }
+    if (view.narrow && !view.focusedType) {
+      syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
+    }
+    if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
+    else renderManualDraft(snapshot, schoolName);
   }
   renderModeNavigation();
   if (selectionResetNotice) {
@@ -161,9 +187,10 @@ function render(snapshot) {
 }
 
 function renderModeNavigation() {
-  if (!inspectionState || !['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL'].includes(currentSnapshot.state) || view.narrow) return;
+  if (!inspectionState || !['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'MANUAL_DRAFT'].includes(currentSnapshot.state) || view.narrow) return;
   const modes = { ACCEPTED_BASELINE: ['CURRENT'], REPAIR_DRAFT: ['CURRENT', 'DRAFT'],
-    SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'] }[currentSnapshot.state];
+    SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'],
+    MANUAL_DRAFT: ['CURRENT', 'DRAFT'] }[currentSnapshot.state];
   const labels = { CURRENT: M.modeCurrent, DRAFT: M.modeDraft, SOLVING: M.modeSolving, PROPOSAL: M.modeProposal };
   stateCard.querySelector('.accepted-heading')?.insertAdjacentHTML('beforeend', `<nav id="workbench-modes" aria-label="${M.presentationModes}">${modes.map(mode => `<button type="button" data-mode="${mode}" aria-pressed="${inspectionState.current().mode === mode}">${labels[mode]}</button>`).join('')}</nav>`);
   stateCard.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
@@ -487,7 +514,7 @@ function setRange(range, day = view.day, manualDay = false) {
 function renderAccepted(snapshot, schoolName) {
   stateCard.className = 'card workspace-card compact-density current-mode';
   const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
-    SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal }[snapshot.state];
+    SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal, MANUAL_DRAFT: M.manualDraftState }[snapshot.state];
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${lifecycle}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     <h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
   bindUtilities();
@@ -614,6 +641,19 @@ function prefillRepairResourceFromSelection() {
   const preferred = type === 'TEACHER' ? selected?.teacherId || (view.focusedType === 'teacherId' ? view.focusedId : null)
     : selected?.roomId || (view.focusedType === 'roomId' ? view.focusedId : null);
   if (preferred) resource.value = preferred;
+}
+
+function renderManualDraft(snapshot, schoolName) {
+  stateCard.className = 'card workspace-card manual-draft-mode current-mode compact-density';
+  if (view.narrow) {
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div id="accepted-view"></div>`;
+    renderFocused(); return;
+  }
+  const conflictsCount = snapshot.workspace.manualDraft?.conflicts?.length || 0;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state draft-state">${M.manualDraftState}</span><span id="conflict-summary-badge" class="conflict-badge ${conflictsCount > 0 ? 'has-conflicts' : 'clean'}">${conflictsCount > 0 ? M.conflictCount(conflictsCount) : M.zeroConflicts}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.manualDraftDetail}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
+    <div id="accepted-view"></div>${focusedEntry()}`;
+  bindUtilities();
+  if (view.focusedType) renderFocused(); else renderWholeSchool();
 }
 
 function renderRepair(snapshot, schoolName) {
@@ -809,7 +849,8 @@ function changeCountSummary(counts) {
 
 function renderWholeSchool() {
   const host = document.querySelector('#accepted-view');
-  const model = acceptedModel;
+  const manualDraftMode = currentSnapshot.state === 'MANUAL_DRAFT' && inspectionState.current().mode === 'DRAFT';
+  const model = (manualDraftMode && manualDraftModel) ? manualDraftModel : acceptedModel;
   const proposalMode = currentSnapshot.state === 'REPAIR_PROPOSAL' && inspectionState.current().mode === 'PROPOSAL';
   const displayed = proposalMode ? comparison : model;
   const dayPeriods = periodsForDay(view.day);
@@ -852,7 +893,7 @@ function renderWholeSchool() {
       <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</div>${proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}</aside>
       <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(reviewLessonName(view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
     </div>
-    ${repairSetupAvailable ? `<div class="task-launch"><button id="open-repair-setup" type="button" class="secondary" aria-expanded="${repairSetupOpen}" aria-controls="workbench-task-area"${repairSetupOpen ? ' hidden' : ''}>${M.startRepair}</button></div><section id="workbench-task-area" class="task-area" aria-label="${M.repairSetup}"${repairSetupOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairSetup}</h3><button id="close-repair-setup" type="button" class="secondary">${M.closeRepairSetup}</button></div>${startRepairForm()}</section>` : ''}
+    ${repairSetupAvailable ? `<div class="task-launch"><button id="open-repair-setup" type="button" class="secondary" aria-expanded="${repairSetupOpen}" aria-controls="workbench-task-area"${repairSetupOpen ? ' hidden' : ''}>${M.startRepair}</button><button id="start-manual-draft" type="button" class="secondary">${M.startManualEditing}</button></div><section id="workbench-task-area" class="task-area" aria-label="${M.repairSetup}"${repairSetupOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairSetup}</h3><button id="close-repair-setup" type="button" class="secondary">${M.closeRepairSetup}</button></div>${startRepairForm()}</section>` : ''}
     ${draftMode || currentSnapshot.state === 'SOLVING_REPAIR' || proposalMode ? '' : focusedEntry()}`;
   if (draftMode || currentSnapshot.state === 'SOLVING_REPAIR' || proposalMode) document.querySelector('.focused-entry')?.removeAttribute('hidden');
   if (view.range === 'WEEK') { bindInspectionControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
@@ -975,7 +1016,10 @@ function comparisonMatchedSides(id) {
 }
 
 function selectedLessonDetails(id) {
-  if (!proposalModeActive()) return lessonDetails(acceptedModel.assignmentMap.get(id));
+  if (!proposalModeActive()) {
+    const activeModel = (currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT' && manualDraftModel) ? manualDraftModel : acceptedModel;
+    return lessonDetails(activeModel.assignmentMap.get(id));
+  }
   const pair = comparison.entries.get(id);
   if (!pair) return '';
   const change = pair.change;
@@ -996,6 +1040,8 @@ function lessonDetails(item) {
     ? `<section class="repair-cues"><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`}</p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
   const stateBadge = currentSnapshot?.state === 'INITIAL_PROPOSAL'
     ? `<span class="state proposal">${M.initialProposal}</span>`
+    : currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT'
+    ? `<span class="state draft-state">${M.manualDraftState}</span>`
     : `<span class="state accepted">✓ ${M.acceptedAssignment}</span>`;
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div>${stateBadge}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
@@ -1085,9 +1131,11 @@ function renderFocused() {
     if (inspectionState && fallback) syncInspectionState(inspectionState.changeFocusedType(type, fallback).state);
     else view.focusedId = fallback;
   }
+  const manualDraftMode = currentSnapshot.state === 'MANUAL_DRAFT' && inspectionState.current().mode === 'DRAFT';
+  const activeModel = (manualDraftMode && manualDraftModel) ? manualDraftModel : acceptedModel;
   const relatedLessonIds = proposalModeActive() ? new Set(comparison.assignments.filter(item => item[type] === view.focusedId).map(item => item.lessonId)) : null;
   host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, relatedLessonIds,
-    assignments: proposalModeActive() ? comparison.assignments : acceptedModel.assignments, weekdays: acceptedModel.weekdays,
+    assignments: proposalModeActive() ? comparison.assignments : activeModel.assignments, weekdays: activeModel.weekdays,
     lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson ${subjectColorClass(item)}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>` : null,
     labels: M, entityName, periodLabel, subjectColorClass, selectControl, options, escapeHtml });
   if (!view.narrow && currentSnapshot.state === 'SOLVING_REPAIR') {
@@ -1137,6 +1185,7 @@ function bindInspectionControls() {
     document.querySelector('#open-repair-setup').hidden = false;
     document.querySelector('#open-repair-setup').focus();
   });
+  document.querySelector('#start-manual-draft')?.addEventListener('click', startManualDraft);
   document.querySelector('#lesson-search').addEventListener('input', event => {
     if (inspectionState) syncInspectionState(inspectionState.setSearch(event.target.value).state); else view.search = event.target.value;
     applyFiltersInPlace();
@@ -1484,6 +1533,7 @@ function bindInitialActions() {
   document.querySelector('#replace-definition').addEventListener('submit', async event => { event.preventDefault(); await mutate('/api/initial-draft/replace', 'POST', new FormData(event.currentTarget)); });
 }
 async function cancelRun(id) { await mutate(`/api/runs/${encodeURIComponent(id)}`, 'DELETE'); }
+async function startManualDraft() { await mutate('/api/manual-draft', 'POST'); }
 
 async function fetchWithCsrf(url, options = {}) {
   const headers = Object.assign({}, options.headers);

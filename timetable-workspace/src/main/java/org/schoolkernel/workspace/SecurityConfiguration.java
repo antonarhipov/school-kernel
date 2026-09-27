@@ -28,9 +28,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/import", "/api/initial-draft/replace",
                                 "/api/repair-draft", "/api/repair-draft/bulk-pin-preview",
                                 "/api/runs", "/api/proposal/accept",
-                                "/api/workspace/clear", "/api/workspace/upload-definition").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/api/repair-draft").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/repair-draft", "/api/runs/*", "/api/proposal", "/api/workspace").permitAll()
+                                "/api/workspace/clear", "/api/workspace/upload-definition",
+                                "/api/manual-draft", "/api/manual-draft/publish").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/repair-draft", "/api/manual-draft").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/repair-draft", "/api/runs/*", "/api/proposal", "/api/workspace", "/api/manual-draft").permitAll()
                         .anyRequest().denyAll())
                 .csrf(Customizer.withDefaults())
                 .exceptionHandling(errors -> errors.accessDeniedHandler(accessDeniedHandler(problems)))

@@ -185,6 +185,9 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
 .period-choices, .pin-dimensions { display: flex; flex-wrap: wrap; gap: 8px 18px; }
 .period-choices label, .pin-dimensions label { display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 600; }
 .draft-state { border-color: #dfc789; background: #fef2d2; color: #5e4100; }
+.conflict-badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; margin-left: 8px; vertical-align: middle; }
+.conflict-badge.clean { background: #e6f4ea; color: #137333; border: 1px solid #ceead6; }
+.conflict-badge.has-conflicts { background: #fce8e6; color: #c5221f; border: 1px solid #fad2cf; }
 .draft-summary { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin: 18px 0; }
 .draft-summary section, .repair-controls, .bulk-preview { padding: 16px; border: 1px solid #c2cdc4; border-radius: 3px; background: #fafcfb; }
 .draft-summary h3, .repair-controls h3 { margin-top: 0; }

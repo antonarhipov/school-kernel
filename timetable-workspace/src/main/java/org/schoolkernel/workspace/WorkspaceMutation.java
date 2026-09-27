@@ -154,6 +154,18 @@ public class WorkspaceMutation {
     }
 
     @Transactional
+    public WorkspaceAggregate replaceManualDraft(
+            long expectedVersion,
+            WorkspaceState expectedState,
+            WorkspaceState nextState,
+            JsonNode document) {
+        if (repository.replace(expectedVersion, expectedState, nextState, document).isEmpty()) {
+            throw transitionProblem(expectedVersion, "The manual draft changed. Reload it before continuing.");
+        }
+        return repository.load();
+    }
+
+    @Transactional
     public long replaceRepairDraft(long expectedVersion, JsonNode repairDraft) {
         return repository.replaceRepairDraft(expectedVersion, repairDraft)
                 .orElseThrow(() -> transitionProblem(

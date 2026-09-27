@@ -36,6 +36,7 @@ public class WorkspaceController {
     private final RepairProposalService repairProposals;
     private final ProposalReviewService proposalReviews;
     private final AcceptedBaselineExportService exports;
+    private final ManualDraftService manualDrafts;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -47,6 +48,7 @@ public class WorkspaceController {
             RepairProposalService repairProposals,
             ProposalReviewService proposalReviews,
             AcceptedBaselineExportService exports,
+            ManualDraftService manualDrafts,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -56,6 +58,7 @@ public class WorkspaceController {
         this.repairProposals = repairProposals;
         this.proposalReviews = proposalReviews;
         this.exports = exports;
+        this.manualDrafts = manualDrafts;
         this.json = json;
     }
 
@@ -104,6 +107,13 @@ public class WorkspaceController {
         RepairDraftService.BulkPinPreview preview = repairs.preview(ifMatch, request);
         return ResponseEntity.ok().eTag(preview.etag()).cacheControl(CacheControl.noStore())
                 .header("X-Content-Type-Options", "nosniff").body(preview.document());
+    }
+
+    @PostMapping("/api/manual-draft")
+    @ResponseBody
+    public ResponseEntity<JsonNode> startManualDraft(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+        return response(manualDrafts.start(ifMatch));
     }
 
     @GetMapping("/")
@@ -270,7 +280,7 @@ public class WorkspaceController {
         body.put("state", aggregate.state().name());
         body.put("version", aggregate.version());
         body.put("acceptedTimetable", switch (aggregate.state()) {
-            case ACCEPTED_BASELINE, REPAIR_DRAFT, SOLVING_REPAIR, REPAIR_PROPOSAL -> true;
+            case ACCEPTED_BASELINE, REPAIR_DRAFT, SOLVING_REPAIR, REPAIR_PROPOSAL, MANUAL_DRAFT -> true;
             default -> false;
         });
         ObjectNode workspace = (ObjectNode) aggregate.document().deepCopy();
