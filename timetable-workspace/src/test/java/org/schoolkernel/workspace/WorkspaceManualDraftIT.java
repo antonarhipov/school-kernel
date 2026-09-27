@@ -13,6 +13,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -121,6 +123,148 @@ class WorkspaceManualDraftIT {
         assertEquals(412, stale.statusCode());
         assertEquals("STALE_WORKSPACE_VERSION", body(stale).path("code").stringValue());
         assertEquals("ACCEPTED_BASELINE", lifecycle());
+    }
+
+    @Test
+    @DisplayName("UC-2: reassign lesson slot cleanly, track modification, zero conflicts")
+    void reassignsLessonCleanlyAndTracksModifications() throws Exception {
+        Session session = session();
+        HttpResponse<String> openResponse = command("POST", "/api/manual-draft", session, "");
+        assertEquals(200, openResponse.statusCode());
+        String draftEtag = openResponse.headers().firstValue("ETag").orElseThrow();
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(), draftEtag);
+
+        ObjectNode payload = JSON.createObjectNode();
+        payload.put("action", "REASSIGN_LESSON");
+        payload.put("lessonId", "lesson-science-1");
+        payload.put("periodId", "mon-3");
+        payload.put("roomId", "room-101");
+        payload.put("teacherId", "teacher-alex");
+
+        HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(payload));
+        assertEquals(200, mutateResponse.statusCode());
+        JsonNode body = body(mutateResponse);
+        assertEquals("MANUAL_DRAFT", body.path("state").stringValue());
+
+        JsonNode manualDraft = body.path("workspace").path("manualDraft");
+        assertTrue(manualDraft.path("conflicts").isEmpty(), "Clean reassignment should have zero conflicts");
+        assertFalse(manualDraft.path("modifications").isEmpty(), "Modifications map must track the changed lesson");
+
+        JsonNode mod = manualDraft.path("modifications").path("lesson-science-1");
+        assertTrue(mod.path("periodChanged").booleanValue());
+        assertFalse(mod.path("roomChanged").booleanValue());
+        assertFalse(mod.path("teacherChanged").booleanValue());
+        assertEquals("mon-2", mod.path("originalPeriodId").stringValue());
+
+        // Baseline remains untouched (Guarantee G1)
+        assertEquals(storedDocument().path("acceptedBaseline").path("result").path("timetable").path("assignments").get(1).path("periodId").stringValue(), "mon-2");
+    }
+
+    @Test
+    @DisplayName("UC-2 & UC-3: detect teacher, room, and cohort clashes, and persist conflicting draft state")
+    void detectsClashesAndPersistsConflicts() throws Exception {
+        Session session = session();
+        HttpResponse<String> openResponse = command("POST", "/api/manual-draft", session, "");
+        String draftEtag = openResponse.headers().firstValue("ETag").orElseThrow();
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(), draftEtag);
+
+        // Reassign science-1 into Monday 1, Room 102, Teacher Alex (where math-1 is already scheduled)
+        ObjectNode payload = JSON.createObjectNode();
+        payload.put("action", "REASSIGN_LESSON");
+        payload.put("lessonId", "lesson-science-1");
+        payload.put("periodId", "mon-1");
+        payload.put("roomId", "room-102");
+        payload.put("teacherId", "teacher-alex");
+
+        HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(payload));
+        assertEquals(200, mutateResponse.statusCode());
+        JsonNode body = body(mutateResponse);
+
+        JsonNode manualDraft = body.path("workspace").path("manualDraft");
+        JsonNode conflicts = manualDraft.path("conflicts");
+        assertFalse(conflicts.isEmpty(), "Conflicts must be detected and populated");
+
+        Set<String> conflictCodes = new HashSet<>();
+        for (JsonNode conflict : conflicts) {
+            conflictCodes.add(conflict.path("code").stringValue());
+            assertTrue(conflict.path("description").stringValue().length() > 5);
+        }
+
+        assertTrue(conflictCodes.contains("TEACHER_CLASH"), "Teacher double-booking should be detected");
+        assertTrue(conflictCodes.contains("ROOM_CLASH"), "Room double-booking should be detected");
+        assertTrue(conflictCodes.contains("COHORT_CLASH"), "Cohort double-booking should be detected");
+        assertTrue(conflictCodes.contains("ROOM_INCOMPATIBLE"), "Room 102 lacks 'lab' capability required by Science 1");
+
+        // Verify state is persisted in DB even with conflicts (Guarantee G3)
+        JsonNode storedDraft = storedDocument().path("manualDraft");
+        assertEquals(conflicts.size(), storedDraft.path("conflicts").size());
+        assertEquals("MANUAL_DRAFT", lifecycle());
+    }
+
+    @Test
+    @DisplayName("UC-2 / UC-4: revert individual lesson restores original assignment and clears modifications")
+    void revertsLessonAssignment() throws Exception {
+        Session session = session();
+        HttpResponse<String> openResponse = command("POST", "/api/manual-draft", session, "");
+        String draftEtag = openResponse.headers().firstValue("ETag").orElseThrow();
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(), draftEtag);
+
+        ObjectNode payload = JSON.createObjectNode();
+        payload.put("action", "REASSIGN_LESSON");
+        payload.put("lessonId", "lesson-science-1");
+        payload.put("periodId", "mon-3");
+        payload.put("roomId", "room-101");
+        payload.put("teacherId", "teacher-alex");
+
+        HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(payload));
+        String mutatedEtag = mutateResponse.headers().firstValue("ETag").orElseThrow();
+        Session mutatedSession = new Session(session.csrfHeader(), session.csrfToken(), mutatedEtag);
+
+        ObjectNode revertPayload = JSON.createObjectNode();
+        revertPayload.put("action", "REVERT_LESSON");
+        revertPayload.put("lessonId", "lesson-science-1");
+
+        HttpResponse<String> revertResponse = command("PATCH", "/api/manual-draft", mutatedSession, JSON.writeValueAsString(revertPayload));
+        assertEquals(200, revertResponse.statusCode());
+        JsonNode manualDraft = body(revertResponse).path("workspace").path("manualDraft");
+
+        assertTrue(manualDraft.path("modifications").isEmpty(), "Modifications map should be empty after revert");
+        assertTrue(manualDraft.path("conflicts").isEmpty());
+    }
+
+    @Test
+    @DisplayName("UC-2 Extension 3a, 4a, RULE-2: enforces optimistic locking and validates entities on mutate")
+    void enforcesOptimisticLockingAndInputValidation() throws Exception {
+        Session session = session();
+        HttpResponse<String> openResponse = command("POST", "/api/manual-draft", session, "");
+        String draftEtag = openResponse.headers().firstValue("ETag").orElseThrow();
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(), draftEtag);
+
+        // Missing If-Match
+        HttpResponse<String> missing = commandWithoutVersion("PATCH", "/api/manual-draft", draftSession, "{}");
+        assertEquals(428, missing.statusCode());
+
+        // Stale If-Match
+        HttpResponse<String> stale = client.send(HttpRequest.newBuilder(uri("/api/manual-draft"))
+                .header(draftSession.csrfHeader(), draftSession.csrfToken())
+                .header("If-Match", "\"ws-999\"")
+                .header("Origin", "http://localhost:" + port)
+                .header("Content-Type", "application/json")
+                .method("PATCH", HttpRequest.BodyPublishers.ofString("{}"))
+                .build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(412, stale.statusCode());
+
+        // Nonexistent lesson
+        ObjectNode badLesson = JSON.createObjectNode().put("action", "REASSIGN_LESSON").put("lessonId", "unknown-lesson")
+                .put("periodId", "mon-1").put("roomId", "room-101").put("teacherId", "teacher-alex");
+        HttpResponse<String> badLessonResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(badLesson));
+        assertEquals(422, badLessonResp.statusCode());
+
+        // Nonexistent period
+        ObjectNode badPeriod = JSON.createObjectNode().put("action", "REASSIGN_LESSON").put("lessonId", "lesson-science-1")
+                .put("periodId", "unknown-period").put("roomId", "room-101").put("teacherId", "teacher-alex");
+        HttpResponse<String> badPeriodResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(badPeriod));
+        assertEquals(422, badPeriodResp.statusCode());
     }
 
     private void storeAccepted() throws Exception {

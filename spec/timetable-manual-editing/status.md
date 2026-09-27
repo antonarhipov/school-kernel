@@ -2,20 +2,52 @@
 
 ## Current
 
-- Use case: none
-- Status: APPROVED
-- Next eligible: UC-2
+- Use case: UC-2
+- Status: IN_PROGRESS
+- Next eligible: none (UC-2 in progress)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | c309189 | convergence/UC-1.md |
-| UC-2 | NOT_STARTED | UC-1 | - | - |
+| UC-2 | IN_PROGRESS | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1, UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
+
+## UC-2 Evidence
+
+- Started from: 6f84e4f61f7d54407b71345d36e2f170f3f2252a
+- Pre-existing dirty files: none
+- Implementation submission: HEAD at convergence
+- Changed files:
+  - `timetable-workspace/src/main/java/org/schoolkernel/workspace/ManualDraftService.java`
+  - `timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java`
+  - `timetable-workspace/src/main/resources/static/workspace/app.js`
+  - `timetable-workspace/src/main/resources/static/workspace/messages.js`
+  - `timetable-workspace/src/main/resources/static/workspace/styles.css`
+  - `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceManualDraftIT.java`
+  - `spec/timetable-manual-editing/checkpoints/UC-2.md`
+- Commands and results:
+  - `mvn test -pl timetable-workspace -Dtest=WorkspaceManualDraftIT`: 7 run, 0 failures, 0 errors, 0 skipped
+  - `mvn test -pl timetable-workspace`: 26 run, 0 failures, 0 errors, 0 skipped
+
+| Contract element | Evidence |
+|---|---|
+| UC-2 main steps 1-8 | `WorkspaceManualDraftIT.reassignsLessonCleanlyAndTracksModifications` |
+| UC-2 extension 3a, 4a | `WorkspaceManualDraftIT.enforcesOptimisticLockingAndInputValidation` |
+| UC-2 extension 6a | `WorkspaceManualDraftIT.detectsClashesAndPersistsConflicts` |
+| UC-2 G1 | `WorkspaceManualDraftIT.reassignsLessonCleanlyAndTracksModifications` |
+| UC-2 G2 | `WorkspaceManualDraftIT.reassignsLessonCleanlyAndTracksModifications` |
+| UC-2 G3 | `WorkspaceManualDraftIT.detectsClashesAndPersistsConflicts` |
+| UC-2 success postcondition | `WorkspaceManualDraftIT.reassignsLessonCleanlyAndTracksModifications` |
+| UC-2 minimal guarantee | `WorkspaceManualDraftIT.enforcesOptimisticLockingAndInputValidation` |
+| RULE-2 | `WorkspaceController.java`, `WorkspaceManualDraftIT.enforcesOptimisticLockingAndInputValidation` |
+| RULE-3 | `ManualDraftService.evaluateConflicts`, `WorkspaceManualDraftIT.detectsClashesAndPersistsConflicts` |
+| RULE-5 | PostgreSQL `manualDraft` JSONB persistence, `WorkspaceManualDraftIT.detectsClashesAndPersistsConflicts` |
+| RULE-7 | `WorkspaceManualDraftIT.java` executed against Testcontainers PostgreSQL |
 
 ## UC-1 Evidence
 

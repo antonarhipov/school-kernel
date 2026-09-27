@@ -1038,14 +1038,74 @@ function lessonDetails(item) {
   const repairCues = (currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT')
     || (currentSnapshot?.state === 'SOLVING_REPAIR' && inspectionState?.current().mode !== 'CURRENT')
     ? `<section class="repair-cues"><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`}</p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
+  const manualDraftActive = currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT';
+  const manual = manualLessonState(item.lessonId);
   const stateBadge = currentSnapshot?.state === 'INITIAL_PROPOSAL'
     ? `<span class="state proposal">${M.initialProposal}</span>`
-    : currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT'
+    : manualDraftActive
     ? `<span class="state draft-state">${M.manualDraftState}</span>`
     : `<span class="state accepted">✓ ${M.acceptedAssignment}</span>`;
+  const manualCues = manualDraftActive ? `
+    <section class="manual-cues">
+      ${manual.modified ? `<p><span class="state modified-state">${M.modifiedFromBaseline}</span></p>` : ''}
+      ${manual.conflictMessages.map(msg => `<p class="error" role="alert">⚠️ ${escapeHtml(msg)}</p>`).join('')}
+    </section>` : '';
+  const editorMarkup = manualDraftActive ? `
+    <section class="assignment-editor" aria-label="${M.assignmentEditor}">
+      <h4>${M.assignmentEditor}</h4>
+      <form id="manual-edit-form">
+        <label for="edit-period">
+          <span>${M.period}</span>
+          <select id="edit-period" name="periodId">
+            ${acceptedModel.definition.periods.map(p => `<option value="${escapeAttribute(p.id)}"${p.id === item.periodId ? ' selected' : ''}>${escapeHtml(periodLabel(p))} (${escapeHtml(M.days[p.weekday] || p.weekday)})</option>`).join('')}
+          </select>
+        </label>
+        <label for="edit-room">
+          <span>${M.room}</span>
+          <select id="edit-room" name="roomId">
+            ${acceptedModel.definition.rooms.map(r => `<option value="${escapeAttribute(r.id)}"${r.id === item.roomId ? ' selected' : ''}>${escapeHtml(entityName(r, r.id))}</option>`).join('')}
+          </select>
+        </label>
+        <label for="edit-teacher">
+          <span>${M.teacher}</span>
+          <select id="edit-teacher" name="teacherId">
+            ${acceptedModel.definition.teachers.map(t => `<option value="${escapeAttribute(t.id)}"${t.id === item.teacherId ? ' selected' : ''}>${escapeHtml(entityName(t, t.id))}</option>`).join('')}
+          </select>
+        </label>
+        <div class="editor-actions">
+          <button id="save-assignment-btn" type="submit" class="primary">${M.saveAssignment}</button>
+          ${manual.modified ? `<button id="revert-lesson-btn" type="button" class="secondary">${M.revertLesson}</button>` : ''}
+        </div>
+        <p id="edit-save-status" role="status"></p>
+      </form>
+    </section>` : '';
+
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div>${stateBadge}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
-    ${repairCues}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+    ${repairCues}${manualCues}${editorMarkup}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+}
+
+function manualLessonState(lessonId) {
+  if (currentSnapshot?.state !== 'MANUAL_DRAFT' || inspectionState?.current().mode !== 'DRAFT') {
+    return { modified: false, conflict: false, labels: '', accessible: [], conflictMessages: [], conflicts: [] };
+  }
+  const draft = currentSnapshot.workspace?.manualDraft;
+  if (!draft) return { modified: false, conflict: false, labels: '', accessible: [], conflictMessages: [], conflicts: [] };
+
+  const conflicts = (draft.conflicts || []).filter(c => c.lessonId === lessonId || (c.competingLessonIds && c.competingLessonIds.includes(lessonId)));
+  const modified = Boolean(draft.modifications && draft.modifications[lessonId]);
+  const labels = [];
+  if (modified) labels.push(`<em class="modified-label">${M.modifiedFromBaseline}</em>`);
+  if (conflicts.length > 0) labels.push(`<em class="conflict-label">${M.conflict}</em>`);
+
+  return {
+    modified,
+    conflict: conflicts.length > 0,
+    labels: labels.join(''),
+    accessible: labels.map(l => l.replace(/<[^>]+>/g, '')),
+    conflictMessages: conflicts.map(c => c.description),
+    conflicts
+  };
 }
 
 function repairLessonState(lessonId) {
@@ -1136,16 +1196,18 @@ function renderFocused() {
   const relatedLessonIds = proposalModeActive() ? new Set(comparison.assignments.filter(item => item[type] === view.focusedId).map(item => item.lessonId)) : null;
   host.innerHTML = renderFocusedSchedule({ narrow: view.narrow, type, focusedId: view.focusedId, source, relatedLessonIds,
     assignments: proposalModeActive() ? comparison.assignments : activeModel.assignments, weekdays: activeModel.weekdays,
-    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson ${subjectColorClass(item)}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>` : null,
+    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson ${subjectColorClass(item)}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>`
+      : manualDraftMode ? item => {
+          const manual = manualLessonState(item.lessonId);
+          return `<article class="focused-lesson ${subjectColorClass(item)}${manual.conflict ? ' conflicting' : ''}${manual.modified ? ' modified' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div>${manual.labels}<span class="accepted-text">${manual.conflict ? '⚠️ ' + M.conflict : manual.modified ? M.modifiedFromBaseline : '✓ ' + M.acceptedAssignment}</span></article>`;
+        }
+      : null,
     labels: M, entityName, periodLabel, subjectColorClass, selectControl, options, escapeHtml });
-  if (!view.narrow && currentSnapshot.state === 'SOLVING_REPAIR') {
+  if (!view.narrow && (manualDraftMode || currentSnapshot.state === 'SOLVING_REPAIR' || proposalModeActive())) {
     host.insertAdjacentHTML('beforeend', `<aside id="workbench-inspector" aria-label="${M.inspector}">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</aside>`);
-    bindRunControls();
+    if (currentSnapshot.state === 'SOLVING_REPAIR') bindRunControls();
+    if (proposalModeActive()) bindRepairReview();
     bindCloseDetails();
-  }
-  if (!view.narrow && proposalModeActive()) {
-    host.insertAdjacentHTML('beforeend', `<aside id="workbench-inspector" aria-label="${M.inspector}">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : ''}</aside>`);
-    bindRepairReview(); bindCloseDetails();
   }
   document.querySelector('#return-matrix')?.addEventListener('click', () => {
     if (inspectionState) syncInspectionState(inspectionState.returnToWholeSchool().state); else view.focusedType = null;
@@ -1319,6 +1381,60 @@ function bindCloseDetails() {
       if (candidate.querySelector('.selected-label')) candidate.querySelector('.selected-label').hidden = true;
     });
   });
+  bindManualEditor();
+}
+
+function bindManualEditor() {
+  const form = document.querySelector('#manual-edit-form');
+  if (form) {
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const statusEl = document.querySelector('#edit-save-status');
+      if (statusEl) {
+        statusEl.className = '';
+        statusEl.textContent = M.savingDraft;
+      }
+      const periodId = document.querySelector('#edit-period')?.value;
+      const roomId = document.querySelector('#edit-room')?.value;
+      const teacherId = document.querySelector('#edit-teacher')?.value;
+      try {
+        await mutateJson('/api/manual-draft', 'PATCH', {
+          action: 'REASSIGN_LESSON',
+          lessonId: view.selectedLessonId,
+          periodId,
+          roomId,
+          teacherId
+        });
+      } catch (err) {
+        if (statusEl) {
+          statusEl.className = 'error';
+          statusEl.textContent = err?.message || M.draftSaveError;
+        }
+      }
+    });
+  }
+
+  const revertBtn = document.querySelector('#revert-lesson-btn');
+  if (revertBtn) {
+    revertBtn.addEventListener('click', async () => {
+      const statusEl = document.querySelector('#edit-save-status');
+      if (statusEl) {
+        statusEl.className = '';
+        statusEl.textContent = M.savingDraft;
+      }
+      try {
+        await mutateJson('/api/manual-draft', 'PATCH', {
+          action: 'REVERT_LESSON',
+          lessonId: view.selectedLessonId
+        });
+      } catch (err) {
+        if (statusEl) {
+          statusEl.className = 'error';
+          statusEl.textContent = err?.message || M.draftSaveError;
+        }
+      }
+    });
+  }
 }
 
 function applyFiltersInPlace() {

@@ -202,10 +202,20 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
 .bulk-history p { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px; background: #f1f5f2; border: 1px solid #d2dcd5; border-radius: 3px; }
 .pin-actions { grid-column: 1 / -1; padding: 12px; border-top: 1px solid #c8d4cd; }
 .lesson-cell.directly-affected { border-color: #2b6d9a; background: #eef5fb; }
-.lesson-cell.conflicting { border-color: #9c2828; box-shadow: inset 0 0 0 1px #9c2828; }
-.lesson-cell .direct-label, .lesson-cell .conflict-label, .lesson-cell .policy-label, .lesson-cell .pin-label { display: inline-flex; }
+.lesson-cell.conflicting, .focused-lesson.conflicting { border-color: #d93025 !important; background-color: #fce8e6 !important; box-shadow: inset 0 0 0 2px #d93025 !important; }
+.lesson-cell.modified, .focused-lesson.modified { border-style: dashed !important; border-width: 2px !important; }
+.lesson-cell .direct-label, .lesson-cell .conflict-label, .lesson-cell .policy-label, .lesson-cell .pin-label, .lesson-cell .modified-label { display: inline-flex; }
 .lesson-cell .conflict-label { background: #fde0e0; border: 1px solid #e8aaaa; color: #701c1c; }
+.lesson-cell .modified-label { background: #e8f0fe; border: 1px solid #aecbfa; color: #1a73e8; font-size: .65rem; padding: 1px 4px; border-radius: 2px; }
 .lesson-cell .policy-label { background: #ebe3f8; border: 1px solid #cfbfe8; color: #473870; }
+.assignment-editor { margin-top: 15px; padding: 12px; border: 1px solid #d2dcd5; border-radius: 4px; background: #f7faf8; }
+.assignment-editor h4 { margin: 0 0 10px; font-size: .95rem; }
+.assignment-editor form { display: grid; gap: 10px; }
+.assignment-editor label { display: grid; gap: 4px; font-size: .85rem; }
+.assignment-editor select { padding: 6px; border: 1px solid #b8c6bd; border-radius: 3px; font-size: .85rem; }
+.assignment-editor .editor-actions { display: flex; gap: 8px; margin-top: 5px; }
+.manual-cues { margin: 10px 0; padding: 8px 12px; background: #fdf2f2; border: 1px solid #fad2cf; border-radius: 4px; }
+.manual-cues p.error { margin: 4px 0; color: #c5221f; font-size: .85rem; font-weight: 500; }
 .lesson-cell .pin-label { background: #daf0e2; border: 1px solid #afd6bd; color: #154e30; }
 .lesson-cell.comparison-accepted { border-color: #1b5e3d; background: #e8f5ec; }
 .lesson-cell.comparison-proposed { border-color: #6a4691; background: #f1eaf8; }
