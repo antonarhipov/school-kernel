@@ -59,6 +59,7 @@ class WorkspaceManualDraftIT {
     @LocalServerPort int port;
     @Autowired JdbcClient jdbc;
     @Autowired WorkspaceRepository repository;
+    @Autowired KernelVerifier verifier;
 
     private HttpClient client;
 
@@ -409,16 +410,137 @@ class WorkspaceManualDraftIT {
         assertEquals("INVALID_WORKSPACE_TRANSITION", body(invalidTransition).path("code").stringValue());
     }
 
+    @Test
+    @DisplayName("UC-6: Attempting to publish draft with hard conflicts returns 422 UNRESOLVED_CONFLICTS and leaves draft unchanged")
+    void refusesPublishWithUnresolvedConflicts() throws Exception {
+        Session session = session();
+        HttpResponse<String> startResp = command("POST", "/api/manual-draft", session, null);
+        assertEquals(200, startResp.statusCode());
+
+        // Reassign lesson-science-1 into mon-1 / room-102 (same slot as lesson-math-1)
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(),
+                startResp.headers().firstValue("ETag").orElseThrow());
+        String clashPayload = """
+                {
+                  "action": "REASSIGN_LESSON",
+                  "lessonId": "lesson-science-1",
+                  "periodId": "mon-1",
+                  "roomId": "room-102",
+                  "teacherId": "teacher-alex"
+                }
+                """;
+        HttpResponse<String> mutateResp = command("PATCH", "/api/manual-draft", draftSession, clashPayload);
+        assertEquals(200, mutateResp.statusCode());
+        JsonNode mutatedBody = body(mutateResp);
+        assertTrue(mutatedBody.path("workspace").path("manualDraft").path("conflicts").size() > 0, "Hard conflicts must exist");
+
+        // Attempt publish with unresolved conflicts
+        Session clashSession = new Session(session.csrfHeader(), session.csrfToken(),
+                mutateResp.headers().firstValue("ETag").orElseThrow());
+        HttpResponse<String> publishResp = command("POST", "/api/manual-draft/publish", clashSession, null);
+        assertEquals(422, publishResp.statusCode(), "Publishing with unresolved conflicts must return 422");
+        assertEquals("UNRESOLVED_CONFLICTS", body(publishResp).path("code").stringValue());
+
+        // Verify draft remains in MANUAL_DRAFT state
+        HttpResponse<String> checkResp = client.send(HttpRequest.newBuilder(uri("/api/workspace"))
+                .header("Accept", "application/json").GET().build(), HttpResponse.BodyHandlers.ofString());
+        JsonNode checkBody = body(checkResp);
+        assertEquals("MANUAL_DRAFT", checkBody.path("state").stringValue());
+        assertNotNull(checkBody.path("workspace").path("manualDraft").path("assignments"));
+    }
+
+    @Test
+    @DisplayName("UC-6: Publish conflict-free draft atomically advances accepted baseline, updates timetable revision, and purges draft")
+    void publishesManualDraftAtomicallyAsAcceptedBaseline() throws Exception {
+        String originalTimetableRevision = storedDocument().path("timetableRevision").stringValue();
+        long initialVersion = repository.load().version();
+
+        Session session = session();
+        HttpResponse<String> startResp = command("POST", "/api/manual-draft", session, null);
+        assertEquals(200, startResp.statusCode());
+
+        // Move lesson-science-1 to mon-3 and room-101 (conflict-free)
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(),
+                startResp.headers().firstValue("ETag").orElseThrow());
+        String movePayload = """
+                {
+                  "action": "REASSIGN_LESSON",
+                  "lessonId": "lesson-science-1",
+                  "periodId": "mon-3",
+                  "roomId": "room-101",
+                  "teacherId": "teacher-alex"
+                }
+                """;
+        HttpResponse<String> mutateResp = command("PATCH", "/api/manual-draft", draftSession, movePayload);
+        assertEquals(200, mutateResp.statusCode());
+        JsonNode mutatedBody = body(mutateResp);
+        assertEquals(0, mutatedBody.path("workspace").path("manualDraft").path("conflicts").size());
+
+        // Publish draft
+        Session publishSession = new Session(session.csrfHeader(), session.csrfToken(),
+                mutateResp.headers().firstValue("ETag").orElseThrow());
+        HttpResponse<String> publishResp = command("POST", "/api/manual-draft/publish", publishSession, null);
+        assertEquals(200, publishResp.statusCode(), "Publishing clean draft must succeed");
+
+        JsonNode publishedBody = body(publishResp);
+        assertEquals("ACCEPTED_BASELINE", publishedBody.path("state").stringValue());
+        assertTrue(publishedBody.path("workspace").path("manualDraft").isMissingNode(), "manualDraft must be purged");
+
+        // Verify version incremented
+        long newVersion = repository.load().version();
+        assertTrue(newVersion > initialVersion, "Version must advance");
+
+        // Verify timetableRevision changed and matches calculation
+        String newTimetableRevision = publishedBody.path("workspace").path("timetableRevision").stringValue();
+        assertFalse(originalTimetableRevision.equals(newTimetableRevision), "Timetable revision must be updated");
+
+        // Verify assignments in accepted baseline
+        JsonNode newAssignments = publishedBody.path("workspace").path("acceptedBaseline")
+                .path("result").path("timetable").path("assignments");
+        assertEquals(2, newAssignments.size());
+        boolean foundMoved = false;
+        for (JsonNode a : newAssignments) {
+            if ("lesson-science-1".equals(a.path("lessonId").stringValue())) {
+                assertEquals("mon-3", a.path("periodId").stringValue());
+                assertEquals("room-101", a.path("roomId").stringValue());
+                foundMoved = true;
+            }
+        }
+        assertTrue(foundMoved, "Moved assignment must be persisted in accepted baseline");
+
+        // Verify via fresh GET /api/workspace
+        HttpResponse<String> freshResp = client.send(HttpRequest.newBuilder(uri("/api/workspace"))
+                .header("Accept", "application/json").GET().build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, freshResp.statusCode());
+        JsonNode freshBody = body(freshResp);
+        assertEquals("ACCEPTED_BASELINE", freshBody.path("state").stringValue());
+        assertEquals(newTimetableRevision, freshBody.path("workspace").path("timetableRevision").stringValue());
+        assertTrue(freshBody.path("workspace").path("manualDraft").isMissingNode());
+
+        // RULE-1: Attempting to publish again from ACCEPTED_BASELINE returns 409
+        String publishedEtag = freshResp.headers().firstValue("ETag").orElseThrow();
+        Session stalePublishSession = new Session(session.csrfHeader(), session.csrfToken(), publishedEtag);
+        HttpResponse<String> invalidPublish = command("POST", "/api/manual-draft/publish", stalePublishSession, null);
+        assertEquals(409, invalidPublish.statusCode());
+        assertEquals("INVALID_WORKSPACE_TRANSITION", body(invalidPublish).path("code").stringValue());
+    }
+
     private void storeAccepted() throws Exception {
         ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
-        ObjectNode result = JSON.createObjectNode().put("status", "FEASIBLE").put("inputRevision", "sha256:accepted-input")
-                .put("timetableRevision", "sha256:accepted-timetable");
+        String defRevision = verifier.verify(new ImportDocuments(definition, null, null,
+                ImportDocuments.ImportMode.INITIAL_DEFINITION)).definitionRevision();
+
+        ObjectNode result = (ObjectNode) JSON.readTree(Path.of("src/test/resources/uc5-accepted-result.json").toFile());
+        result.put("schoolId", "demo-school").put("inputRevision", defRevision);
         var assignments = result.putObject("timetable").putArray("assignments");
         assignments.add(assignment("lesson-math-1", "math", "cohort-7a", "teacher-alex", "mon-1", "room-102"));
         assignments.add(assignment("lesson-science-1", "science", "cohort-7a", "teacher-alex", "mon-2", "room-101"));
+        String ttRevision = ManualDraftService.calculateTimetableRevision("demo-school", defRevision, assignments);
+        result.put("timetableRevision", ttRevision);
+
         ObjectNode document = JSON.createObjectNode();
         document.putObject("school").put("id", "demo-school").put("displayName", "Demo School");
-        document.put("definitionRevision", "sha256:accepted-input").put("timetableRevision", "sha256:accepted-timetable");
+        document.put("definitionRevision", defRevision).put("timetableRevision", ttRevision);
         ObjectNode baseline = document.putObject("acceptedBaseline");
         baseline.set("definition", definition);
         baseline.set("result", result);
@@ -447,14 +569,14 @@ class WorkspaceManualDraftIT {
     private HttpResponse<String> command(String method, String path, Session session, String body) throws Exception {
         return client.send(HttpRequest.newBuilder(uri(path)).header(session.csrfHeader(), session.csrfToken())
                 .header("If-Match", session.etag()).header("Origin", "http://localhost:" + port)
-                .header("Content-Type", "application/json").method(method, HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "application/json").method(method, HttpRequest.BodyPublishers.ofString(body == null ? "" : body))
                 .build(), HttpResponse.BodyHandlers.ofString());
     }
 
     private HttpResponse<String> commandWithoutVersion(String method, String path, Session session, String body) throws Exception {
         return client.send(HttpRequest.newBuilder(uri(path)).header(session.csrfHeader(), session.csrfToken())
                 .header("Origin", "http://localhost:" + port)
-                .header("Content-Type", "application/json").method(method, HttpRequest.BodyPublishers.ofString(body))
+                .header("Content-Type", "application/json").method(method, HttpRequest.BodyPublishers.ofString(body == null ? "" : body))
                 .build(), HttpResponse.BodyHandlers.ofString());
     }
 

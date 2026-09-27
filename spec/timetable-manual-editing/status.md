@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: none (UC-5 approved; ready for UC-6)
-- Status: READY
-- Next eligible: UC-6
+- Use case: UC-6
+- Status: IN_PROGRESS
+- Next eligible: none (UC-6 in progress)
 
 ## Progress
 
@@ -15,7 +15,7 @@
 | UC-3 | APPROVED | UC-1, UC-2 | ae4ba8e | convergence/UC-3.md |
 | UC-4 | APPROVED | UC-1 | 335ee49 | convergence/UC-4.md |
 | UC-5 | APPROVED | UC-1 | b728b14 | convergence/UC-5.md |
-| UC-6 | NOT_STARTED | UC-1 | - | - |
+| UC-6 | IN_PROGRESS | UC-1 | - | - |
 
 ## UC-5 Evidence
 

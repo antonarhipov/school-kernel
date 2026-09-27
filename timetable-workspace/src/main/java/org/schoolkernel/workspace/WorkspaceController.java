@@ -132,6 +132,13 @@ public class WorkspaceController {
         return response(manualDrafts.discard(ifMatch, request));
     }
 
+    @PostMapping("/api/manual-draft/publish")
+    @ResponseBody
+    public ResponseEntity<JsonNode> publishManualDraft(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+        return response(manualDrafts.publish(ifMatch));
+    }
+
     @GetMapping("/")
     public ResponseEntity<Void> root() {
         return ResponseEntity.status(302).location(URI.create("/workspace/")).build();

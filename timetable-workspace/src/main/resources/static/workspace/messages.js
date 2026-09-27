@@ -65,6 +65,8 @@ export const M = Object.freeze({
   confirmDiscardDraft: 'Are you sure you want to discard this draft? All manual edits will be permanently lost.',
   draftDiscarded: 'Manual draft discarded. Returned to accepted baseline.',
   publishDraft: 'Publish draft',
+  publishConflictsWarning: count => `Cannot publish draft: ${count} ${count === 1 ? 'hard conflict' : 'hard conflicts'} must be resolved first.`,
+  draftPublished: 'Manual draft published as the new accepted baseline.',
   modeCurrent: 'Current',
   modeDraft: 'Draft',
   modeSolving: 'Solving',

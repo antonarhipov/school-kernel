@@ -653,17 +653,20 @@ function prefillRepairResourceFromSelection() {
 
 function renderManualDraft(snapshot, schoolName) {
   stateCard.className = 'card workspace-card manual-draft-mode current-mode compact-density';
+  const conflictsCount = snapshot.workspace.manualDraft?.conflicts?.length || 0;
+  const publishDisabled = conflictsCount > 0;
+  const publishTitle = publishDisabled ? M.publishConflictsWarning(conflictsCount) : '';
   if (view.narrow) {
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div class="task-launch manual-task-launch"><button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button></div><div id="accepted-view"></div>`;
+    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div class="task-launch manual-task-launch"><button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button><button id="publish-manual-draft" type="button" class="primary" ${publishDisabled ? 'disabled aria-disabled="true" title="' + escapeHtml(publishTitle) + '"' : ''}>${M.publishDraft}</button></div><div id="accepted-view"></div>`;
     bindManualDraftActions();
     renderFocused(); return;
   }
-  const conflictsCount = snapshot.workspace.manualDraft?.conflicts?.length || 0;
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state draft-state">${M.manualDraftState}</span><span id="conflict-summary-badge" class="conflict-badge ${conflictsCount > 0 ? 'has-conflicts' : 'clean'}">${conflictsCount > 0 ? M.conflictCount(conflictsCount) : M.zeroConflicts}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.manualDraftDetail}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
-    <div class="task-launch manual-task-launch">
-      <button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button>
+  stateCard.innerHTML = `<div class="accepted-heading"><div class=\"school-identity\"><h2>${escapeHtml(schoolName)}</h2><span class=\"state draft-state\">${M.manualDraftState}</span><span id=\"conflict-summary-badge\" class=\"conflict-badge ${conflictsCount > 0 ? 'has-conflicts' : 'clean'}\">${conflictsCount > 0 ? M.conflictCount(conflictsCount) : M.zeroConflicts}</span><p class=\"revision\">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class=\"header-utilities\"><p class=\"mode-note\">${M.manualDraftDetail}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
+    <div class=\"task-launch manual-task-launch\">
+      <button id=\"discard-manual-draft\" type=\"button\" class=\"secondary\">${M.discardDraft}</button>
+      <button id=\"publish-manual-draft\" type=\"button\" class=\"primary\" ${publishDisabled ? 'disabled aria-disabled=\"true\" title=\"' + escapeHtml(publishTitle) + '\"' : ''}>${M.publishDraft}</button>
     </div>
-    <div id="accepted-view"></div>${focusedEntry()}`;
+    <div id=\"accepted-view\"></div>${focusedEntry()}`;
   bindUtilities();
   bindManualDraftActions();
   if (view.focusedType) renderFocused(); else renderWholeSchool();
@@ -1579,6 +1582,13 @@ function bindManualDraftActions() {
       const confirmed = window.confirm(M.confirmDiscardDraft);
       if (!confirmed) return;
       await mutateJson('/api/manual-draft', 'DELETE', { confirmed: true });
+    });
+  }
+  const publishBtn = document.querySelector('#publish-manual-draft');
+  if (publishBtn && !publishBtn.dataset.bound) {
+    publishBtn.dataset.bound = 'true';
+    publishBtn.addEventListener('click', async () => {
+      await mutateJson('/api/manual-draft/publish', 'POST');
     });
   }
 }

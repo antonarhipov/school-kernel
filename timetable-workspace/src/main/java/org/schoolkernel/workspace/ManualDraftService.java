@@ -1,15 +1,20 @@
 package org.schoolkernel.workspace;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -20,11 +25,20 @@ import tools.jackson.databind.node.ObjectNode;
 public class ManualDraftService {
     private final WorkspaceRepository repository;
     private final WorkspaceMutation mutation;
+    private final KernelVerifier verifier;
+    private final ManifestService manifests;
     private final ObjectMapper json;
 
-    public ManualDraftService(WorkspaceRepository repository, WorkspaceMutation mutation, ObjectMapper json) {
+    public ManualDraftService(
+            WorkspaceRepository repository,
+            WorkspaceMutation mutation,
+            KernelVerifier verifier,
+            ManifestService manifests,
+            ObjectMapper json) {
         this.repository = repository;
         this.mutation = mutation;
+        this.verifier = verifier;
+        this.manifests = manifests;
         this.json = json;
     }
 
@@ -512,5 +526,102 @@ public class ManualDraftService {
         if (node == null) return defaultValue;
         JsonNode child = node.path(field);
         return child.isTextual() ? child.stringValue() : defaultValue;
+    }
+
+    @Transactional(noRollbackFor = WorkspaceProblem.class)
+    public WorkspaceAggregate publish(String ifMatch) {
+        WorkspaceAggregate current = repository.load();
+        long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
+        requireState(current, WorkspaceState.MANUAL_DRAFT,
+                "Manual draft publication requires MANUAL_DRAFT state.");
+
+        JsonNode manualDraft = current.document().path("manualDraft");
+        ArrayNode conflicts = (ArrayNode) manualDraft.path("conflicts");
+        if (conflicts != null && !conflicts.isEmpty()) {
+            throw new WorkspaceProblem(
+                    HttpStatus.UNPROCESSABLE_ENTITY,
+                    "UNRESOLVED_CONFLICTS",
+                    "All hard conflicts must be resolved before publishing (" + conflicts.size() + " remaining).");
+        }
+
+        JsonNode acceptedBaseline = current.document().path("acceptedBaseline");
+        JsonNode definition = acceptedBaseline.path("definition");
+        JsonNode originalResult = acceptedBaseline.path("result");
+
+        // Construct candidate timetable result
+        ObjectNode candidateResult = (ObjectNode) originalResult.deepCopy();
+        candidateResult.put("correlationId", UUID.randomUUID().toString());
+        ArrayNode candidateAssignments = (ArrayNode) manualDraft.path("assignments").deepCopy();
+        ObjectNode timetable = (ObjectNode) candidateResult.path("timetable");
+        timetable.set("assignments", candidateAssignments);
+
+        String timetableRevision = calculateTimetableRevision(
+                candidateResult.path("schoolId").stringValue(),
+                candidateResult.path("inputRevision").stringValue(),
+                candidateAssignments);
+        candidateResult.put("timetableRevision", timetableRevision);
+
+        // Kernel verification
+        KernelVerifier.Verification verified;
+        try {
+            verified = verifier.verify(new ImportDocuments(
+                    definition, candidateResult, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+        } catch (WorkspaceProblem problem) {
+            if ("KERNEL_VERIFICATION_FAILED".equals(problem.code())) {
+                throw new WorkspaceProblem(
+                        HttpStatus.UNPROCESSABLE_ENTITY,
+                        "VERIFICATION_FAILED",
+                        problem.getMessage());
+            }
+            throw problem;
+        }
+
+        // Generate updated manifest
+        JsonNode newManifest = manifests.validatedOrGenerated(new ImportDocuments(
+                definition, candidateResult, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+
+        ObjectNode updatedDocument = json.createObjectNode();
+        updatedDocument.set("school", current.document().path("school").deepCopy());
+        updatedDocument.put("importMode", "MANUAL_EDIT_PUBLICATION");
+        updatedDocument.put("definitionRevision", verified.definitionRevision());
+        updatedDocument.put("timetableRevision", verified.timetableRevision());
+
+        ObjectNode newAccepted = updatedDocument.putObject("acceptedBaseline");
+        newAccepted.set("definition", definition.deepCopy());
+        newAccepted.set("result", candidateResult);
+        if (newManifest != null) {
+            newAccepted.set("manifest", newManifest);
+        }
+
+        if (current.document().has("lastRun")) {
+            updatedDocument.set("lastRun", current.document().path("lastRun").deepCopy());
+        }
+
+        return mutation.replaceManualDraft(
+                expectedVersion,
+                WorkspaceState.MANUAL_DRAFT,
+                WorkspaceState.ACCEPTED_BASELINE,
+                updatedDocument);
+    }
+
+    public static String calculateTimetableRevision(String schoolId, String inputRevision, ArrayNode assignments) {
+        ObjectMapper mapper = tools.jackson.databind.json.JsonMapper.builder().build();
+        ObjectNode scope = mapper.createObjectNode();
+        scope.put("schemaVersion", 1);
+        scope.put("schoolId", schoolId);
+        scope.put("inputRevision", inputRevision);
+        var ordered = new ArrayList<JsonNode>();
+        assignments.forEach(ordered::add);
+        ordered.sort(Comparator.comparing(item -> item.path("lessonId").stringValue()));
+        ArrayNode normalizedAssignments = mapper.createArrayNode();
+        ordered.forEach(normalizedAssignments::add);
+        scope.set("assignments", normalizedAssignments);
+        try {
+            byte[] canonical = CanonicalJson.bytes(scope);
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(canonical);
+            return "sha256:" + HexFormat.of().formatHex(digest);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("SHA-256 algorithm not available", e);
+        }
     }
 }
