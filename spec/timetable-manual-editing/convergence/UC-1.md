@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: spec/timetable-manual-editing/checkpoints/UC-1.md at c309189
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVED
 - Findings: 0 critical, 0 gap, 0 protocol, 0 drift, 0 cosmetic
 - Suite: 14 run, 0 failed, 0 errors, 0 skipped (`WorkspaceManualDraftIT` + `WorkspaceRepairDraftIT`)
 - Working tree impact from verification: none
@@ -72,12 +72,13 @@ None. All automated evidence is `STRONG`.
      - Mode navigation buttons allow switching between **Draft** and **Current**.
      - The timetable matrix displays the baseline assignments ready for editing.
   5. Refresh the page to verify draft persistence: the draft state remains active surviving browser reload.
+- **User Confirmation:** Confirmed by user ("The manual editing button is visible and I get 'manual draft open' label in the inspector widget").
 
 ## Status Update
 
-- Status change: `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`
-- Next eligible: none until walkthrough confirmed by user
+- Status change: `PENDING_WALKTHROUGH` -> `APPROVED`
+- Next eligible: `UC-2`
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-1 Open manual editing draft
+APPROVED
