@@ -1099,7 +1099,7 @@ function lessonDetails(item) {
         </label>
         <div class="editor-actions">
           <button id="save-assignment-btn" type="submit" class="primary">${M.saveAssignment}</button>
-          ${manual.modified ? `<button id="revert-lesson-btn" type="button" class="secondary">${M.revertLesson}</button>` : ''}
+          <button id="revert-lesson-btn" type="button" class="secondary"${manual.modified ? '' : ' disabled'}>${M.revertLesson}</button>
         </div>
         <p id="edit-save-status" role="status"></p>
       </form>
@@ -1538,10 +1538,18 @@ function bindManualEditor() {
   if (revertBtn && !revertBtn.dataset.bound) {
     revertBtn.dataset.bound = 'true';
     revertBtn.addEventListener('click', async () => {
+      if (revertBtn.disabled) return;
+      const origAssignment = acceptedModel?.assignmentMap?.get(view.selectedLessonId);
+      if (origAssignment && view.range === 'DAY') {
+        const origPeriod = acceptedModel?.definition?.periods?.find(p => p.id === origAssignment.periodId);
+        if (origPeriod && origPeriod.weekday !== view.day) {
+          view.day = origPeriod.weekday;
+        }
+      }
       const statusEl = document.querySelector('#edit-save-status');
       if (statusEl) {
-        statusEl.className = '';
-        statusEl.textContent = M.savingDraft;
+        statusEl.className = 'saving';
+        statusEl.textContent = M.savingChanges;
       }
       try {
         await mutateJson('/api/manual-draft', 'PATCH', {
@@ -1551,7 +1559,7 @@ function bindManualEditor() {
       } catch (err) {
         if (statusEl) {
           statusEl.className = 'error';
-          statusEl.textContent = err?.message || M.draftSaveError;
+          statusEl.textContent = err.message || M.draftSaveError;
         }
       }
     });

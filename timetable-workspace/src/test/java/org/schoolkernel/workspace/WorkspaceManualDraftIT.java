@@ -232,6 +232,18 @@ class WorkspaceManualDraftIT {
 
         assertTrue(manualDraft.path("modifications").isEmpty(), "Modifications map should be empty after revert");
         assertTrue(manualDraft.path("conflicts").isEmpty());
+
+        JsonNode revertedAssignment = null;
+        for (JsonNode a : manualDraft.path("assignments")) {
+            if ("lesson-science-1".equals(a.path("lessonId").stringValue())) {
+                revertedAssignment = a;
+                break;
+            }
+        }
+        assertNotNull(revertedAssignment);
+        assertEquals("mon-2", revertedAssignment.path("periodId").stringValue(), "Restores baseline period");
+        assertEquals("room-101", revertedAssignment.path("roomId").stringValue(), "Restores baseline room");
+        assertEquals("teacher-alex", revertedAssignment.path("teacherId").stringValue(), "Restores baseline teacher");
     }
 
     @Test
