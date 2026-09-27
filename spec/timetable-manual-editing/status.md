@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-6
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none (all UCs implemented; awaiting UC-6 convergence walkthrough)
+- Use case: none
+- Status: COMPLETED
+- Next eligible: none (all use cases APPROVED)
 
 ## Progress
 
@@ -15,7 +15,7 @@
 | UC-3 | APPROVED | UC-1, UC-2 | ae4ba8e | convergence/UC-3.md |
 | UC-4 | APPROVED | UC-1 | 335ee49 | convergence/UC-4.md |
 | UC-5 | APPROVED | UC-1 | b728b14 | convergence/UC-5.md |
-| UC-6 | READY_FOR_CONVERGENCE | UC-1 | 2d69f15 | convergence/UC-6.md |
+| UC-6 | APPROVED | UC-1 | 2d69f15 | convergence/UC-6.md |
 
 ## UC-6 Evidence
 
