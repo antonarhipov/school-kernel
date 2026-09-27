@@ -84,7 +84,10 @@ and `130` for interruption before publication.
 - Catalog `7` adds a hard per-cohort `dailyLessonSpreadLimit` (`hard.cohort-daily-spread`). It uses the weekly-balance
   count with the limit in place of `maxDailyLessonSpread`, so a feasible timetable has no pair of available weekdays
   whose lesson counts differ by more than the limit. Omitting it imposes no hard limit, and `maxDailyLessonSpread`
-  remains the preferred target. MVK limits grades 1 through 4 to `1` and grades 5 through 9 to `2`. Workspace repair
+  remains the preferred target. MVK limits grades 1 through 4 to `1` and grades 5 through 9 to `2`. Because an even
+  week can push a whole day into the afternoon, MVK also bounds grades 4 through 9 at `latestStartSlot: 4` and lets
+  classroom `K2` host music lessons next to `MU`; with a single music room, music filled every morning period.
+  Workspace repair
   creates catalog `7` successors, and the workspace plans and repairs with a one-minute limit because MVK does not
   reliably reach a feasible catalog `7` timetable in 30 seconds.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims

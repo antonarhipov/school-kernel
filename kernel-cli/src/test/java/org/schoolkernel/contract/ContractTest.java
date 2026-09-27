@@ -192,10 +192,7 @@ class ContractTest {
             assertFalse(cohort.has("preferredLatestStartSlot"));
             boolean youngest = List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b")
                     .contains(cohort.path("id").stringValue());
-            assertEquals(youngest, cohort.has("latestStartSlot"));
-            if (youngest) {
-                assertEquals(2, cohort.path("latestStartSlot").intValue());
-            }
+            assertEquals(youngest ? 2 : 4, cohort.path("latestStartSlot").intValue());
             boolean primary = cohort.path("id").stringValue().charAt(0) <= '4';
             assertEquals(primary ? 1 : 2, cohort.path("dailyLessonSpreadLimit").intValue());
         });
@@ -219,6 +216,10 @@ class ContractTest {
                   {"constraintId":"soft.non-preferred-room","weight":5}
                 ]
                 """), definition.path("softConstraintOverrides"));
+        assertEquals(List.of("k2", "mu"), StreamSupport.stream(definition.path("rooms").spliterator(), false)
+                .filter(room -> StreamSupport.stream(room.path("capabilityIds").spliterator(), false)
+                        .anyMatch(capability -> capability.stringValue().equals("music-room")))
+                .map(room -> room.path("id").stringValue()).toList());
         assertEquals(List.of("mon-0", "tue-0", "wed-0", "thu-0", "fri-0"),
                 StreamSupport.stream(definition.path("reservedPeriodIds").spliterator(), false)
                         .map(period -> period.stringValue()).toList());

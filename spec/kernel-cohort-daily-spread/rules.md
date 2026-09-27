@@ -26,7 +26,8 @@
 
 - Constraint: Packaged planning MUST refuse a forced spread beyond the limit under catalog 7, accept it once the limit
   allows it, and accept it under catalog 6. MVK MUST plan feasibly at a 60-second limit, and its result MUST verify.
-- Verification: `DailySpreadCliIT`; packaged MVK plan and verify.
+- Verification: `DailySpreadCliIT`; packaged MVK plan and verify;
+  `ContractTest.mvkHasExactBalancedPreferenceConfiguration` for the MVK start bounds and music rooms.
 
 ### RULE-5 - Workspace run limit
 

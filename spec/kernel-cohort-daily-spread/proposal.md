@@ -17,3 +17,10 @@ through 9 to two, and keeps `maxDailyLessonSpread: 1` everywhere as the target w
 
 The tighter timetable needs more search. MVK plans feasibly in all five seeds at 60 seconds but in about one of three
 at 30 seconds. The kernel keeps its 30-second default, and the workspace moves its normal run to one minute.
+
+The first delivered configuration balanced every week but let some cohort days start at 13:50 and run to 17:15:
+5B `4,4,4,4,4` with a Wednesday from period 6, 6B with a Thursday from period 5. Only grades 1 through 3 had a hard
+start bound. Beneath the late starts sat a resource limit: MVK's single music room serves 29 lessons and was full on
+every weekday from period 2 to 5 in every run, so some cohort had to take music in the afternoon. MVK now bounds
+grades 4 through 9 at start slot 4 (11:50) and lets classroom K2 host music as well. A start bound of slot 3 was not
+reached in 60 or 120 seconds, even with the second music room.

@@ -76,7 +76,9 @@ the rule that a watchdog ends a process no later than ten seconds after its kern
 ## Normative MVK configuration
 
 `examples/mvk.json` uses catalog 7. Cohorts `1a` through `4b` declare `dailyLessonSpreadLimit: 1`, and cohorts `5a`
-through `9c` declare `dailyLessonSpreadLimit: 2`. Every other field matches catalog 6.
+through `9c` declare `dailyLessonSpreadLimit: 2`. Cohorts `4a` through `9c` declare `latestStartSlot: 4`; grades 1
+through 3 keep `latestStartSlot: 2`. Room `k2` declares the capabilities `general-classroom` and `music-room`. Every
+other field matches catalog 6.
 
 ## Out of scope
 
