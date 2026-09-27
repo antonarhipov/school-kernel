@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-6
-- Status: IN_PROGRESS
-- Next eligible: none (UC-6 in progress)
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none (all UCs implemented; awaiting UC-6 convergence walkthrough)
 
 ## Progress
 
@@ -15,7 +15,23 @@
 | UC-3 | APPROVED | UC-1, UC-2 | ae4ba8e | convergence/UC-3.md |
 | UC-4 | APPROVED | UC-1 | 335ee49 | convergence/UC-4.md |
 | UC-5 | APPROVED | UC-1 | b728b14 | convergence/UC-5.md |
-| UC-6 | IN_PROGRESS | UC-1 | - | - |
+| UC-6 | READY_FOR_CONVERGENCE | UC-1 | 2d69f15 | convergence/UC-6.md |
+
+## UC-6 Evidence
+
+- Started from: a88749c
+- Implementation submission: 2d69f15
+- Changed files:
+  - `timetable-workspace/src/main/java/org/schoolkernel/workspace/ManualDraftService.java`
+  - `timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java`
+  - `timetable-workspace/src/main/resources/static/workspace/app.js`
+  - `timetable-workspace/src/main/resources/static/workspace/messages.js`
+  - `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceManualDraftIT.java`
+  - `spec/timetable-manual-editing/checkpoints/UC-6.md`
+- Test commands run:
+  - `./mvnw test -pl timetable-workspace -Dtest=WorkspaceManualDraftIT` (11 passed, 0 failures)
+- Verification findings: 0 critical, 0 gap, 0 protocol, 0 drift, 0 cosmetic.
+- Verification verdict: APPROVE (ready for user walkthrough verification).
 
 ## UC-5 Evidence
 
