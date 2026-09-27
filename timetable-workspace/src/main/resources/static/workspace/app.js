@@ -666,6 +666,7 @@ function renderManualDraft(snapshot, schoolName) {
       <button id=\"discard-manual-draft\" type=\"button\" class=\"secondary\">${M.discardDraft}</button>
       <button id=\"publish-manual-draft\" type=\"button\" class=\"primary\" ${publishDisabled ? 'disabled aria-disabled=\"true\" title=\"' + escapeHtml(publishTitle) + '\"' : ''}>${M.publishDraft}</button>
     </div>
+    <p id=\"manual-publish-status\" class=\"error\" role=\"alert\" style=\"display:none; margin: 0.5rem 0; color: #cf1322; font-weight: 500;\"></p>
     <div id=\"accepted-view\"></div>${focusedEntry()}`;
   bindUtilities();
   bindManualDraftActions();
@@ -1842,6 +1843,17 @@ async function mutate(path, method, body) {
     if (!response.ok) {
       if (path === '/api/repair-draft' && method !== 'DELETE') {
         reportDraftFailure(result.message || M.actionFailed);
+        if (response.headers.get('ETag')) etag = response.headers.get('ETag');
+        return;
+      }
+      if (path === '/api/manual-draft/publish') {
+        const publishStatus = document.querySelector('#manual-publish-status');
+        if (publishStatus) {
+          publishStatus.style.display = 'block';
+          publishStatus.textContent = result.message || M.actionFailed;
+        } else {
+          stateCard.insertAdjacentHTML('afterbegin', `<p id="manual-publish-status" class="error" role="alert" style="margin: 0.5rem 0; color: #cf1322; font-weight: 500;">${escapeHtml(result.message || M.actionFailed)}</p>`);
+        }
         if (response.headers.get('ETag')) etag = response.headers.get('ETag');
         return;
       }
