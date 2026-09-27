@@ -425,7 +425,7 @@ class WorkspaceImportIT {
         unsupportedSchema.put("schemaVersion", 2);
         invalidDefinitions.add(unsupportedSchema);
         ObjectNode unsupportedCatalog = definition.deepCopy();
-        unsupportedCatalog.put("catalogVersion", 8);
+        unsupportedCatalog.put("catalogVersion", 9);
         invalidDefinitions.add(unsupportedCatalog);
         ObjectNode missingName = definition.deepCopy();
         missingName.remove("displayName");

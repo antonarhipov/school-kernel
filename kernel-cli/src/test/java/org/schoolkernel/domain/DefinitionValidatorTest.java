@@ -150,6 +150,72 @@ class DefinitionValidatorTest {
         assertEquals("/z/0999", report.errors().getLast().location());
     }
 
+    @Test
+    @DisplayName("Curator RULE-2: a curator lesson needs the cohort's curator, who is qualified for it by role")
+    void curatorLessonsBelongToTheCohortCurator() throws Exception {
+        ObjectNode input = curatorInput();
+        var validator = new DefinitionValidator();
+        var accepted = validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class));
+        assertTrue(accepted.report().isValid(), accepted.report().toString());
+        var cohort = accepted.definition().cohorts().getFirst();
+        assertEquals("teacher-1", cohort.curatorTeacherId());
+        assertEquals("room-1", cohort.homeRoomId());
+        assertTrue(accepted.definition().subjects().getLast().curatorLesson());
+
+        ObjectNode other = input.deepCopy();
+        other.withArray("teachers").addObject().put("id", "teacher-2").put("displayName", "Teacher Two")
+                .putArray("qualifiedSubjectIds").add("class-hour");
+        ((ObjectNode) other.withArray("lessons").get(1)).put("teacherId", "teacher-2");
+        assertEquals(List.of("curator lesson must be taught by the cohort's curator"), messages(validator, other));
+
+        ObjectNode uncurated = input.deepCopy();
+        ((ObjectNode) uncurated.withArray("cohorts").get(0)).remove("curatorTeacherId");
+        assertEquals(java.util.Set.of("teacher is not qualified for the lesson subject",
+                        "curator lesson requires the cohort to declare a curator"),
+                java.util.Set.copyOf(messages(validator, uncurated)));
+
+        ObjectNode unknown = input.deepCopy();
+        ((ObjectNode) unknown.withArray("cohorts").get(0)).put("curatorTeacherId", "nobody").put("homeRoomId", "nowhere");
+        assertTrue(messages(validator, unknown).containsAll(List.of("unknown teacher reference", "unknown room reference")));
+    }
+
+    @Test
+    @DisplayName("Curator RULE-2: a home room that cannot host the curator lesson is invalid input")
+    void homeRoomContradictionsAreInvalidInput() throws Exception {
+        var validator = new DefinitionValidator();
+        ObjectNode locked = curatorInput();
+        locked.withArray("rooms").addObject().put("id", "room-2").put("displayName", "Room Two").put("capacity", 25)
+                .putArray("capabilityIds");
+        ((ObjectNode) locked.withArray("lessons").get(1)).put("roomLock", "room-2");
+        assertEquals(List.of("room lock contradicts cohort home room"), messages(validator, locked));
+
+        ObjectNode small = curatorInput();
+        ((ObjectNode) small.withArray("rooms").get(0)).put("capacity", 10);
+        assertTrue(messages(validator, small).contains("cohort home room contradicts room capacity"));
+
+        ObjectNode lab = curatorInput();
+        ((ObjectNode) lab.withArray("lessons").get(1)).putArray("requiredRoomCapabilityIds").add("lab");
+        assertEquals(List.of("cohort home room contradicts required room capabilities"), messages(validator, lab));
+    }
+
+    /** Catalog 8: cohort-1 has curator teacher-1 and home room room-1; lesson-2 is its class hour. */
+    private static ObjectNode curatorInput() throws Exception {
+        ObjectNode input = validInput();
+        input.put("catalogVersion", 8);
+        input.withArray("subjects").addObject().put("id", "class-hour").put("displayName", "Class hour")
+                .put("curatorLesson", true);
+        ((ObjectNode) input.withArray("cohorts").get(0)).put("curatorTeacherId", "teacher-1")
+                .put("homeRoomId", "room-1");
+        input.withArray("lessons").addObject().put("id", "lesson-2").put("displayName", "Class hour")
+                .put("subjectId", "class-hour").put("cohortId", "cohort-1").put("teacherId", "teacher-1");
+        return input;
+    }
+
+    private static List<String> messages(DefinitionValidator validator, ObjectNode input) throws Exception {
+        return validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .report().errors().stream().map(ValidationError::message).toList();
+    }
+
     private static ObjectNode validInput() throws Exception {
         try (InputStream input = DefinitionValidatorTest.class.getResourceAsStream("/fixtures/valid-plan.json")) {
             return (ObjectNode) JsonSupport.mapper().readTree(input);

@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -54,7 +54,8 @@
         "reservedPeriodsAllowed": { "type": "boolean" },
         "maxWeeklyReservedLessonsPerCohort": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
         "dayEdgeOnly": { "type": "boolean" },
-        "maxDailyLessonsPerCohort": { "type": "integer", "minimum": 1, "maximum": 2147483647 }
+        "maxDailyLessonsPerCohort": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+        "curatorLesson": { "type": "boolean" }
       },
       "if": { "required": ["maxWeeklyReservedLessonsPerCohort"] },
       "then": {
@@ -88,7 +89,9 @@
         "maxDailyGaps": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
         "latestStartSlot": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
         "preferredLatestStartSlot": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
-        "dailyLessonSpreadLimit": { "type": "integer", "minimum": 0, "maximum": 2147483647 }
+        "dailyLessonSpreadLimit": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+        "curatorTeacherId": { "$ref": "#/$defs/id" },
+        "homeRoomId": { "$ref": "#/$defs/id" }
       }
     },
     "room": {
@@ -156,6 +159,16 @@
     }
   },
   "allOf": [
+    {
+      "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7] } } },
+      "then": { "properties": {
+        "cohorts": { "items": { "not": { "anyOf": [
+          { "required": ["curatorTeacherId"] },
+          { "required": ["homeRoomId"] }
+        ] } } },
+        "subjects": { "items": { "not": { "required": ["curatorLesson"] } } }
+      } }
+    },
     {
       "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6] } } },
       "then": { "properties": { "cohorts": { "items": {

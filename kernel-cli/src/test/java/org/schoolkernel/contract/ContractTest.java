@@ -175,11 +175,110 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("Curator RULE-1: catalog 8 accepts curators, home rooms and curator lessons; older catalogs reject them")
+    void curatorFieldsSchemaAndRevision() throws Exception {
+        var definition = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        definition.put("catalogVersion", 8);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        var cohort = (tools.jackson.databind.node.ObjectNode) definition.withArray("cohorts").get(0);
+        var subject = (tools.jackson.databind.node.ObjectNode) definition.withArray("subjects").get(0);
+        String revision = new RevisionService().definitionRevision(definition);
+        for (Runnable change : List.<Runnable>of(
+                () -> cohort.put("curatorTeacherId", "teacher-1"),
+                () -> cohort.put("homeRoomId", "room-1"),
+                () -> subject.put("curatorLesson", true))) {
+            change.run();
+            assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+            String next = new RevisionService().definitionRevision(definition);
+            assertNotEquals(revision, next);
+            revision = next;
+        }
+        for (int version : new int[] {1, 2, 3, 4, 5, 6, 7}) {
+            var oldCatalog = definition.deepCopy();
+            oldCatalog.put("catalogVersion", version);
+            assertFalse(new DefinitionSchemaValidator().validate(oldCatalog).isEmpty());
+        }
+        cohort.put("homeRoomId", "");
+        assertFalse(new DefinitionSchemaValidator().validate(definition).isEmpty());
+    }
+
+    @Test
+    @DisplayName("Curator RULE-5: MVK declares source-backed curators and rooms plus a synthetic 6C curator")
+    void mvkDeclaresCuratorsAndHomeRooms() throws Exception {
+        var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        var curators = new java.util.LinkedHashMap<String, String>();
+        var homeRooms = new java.util.LinkedHashMap<String, String>();
+        definition.path("cohorts").forEach(cohort -> {
+            String id = cohort.path("id").stringValue();
+            if (cohort.has("curatorTeacherId")) {
+                curators.put(id, cohort.path("curatorTeacherId").stringValue());
+            }
+            if (cohort.has("homeRoomId")) {
+                homeRooms.put(id, cohort.path("homeRoomId").stringValue());
+            }
+        });
+        assertEquals(java.util.Map.ofEntries(
+                java.util.Map.entry("1a", "piret-laanesaar"), java.util.Map.entry("1b", "kairi-meressaar"),
+                java.util.Map.entry("1c", "helena-kroon"), java.util.Map.entry("2a", "anita-kalmus"),
+                java.util.Map.entry("2b", "maiki-saaring"), java.util.Map.entry("2c", "indra-feldman"),
+                java.util.Map.entry("3a", "kristin-muul"), java.util.Map.entry("3b", "reena-korp"),
+                java.util.Map.entry("4a", "anette-maria-rennit"), java.util.Map.entry("4b", "rita-lumiste"),
+                java.util.Map.entry("5a", "ene-avson"), java.util.Map.entry("5b", "katariin-treial"),
+                java.util.Map.entry("5d", "liisi-rannik"), java.util.Map.entry("6a", "vaike-antsov"),
+                java.util.Map.entry("6b", "liivi-kivimae-bondarev"), java.util.Map.entry("6c", "olga-simonovits"),
+                java.util.Map.entry("7a", "saale-maripuu"), java.util.Map.entry("7b", "bergit-semre"),
+                java.util.Map.entry("8a", "grete-suurvali"),
+                java.util.Map.entry("8b", "marina-pokintsereda"), java.util.Map.entry("9a", "marilin-laanetu"),
+                java.util.Map.entry("9b", "piret-noor"), java.util.Map.entry("9c", "helina-silberg")), curators);
+        assertTrue(StreamSupport.stream(definition.path("lessons").spliterator(), false)
+                .anyMatch(lesson -> lesson.path("cohortId").stringValue().equals("6c")
+                        && lesson.path("teacherId").stringValue().equals(curators.get("6c"))),
+                "the synthetic 6C curator must teach 6C");
+        assertEquals(java.util.Map.ofEntries(
+                java.util.Map.entry("1a", "a106"), java.util.Map.entry("1b", "a120"),
+                java.util.Map.entry("1c", "a118"), java.util.Map.entry("2a", "a109"),
+                java.util.Map.entry("2b", "a117"), java.util.Map.entry("2c", "a207"),
+                java.util.Map.entry("3a", "a228"), java.util.Map.entry("3b", "a217"),
+                java.util.Map.entry("4a", "a218"), java.util.Map.entry("4b", "a119"),
+                java.util.Map.entry("5a", "a215"), java.util.Map.entry("5b", "a216"),
+                java.util.Map.entry("5d", "a211"), java.util.Map.entry("6a", "b213"),
+                java.util.Map.entry("6b", "b214"), java.util.Map.entry("7a", "b216"),
+                java.util.Map.entry("7b", "a229"), java.util.Map.entry("8a", "b214"),
+                java.util.Map.entry("8b", "a230"), java.util.Map.entry("9a", "a204"),
+                java.util.Map.entry("9b", "b212"), java.util.Map.entry("9c", "b215")), homeRooms);
+        definition.path("lessons").forEach(lesson -> {
+            if (lesson.path("subjectId").stringValue().equals("klassitund")) {
+                String cohortId = lesson.path("cohortId").stringValue();
+                assertEquals(curators.get(cohortId), lesson.path("teacherId").stringValue());
+                assertEquals(homeRooms.get(cohortId), lesson.path("preferredRoomIds").get(0).stringValue());
+            }
+        });
+        var lessons = definition.path("lessons");
+        var curatorInto = StreamSupport.stream(lessons.spliterator(), false)
+                .filter(lesson -> lesson.path("subjectId").stringValue().equals("into"))
+                .filter(lesson -> lesson.path("teacherId").stringValue()
+                        .equals(curators.get(lesson.path("cohortId").stringValue())))
+                .toList();
+        assertEquals(11, curatorInto.size());
+        curatorInto.forEach(lesson -> assertEquals(homeRooms.get(lesson.path("cohortId").stringValue()),
+                lesson.path("roomLock").stringValue()));
+        var history = StreamSupport.stream(lessons.spliterator(), false)
+                .filter(lesson -> lesson.path("teacherId").stringValue().equals("siiri-aiaste"))
+                .filter(lesson -> lesson.path("subjectId").stringValue().equals("ajalugu"))
+                .toList();
+        assertEquals(14, history.size());
+        history.forEach(lesson -> assertEquals("a231", lesson.path("roomLock").stringValue()));
+        assertEquals(25, StreamSupport.stream(lessons.spliterator(), false)
+                .filter(lesson -> lesson.has("roomLock")).count());
+    }
+
+    @Test
     @DisplayName("Cohort balance UC-1 G5/RULE-5: MVK has the exact gap, daily-load and start preference configuration")
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
         var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
-        assertEquals(7, definition.path("catalogVersion").intValue());
+        assertEquals(8, definition.path("catalogVersion").intValue());
         var cohorts = definition.path("cohorts");
         assertEquals(List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "4a", "4b",
                         "5a", "5b", "5d", "6a", "6b", "6c", "7a", "7b", "8a", "8b", "9a", "9b", "9c"),
@@ -203,6 +302,9 @@ class ContractTest {
                 assertEquals(true, subject.path("dayEdgeOnly").booleanValue());
                 assertEquals(1, subject.path("maxDailyLessonsPerCohort").intValue());
                 assertEquals(6, subject.size());
+            } else if (subject.path("id").stringValue().equals("klassitund")) {
+                assertEquals(true, subject.path("curatorLesson").booleanValue());
+                assertEquals(3, subject.size());
             } else {
                 assertEquals(2, subject.size());
             }

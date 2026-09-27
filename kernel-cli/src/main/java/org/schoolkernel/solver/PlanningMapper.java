@@ -2,6 +2,7 @@ package org.schoolkernel.solver;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,8 @@ public final class PlanningMapper {
                 .collect(Collectors.toMap(SchoolDefinition.Cohort::id, Function.identity()));
         Map<String, SchoolDefinition.Subject> subjects = definition.subjects().stream()
                 .collect(Collectors.toMap(SchoolDefinition.Subject::id, Function.identity()));
+        Map<String, SchoolDefinition.Room> definedRooms = definition.rooms().stream()
+                .collect(Collectors.toMap(SchoolDefinition.Room::id, Function.identity()));
         var lessons = definition.lessons().stream().map(lesson -> {
             var teacher = teachers.get(lesson.teacherId());
             var cohort = cohorts.get(lesson.cohortId());
@@ -50,7 +53,8 @@ public final class PlanningMapper {
                     lesson.id(), lesson.subjectId(), lesson.cohortId(), cohort.size(), lesson.teacherId(),
                     lesson.seriesId(), teacher.availablePeriodIds(), teacher.undesirablePeriodIds(),
                     cohort.availablePeriodIds(), cohort.undesirablePeriodIds(), lesson.undesirablePeriodIds(),
-                    lesson.requiredRoomCapabilityIds(), lesson.preferredRoomIds(), lesson.periodLock(), lesson.roomLock(),
+                    lesson.requiredRoomCapabilityIds(), preferredRoomIds(lesson, cohort, definedRooms),
+                    lesson.periodLock(), lesson.roomLock(),
                     baseline == null ? null : baseline.periodId(),
                     baseline == null ? null : baseline.roomId(),
                     periods, cohort.maxDailyLessonSpread(), cohort.maxDailyGaps(),
@@ -76,6 +80,21 @@ public final class PlanningMapper {
         return new SchoolSchedule(periods, rooms, lessons, ConstraintWeightOverrides.of(overrides));
     }
 
+    /**
+     * A lesson without its own room preference prefers its cohort's home room when that room could host it, so
+     * music and sports lessons are not penalized for leaving the classroom.
+     */
+    private static Set<String> preferredRoomIds(
+            SchoolDefinition.Lesson lesson, SchoolDefinition.Cohort cohort, Map<String, SchoolDefinition.Room> rooms) {
+        if (!lesson.preferredRoomIds().isEmpty() || cohort.homeRoomId() == null) {
+            return lesson.preferredRoomIds();
+        }
+        var home = rooms.get(cohort.homeRoomId());
+        boolean fits = home.capacity() >= cohort.size()
+                && home.capabilityIds().containsAll(lesson.requiredRoomCapabilityIds());
+        return fits ? Set.of(home.id()) : lesson.preferredRoomIds();
+    }
+
     private static boolean canKeepBaseline(PlanningLesson lesson, PeriodValue period, RoomValue room) {
         return period != null && room != null
                 && (!period.reserved() || lesson.getPlacementRules().reservedPeriodsAllowed())
@@ -85,6 +104,8 @@ public final class PlanningMapper {
                 && room.capacity() >= lesson.getCohortSize()
                 && room.capabilityIds().containsAll(lesson.getRequiredRoomCapabilityIds())
                 && (lesson.getPeriodLock() == null || lesson.getPeriodLock().equals(period.id()))
-                && (lesson.getRoomLock() == null || lesson.getRoomLock().equals(room.id()));
+                && (lesson.getRoomLock() == null || lesson.getRoomLock().equals(room.id()))
+                && (lesson.getPlacementRules().homeRoomId() == null
+                        || lesson.getPlacementRules().homeRoomId().equals(room.id()));
     }
 }

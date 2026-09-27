@@ -27,11 +27,18 @@ public record SchoolDefinition(
             boolean reservedPeriodsAllowed,
             int maxWeeklyReservedLessonsPerCohort,
             boolean dayEdgeOnly,
-            int maxDailyLessonsPerCohort) {
+            int maxDailyLessonsPerCohort,
+            boolean curatorLesson) {
         public static final int UNLIMITED = Integer.MAX_VALUE;
 
         public Subject(String id, String displayName) {
             this(id, displayName, false, UNLIMITED, false, UNLIMITED);
+        }
+
+        public Subject(String id, String displayName, boolean reservedPeriodsAllowed,
+                int maxWeeklyReservedLessonsPerCohort, boolean dayEdgeOnly, int maxDailyLessonsPerCohort) {
+            this(id, displayName, reservedPeriodsAllowed, maxWeeklyReservedLessonsPerCohort, dayEdgeOnly,
+                    maxDailyLessonsPerCohort, false);
         }
     }
 
@@ -52,7 +59,9 @@ public record SchoolDefinition(
             int maxDailyGaps,
             int latestStartSlot,
             int preferredLatestStartSlot,
-            int dailyLessonSpreadLimit) {
+            int dailyLessonSpreadLimit,
+            String curatorTeacherId,
+            String homeRoomId) {
         /** Catalogs before version 5 place no hard limit on cohort gaps. */
         public static final int UNLIMITED_GAPS = Integer.MAX_VALUE;
         /** Without a declared bound, any start slot is feasible. */
@@ -84,6 +93,13 @@ public record SchoolDefinition(
                 int latestStartSlot, int preferredLatestStartSlot) {
             this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, maxDailyLessonSpread,
                     maxDailyGaps, latestStartSlot, preferredLatestStartSlot, NO_SPREAD_LIMIT);
+        }
+
+        public Cohort(String id, String displayName, int size, Set<String> availablePeriodIds,
+                Set<String> undesirablePeriodIds, int maxDailyLessonSpread, int maxDailyGaps,
+                int latestStartSlot, int preferredLatestStartSlot, int dailyLessonSpreadLimit) {
+            this(id, displayName, size, availablePeriodIds, undesirablePeriodIds, maxDailyLessonSpread,
+                    maxDailyGaps, latestStartSlot, preferredLatestStartSlot, dailyLessonSpreadLimit, null, null);
         }
     }
 

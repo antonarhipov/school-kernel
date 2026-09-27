@@ -68,6 +68,9 @@ public final class HardConstraintDiagnostics {
             addIf(examples, KernelCatalog.ROOM_LOCK.id(),
                     lesson.getRoomLock() != null && !lesson.getRoomLock().equals(roomId),
                     lesson.getId(), roomId, lesson.getRoomLock());
+            addIf(examples, KernelCatalog.COHORT_HOME_ROOM.id(),
+                    SchoolConstraintProvider.outsideHomeRoom(lesson),
+                    lesson.getId(), roomId, lesson.getPlacementRules().homeRoomId());
             addIf(examples, KernelCatalog.RESERVED_PERIOD.id(),
                     SchoolConstraintProvider.usesForbiddenReservedPeriod(lesson),
                     lesson.getId(), periodId);

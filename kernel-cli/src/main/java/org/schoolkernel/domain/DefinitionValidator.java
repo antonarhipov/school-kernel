@@ -58,13 +58,14 @@ public final class DefinitionValidator {
         checkReferences("/reservedPeriodIds", input.schoolId(), input.reservedPeriodIds(),
                 periodIds, "period", errors);
         checkTeacherReferences(input.teachers(), subjectIds, periodIds, errors);
-        checkCohortReferences(input.cohorts(), periodIds, errors);
+        checkCohortReferences(input.cohorts(), teacherIds, roomIds, periodIds, errors);
         checkRoomReferences(input.rooms(), periodIds, errors);
         checkPeriods(input.periods(), errors);
         checkLessons(input, subjectIds, teacherIds, cohortIds, roomIds, periodIds, errors);
         checkSeries(input.lessons(), errors);
         checkOverrides(input.softConstraintOverrides(), input, errors);
         checkLockConflicts(input, errors);
+        checkCuratorLessons(input, errors);
 
         var report = ValidationReport.from(errors);
         if (!report.isValid()) {
@@ -139,10 +140,20 @@ public final class DefinitionValidator {
 
     private static void checkCohortReferences(
             List<CohortDto> cohorts,
+            Set<String> teacherIds,
+            Set<String> roomIds,
             Set<String> periodIds,
             List<ValidationError> errors) {
         for (int i = 0; i < cohorts.size(); i++) {
             var cohort = cohorts.get(i);
+            if (cohort.curatorTeacherId() != null) {
+                checkReference("/cohorts/" + i + "/curatorTeacherId", cohort.id(), cohort.curatorTeacherId(),
+                        teacherIds, "teacher", errors);
+            }
+            if (cohort.homeRoomId() != null) {
+                checkReference("/cohorts/" + i + "/homeRoomId", cohort.id(), cohort.homeRoomId(), roomIds, "room",
+                        errors);
+            }
             checkReferences("/cohorts/" + i + "/availablePeriodIds", cohort.id(), cohort.availablePeriodIds(),
                     periodIds, "period", errors);
             checkReferences("/cohorts/" + i + "/undesirablePeriodIds", cohort.id(), cohort.undesirablePeriodIds(),
@@ -237,6 +248,8 @@ public final class DefinitionValidator {
             Set<String> periodIds,
             List<ValidationError> errors) {
         var teachers = index(input.teachers(), TeacherDto::id);
+        var cohorts = index(input.cohorts(), CohortDto::id);
+        var subjects = index(input.subjects(), SubjectDto::id);
         for (int i = 0; i < input.lessons().size(); i++) {
             var lesson = input.lessons().get(i);
             checkReference("/lessons/" + i + "/subjectId", lesson.id(), lesson.subjectId(), subjectIds, "subject", errors);
@@ -255,7 +268,8 @@ public final class DefinitionValidator {
 
             var teacher = teachers.get(lesson.teacherId());
             if (teacher != null && subjectIds.contains(lesson.subjectId())
-                    && !teacher.qualifiedSubjectIds().contains(lesson.subjectId())) {
+                    && !teacher.qualifiedSubjectIds().contains(lesson.subjectId())
+                    && !isCuratorLesson(lesson, subjects, cohorts)) {
                 error(errors, "/lessons/" + i + "/teacherId", List.of(lesson.id(), teacher.id(), lesson.subjectId()),
                         "teacher is not qualified for the lesson subject");
             }
@@ -407,6 +421,54 @@ public final class DefinitionValidator {
         }
     }
 
+    /** A curator is qualified for the curator lessons of their own cohort, whatever else they teach. */
+    private static boolean isCuratorLesson(
+            LessonDto lesson, Map<String, SubjectDto> subjects, Map<String, CohortDto> cohorts) {
+        var subject = subjects.get(lesson.subjectId());
+        var cohort = cohorts.get(lesson.cohortId());
+        return subject != null && Boolean.TRUE.equals(subject.curatorLesson())
+                && cohort != null && lesson.teacherId().equals(cohort.curatorTeacherId());
+    }
+
+    private static void checkCuratorLessons(SchoolDefinitionDto input, List<ValidationError> errors) {
+        var subjects = index(input.subjects(), SubjectDto::id);
+        var cohorts = index(input.cohorts(), CohortDto::id);
+        var rooms = index(input.rooms(), RoomDto::id);
+        for (int i = 0; i < input.lessons().size(); i++) {
+            var lesson = input.lessons().get(i);
+            var subject = subjects.get(lesson.subjectId());
+            var cohort = cohorts.get(lesson.cohortId());
+            if (subject == null || cohort == null || !Boolean.TRUE.equals(subject.curatorLesson())) {
+                continue;
+            }
+            if (cohort.curatorTeacherId() == null) {
+                error(errors, "/lessons/" + i + "/cohortId", List.of(lesson.id(), cohort.id()),
+                        "curator lesson requires the cohort to declare a curator");
+            } else if (!cohort.curatorTeacherId().equals(lesson.teacherId())) {
+                error(errors, "/lessons/" + i + "/teacherId",
+                        List.of(lesson.id(), lesson.teacherId(), cohort.curatorTeacherId()),
+                        "curator lesson must be taught by the cohort's curator");
+            }
+            var homeRoom = cohort.homeRoomId() == null ? null : rooms.get(cohort.homeRoomId());
+            if (homeRoom == null) {
+                continue;
+            }
+            if (lesson.roomLock() != null && !lesson.roomLock().equals(homeRoom.id())) {
+                error(errors, "/lessons/" + i + "/roomLock", List.of(lesson.id(), lesson.roomLock(), homeRoom.id()),
+                        "room lock contradicts cohort home room");
+            }
+            if (homeRoom.capacity() < cohort.size()) {
+                error(errors, "/lessons/" + i, List.of(lesson.id(), homeRoom.id()),
+                        "cohort home room contradicts room capacity");
+            }
+            if (lesson.requiredRoomCapabilityIds() != null
+                    && !new HashSet<>(homeRoom.capabilityIds()).containsAll(lesson.requiredRoomCapabilityIds())) {
+                error(errors, "/lessons/" + i, List.of(lesson.id(), homeRoom.id()),
+                        "cohort home room contradicts required room capabilities");
+            }
+        }
+    }
+
     private static void checkLockedCollision(
             Map<String, String> lockedResources,
             String type,
@@ -430,7 +492,8 @@ public final class DefinitionValidator {
                         Boolean.TRUE.equals(value.reservedPeriodsAllowed()),
                         orUnlimited(value.maxWeeklyReservedLessonsPerCohort()),
                         Boolean.TRUE.equals(value.dayEdgeOnly()),
-                        orUnlimited(value.maxDailyLessonsPerCohort())))
+                        orUnlimited(value.maxDailyLessonsPerCohort()),
+                        Boolean.TRUE.equals(value.curatorLesson())))
                 .toList();
         var teachers = input.teachers().stream()
                 .map(value -> new SchoolDefinition.Teacher(
@@ -449,7 +512,8 @@ public final class DefinitionValidator {
                                 ? SchoolDefinition.Cohort.DEFAULT_PREFERRED_START_SLOT
                                 : value.preferredLatestStartSlot(),
                         value.dailyLessonSpreadLimit() == null
-                                ? SchoolDefinition.Cohort.NO_SPREAD_LIMIT : value.dailyLessonSpreadLimit()))
+                                ? SchoolDefinition.Cohort.NO_SPREAD_LIMIT : value.dailyLessonSpreadLimit(),
+                        value.curatorTeacherId(), value.homeRoomId()))
                 .toList();
         var rooms = input.rooms().stream()
                 .map(value -> new SchoolDefinition.Room(

@@ -44,8 +44,8 @@ and `130` for interruption before publication.
 - [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
-- Schema version `1` supports catalog versions `1` through `7`. Earlier catalogs remain readable for existing accepted
-  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `7`.
+- Schema version `1` supports catalog versions `1` through `8`. Earlier catalogs remain readable for existing accepted
+  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `8`.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
 - A feasible result assigns every lesson once and satisfies the exact hard catalog in the specification.
@@ -70,7 +70,7 @@ and `130` for interruption before publication.
   lesson block. The late-start preference discourages first lessons after the third regular period; it does not
   compare start times within the first three periods.
   The preferences default to weight `1`; `softConstraintOverrides` can tune
-  them from `0` through `1,000,000`. Workspace repair creates a catalog `7` successor while preserving its accepted
+  them from `0` through `1,000,000`. Workspace repair creates a catalog `8` successor while preserving its accepted
   predecessor, so a repair proposal also closes any gaps an older accepted timetable had. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
   room moves solely to improve class quality.
 - Catalog `6` adds per-cohort start bounds and per-subject placement rules. Slots count regular periods from `1` in
@@ -87,9 +87,20 @@ and `130` for interruption before publication.
   remains the preferred target. MVK limits grades 1 through 4 to `1` and grades 5 through 9 to `2`. Because an even
   week can push a whole day into the afternoon, MVK also bounds grades 4 through 9 at `latestStartSlot: 4` and lets
   classroom `K2` host music lessons next to `MU`; with a single music room, music filled every morning period.
-  Workspace repair
-  creates catalog `7` successors, and the workspace plans and repairs with a one-minute limit because MVK does not
+  The workspace plans and repairs with a one-minute limit because MVK does not
   reliably reach a feasible catalog `7` timetable in 30 seconds.
+- Catalog `8` lets a cohort declare its curator (`curatorTeacherId`) and home room (`homeRoomId`), and a subject
+  declare `curatorLesson`. Each curator lesson must be taught by its cohort's curator, who needs no separate
+  qualification for it, and is held in the cohort's home room when one is declared (`hard.cohort-home-room`). A
+  lesson with no room preference of its own prefers the home room if the room can host it. A curator creates no
+  lessons; a school adds Klassitund only where it wants one. MVK marks Klassitund as its curator lesson, takes
+  21 curators from EduPage class records, infers 5D's curator and room from its Klassitund lessons, and assigns a
+  synthetic 6C curator from teachers who teach that cohort. It declares home rooms for grades 1 through 4 and
+  derives older-cohort rooms from the curator-taught IntÕ lesson, except 5D's Klassitund room and the unresolved 6C.
+  MVK locks those eleven IntÕ lessons to their home rooms and Siiri Aiaste's History lessons to A231, where the
+  published timetable consistently assigns them.
+  Workspace repair creates catalog `8`
+  successors.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
   infeasibility or optimality.
 
@@ -98,7 +109,8 @@ The complete behavior, constraint catalog, failure semantics, and score definiti
 [`spec/kernel-schedule-quality/spec.md`](spec/kernel-schedule-quality/spec.md) and the catalog `3` start-quality extension
 in [`spec/kernel-cohort-start-quality/spec.md`](spec/kernel-cohort-start-quality/spec.md). The cohort-level spread
 setting is specified in [`spec/kernel-cohort-daily-balance/spec.md`](spec/kernel-cohort-daily-balance/spec.md).
-School-wide reservation behavior is in [`spec/kernel-reserved-periods/spec.md`](spec/kernel-reserved-periods/spec.md).
+School-wide reservation behavior is in [`spec/kernel-reserved-periods/spec.md`](spec/kernel-reserved-periods/spec.md),
+and curators and home rooms are in [`spec/kernel-cohort-curator/spec.md`](spec/kernel-cohort-curator/spec.md).
 
 ## Operations workspace
 

@@ -22,7 +22,9 @@ public final class PreflightFeasibilityCheck {
         for (var lesson : definition.lessons().stream().sorted(java.util.Comparator.comparing(SchoolDefinition.Lesson::id)).toList()) {
             var teacher = teachers.get(lesson.teacherId());
             var cohort = cohorts.get(lesson.cohortId());
-            boolean reservationAllowed = subjects.get(lesson.subjectId()).reservedPeriodsAllowed();
+            var subject = subjects.get(lesson.subjectId());
+            boolean reservationAllowed = subject.reservedPeriodsAllowed();
+            String homeRoomId = subject.curatorLesson() ? cohort.homeRoomId() : null;
             var candidatePeriods = definition.periods().stream()
                     .filter(period -> reservationAllowed || !definition.reservedPeriodIds().contains(period.id()))
                     .filter(period -> lesson.periodLock() == null || lesson.periodLock().equals(period.id()))
@@ -52,6 +54,7 @@ public final class PreflightFeasibilityCheck {
 
             var selectableRooms = definition.rooms().stream()
                     .filter(room -> lesson.roomLock() == null || lesson.roomLock().equals(room.id()))
+                    .filter(room -> homeRoomId == null || homeRoomId.equals(room.id()))
                     .toList();
             boolean capacityPossible = selectableRooms.stream().anyMatch(room -> room.capacity() >= cohort.size());
             boolean capabilityPossible = selectableRooms.stream()
@@ -71,6 +74,9 @@ public final class PreflightFeasibilityCheck {
                 }
                 if (lesson.roomLock() != null) {
                     failures.get(KernelCatalog.ROOM_LOCK.id()).add(List.of(lesson.id(), lesson.roomLock()));
+                }
+                if (homeRoomId != null) {
+                    failures.get(KernelCatalog.COHORT_HOME_ROOM.id()).add(List.of(lesson.id(), homeRoomId));
                 }
             }
         }

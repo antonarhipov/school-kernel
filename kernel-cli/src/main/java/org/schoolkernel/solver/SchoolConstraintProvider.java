@@ -45,6 +45,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 subjectDailyLimit(factory),
                 subjectReservedLimit(factory),
                 cohortDailySpread(factory),
+                cohortHomeRoom(factory),
                 periodMove(factory),
                 roomOnlyMove(factory),
                 teacherGap(factory),
@@ -221,6 +222,19 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .penalize(DAY_SHAPE_HARD, (cohortWeek, weekdays) -> (int) countCohortWeekImbalance(
                         weekdays, cohortWeek.available(), cohortWeek.catalog(), cohortWeek.maxDailyLessonSpread()))
                 .asConstraint(KernelCatalog.COHORT_DAILY_SPREAD.id());
+    }
+
+    public Constraint cohortHomeRoom(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(SchoolConstraintProvider::outsideHomeRoom)
+                .penalize(HARD)
+                .asConstraint(KernelCatalog.COHORT_HOME_ROOM.id());
+    }
+
+    /** A curator lesson of a cohort with a home room held anywhere else. */
+    static boolean outsideHomeRoom(PlanningLesson lesson) {
+        String homeRoomId = lesson.getPlacementRules().homeRoomId();
+        return homeRoomId != null && !homeRoomId.equals(lesson.getRoom().id());
     }
 
     public Constraint periodMove(ConstraintFactory factory) {

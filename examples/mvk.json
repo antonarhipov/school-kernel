@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 7,
+  "catalogVersion": 8,
   "schoolId": "merivalja-kool",
   "displayName": "Merivälja Kool",
   "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
@@ -70,7 +70,8 @@
     },
     {
       "id": "klassitund",
-      "displayName": "Klassitund"
+      "displayName": "Klassitund",
+      "curatorLesson": true
     },
     {
       "id": "kunstiopetus",
@@ -503,7 +504,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "piret-laanesaar",
+      "homeRoomId": "a106"
     },
     {
       "id": "1b",
@@ -511,7 +514,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "kairi-meressaar",
+      "homeRoomId": "a120"
     },
     {
       "id": "1c",
@@ -519,7 +524,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "helena-kroon",
+      "homeRoomId": "a118"
     },
     {
       "id": "2a",
@@ -527,7 +534,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "anita-kalmus",
+      "homeRoomId": "a109"
     },
     {
       "id": "2b",
@@ -535,7 +544,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "maiki-saaring",
+      "homeRoomId": "a117"
     },
     {
       "id": "2c",
@@ -543,7 +554,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "indra-feldman",
+      "homeRoomId": "a207"
     },
     {
       "id": "3a",
@@ -551,7 +564,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "kristin-muul",
+      "homeRoomId": "a228"
     },
     {
       "id": "3b",
@@ -559,7 +574,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 2
+      "latestStartSlot": 2,
+      "curatorTeacherId": "reena-korp",
+      "homeRoomId": "a217"
     },
     {
       "id": "4a",
@@ -567,7 +584,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "anette-maria-rennit",
+      "homeRoomId": "a218"
     },
     {
       "id": "4b",
@@ -575,7 +594,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "rita-lumiste",
+      "homeRoomId": "a119"
     },
     {
       "id": "5a",
@@ -583,7 +604,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "ene-avson",
+      "homeRoomId": "a215"
     },
     {
       "id": "5b",
@@ -591,7 +614,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "katariin-treial",
+      "homeRoomId": "a216"
     },
     {
       "id": "5d",
@@ -599,7 +624,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "liisi-rannik",
+      "homeRoomId": "a211"
     },
     {
       "id": "6a",
@@ -607,7 +634,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "vaike-antsov",
+      "homeRoomId": "b213"
     },
     {
       "id": "6b",
@@ -615,7 +644,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "liivi-kivimae-bondarev",
+      "homeRoomId": "b214"
     },
     {
       "id": "6c",
@@ -623,7 +654,8 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "olga-simonovits"
     },
     {
       "id": "7a",
@@ -631,7 +663,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "saale-maripuu",
+      "homeRoomId": "b216"
     },
     {
       "id": "7b",
@@ -639,7 +673,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "bergit-semre",
+      "homeRoomId": "a229"
     },
     {
       "id": "8a",
@@ -647,7 +683,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "grete-suurvali",
+      "homeRoomId": "b214"
     },
     {
       "id": "8b",
@@ -655,7 +693,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "marina-pokintsereda",
+      "homeRoomId": "a230"
     },
     {
       "id": "9a",
@@ -663,7 +703,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "marilin-laanetu",
+      "homeRoomId": "a204"
     },
     {
       "id": "9b",
@@ -671,7 +713,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "piret-noor",
+      "homeRoomId": "b212"
     },
     {
       "id": "9c",
@@ -679,7 +723,9 @@
       "size": 24,
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
-      "latestStartSlot": 4
+      "latestStartSlot": 4,
+      "curatorTeacherId": "helina-silberg",
+      "homeRoomId": "b215"
     }
   ],
   "rooms": [
@@ -4533,7 +4579,8 @@
       ],
       "preferredRoomIds": [
         "a215"
-      ]
+      ],
+      "roomLock": "a215"
     },
     {
       "id": "5a.matemaatika.01",
@@ -4981,7 +5028,8 @@
       ],
       "preferredRoomIds": [
         "a216"
-      ]
+      ],
+      "roomLock": "a216"
     },
     {
       "id": "5b.matemaatika.04",
@@ -5625,7 +5673,8 @@
       ],
       "preferredRoomIds": [
         "b213"
-      ]
+      ],
+      "roomLock": "b213"
     },
     {
       "id": "6a.matemaatika.05",
@@ -5849,7 +5898,8 @@
       ],
       "preferredRoomIds": [
         "b214"
-      ]
+      ],
+      "roomLock": "b214"
     },
     {
       "id": "6b.ajalugu.02",
@@ -6283,7 +6333,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "7a.into.01",
@@ -6297,7 +6348,8 @@
       ],
       "preferredRoomIds": [
         "b216"
-      ]
+      ],
+      "roomLock": "b216"
     },
     {
       "id": "7a.kirjandus.01",
@@ -6465,7 +6517,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "7a.matemaatika.04",
@@ -6521,7 +6574,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "7b.bioloogia.01",
@@ -6731,7 +6785,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "7b.kunstiopetus.01",
@@ -6815,7 +6870,8 @@
       ],
       "preferredRoomIds": [
         "a229"
-      ]
+      ],
+      "roomLock": "a229"
     },
     {
       "id": "7b.loodusopetus.02",
@@ -6899,7 +6955,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "8a.kirjandus.01",
@@ -7067,7 +7124,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "8a.matemaatika.04",
@@ -7193,7 +7251,8 @@
       ],
       "preferredRoomIds": [
         "b214"
-      ]
+      ],
+      "roomLock": "b214"
     },
     {
       "id": "8b.inglise-keel.01",
@@ -7221,7 +7280,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "8b.bioloogia.01",
@@ -7333,7 +7393,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "8b.inimeseopetus.01",
@@ -7375,7 +7436,8 @@
       ],
       "preferredRoomIds": [
         "a230"
-      ]
+      ],
+      "roomLock": "a230"
     },
     {
       "id": "8b.keemia.02",
@@ -7627,7 +7689,8 @@
       ],
       "preferredRoomIds": [
         "a204"
-      ]
+      ],
+      "roomLock": "a204"
     },
     {
       "id": "9a.matemaatika.03",
@@ -7809,7 +7872,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "9a.eesti-keel.02",
@@ -7879,7 +7943,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "9a.fuusika.02",
@@ -7991,7 +8056,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "9b.inglise-keel.01",
@@ -8033,7 +8099,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "9b.eesti-keel.01",
@@ -8257,7 +8324,8 @@
       ],
       "preferredRoomIds": [
         "b212"
-      ]
+      ],
+      "roomLock": "b212"
     },
     {
       "id": "9b.matemaatika.05",
@@ -8369,7 +8437,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "9c.keemia.01",
@@ -8425,7 +8494,8 @@
       ],
       "preferredRoomIds": [
         "a231"
-      ]
+      ],
+      "roomLock": "a231"
     },
     {
       "id": "9c.eksami-ettevalmistus-matemaatika.01",
@@ -8621,7 +8691,8 @@
       ],
       "preferredRoomIds": [
         "b215"
-      ]
+      ],
+      "roomLock": "b215"
     },
     {
       "id": "9c.fuusika.02",

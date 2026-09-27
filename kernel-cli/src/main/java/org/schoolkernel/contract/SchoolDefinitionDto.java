@@ -23,7 +23,8 @@ public record SchoolDefinitionDto(
             Boolean reservedPeriodsAllowed,
             Integer maxWeeklyReservedLessonsPerCohort,
             Boolean dayEdgeOnly,
-            Integer maxDailyLessonsPerCohort) {}
+            Integer maxDailyLessonsPerCohort,
+            Boolean curatorLesson) {}
 
     public record TeacherDto(
             String id,
@@ -42,7 +43,9 @@ public record SchoolDefinitionDto(
             Integer maxDailyGaps,
             Integer latestStartSlot,
             Integer preferredLatestStartSlot,
-            Integer dailyLessonSpreadLimit) {}
+            Integer dailyLessonSpreadLimit,
+            String curatorTeacherId,
+            String homeRoomId) {}
 
     public record RoomDto(
             String id,

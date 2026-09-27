@@ -54,6 +54,7 @@ public final class ScheduleEvaluator {
                     lesson.getPeriodLock() != null && !lesson.getPeriodLock().equals(periodId));
             incrementIf(hard, KernelCatalog.ROOM_LOCK.id(),
                     lesson.getRoomLock() != null && !lesson.getRoomLock().equals(lesson.getRoom().id()));
+            incrementIf(hard, KernelCatalog.COHORT_HOME_ROOM.id(), SchoolConstraintProvider.outsideHomeRoom(lesson));
             incrementIf(hard, KernelCatalog.RESERVED_PERIOD.id(),
                     SchoolConstraintProvider.usesForbiddenReservedPeriod(lesson));
 

@@ -37,6 +37,8 @@ Current feature directories:
   rules, including the first exception to a period reservation (MVK's Õpiabi in slot 0).
 - [`kernel-cohort-daily-spread`](kernel-cohort-daily-spread/) specifies the catalog 7 hard per-cohort daily lesson
   spread limit and the one-minute workspace run it requires for MVK.
+- [`kernel-cohort-curator`](kernel-cohort-curator/) specifies catalog 8 cohort curators, home rooms, and curator
+  lessons such as Klassitund, which the curator teaches in the home room.
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
 
