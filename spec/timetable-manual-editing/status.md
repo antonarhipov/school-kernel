@@ -3,15 +3,15 @@
 ## Current
 
 - Use case: UC-2
-- Status: IN_PROGRESS
-- Next eligible: none (UC-2 in progress)
+- Status: PENDING_WALKTHROUGH
+- Next eligible: none (UC-2 pending walkthrough)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | c309189 | convergence/UC-1.md |
-| UC-2 | IN_PROGRESS | UC-1 | - | - |
+| UC-2 | PENDING_WALKTHROUGH | UC-1 | 5273fab | convergence/UC-2.md |
 | UC-3 | NOT_STARTED | UC-1, UC-2 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
