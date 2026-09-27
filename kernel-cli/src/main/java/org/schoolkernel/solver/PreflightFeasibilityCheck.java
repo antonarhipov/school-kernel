@@ -15,26 +15,28 @@ public final class PreflightFeasibilityCheck {
     public List<ConstraintDiagnostic> findObviousFailures(SchoolDefinition definition) {
         Map<String, SchoolDefinition.Teacher> teachers = index(definition.teachers(), SchoolDefinition.Teacher::id);
         Map<String, SchoolDefinition.Cohort> cohorts = index(definition.cohorts(), SchoolDefinition.Cohort::id);
+        Map<String, SchoolDefinition.Subject> subjects = index(definition.subjects(), SchoolDefinition.Subject::id);
         var failures = new LinkedHashMap<String, List<List<String>>>();
         KernelCatalog.hardConstraintIds().forEach(id -> failures.put(id, new ArrayList<>()));
 
         for (var lesson : definition.lessons().stream().sorted(java.util.Comparator.comparing(SchoolDefinition.Lesson::id)).toList()) {
             var teacher = teachers.get(lesson.teacherId());
             var cohort = cohorts.get(lesson.cohortId());
+            boolean reservationAllowed = subjects.get(lesson.subjectId()).reservedPeriodsAllowed();
             var candidatePeriods = definition.periods().stream()
-                    .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
+                    .filter(period -> reservationAllowed || !definition.reservedPeriodIds().contains(period.id()))
                     .filter(period -> lesson.periodLock() == null || lesson.periodLock().equals(period.id()))
                     .filter(period -> teacher.availablePeriodIds().contains(period.id()))
                     .filter(period -> cohort.availablePeriodIds().contains(period.id()))
                     .toList();
             if (candidatePeriods.isEmpty()) {
                 if (definition.periods().stream()
-                        .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
+                        .filter(period -> reservationAllowed || !definition.reservedPeriodIds().contains(period.id()))
                         .noneMatch(period -> teacher.availablePeriodIds().contains(period.id()))) {
                     failures.get(KernelCatalog.TEACHER_AVAILABILITY.id()).add(List.of(lesson.id(), teacher.id()));
                 }
                 if (definition.periods().stream()
-                        .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
+                        .filter(period -> reservationAllowed || !definition.reservedPeriodIds().contains(period.id()))
                         .noneMatch(period -> cohort.availablePeriodIds().contains(period.id()))) {
                     failures.get(KernelCatalog.COHORT_AVAILABILITY.id()).add(List.of(lesson.id(), cohort.id()));
                 }

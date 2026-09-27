@@ -21,9 +21,13 @@ public final class PlanningMapper {
     public SchoolSchedule toPlanningProblem(
             SchoolDefinition definition,
             Map<String, BaselineAssignment> baselineAssignments) {
+        // Reserved periods widen the search only for schools with a subject that may use them.
+        boolean reservedInRange = definition.subjects().stream()
+                .anyMatch(SchoolDefinition.Subject::reservedPeriodsAllowed);
         var periods = definition.periods().stream()
-                .filter(period -> !definition.reservedPeriodIds().contains(period.id()))
-                .map(period -> new PeriodValue(period.id(), period.weekday(), period.order()))
+                .filter(period -> reservedInRange || !definition.reservedPeriodIds().contains(period.id()))
+                .map(period -> new PeriodValue(period.id(), period.weekday(), period.order(),
+                        definition.reservedPeriodIds().contains(period.id())))
                 .toList();
         var rooms = definition.rooms().stream()
                 .map(room -> new RoomValue(
@@ -36,6 +40,8 @@ public final class PlanningMapper {
                 .collect(Collectors.toMap(SchoolDefinition.Teacher::id, Function.identity()));
         Map<String, SchoolDefinition.Cohort> cohorts = definition.cohorts().stream()
                 .collect(Collectors.toMap(SchoolDefinition.Cohort::id, Function.identity()));
+        Map<String, SchoolDefinition.Subject> subjects = definition.subjects().stream()
+                .collect(Collectors.toMap(SchoolDefinition.Subject::id, Function.identity()));
         var lessons = definition.lessons().stream().map(lesson -> {
             var teacher = teachers.get(lesson.teacherId());
             var cohort = cohorts.get(lesson.cohortId());
@@ -47,7 +53,8 @@ public final class PlanningMapper {
                     lesson.requiredRoomCapabilityIds(), lesson.preferredRoomIds(), lesson.periodLock(), lesson.roomLock(),
                     baseline == null ? null : baseline.periodId(),
                     baseline == null ? null : baseline.roomId(),
-                    periods, cohort.maxDailyLessonSpread(), cohort.maxDailyGaps());
+                    periods, cohort.maxDailyLessonSpread(), cohort.maxDailyGaps(),
+                    PlacementRules.of(cohort, subjects.get(lesson.subjectId())));
             if (baseline != null) {
                 PeriodValue baselinePeriod = periodsById.get(baseline.periodId());
                 RoomValue baselineRoom = roomsById.get(baseline.roomId());
@@ -71,6 +78,7 @@ public final class PlanningMapper {
 
     private static boolean canKeepBaseline(PlanningLesson lesson, PeriodValue period, RoomValue room) {
         return period != null && room != null
+                && (!period.reserved() || lesson.getPlacementRules().reservedPeriodsAllowed())
                 && lesson.getTeacherAvailablePeriodIds().contains(period.id())
                 && lesson.getCohortAvailablePeriodIds().contains(period.id())
                 && room.availablePeriodIds().contains(period.id())

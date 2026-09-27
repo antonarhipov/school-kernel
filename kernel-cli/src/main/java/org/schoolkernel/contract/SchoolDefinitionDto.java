@@ -17,7 +17,13 @@ public record SchoolDefinitionDto(
         List<LessonDto> lessons,
         List<SoftConstraintOverrideDto> softConstraintOverrides) {
 
-    public record SubjectDto(String id, String displayName) {}
+    public record SubjectDto(
+            String id,
+            String displayName,
+            Boolean reservedPeriodsAllowed,
+            Integer maxWeeklyReservedLessonsPerCohort,
+            Boolean dayEdgeOnly,
+            Integer maxDailyLessonsPerCohort) {}
 
     public record TeacherDto(
             String id,
@@ -33,7 +39,9 @@ public record SchoolDefinitionDto(
             List<String> availablePeriodIds,
             List<String> undesirablePeriodIds,
             Integer maxDailyLessonSpread,
-            Integer maxDailyGaps) {}
+            Integer maxDailyGaps,
+            Integer latestStartSlot,
+            Integer preferredLatestStartSlot) {}
 
     public record RoomDto(
             String id,

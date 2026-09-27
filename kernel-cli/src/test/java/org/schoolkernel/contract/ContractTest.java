@@ -103,11 +103,60 @@ class ContractTest {
     }
 
     @Test
+    @DisplayName("Day edges RULE-1: catalog 6 accepts start bounds and subject placement rules; older catalogs reject them")
+    void dayEdgeFieldsSchemaAndRevision() throws Exception {
+        var definition = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper()
+                .readTree(resource("/fixtures/valid-plan.json"));
+        definition.put("catalogVersion", 6);
+        assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+        var cohort = (tools.jackson.databind.node.ObjectNode) definition.withArray("cohorts").get(0);
+        var subject = (tools.jackson.databind.node.ObjectNode) definition.withArray("subjects").get(0);
+        var fields = List.<Runnable>of(
+                () -> cohort.put("latestStartSlot", 2),
+                () -> cohort.put("preferredLatestStartSlot", 1),
+                () -> subject.put("reservedPeriodsAllowed", true),
+                () -> subject.put("maxWeeklyReservedLessonsPerCohort", 1),
+                () -> subject.put("dayEdgeOnly", true),
+                () -> subject.put("maxDailyLessonsPerCohort", 1));
+        for (Runnable field : fields) {
+            String before = new RevisionService().definitionRevision(definition);
+            field.run();
+            assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
+            assertNotEquals(before, new RevisionService().definitionRevision(definition));
+        }
+        for (int version : new int[] {1, 2, 3, 4, 5}) {
+            var oldCatalog = definition.deepCopy();
+            oldCatalog.put("catalogVersion", version);
+            assertFalse(new DefinitionSchemaValidator().validate(oldCatalog).isEmpty());
+        }
+
+        for (String field : List.of("latestStartSlot", "preferredLatestStartSlot")) {
+            var invalid = definition.deepCopy();
+            ((tools.jackson.databind.node.ObjectNode) invalid.withArray("cohorts").get(0)).put(field, 0);
+            assertFalse(new DefinitionSchemaValidator().validate(invalid).isEmpty());
+            ((tools.jackson.databind.node.ObjectNode) invalid.withArray("cohorts").get(0)).put(field, 1.5);
+            assertFalse(new DefinitionSchemaValidator().validate(invalid).isEmpty());
+        }
+        for (String field : List.of("maxWeeklyReservedLessonsPerCohort", "maxDailyLessonsPerCohort")) {
+            var invalid = definition.deepCopy();
+            ((tools.jackson.databind.node.ObjectNode) invalid.withArray("subjects").get(0)).put(field, 0);
+            assertFalse(new DefinitionSchemaValidator().validate(invalid).isEmpty());
+        }
+        var withoutPermission = definition.deepCopy();
+        ((tools.jackson.databind.node.ObjectNode) withoutPermission.withArray("subjects").get(0))
+                .put("reservedPeriodsAllowed", false);
+        assertFalse(new DefinitionSchemaValidator().validate(withoutPermission).isEmpty());
+        ((tools.jackson.databind.node.ObjectNode) withoutPermission.withArray("subjects").get(0))
+                .remove("reservedPeriodsAllowed");
+        assertFalse(new DefinitionSchemaValidator().validate(withoutPermission).isEmpty());
+    }
+
+    @Test
     @DisplayName("Cohort balance UC-1 G5/RULE-5: MVK has the exact gap, daily-load and start preference configuration")
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
         var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
-        assertEquals(5, definition.path("catalogVersion").intValue());
+        assertEquals(6, definition.path("catalogVersion").intValue());
         var cohorts = definition.path("cohorts");
         assertEquals(List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "4a", "4b",
                         "5a", "5b", "5d", "6a", "6b", "6c", "7a", "7b", "8a", "8b", "9a", "9b", "9c"),
@@ -117,6 +166,24 @@ class ContractTest {
             assertEquals(1, cohort.path("maxDailyLessonSpread").intValue());
             assertFalse(cohort.has("undesirablePeriodIds"));
             assertFalse(cohort.has("maxDailyGaps"));
+            assertFalse(cohort.has("preferredLatestStartSlot"));
+            boolean youngest = List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b")
+                    .contains(cohort.path("id").stringValue());
+            assertEquals(youngest, cohort.has("latestStartSlot"));
+            if (youngest) {
+                assertEquals(2, cohort.path("latestStartSlot").intValue());
+            }
+        });
+        definition.path("subjects").forEach(subject -> {
+            if (subject.path("id").stringValue().equals("opiabi")) {
+                assertEquals(true, subject.path("reservedPeriodsAllowed").booleanValue());
+                assertEquals(1, subject.path("maxWeeklyReservedLessonsPerCohort").intValue());
+                assertEquals(true, subject.path("dayEdgeOnly").booleanValue());
+                assertEquals(1, subject.path("maxDailyLessonsPerCohort").intValue());
+                assertEquals(6, subject.size());
+            } else {
+                assertEquals(2, subject.size());
+            }
         });
         assertEquals(JsonSupport.mapper().readTree("""
                 [

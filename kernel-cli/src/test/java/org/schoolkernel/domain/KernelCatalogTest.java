@@ -11,7 +11,8 @@ class KernelCatalogTest {
     @Test
     @DisplayName("RULE-27: catalog version, IDs, order, categories, and defaults are exact")
     void catalogIsExact() {
-        assertEquals(5, KernelCatalog.VERSION);
+        assertEquals(6, KernelCatalog.VERSION);
+        assertEquals(5, KernelCatalog.NO_GAPS_VERSION);
         assertEquals(4, KernelCatalog.DAILY_BALANCE_VERSION);
         assertEquals(3, KernelCatalog.START_QUALITY_VERSION);
         assertEquals(2, KernelCatalog.CLASS_QUALITY_VERSION);
@@ -39,6 +40,11 @@ class KernelCatalogTest {
                 row("hard.period-lock", "HARD", null),
                 row("hard.room-lock", "HARD", null),
                 row("hard.cohort-gap", "HARD", null),
+                row("hard.reserved-period", "HARD", null),
+                row("hard.cohort-late-start", "HARD", null),
+                row("hard.subject-day-edge", "HARD", null),
+                row("hard.subject-daily-limit", "HARD", null),
+                row("hard.subject-reserved-limit", "HARD", null),
                 row("stability.period-move", "PERIOD_STABILITY", null),
                 row("stability.room-only-move", "ROOM_STABILITY", null),
                 row("soft.teacher-gap", "ORDINARY_PREFERENCE", 1L),

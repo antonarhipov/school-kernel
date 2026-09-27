@@ -11,7 +11,8 @@ public final class KernelCatalog {
     public static final int CLASS_QUALITY_VERSION = 2;
     public static final int START_QUALITY_VERSION = 3;
     public static final int DAILY_BALANCE_VERSION = 4;
-    public static final int VERSION = 5;
+    public static final int NO_GAPS_VERSION = 5;
+    public static final int VERSION = 6;
 
     public enum Category {
         HARD,
@@ -45,6 +46,11 @@ public final class KernelCatalog {
     public static final ConstraintDescriptor PERIOD_LOCK = hard("hard.period-lock");
     public static final ConstraintDescriptor ROOM_LOCK = hard("hard.room-lock");
     public static final ConstraintDescriptor COHORT_DAILY_GAPS = hard("hard.cohort-gap");
+    public static final ConstraintDescriptor RESERVED_PERIOD = hard("hard.reserved-period");
+    public static final ConstraintDescriptor COHORT_LATEST_START = hard("hard.cohort-late-start");
+    public static final ConstraintDescriptor SUBJECT_DAY_EDGE = hard("hard.subject-day-edge");
+    public static final ConstraintDescriptor SUBJECT_DAILY_LIMIT = hard("hard.subject-daily-limit");
+    public static final ConstraintDescriptor SUBJECT_RESERVED_LIMIT = hard("hard.subject-reserved-limit");
     public static final ConstraintDescriptor PERIOD_MOVE =
             new ConstraintDescriptor("stability.period-move", Category.PERIOD_STABILITY, null);
     public static final ConstraintDescriptor ROOM_ONLY_MOVE =
@@ -69,6 +75,11 @@ public final class KernelCatalog {
             PERIOD_LOCK,
             ROOM_LOCK,
             COHORT_DAILY_GAPS,
+            RESERVED_PERIOD,
+            COHORT_LATEST_START,
+            SUBJECT_DAY_EDGE,
+            SUBJECT_DAILY_LIMIT,
+            SUBJECT_RESERVED_LIMIT,
             PERIOD_MOVE,
             ROOM_ONLY_MOVE,
             TEACHER_GAP,
@@ -122,6 +133,7 @@ public final class KernelCatalog {
                 || catalogVersion == CLASS_QUALITY_VERSION
                 || catalogVersion == START_QUALITY_VERSION
                 || catalogVersion == DAILY_BALANCE_VERSION
+                || catalogVersion == NO_GAPS_VERSION
                 || catalogVersion == VERSION;
     }
 

@@ -29,6 +29,7 @@ public class PlanningLesson {
     private String baselinePeriodId;
     private String baselineRoomId;
     private List<PeriodValue> periodCatalog;
+    private PlacementRules placementRules = PlacementRules.NONE;
     private PeriodValue period;
     private RoomValue room;
 
@@ -132,6 +133,36 @@ public class PlanningLesson {
             List<PeriodValue> periodCatalog,
             int cohortMaxDailyLessonSpread,
             int cohortMaxDailyGaps) {
+        this(id, subjectId, cohortId, cohortSize, teacherId, seriesId,
+                teacherAvailablePeriodIds, teacherUndesirablePeriodIds,
+                cohortAvailablePeriodIds, cohortUndesirablePeriodIds, lessonUndesirablePeriodIds,
+                requiredRoomCapabilityIds, preferredRoomIds, periodLock, roomLock,
+                baselinePeriodId, baselineRoomId, periodCatalog, cohortMaxDailyLessonSpread, cohortMaxDailyGaps,
+                PlacementRules.NONE);
+    }
+
+    public PlanningLesson(
+            String id,
+            String subjectId,
+            String cohortId,
+            int cohortSize,
+            String teacherId,
+            String seriesId,
+            Set<String> teacherAvailablePeriodIds,
+            Set<String> teacherUndesirablePeriodIds,
+            Set<String> cohortAvailablePeriodIds,
+            Set<String> cohortUndesirablePeriodIds,
+            Set<String> lessonUndesirablePeriodIds,
+            Set<String> requiredRoomCapabilityIds,
+            Set<String> preferredRoomIds,
+            String periodLock,
+            String roomLock,
+            String baselinePeriodId,
+            String baselineRoomId,
+            List<PeriodValue> periodCatalog,
+            int cohortMaxDailyLessonSpread,
+            int cohortMaxDailyGaps,
+            PlacementRules placementRules) {
         this.id = id;
         this.subjectId = subjectId;
         this.cohortId = cohortId;
@@ -152,6 +183,7 @@ public class PlanningLesson {
         this.baselinePeriodId = baselinePeriodId;
         this.baselineRoomId = baselineRoomId;
         this.periodCatalog = periodCatalog;
+        this.placementRules = placementRules;
     }
 
     @PlanningId
@@ -233,6 +265,18 @@ public class PlanningLesson {
 
     public List<PeriodValue> getPeriodCatalog() {
         return periodCatalog;
+    }
+
+    public PlacementRules getPlacementRules() {
+        return placementRules;
+    }
+
+    public int getCohortLatestStartSlot() {
+        return placementRules.latestStartSlot();
+    }
+
+    public int getCohortPreferredLatestStartSlot() {
+        return placementRules.preferredLatestStartSlot();
     }
 
     @PlanningVariable(valueRangeProviderRefs = "periodRange")

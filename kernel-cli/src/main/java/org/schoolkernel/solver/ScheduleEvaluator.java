@@ -54,6 +54,8 @@ public final class ScheduleEvaluator {
                     lesson.getPeriodLock() != null && !lesson.getPeriodLock().equals(periodId));
             incrementIf(hard, KernelCatalog.ROOM_LOCK.id(),
                     lesson.getRoomLock() != null && !lesson.getRoomLock().equals(lesson.getRoom().id()));
+            incrementIf(hard, KernelCatalog.RESERVED_PERIOD.id(),
+                    SchoolConstraintProvider.usesForbiddenReservedPeriod(lesson));
 
             if (lesson.getBaselinePeriodId() != null) {
                 boolean forcedPeriod = lesson.getPeriodLock() != null
@@ -97,6 +99,18 @@ public final class ScheduleEvaluator {
         cohortDays.values().forEach(lessons -> hard.compute(
                 KernelCatalog.COHORT_DAILY_GAPS.id(),
                 (key, count) -> count + SchoolConstraintProvider.countCohortExcessGaps(lessons)));
+        cohortDays.values().forEach(lessons -> hard.compute(
+                KernelCatalog.COHORT_LATEST_START.id(),
+                (key, count) -> count + SchoolConstraintProvider.countCohortLatestStartViolation(lessons)));
+        cohortDays.values().forEach(lessons -> hard.compute(
+                KernelCatalog.SUBJECT_DAY_EDGE.id(),
+                (key, count) -> count + SchoolConstraintProvider.dayEdgeViolations(lessons).size()));
+        cohortDays.values().forEach(lessons -> hard.compute(
+                KernelCatalog.SUBJECT_DAILY_LIMIT.id(),
+                (key, count) -> count + sum(SchoolConstraintProvider.subjectDailyExcess(lessons))));
+        cohorts.values().forEach(lessons -> hard.compute(
+                KernelCatalog.SUBJECT_RESERVED_LIMIT.id(),
+                (key, count) -> count + sum(SchoolConstraintProvider.subjectReservedExcess(lessons))));
         cohortDays.values().forEach(lessons -> soft.compute(
                 KernelCatalog.COHORT_GAP.id(),
                 (key, count) -> count + SchoolConstraintProvider.countCohortGaps(lessons)));
@@ -135,6 +149,10 @@ public final class ScheduleEvaluator {
         var lessons = owners.computeIfAbsent(key, ignored -> new ArrayList<>());
         counts.compute(constraintId, (ignored, count) -> count + lessons.size());
         lessons.add(lessonId);
+    }
+
+    private static long sum(Map<String, Long> excess) {
+        return excess.values().stream().mapToLong(Long::longValue).sum();
     }
 
     private static void incrementIf(Map<String, Long> counts, String id, boolean matches) {

@@ -39,8 +39,8 @@ class SolverConfigurationTest {
     void bendableProductLevels() {
         assertEquals(2, SchoolConstraintProvider.HARD.hardLevelsSize());
         assertEquals(3, SchoolConstraintProvider.HARD.softLevelsSize());
-        assertEquals(2, SchoolConstraintProvider.COHORT_GAP_HARD.hardLevelsSize());
-        assertEquals(1, SchoolConstraintProvider.COHORT_GAP_HARD.hardScore(1));
+        assertEquals(2, SchoolConstraintProvider.DAY_SHAPE_HARD.hardLevelsSize());
+        assertEquals(1, SchoolConstraintProvider.DAY_SHAPE_HARD.hardScore(1));
         assertEquals(2, SchoolConstraintProvider.PERIOD_MOVE.hardLevelsSize());
         assertEquals(3, SchoolConstraintProvider.PERIOD_MOVE.softLevelsSize());
         assertEquals(2, SchoolConstraintProvider.ROOM_ONLY_MOVE.hardLevelsSize());

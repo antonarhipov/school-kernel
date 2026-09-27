@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.schoolkernel.domain.KernelCatalog;
@@ -17,8 +18,9 @@ import ai.timefold.solver.core.api.score.stream.Joiners;
 
 public final class SchoolConstraintProvider implements ConstraintProvider {
     static final BendableScore HARD = BendableScore.ofHard(2, 3, 0, 1);
-    // Gaps are infeasible, but a lower hard level lets search resolve physical conflicts first.
-    static final BendableScore COHORT_GAP_HARD = BendableScore.ofHard(2, 3, 1, 1);
+    // Gaps and other day-shape rules are infeasible, but a lower hard level lets search resolve physical
+    // conflicts first.
+    static final BendableScore DAY_SHAPE_HARD = BendableScore.ofHard(2, 3, 1, 1);
     static final BendableScore PERIOD_MOVE = BendableScore.ofSoft(2, 3, 0, 1);
     static final BendableScore ROOM_ONLY_MOVE = BendableScore.ofSoft(2, 3, 1, 1);
     static final BendableScore PREFERENCE = BendableScore.ofSoft(2, 3, 2, 1);
@@ -37,6 +39,11 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 periodLock(factory),
                 roomLock(factory),
                 cohortDailyGaps(factory),
+                reservedPeriod(factory),
+                cohortLatestStart(factory),
+                subjectDayEdge(factory),
+                subjectDailyLimit(factory),
+                subjectReservedLimit(factory),
                 periodMove(factory),
                 roomOnlyMove(factory),
                 teacherGap(factory),
@@ -135,8 +142,69 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                         ConstraintCollectors.max(PlanningLesson::getCohortMaxDailyGaps),
                         ConstraintCollectors.toList(PlanningLesson::getPeriod))
                 .filter((cohortDay, maxDailyGaps, periods) -> excessGaps(cohortDay, maxDailyGaps, periods) > 0)
-                .penalize(COHORT_GAP_HARD, SchoolConstraintProvider::excessGaps)
+                .penalize(DAY_SHAPE_HARD, SchoolConstraintProvider::excessGaps)
                 .asConstraint(KernelCatalog.COHORT_DAILY_GAPS.id());
+    }
+
+    public Constraint reservedPeriod(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(SchoolConstraintProvider::usesForbiddenReservedPeriod)
+                .penalize(HARD)
+                .asConstraint(KernelCatalog.RESERVED_PERIOD.id());
+    }
+
+    public Constraint cohortLatestStart(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getPlacementRules().latestStartSlot() != PlacementRules.UNLIMITED)
+                .groupBy(
+                        lesson -> new CohortDay(lesson.getCohortId(), lesson.getPeriod().weekday(),
+                                lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog()),
+                        ConstraintCollectors.max(PlanningLesson::getCohortLatestStartSlot),
+                        ConstraintCollectors.toList(PlanningLesson::getPeriod))
+                .filter((cohortDay, slot, periods) ->
+                        countLateStart(periods, cohortDay.catalog(), cohortDay.weekday(), slot) > 0)
+                .penalize(DAY_SHAPE_HARD)
+                .asConstraint(KernelCatalog.COHORT_LATEST_START.id());
+    }
+
+    public Constraint subjectDayEdge(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getPlacementRules().dayEdgeOnly())
+                .ifExists(PlanningLesson.class,
+                        Joiners.equal(PlanningLesson::getCohortId),
+                        Joiners.equal(lesson -> lesson.getPeriod().weekday()),
+                        Joiners.greaterThan(lesson -> lesson.getPeriod().order()))
+                .ifExists(PlanningLesson.class,
+                        Joiners.equal(PlanningLesson::getCohortId),
+                        Joiners.equal(lesson -> lesson.getPeriod().weekday()),
+                        Joiners.lessThan(lesson -> lesson.getPeriod().order()))
+                .penalize(DAY_SHAPE_HARD)
+                .asConstraint(KernelCatalog.SUBJECT_DAY_EDGE.id());
+    }
+
+    public Constraint subjectDailyLimit(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getPlacementRules().maxDailyLessons() != PlacementRules.UNLIMITED)
+                .groupBy(
+                        lesson -> new SubjectDay(lesson.getCohortId(), lesson.getSubjectId(),
+                                lesson.getPeriod().weekday(), lesson.getPlacementRules().maxDailyLessons()),
+                        ConstraintCollectors.count())
+                .filter((subjectDay, count) -> count > subjectDay.limit())
+                .penalize(DAY_SHAPE_HARD, (subjectDay, count) -> count - subjectDay.limit())
+                .asConstraint(KernelCatalog.SUBJECT_DAILY_LIMIT.id());
+    }
+
+    public Constraint subjectReservedLimit(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> lesson.getPeriod().reserved()
+                        && lesson.getPlacementRules().maxWeeklyReservedLessons() != PlacementRules.UNLIMITED)
+                .groupBy(
+                        lesson -> new SubjectWeek(lesson.getCohortId(), lesson.getSubjectId(),
+                                lesson.getPlacementRules().maxWeeklyReservedLessons()),
+                        ConstraintCollectors.count())
+                .filter((subjectWeek, count) -> count > subjectWeek.limit())
+                .penalize(DAY_SHAPE_HARD, (subjectWeek, count) -> count - subjectWeek.limit())
+                .asConstraint(KernelCatalog.SUBJECT_RESERVED_LIMIT.id());
     }
 
     public Constraint periodMove(ConstraintFactory factory) {
@@ -187,9 +255,10 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .groupBy(
                         lesson -> new CohortDay(lesson.getCohortId(), lesson.getPeriod().weekday(),
                                 lesson.getCohortAvailablePeriodIds(), lesson.getPeriodCatalog()),
+                        ConstraintCollectors.max(PlanningLesson::getCohortPreferredLatestStartSlot),
                         ConstraintCollectors.toList(PlanningLesson::getPeriod))
-                .penalize(PREFERENCE, (cohortDay, periods) -> countLateStart(
-                        periods, cohortDay.catalog(), cohortDay.weekday()))
+                .penalize(PREFERENCE, (cohortDay, slot, periods) -> countLateStart(
+                        periods, cohortDay.catalog(), cohortDay.weekday(), slot))
                 .asConstraint(KernelCatalog.COHORT_LATE_START.id());
     }
 
@@ -259,16 +328,73 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
         if (lessons.isEmpty()) return 0;
         PlanningLesson sample = lessons.getFirst();
         return countLateStart(lessons.stream().map(PlanningLesson::getPeriod).toList(),
-                sample.getPeriodCatalog(), sample.getPeriod().weekday());
+                sample.getPeriodCatalog(), sample.getPeriod().weekday(),
+                sample.getPlacementRules().preferredLatestStartSlot());
     }
 
-    private static long countLateStart(List<PeriodValue> assigned, List<PeriodValue> catalog, DayOfWeek day) {
+    static long countCohortLatestStartViolation(List<PlanningLesson> lessons) {
+        if (lessons.isEmpty()) return 0;
+        PlanningLesson sample = lessons.getFirst();
+        int slot = sample.getPlacementRules().latestStartSlot();
+        if (slot == PlacementRules.UNLIMITED) return 0;
+        return countLateStart(lessons.stream().map(PlanningLesson::getPeriod).toList(),
+                sample.getPeriodCatalog(), sample.getPeriod().weekday(), slot);
+    }
+
+    /** A day is late for {@code slot} when at least that many regular periods precede its first lesson. */
+    private static long countLateStart(
+            List<PeriodValue> assigned, List<PeriodValue> catalog, DayOfWeek day, int slot) {
         if (assigned.isEmpty()) return 0;
         int firstAssignedOrder = assigned.stream().mapToInt(PeriodValue::order).min().orElseThrow();
         long earlierSlots = catalog.stream()
-                .filter(period -> period.weekday() == day && period.order() < firstAssignedOrder)
+                .filter(period -> period.weekday() == day && !period.reserved() && period.order() < firstAssignedOrder)
                 .count();
-        return earlierSlots >= 3 ? 1 : 0;
+        return earlierSlots >= slot ? 1 : 0;
+    }
+
+    static boolean usesForbiddenReservedPeriod(PlanningLesson lesson) {
+        return lesson.getPeriod().reserved() && !lesson.getPlacementRules().reservedPeriodsAllowed();
+    }
+
+    /** Edge-only lessons with a lesson of the same cohort both before and after them on the day. */
+    static List<PlanningLesson> dayEdgeViolations(List<PlanningLesson> cohortDay) {
+        return cohortDay.stream()
+                .filter(lesson -> lesson.getPlacementRules().dayEdgeOnly())
+                .filter(lesson -> cohortDay.stream().anyMatch(
+                        other -> other.getPeriod().order() < lesson.getPeriod().order()))
+                .filter(lesson -> cohortDay.stream().anyMatch(
+                        other -> other.getPeriod().order() > lesson.getPeriod().order()))
+                .toList();
+    }
+
+    /** Subjects of one cohort-day that exceed their daily limit, with the excess count. */
+    static Map<String, Long> subjectDailyExcess(List<PlanningLesson> cohortDay) {
+        return excessBySubject(cohortDay.stream()
+                .filter(lesson -> lesson.getPlacementRules().maxDailyLessons() != PlacementRules.UNLIMITED)
+                .toList(), rules -> rules.maxDailyLessons());
+    }
+
+    /** Subjects of one cohort's week that exceed their reserved-period limit, with the excess count. */
+    static Map<String, Long> subjectReservedExcess(List<PlanningLesson> cohortWeek) {
+        return excessBySubject(cohortWeek.stream()
+                .filter(lesson -> lesson.getPeriod().reserved()
+                        && lesson.getPlacementRules().maxWeeklyReservedLessons() != PlacementRules.UNLIMITED)
+                .toList(), rules -> rules.maxWeeklyReservedLessons());
+    }
+
+    private static Map<String, Long> excessBySubject(
+            List<PlanningLesson> lessons, java.util.function.ToIntFunction<PlacementRules> limit) {
+        var excess = new java.util.TreeMap<String, Long>();
+        lessons.stream()
+                .collect(java.util.stream.Collectors.groupingBy(PlanningLesson::getSubjectId))
+                .forEach((subjectId, subjectLessons) -> {
+                    long over = subjectLessons.size()
+                            - (long) limit.applyAsInt(subjectLessons.getFirst().getPlacementRules());
+                    if (over > 0) {
+                        excess.put(subjectId, over);
+                    }
+                });
+        return excess;
     }
 
     private static long countGaps(
@@ -290,8 +416,10 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
         }
         var assignedOrders = new HashSet<Integer>();
         assigned.forEach(period -> assignedOrders.add(period.order()));
+        // An unoccupied reserved period is outside the day, as if it were never declared.
         List<PeriodValue> dayPeriods = catalog.stream()
                 .filter(period -> period.weekday() == day)
+                .filter(period -> !period.reserved() || assignedOrders.contains(period.order()))
                 .sorted(java.util.Comparator.comparingInt(PeriodValue::order))
                 .toList();
         var gaps = new java.util.ArrayList<PeriodValue>();
@@ -341,7 +469,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
             List<DayOfWeek> assignments, Set<String> available, List<PeriodValue> catalog,
             int maxDailyLessonSpread) {
         List<DayOfWeek> days = catalog.stream()
-                .filter(period -> available.contains(period.id()))
+                .filter(period -> !period.reserved() && available.contains(period.id()))
                 .map(PeriodValue::weekday)
                 .distinct()
                 .toList();
@@ -380,4 +508,6 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
     private record CohortWeek(
             String cohortId, Set<String> available, List<PeriodValue> catalog, int maxDailyLessonSpread) {}
     private record SeriesDay(String seriesId, DayOfWeek weekday) {}
+    private record SubjectDay(String cohortId, String subjectId, DayOfWeek weekday, int limit) {}
+    private record SubjectWeek(String cohortId, String subjectId, int limit) {}
 }

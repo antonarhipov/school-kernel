@@ -68,6 +68,9 @@ public final class HardConstraintDiagnostics {
             addIf(examples, KernelCatalog.ROOM_LOCK.id(),
                     lesson.getRoomLock() != null && !lesson.getRoomLock().equals(roomId),
                     lesson.getId(), roomId, lesson.getRoomLock());
+            addIf(examples, KernelCatalog.RESERVED_PERIOD.id(),
+                    SchoolConstraintProvider.usesForbiddenReservedPeriod(lesson),
+                    lesson.getId(), periodId);
         }
 
         var cohortDays = new LinkedHashMap<String, List<PlanningLesson>>();
@@ -81,6 +84,32 @@ public final class HardConstraintDiagnostics {
                 SchoolConstraintProvider.cohortGapPeriods(cohortDay).forEach(period -> entityIds.add(period.id()));
                 examples.get(KernelCatalog.COHORT_DAILY_GAPS.id()).add(List.copyOf(entityIds));
             }
+            String cohortId = cohortDay.getFirst().getCohortId();
+            String weekday = cohortDay.getFirst().getPeriod().weekday().name();
+            if (SchoolConstraintProvider.countCohortLatestStartViolation(cohortDay) > 0) {
+                String firstPeriodId = cohortDay.stream()
+                        .min(Comparator.comparingInt(lesson -> lesson.getPeriod().order()))
+                        .orElseThrow().getPeriod().id();
+                examples.get(KernelCatalog.COHORT_LATEST_START.id()).add(List.of(cohortId, weekday, firstPeriodId));
+            }
+            SchoolConstraintProvider.dayEdgeViolations(cohortDay).forEach(lesson -> examples
+                    .get(KernelCatalog.SUBJECT_DAY_EDGE.id())
+                    .add(List.of(lesson.getId(), cohortId, lesson.getPeriod().id())));
+            SchoolConstraintProvider.subjectDailyExcess(cohortDay).keySet().forEach(subjectId -> examples
+                    .get(KernelCatalog.SUBJECT_DAILY_LIMIT.id()).add(List.of(cohortId, subjectId, weekday)));
+        }
+
+        var cohortWeeks = new LinkedHashMap<String, List<PlanningLesson>>();
+        lessons.forEach(lesson -> cohortWeeks.computeIfAbsent(lesson.getCohortId(), ignored -> new ArrayList<>())
+                .add(lesson));
+        for (List<PlanningLesson> cohortWeek : cohortWeeks.values()) {
+            SchoolConstraintProvider.subjectReservedExcess(cohortWeek).keySet().forEach(subjectId -> {
+                var entityIds = new ArrayList<String>(List.of(cohortWeek.getFirst().getCohortId(), subjectId));
+                cohortWeek.stream()
+                        .filter(lesson -> lesson.getSubjectId().equals(subjectId) && lesson.getPeriod().reserved())
+                        .forEach(lesson -> entityIds.add(lesson.getPeriod().id()));
+                examples.get(KernelCatalog.SUBJECT_RESERVED_LIMIT.id()).add(List.copyOf(entityIds));
+            });
         }
 
         return KernelCatalog.hardConstraintIds().stream()

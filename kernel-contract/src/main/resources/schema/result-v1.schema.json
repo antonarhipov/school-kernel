@@ -14,7 +14,7 @@
     "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
     "elapsedTimeMs": { "type": "integer", "minimum": 0 },
     "schoolId": { "$ref": "#/$defs/id" },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6] },
     "inputRevision": { "$ref": "#/$defs/revision" },
     "effectiveSoftWeights": { "$ref": "#/$defs/effectiveSoftWeights" },
     "seed": { "type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807 },
@@ -83,7 +83,7 @@
       }
     },
     {
-      "if": { "required": ["catalogVersion"], "properties": { "catalogVersion": { "enum": [3, 4, 5] } } },
+      "if": { "required": ["catalogVersion"], "properties": { "catalogVersion": { "enum": [3, 4, 5, 6] } } },
       "then": { "properties": {
         "effectiveSoftWeights": { "required": ["soft.cohort-gap", "soft.cohort-late-start", "soft.cohort-week-balance"] },
         "score": { "properties": { "constraintBreakdown": { "minItems": 7, "maxItems": 7 } } }

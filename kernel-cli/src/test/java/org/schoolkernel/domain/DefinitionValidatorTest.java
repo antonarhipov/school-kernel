@@ -78,6 +78,45 @@ class DefinitionValidatorTest {
     }
 
     @Test
+    void dayEdgeFieldDefaults() throws Exception {
+        ObjectNode input = validInput();
+        input.put("catalogVersion", 6);
+        var validator = new DefinitionValidator();
+        var defaults = validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition();
+        assertEquals(SchoolDefinition.Cohort.NO_START_BOUND, defaults.cohorts().getFirst().latestStartSlot());
+        assertEquals(3, defaults.cohorts().getFirst().preferredLatestStartSlot());
+        assertEquals(new SchoolDefinition.Subject("math", "Mathematics"), defaults.subjects().getFirst());
+
+        ((ObjectNode) input.withArray("cohorts").get(0)).put("latestStartSlot", 2).put("preferredLatestStartSlot", 1);
+        ((ObjectNode) input.withArray("subjects").get(0)).put("reservedPeriodsAllowed", true)
+                .put("maxWeeklyReservedLessonsPerCohort", 1).put("dayEdgeOnly", true)
+                .put("maxDailyLessonsPerCohort", 1);
+        var declared = validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .definition();
+        assertEquals(2, declared.cohorts().getFirst().latestStartSlot());
+        assertEquals(1, declared.cohorts().getFirst().preferredLatestStartSlot());
+        assertEquals(new SchoolDefinition.Subject("math", "Mathematics", true, 1, true, 1),
+                declared.subjects().getFirst());
+    }
+
+    @Test
+    void reservedPeriodLockIsValidOnlyForPermittedSubjects() throws Exception {
+        ObjectNode input = validInput();
+        input.put("catalogVersion", 6);
+        input.putArray("reservedPeriodIds").add("mon-1");
+        ((ObjectNode) input.withArray("lessons").get(0)).put("periodLock", "mon-1");
+        var validator = new DefinitionValidator();
+        var refused = validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class));
+        assertTrue(refused.report().errors().stream()
+                .anyMatch(error -> error.message().equals("period lock contradicts school reservation")));
+
+        ((ObjectNode) input.withArray("subjects").get(0)).put("reservedPeriodsAllowed", true);
+        assertTrue(validator.validateForPlan(JsonSupport.mapper().treeToValue(input, SchoolDefinitionDto.class))
+                .report().isValid());
+    }
+
+    @Test
     @DisplayName("UC-1 validation reporting: details are deterministic and capped while total is preserved")
     void validationReportsAreDeterministicAndCapped() {
         var detected = java.util.stream.IntStream.range(0, 1_005)

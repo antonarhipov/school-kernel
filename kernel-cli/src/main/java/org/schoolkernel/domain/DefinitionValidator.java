@@ -338,6 +338,7 @@ public final class DefinitionValidator {
         var teachers = index(input.teachers(), TeacherDto::id);
         var cohorts = index(input.cohorts(), CohortDto::id);
         var rooms = index(input.rooms(), RoomDto::id);
+        var subjects = index(input.subjects(), SubjectDto::id);
         Set<String> allPeriods = ids(input.periods(), PeriodDto::id);
         Set<String> reservedPeriods = set(input.reservedPeriodIds());
         var lockedResources = new HashMap<String, String>();
@@ -375,7 +376,9 @@ public final class DefinitionValidator {
             if (lesson.periodLock() == null || !allPeriods.contains(lesson.periodLock())) {
                 continue;
             }
-            if (reservedPeriods.contains(lesson.periodLock())) {
+            var subject = subjects.get(lesson.subjectId());
+            boolean reservationAllowed = subject != null && Boolean.TRUE.equals(subject.reservedPeriodsAllowed());
+            if (reservedPeriods.contains(lesson.periodLock()) && !reservationAllowed) {
                 error(errors, "/lessons/" + i + "/periodLock", List.of(lesson.id(), lesson.periodLock()),
                         "period lock contradicts school reservation");
             }
@@ -422,7 +425,12 @@ public final class DefinitionValidator {
     private static SchoolDefinition toDomain(SchoolDefinitionDto input) {
         Set<String> allPeriods = ids(input.periods(), PeriodDto::id);
         var subjects = input.subjects().stream()
-                .map(value -> new SchoolDefinition.Subject(value.id(), value.displayName()))
+                .map(value -> new SchoolDefinition.Subject(
+                        value.id(), value.displayName(),
+                        Boolean.TRUE.equals(value.reservedPeriodsAllowed()),
+                        orUnlimited(value.maxWeeklyReservedLessonsPerCohort()),
+                        Boolean.TRUE.equals(value.dayEdgeOnly()),
+                        orUnlimited(value.maxDailyLessonsPerCohort())))
                 .toList();
         var teachers = input.teachers().stream()
                 .map(value -> new SchoolDefinition.Teacher(
@@ -434,7 +442,12 @@ public final class DefinitionValidator {
                         value.id(), value.displayName(), value.size(),
                         availability(value.availablePeriodIds(), allPeriods), set(value.undesirablePeriodIds()),
                         value.maxDailyLessonSpread() == null ? 1 : value.maxDailyLessonSpread(),
-                        maxDailyGaps(value, input.catalogVersion())))
+                        maxDailyGaps(value, input.catalogVersion()),
+                        value.latestStartSlot() == null
+                                ? SchoolDefinition.Cohort.NO_START_BOUND : value.latestStartSlot(),
+                        value.preferredLatestStartSlot() == null
+                                ? SchoolDefinition.Cohort.DEFAULT_PREFERRED_START_SLOT
+                                : value.preferredLatestStartSlot()))
                 .toList();
         var rooms = input.rooms().stream()
                 .map(value -> new SchoolDefinition.Room(
@@ -462,10 +475,14 @@ public final class DefinitionValidator {
     }
 
     private static int maxDailyGaps(CohortDto cohort, int catalogVersion) {
-        if (catalogVersion < KernelCatalog.VERSION) {
+        if (catalogVersion < KernelCatalog.NO_GAPS_VERSION) {
             return SchoolDefinition.Cohort.UNLIMITED_GAPS;
         }
         return cohort.maxDailyGaps() == null ? 0 : cohort.maxDailyGaps();
+    }
+
+    private static int orUnlimited(Integer limit) {
+        return limit == null ? SchoolDefinition.Subject.UNLIMITED : limit;
     }
 
     private static Map<String, Long> effectiveWeights(List<SoftConstraintOverrideDto> overrides, int catalogVersion) {

@@ -119,8 +119,8 @@ class WorkspaceRepairPlanningIT {
         assertEquals(acceptedBefore.path("result").path("timetableRevision"), proposal.path("acceptedTimetableRevision"));
         assertEquals(draftBefore.path("intentRevision"), proposal.path("intentRevision"));
         assertEquals(acceptedBefore.path("result").path("inputRevision"), proposal.path("definition").path("basedOnRevision"));
-        assertEquals(5, proposal.path("definition").path("catalogVersion").intValue());
-        assertEquals(5, proposal.path("result").path("catalogVersion").intValue());
+        assertEquals(6, proposal.path("definition").path("catalogVersion").intValue());
+        assertEquals(6, proposal.path("result").path("catalogVersion").intValue());
         assertEquals(7, proposal.path("result").path("score").path("constraintBreakdown").size());
         assertEquals(proposal.path("successorDefinitionRevision"), proposal.path("result").path("inputRevision"));
         assertEquals(proposal.path("proposedTimetableRevision"), proposal.path("result").path("timetableRevision"));

@@ -33,6 +33,8 @@ Current feature directories:
   while preserving the earlier weekly-balance meanings.
 - [`kernel-cohort-no-gaps`](kernel-cohort-no-gaps/) specifies the catalog 5 hard cohort-gap constraint and per-cohort
   `maxDailyGaps` allowance, superseding the soft-only gap handling in catalog 4.
+- [`kernel-day-edges`](kernel-day-edges/) specifies catalog 6 per-cohort start bounds and per-subject placement
+  rules, including the first exception to a period reservation (MVK's Õpiabi in slot 0).
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
 
