@@ -54,7 +54,7 @@ public class KernelPlanner {
             KernelVerifier verifier,
             ObjectMapper json,
             Path temporaryRoot) {
-        this.executable = executable;
+        this.executable = KernelVerifier.resolveExecutable(executable);
         this.processes = processes;
         this.verifier = verifier;
         this.json = json;

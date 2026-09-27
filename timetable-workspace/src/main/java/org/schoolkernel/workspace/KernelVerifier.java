@@ -45,9 +45,24 @@ public class KernelVerifier {
     }
 
     KernelVerifier(String executable, KernelProcessLauncher processes, Path temporaryRoot) {
-        this.executable = executable;
+        this.executable = resolveExecutable(executable);
         this.processes = processes;
         this.temporaryRoot = temporaryRoot;
+    }
+
+    static String resolveExecutable(String executable) {
+        if (executable == null || executable.isBlank()) {
+            return executable;
+        }
+        Path path = Path.of(executable);
+        if (Files.exists(path)) {
+            return path.toAbsolutePath().normalize().toString();
+        }
+        Path parentRelative = Path.of("..").resolve(executable);
+        if (Files.exists(parentRelative)) {
+            return parentRelative.toAbsolutePath().normalize().toString();
+        }
+        return executable;
     }
 
     public Verification verify(ImportDocuments documents) {
