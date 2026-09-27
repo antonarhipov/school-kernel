@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -21,6 +21,7 @@
     "periods": { "type": "array", "items": { "$ref": "#/$defs/period" } },
     "reservedPeriodIds": { "$ref": "#/$defs/idArray" },
     "lessons": { "type": "array", "items": { "$ref": "#/$defs/lesson" } },
+    "roomAssignments": { "type": "array", "items": { "$ref": "#/$defs/roomAssignment" } },
     "softConstraintOverrides": {
       "type": "array",
       "items": { "$ref": "#/$defs/softConstraintOverride" }
@@ -143,6 +144,22 @@
         "roomLock": { "$ref": "#/$defs/id" }
       }
     },
+    "roomAssignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subjectId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "subjectId": { "$ref": "#/$defs/id" },
+        "teacherId": { "$ref": "#/$defs/id" },
+        "allowedRoomIds": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+        "useHomeRoom": { "const": true }
+      },
+      "oneOf": [
+        { "required": ["allowedRoomIds"], "not": { "required": ["useHomeRoom"] } },
+        { "required": ["useHomeRoom"], "not": { "required": ["allowedRoomIds"] } }
+      ]
+    },
     "softConstraintOverride": {
       "type": "object",
       "additionalProperties": false,
@@ -159,6 +176,10 @@
     }
   },
   "allOf": [
+    {
+      "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8] } } },
+      "then": { "not": { "required": ["roomAssignments"] } }
+    },
     {
       "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7] } } },
       "then": { "properties": {

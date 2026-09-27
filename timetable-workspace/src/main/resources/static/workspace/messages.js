@@ -291,6 +291,7 @@ export const M = Object.freeze({
   teacherRibbon: 'Teacher load by period',
   assigned: 'Assigned',
   availableUnassigned: 'Available · unassigned',
+  teacherUnavailable: 'Unavailable',
   selectionOutsideFilters: 'The selected lesson is outside the active filters, so its details were closed.',
   reset: 'Reset view',
   filteredMatrix: 'Filtered whole-school matrix',

@@ -17,6 +17,7 @@ import org.schoolkernel.contract.SchoolDefinitionDto;
 import org.schoolkernel.contract.SchoolDefinitionDto.CohortDto;
 import org.schoolkernel.contract.SchoolDefinitionDto.LessonDto;
 import org.schoolkernel.contract.SchoolDefinitionDto.PeriodDto;
+import org.schoolkernel.contract.SchoolDefinitionDto.RoomAssignmentDto;
 import org.schoolkernel.contract.SchoolDefinitionDto.RoomDto;
 import org.schoolkernel.contract.SchoolDefinitionDto.SoftConstraintOverrideDto;
 import org.schoolkernel.contract.SchoolDefinitionDto.SubjectDto;
@@ -48,6 +49,7 @@ public final class DefinitionValidator {
         checkUniqueIds("rooms", input.rooms(), RoomDto::id, errors);
         checkUniqueIds("periods", input.periods(), PeriodDto::id, errors);
         checkUniqueIds("lessons", input.lessons(), LessonDto::id, errors);
+        checkUniqueIds("roomAssignments", roomAssignments(input), RoomAssignmentDto::id, errors);
 
         var subjectIds = ids(input.subjects(), SubjectDto::id);
         var teacherIds = ids(input.teachers(), TeacherDto::id);
@@ -62,6 +64,7 @@ public final class DefinitionValidator {
         checkRoomReferences(input.rooms(), periodIds, errors);
         checkPeriods(input.periods(), errors);
         checkLessons(input, subjectIds, teacherIds, cohortIds, roomIds, periodIds, errors);
+        checkRoomAssignmentReferences(input, subjectIds, teacherIds, roomIds, errors);
         checkSeries(input.lessons(), errors);
         checkOverrides(input.softConstraintOverrides(), input, errors);
         checkLockConflicts(input, errors);
@@ -71,7 +74,80 @@ public final class DefinitionValidator {
         if (!report.isValid()) {
             return new Outcome(null, report);
         }
-        return new Outcome(toDomain(input), report);
+        var definition = toDomain(input);
+        checkRoomAssignmentConflicts(definition, errors);
+        report = ValidationReport.from(errors);
+        return new Outcome(report.isValid() ? definition : null, report);
+    }
+
+    private static List<RoomAssignmentDto> roomAssignments(SchoolDefinitionDto input) {
+        return input.roomAssignments() == null ? List.of() : input.roomAssignments();
+    }
+
+    private static void checkRoomAssignmentReferences(
+            SchoolDefinitionDto input,
+            Set<String> subjectIds,
+            Set<String> teacherIds,
+            Set<String> roomIds,
+            List<ValidationError> errors) {
+        var policies = roomAssignments(input);
+        for (int i = 0; i < policies.size(); i++) {
+            var policy = policies.get(i);
+            checkReference("/roomAssignments/" + i + "/subjectId", policy.id(), policy.subjectId(),
+                    subjectIds, "subject", errors);
+            if (policy.teacherId() != null) {
+                checkReference("/roomAssignments/" + i + "/teacherId", policy.id(), policy.teacherId(),
+                        teacherIds, "teacher", errors);
+            }
+            checkReferences("/roomAssignments/" + i + "/allowedRoomIds", policy.id(), policy.allowedRoomIds(),
+                    roomIds, "room", errors);
+        }
+    }
+
+    private static void checkRoomAssignmentConflicts(
+            SchoolDefinition definition, List<ValidationError> errors) {
+        var rooms = index(definition.rooms(), SchoolDefinition.Room::id);
+        var cohorts = index(definition.cohorts(), SchoolDefinition.Cohort::id);
+        var subjects = index(definition.subjects(), SchoolDefinition.Subject::id);
+        for (int i = 0; i < definition.lessons().size(); i++) {
+            var lesson = definition.lessons().get(i);
+            var resolved = RoomAssignmentResolver.resolve(definition, lesson);
+            if (!resolved.applies()) {
+                continue;
+            }
+            var ids = new ArrayList<String>();
+            ids.add(lesson.id());
+            ids.addAll(resolved.policyIds());
+            if (!resolved.missingHomeRoomPolicyIds().isEmpty()) {
+                error(errors, "/lessons/" + i + "/cohortId", ids,
+                        "room assignment requires the matched cohort to declare a home room");
+                continue;
+            }
+            if (resolved.allowedRoomIds().isEmpty()) {
+                error(errors, "/lessons/" + i, ids,
+                        "matching room assignments have no room in common");
+                continue;
+            }
+            if (lesson.roomLock() != null && !resolved.allows(lesson.roomLock())) {
+                error(errors, "/lessons/" + i + "/roomLock", ids,
+                        "room assignment contradicts the lesson room lock");
+            }
+            var cohort = cohorts.get(lesson.cohortId());
+            var subject = subjects.get(lesson.subjectId());
+            if (subject.curatorLesson() && cohort.homeRoomId() != null
+                    && !resolved.allows(cohort.homeRoomId())) {
+                error(errors, "/lessons/" + i, ids,
+                        "room assignment contradicts the curator home room");
+            }
+            boolean hostExists = resolved.allowedRoomIds().stream()
+                    .map(rooms::get)
+                    .anyMatch(room -> room.capacity() >= cohort.size()
+                            && room.capabilityIds().containsAll(lesson.requiredRoomCapabilityIds()));
+            if (!hostExists) {
+                error(errors, "/lessons/" + i, ids,
+                        "room assignment has no room with sufficient capacity and required capabilities");
+            }
+        }
     }
 
     private static void checkDisplayNames(SchoolDefinitionDto input, List<ValidationError> errors) {
@@ -532,11 +608,16 @@ public final class DefinitionValidator {
                         value.seriesId(), set(value.requiredRoomCapabilityIds()), set(value.preferredRoomIds()),
                         set(value.undesirablePeriodIds()), value.periodLock(), value.roomLock()))
                 .toList();
+        var roomAssignments = roomAssignments(input).stream()
+                .map(value -> new SchoolDefinition.RoomAssignment(
+                        value.id(), value.subjectId(), value.teacherId(), set(value.allowedRoomIds()),
+                        Boolean.TRUE.equals(value.useHomeRoom())))
+                .toList();
         return new SchoolDefinition(
                 input.schemaVersion(), input.catalogVersion(), input.schoolId(), input.displayName(),
                 input.basedOnRevision(),
                 subjects, teachers, cohorts, rooms,
-                periods, set(input.reservedPeriodIds()), lessons,
+                periods, set(input.reservedPeriodIds()), lessons, roomAssignments,
                 Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())));
     }
 

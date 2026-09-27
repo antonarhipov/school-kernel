@@ -68,6 +68,11 @@ public final class HardConstraintDiagnostics {
             addIf(examples, KernelCatalog.ROOM_LOCK.id(),
                     lesson.getRoomLock() != null && !lesson.getRoomLock().equals(roomId),
                     lesson.getId(), roomId, lesson.getRoomLock());
+            if (!lesson.roomAssignmentAllows(roomId)) {
+                var ids = new ArrayList<String>(List.of(lesson.getId(), roomId));
+                ids.addAll(lesson.getRoomAssignmentPolicyIds());
+                examples.get(KernelCatalog.ROOM_ASSIGNMENT.id()).add(List.copyOf(ids));
+            }
             addIf(examples, KernelCatalog.COHORT_HOME_ROOM.id(),
                     SchoolConstraintProvider.outsideHomeRoom(lesson),
                     lesson.getId(), roomId, lesson.getPlacementRules().homeRoomId());

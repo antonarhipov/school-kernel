@@ -39,8 +39,13 @@ Current feature directories:
   spread limit and the one-minute workspace run it requires for MVK.
 - [`kernel-cohort-curator`](kernel-cohort-curator/) specifies catalog 8 cohort curators, home rooms, and curator
   lessons such as Klassitund, which the curator teaches in the home room.
+- [`kernel-room-assignment`](kernel-room-assignment/) specifies catalog 9 reusable hard subject and teacher-subject
+  room assignments, allowed-room sets, and cohort-home-room targets.
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
+- [`timetable-manual-editing`](timetable-manual-editing/) specifies direct manual editing of scheduled lesson slot,
+  room, and teacher assignments, automatic real-time conflict validation with explanatory overlays, durable draft
+  persistence, and conflict-gated publication.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.

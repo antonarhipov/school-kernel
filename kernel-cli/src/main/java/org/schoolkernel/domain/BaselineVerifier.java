@@ -76,6 +76,13 @@ public final class BaselineVerifier {
                         "accepted baseline references an unknown room"));
             } else {
                 lesson.setRoom(room);
+                if (!lesson.roomAssignmentAllows(room.id())) {
+                    var ids = new ArrayList<String>(List.of(lesson.getId(), room.id()));
+                    ids.addAll(lesson.getRoomAssignmentPolicyIds());
+                    errors.add(new ValidationError(
+                            "/timetable/assignments", List.copyOf(ids),
+                            "accepted baseline violates hard.room-assignment"));
+                }
             }
         }
         if (!errors.isEmpty()) {

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.schoolkernel.domain.SchoolDefinition;
 import org.schoolkernel.domain.KernelCatalog;
+import org.schoolkernel.domain.RoomAssignmentResolver;
 
 public final class PreflightFeasibilityCheck {
     public List<ConstraintDiagnostic> findObviousFailures(SchoolDefinition definition) {
@@ -25,6 +26,7 @@ public final class PreflightFeasibilityCheck {
             var subject = subjects.get(lesson.subjectId());
             boolean reservationAllowed = subject.reservedPeriodsAllowed();
             String homeRoomId = subject.curatorLesson() ? cohort.homeRoomId() : null;
+            var assignment = RoomAssignmentResolver.resolve(definition, lesson);
             var candidatePeriods = definition.periods().stream()
                     .filter(period -> reservationAllowed || !definition.reservedPeriodIds().contains(period.id()))
                     .filter(period -> lesson.periodLock() == null || lesson.periodLock().equals(period.id()))
@@ -55,6 +57,7 @@ public final class PreflightFeasibilityCheck {
             var selectableRooms = definition.rooms().stream()
                     .filter(room -> lesson.roomLock() == null || lesson.roomLock().equals(room.id()))
                     .filter(room -> homeRoomId == null || homeRoomId.equals(room.id()))
+                    .filter(room -> assignment.allows(room.id()))
                     .toList();
             boolean capacityPossible = selectableRooms.stream().anyMatch(room -> room.capacity() >= cohort.size());
             boolean capabilityPossible = selectableRooms.stream()
@@ -77,6 +80,11 @@ public final class PreflightFeasibilityCheck {
                 }
                 if (homeRoomId != null) {
                     failures.get(KernelCatalog.COHORT_HOME_ROOM.id()).add(List.of(lesson.id(), homeRoomId));
+                }
+                if (assignment.applies()) {
+                    var ids = new ArrayList<String>(List.of(lesson.id()));
+                    ids.addAll(assignment.policyIds());
+                    failures.get(KernelCatalog.ROOM_ASSIGNMENT.id()).add(List.copyOf(ids));
                 }
             }
         }

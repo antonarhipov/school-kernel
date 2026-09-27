@@ -96,6 +96,9 @@ class WorkspaceImportIT {
     @Autowired
     MutableAcceptedBundleArchiver archiver;
 
+    @Autowired
+    RepairDraftService repairs;
+
     @TempDir
     Path temporaryDirectory;
 
@@ -199,6 +202,81 @@ class WorkspaceImportIT {
                         ? "PERSISTENT_POLICY"
                         : stored.path("manifest").path("locks").get(0).path("periodLockOrigin").stringValue());
         assertEquals(1L, version());
+    }
+
+    @Test
+    @DisplayName("Room assignment UC-1 ext 1b/RULE-4: HTTP accepted import and repair preserve catalog-9 policies")
+    void importsAndRepairsRoomAssignmentDefinition() throws Exception {
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        definition.put("catalogVersion", 9);
+        definition.putArray("roomAssignments").addObject().put("id", "math-room")
+                .put("subjectId", "math").putArray("allowedRoomIds").add("room-102");
+        Path definitionPath = temporaryDirectory.resolve("room-assignment-definition.json");
+        Files.write(definitionPath, JSON.writeValueAsBytes(definition));
+        Path resultPath = plannedResult(definitionPath, "room-assignment-result.json");
+        JsonNode result = JSON.readTree(resultPath);
+
+        HttpResponse<String> imported = post(session(), Map.of(
+                "definition", new FilePart("definition.json", Files.readAllBytes(definitionPath)),
+                "result", new FilePart("result.json", Files.readAllBytes(resultPath))), true, true);
+        assertEquals(200, imported.statusCode(), imported.body());
+        assertEquals("ACCEPTED_BASELINE", JSON.readTree(imported.body()).path("state").stringValue());
+        JsonNode acceptedBefore = storedDocument().path("acceptedBaseline").deepCopy();
+        assertEquals(definition, acceptedBefore.path("definition"));
+        assertEquals(result, acceptedBefore.path("result"));
+
+        Session repairSession = session();
+        HttpResponse<String> drafted = client.send(HttpRequest.newBuilder(uri("/api/repair-draft"))
+                .header(repairSession.csrfHeader(), repairSession.csrfToken())
+                .header("If-Match", repairSession.etag())
+                .header("Origin", "http://localhost:" + port)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("""
+                        {"resourceType":"TEACHER","resourceId":"teacher-alex","periodIds":["mon-1"]}
+                        """))
+                .build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, drafted.statusCode(), drafted.body());
+        assertEquals("REPAIR_DRAFT", JSON.readTree(drafted.body()).path("state").stringValue());
+        JsonNode stored = storedDocument();
+        assertEquals(acceptedBefore, stored.path("acceptedBaseline"));
+        ObjectNode successor = repairs.compiledDefinition(stored);
+        assertEquals(9, successor.path("catalogVersion").intValue());
+        assertEquals(definition.path("roomAssignments"), successor.path("roomAssignments"));
+        assertEquals(result.path("inputRevision").stringValue(), successor.path("basedOnRevision").stringValue());
+
+        Session runSession = session();
+        HttpResponse<String> started = client.send(HttpRequest.newBuilder(uri("/api/runs"))
+                .header(runSession.csrfHeader(), runSession.csrfToken())
+                .header("If-Match", runSession.etag())
+                .header("Origin", "http://localhost:" + port)
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString("{\"limit\":\"PT1M\"}"))
+                .build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(202, started.statusCode(), started.body());
+        assertEquals("SOLVING_REPAIR", JSON.readTree(started.body()).path("state").stringValue());
+
+        JsonNode proposalSnapshot = null;
+        long deadline = System.nanoTime() + Duration.ofSeconds(75).toNanos();
+        while (System.nanoTime() < deadline) {
+            HttpResponse<String> current = client.send(HttpRequest.newBuilder(uri("/api/workspace")).GET().build(),
+                    HttpResponse.BodyHandlers.ofString());
+            proposalSnapshot = JSON.readTree(current.body());
+            if (!"SOLVING_REPAIR".equals(proposalSnapshot.path("state").stringValue())) break;
+            Thread.sleep(50);
+        }
+        assertNotNull(proposalSnapshot);
+        assertEquals("REPAIR_PROPOSAL", proposalSnapshot.path("state").stringValue(), proposalSnapshot.toString());
+        JsonNode proposal = proposalSnapshot.path("workspace").path("proposal");
+        assertEquals(successor, proposal.path("definition"));
+        assertEquals(9, proposal.path("result").path("catalogVersion").intValue());
+        assertEquals("FEASIBLE", proposal.path("result").path("status").stringValue());
+        assertEquals(proposal.path("successorDefinitionRevision"), proposal.path("result").path("inputRevision"));
+        for (JsonNode assignment : proposal.path("result").path("timetable").path("assignments")) {
+            if ("math".equals(assignment.path("subjectId").stringValue())) {
+                assertEquals("room-102", assignment.path("roomId").stringValue());
+            }
+        }
+        assertEquals(acceptedBefore, storedDocument().path("acceptedBaseline"));
     }
 
     @Test
@@ -425,7 +503,7 @@ class WorkspaceImportIT {
         unsupportedSchema.put("schemaVersion", 2);
         invalidDefinitions.add(unsupportedSchema);
         ObjectNode unsupportedCatalog = definition.deepCopy();
-        unsupportedCatalog.put("catalogVersion", 9);
+        unsupportedCatalog.put("catalogVersion", 10);
         invalidDefinitions.add(unsupportedCatalog);
         ObjectNode missingName = definition.deepCopy();
         missingName.remove("displayName");

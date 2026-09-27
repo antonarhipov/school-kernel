@@ -497,6 +497,8 @@ body.operational .utility-disclosure > summary { padding: 6px 9px; font-size: .7
   .repair-mode.current-mode .draft-task-area { max-height: 20vh; }
   .solving-mode.current-mode .solving-task-area { max-height: 20vh; }
   .review-mode.current-mode .proposal-task-area { max-height: 15vh; }
+  .review-mode.current-mode:has(.proposal-task-area:not([hidden])) .matrix-wrap { max-height: 250px; }
+  .review-mode.current-mode:has(.proposal-task-area:not([hidden])) #workbench-inspector { max-height: 250px; }
 }
 
 @media (max-width: 700px) {

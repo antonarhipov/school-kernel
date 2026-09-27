@@ -1453,7 +1453,7 @@ function renderTeacherRibbon(periods) {
     .map(period => {
       const assigned = model.assignments.some(item => item.teacherId === view.teacherInvestigationId && item.periodId === period.id);
       const state = assigned ? 'assigned' : availability === null || availability.has(period.id) ? 'available' : 'unavailable';
-      const label = state === 'assigned' ? M.assigned : state === 'available' ? M.availableUnassigned : M.unavailable;
+      const label = state === 'assigned' ? M.assigned : state === 'available' ? M.availableUnassigned : M.teacherUnavailable;
       return `<li class="ribbon-${state}"><strong>${escapeHtml(periodLabel(period))}</strong><span>${label}</span></li>`;
     }).join('');
   const title = `${proposalModeActive() ? M.proposedAvailability : M.teacherRibbon} · ${escapeHtml(entityName(teacher, view.teacherInvestigationId))}`;

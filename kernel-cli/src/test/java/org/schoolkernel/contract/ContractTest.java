@@ -278,7 +278,7 @@ class ContractTest {
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
         var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
-        assertEquals(8, definition.path("catalogVersion").intValue());
+        assertEquals(9, definition.path("catalogVersion").intValue());
         var cohorts = definition.path("cohorts");
         assertEquals(List.of("1a", "1b", "1c", "2a", "2b", "2c", "3a", "3b", "4a", "4b",
                         "5a", "5b", "5d", "6a", "6b", "6c", "7a", "7b", "8a", "8b", "9a", "9b", "9c"),

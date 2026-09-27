@@ -44,8 +44,8 @@ and `130` for interruption before publication.
 - [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
-- Schema version `1` supports catalog versions `1` through `8`. Earlier catalogs remain readable for existing accepted
-  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `8`.
+- Schema version `1` supports catalog versions `1` through `9`. Earlier catalogs remain readable for existing accepted
+  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `9`.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
 - A feasible result assigns every lesson once and satisfies the exact hard catalog in the specification.
@@ -70,7 +70,7 @@ and `130` for interruption before publication.
   lesson block. The late-start preference discourages first lessons after the third regular period; it does not
   compare start times within the first three periods.
   The preferences default to weight `1`; `softConstraintOverrides` can tune
-  them from `0` through `1,000,000`. Workspace repair creates a catalog `8` successor while preserving its accepted
+  them from `0` through `1,000,000`. Workspace repair creates at least a catalog `8` successor while preserving its accepted
   predecessor, so a repair proposal also closes any gaps an older accepted timetable had. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
   room moves solely to improve class quality.
 - Catalog `6` adds per-cohort start bounds and per-subject placement rules. Slots count regular periods from `1` in
@@ -99,8 +99,15 @@ and `130` for interruption before publication.
   derives older-cohort rooms from the curator-taught IntÕ lesson, except 5D's Klassitund room and the unresolved 6C.
   MVK locks those eleven IntÕ lessons to their home rooms and Siiri Aiaste's History lessons to A231, where the
   published timetable consistently assigns them.
-  Workspace repair creates catalog `8`
-  successors.
+  Workspace repair upgrades older catalogs to `8` and preserves newer catalog versions.
+- Catalog `9` adds top-level `roomAssignments`: each rule selects a subject and optionally a teacher, then declares
+  non-empty `allowedRoomIds` or `useHomeRoom: true`. Every matching rule applies, so their allowed-room sets
+  intersect. Empty intersections, missing matched home rooms, and conflicts with individual room locks or room
+  requirements are invalid input. `hard.room-assignment` requires every matching lesson to use a permitted room in
+  planning, repair, and independent verification. MVK uses this for History in A231, Piret Noor Mathematics in B212,
+  Heiki Raudla Literature in A209, Chemistry in a newly declared A233, Physics in A223(LAB), PE in KK1/KK2/KK3,
+  and Õpiabi in each cohort's home room. Music still prefers MU but may use another music-capable room. The
+  requested A233 is not in the EduPage snapshot; it is synthetic in MVK until its source details are confirmed.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
   infeasibility or optimality.
 
@@ -110,7 +117,8 @@ The complete behavior, constraint catalog, failure semantics, and score definiti
 in [`spec/kernel-cohort-start-quality/spec.md`](spec/kernel-cohort-start-quality/spec.md). The cohort-level spread
 setting is specified in [`spec/kernel-cohort-daily-balance/spec.md`](spec/kernel-cohort-daily-balance/spec.md).
 School-wide reservation behavior is in [`spec/kernel-reserved-periods/spec.md`](spec/kernel-reserved-periods/spec.md),
-and curators and home rooms are in [`spec/kernel-cohort-curator/spec.md`](spec/kernel-cohort-curator/spec.md).
+curators and home rooms are in [`spec/kernel-cohort-curator/spec.md`](spec/kernel-cohort-curator/spec.md), and
+reusable hard room assignments are in [`spec/kernel-room-assignment/spec.md`](spec/kernel-room-assignment/spec.md).
 
 ## Operations workspace
 

@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.schoolkernel.domain.KernelCatalog;
+import org.schoolkernel.domain.RoomAssignmentResolver;
 import org.schoolkernel.domain.SchoolDefinition;
 
 import ai.timefold.solver.core.api.domain.solution.ConstraintWeightOverrides;
@@ -59,6 +60,8 @@ public final class PlanningMapper {
                     baseline == null ? null : baseline.roomId(),
                     periods, cohort.maxDailyLessonSpread(), cohort.maxDailyGaps(),
                     PlacementRules.of(cohort, subjects.get(lesson.subjectId())));
+            var roomAssignment = RoomAssignmentResolver.resolve(definition, lesson);
+            planningLesson.setRoomAssignment(roomAssignment.allowedRoomIds(), roomAssignment.policyIds());
             if (baseline != null) {
                 PeriodValue baselinePeriod = periodsById.get(baseline.periodId());
                 RoomValue baselineRoom = roomsById.get(baseline.roomId());
@@ -105,6 +108,7 @@ public final class PlanningMapper {
                 && room.capabilityIds().containsAll(lesson.getRequiredRoomCapabilityIds())
                 && (lesson.getPeriodLock() == null || lesson.getPeriodLock().equals(period.id()))
                 && (lesson.getRoomLock() == null || lesson.getRoomLock().equals(room.id()))
+                && lesson.roomAssignmentAllows(room.id())
                 && (lesson.getPlacementRules().homeRoomId() == null
                         || lesson.getPlacementRules().homeRoomId().equals(room.id()));
     }

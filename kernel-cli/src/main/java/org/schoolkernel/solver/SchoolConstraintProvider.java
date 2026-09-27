@@ -38,6 +38,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 roomCapability(factory),
                 periodLock(factory),
                 roomLock(factory),
+                roomAssignment(factory),
                 cohortDailyGaps(factory),
                 reservedPeriod(factory),
                 cohortLatestStart(factory),
@@ -133,6 +134,13 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .filter(lesson -> lesson.getRoomLock() != null && !lesson.getRoomLock().equals(lesson.getRoom().id()))
                 .penalize(HARD)
                 .asConstraint(KernelCatalog.ROOM_LOCK.id());
+    }
+
+    public Constraint roomAssignment(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class)
+                .filter(lesson -> !lesson.roomAssignmentAllows(lesson.getRoom().id()))
+                .penalize(HARD)
+                .asConstraint(KernelCatalog.ROOM_ASSIGNMENT.id());
     }
 
     public Constraint cohortDailyGaps(ConstraintFactory factory) {
@@ -253,7 +261,8 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                         && lesson.getBaselinePeriodId().equals(lesson.getPeriod().id())
                         && !lesson.getBaselineRoomId().equals(lesson.getRoom().id())
                         && (lesson.getRoomLock() == null
-                                || lesson.getRoomLock().equals(lesson.getBaselineRoomId())))
+                                || lesson.getRoomLock().equals(lesson.getBaselineRoomId()))
+                        && lesson.roomAssignmentAllows(lesson.getBaselineRoomId()))
                 .penalize(ROOM_ONLY_MOVE)
                 .asConstraint(KernelCatalog.ROOM_ONLY_MOVE.id());
     }

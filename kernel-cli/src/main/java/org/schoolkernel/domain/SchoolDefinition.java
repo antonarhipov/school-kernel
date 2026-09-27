@@ -19,7 +19,16 @@ public record SchoolDefinition(
         List<Period> periods,
         Set<String> reservedPeriodIds,
         List<Lesson> lessons,
+        List<RoomAssignment> roomAssignments,
         Map<String, Long> softWeights) {
+
+    public SchoolDefinition(
+            int schemaVersion, int catalogVersion, String schoolId, String displayName, String basedOnRevision,
+            List<Subject> subjects, List<Teacher> teachers, List<Cohort> cohorts, List<Room> rooms,
+            List<Period> periods, Set<String> reservedPeriodIds, List<Lesson> lessons, Map<String, Long> softWeights) {
+        this(schemaVersion, catalogVersion, schoolId, displayName, basedOnRevision, subjects, teachers, cohorts,
+                rooms, periods, reservedPeriodIds, lessons, List.of(), softWeights);
+    }
 
     public record Subject(
             String id,
@@ -130,4 +139,11 @@ public record SchoolDefinition(
             Set<String> undesirablePeriodIds,
             String periodLock,
             String roomLock) {}
+
+    public record RoomAssignment(
+            String id,
+            String subjectId,
+            String teacherId,
+            Set<String> allowedRoomIds,
+            boolean useHomeRoom) {}
 }

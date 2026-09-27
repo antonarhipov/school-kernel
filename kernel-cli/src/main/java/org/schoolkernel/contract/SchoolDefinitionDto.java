@@ -15,6 +15,7 @@ public record SchoolDefinitionDto(
         List<PeriodDto> periods,
         List<String> reservedPeriodIds,
         List<LessonDto> lessons,
+        List<RoomAssignmentDto> roomAssignments,
         List<SoftConstraintOverrideDto> softConstraintOverrides) {
 
     public record SubjectDto(
@@ -74,6 +75,13 @@ public record SchoolDefinitionDto(
             List<String> undesirablePeriodIds,
             String periodLock,
             String roomLock) {}
+
+    public record RoomAssignmentDto(
+            String id,
+            String subjectId,
+            String teacherId,
+            List<String> allowedRoomIds,
+            Boolean useHomeRoom) {}
 
     public record SoftConstraintOverrideDto(String constraintId, long weight) {}
 }

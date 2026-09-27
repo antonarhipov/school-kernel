@@ -193,8 +193,9 @@ public final class ResultFactory {
             boolean roomChanged = !old.roomId().equals(solved.getRoom().id());
             boolean forcedPeriod = periodChanged && lesson.periodLock() != null
                     && lesson.periodLock().equals(solved.getPeriod().id());
-            boolean forcedRoom = roomChanged && lesson.roomLock() != null
-                    && lesson.roomLock().equals(solved.getRoom().id());
+            boolean forcedRoom = roomChanged && ((lesson.roomLock() != null
+                    && lesson.roomLock().equals(solved.getRoom().id()))
+                    || !solved.roomAssignmentAllows(old.roomId()));
             if (forcedPeriod || forcedRoom) {
                 ObjectNode item = forcedMoves.addObject().put("lessonId", id);
                 if (forcedPeriod) {

@@ -13,7 +13,7 @@
     "elapsedTimeMs": { "type": "integer", "minimum": 0 },
     "mode": { "enum": ["INITIAL_DEFINITION", "ACCEPTED_BASELINE"] },
     "schoolId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9] },
     "definitionRevision": { "$ref": "#/$defs/revision" },
     "timetableRevision": { "$ref": "#/$defs/revision" },
     "validationReport": { "$ref": "#/$defs/validationReport" },

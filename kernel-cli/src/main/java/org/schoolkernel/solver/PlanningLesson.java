@@ -24,6 +24,8 @@ public class PlanningLesson {
     private Set<String> lessonUndesirablePeriodIds;
     private Set<String> requiredRoomCapabilityIds;
     private Set<String> preferredRoomIds;
+    private Set<String> allowedRoomAssignmentIds = Set.of();
+    private List<String> roomAssignmentPolicyIds = List.of();
     private String periodLock;
     private String roomLock;
     private String baselinePeriodId;
@@ -253,6 +255,23 @@ public class PlanningLesson {
 
     public String getRoomLock() {
         return roomLock;
+    }
+
+    public Set<String> getAllowedRoomAssignmentIds() {
+        return allowedRoomAssignmentIds;
+    }
+
+    public List<String> getRoomAssignmentPolicyIds() {
+        return roomAssignmentPolicyIds;
+    }
+
+    public void setRoomAssignment(Set<String> allowedRoomIds, List<String> policyIds) {
+        this.allowedRoomAssignmentIds = Set.copyOf(allowedRoomIds);
+        this.roomAssignmentPolicyIds = List.copyOf(policyIds);
+    }
+
+    public boolean roomAssignmentAllows(String roomId) {
+        return roomAssignmentPolicyIds.isEmpty() || allowedRoomAssignmentIds.contains(roomId);
     }
 
     public String getBaselinePeriodId() {

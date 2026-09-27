@@ -14,7 +14,8 @@ public final class KernelCatalog {
     public static final int NO_GAPS_VERSION = 5;
     public static final int DAY_EDGES_VERSION = 6;
     public static final int DAILY_SPREAD_VERSION = 7;
-    public static final int VERSION = 8;
+    public static final int CURATOR_VERSION = 8;
+    public static final int VERSION = 9;
 
     public enum Category {
         HARD,
@@ -55,6 +56,7 @@ public final class KernelCatalog {
     public static final ConstraintDescriptor SUBJECT_RESERVED_LIMIT = hard("hard.subject-reserved-limit");
     public static final ConstraintDescriptor COHORT_DAILY_SPREAD = hard("hard.cohort-daily-spread");
     public static final ConstraintDescriptor COHORT_HOME_ROOM = hard("hard.cohort-home-room");
+    public static final ConstraintDescriptor ROOM_ASSIGNMENT = hard("hard.room-assignment");
     public static final ConstraintDescriptor PERIOD_MOVE =
             new ConstraintDescriptor("stability.period-move", Category.PERIOD_STABILITY, null);
     public static final ConstraintDescriptor ROOM_ONLY_MOVE =
@@ -86,6 +88,7 @@ public final class KernelCatalog {
             SUBJECT_RESERVED_LIMIT,
             COHORT_DAILY_SPREAD,
             COHORT_HOME_ROOM,
+            ROOM_ASSIGNMENT,
             PERIOD_MOVE,
             ROOM_ONLY_MOVE,
             TEACHER_GAP,
@@ -142,6 +145,7 @@ public final class KernelCatalog {
                 || catalogVersion == NO_GAPS_VERSION
                 || catalogVersion == DAY_EDGES_VERSION
                 || catalogVersion == DAILY_SPREAD_VERSION
+                || catalogVersion == CURATOR_VERSION
                 || catalogVersion == VERSION;
     }
 

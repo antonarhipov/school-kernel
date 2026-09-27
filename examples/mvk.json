@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 8,
+  "catalogVersion": 9,
   "schoolId": "merivalja-kool",
   "displayName": "Merivälja Kool",
   "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
@@ -10,6 +10,15 @@
     { "constraintId": "soft.cohort-late-start", "weight": 10000 },
     { "constraintId": "soft.cohort-week-balance", "weight": 1000 },
     { "constraintId": "soft.non-preferred-room", "weight": 5 }
+  ],
+  "roomAssignments": [
+    { "id": "mvk-history-a231", "subjectId": "ajalugu", "allowedRoomIds": ["a231"] },
+    { "id": "mvk-piret-maths-b212", "subjectId": "matemaatika", "teacherId": "piret-noor", "allowedRoomIds": ["b212"] },
+    { "id": "mvk-heiki-literature-a209", "subjectId": "kirjandus", "teacherId": "heiki-raudla", "allowedRoomIds": ["a209"] },
+    { "id": "mvk-chemistry-a233", "subjectId": "keemia", "allowedRoomIds": ["a233"] },
+    { "id": "mvk-physics-a223", "subjectId": "fuusika", "allowedRoomIds": ["a223-lab"] },
+    { "id": "mvk-physical-education-halls", "subjectId": "kehaline-kasvatus", "allowedRoomIds": ["kk1", "kk2", "kk3"] },
+    { "id": "mvk-study-support-home", "subjectId": "opiabi", "useHomeRoom": true }
   ],
   "subjects": [
     {
@@ -911,6 +920,14 @@
       "capacity": 30,
       "capabilityIds": [
         "general-classroom"
+      ]
+    },
+    {
+      "id": "a233",
+      "displayName": "A233",
+      "capacity": 30,
+      "capabilityIds": [
+        "science-lab"
       ]
     },
     {
@@ -4649,7 +4666,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -4733,7 +4750,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -4845,7 +4862,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -5084,7 +5101,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -5490,7 +5507,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -5504,7 +5521,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "b214"
+        "a209"
       ]
     },
     {
@@ -5518,7 +5535,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "b214"
+        "a209"
       ]
     },
     {
@@ -5644,7 +5661,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -5729,7 +5746,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a216"
+        "a209"
       ]
     },
     {
@@ -5827,7 +5844,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -5912,7 +5929,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a218"
+        "a231"
       ]
     },
     {
@@ -5940,7 +5957,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a216"
+        "a209"
       ]
     },
     {
@@ -6220,7 +6237,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a209"
+        "a231"
       ]
     },
     {
@@ -6362,7 +6379,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a231"
+        "a209"
       ]
     },
     {
@@ -6502,7 +6519,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a216"
+        "a209"
       ]
     },
     {
@@ -6756,7 +6773,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a216"
+        "a209"
       ]
     },
     {
@@ -6841,7 +6858,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a216"
+        "a209"
       ]
     },
     {
@@ -7025,7 +7042,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -7095,7 +7112,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -7378,7 +7395,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -7450,7 +7467,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -7829,7 +7846,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -7999,7 +8016,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -8295,7 +8312,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -8366,7 +8383,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -8394,7 +8411,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a216"
+        "a209"
       ]
     },
     {
@@ -8451,7 +8468,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
@@ -8536,7 +8553,7 @@
         "general-classroom"
       ],
       "preferredRoomIds": [
-        "a231"
+        "a209"
       ]
     },
     {
@@ -8564,7 +8581,7 @@
         "science-lab"
       ],
       "preferredRoomIds": [
-        "a223-lab"
+        "a233"
       ]
     },
     {
