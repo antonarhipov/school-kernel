@@ -2,20 +2,46 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: PENDING_WALKTHROUGH
-- Next eligible: none (UC-2 pending walkthrough)
+- Use case: UC-3
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none (UC-3 awaiting convergence)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | c309189 | convergence/UC-1.md |
-| UC-2 | PENDING_WALKTHROUGH | UC-1 | 5273fab | convergence/UC-2.md |
-| UC-3 | NOT_STARTED | UC-1, UC-2 | - | - |
+| UC-2 | APPROVED | UC-1 | 5273fab | convergence/UC-2.md |
+| UC-3 | READY_FOR_CONVERGENCE | UC-1, UC-2 | - | convergence/UC-3.md |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
+
+## UC-3 Evidence
+
+- Started from: 9048e41a37c355887be177b94998eeea4457e5e1
+- Pre-existing dirty files: none
+- Implementation submission: HEAD at convergence
+- Changed files:
+  - `timetable-workspace/src/main/resources/static/workspace/app.js`
+  - `timetable-workspace/src/main/resources/static/workspace/messages.js`
+  - `timetable-workspace/src/main/resources/static/workspace/styles.css`
+  - `timetable-workspace/src/test/java/org/schoolkernel/workspace/WorkspaceManualDraftIT.java`
+  - `spec/timetable-manual-editing/checkpoints/UC-3.md`
+- Commands and results:
+  - `mvn test -pl timetable-workspace -Dtest=WorkspaceManualDraftIT`: 8 run, 0 failures, 0 errors, 0 skipped
+
+| Contract element | Evidence |
+|---|---|
+| UC-3 main steps 1-4 | `WorkspaceManualDraftIT.inspectsConflictDetailsAndCausalExplanations`, UI overlay in `app.js` & `styles.css` |
+| UC-3 extension 2a | `WorkspaceManualDraftIT.inspectsConflictDetailsAndCausalExplanations` (`WorkspaceManualDraftIT.java:302`) |
+| UC-3 G1 | `WorkspaceManualDraftIT.inspectsConflictDetailsAndCausalExplanations` (`WorkspaceManualDraftIT.java:309`) |
+| UC-3 G2 | `WorkspaceManualDraftIT.inspectsConflictDetailsAndCausalExplanations` (`WorkspaceManualDraftIT.java:328`) |
+| UC-3 success postcondition | `conflictOverlayMarkup`, `manualCues`, `WorkspaceManualDraftIT.java:309` |
+| UC-3 minimal guarantee | `WorkspaceManualDraftIT.java:328` (ETag, version, state unchanged) |
+| RULE-3 | `ManualDraftService.evaluateConflicts`, `WorkspaceManualDraftIT.java:302` |
+| RULE-5 | UI overlay adjacent to cell + inspector itemization + DB persistence |
+| RULE-7 | `WorkspaceManualDraftIT.java` against Testcontainers PostgreSQL |
 
 ## UC-2 Evidence
 

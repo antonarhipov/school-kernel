@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: spec/timetable-manual-editing/checkpoints/UC-2.md at 5273fab
-- Verdict: PENDING_WALKTHROUGH
+- Verdict: APPROVED
 - Findings: 0 critical, 0 gap, 0 protocol, 0 drift, 0 cosmetic
 - Suite: 7 run, 0 failed, 0 errors, 0 skipped (`WorkspaceManualDraftIT`), full workspace suite 26 run, 0 failed
 - Working tree impact from verification: none
@@ -80,12 +80,13 @@ None. All automated contract assertions are `STRONG` and verified against Testco
      - In the Inspector sidebar, warning callouts (`⚠️`) detail the conflict reasons (e.g., *Room Room 102 is double-booked in period Monday 1 with Mathematics 1* and *Teacher Alex is double-booked in period Monday 1 with Mathematics 1*).
   6. Refresh the browser page: confirm that all manual edits, modified statuses, and conflicts remain intact across page reloads.
   7. Click **Revert to accepted**: verify the lesson reverts to its original baseline slot and room, modifications clear, and conflicts return to zero.
+- **User Confirmation:** Confirmed by user ("confirmed").
 
 ## Status Update
 
-- Status change: `IN_PROGRESS` -> `PENDING_WALKTHROUGH`
-- Next eligible: `UC-3` (after walkthrough approval)
+- Status change: `PENDING_WALKTHROUGH` -> `APPROVED`
+- Next eligible: `UC-3`
 
 ## Response to execute
 
-PENDING_WALKTHROUGH: Ready for administrator interactive walkthrough confirmation.
+APPROVED

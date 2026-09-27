@@ -939,8 +939,13 @@ function weekLessonButton(item) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draft = repairLessonState(item.lessonId);
-  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable, periodLabel(item.period), item.lessonId, ...cues.accessible, ...draft.accessible].join(' · ');
-  return `<button type="button" class="lesson-cell week-lesson ${subjectColorClass(item)}${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${draft.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${cues.weekMarkup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  const manual = manualLessonState(item.lessonId);
+  const conflictClass = (draft.conflict || manual.conflict) ? ' conflicting' : '';
+  const modifiedClass = manual.modified ? ' modified' : '';
+  const indicator = manual.conflict ? `<span class="conflict-indicator" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" data-conflict-target="conflict-overlay-${escapeAttribute(item.lessonId)}" title="${escapeAttribute(M.viewConflictExplanation)}">⚠️</span>` : '';
+  const overlay = conflictOverlayMarkup(manual, item.lessonId);
+  const label = [entityName(item.subject, item.subjectId), entityName(item.teacher, item.teacherId), entityName(item.room, item.roomId), entityName(item.cohort, item.cohortId), M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable, periodLabel(item.period), item.lessonId, ...cues.accessible, ...draft.accessible, ...manual.accessible].join(' · ');
+  return `<button type="button" class="lesson-cell week-lesson ${subjectColorClass(item)}${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${conflictClass}${modifiedClass}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span class="week-room">${escapeHtml(entityName(item.room, item.roomId))}</span>${draft.labels}${manual.labels}${indicator}${cues.weekMarkup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em>${overlay}</button>`;
 }
 
 function matrix(cohorts, periods, assignmentsByCell, filtered) {
@@ -958,7 +963,12 @@ function lessonButton(item, matched) {
   const selected = item.lessonId === view.selectedLessonId;
   const cues = lessonCues(item);
   const draftState = repairLessonState(item.lessonId);
-  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${draftState.conflict ? ' conflicting' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  const manual = manualLessonState(item.lessonId);
+  const conflictClass = (draftState.conflict || manual.conflict) ? ' conflicting' : '';
+  const modifiedClass = manual.modified ? ' modified' : '';
+  const indicator = manual.conflict ? `<span class="conflict-indicator" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" data-conflict-target="conflict-overlay-${escapeAttribute(item.lessonId)}" title="${escapeAttribute(M.viewConflictExplanation)}">⚠️</span>` : '';
+  const overlay = conflictOverlayMarkup(manual, item.lessonId);
+  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${conflictClass}${modifiedClass}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible, ...manual.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.teacher, item.teacherId))}</span><span>${escapeHtml(entityName(item.room, item.roomId))}</span>${draftState.labels}${manual.labels}${indicator}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em>${overlay}</button>`;
 }
 
 function comparisonLessonButton(item, week) {
@@ -1048,7 +1058,14 @@ function lessonDetails(item) {
   const manualCues = manualDraftActive ? `
     <section class="manual-cues">
       ${manual.modified ? `<p><span class="state modified-state">${M.modifiedFromBaseline}</span></p>` : ''}
-      ${manual.conflictMessages.map(msg => `<p class="error" role="alert">⚠️ ${escapeHtml(msg)}</p>`).join('')}
+      ${manual.conflicts.length > 0 ? `
+        <div class="conflict-alert" role="alert">
+          <p class="error"><strong>⚠️ ${escapeHtml(M.conflictsDetected)} (${manual.conflicts.length}):</strong></p>
+          <ul class="conflict-list">
+            ${manual.conflicts.map(c => `<li><strong>${escapeHtml(c.code)}</strong>: ${escapeHtml(c.description)}${c.competingLessonIds && c.competingLessonIds.length > 0 ? ` <small class="competing-info">(${escapeHtml(M.competingAssignments)}: ${escapeHtml(c.competingLessonIds.join(', '))})</small>` : ''}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
     </section>` : '';
   const editorMarkup = manualDraftActive ? `
     <section class="assignment-editor" aria-label="${M.assignmentEditor}">
@@ -1083,6 +1100,87 @@ function lessonDetails(item) {
   return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div>${stateBadge}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
     <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
     ${repairCues}${manualCues}${editorMarkup}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+}
+
+function conflictOverlayMarkup(manual, lessonId) {
+  if (!manual.conflict || !manual.conflicts.length) return '';
+  const items = manual.conflicts.map(c => {
+    const competing = (c.competingLessonIds && c.competingLessonIds.length > 0)
+      ? `<div class="competing-meta"><small>${escapeHtml(M.competingAssignments)}: ${escapeHtml(c.competingLessonIds.join(', '))}</small></div>`
+      : '';
+    return `<li data-conflict-code="${escapeAttribute(c.code)}"><span class="conflict-code">${escapeHtml(c.code)}</span>: <span>${escapeHtml(c.description)}</span>${competing}</li>`;
+  }).join('');
+  return `<div class="conflict-overlay" id="conflict-overlay-${escapeAttribute(lessonId)}" role="dialog" aria-label="${escapeAttribute(M.conflictDetails)}" hidden>
+    <h4>⚠️ ${escapeHtml(M.conflictsDetected)} (${manual.conflicts.length})</h4>
+    <ul>${items}</ul>
+  </div>`;
+}
+
+function bindConflictOverlays(root = document) {
+  root.querySelectorAll('.conflict-indicator').forEach(indicator => {
+    if (indicator._boundOverlay) return;
+    indicator._boundOverlay = true;
+
+    const overlayId = indicator.dataset.conflictTarget;
+    const overlay = document.getElementById(overlayId);
+    if (!overlay) return;
+
+    const toggle = (show) => {
+      const willShow = typeof show === 'boolean' ? show : overlay.hidden;
+      if (willShow) {
+        document.querySelectorAll('.conflict-overlay:not([hidden])').forEach(el => {
+          if (el !== overlay) {
+            el.hidden = true;
+            const ind = document.querySelector(`[data-conflict-target="${el.id}"]`);
+            if (ind) ind.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      overlay.hidden = !willShow;
+      indicator.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+    };
+
+    indicator.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+
+    indicator.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        e.stopPropagation();
+        toggle();
+      } else if (e.key === 'Escape') {
+        toggle(false);
+      }
+    });
+
+    indicator.addEventListener('mouseenter', () => toggle(true));
+    indicator.parentElement?.addEventListener('mouseleave', () => toggle(false));
+    overlay.addEventListener('click', (e) => e.stopPropagation());
+  });
+
+  if (!window._conflictDismissBound) {
+    window._conflictDismissBound = true;
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.conflict-overlay') && !e.target.closest('.conflict-indicator')) {
+        document.querySelectorAll('.conflict-overlay:not([hidden])').forEach(el => {
+          el.hidden = true;
+          const ind = document.querySelector(`[data-conflict-target="${el.id}"]`);
+          if (ind) ind.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.conflict-overlay:not([hidden])').forEach(el => {
+          el.hidden = true;
+          const ind = document.querySelector(`[data-conflict-target="${el.id}"]`);
+          if (ind) ind.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+  }
 }
 
 function manualLessonState(lessonId) {
@@ -1199,7 +1297,9 @@ function renderFocused() {
     lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson ${subjectColorClass(item)}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>`
       : manualDraftMode ? item => {
           const manual = manualLessonState(item.lessonId);
-          return `<article class="focused-lesson ${subjectColorClass(item)}${manual.conflict ? ' conflicting' : ''}${manual.modified ? ' modified' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div>${manual.labels}<span class="accepted-text">${manual.conflict ? '⚠️ ' + M.conflict : manual.modified ? M.modifiedFromBaseline : '✓ ' + M.acceptedAssignment}</span></article>`;
+          const indicator = manual.conflict ? `<span class="conflict-indicator" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" data-conflict-target="conflict-overlay-${escapeAttribute(item.lessonId)}" title="${escapeAttribute(M.viewConflictExplanation)}">⚠️</span>` : '';
+          const overlay = conflictOverlayMarkup(manual, item.lessonId);
+          return `<article class="focused-lesson ${subjectColorClass(item)}${manual.conflict ? ' conflicting' : ''}${manual.modified ? ' modified' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div>${manual.labels}${indicator}<span class="accepted-text">${manual.conflict ? '⚠️ ' + M.conflict : manual.modified ? M.modifiedFromBaseline : '✓ ' + M.acceptedAssignment}</span>${overlay}</article>`;
         }
       : null,
     labels: M, entityName, periodLabel, subjectColorClass, selectControl, options, escapeHtml });
@@ -1209,6 +1309,7 @@ function renderFocused() {
     if (proposalModeActive()) bindRepairReview();
     bindCloseDetails();
   }
+  if (manualDraftMode) bindConflictOverlays(host);
   document.querySelector('#return-matrix')?.addEventListener('click', () => {
     if (inspectionState) syncInspectionState(inspectionState.returnToWholeSchool().state); else view.focusedType = null;
     renderWholeSchool();
@@ -1327,11 +1428,13 @@ function setInvestigationMode(kind, only) {
 }
 
 function bindLessonButtons(root) {
+  if (!root) return;
   root.querySelectorAll('[data-lesson-id]').forEach(button => {
     if (boundLessonButtons.has(button)) return;
     boundLessonButtons.add(button);
     button.addEventListener('click', () => selectLesson(button));
   });
+  bindConflictOverlays(root);
 }
 
 function syncSelectedLesson(root) {

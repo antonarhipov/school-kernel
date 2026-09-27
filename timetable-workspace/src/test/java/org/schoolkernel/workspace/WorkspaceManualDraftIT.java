@@ -13,7 +13,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -265,6 +267,77 @@ class WorkspaceManualDraftIT {
                 .put("periodId", "unknown-period").put("roomId", "room-101").put("teacherId", "teacher-alex");
         HttpResponse<String> badPeriodResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(badPeriod));
         assertEquals(422, badPeriodResp.statusCode());
+    }
+
+    @Test
+    @DisplayName("UC-3: inspects conflict details, causal explanations, competing lessons, and multi-conflict enumeration (G1, G2, Ext 2a)")
+    void inspectsConflictDetailsAndCausalExplanations() throws Exception {
+        Session session = session();
+        HttpResponse<String> openResponse = command("POST", "/api/manual-draft", session, "");
+        String draftEtag = openResponse.headers().firstValue("ETag").orElseThrow();
+        Session draftSession = new Session(session.csrfHeader(), session.csrfToken(), draftEtag);
+
+        // Reassign lesson-science-1 into mon-1, room-102, teacher-alex (causes multiple simultaneous conflicts with lesson-math-1)
+        ObjectNode mutatePayload = JSON.createObjectNode();
+        mutatePayload.put("action", "REASSIGN_LESSON");
+        mutatePayload.put("lessonId", "lesson-science-1");
+        mutatePayload.put("periodId", "mon-1");
+        mutatePayload.put("roomId", "room-102");
+        mutatePayload.put("teacherId", "teacher-alex");
+
+        HttpResponse<String> mutateResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(mutatePayload));
+        assertEquals(200, mutateResp.statusCode());
+        String mutatedEtag = mutateResp.headers().firstValue("ETag").orElseThrow();
+
+        JsonNode responseBody = body(mutateResp);
+        JsonNode manualDraft = responseBody.path("workspace").path("manualDraft");
+        JsonNode conflicts = manualDraft.path("conflicts");
+        assertFalse(conflicts.isEmpty(), "Conflicts must be present");
+
+        // Filter conflicts pertaining to lesson-science-1
+        List<JsonNode> scienceConflicts = new ArrayList<>();
+        conflicts.forEach(c -> {
+            if ("lesson-science-1".equals(c.path("lessonId").stringValue())) {
+                scienceConflicts.add(c);
+            }
+        });
+
+        // UC-3 Extension 2a: Multi-conflict enumeration (simultaneous teacher, room, cohort clashes)
+        assertTrue(scienceConflicts.size() >= 3, "Should itemize multiple distinct conflicts");
+
+        Set<String> codes = new HashSet<>();
+        for (JsonNode c : scienceConflicts) {
+            String code = c.path("code").stringValue();
+            codes.add(code);
+            // UC-3 G1: Complete causal explanation: contested resource, period, and competing assignments
+            assertNotNull(c.path("resourceType").stringValue(), "Resource type must be present");
+            assertNotNull(c.path("resourceId").stringValue(), "Resource ID must be present");
+            assertEquals("mon-1", c.path("periodId").stringValue(), "Period must match contested slot");
+            assertTrue(c.path("description").stringValue().contains("double-booked")
+                    || c.path("description").stringValue().contains("unavailable")
+                    || c.path("description").stringValue().contains("capability"), "Must provide causal reason");
+
+            // For clashes, competingLessonIds must include lesson-math-1
+            if (code.endsWith("_CLASH")) {
+                List<String> competing = new ArrayList<>();
+                c.path("competingLessonIds").forEach(comp -> competing.add(comp.stringValue()));
+                assertTrue(competing.contains("lesson-math-1"), "Competing lessons must identify lesson-math-1");
+            }
+        }
+        assertTrue(codes.contains("TEACHER_CLASH"));
+        assertTrue(codes.contains("ROOM_CLASH"));
+        assertTrue(codes.contains("COHORT_CLASH"));
+
+        // UC-3 G2: Non-mutating inspection: fetching workspace via GET preserves ETag and state
+        HttpResponse<String> inspectResp = client.send(HttpRequest.newBuilder(uri("/api/workspace"))
+                .header("Accept", "application/json")
+                .GET().build(), HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, inspectResp.statusCode());
+        assertEquals(mutatedEtag, inspectResp.headers().firstValue("ETag").orElseThrow(), "ETag unchanged after inspection");
+
+        JsonNode inspectedBody = body(inspectResp);
+        assertEquals(responseBody.path("version").intValue(), inspectedBody.path("version").intValue(), "Version unchanged");
+        assertEquals(conflicts.size(), inspectedBody.path("workspace").path("manualDraft").path("conflicts").size(), "Conflicts unchanged");
     }
 
     private void storeAccepted() throws Exception {

@@ -202,8 +202,16 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
 .bulk-history p { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px; background: #f1f5f2; border: 1px solid #d2dcd5; border-radius: 3px; }
 .pin-actions { grid-column: 1 / -1; padding: 12px; border-top: 1px solid #c8d4cd; }
 .lesson-cell.directly-affected { border-color: #2b6d9a; background: #eef5fb; }
-.lesson-cell.conflicting, .focused-lesson.conflicting { border-color: #d93025 !important; background-color: #fce8e6 !important; box-shadow: inset 0 0 0 2px #d93025 !important; }
+.lesson-cell.conflicting, .focused-lesson.conflicting { border-color: #d93025 !important; background-color: #fce8e6 !important; box-shadow: inset 0 0 0 2px #d93025 !important; position: relative; }
 .lesson-cell.modified, .focused-lesson.modified { border-style: dashed !important; border-width: 2px !important; }
+.conflict-indicator { display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; margin-left: 4px; cursor: pointer; vertical-align: middle; padding: 1px 3px; border-radius: 3px; background: rgba(217, 48, 37, 0.15); line-height: 1; }
+.conflict-indicator:hover, .conflict-indicator:focus { background: rgba(217, 48, 37, 0.3); outline: none; }
+.conflict-overlay { position: absolute; top: 100%; left: 0; z-index: 100; min-width: 250px; max-width: 340px; background: #ffffff; color: #1f2937; border: 1px solid #d93025; border-radius: 6px; padding: 10px 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22); text-align: left; font-weight: normal; font-size: 0.8rem; line-height: 1.4; white-space: normal; pointer-events: auto; cursor: default; }
+.conflict-overlay[hidden] { display: none !important; }
+.conflict-overlay h4 { margin: 0 0 6px 0; font-size: 0.85rem; font-weight: 700; color: #b91c1c; display: flex; align-items: center; gap: 4px; }
+.conflict-overlay ul { margin: 0; padding-left: 16px; }
+.conflict-overlay li { margin-bottom: 4px; }
+.conflict-overlay .conflict-code { font-weight: 600; color: #991b1b; }
 .lesson-cell .direct-label, .lesson-cell .conflict-label, .lesson-cell .policy-label, .lesson-cell .pin-label, .lesson-cell .modified-label { display: inline-flex; }
 .lesson-cell .conflict-label { background: #fde0e0; border: 1px solid #e8aaaa; color: #701c1c; }
 .lesson-cell .modified-label { background: #e8f0fe; border: 1px solid #aecbfa; color: #1a73e8; font-size: .65rem; padding: 1px 4px; border-radius: 2px; }
