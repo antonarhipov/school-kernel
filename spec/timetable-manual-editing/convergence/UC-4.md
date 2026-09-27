@@ -2,8 +2,8 @@
 
 ## Summary
 
-- Submission: `spec/timetable-manual-editing/checkpoints/UC-4.md` at `fd8a23e`
-- Verdict: PENDING WALKTHROUGH
+- Submission: `spec/timetable-manual-editing/checkpoints/UC-4.md` at `335ee49`
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gap, 0 protocol, 0 drift, 0 cosmetic
 - Suite: 8 run, 0 failed, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -65,22 +65,13 @@
 
 None.
 
-## Walkthrough
-
-1. In the Timetable Workspace UI in the browser (`http://localhost:8080/workspace/`), select an unmodified lesson:
-   - Notice in the Inspector panel that the **"Revert to baseline"** button is visible but **disabled**.
-2. Change its period, room, or teacher, and click **"Save assignment"**:
-   - The cell displays the `(modified)` state, and the **"Revert to baseline"** button is now **enabled**.
-3. Click **"Revert to baseline"**:
-   - The lesson moves back to its original slot/room/teacher in the accepted baseline.
-   - The `(modified)` badge and any conflict highlights caused by that lesson disappear.
-   - The **"Revert to baseline"** button becomes **disabled** again.
+## Walkthrough confirmed by user on 2026-09-28. Button label refined to "Revert to baseline".
 
 ## Status Update
 
-- Status: `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`
-- Next eligible UCs: none (pending UC-4 walkthrough confirmation)
+- Status: `PENDING_WALKTHROUGH` -> `APPROVED`
+- Next eligible UCs: UC-5, UC-6
 
 ## Response to execute
 
-PENDING WALKTHROUGH: Awaiting human confirmation of UC-4 revert to baseline walkthrough.
+APPROVED: UC-4 is verified and approved. Execution may proceed to UC-5.
