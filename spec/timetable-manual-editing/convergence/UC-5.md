@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `spec/timetable-manual-editing/checkpoints/UC-5.md` at `b728b14`
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE
 - Findings: 0 critical, 0 gap, 0 protocol, 0 drift, 0 cosmetic
 - Suite: 9 run, 0 failed, 0 errors, 0 skipped
 - Working tree impact from verification: none
@@ -67,24 +67,13 @@
 
 None.
 
-## Walkthrough
-
-1. In the browser (`http://localhost:8080/workspace/`), while in `MANUAL_DRAFT` (click "Manual editing" if not already in draft):
-   - Notice the **"Discard draft"** button displayed in the workspace header area.
-2. Click **"Discard draft"**:
-   - A confirmation dialog appears asking: *"Are you sure you want to discard this draft? All manual edits will be permanently lost."*
-3. Click **Cancel**:
-   - The dialog closes with no side effects; the workspace remains in `MANUAL_DRAFT` with all modifications intact.
-4. Click **"Discard draft"** again, and this time click **OK** (confirm):
-   - The manual draft is discarded.
-   - The workspace transitions back to **"Accepted baseline"** (`ACCEPTED_BASELINE`).
-   - The accepted timetable is displayed with 0 unaccepted modifications and 0 draft conflicts.
+## Walkthrough confirmed by user on 2026-09-28 ("yes. all good").
 
 ## Status Update
 
-- Status: `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`
-- Next eligible UCs: none (pending UC-5 walkthrough confirmation)
+- Status: `PENDING_WALKTHROUGH` -> `APPROVED`
+- Next eligible UCs: UC-6
 
 ## Response to execute
 
-PENDING WALKTHROUGH: Awaiting human confirmation of UC-5 discard manual draft walkthrough.
+APPROVED: UC-5 is verified and approved. Execution may proceed to UC-6.
