@@ -907,13 +907,13 @@ function renderWholeSchool() {
     <p id="no-matches" class="empty-message" role="status"${narrowed && matches.length === 0 ? '' : ' hidden'}>${M.noMatches} <button id="reset-empty" type="button" class="link-button">${M.reset}</button></p>
     <div class="workbench-layout${inspectionState.current().inspectorOpen ? '' : ' inspector-collapsed'}">
       <div class="canvas-region">${view.range === 'WEEK' ? renderWeekMatrix({ cohorts: model.definition.cohorts, weekdays: model.weekdays, assignmentsByCell: displayed.assignmentsByCell, periodsForDay, labels: M, entityName, periodLabel, lessonMarkup: weekLessonButton, escapeHtml, escapeAttribute }) : renderDayMatrix({ cohorts: model.definition.cohorts, periods: dayPeriods, assignmentsByCell: displayed.assignmentsByCell, periodId: view.periodId, labels: M, entityName, periodLabel, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div>
-      <aside id="workbench-inspector" aria-label="${M.inspector}"${inspectionState.current().inspectorOpen ? '' : ' hidden'}><button id="toggle-inspector" type="button" class="secondary">${M.collapseInspector}</button><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p>${M.noLessonSelected}</p>`}</div>${proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}</aside>
-      <div id="inspector-summary"${inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(reviewLessonName(view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
+      <aside id="workbench-inspector" aria-label="${M.inspector}"${view.selectedLessonId && inspectionState.current().inspectorOpen ? '' : ' hidden'}><div class="popover-header"><span class="inspector-badge">${M.inspector}</span><button id="toggle-inspector" type="button" class="close-popover-btn" aria-label="${M.collapseInspector}">&times;</button></div><div id="lesson-details-host">${view.selectedLessonId ? selectedLessonDetails(view.selectedLessonId) : `<p class="empty-selection">${M.noLessonSelected}</p>`}</div>${proposalDraft ? `<section class="draft-context"><h3>${M.proposalDraftDetail}</h3>${currentSnapshot.workspace.repairDraft.intent.changes.map(repairChange).join('')}${M.attemptPins}: ${currentSnapshot.workspace.repairDraft.intent.pins.length}</section>` : ''}</aside>
+      <div id="inspector-summary"${!view.selectedLessonId || inspectionState.current().inspectorOpen ? ' hidden' : ''}><span>${view.selectedLessonId ? escapeHtml(M.selectedSummary(reviewLessonName(view.selectedLessonId))) : M.noLessonSelected}</span> <button id="reopen-inspector" type="button" class="secondary">${M.reopenInspector}</button></div>
     </div>
-    ${repairSetupAvailable ? `<div class="task-launch"><button id="open-repair-setup" type="button" class="secondary" aria-expanded="${repairSetupOpen}" aria-controls="workbench-task-area"${repairSetupOpen ? ' hidden' : ''}>${M.startRepair}</button><button id="start-manual-draft" type="button" class="secondary">${M.startManualEditing}</button></div><section id="workbench-task-area" class="task-area" aria-label="${M.repairSetup}"${repairSetupOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairSetup}</h3><button id="close-repair-setup" type="button" class="secondary">${M.closeRepairSetup}</button></div>${startRepairForm()}</section>` : ''}
+    ${repairSetupAvailable ? `<div class="task-launch"><button id="open-repair-setup" type="button" class="secondary" aria-expanded="${repairSetupOpen}" aria-controls="workbench-task-area"${repairSetupOpen ? ' hidden' : ''}>${M.startRepair}</button></div><section id="workbench-task-area" class="task-area" aria-label="${M.repairSetup}"${repairSetupOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairSetup}</h3><button id="close-repair-setup" type="button" class="secondary">${M.closeRepairSetup}</button></div>${startRepairForm()}</section>` : ''}
     ${draftMode || currentSnapshot.state === 'SOLVING_REPAIR' || proposalMode ? '' : focusedEntry()}`;
   if (draftMode || currentSnapshot.state === 'SOLVING_REPAIR' || proposalMode) document.querySelector('.focused-entry')?.removeAttribute('hidden');
-  if (view.range === 'WEEK') { bindInspectionControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); restoreCanvasScroll(); return; }
+  if (view.range === 'WEEK') { bindInspectionControls(); bindRunControls(); if (proposalMode) bindRepairReview(); applyFiltersInPlace(); mountInlineInspector(); restoreCanvasScroll(); return; }
   dayMatrices = new Map([[view.day, host.querySelector('.matrix-wrap')]]);
   for (const day of model.weekdays) {
     if (day === view.day) continue;
@@ -925,6 +925,7 @@ function renderWholeSchool() {
   bindRunControls();
   if (proposalMode) bindRepairReview();
   applyFiltersInPlace();
+  mountInlineInspector();
   restoreCanvasScroll();
 }
 
@@ -1051,12 +1052,50 @@ function selectedLessonDetails(id) {
   if (!pair) return '';
   const change = pair.change;
   const target = reviewTargetLabel(pair);
-  return `<section class="comparison-details">${pair.old ? `<span class="state accepted">✓ ${M.acceptedAssignment}</span>` : ''}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(reviewLessonName(id))}</h3><p>${change ? M.proposalChange : M.visuallyQuiet}</p><p>${escapeHtml(id)}</p>
-    <p>${M.reviewTarget}: ${target}</p>
-    ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}
-    ${change ? `<p>${change.categories.map(category => M[category]).join(', ')}</p>` : ''}${comparisonMatchedSides(id).length ? `<p>${comparisonMatchedSides(id).join(' · ')}</p>` : ''}${comparisonProtection(id) ? `<p>${escapeHtml(comparisonProtection(id))}</p>` : ''}
-    <div class="before-after">${reviewSide(M.oldAssignment, change ? change.old : pair.old, change?.changedDimensions || [], acceptedModel)}${reviewSide(M.proposedAssignment, change ? change.proposed : pair.proposed, change?.changedDimensions || [], proposedModel)}</div>
-    <button id="close-details" type="button" class="secondary">${M.closeDetails}</button></section>`;
+  return `<section class="comparison-details">
+    <div class="inspector-horizontal-flow">
+      <div class="panel-section identity-section">
+        <div class="lesson-identity-card">
+          ${pair.old ? `<span class="state accepted">✓ ${M.acceptedAssignment}</span>` : ''}
+          <h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(reviewLessonName(id))}</h3>
+          <p class="lesson-panel-subtitle">${escapeHtml(id)} &middot; ${change ? M.proposalChange : M.visuallyQuiet}</p>
+        </div>
+      </div>
+      <div class="panel-section review-target-section">
+        <div class="review-target-card">
+          <p class="review-target-line"><strong>${M.reviewTarget}:</strong> ${target}</p>
+          ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}
+          ${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}
+          ${change ? `<p class="review-categories">${change.categories.map(category => M[category]).join(', ')}</p>` : ''}
+          ${comparisonMatchedSides(id).length ? `<p class="matched-sides">${comparisonMatchedSides(id).join(' · ')}</p>` : ''}
+          ${comparisonProtection(id) ? `<p class="protection-note">${escapeHtml(comparisonProtection(id))}</p>` : ''}
+        </div>
+      </div>
+      <div class="panel-section comparison-section">
+        <div class="before-after">${reviewSide(M.oldAssignment, change ? change.old : pair.old, change?.changedDimensions || [], acceptedModel)}${reviewSide(M.proposedAssignment, change ? change.proposed : pair.proposed, change?.changedDimensions || [], proposedModel)}</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function formatPeriodSlot(p) {
+  if (!p) return M.nameUnavailable;
+  const name = entityName(p, p.id);
+  const cleanTime = t => t ? t.replace(/:00$/, '') : '';
+  const time = p.startTime && p.endTime
+    ? `${cleanTime(p.startTime)}–${cleanTime(p.endTime)}`
+    : (p.startTime ? cleanTime(p.startTime) : '');
+
+  const dayName = M.days[p.weekday] || p.weekday || '';
+  const dayShort = dayName ? dayName.slice(0, 3) : '';
+  const nameLower = name.toLowerCase();
+  const dayLower = dayName.toLowerCase();
+  const weekdayLower = (p.weekday || '').toLowerCase();
+
+  const alreadyHasDay = dayLower && (nameLower.includes(dayLower) || nameLower.includes(weekdayLower));
+  const prefix = (!alreadyHasDay && dayShort) ? `${dayShort} ` : '';
+  const base = `${prefix}${name}`.trim();
+  return time ? `${base} · ${time}` : base;
 }
 
 function lessonDetails(item) {
@@ -1065,58 +1104,85 @@ function lessonDetails(item) {
   const repairCues = (currentSnapshot?.state === 'REPAIR_DRAFT' && inspectionState?.current().mode === 'DRAFT')
     || (currentSnapshot?.state === 'SOLVING_REPAIR' && inspectionState?.current().mode !== 'CURRENT')
     ? `<section class="repair-cues"><p>${draftState.labels}${draftState.periodPinned || draftState.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`}</p>${draftState.intent ? `<p>${escapeHtml(draftState.intent)}</p>` : ''}${draftState.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</section>` : '';
-  const manualDraftActive = currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT';
   const manual = manualLessonState(item.lessonId);
-  const stateBadge = currentSnapshot?.state === 'INITIAL_PROPOSAL'
-    ? `<span class="state proposal">${M.initialProposal}</span>`
-    : manualDraftActive
+  const isDraftState = currentSnapshot?.state === 'MANUAL_DRAFT';
+
+  const stateBadge = manual.modified
+    ? `<span class="state modified-state">${M.modifiedFromBaseline}</span>`
+    : manual.conflicts.length > 0
+    ? `<span class="state draft-state">⚠️ ${M.conflictsDetected} (${manual.conflicts.length})</span>`
+    : isDraftState
     ? `<span class="state draft-state">${M.manualDraftState}</span>`
     : `<span class="state accepted">✓ ${M.acceptedAssignment}</span>`;
-  const manualCues = manualDraftActive ? `
-    <section class="manual-cues">
-      ${manual.modified ? `<p><span class="state modified-state">${M.modifiedFromBaseline}</span></p>` : ''}
-      ${manual.conflicts.length > 0 ? `
-        <div class="conflict-alert" role="alert">
-          <p class="error"><strong>⚠️ ${escapeHtml(M.conflictsDetected)} (${manual.conflicts.length}):</strong></p>
-          <ul class="conflict-list">
-            ${manual.conflicts.map(c => `<li><strong>${escapeHtml(c.code)}</strong>: ${escapeHtml(c.description)}${c.competingLessonIds && c.competingLessonIds.length > 0 ? ` <small class="competing-info">(${escapeHtml(M.competingAssignments)}: ${escapeHtml(c.competingLessonIds.join(', '))})</small>` : ''}</li>`).join('')}
-          </ul>
-        </div>
-      ` : ''}
-    </section>` : '';
-  const editorMarkup = manualDraftActive ? `
-    <section class="assignment-editor" aria-label="${M.assignmentEditor}">
-      <h4>${M.assignmentEditor}</h4>
-      <form id="manual-edit-form">
-        <label for="edit-period">
-          <span>${M.period}</span>
-          <select id="edit-period" name="periodId">
-            ${acceptedModel.definition.periods.map(p => `<option value="${escapeAttribute(p.id)}"${p.id === item.periodId ? ' selected' : ''}>${escapeHtml(periodLabel(p))} (${escapeHtml(M.days[p.weekday] || p.weekday)})</option>`).join('')}
-          </select>
-        </label>
-        <label for="edit-room">
-          <span>${M.room}</span>
-          <select id="edit-room" name="roomId">
-            ${acceptedModel.definition.rooms.map(r => `<option value="${escapeAttribute(r.id)}"${r.id === item.roomId ? ' selected' : ''}>${escapeHtml(entityName(r, r.id))}</option>`).join('')}
-          </select>
-        </label>
-        <label for="edit-teacher">
-          <span>${M.teacher}</span>
-          <select id="edit-teacher" name="teacherId">
-            ${acceptedModel.definition.teachers.map(t => `<option value="${escapeAttribute(t.id)}"${t.id === item.teacherId ? ' selected' : ''}>${escapeHtml(entityName(t, t.id))}</option>`).join('')}
-          </select>
-        </label>
-        <div class="editor-actions">
-          <button id="save-assignment-btn" type="submit" class="primary">${M.saveAssignment}</button>
-          <button id="revert-lesson-btn" type="button" class="secondary"${manual.modified ? '' : ' disabled'}>${M.revertLesson}</button>
-        </div>
-        <p id="edit-save-status" role="status"></p>
-      </form>
-    </section>` : '';
 
-  return `<aside class="lesson-panel" aria-labelledby="lesson-panel-title"><div>${stateBadge}<h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3></div><button id="close-details" type="button" class="secondary">${M.closeDetails}</button>
-    <dl>${detail(M.subject, entityName(item.subject, item.subjectId))}${detail(M.class, entityName(item.cohort, item.cohortId))}${detail(M.teacher, entityName(item.teacher, item.teacherId))}${detail(M.weekdayLabel, M.days[item.period?.weekday] || item.period?.weekday || M.nameUnavailable)}${detail(M.period, entityName(item.period, item.periodId))}${detail(M.room, entityName(item.room, item.roomId))}</dl>
-    ${repairCues}${manualCues}${editorMarkup}<details><summary>${M.technicalDetails}</summary><p>${M.technicalMapping}</p><dl class="technical">${idDetail(M.lesson, item.lessonId)}${idDetail(M.subject, item.subjectId)}${idDetail(M.class, item.cohortId)}${idDetail(M.teacher, item.teacherId)}${idDetail(M.period, item.periodId)}${idDetail(M.room, item.roomId)}</dl></details></aside>`;
+  const conflictAlert = manual.conflicts.length > 0 ? `
+    <div class="popover-conflict-alert" role="alert">
+      <strong>⚠️ ${escapeHtml(M.conflictsDetected)} (${manual.conflicts.length}):</strong>
+      <ul>
+        ${manual.conflicts.map(c => `<li><strong>${escapeHtml(c.code)}</strong>: ${escapeHtml(c.description)}${c.competingLessonIds && c.competingLessonIds.length > 0 ? ` <small class="competing-info">(${escapeHtml(M.competingAssignments)}: ${escapeHtml(c.competingLessonIds.join(', '))})</small>` : ''}</li>`).join('')}
+      </ul>
+    </div>` : '';
+
+  return `<div class="lesson-panel lesson-popover-content">
+    <div class="popover-title-section">
+      <div class="popover-badge-strip">${stateBadge}</div>
+      <h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(entityName(item.lesson, item.lessonId))}</h3>
+      <p class="popover-subtitle">${escapeHtml(entityName(item.cohort, item.cohortId))} &middot; ${escapeHtml(entityName(item.subject, item.subjectId))}</p>
+    </div>
+
+    ${conflictAlert}
+    ${repairCues ? `<div class="popover-repair-cues">${repairCues}</div>` : ''}
+
+    <form id="manual-edit-form" class="popover-form">
+      <div class="popover-field">
+        <label for="edit-period">
+          <span class="popover-field-label">${M.period}</span>
+          <select id="edit-period" name="periodId" class="popover-select">
+            ${acceptedModel.definition.periods.map(p => `<option value="${escapeAttribute(p.id)}"${p.id === item.periodId ? ' selected' : ''}>${escapeHtml(formatPeriodSlot(p))}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+
+      <div class="popover-field-row">
+        <div class="popover-field">
+          <label for="edit-room">
+            <span class="popover-field-label">${M.room}</span>
+            <select id="edit-room" name="roomId" class="popover-select">
+              ${acceptedModel.definition.rooms.map(r => `<option value="${escapeAttribute(r.id)}"${r.id === item.roomId ? ' selected' : ''}>${escapeHtml(entityName(r, r.id))}</option>`).join('')}
+            </select>
+          </label>
+        </div>
+
+        <div class="popover-field">
+          <label for="edit-teacher">
+            <span class="popover-field-label">${M.teacher}</span>
+            <select id="edit-teacher" name="teacherId" class="popover-select">
+              ${acceptedModel.definition.teachers.map(t => `<option value="${escapeAttribute(t.id)}"${t.id === item.teacherId ? ' selected' : ''}>${escapeHtml(entityName(t, t.id))}</option>`).join('')}
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="popover-actions">
+        <span id="edit-save-status" class="edit-save-status" role="status"></span>
+        <button id="save-assignment-btn" type="submit" class="primary" hidden>${M.saveAssignment}</button>
+        ${manual.modified ? `<button id="revert-lesson-btn" type="button" class="revert-btn">${M.revertLesson}</button>` : ''}
+      </div>
+    </form>
+
+    <details class="popover-technical">
+      <summary>${M.technicalDetails}</summary>
+      <p class="technical-mapping">${escapeHtml(M.technicalMapping)}</p>
+      <div class="technical-pills">
+        <span class="tech-pill"><code>${escapeHtml(item.lessonId)}</code></span>
+        <span class="tech-pill"><code>${escapeHtml(item.subjectId)}</code></span>
+        <span class="tech-pill"><code>${escapeHtml(item.cohortId)}</code></span>
+        <span class="tech-pill"><code>${escapeHtml(item.teacherId)}</code></span>
+        <span class="tech-pill"><code>${escapeHtml(item.periodId)}</code></span>
+        <span class="tech-pill"><code>${escapeHtml(item.roomId)}</code></span>
+      </div>
+    </details>
+  </div>`;
 }
 
 function conflictOverlayMarkup(manual, lessonId) {
@@ -1463,17 +1529,90 @@ function syncSelectedLesson(root) {
   });
 }
 
+function selectedLessonCohortId(id) {
+  if (!id) return null;
+  const active = (currentSnapshot?.state === 'MANUAL_DRAFT' && inspectionState?.current().mode === 'DRAFT' && manualDraftModel) ? manualDraftModel : acceptedModel;
+  const item = active?.assignments?.find(a => a.lessonId === id);
+  if (item?.cohortId) return item.cohortId;
+  const defLesson = acceptedModel?.definition?.lessons?.find(l => l.id === id);
+  if (defLesson?.cohortId) return defLesson.cohortId;
+  const propItem = proposedModel?.assignments?.find(a => a.lessonId === id);
+  if (propItem?.cohortId) return propItem.cohortId;
+  return null;
+}
+
+function positionPopover(button) {
+  const inspector = document.querySelector('#workbench-inspector');
+  if (!inspector) return;
+  if (!view.selectedLessonId) {
+    inspector.hidden = true;
+    return;
+  }
+  const isOpen = inspectionState ? inspectionState.current().inspectorOpen : true;
+  if (!isOpen) {
+    inspector.hidden = true;
+    return;
+  }
+  const targetBtn = button || document.querySelector(`.lesson-cell[data-lesson-id="${view.selectedLessonId}"]`);
+  if (!targetBtn || targetBtn.hidden || targetBtn.closest('[hidden]')) {
+    inspector.hidden = true;
+    return;
+  }
+
+  inspector.hidden = false;
+  const btnRect = targetBtn.getBoundingClientRect();
+  const popoverWidth = Math.min(420, window.innerWidth - 32);
+  const gap = 8;
+  const estimatedHeight = 360;
+
+  let left;
+  let top;
+
+  // Try placing to the right first (Google Calendar standard)
+  if (btnRect.right + gap + popoverWidth <= window.innerWidth - 16) {
+    left = btnRect.right + gap;
+    top = btnRect.top - 8;
+  } else if (btnRect.left - gap - popoverWidth >= 16) {
+    // Try placing to the left
+    left = btnRect.left - gap - popoverWidth;
+    top = btnRect.top - 8;
+  } else {
+    // Fallback: place below or above
+    left = Math.max(16, Math.min(window.innerWidth - popoverWidth - 16, btnRect.left + (btnRect.width / 2) - (popoverWidth / 2)));
+    top = btnRect.bottom + gap;
+    if (top + estimatedHeight > window.innerHeight - 16 && btnRect.top - estimatedHeight - gap > 16) {
+      top = btnRect.top - estimatedHeight - gap;
+    }
+  }
+
+  top = Math.max(16, Math.min(window.innerHeight - estimatedHeight - 16, top));
+
+  inspector.style.position = 'fixed';
+  inspector.style.left = `${Math.round(left)}px`;
+  inspector.style.top = `${Math.round(top)}px`;
+  inspector.style.width = `${popoverWidth}px`;
+  inspector.style.zIndex = '1050';
+}
+
+function mountInlineInspector() {
+  const existingRow = document.querySelector('#inline-inspector-row');
+  if (existingRow) existingRow.remove();
+  positionPopover();
+}
+
 function selectLesson(button) {
   if (inspectionState) syncInspectionState(inspectionState.selectLesson(button.dataset.lessonId, button.dataset.comparisonSide || null));
   else { view.selectedLessonId = button.dataset.lessonId; view.reviewTargetSide = button.dataset.comparisonSide || null; }
-  if (document.querySelector('#workbench-inspector')) toggleInspector(true);
+  const detailsHost = document.querySelector('#lesson-details-host');
+  if (detailsHost) detailsHost.innerHTML = selectedLessonDetails(view.selectedLessonId);
+  positionPopover(button);
+  toggleInspector(true);
   document.querySelectorAll('.lesson-cell[data-lesson-id]').forEach(candidate => {
     const selected = candidate.dataset.lessonId === view.selectedLessonId;
     candidate.classList.toggle('selected', selected);
     candidate.setAttribute('aria-pressed', String(selected));
     candidate.querySelector('.selected-label').hidden = !selected;
   });
-  document.querySelector('#lesson-details-host').innerHTML = selectedLessonDetails(view.selectedLessonId);
   updateReviewSelection();
   bindCloseDetails(); refreshDraftSelectedProtection();
   bindManualEditor();
@@ -1482,17 +1621,32 @@ function selectLesson(button) {
 }
 
 function toggleInspector(open) {
-  syncInspectionState(inspectionState.setInspectorOpen(open));
+  if (inspectionState) syncInspectionState(inspectionState.setInspectorOpen(open));
   document.querySelector('.workbench-layout')?.classList.toggle('inspector-collapsed', !open);
-  document.querySelector('#workbench-inspector').hidden = !open;
-  document.querySelector('#inspector-summary').hidden = open;
-  document.querySelector('#inspector-summary span').textContent = view.selectedLessonId ? M.selectedSummary(reviewLessonName(view.selectedLessonId)) : M.noLessonSelected;
+  const inspector = document.querySelector('#workbench-inspector');
+  if (inspector) {
+    inspector.hidden = !view.selectedLessonId || !open;
+    if (open && view.selectedLessonId) {
+      positionPopover();
+    }
+  }
+  const summary = document.querySelector('#inspector-summary');
+  if (summary) {
+    summary.hidden = !view.selectedLessonId || open;
+    const summarySpan = summary.querySelector('span');
+    if (summarySpan) {
+      summarySpan.textContent = view.selectedLessonId ? M.selectedSummary(reviewLessonName(view.selectedLessonId)) : M.noLessonSelected;
+    }
+  }
 }
 
 function bindCloseDetails() {
+  document.querySelector('#toggle-inspector')?.addEventListener('click', () => toggleInspector(false));
+  document.querySelector('#reopen-inspector')?.addEventListener('click', () => toggleInspector(true));
   document.querySelector('#close-details')?.addEventListener('click', () => {
     if (inspectionState) syncInspectionState(inspectionState.closeLesson());
     else view.selectedLessonId = null;
+    toggleInspector(false);
     if (document.querySelector('#lesson-details-host')) document.querySelector('#lesson-details-host').textContent = M.noLessonSelected;
     else document.querySelector('.comparison-details')?.remove();
     updateReviewSelection();
@@ -1506,15 +1660,18 @@ function bindCloseDetails() {
   bindManualEditor();
 }
 
+let manualDraftSaveQueue = Promise.resolve();
+
 function bindManualEditor() {
   const form = document.querySelector('#manual-edit-form');
-  if (form && !form.dataset.bound) {
-    form.dataset.bound = 'true';
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
+  if (!form) return;
+
+  const performSave = () => {
+    manualDraftSaveQueue = manualDraftSaveQueue.then(async () => {
+      if (!view.selectedLessonId) return;
       const statusEl = document.querySelector('#edit-save-status');
       if (statusEl) {
-        statusEl.className = '';
+        statusEl.className = 'edit-save-status saving';
         statusEl.textContent = M.savingDraft;
       }
       const periodId = document.querySelector('#edit-period')?.value;
@@ -1536,45 +1693,61 @@ function bindManualEditor() {
         });
       } catch (err) {
         if (statusEl) {
-          statusEl.className = 'error';
+          statusEl.className = 'edit-save-status error';
           statusEl.textContent = err?.message || M.draftSaveError;
         }
       }
     });
-  }
+    return manualDraftSaveQueue;
+  };
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    performSave();
+  });
+
+  const periodSelect = document.querySelector('#edit-period');
+  const roomSelect = document.querySelector('#edit-room');
+  const teacherSelect = document.querySelector('#edit-teacher');
+
+  [periodSelect, roomSelect, teacherSelect].forEach(select => {
+    if (select) {
+      select.addEventListener('change', performSave);
+    }
+  });
 
   const revertBtn = document.querySelector('#revert-lesson-btn');
-  if (revertBtn && !revertBtn.dataset.bound) {
-    revertBtn.dataset.bound = 'true';
-    revertBtn.addEventListener('click', async () => {
-      if (revertBtn.disabled) return;
-      const origAssignment = acceptedModel?.assignmentMap?.get(view.selectedLessonId);
-      if (origAssignment && view.range === 'DAY') {
-        const origPeriod = acceptedModel?.definition?.periods?.find(p => p.id === origAssignment.periodId);
-        if (origPeriod && origPeriod.weekday !== view.day) {
-          view.day = origPeriod.weekday;
+  if (revertBtn) {
+    revertBtn.addEventListener('click', () => {
+      manualDraftSaveQueue = manualDraftSaveQueue.then(async () => {
+        const origAssignment = acceptedModel?.assignmentMap?.get(view.selectedLessonId);
+        if (origAssignment && view.range === 'DAY') {
+          const origPeriod = acceptedModel?.definition?.periods?.find(p => p.id === origAssignment.periodId);
+          if (origPeriod && origPeriod.weekday !== view.day) {
+            view.day = origPeriod.weekday;
+          }
         }
-      }
-      const statusEl = document.querySelector('#edit-save-status');
-      if (statusEl) {
-        statusEl.className = 'saving';
-        statusEl.textContent = M.savingChanges;
-      }
-      try {
-        await mutateJson('/api/manual-draft', 'PATCH', {
-          action: 'REVERT_LESSON',
-          lessonId: view.selectedLessonId
-        });
-      } catch (err) {
+        const statusEl = document.querySelector('#edit-save-status');
         if (statusEl) {
-          statusEl.className = 'error';
-          statusEl.textContent = err.message || M.draftSaveError;
+          statusEl.className = 'edit-save-status saving';
+          statusEl.textContent = M.savingChanges;
         }
-      }
+        try {
+          await mutateJson('/api/manual-draft', 'PATCH', {
+            action: 'REVERT_LESSON',
+            lessonId: view.selectedLessonId
+          });
+        } catch (err) {
+          if (statusEl) {
+            statusEl.className = 'edit-save-status error';
+            statusEl.textContent = err.message || M.draftSaveError;
+          }
+        }
+      });
+      return manualDraftSaveQueue;
     });
   }
 }
-
 function bindManualDraftActions() {
   const discardBtn = document.querySelector('#discard-manual-draft');
   if (discardBtn && !discardBtn.dataset.bound) {
@@ -1654,6 +1827,7 @@ function applyFiltersInPlace() {
   document.querySelector('#search-summary').hidden = !view.search.trim();
   document.querySelector('#no-matches').hidden = !(narrowed && investigation.represented.length === 0);
   document.querySelector('.matrix-wrap').setAttribute('aria-label', narrowed ? M.filteredMatrix : M.completeMatrix);
+  if (view.selectedLessonId) positionPopover();
 }
 
 function resetView() {
@@ -1695,6 +1869,7 @@ function clearSelectedLessonOutsideRepresentation() {
   const selected = proposalModeActive() ? comparison.assignmentsById.get(view.selectedLessonId) || [] : [activeModel.assignmentMap.get(view.selectedLessonId)];
   if (!selected.some(Boolean) || selected.some(isRepresented)) return false;
   if (inspectionState) syncInspectionState(inspectionState.closeLesson()); else view.selectedLessonId = null;
+  mountInlineInspector();
   const details = document.querySelector('#lesson-details-host');
   if (details) details.textContent = M.noLessonSelected;
   document.querySelector('#inspector-summary span')?.replaceChildren(M.noLessonSelected);
@@ -1858,21 +2033,24 @@ async function mutate(path, method, body) {
         return;
       }
       if (path === '/api/manual-draft') {
+        if (response.headers.get('ETag')) etag = response.headers.get('ETag');
+        if (result.code === 'STALE_WORKSPACE_VERSION') {
+          await load(true);
+          return;
+        }
         const manualStatus = document.querySelector('#edit-save-status');
         if (manualStatus) {
-          manualStatus.className = 'error';
+          manualStatus.className = 'edit-save-status error';
           manualStatus.textContent = result.message || M.draftSaveError;
         }
-        if (response.headers.get('ETag')) etag = response.headers.get('ETag');
-        stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${escapeHtml(result.message || M.actionFailed)}</p>`);
         return;
       }
       if (path === '/api/proposal/accept' && result.code === 'STALE_PROPOSAL') {
         await load(true);
-        stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${escapeHtml(result.message || M.actionFailed)} ${M.acceptedStillCurrent}</p>`);
+        stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${M.acceptedStillCurrent}</p>`);
         return;
       }
-      stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
+      stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${escapeHtml(result.message || M.actionFailed)} ${path === '/api/proposal/accept' ? M.acceptanceNotAdvanced : ''}</p>`);
       if (response.headers.get('ETag')) etag = response.headers.get('ETag'); return;
     }
     if (path === '/api/repair-draft') draftSaveFailed = false;
@@ -1883,11 +2061,10 @@ async function mutate(path, method, body) {
     else if (path === '/api/manual-draft') {
       const manualStatus = document.querySelector('#edit-save-status');
       if (manualStatus) {
-        manualStatus.className = 'error';
+        manualStatus.className = 'edit-save-status error';
         manualStatus.textContent = M.draftSaveError;
       }
-      stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${M.actionFailed}</p>`);
-    } else stateCard.insertAdjacentHTML('beforeend', `<p class=\"error\" role=\"alert\">${M.actionFailed}</p>`);
+    } else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.actionFailed}</p>`);
   }
 }
 
@@ -1933,6 +2110,28 @@ window.matchMedia('(max-width: 700px)').addEventListener('change', event => {
       if (!event.matches) view.focusedType = null;
     }
     load(true);
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (view.selectedLessonId) positionPopover();
+});
+window.addEventListener('scroll', () => {
+  if (view.selectedLessonId) positionPopover();
+}, true);
+window.addEventListener('click', event => {
+  const inspector = document.querySelector('#workbench-inspector');
+  if (!inspector || inspector.hidden) return;
+  if (inspector.contains(event.target)) return;
+  if (event.target.closest('.lesson-cell')) return;
+  if (event.target.closest('#reopen-inspector')) return;
+  if (event.target.closest('#toggle-inspector')) return;
+  if (event.target.closest('button, select, input, summary, a')) return;
+  toggleInspector(false);
+});
+window.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    toggleInspector(false);
   }
 });
 

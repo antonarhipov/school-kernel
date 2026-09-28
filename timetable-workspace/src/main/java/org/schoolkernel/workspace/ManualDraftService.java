@@ -89,13 +89,27 @@ public class ManualDraftService {
     public WorkspaceAggregate mutateDraft(String ifMatch, JsonNode payload) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
-        requireState(current, WorkspaceState.MANUAL_DRAFT,
-                "Manual editing mutations require MANUAL_DRAFT state.");
+        boolean isBaseline = current.state() == WorkspaceState.ACCEPTED_BASELINE;
+        if (!isBaseline) {
+            requireState(current, WorkspaceState.MANUAL_DRAFT,
+                    "Manual editing mutations require MANUAL_DRAFT state.");
+        }
 
         ObjectNode document = (ObjectNode) current.document().deepCopy();
-        ObjectNode draft = (ObjectNode) document.path("manualDraft");
-        if (draft.isMissingNode() || draft.isNull()) {
-            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_STATE", "Manual draft is missing.");
+        ObjectNode draft;
+        if (isBaseline) {
+            ObjectNode acceptedBaseline = (ObjectNode) document.path("acceptedBaseline");
+            JsonNode baselineAssignments = acceptedBaseline.path("result").path("timetable").path("assignments");
+            draft = document.putObject("manualDraft");
+            draft.set("assignments", baselineAssignments.deepCopy());
+            draft.putObject("modifications");
+            draft.putArray("conflicts");
+            draft.put("draftRevision", "sha256:" + Long.toHexString(System.currentTimeMillis()));
+        } else {
+            draft = (ObjectNode) document.path("manualDraft");
+            if (draft.isMissingNode() || draft.isNull()) {
+                throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_STATE", "Manual draft is missing.");
+            }
         }
 
         String action = payload.path("action").stringValue();
@@ -216,7 +230,7 @@ public class ManualDraftService {
 
         return mutation.replaceManualDraft(
                 expectedVersion,
-                WorkspaceState.MANUAL_DRAFT,
+                isBaseline ? WorkspaceState.ACCEPTED_BASELINE : WorkspaceState.MANUAL_DRAFT,
                 WorkspaceState.MANUAL_DRAFT,
                 document);
     }

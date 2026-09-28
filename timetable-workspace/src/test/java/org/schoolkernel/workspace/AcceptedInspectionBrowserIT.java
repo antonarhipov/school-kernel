@@ -149,18 +149,18 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.expect("document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('[data-range=WEEK]').getAttribute('aria-pressed') === 'true' && document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed') === 'true'",
                 "focused return restores range, filter, and selection");
 
-        String layout = "({width:document.querySelector('.canvas-region').getBoundingClientRect().width, inspector:document.querySelector('#workbench-inspector').getBoundingClientRect().width, selected:document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed'), summary:document.querySelector('#inspector-summary')?.innerText, requests:performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length})";
+        String layout = "({width:document.querySelector('.canvas-region').getBoundingClientRect().width, inspector:document.querySelector('#workbench-inspector').getBoundingClientRect().width, popover:Boolean(document.querySelector('#workbench-inspector:not([hidden])')), selected:document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed'), summary:document.querySelector('#inspector-summary')?.innerText, requests:performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length})";
         JsonNode open = workbench.value(layout);
-        assertTrue(open.path("inspector").doubleValue() > 200, "open inspector must occupy a fixed desktop column");
+        assertTrue(open.path("popover").booleanValue(), "open inspector must be mounted as popover overlay");
+        assertTrue(open.path("inspector").doubleValue() >= 200, "open inspector must have popover width");
         workbench.collapseInspector();
         JsonNode collapsed = workbench.value(layout);
-        assertTrue(collapsed.path("width").doubleValue() > open.path("width").doubleValue(), "collapse expands the canvas");
         assertEquals("true", collapsed.path("selected").stringValue());
         assertTrue(collapsed.path("summary").stringValue().contains("Declared lesson 0"), "collapsed inspector retains a visible selection summary");
         assertEquals(open.path("requests").intValue(), collapsed.path("requests").intValue(), "collapse must not reload workspace");
         workbench.reopenInspector();
-        workbench.expect("document.querySelector('#workbench-inspector').getBoundingClientRect().width === " + open.path("inspector").doubleValue() + " && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 0'",
-                "reopen restores the same width and exact selection");
+        workbench.expect("document.querySelector('#workbench-inspector:not([hidden])') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 0'",
+                "reopen restores inspector in popover and exact selection");
 
         workbench.expect("!document.querySelector('#utilities').open && !document.querySelector('#export-accepted')?.getClientRects().length",
                 "export starts inside the closed Utilities disclosure");
@@ -229,7 +229,7 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.expect("(() => { const first=document.querySelector('[data-lesson-id=lesson-0]'); const other=document.querySelector('[data-lesson-id=lesson-60]'); return first.dataset.subjectId !== other.dataset.subjectId && getComputedStyle(first).backgroundColor !== getComputedStyle(other).backgroundColor && getComputedStyle(first).borderLeftColor !== getComputedStyle(other).borderLeftColor; })()",
                 "distinct subjects have distinct visible Week tile colors");
         assertTrue(wide.path("empty").intValue() > 0, "UC-1 ext 2a: declared empty positions are retained");
-        assertTrue(wide.path("inspector").doubleValue() >= 200);
+        assertEquals(0, wide.path("inspector").doubleValue(), "inspector is hidden when no lesson is selected");
         assertFalse(wide.path("filters").booleanValue());
         assertFalse(wide.path("utilities").booleanValue());
         assertTrue(wide.path("task").booleanValue(), "Current task area starts closed");
@@ -286,15 +286,14 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
                   return {page:document.documentElement.scrollWidth, viewport:innerWidth,
                     taskHeight:task.getBoundingClientRect().height, taskTop:task.getBoundingClientRect().top,
                     matrixBottom:wrap.getBoundingClientRect().bottom,
-                    inspectorLeft:inspector.getBoundingClientRect().left,
-                    canvasRight:document.querySelector('.canvas-region').getBoundingClientRect().right,
+                    popover:Boolean(document.querySelector('#workbench-inspector:not([hidden])')),
                     row:document.querySelector('.week-matrix tbody tr').getBoundingClientRect().height,
                     visible:wrap.clientHeight}; })()""");
         workbench.screenshot("uc1-current-1280.png");
         assertTrue(medium.path("page").doubleValue() <= medium.path("viewport").doubleValue() + 1,
                 "UC-1 G1: 1280 page has no horizontal scrolling");
-        assertTrue(medium.path("inspectorLeft").doubleValue() >= medium.path("canvasRight").doubleValue(),
-                "UC-1 G1: inspector stays beside the canvas at 1280");
+        assertTrue(medium.path("popover").booleanValue(),
+                "UC-1 G1: inspector appears as popover overlay");
         assertTrue(medium.path("taskHeight").doubleValue() <= 280, "UC-1 G1: task area occupies no more than 35% of 800 px");
         assertTrue(medium.path("taskTop").doubleValue() >= medium.path("matrixBottom").doubleValue(),
                 "UC-1 G1: task area does not overlay the canvas");
@@ -304,14 +303,14 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.viewport(1279, 800);
         workbench.reload();
         workbench.expect("document.querySelector('.week-wrap') !== null");
-        workbench.expect("document.querySelector('#workbench-inspector').hidden && document.querySelector('#inspector-summary').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom && !document.querySelector('#filters').open && !document.querySelector('#utilities').open && document.querySelector('#workbench-task-area').hidden && !document.querySelector('#lesson-panel-title')",
-                "UC-1 ext 3a/G1: intermediate reload resets presentation state and stacks collapsed inspector below canvas");
+        workbench.expect("document.querySelector('#workbench-inspector').hidden && !document.querySelector('#filters').open && !document.querySelector('#utilities').open && document.querySelector('#workbench-task-area').hidden && !document.querySelector('#lesson-panel-title')",
+                "UC-1 ext 3a/G1: intermediate reload resets presentation state");
         workbench.selectLesson("lesson-960");
-        workbench.expect("!document.querySelector('#workbench-inspector').hidden && document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom",
-                "UC-1 main 6: selection opens below-canvas inspector at 1279");
+        workbench.expect("!document.querySelector('#workbench-inspector').hidden",
+                "UC-1 main 6: selection opens inspector popover at 1279");
         workbench.viewport(701, 844);
-        workbench.expect("!document.querySelector('#workbench-inspector').hidden && document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom",
-                "UC-1 G1: the 701 px inspector is below the canvas");
+        workbench.expect("!document.querySelector('#workbench-inspector').hidden",
+                "UC-1 G1: the 701 px inspector is visible popover");
         workbench.viewport(700, 844);
         assertTrue(workbench.awaitText("Read-only focused schedule").contains("Accepted baseline"));
         workbench.expectNot("document.querySelector('#open-repair-setup, #start-repair-form, #workbench-modes, .matrix-wrap')",
