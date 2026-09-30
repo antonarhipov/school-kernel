@@ -46,6 +46,10 @@ Current feature directories:
 - [`timetable-manual-editing`](timetable-manual-editing/) specifies direct manual editing of scheduled lesson slot,
   room, and teacher assignments, automatic real-time conflict validation with explanatory overlays, durable draft
   persistence, and conflict-gated publication.
+- [`school-definition-authoring`](school-definition-authoring/) proposes and specifies a durable definition draft for
+  adding, configuring, and removing cohorts, teachers, and rooms, finished into the initial draft or a repair draft.
+- [`timetable-matrix-lenses`](timetable-matrix-lenses/) proposes turning the Teacher and Room filters into lenses that
+  pivot the whole-school Week/Day matrix to one teacher or room, superseding the separate focused schedule surface.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.
