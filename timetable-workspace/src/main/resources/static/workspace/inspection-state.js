@@ -7,7 +7,7 @@ const AVAILABLE_MODES = Object.freeze({ INITIAL_PROPOSAL: ['PROPOSAL'], ACCEPTED
 export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], cohortIds = [], roomIds = [], periodIds = [], storage = window.localStorage }) {
   const firstWeekday = weekdays[0] || null;
   let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null, reviewTargetSide: null,
-    subjectId: null, teacherId: null, subjectOnly: false, teacherOnly: false,
+    subjectId: null, teacherId: null, subjectOnly: false,
     searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
     focusedType: null, focusedId: null, scrollContext: null,
     lifecycle: null, mode: 'CURRENT', inspectorOpen: window.matchMedia('(min-width: 1280px)').matches,
@@ -60,21 +60,12 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
     },
     selectTeacher: teacherId => {
       if (teacherId !== null && !teacherIds.includes(teacherId)) return { changed: false, state };
-      state = { ...state, teacherId, teacherOnly: teacherId ? state.teacherOnly : false };
+      state = { ...state, teacherId };
       return { changed: true, state };
     },
     setSubjectOnly: subjectOnly => {
       if (typeof subjectOnly !== 'boolean' || (subjectOnly && !state.subjectId)) return { changed: false, state };
       state = { ...state, subjectOnly };
-      return { changed: true, state };
-    },
-    setTeacherOnly: teacherOnly => {
-      if (typeof teacherOnly !== 'boolean' || (teacherOnly && !state.teacherId)) return { changed: false, state };
-      state = { ...state, teacherOnly };
-      return { changed: true, state };
-    },
-    resetInvestigationFilters: () => {
-      state = { ...state, subjectOnly: false, teacherOnly: false };
       return { changed: true, state };
     },
     setSearch: searchQuery => {
@@ -86,17 +77,19 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       const validIds = filter === 'cohortId' ? cohortIds : filter === 'teacherFilterId' ? teacherIds
         : filter === 'roomId' ? roomIds : filter === 'periodId' ? periodIds : null;
       if (!validIds || (id !== null && !validIds.includes(id))) return { changed: false, state };
-      state = { ...state, [filter]: id };
+      // Teacher and room filters are lenses: at most one of them pivots the matrix at a time.
+      const otherLens = id === null ? null : filter === 'teacherFilterId' ? 'roomId' : filter === 'roomId' ? 'teacherFilterId' : null;
+      state = { ...state, [filter]: id, ...(otherLens ? { [otherLens]: null } : {}) };
       return { changed: true, state };
     },
     resetFilters: () => {
       state = { ...state, searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-        subjectOnly: false, teacherOnly: false };
+        subjectOnly: false };
       return { changed: true, state };
     },
     clearNarrowing: () => {
       state = { ...state, cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-        subjectOnly: false, teacherOnly: false };
+        subjectOnly: false };
       return { changed: true, state };
     },
     openFocused: (focusedType, focusedId, scrollContext) => {

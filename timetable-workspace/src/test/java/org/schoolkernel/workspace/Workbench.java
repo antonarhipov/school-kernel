@@ -234,16 +234,18 @@ final class Workbench {
         click("#reset-view");
     }
 
-    void openFocus(String focusType) {
-        click("[data-open-focus=" + focusType + "]");
+    /** Applies the teacher or room lens from the selected lesson's inspector ({@code TEACHER} or {@code ROOM}). */
+    void showWeek(String kind) {
+        click("[data-show-week=" + kind + "]");
+    }
+
+    /** Removes the active lens through its criterion in the filter status. */
+    void removeLens() {
+        click("#active-criteria [data-remove-lens]");
     }
 
     void focusEntity(String entityId) {
         select("#focus-entity", entityId);
-    }
-
-    void returnToMatrix() {
-        click("#return-matrix");
     }
 
     void collapseInspector() {

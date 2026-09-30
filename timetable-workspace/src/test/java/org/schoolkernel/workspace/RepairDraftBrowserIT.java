@@ -136,12 +136,13 @@ class RepairDraftBrowserIT extends WorkbenchBrowserSupport {
         workbench.mode("DRAFT");
         workbench.expect("document.querySelector('#workbench-task-area').hidden && !document.querySelector('#reopen-draft-task').hidden");
         workbench.click("#reopen-draft-task");
-        workbench.openFocus("teacherId");
-        workbench.awaitText("Teacher schedule");
-        workbench.returnToMatrix();
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher");
         workbench.expect("!document.querySelector('#workbench-task-area').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 500'");
-        assertEquals(List.of(), mutations.requests(), "UC-2 G3: mode, task collapse, focus and return issue no mutating request");
-        assertEquals(beforePresentation, storedDocument(), "UC-2 main 6/G3: mode, collapse, focus and return save nothing");
+        workbench.removeLens();
+        workbench.expect("!document.querySelector('#workbench-task-area').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 500'");
+        assertEquals(List.of(), mutations.requests(), "UC-2 G3: mode, task collapse, lens and clearing issue no mutating request");
+        assertEquals(beforePresentation, storedDocument(), "UC-2 main 6/G3: mode, collapse, lens and clearing save nothing");
         workbench.viewport(1280, 800);
         assertDraftTaskGeometry(1280, 800);
         workbench.screenshot("uc2-draft-1280.png");
@@ -291,12 +292,12 @@ class RepairDraftBrowserIT extends WorkbenchBrowserSupport {
         workbench.collapseInspector();
         workbench.expect("document.querySelector('.workbench-layout')?.classList.contains('inspector-collapsed') && document.querySelector('#inspector-summary')?.textContent.includes('Mathematics 1')");
         workbench.reopenInspector();
-        workbench.openFocus("teacherId");
-        workbench.awaitText("Teacher schedule · Alex");
-        workbench.returnToMatrix();
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · Alex");
+        workbench.removeLens();
         workbench.awaitText("Day · Monday");
         assertEquals(DEMO_LESSONS, workbench.renderedLessonIds());
-        assertEquals(durable, storedDocument(), "mode, range, inspector and focused return are presentation-only");
+        assertEquals(durable, storedDocument(), "mode, range, inspector and lens are presentation-only");
 
         workbench.reload();
         workbench.expect("document.querySelector('#workbench-modes [data-mode=DRAFT]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && !document.querySelector('#lesson-panel-title')");

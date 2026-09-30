@@ -58,11 +58,13 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.click(".lesson-panel details > summary");
         assertTrue(workbench.awaitText("kernel term cohort").contains("lesson-math-1"));
 
-        workbench.press("[data-open-focus=teacherId]", "Space");
-        String focused = workbench.awaitText("Teacher schedule · Alex");
-        assertTrue(focused.contains("Monday"));
-        assertTrue(focused.contains("Return to whole-school matrix"));
-        workbench.returnToMatrix();
+        workbench.press("[data-show-week=TEACHER]", "Space");
+        String lens = workbench.awaitText("Lens: Teacher · Alex");
+        assertTrue(lens.contains("Monday"));
+        assertFalse(lens.contains("Return to whole-school matrix"), "matrix lenses supersede the focused return control");
+        workbench.expect("document.querySelectorAll('.week-matrix tbody[data-row-kind=TEACHER]').length === 1 && !document.querySelector('.focused-schedule')");
+        workbench.removeLens();
+        workbench.awaitText("Showing 1 of 1 classes");
         workbench.expect("document.querySelector('.workspace-card').classList.contains('compact-density') && !document.querySelector('[data-density]')");
 
         workbench.viewport(390, 844);
@@ -142,12 +144,12 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
             assertTrue(acceptedFields.contains(field), field);
         }
 
-        workbench.openFocus("cohortId");
-        workbench.awaitText("Class schedule · Class 0");
-        workbench.returnToMatrix();
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · Teacher 0");
+        workbench.removeLens();
         assertTrue(workbench.awaitText("Filtered whole-school matrix").contains("Class: Class 0"));
         workbench.expect("document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('[data-range=WEEK]').getAttribute('aria-pressed') === 'true' && document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed') === 'true'",
-                "focused return restores range, filter, and selection");
+                "clearing the lens restores range, filter, and selection");
 
         String layout = "({width:document.querySelector('.canvas-region').getBoundingClientRect().width, inspector:document.querySelector('#workbench-inspector').getBoundingClientRect().width, popover:Boolean(document.querySelector('#workbench-inspector:not([hidden])')), selected:document.querySelector('[data-lesson-id=lesson-0]').getAttribute('aria-pressed'), summary:document.querySelector('#inspector-summary')?.innerText, requests:performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('/api/workspace')).length})";
         JsonNode open = workbench.value(layout);
@@ -253,8 +255,8 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
                 "UC-1 main 4: explicit class narrowing intersects with the highlighted subject and teacher only when requested");
         workbench.filterRoom("room-99");
         workbench.closeDisclosure("#filters");
-        workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 0' && !document.querySelector('#no-matches').hidden && document.querySelectorAll('.week-matrix tbody').length === 60 && !document.querySelector('#clear-filters').hidden && document.querySelector('#active-criteria').textContent.includes('Room: Room 99')",
-                "UC-1 ext 4a: zero matches retain declared time structure and visible closed-filter summary");
+        workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 0' && !document.querySelector('#no-matches').hidden && document.querySelectorAll('.week-matrix tbody').length === 1 && document.querySelector('.week-matrix tbody').dataset.rowId === 'room-99' && document.querySelectorAll('.week-matrix tbody tr').length === 12 && !document.querySelector('#clear-filters').hidden && document.querySelector('#active-criteria').textContent.includes('Room: Room 99')",
+                "UC-1 ext 4a: a zero-match room lens retains the declared time structure and visible closed-filter summary");
         workbench.click("#clear-filters");
         workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 1000' && document.querySelector('#lesson-search').value === 'Sixteen' && document.querySelector('#subject-investigation').value === 'subject-0' && document.querySelector('#teacher-investigation').value === 'teacher-16'",
                 "UC-1 main 4: clearing explicit narrowing retains search and highlights");
@@ -262,11 +264,11 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.selectLesson("lesson-960");
         workbench.expect("document.querySelector('#lesson-panel-title').textContent === 'Declared lesson 960' && document.querySelector('#workbench-inspector').textContent.includes('Class Sixteen with a deliberately long authoritative display name') && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-label').includes('Monday · Declared period 0 · lesson-960')",
                 "UC-1 main 6: inspector and accessible name retain authoritative full details and identity");
-        workbench.openFocus("teacherId");
-        workbench.awaitText("Teacher schedule · Teacher Sixteen");
-        workbench.returnToMatrix();
-        workbench.expect("document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-search').value === 'Sixteen'",
-                "UC-1 main 5-6: focused return restores selection and investigation");
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · Teacher Sixteen");
+        workbench.removeLens();
+        workbench.expect("document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-search').value === 'Sixteen' && document.querySelector('#teacher-investigation').value === 'teacher-16'",
+                "UC-1 main 5-6: clearing the lens restores selection and investigation");
         workbench.collapseInspector();
         workbench.expect("document.querySelector('#workbench-inspector').hidden && document.querySelector('#inspector-summary').textContent.includes('Declared lesson 960')");
         workbench.reopenInspector();
@@ -407,6 +409,8 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         assertInvestigationPopulation(document, null, "subject-0", "teacher-16", true, false);
         workbench.click("#teacher-only");
         assertInvestigationPopulation(document, null, "subject-0", "teacher-16", true, true);
+        workbench.expect("document.querySelectorAll('.week-matrix tbody').length === 1 && document.querySelector('.week-matrix tbody').dataset.rowId === 'teacher-16'",
+                "matrix lenses decision 5: teacher Show only matches applies the teacher lens");
         workbench.range("DAY");
         workbench.awaitText("Day · Monday");
         assertInvestigationPopulation(document, "MONDAY", "subject-0", "teacher-16", true, true);
@@ -440,7 +444,7 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
     }
 
     @Test
-    @DisplayName("UC-3 main/extensions/G1-G8/RULE-15: real browser highlights search, narrows explicitly, and returns from focused accepted schedules")
+    @DisplayName("UC-3 main/extensions/G1-G8/RULE-15: real browser highlights search and narrows explicitly with one lens at a time")
     void narrowsAndFocusesAcceptedTimetable() {
         storeAccepted(fixtures.scaleDocument());
         String before = storedDocument();
@@ -462,14 +466,17 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.awaitText("Day · Monday");
         workbench.filterClass("cohort-0");
         workbench.filterTeacher("teacher-0");
-        workbench.filterRoom("room-0");
         workbench.focusPeriod("period-0");
         String narrowed = workbench.awaitText("Represented lessons: 1");
         assertTrue(narrowed.contains("Filtered whole-school matrix"));
         assertTrue(narrowed.contains("Class: Class 0"));
         assertTrue(narrowed.contains("Teacher: Teacher 0"));
-        assertTrue(narrowed.contains("Room: Room 0"));
         assertTrue(narrowed.contains("Period: Declared period 0"));
+        workbench.filterRoom("room-0");
+        workbench.awaitText("Room: Room 0");
+        String roomLens = workbench.awaitText("Represented lessons: 1");
+        assertFalse(roomLens.contains("Teacher: Teacher 0"), "matrix lenses: choosing a room clears the teacher lens");
+        assertEquals("", workbench.string("document.querySelector('#teacher-filter').value"));
 
         workbench.filterRoom("room-1");
         String emptyFiltered = workbench.awaitText("This narrowed view is empty");
@@ -481,41 +488,40 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
     }
 
     @Test
-    @DisplayName("UC-3 focused schedules/G4-G8/RULE-15: real browser returns from class, teacher, room, empty, and narrow agendas")
-    void opensFocusedAcceptedSchedules() {
+    @DisplayName("UC-3 superseded by matrix lenses/G4-G8/RULE-15: Show week pivots a narrowed Day between teacher and room lenses")
+    void pivotsNarrowedDayBetweenLenses() {
         storeAccepted(fixtures.scaleDocument());
         String before = storedDocument();
         workbench.open().awaitText("Showing 60 of 60 classes");
-        narrowMondayToClassTeacherAndRoomZero();
+        narrowMondayToClassAndRoomZero();
         workbench.selectLesson("lesson-0");
         String details = workbench.awaitText("Accepted assignment");
         assertTrue(details.contains("Declared lesson 0"));
         assertTrue(details.contains("Class 0"));
 
-        workbench.openFocus("cohortId");
-        assertTrue(workbench.awaitText("Class schedule · Class 0").contains("Monday"));
-        workbench.click("[data-focus-type=teacherId]");
-        workbench.awaitText("Teacher schedule · Teacher 0");
-        workbench.click("[data-focus-type=roomId]");
-        workbench.awaitText("Room schedule · Room 0");
-        assertEquals(before, storedDocument(), "UC-3 focused schedules must not mutate accepted workspace state");
+        workbench.showWeek("TEACHER");
+        assertTrue(workbench.awaitText("Lens: Teacher · Teacher 0").contains("Day · Monday"));
+        workbench.expect("document.querySelector('.matrix tbody tr').dataset.rowId === 'teacher-0' && document.querySelector('#room-filter').value === '' && document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 12'");
+        workbench.showWeek("ROOM");
+        workbench.awaitText("Lens: Room · Room 0");
+        workbench.expect("document.querySelector('.matrix tbody tr').dataset.rowId === 'room-0' && document.querySelector('#teacher-filter').value === ''");
+        assertEquals(before, storedDocument(), "lenses must not mutate accepted workspace state");
     }
 
     @Test
-    @DisplayName("UC-3 focused extensions/G4-G8/RULE-15: real browser returns from empty and narrow room agendas")
-    void returnsFromEmptyAndNarrowFocusedSchedules() {
+    @DisplayName("UC-3 superseded by matrix lenses/G4-G8/RULE-15: an empty room lens clears back to the retained whole-school context")
+    void clearsAnEmptyRoomLensToTheRetainedContext() {
         storeAccepted(fixtures.scaleDocument());
         String before = storedDocument();
         workbench.open().awaitText("Showing 60 of 60 classes");
-        narrowMondayToClassTeacherAndRoomZero();
-        workbench.openFocus("roomId");
-        workbench.focusEntity("room-99");
-        assertTrue(workbench.awaitText("No accepted lessons are scheduled for this selection.").contains("Room 99"));
-        workbench.returnToMatrix();
+        narrowMondayToClassAndRoomZero();
+        workbench.filterRoom("room-99");
+        assertTrue(workbench.awaitText("Lens: Room · Room 99").contains("Represented lessons: 0"));
+        workbench.removeLens();
         assertTrue(workbench.awaitText("Day · Monday").contains("Filtered whole-school matrix"));
-        workbench.expect("document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('#teacher-filter').value === 'teacher-0' && document.querySelector('#room-filter').value === 'room-0'",
-                "return must retain the whole-school context");
-        assertEquals(before, storedDocument(), "UC-3 empty focused inspection must not mutate accepted workspace state");
+        workbench.expect("document.querySelector('#cohort-filter').value === 'cohort-0' && document.querySelector('#teacher-filter').value === '' && document.querySelector('#room-filter').value === '' && document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 12'",
+                "clearing the lens must retain the rest of the whole-school context");
+        assertEquals(before, storedDocument(), "an empty lens must not mutate accepted workspace state");
     }
 
     @Test
@@ -569,11 +575,10 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(before, storedDocument(), "UC-1 preference failures must not mutate accepted workspace state");
     }
 
-    private void narrowMondayToClassTeacherAndRoomZero() {
+    private void narrowMondayToClassAndRoomZero() {
         workbench.range("DAY");
         workbench.awaitText("Day · Monday");
         workbench.filterClass("cohort-0");
-        workbench.filterTeacher("teacher-0");
         workbench.filterRoom("room-0");
         workbench.awaitText("Represented lessons: 12");
     }

@@ -385,6 +385,9 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
 .matrix th small { display: block; margin-top: 4px; color: #5e6d66; font-size: .68rem; font-weight: 500; font-family: var(--font-mono, monospace); }
 .matrix td { height: 112px; min-width: 150px; padding: 5px; vertical-align: top; background: white; border-right: 1px solid #e4ece7; }
 .empty-cell { display: inline-block; color: #7f8e87; font-size: .76rem; font-style: italic; }
+.unavailable-cell { padding: 1px 5px; border: 1px dashed #9aa7a0; border-radius: 3px; background: repeating-linear-gradient(135deg, #eef1ef 0 6px, #e3e8e5 6px 12px); color: #4d5a54; font-style: normal; font-weight: 700; }
+.criteria .criterion-remove { margin-left: 5px; padding: 0 3px; border: 0; background: transparent; color: #5c4106; font-weight: 800; line-height: 1; box-shadow: none; }
+.show-week-actions { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0; padding: 0; list-style: none; font-size: .8rem; }
 .lesson-cell { width: 100%; min-height: 94px; padding: 9px; display: flex; flex-direction: column; align-items: start; gap: 3px; border: 1px solid #b8c6bd; border-radius: 3px; background: #f7faf8; color: #17241e; text-align: left; font-size: .78rem; box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.04); }
 .lesson-cell strong { font-size: .88rem; }
 .lesson-cell span { color: #4e5e57; }
@@ -412,14 +415,12 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
 .week-period { position: absolute; left: 0; top: 7px; width: 48px; overflow: hidden; color: #5a6962; font-size: .65rem; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono, monospace); }
 .week-lesson { min-height: 44px; padding: 5px 7px; gap: 2px; }
 .week-lesson strong { overflow: hidden; max-width: 100%; text-overflow: ellipsis; white-space: nowrap; font-size: .76rem; }
-.week-lesson .week-room { align-self: end; max-width: 100%; overflow: hidden; text-align: right; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono, monospace); }
+.week-lesson .week-room, .week-lesson .week-meta { align-self: end; max-width: 100%; overflow: hidden; text-align: right; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono, monospace); }
 .lesson-panel { margin-top: 16px; padding: 18px; display: grid; grid-template-columns: 1fr auto; gap: 16px; border: 1px solid #a2c2b0; border-radius: 3px; background: #f6faf7; }
 .lesson-panel h3 { margin: 8px 0 0; }
 .lesson-panel dl, .lesson-panel details { grid-column: 1 / -1; }
 .lesson-panel summary { cursor: pointer; font-weight: 750; font-family: var(--font-mono, monospace); }
 .lesson-panel .technical { margin-top: 8px; }
-.focused-entry { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 18px; padding-top: 16px; border-top: 1px solid #c2cdc4; }
-.focused-entry h3 { width: 100%; margin: 0 0 3px; }
 .focused-toolbar { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 16px 0; }
 .focused-toolbar label { min-width: min(340px, 100%); }
 .view-tabs { display: flex; gap: 4px; padding: 2px; border: 1px solid #c0cdc4; border-radius: 3px; background: #e2e8e3; }
@@ -551,7 +552,7 @@ code { font-family: var(--font-mono, monospace); background: #ebf0ec; padding: 1
   header, main { width: min(100% - 20px, 680px); }
   .accepted-heading, .focused-toolbar { align-items: stretch; flex-direction: column; }
   .mode-note { align-self: start; }
-  .inspection-toolbar, .matrix-wrap, .focused-entry, .workbench-layout, .utility-disclosure, #workbench-modes { display: none; }
+  .inspection-toolbar, .matrix-wrap, .workbench-layout, .utility-disclosure, #workbench-modes { display: none; }
   .investigation-panel { display: none; }
   .view-tabs { width: 100%; }
   .view-tabs button { flex: 1; }
@@ -616,7 +617,7 @@ body.operational .utility-disclosure > summary { padding: 6px 9px; font-size: .7
 .current-mode .week-period { top: 6px; width: 48px; font-size: .59rem; }
 .current-mode .week-lesson { display: flex; flex-direction: row; align-items: center; gap: 2px; min-height: 20px; padding: 2px 4px; line-height: 1.05; }
 .current-mode .week-lesson strong { flex: 1; min-width: 0; font-size: .68rem; }
-.current-mode .week-lesson .week-room { flex: 0 1 auto; align-self: center; max-width: 48px; font-size: .62rem; }
+.current-mode .week-lesson .week-room, .current-mode .week-lesson .week-meta { flex: 0 1 auto; align-self: center; max-width: 48px; font-size: .62rem; }
 .current-mode .week-lesson em { flex: none; max-width: 100%; margin: 0; padding: 1px 2px; font-size: .55rem; white-space: nowrap; }
 .current-mode .matrix:not(.week-matrix) td { height: 58px; padding: 3px; }
 .current-mode .matrix:not(.week-matrix) .lesson-cell { min-height: 44px; padding: 4px 6px; gap: 1px; line-height: 1.05; }
@@ -751,9 +752,6 @@ body.operational .utility-disclosure > summary { padding: 6px 9px; font-size: .7
 .current-mode .initial-proposal-task-area dl div { padding: 4px 8px; }
 .current-mode .initial-proposal-task-area .confirmation { margin: 8px 0; }
 .current-mode .initial-proposal-task-area .actions { display: flex; gap: 8px; margin-top: 6px; }
-.current-mode .focused-entry { margin-top: 5px; padding-top: 5px; }
-.current-mode .focused-entry h3 { margin: 0; font-size: .85rem; }
-.current-mode .focused-entry button { padding: 5px 9px; font-size: .73rem; }
 
 @media (min-width: 701px) and (max-width: 1279px) {
   .current-mode .workbench-layout, .current-mode .workbench-layout.inspector-collapsed { grid-template-columns: minmax(0, 1fr); }

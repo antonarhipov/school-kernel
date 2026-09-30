@@ -161,10 +161,10 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         workbench.awaitText("Current · accepted");
         workbench.expect("!document.querySelector('#apply-pin') && document.querySelector('#cancel-run') !== null && document.querySelector('#cohort-filter')?.value === 'cohort-7a'");
         workbench.mode("SOLVING");
-        workbench.openFocus("teacherId");
-        workbench.awaitText("Teacher schedule · Alex");
+        workbench.filterTeacher("teacher-alex");
+        workbench.awaitText("Lens: Teacher · Alex");
         workbench.expect("document.querySelector('#workbench-task-area #cancel-run') !== null");
-        workbench.returnToMatrix();
+        workbench.removeLens();
         workbench.awaitText("Day · Monday");
 
         workbench.viewport(390, 800);

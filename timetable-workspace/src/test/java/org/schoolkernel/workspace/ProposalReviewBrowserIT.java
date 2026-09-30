@@ -62,8 +62,8 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
     }
 
     @Test
-    @DisplayName("UC-4 C-1: focusing either teacher or room retains the joined accepted/proposed lesson")
-    void retainsBothSidesInFocusedResourceSchedules() {
+    @DisplayName("UC-4 C-1/matrix lenses RULE-4: either teacher or room lens retains the joined accepted/proposed lesson")
+    void retainsBothSidesInResourceLenses() {
         ObjectNode document = fixtures.comparisonShapeDocument();
         ObjectNode proposal = (ObjectNode) document.path("proposal");
         ObjectNode result = (ObjectNode) proposal.path("result");
@@ -76,19 +76,16 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         storeProposal(document);
         String durable = storedDocument();
         workbench.open().awaitText("Unique changed lessons");
-        for (String[] focus : new String[][] {
-                { "teacherId", "teacher-0", "teacher-21", "lesson-1" },
-                { "roomId", "room-0", "room-90", "lesson-0" } }) {
-            if (focus[0].equals("teacherId")) workbench.filterTeacher(focus[1]);
-            else workbench.filterRoom(focus[1]);
-            workbench.openFocus(focus[0]);
-            for (String resource : new String[] { focus[1], focus[2] }) {
-                workbench.focusEntity(resource);
-                String selector = ".focused-schedule [data-lesson-id=" + focus[3] + "]";
-                workbench.expect("document.querySelectorAll('" + selector + "').length === 2 && document.querySelector('" + selector + "[data-comparison-side=accepted]') && document.querySelector('" + selector + "[data-comparison-side=proposed]') && [...document.querySelectorAll('" + selector + "')].some(item => item.textContent.includes('Related comparison side'))",
-                        "UC-4 C-1: old/new " + focus[0] + " focus " + resource + " retains both exact sides without calling both current");
+        for (String[] lens : new String[][] {
+                { "TEACHER", "teacher-0", "teacher-21", "lesson-1" },
+                { "ROOM", "room-0", "room-90", "lesson-0" } }) {
+            for (String resource : new String[] { lens[1], lens[2] }) {
+                if (lens[0].equals("TEACHER")) workbench.filterTeacher(resource);
+                else workbench.filterRoom(resource);
+                String selector = ".week-matrix tbody[data-row-kind=" + lens[0] + "][data-row-id=" + resource + "] [data-lesson-id=" + lens[3] + "]:not([hidden])";
+                workbench.expect("document.querySelectorAll('.week-matrix tbody').length === 1 && document.querySelectorAll('" + selector + "').length === 2 && document.querySelector('" + selector + "[data-comparison-side=accepted]')?.getAttribute('aria-label').includes('Accepted origin · current') && document.querySelector('" + selector + "[data-comparison-side=proposed]')?.getAttribute('aria-label').includes('Proposed destination · not current')",
+                        "UC-4 C-1: old/new " + lens[0] + " lens " + resource + " retains both exact sides without calling both current");
             }
-            workbench.returnToMatrix();
             workbench.resetView();
         }
         String lessonOneSides = "[...document.querySelectorAll('.matrix-wrap [data-lesson-id=lesson-1]')]";
@@ -250,18 +247,17 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         workbench.expect("document.querySelector('#range-summary')?.textContent.includes('Monday') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#review-selection')?.textContent.includes('Review target: Accepted origin · current') && document.querySelector('#lesson-search')?.value === 'Room 50'",
                 "UC-4 main 3: review detail can navigate back to accepted origin without losing the investigation");
         workbench.range("WEEK");
-        workbench.filterClass("cohort-0");
-        workbench.openFocus("cohortId");
-        workbench.expect("document.querySelector('.focused-schedule') !== null", "UC-4 focused entry must open the selected class schedule");
+        workbench.filterTeacher("teacher-0");
+        workbench.expect("document.querySelector('.week-matrix tbody[data-row-kind=TEACHER][data-row-id=teacher-0]') !== null", "an excluding teacher lens is active");
         workbench.click(".review-groups >> nth=1 >> [data-review-lesson=lesson-960][data-review-side=proposed]");
-        workbench.expect("!document.querySelector('.focused-schedule') && document.querySelector('.matrix-wrap [data-lesson-id=lesson-960][data-comparison-side=proposed]') && document.querySelector('#review-selection')?.textContent.includes('Review target: Proposed destination · not current') && document.querySelector('#lesson-search')?.value === 'Room 50' && document.querySelector('#inspection-notice')?.textContent.includes('Returned to the whole-school canvas')",
-                "UC-4 extension 3a: grouping navigation leaves only an excluding focus and retains the search and stable lesson identity");
-        workbench.openFocus("cohortId");
+        workbench.expect("document.querySelector('#teacher-filter')?.value === '' && document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]').length === 60 && !document.querySelector('.matrix-wrap [data-lesson-id=lesson-960][data-comparison-side=proposed]')?.hidden && document.querySelector('#review-selection')?.textContent.includes('Review target: Proposed destination · not current') && document.querySelector('#lesson-search')?.value === 'Room 50' && document.querySelector('#inspection-notice')?.textContent.includes('Cleared Teacher filter')",
+                "UC-4 extension 3a: grouping navigation clears only an excluding lens and retains the search and stable lesson identity");
+        workbench.filterTeacher("teacher-16");
         workbench.click(origin);
-        workbench.expect("document.querySelector('.focused-schedule [data-lesson-id=lesson-960][data-comparison-side=accepted].selected[aria-current=true] .selected-label')?.textContent === 'Selected' && document.querySelector('#review-selection')?.textContent.includes('Review target: Accepted origin · current') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'",
-                "UC-4 extension 3a: an in-focus accepted origin remains in the focused schedule with an explicit selected cue");
-        workbench.returnToMatrix();
-        workbench.expect("document.querySelector('#lesson-search')?.value === 'Room 50'", "UC-4 G4: focused review navigation and return retain the search");
+        workbench.expect("document.querySelector('#teacher-filter')?.value === 'teacher-16' && document.querySelector('.week-matrix tbody[data-row-id=teacher-16] [data-lesson-id=lesson-960][data-comparison-side=accepted].selected[aria-pressed=true] .selected-label:not([hidden])')?.textContent === 'Selected' && document.querySelector('#review-selection')?.textContent.includes('Review target: Accepted origin · current') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'",
+                "UC-4 extension 3a: an in-lens accepted origin remains in the teacher lens with an explicit selected cue");
+        workbench.removeLens();
+        workbench.expect("document.querySelector('#lesson-search')?.value === 'Room 50'", "UC-4 G4: lens review navigation and clearing retain the search");
         workbench.resetView();
         workbench.range("WEEK");
         workbench.click("[data-review-lesson=lesson-500]");

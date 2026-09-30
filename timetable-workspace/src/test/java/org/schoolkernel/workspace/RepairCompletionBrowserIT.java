@@ -44,10 +44,9 @@ class RepairCompletionBrowserIT extends WorkbenchBrowserSupport {
         workbench.investigateSubject("subject-0");
         workbench.investigateTeacher("teacher-16");
         workbench.expect("document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && document.querySelector('#workbench-inspector')?.textContent.includes('period-0') && document.querySelector('#workbench-inspector')?.textContent.includes('room-16') && document.querySelector('#range-summary')?.textContent.includes('Monday')");
-        workbench.openFocus("teacherId");
-        workbench.focusEntity("teacher-16");
-        workbench.expect("document.querySelector('#return-matrix') && document.querySelector('.focused-schedule')?.textContent.includes('Teacher Sixteen')");
-        workbench.returnToMatrix();
+        workbench.showWeek("TEACHER");
+        workbench.expect("document.querySelector('.matrix tbody tr[data-row-kind=TEACHER]')?.textContent.includes('Teacher Sixteen') && !document.querySelector('#return-matrix, .focused-schedule')");
+        workbench.removeLens();
         workbench.expect("document.querySelector('[data-range=DAY]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'");
         assertEquals(original, storedWorkspaceDocument().path("acceptedBaseline"));
 
