@@ -38,6 +38,30 @@ Initial planning returns exit code `0` for `FEASIBLE`, `2` for `INVALID_INPUT`, 
 found, `4` for a safely handled internal error, `64` for command misuse, `74` for filesystem or publication failure,
 and `130` for interruption before publication.
 
+## Test checks
+
+Run these commands from the repository root:
+
+```bash
+./mvnw test                         # Core unit, contract, and architecture tests; no Docker or browser
+./mvnw -pl kernel-cli -am verify    # Core tests and packaged CLI integration tests
+./mvnw -Pworkspace-api verify       # Core tests and PostgreSQL-backed workspace API integration tests
+./mvnw -Pworkspace-browser verify   # Core tests and browser integration tests
+./mvnw verify                       # All core and integration tests
+```
+
+The workspace profiles run the whole reactor so the packaged kernel is built before workspace integration tests.
+Those tests require Docker; browser tests also require Chrome. For one integration class, use the reactor root and
+allow modules with no matching class to pass:
+
+```bash
+./mvnw -Dit.test=FlywayFailureIT -Dfailsafe.failIfNoSpecifiedTests=false verify
+```
+
+Name core tests `*Test` or `*Tests`, packaged CLI tests `*CliIT`, and browser tests `*BrowserIT`. Other workspace
+`*IT` classes exercise the API and database. Plain `verify` remains the full gate; `clean verify` also rebuilds from
+scratch.
+
 ## Public contract
 
 - [`school-definition-v1.schema.json`](kernel-contract/src/main/resources/schema/school-definition-v1.schema.json) defines inputs.
