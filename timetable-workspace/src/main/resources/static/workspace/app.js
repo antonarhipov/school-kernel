@@ -26,6 +26,8 @@ const boundReviewControls = new WeakSet();
 const boundDiagnosticButtons = new WeakSet();
 const boundShowWeekButtons = new WeakSet();
 const boundManualForms = new WeakSet();
+let editedLessonId = null;
+let detachedLessonId = null;
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
@@ -169,7 +171,13 @@ function render(snapshot) {
     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
     const activeModel = inspectionState.current().mode === 'DRAFT' ? manualDraftModel : acceptedModel;
     const selected = activeModel.assignmentMap.get(view.selectedLessonId);
-    if (view.selectedLessonId && !isRepresented(selected)) {
+    const departure = selected && editedLessonId === view.selectedLessonId ? lensDeparture(selected) : null;
+    editedLessonId = null;
+    if (departure) {
+      // The edit moved the lesson out of the lens: the lens stays, the lesson stays open in the inspector.
+      detachedLessonId = selected.lessonId;
+      selectionResetNotice = departure;
+    } else if (view.selectedLessonId && !isRepresented(selected)) {
       selectionResetNotice = !selected ? M.comparisonSelectionCleared
         : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
       syncInspectionState(inspectionState.closeLesson());
@@ -814,14 +822,16 @@ function selectDraftLesson(id) {
   const item = acceptedModel.assignmentMap.get(id);
   if (!item) return;
   if (!isRepresented(item)) {
-    for (const [filter, selected, expected] of [['cohortId', view.cohortId, item.cohortId], ['teacherFilterId', view.teacherId, item.teacherId], ['roomId', view.roomId, item.roomId], ['periodId', view.periodId, item.periodId]]) {
-      if (selected && selected !== expected) syncInspectionState(inspectionState.selectFilter(filter, null).state);
+    const cleared = [];
+    for (const [filter, selected, expected, label] of [['cohortId', view.cohortId, item.cohortId, M.classFilter], ['teacherFilterId', view.teacherId, item.teacherId, M.teacherFilter],
+      ['roomId', view.roomId, item.roomId, M.roomFilter], ['periodId', view.periodId, item.periodId, M.periodFocus]]) {
+      if (selected && selected !== expected) { syncInspectionState(inspectionState.selectFilter(filter, null).state); cleared.push(M.clearedReviewFilter(label)); }
     }
-    if (view.subjectOnly && item.subjectId !== view.subjectInvestigationId) syncInspectionState(inspectionState.setSubjectOnly(false).state);
+    if (view.subjectOnly && item.subjectId !== view.subjectInvestigationId) { syncInspectionState(inspectionState.setSubjectOnly(false).state); cleared.push(M.clearedReviewFilter(M.subjectInvestigation)); }
     if (view.range === 'DAY' && view.day !== item.period.weekday) syncInspectionState(inspectionState.selectDay(item.period.weekday, item.period.weekday).state);
     renderWholeSchool();
-    document.querySelector('#inspection-notice').textContent = currentSnapshot.workspace.repairDraft.conflicts.some(conflict => conflict.lessonId === id)
-      ? M.conflictNavigationReset : M.draftNavigationReset;
+    document.querySelector('#inspection-notice').textContent = [currentSnapshot.workspace.repairDraft.conflicts.some(conflict => conflict.lessonId === id)
+      ? M.conflictNavigationReset : M.draftNavigationReset, ...cleared].join(' ');
   }
   const button = document.querySelector(`[data-lesson-id="${CSS.escape(id)}"]`);
   if (button) { button.scrollIntoView({ block: 'nearest', inline: 'nearest' }); selectLesson(button); }
@@ -933,6 +943,15 @@ function matrixArrangement(model, displayed) {
     rows: [{ id, kind, label: lensRowLabel(kind) }],
     cellItems: (row, period) => cells.get(period.id) || [],
     emptyMarkup: (row, period, hidden) => emptyCellMarkup(availability !== null && !availability.has(period.id), hidden) };
+}
+
+function lensDeparture(item) {
+  const kind = lensKind();
+  if (!kind) return null;
+  const field = kind === 'TEACHER' ? 'teacherId' : 'roomId';
+  if (item[field] === view[field]) return null;
+  const now = kind === 'TEACHER' ? entityName(item.teacher, item.teacherId) : entityName(item.room, item.roomId);
+  return M.lessonLeftLens(entityName(item.lesson, item.lessonId), lensRowLabel(kind), kind === 'TEACHER' ? M.teacher : M.room, now);
 }
 
 function lensRowLabel(kind) {
@@ -1245,17 +1264,33 @@ function lessonDetails(item) {
 // One Show week action per distinct declared teacher and room of the given sides (both sides in Proposal review).
 function showWeekActions(...sides) {
   const action = (kind, id, label, name) => `<li><span>${label}: ${escapeHtml(name)}</span> <button type="button" class="link-button" data-show-week="${kind}" data-show-week-id="${escapeAttribute(id)}" aria-label="${escapeAttribute(M.showWeekOf(label, name))}">${M.showWeek}</button></li>`;
-  const actions = [['TEACHER', 'teacherId', 'teacher', M.teacher, acceptedModel.maps.teachers], ['ROOM', 'roomId', 'room', M.room, acceptedModel.maps.rooms]]
+  const actions = [['TEACHER', 'teacherId', 'teacher', M.teacher, acceptedModel.maps.teachers], ['ROOM', 'roomId', 'room', M.room, acceptedModel.maps.rooms],
+    ['CLASS', 'cohortId', 'cohort', M.class, acceptedModel.maps.cohorts]]
     .flatMap(([kind, field, entity, label, declared]) => [...new Map(sides.filter(side => declared.has(side[field]))
       .map(side => [side[field], side])).values()].map(side => action(kind, side[field], label, entityName(side[entity], side[field]))));
   return `<ul class="show-week-actions" aria-label="${M.showWeek}">${actions.join('')}</ul>`;
+}
+
+// A class week is a class filter, not a lens: it clears any lens first and keeps the lesson selected.
+function showClassWeek(cohortId) {
+  let restoreScroll = null;
+  for (const lens of ['teacherFilterId', 'roomId']) {
+    if (inspectionState.current()[lens]) restoreScroll = inspectionState.selectFilter(lens, null).restoreScroll || restoreScroll;
+  }
+  const transition = inspectionState.selectFilter('cohortId', cohortId);
+  syncInspectionState(inspectionState.current());
+  if (!transition.changed) return;
+  clearSelectedLessonOutsideRepresentation();
+  renderWholeSchool();
+  settleMatrixScroll(restoreScroll);
 }
 
 function bindShowWeek() {
   document.querySelectorAll('[data-show-week]').forEach(button => {
     if (boundShowWeekButtons.has(button)) return;
     boundShowWeekButtons.add(button);
-    button.addEventListener('click', () => applyLens(button.dataset.showWeek === 'TEACHER' ? 'teacherFilterId' : 'roomId', button.dataset.showWeekId));
+    button.addEventListener('click', () => button.dataset.showWeek === 'CLASS' ? showClassWeek(button.dataset.showWeekId)
+      : applyLens(button.dataset.showWeek === 'TEACHER' ? 'teacherFilterId' : 'roomId', button.dataset.showWeekId));
   });
 }
 
@@ -1613,13 +1648,15 @@ function positionPopover(button) {
     return;
   }
   const targetBtn = button || document.querySelector(`.lesson-cell[data-lesson-id="${view.selectedLessonId}"]`);
-  if (!targetBtn || targetBtn.hidden || targetBtn.closest('[hidden]')) {
+  const visibleTarget = targetBtn && !targetBtn.hidden && !targetBtn.closest('[hidden]');
+  const canvas = !visibleTarget && detachedLessonId === view.selectedLessonId ? document.querySelector('.canvas-region') : null;
+  if (!visibleTarget && !canvas) {
     inspector.hidden = true;
     return;
   }
 
   inspector.hidden = false;
-  const btnRect = targetBtn.getBoundingClientRect();
+  const btnRect = visibleTarget ? targetBtn.getBoundingClientRect() : canvasAnchor(canvas);
   const popoverWidth = Math.min(420, window.innerWidth - 32);
   const gap = 8;
   const estimatedHeight = 360;
@@ -1651,6 +1688,13 @@ function positionPopover(button) {
   inspector.style.top = `${Math.round(top)}px`;
   inspector.style.width = `${popoverWidth}px`;
   inspector.style.zIndex = '1050';
+}
+
+// A zero-width anchor at the canvas's top-right edge, so the popover opens just inside it.
+function canvasAnchor(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.max(rect.left + 16, rect.right - Math.min(420, window.innerWidth - 32) - 24);
+  return { left: x, right: x, top: rect.top + 8, bottom: rect.top + 8, width: 0, height: 0 };
 }
 
 function mountInlineInspector() {
@@ -1742,9 +1786,10 @@ function bindManualEditor() {
       if (periodId && view.range === 'DAY') {
         const chosenPeriod = acceptedModel?.definition?.periods?.find(p => p.id === periodId);
         if (chosenPeriod && chosenPeriod.weekday !== view.day) {
-          view.day = chosenPeriod.weekday;
+          syncInspectionState(inspectionState.selectDay(chosenPeriod.weekday, chosenPeriod.weekday).state);
         }
       }
+      editedLessonId = view.selectedLessonId;
       try {
         await mutateJson('/api/manual-draft', 'PATCH', {
           action: 'REASSIGN_LESSON',
@@ -1786,9 +1831,10 @@ function bindManualEditor() {
         if (origAssignment && view.range === 'DAY') {
           const origPeriod = acceptedModel?.definition?.periods?.find(p => p.id === origAssignment.periodId);
           if (origPeriod && origPeriod.weekday !== view.day) {
-            view.day = origPeriod.weekday;
+            syncInspectionState(inspectionState.selectDay(origPeriod.weekday, origPeriod.weekday).state);
           }
         }
+        editedLessonId = view.selectedLessonId;
         const statusEl = document.querySelector('#edit-save-status');
         if (statusEl) {
           statusEl.className = 'edit-save-status saving';

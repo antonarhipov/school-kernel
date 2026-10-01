@@ -320,6 +320,7 @@ export const M = Object.freeze({
   teacherUnavailable: 'Unavailable',
   selectionOutsideFilters: 'The selected lesson is outside the active filters, so its details were closed.',
   selectionOutsideLens: label => `The selected lesson is not in the ${label} lens, so its details were closed.`,
+  lessonLeftLens: (lesson, lens, type, name) => `${lesson} left the ${lens} lens: its ${type.toLocaleLowerCase()} is now ${name}. It stays open in the inspector.`,
   reset: 'Reset view',
   filteredMatrix: 'Filtered whole-school matrix',
   completeMatrix: 'Complete whole-school matrix',

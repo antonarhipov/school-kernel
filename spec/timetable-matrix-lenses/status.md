@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: READY_FOR_CONVERGENCE (revision 1)
-- Next eligible: none until UC-2 is APPROVED (then UC-3, UC-4)
+- Use case: UC-3
+- Status: READY_FOR_CONVERGENCE (UC-2 revision 1 is also still awaiting its verdict)
+- Next eligible: none until UC-3 is APPROVED (then UC-4)
 
 ## Progress
 
@@ -12,8 +12,34 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
 | UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence (rev. 1; first submission 013c12a) | `convergence/UC-2.md` (REJECT at 013c12a: G-1, G-2) |
-| UC-3 | NOT_STARTED | UC-1 (extends UC-1 at 5a) | - | - |
+| UC-3 | READY_FOR_CONVERGENCE | UC-1 (extends UC-1 at 5a) | HEAD at convergence | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
+
+## UC-3 Evidence
+
+- Started from: fee1bb5 (UC-2 revision 1). The user approved starting before the UC-2 revision-1 verdict. UC-3
+  requires only UC-1, which is APPROVED.
+- Pre-existing dirty files: `spec/README.md`, `spec/school-definition-authoring/*`. These are unrelated and not part
+  of this submission.
+- Implementation submission: HEAD at convergence
+- Changed files: `app.js` and `messages.js` (workspace static); `MatrixLensBrowserIT.java`; `checkpoints/UC-3.md`;
+  `status.md`
+- Commands and results:
+  - `MatrixLensBrowserIT`: 18 run, 0 failures, 0 errors.
+  - Full `./mvnw -pl timetable-workspace -am verify`: 124 integration tests, 4 failures, 9 errors, 0 skipped.
+    - 11 failures match the baseline.
+    - The other two are a first-render timeout at `MatrixLensBrowserIT:458` and `:495` (UC-2 tests). That timeout
+      also reproduces on clean fee1bb5. Details are in `checkpoints/UC-3.md`.
+
+| Contract element | Evidence |
+|---|---|
+| UC-3 main steps 1-5 | `MatrixLensBrowserIT.java:582`; `app.js:1268`, `:1789` |
+| UC-3 extension 1a | `MatrixLensBrowserIT.java:662`; `app.js:821` (draft and diagnostic links); `:273` (Proposal targets) |
+| UC-3 extension 2a | `MatrixLensBrowserIT.java:662`; `app.js:1275`; UC-2 `:419` |
+| UC-3 extension 5a | `MatrixLensBrowserIT.java:617`; `app.js:174`, `:948`, `:1694` |
+| UC-3 extension 5b | `MatrixLensBrowserIT.java:644` |
+| UC-3 G1-G3, postconditions | See `checkpoints/UC-3.md` |
+| RULE-1, 3, 4, 6, 7 | See `checkpoints/UC-3.md` |
 
 ## UC-2 Evidence
 

@@ -577,6 +577,122 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(before, storedDocument());
     }
 
+    @Test
+    @DisplayName("UC-3 main 1-5/G1/G3: a lesson edited inside its lens moves to its new lens cell, selected, with one save per edit")
+    void editsALessonInsideItsLens() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        Workbench.MutationLog mutations = workbench.recordMutations();
+
+        // Main 1-2: the inspector opens from a lens tile and offers Show week for teacher, room and class.
+        workbench.selectLesson("lesson-960");
+        workbench.expect("!document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960' && ['TEACHER', 'ROOM', 'CLASS'].every(kind => document.querySelector('#workbench-inspector [data-show-week=' + kind + ']')) && document.querySelector('[data-show-week=CLASS]').getAttribute('aria-label') === 'Show week for class " + CLASS16 + "'",
+                "UC-3 main 2: complete details with Show week for the teacher, room and class");
+        assertEquals(List.of(), mutations.requests(), "UC-3 G3: selecting and inspecting issue no mutation");
+
+        // Main 3-5 in Week: period-0 to the free, declared period-40 keeps the lesson in the lens, in its new cell.
+        workbench.select("#edit-period", "period-40");
+        workbench.expect("document.querySelector('[data-lesson-id=lesson-960]')?.closest('td')?.title === 'Declared period 40' && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#teacher-filter').value === 'teacher-16' && document.querySelector('.week-matrix tbody').dataset.rowId === 'teacher-16'",
+                "UC-3 main 5: the edited lesson is rendered in its new lens cell with the selection retained");
+        assertEquals(List.of("PATCH /api/manual-draft"), mutations.requests(), "UC-3 main 4: one edit issues exactly one save");
+        assertEquals("MANUAL_DRAFT", storedLifecycle());
+        assertEquals("period-40", draftAssignment("lesson-960").path("periodId").stringValue(), "UC-3 main 4: the edit is persisted");
+
+        // Main 3-5 in Day: a period on another weekday moves the Day to that weekday, still in the lens.
+        workbench.range("DAY");
+        workbench.weekday("MONDAY");
+        workbench.awaitText("Day · Monday");
+        workbench.selectLesson("lesson-961");
+        workbench.select("#edit-period", "period-40");
+        workbench.awaitText("Day · Thursday");
+        workbench.expect("document.querySelector('.matrix tbody tr').dataset.rowId === 'teacher-16' && document.querySelector('[data-lesson-id=lesson-961]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#weekday').value === 'THURSDAY'",
+                "UC-3 main 5: a cross-day edit follows the lesson to its weekday inside the lens");
+        assertEquals(List.of("PATCH /api/manual-draft", "PATCH /api/manual-draft"), mutations.requests());
+    }
+
+    @Test
+    @DisplayName("UC-3 ext 5a/G2: an edit that reassigns the lesson out of the lens keeps it inspected, announces it, and keeps the lens")
+    void keepsALessonEditedOutOfTheLens() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        Workbench.MutationLog mutations = workbench.recordMutations();
+
+        workbench.selectLesson("lesson-961");
+        workbench.select("#edit-teacher", "teacher-17");
+        workbench.awaitText("Declared lesson 961 left the Teacher · " + TEACHER16 + " lens: its teacher is now Teacher 17. It stays open in the inspector.");
+        workbench.expect("!document.querySelector('[data-lesson-id=lesson-961]') && document.querySelector('#teacher-filter').value === 'teacher-16' && document.querySelector('.week-matrix tbody').dataset.rowId === 'teacher-16' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 961' && document.querySelector('#edit-teacher').value === 'teacher-17'",
+                "UC-3 ext 5a 1-4: the tile leaves the lens, the lesson stays selected and inspected, and the lens is unchanged");
+        assertEquals("teacher-17", draftAssignment("lesson-961").path("teacherId").stringValue());
+
+        // The same for a room lens.
+        workbench.filterRoom("room-16");
+        workbench.awaitText("Lens: Room · " + ROOM16);
+        workbench.selectLesson("lesson-962");
+        workbench.select("#edit-room", "room-90");
+        workbench.awaitText("Declared lesson 962 left the Room · " + ROOM16 + " lens: its room is now Room 90. It stays open in the inspector.");
+        workbench.expect("!document.querySelector('[data-lesson-id=lesson-962]') && document.querySelector('#room-filter').value === 'room-16' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 962'",
+                "UC-3 ext 5a: a room reassignment leaves the room lens the same way");
+        assertEquals(List.of("PATCH /api/manual-draft", "PATCH /api/manual-draft"), mutations.requests(), "UC-3 G3: only the two edits mutate");
+    }
+
+    @Test
+    @DisplayName("UC-3 ext 5b: an edit that clashes with another lesson of the lens entity stacks both tiles with conflict cues")
+    void stacksALensClashCausedByAnEdit() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+
+        workbench.selectLesson("lesson-963");
+        workbench.select("#edit-period", "period-4");
+        workbench.expect("(() => { const cell = document.querySelector('[data-lesson-id=lesson-963]')?.closest('td'); return cell && cell.title === 'Declared period 4' && cell.querySelector('[data-lesson-id=lesson-964]') && [...cell.querySelectorAll('.lesson-cell')].every(tile => tile.classList.contains('conflicting') && tile.querySelector('.conflict-indicator')); })()",
+                "UC-3 ext 5b: both lens lessons share the period-4 cell with the conflict highlight and indicator");
+        workbench.press("[data-lesson-id=lesson-964] .conflict-indicator", "Enter");
+        workbench.expect("!document.querySelector('#conflict-overlay-lesson-964').hidden && document.querySelector('#conflict-overlay-lesson-964').textContent.includes('TEACHER_CLASH')",
+                "UC-3 ext 5b: the conflict overlay explains the teacher clash inside the lens");
+        workbench.expect("document.querySelector('[data-lesson-id=lesson-963]').getAttribute('aria-pressed') === 'true' && document.querySelector('#teacher-filter').value === 'teacher-16'");
+    }
+
+    @Test
+    @DisplayName("UC-3 ext 2a/1a: class Show week clears the lens for a class filter; a draft link outside the lens clears it with named criteria")
+    void leavesTheLensForAClassWeekOrADraftLink() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        workbench.selectLesson("lesson-960");
+        workbench.showWeek("CLASS");
+        workbench.awaitText("Class: " + CLASS16);
+        workbench.expect("document.querySelector('#teacher-filter').value === '' && document.querySelector('#cohort-filter').value === 'cohort-16' && document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]:not([hidden])').length === 1 && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && !document.querySelector('#workbench-inspector').hidden && !document.querySelector('#active-criteria [data-remove-lens]')",
+                "UC-3 ext 2a: the class Show week clears the lens, applies the class filter and keeps the lesson selected");
+        assertEquals(List.of(), mutations.requests());
+        assertEquals(before, storedDocument());
+        workbench.resetView();
+
+        // Ext 1a through a repair-draft direct-effect link while an excluding room lens is active.
+        workbench.startRepair("TEACHER", "teacher-16", "period-0");
+        workbench.awaitText("Repair draft · not current");
+        workbench.filterRoom("room-3");
+        workbench.awaitText("Lens: Room · Room 3");
+        workbench.click("[data-draft-effect=lesson-960]");
+        workbench.expect("document.querySelector('#room-filter').value === '' && document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]').length === 60 && document.querySelector('#inspection-notice').textContent.includes('Cleared Room filter') && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'",
+                "UC-3 ext 1a: a draft link outside the lens clears it, names the cleared criterion and selects the target");
+    }
+
+    private JsonNode draftAssignment(String lessonId) {
+        for (JsonNode assignment : storedWorkspaceDocument().path("manualDraft").path("assignments")) {
+            if (lessonId.equals(assignment.path("lessonId").stringValue())) return assignment;
+        }
+        throw new AssertionError("no draft assignment for " + lessonId);
+    }
+
     private void assertClassRowsRestoredAt(double scrollTop) {
         workbench.expect("document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]').length === 60 && Math.abs(document.querySelector('.matrix-wrap').scrollTop - " + scrollTop + ") < 1",
                 "UC-2 main 2/4: class rows return at the scroll position recorded at lens entry (" + scrollTop + ")");
