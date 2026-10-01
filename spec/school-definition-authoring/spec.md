@@ -5,27 +5,32 @@
 School Definition Authoring lets the school timetable administrator maintain the school's cohorts, teachers, and rooms
 from the timetable workspace, without editing School Kernel JSON. The administrator opens a durable definition draft,
 adds or configures resources through form controls, including availability, qualifications, capacity, capabilities,
-cohort day-shape limits, curators, and home rooms, and removes resources that nothing depends on any more.
+cohort day-shape limits, curators, and home rooms. They move lessons from one teacher to another, and remove resources
+that nothing depends on any more.
 
 Every save runs immediate workspace checks and persists the draft, even when it is invalid, so multi-step edits
 can span several sessions. Issues appear next to the resource and attribute that caused them, including issues that
-show up in lessons because of a resource edit. A draft can be finished only when School Kernel accepts the complete
-definition. Before a baseline exists, finishing replaces the initial definition used for planning. After a baseline
-exists, finishing opens a repair draft seeded with the complete successor definition, and the accepted timetable stays
-current until a repair proposal is explicitly accepted.
+show up in lessons because of a resource edit, and advisories for conditions that make planning certain to fail. A
+draft can be finished only when School Kernel accepts the complete definition. Before a baseline exists, finishing
+replaces the initial definition used for planning. After a baseline exists, finishing opens a repair draft seeded with
+the complete successor definition, and the accepted timetable stays current until a repair proposal is explicitly
+accepted. Discarding that repair draft returns to the definition draft with the authored changes intact.
 
 ## Scope and resolved decisions
 
 ### In scope
 
 - A durable `DEFINITION_DRAFT` workspace state opened from `INITIAL_DRAFT` or `ACCEPTED_BASELINE`.
-- Adding, configuring, reverting, and removing cohorts, teachers, and rooms.
+- Adding, configuring, reverting (whole resource or single attribute), and removing cohorts, teachers, and rooms.
 - Editing every attribute listed in [Editable attributes](#editable-attributes) that the draft's catalog version
   supports.
 - Period-set attributes edited on the school's declared period grid.
-- Workspace-side checks on every save and authoritative School Kernel verification before finishing.
+- Reassigning selected lessons and room-assignment rules from one teacher to another.
+- Workspace-side checks on every save, including feasibility advisories, and authoritative School Kernel
+  verification before finishing.
 - A change summary against the source definition.
 - Discarding the draft and finishing it into the initial draft or a repair draft.
+- Returning from a seeded repair draft to the definition draft.
 
 ### Resolved decisions
 
@@ -35,7 +40,8 @@ current until a repair proposal is explicitly accepted.
    `basedOnRevision` equals the accepted result's `inputRevision`. It becomes current only through the existing repair
    workflow: repair planning, a `FEASIBLE` proposal, and explicit acceptance.
 3. **Blocked deletion:** A resource that any other part of the definition references cannot be removed. The workspace
-   lists every dependent from [Removal dependents](#removal-dependents). Nothing is removed or rewritten implicitly.
+   lists every dependent from [Removal dependents](#removal-dependents) and states, for each, whether it can be
+   resolved in this feature. Nothing is removed or rewritten implicitly.
 4. **Persist invalid, gate on finish:** Saves are accepted when the draft is incomplete or invalid, as long as the
    request itself is well-formed. Finishing requires zero blocking workspace issues and a successful School Kernel
    verification of the exact complete definition.
@@ -44,11 +50,25 @@ current until a repair proposal is explicitly accepted.
 6. **Fixed catalog version:** A draft opened from `INITIAL_DRAFT` keeps that definition's catalog version. A draft opened
    from `ACCEPTED_BASELINE` uses the catalog version the repair workflow produces, the greater of `8` and the accepted
    version. Attributes the draft's catalog does not support are shown as unavailable, together with the catalog version
-   that introduces them. They are never written.
+   that introduces them. They are never written. When the accepted catalog is raised, the draft says so and reports
+   `CATALOG_RAISED` for every cohort whose omitted attribute now has a constraining default.
 7. **Preserved omission:** An attribute that is cleared is omitted, not written as its default. A period set that
    covers every declared period is stored as an omitted `availablePeriodIds`.
-8. **Single draft:** While `DEFINITION_DRAFT` is active, planning runs, repair drafts, manual drafts, imports, and
-   workspace clearing are refused.
+8. **Single, visible draft:** While `DEFINITION_DRAFT` is active, planning runs, repair drafts, manual drafts,
+   imports, and workspace clearing are refused. Every workspace view indicates that the draft is open, and every
+   refusal names the draft and links to it.
+9. **Teacher reassignment is the only lesson edit:** Lessons and room-assignment rules change only through UC-8, and
+   only in `teacherId`. Creating, deleting, or otherwise editing lessons and rules is out of scope.
+10. **Definition teacher is authoritative:** Workspace checks evaluate a lesson against its `lessons[].teacherId`. New
+    kernel results take each assignment's teacher from the lesson, so an accepted assignment whose teacher differs
+    (for example after a manual teacher change) is reported as `ASSIGNMENT_TEACHER_DIVERGES` and can be adopted
+    through UC-8.
+11. **Authored changes survive repair discard:** A repair draft seeded by UC-7 keeps the definition draft it came
+    from. Discarding that repair draft restores the definition draft. Accepting its proposal drops it.
+12. **Repair is always required after a baseline:** Every finished post-baseline draft goes through repair planning,
+    including one that would move no accepted assignment.
+13. **Repair staging stays:** Staging unavailability in a repair draft remains available, including in a repair draft
+    seeded by UC-7. Authoring is the path for every other resource change.
 
 ## Actors and domain terms
 
@@ -69,6 +89,13 @@ current until a repair proposal is explicitly accepted.
   baseline definition. It is never modified by the draft.
 - **Definition draft (`DEFINITION_DRAFT`):** A durable workspace state holding the complete working definition, its
   source state, its source definition revision, and its current issues.
+- **Opened draft:** The draft exactly as UC-1 created it, before any edit. For an accepted source it already differs
+  from the source definition in `basedOnRevision` and possibly `catalogVersion`. "Unchanged" means equal to the
+  opened draft.
+- **Teacher reassignment:** Changing `teacherId` on selected lessons and room-assignment rules from one teacher to
+  another (UC-8).
+- **Kept draft:** The definition draft retained with a repair draft that UC-7 seeded, restored if that repair draft is
+  discarded.
 - **Issue:** A reported problem with the draft. It is either *blocking* (the draft cannot be finished) or *advisory*
   (it informs the administrator but does not block finishing).
 - **Dependent:** Any lesson, cohort, or room-assignment rule that references a resource by ID.
@@ -85,6 +112,7 @@ current until a repair proposal is explicitly accepted.
 | UC-5 | Review draft changes and issues | School timetable administrator | Requires UC-1 |
 | UC-6 | Discard the definition draft | School timetable administrator | Requires UC-1 |
 | UC-7 | Finish the definition draft | School timetable administrator | Requires UC-1; Includes UC-5 at step 1 |
+| UC-8 | Reassign a teacher's lessons | School timetable administrator | Requires UC-1 |
 
 ## State models
 
@@ -92,23 +120,30 @@ current until a repair proposal is explicitly accepted.
 stateDiagram-v2
     INITIAL_DRAFT --> DEFINITION_DRAFT: UC-1 Open draft
     ACCEPTED_BASELINE --> DEFINITION_DRAFT: UC-1 Open draft
-    DEFINITION_DRAFT --> DEFINITION_DRAFT: UC-2 Add\nUC-3 Configure\nUC-4 Remove\nUC-5 Review
+    DEFINITION_DRAFT --> DEFINITION_DRAFT: UC-2 Add\nUC-3 Configure\nUC-4 Remove\nUC-5 Review\nUC-8 Reassign
     DEFINITION_DRAFT --> INITIAL_DRAFT: UC-6 Discard (source INITIAL_DRAFT)\nUC-7 Finish (source INITIAL_DRAFT)
     DEFINITION_DRAFT --> ACCEPTED_BASELINE: UC-6 Discard (source ACCEPTED_BASELINE)
     DEFINITION_DRAFT --> REPAIR_DRAFT: UC-7 Finish (source ACCEPTED_BASELINE)
+    REPAIR_DRAFT --> DEFINITION_DRAFT: Repair discard (kept draft present)
 ```
 
 Allowed transitions:
 
 - `INITIAL_DRAFT` -> `DEFINITION_DRAFT` via UC-1.
 - `ACCEPTED_BASELINE` -> `DEFINITION_DRAFT` via UC-1.
-- `DEFINITION_DRAFT` -> `DEFINITION_DRAFT` via UC-2, UC-3, UC-4, and UC-5.
+- `DEFINITION_DRAFT` -> `DEFINITION_DRAFT` via UC-2, UC-3, UC-4, UC-5, and UC-8.
 - `DEFINITION_DRAFT` -> source state via UC-6.
 - `DEFINITION_DRAFT` -> `INITIAL_DRAFT` via UC-7 when the source is `INITIAL_DRAFT`. The initial definition is replaced.
-- `DEFINITION_DRAFT` -> `REPAIR_DRAFT` via UC-7 when the source is `ACCEPTED_BASELINE`. The accepted baseline is unchanged.
+- `DEFINITION_DRAFT` -> `REPAIR_DRAFT` via UC-7 when the source is `ACCEPTED_BASELINE`. The accepted baseline is
+  unchanged, and the definition draft is kept with the repair draft.
+- `REPAIR_DRAFT` -> `DEFINITION_DRAFT` via the existing repair discard when the repair draft has a kept draft. The
+  repair draft's staging and pins are discarded and the kept draft is restored unchanged. Without a kept draft, repair
+  discard returns to `ACCEPTED_BASELINE` as today.
 
 Every other transition into or out of `DEFINITION_DRAFT` is refused without side effects. Application restart restores
-`DEFINITION_DRAFT` with its content and issues and never finishes or discards it.
+`DEFINITION_DRAFT` with its content and issues and never finishes or discards it. A kept draft survives
+`SOLVING_REPAIR`, `REPAIR_PROPOSAL`, rejection of a repair proposal, and application restart. Accepting the repair
+proposal removes it.
 
 ### Definition lineage
 
@@ -140,12 +175,16 @@ its source cannot change while it is open. The workspace never rebases a draft.
    initial issues.
 3. The workspace durably saves the draft and enters `DEFINITION_DRAFT`.
 4. The workspace shows the resource editor listing cohorts, teachers, and rooms by display name, states the source
-   (initial draft or accepted timetable) and what finishing will do, and shows the current issue count.
+   (initial draft or accepted timetable) and what finishing will do, states which workflows are unavailable while the
+   draft is open, and shows the current issue count.
 
 ### Extensions
 
 - 1a. If the workspace is in any other state, including an active run, proposal, repair draft, or manual draft, the
   workspace refuses the request, names the state that must be resolved first, and ends.
+- 2a. If the source is `ACCEPTED_BASELINE` and the draft's catalog version is above the accepted one, the workspace
+  states both versions in the editor header and reports a `CATALOG_RAISED` advisory for every affected cohort
+  attribute; continue at step 3.
 - 1b. If the workspace is `EMPTY`, the workspace explains that a school definition with periods and subjects must be
   imported before its resources can be authored, and ends.
 - 3a. If durable storage fails, the workspace reports that no draft was created, remains in the source state, and ends.
@@ -155,7 +194,10 @@ its source cannot change while it is open. The workspace never rebases a draft.
 - G1. Source immutability: the source definition, and for an accepted source the accepted result and assignments,
   remain byte-identical.
 - G2. Initial parity: apart from `basedOnRevision` and the catalog version, the new draft's resources equal the source
-  definition's resources.
+  definition's resources. The opened draft, not the source definition, is the reference for "unchanged" in UC-5 and
+  UC-7.
+- G3. Visible lock: while the draft is open, every workspace view indicates it, and every refused action names the
+  draft and links to the resource editor.
 
 ### Postconditions
 
@@ -180,8 +222,8 @@ its source cannot change while it is open. The workspace never rebases a draft.
 
 1. The administrator chooses the resource type to add.
 2. The workspace presents a creation form with the resource's required attributes from
-   [Editable attributes](#editable-attributes) and a suggested ID derived from the display name. It explains that the
-   ID cannot be changed later.
+   [Editable attributes](#editable-attributes) and an ID suggested from the display name by the
+   [Identifier suggestion](#identifier-suggestion) rule. It explains that the ID cannot be changed later.
 3. The administrator enters the display name, accepts or edits the ID, and fills in the required attributes.
 4. The workspace checks that the ID matches the contract identifier pattern and is unique within that resource type.
 5. The workspace adds the resource with only the entered attributes, leaving optional attributes omitted, recomputes
@@ -242,13 +284,19 @@ its source cannot change while it is open. The workspace never rebases a draft.
   the catalog version that introduces it, and does not allow editing; continue at step 3.
 - 3a. If the administrator reverts the resource, the workspace restores every attribute to its source-definition value;
   continue at step 5. The revert action is unavailable for resources added in this draft.
+- 3b. If the administrator reverts a single modified attribute, the workspace restores that attribute to its
+  source-definition value, including omission; continue at step 5. Attribute revert is unavailable for resources added
+  in this draft.
 - 5a. If the change produces blocking or advisory issues from [Issue codes](#issue-codes), the workspace still
   persists the draft, shows each issue next to the causing attribute with the affected dependents (for example, each
   lesson whose teacher is no longer qualified), and continues at step 6.
 - 5b. If the draft is opened from `ACCEPTED_BASELINE` and the change makes an accepted assignment inconsistent with the
   draft (for example, a teacher is made unavailable in a period where they teach), the workspace reports the
   affected lessons as advisory `ACCEPTED_ASSIGNMENT_AFFECTED`, explaining that repair planning will move them;
-  continue at step 6.
+  continue at step 6. The check uses the lesson's teacher in the draft, because repair planning assigns that teacher.
+- 5c. If the change leaves a teacher or cohort with more lessons than available periods, a cohort larger than every
+  room, or a lesson requiring a capability that no room provides, the workspace reports the matching feasibility
+  advisory, explaining that planning cannot succeed until it is resolved; continue at step 6.
 - 6a. If durable storage fails, the workspace reports that the change was not saved, keeps the edited values in the
   form for retry, leaves the stored draft unchanged, and ends.
 
@@ -261,7 +309,8 @@ its source cannot change while it is open. The workspace never rebases a draft.
 - G3. Change tracking: every modified resource and attribute is distinguishable from unchanged ones without relying on
   color alone.
 - G4. Resource-scoped edits: configuring a resource never modifies lessons, subjects, periods, or room-assignment rules.
-  Consequences for those elements are reported as issues, not applied.
+  Consequences for those elements are reported as issues, not applied. Reverting a teacher never reverts lessons
+  reassigned to or from them (UC-8).
 
 ### Postconditions
 
@@ -295,6 +344,9 @@ its source cannot change while it is open. The workspace never rebases a draft.
 
 - 2a. If one or more dependents exist, the workspace refuses the removal, lists every dependent by kind and display
   name with a link to it, explains that each must stop referencing the resource first, and ends without mutation.
+  For each dependent it states how it can be resolved, following the *Resolved by* column of
+  [Removal dependents](#removal-dependents). For a teacher, it offers UC-8 with the teacher's lessons and
+  room-assignment rules preselected. Dependents that this feature cannot change are labelled as such.
 - 4a. If the administrator cancels, the workspace closes the confirmation without side effects and ends.
 - 5a. If durable storage fails, the workspace reports that the resource was not removed, leaves the stored draft
   unchanged, and ends.
@@ -330,7 +382,9 @@ its source cannot change while it is open. The workspace never rebases a draft.
 
 1. The administrator opens the change summary.
 2. The workspace lists added, modified, and removed resources grouped by type, showing the old and new value of each
-   changed attribute.
+   changed attribute. It lists every lesson and room-assignment rule whose `teacherId` changed, with the old and new
+   teacher. For an accepted source whose catalog was raised, it states the catalog change once, separately from
+   resource changes.
 3. The workspace lists every current issue grouped by severity and resource, with its code, explanation, and affected
    dependents. It also lists the most recent School Kernel verification outcome if one exists for the current draft
    content.
@@ -338,7 +392,7 @@ its source cannot change while it is open. The workspace never rebases a draft.
 
 ### Extensions
 
-- 2a. If the draft does not differ from the source definition, the workspace states that there is nothing to finish and
+- 2a. If the draft does not differ from the opened draft, the workspace states that there is nothing to finish and
   offers discard; continue at step 3.
 - 3a. If the draft content has changed since the last School Kernel verification, the workspace marks that outcome as
   outdated and does not present it as current.
@@ -346,7 +400,7 @@ its source cannot change while it is open. The workspace never rebases a draft.
 ### Guarantees
 
 - G1. Complete diff: every attribute that differs from the source definition appears in the summary, including
-  attributes changed from omitted to set and back.
+  attributes changed from omitted to set and back, and every reassigned lesson and room-assignment rule.
 - G2. Non-mutating review: reviewing never changes draft content, issues, or state.
 
 ### Postconditions
@@ -385,7 +439,7 @@ its source cannot change while it is open. The workspace never rebases a draft.
 ### Guarantees
 
 - G1. Clean discard: no authored change survives discard.
-- G2. Confirmation barrier: discard always requires explicit confirmation when the draft differs from the source.
+- G2. Confirmation barrier: discard always requires explicit confirmation when the draft differs from the opened draft.
 
 ### Postconditions
 
@@ -409,21 +463,21 @@ its source cannot change while it is open. The workspace never rebases a draft.
 ### Main success scenario
 
 1. The administrator reviews the change summary (UC-5) and chooses to finish the draft.
-2. The workspace confirms that the draft differs from the source and has zero blocking workspace issues.
+2. The workspace confirms that the draft differs from the opened draft and has zero blocking workspace issues.
 3. The workspace asks the School Kernel verifier to validate the exact complete draft definition.
 4. The verifier accepts the definition.
-5. The workspace atomically completes the source-specific handoff and deletes the draft:
+5. The workspace atomically completes the source-specific handoff:
    - When the source is `INITIAL_DRAFT`, the verified definition replaces the initial draft definition, following the
-     existing replace-draft semantics, and the workspace enters `INITIAL_DRAFT`.
+     existing replace-draft semantics, the draft is deleted, and the workspace enters `INITIAL_DRAFT`.
    - When the source is `ACCEPTED_BASELINE`, the workspace opens a repair draft whose successor definition is the
-     verified definition and whose directly affected lessons are those reported as `ACCEPTED_ASSIGNMENT_AFFECTED`, and
-     enters `REPAIR_DRAFT`.
+     verified definition and whose directly affected lessons are those reported as `ACCEPTED_ASSIGNMENT_AFFECTED`,
+     keeps the definition draft with it, and enters `REPAIR_DRAFT`.
 6. The workspace announces the outcome. For an accepted source, it states that the accepted timetable remains current
-   until a repair proposal is accepted.
+   until a repair proposal is accepted, and that discarding the repair draft returns to the definition draft.
 
 ### Extensions
 
-- 2a. If the draft does not differ from the source, the workspace refuses to finish, offers discard, and ends.
+- 2a. If the draft does not differ from the opened draft, the workspace refuses to finish, offers discard, and ends.
 - 2b. If blocking workspace issues remain, the workspace refuses to finish, states the number of blocking issues, links
   to each one, and ends in `DEFINITION_DRAFT`.
 - 4a. If the verifier rejects the definition, the workspace records the outcome against the current draft content, maps
@@ -440,17 +494,77 @@ its source cannot change while it is open. The workspace never rebases a draft.
   `DEFINITION_DRAFT`.
 - G2. Baseline integrity: finishing from `ACCEPTED_BASELINE` never changes the accepted definition, result,
   assignments, or baseline revision. The change reaches the accepted timetable only through repair acceptance.
-- G3. Atomic progression: finishing either completes the handoff and removes the draft, or changes nothing.
+- G3. Atomic progression: finishing either completes the handoff, or changes nothing.
 - G4. Lineage fidelity: a successor definition's `basedOnRevision` equals the accepted result's `inputRevision`.
-- G5. Honest discard downstream: once handed to a repair draft, the authored changes live in that repair draft.
-  Discarding the repair draft discards them too, and its confirmation says so and counts the authored resource changes.
+- G5. Recoverable handoff: once handed to a repair draft, the authored changes are kept with it. Discarding the repair
+  draft returns to `DEFINITION_DRAFT` with the kept draft unchanged, and its confirmation states that staging and pins
+  will be discarded and the authored changes kept. Abandoning the authored changes requires a further UC-6 discard.
+- G6. Single home for authored changes: accepting the repair proposal removes the kept draft. Authored changes never
+  exist in more than one place that can still be finished.
 
 ### Postconditions
 
-- Success: The workspace is in `INITIAL_DRAFT` with the authored definition, or in `REPAIR_DRAFT` seeded with the
-  authored successor definition. The draft is removed.
+- Success: The workspace is in `INITIAL_DRAFT` with the authored definition and no draft, or in `REPAIR_DRAFT` seeded
+  with the authored successor definition and holding the kept draft.
 - Minimal guarantee: The workspace remains in `DEFINITION_DRAFT`, and its source is unchanged, if finishing is refused
   or fails.
+
+---
+
+## UC-8 - Reassign a teacher's lessons
+
+- Goal: Move lessons and teacher-scoped room-assignment rules from one teacher to another, so that a new teacher can
+  take over teaching and a departing teacher can be removed.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable storage
+- Trigger: The administrator chooses to reassign from a teacher's configuration view, from a UC-4 removal refusal, or
+  from an `ASSIGNMENT_TEACHER_DIVERGES` advisory.
+- Preconditions: The workspace is in `DEFINITION_DRAFT`.
+- Relations:
+  - Requires: UC-1
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator chooses to reassign from a source teacher.
+2. The workspace lists every lesson whose `teacherId` is the source teacher, with its subject and cohort, and every
+   room-assignment rule whose `teacherId` is the source teacher, with its subject. Items are preselected according to
+   the trigger: all items for a removal refusal, the divergent lessons for a divergence advisory, and none otherwise.
+3. The administrator selects lessons and rules and chooses a target teacher from the teachers declared in the draft,
+   including teachers added in this draft.
+4. The workspace shows, before saving, every selected subject the target teacher is not qualified for and every
+   selected curator lesson the target teacher is not the cohort's curator for.
+5. The administrator confirms.
+6. The workspace sets `teacherId` to the target teacher on each selected lesson and rule, recomputes issues, and
+   durably saves the draft.
+7. The workspace marks each reassigned lesson and rule as changed and updates the issue count.
+
+### Extensions
+
+- 2a. If the source teacher has no lessons and no room-assignment rules, the workspace states that there is nothing to
+  reassign and ends.
+- 3a. If no item is selected, or the target teacher is the source teacher, the workspace keeps the confirmation
+  unavailable and resumes at step 3.
+- 4a. If the target teacher is not qualified for a selected subject, the workspace still allows confirmation. After
+  saving, the resulting `TEACHER_NOT_QUALIFIED` issues are attributed to the target teacher's `qualifiedSubjectIds`;
+  continue at step 7.
+- 5a. If the administrator cancels, the workspace closes the reassignment without side effects and ends.
+- 6a. If durable storage fails, the workspace reports that nothing was reassigned, keeps the selection for retry,
+  leaves the stored draft unchanged, and ends.
+
+### Guarantees
+
+- G1. Teacher-only change: reassignment changes only `teacherId` on the selected lessons and rules. It never creates,
+  deletes, or otherwise edits a lesson or rule, and never changes a cohort's curator.
+- G2. Reversible: reassigning the same items back to the source teacher restores them exactly.
+- G3. Accepted assignments untouched: reassignment never modifies accepted assignments. For an accepted source, the
+  new teacher reaches the timetable only through repair.
+
+### Postconditions
+
+- Success: The selected lessons and rules name the target teacher, issues are recomputed, and the draft is persisted.
+- Minimal guarantee: The stored draft is unchanged if reassignment is cancelled or fails.
 
 ---
 
@@ -488,18 +602,31 @@ to the administrator.
 
 *exactly these rows - no more, no fewer*
 
+### Identifier suggestion
+
+The suggested ID for a display name is computed as follows. The administrator can always edit it before saving.
+
+1. Decompose the display name to Unicode NFKD and remove combining marks (`Õpiabi` becomes `Opiabi`, `Kivimäe`
+   becomes `Kivimae`, `Šaal` becomes `Saal`).
+2. Lowercase the result.
+3. Replace every run of characters outside `[a-z0-9._-]` with a single `-`, and trim leading and trailing `-`, `.`,
+   and `_`.
+4. Truncate to 128 characters.
+5. If the result is empty, suggest nothing. If it is already used by a resource of that type in the draft, append
+   `-2`, `-3`, and so on until it is unique.
+
 ### Removal dependents
 
-| Removed resource | Dependent | Reference |
-| --- | --- | --- |
-| Cohort | Lesson | `lessons[].cohortId` |
-| Teacher | Lesson | `lessons[].teacherId` |
-| Teacher | Cohort | `cohorts[].curatorTeacherId` |
-| Teacher | Room-assignment rule | `roomAssignments[].teacherId` |
-| Room | Lesson | `lessons[].roomLock` |
-| Room | Lesson | `lessons[].preferredRoomIds[]` |
-| Room | Cohort | `cohorts[].homeRoomId` |
-| Room | Room-assignment rule | `roomAssignments[].allowedRoomIds[]` |
+| Removed resource | Dependent | Reference | Resolved by |
+| --- | --- | --- | --- |
+| Cohort | Lesson | `lessons[].cohortId` | Not changeable in this feature |
+| Teacher | Lesson | `lessons[].teacherId` | UC-8 |
+| Teacher | Cohort | `cohorts[].curatorTeacherId` | UC-3 on the cohort |
+| Teacher | Room-assignment rule | `roomAssignments[].teacherId` | UC-8 |
+| Room | Lesson | `lessons[].roomLock` | Not changeable in this feature |
+| Room | Lesson | `lessons[].preferredRoomIds[]` | Not changeable in this feature |
+| Room | Cohort | `cohorts[].homeRoomId` | UC-3 on the cohort |
+| Room | Room-assignment rule | `roomAssignments[].allowedRoomIds[]` | Not changeable in this feature |
 
 *exactly these rows - no more, no fewer*
 
@@ -518,23 +645,49 @@ every workspace check can still be rejected at UC-7 step 4.
 | `LOCK_CONTRADICTS_AVAILABILITY` | Blocking | A lesson's `periodLock` falls outside its teacher's or cohort's availability, or its `roomLock` falls outside the room's availability |
 | `ROOM_UNFIT` | Blocking | A locked room or cohort home room has less capacity than the cohort size or lacks a capability the lesson requires |
 | `AVAILABILITY_OVERLAP` | Advisory | An undesirable period is not in the resource's available set |
+| `LOAD_EXCEEDS_AVAILABILITY` | Advisory | A teacher or cohort has more lessons than declared periods it is available in |
+| `NO_ROOM_FITS_COHORT` | Advisory | A cohort that has lessons is larger than every declared room's capacity |
+| `CAPABILITY_NOT_PROVIDED` | Advisory | A lesson requires a room capability that no declared room provides |
+| `CATALOG_RAISED` | Advisory | For an accepted source whose catalog is below the draft's, a cohort omits `maxDailyLessonSpread`, `maxDailyGaps`, or `preferredLatestStartSlot`, and that attribute's min catalog is above the accepted catalog, so its omitted default now applies |
+| `ASSIGNMENT_TEACHER_DIVERGES` | Advisory | For an accepted source, an accepted assignment's teacher differs from its lesson's `teacherId`, so repair planning will assign the lesson's `teacherId` unless the lesson is reassigned |
 | `ACCEPTED_ASSIGNMENT_AFFECTED` | Advisory | For an accepted source, an accepted assignment would violate the draft's resource constraints and must be moved by repair |
 | `KERNEL_REJECTED` | Blocking | A School Kernel validation error that cannot be mapped to one of the codes above |
 
 *exactly these rows - no more, no fewer*
+
+Feasibility advisories (`LOAD_EXCEEDS_AVAILABILITY`, `NO_ROOM_FITS_COHORT`, and `CAPABILITY_NOT_PROVIDED`) report
+necessary conditions only. Each one guarantees that planning cannot succeed, and their absence guarantees nothing.
+They never block finishing, because School Kernel verification accepts such definitions and an initial draft may be
+finished while still incomplete.
 
 ---
 
 ## Out of scope
 
 - Authoring subjects, periods, reserved periods, lessons, room-assignment rules, or soft-constraint overrides. These
-  are shown read-only and can only be chosen as reference targets.
+  are shown read-only and can only be chosen as reference targets. UC-8 teacher reassignment is the only exception.
 - Creating a definition in an `EMPTY` workspace.
 - Changing resource identifiers.
 - Changing a definition's catalog version.
 - Accepting a successor definition without repair planning.
+- Parking a definition draft while another workflow runs, or rebasing a draft.
+- Copying attributes between resources and other bulk edits.
+- Changing how manual editing publishes teacher changes.
 - Spreadsheet or student-information-system import.
 - Concurrent multi-administrator authoring.
+
+---
+
+## Acceptance scenarios
+
+- **MVK home room.** Starting from an MVK (catalog 9) accepted baseline, the administrator opens a definition draft,
+  sets cohort `6c`'s `homeRoomId`, finishes, plans the repair, and accepts the proposal. The accepted definition carries
+  the home room, and no resource other than `6c` changed.
+- **Teacher replacement.** Starting from an accepted baseline, the administrator adds a teacher, reassigns every lesson
+  and room-assignment rule of a departing teacher to them (UC-8), moves any curatorship (UC-3), removes the departing
+  teacher (UC-4), and finishes into repair. The repair proposal assigns the reassigned lessons to the new teacher.
+- **Revise after repair.** After finishing into repair, the administrator discards the repair draft, lands back in
+  the definition draft with every authored change intact, edits further, and finishes again.
 
 ---
 
@@ -548,4 +701,9 @@ every workspace check can still be rejected at UC-7 step 4.
 - **Repair workflow entry point.** `timetable-workspace` repair drafts currently compile staged unavailability and
   pins onto the accepted definition. UC-7 for an accepted source needs a repair draft that can be seeded with a
   complete authored successor definition and a precomputed direct-effect set, while keeping pins, staging, and
-  acceptance semantics unchanged. [`rules.md`](rules.md) RULE-9 specifies the repair change.
+  acceptance semantics unchanged. Its discard must return to the kept definition draft when one is present.
+  [`rules.md`](rules.md) RULE-9 specifies the repair change.
+- **Manual teacher changes.** Manual-draft publication changes an accepted assignment's `teacherId` without changing
+  `lessons[].teacherId`, and the kernel builds new assignments from the lesson (`ResultFactory`). This feature does not
+  change that behavior. It reports the divergence (`ASSIGNMENT_TEACHER_DIVERGES`) and lets UC-8 adopt the manual
+  teacher in the definition.
