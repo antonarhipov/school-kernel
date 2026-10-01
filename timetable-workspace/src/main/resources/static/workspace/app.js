@@ -963,14 +963,27 @@ function tileFields(item, week) {
 }
 
 function applyLens(filter, id) {
-  const transition = inspectionState.selectFilter(filter, id);
+  const transition = inspectionState.selectFilter(filter, id, matrixScroll());
   if (!transition.changed) return false;
   syncInspectionState(transition.state);
   const selectionCleared = clearSelectedLessonOutsideRepresentation();
   renderWholeSchool();
-  if (selectionCleared) document.querySelector('#inspection-notice').textContent = M.selectionOutsideFilters;
-  document.querySelector('#accepted-view .lesson-cell.selected')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  if (selectionCleared) document.querySelector('#inspection-notice').textContent = lensKind()
+    ? M.selectionOutsideLens(lensRowLabel(lensKind())) : M.selectionOutsideFilters;
+  settleMatrixScroll(transition.restoreScroll);
   return true;
+}
+
+function matrixScroll() {
+  const matrix = document.querySelector('#accepted-view .matrix-wrap');
+  return matrix ? { left: matrix.scrollLeft, top: matrix.scrollTop } : null;
+}
+
+// A represented selection is brought into view; otherwise leaving a lens returns to the class-row scroll position.
+function settleMatrixScroll(restoreScroll) {
+  const selected = document.querySelector('#accepted-view .lesson-cell.selected:not([hidden])');
+  if (selected) selected.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  else if (restoreScroll) document.querySelector('#accepted-view .matrix-wrap')?.scrollTo(restoreScroll.left, restoreScroll.top);
 }
 
 function bindRunControls() {
@@ -1881,14 +1894,17 @@ function applyFiltersInPlace() {
 }
 
 function resetView() {
-  if (inspectionState) syncInspectionState(inspectionState.resetFilters().state);
-  else { view.search = ''; view.cohortId = ''; view.teacherId = ''; view.roomId = ''; view.periodId = ''; }
+  const transition = inspectionState.resetFilters();
+  syncInspectionState(transition.state);
   renderWholeSchool();
+  settleMatrixScroll(transition.restoreScroll);
 }
 
 function clearNarrowing() {
-  syncInspectionState(inspectionState.clearNarrowing().state);
+  const transition = inspectionState.clearNarrowing();
+  syncInspectionState(transition.state);
   renderWholeSchool();
+  settleMatrixScroll(transition.restoreScroll);
 }
 
 function filteredAssignments() {

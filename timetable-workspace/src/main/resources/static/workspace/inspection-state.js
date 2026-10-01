@@ -9,7 +9,7 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
   let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null, reviewTargetSide: null,
     subjectId: null, teacherId: null, subjectOnly: false,
     searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-    focusedType: null, focusedId: null, scrollContext: null,
+    focusedType: null, focusedId: null, scrollContext: null, lensScrollContext: null,
     lifecycle: null, mode: 'CURRENT', inspectorOpen: window.matchMedia('(min-width: 1280px)').matches,
     filtersOpen: false, utilitiesOpen: false,
     taskAreaOpen: { CURRENT: false, DRAFT: true, SOLVING: true, PROPOSAL: true } };
@@ -25,6 +25,15 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       // Local display preference is optional and never blocks inspection.
     }
   }
+
+  // Entering a lens records where class rows were scrolled; leaving it returns that position as restoreScroll.
+  const leaveOrEnterLens = (next, scrollContext = null) => {
+    const wasLens = Boolean(state.teacherFilterId || state.roomId);
+    const isLens = Boolean(next.teacherFilterId || next.roomId);
+    const restoreScroll = wasLens && !isLens ? state.lensScrollContext : null;
+    state = { ...next, lensScrollContext: isLens ? (wasLens ? state.lensScrollContext : scrollContext) : null };
+    return { changed: true, state, restoreScroll };
+  };
 
   return Object.freeze({
     current: () => Object.freeze({ ...state, taskAreaOpen: Object.freeze({ ...state.taskAreaOpen }) }),
@@ -73,25 +82,19 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       state = { ...state, searchQuery };
       return { changed: true, state };
     },
-    selectFilter: (filter, id) => {
+    // scrollContext is the class-row scroll position, recorded only when a lens is entered from class rows.
+    selectFilter: (filter, id, scrollContext = null) => {
       const validIds = filter === 'cohortId' ? cohortIds : filter === 'teacherFilterId' ? teacherIds
         : filter === 'roomId' ? roomIds : filter === 'periodId' ? periodIds : null;
       if (!validIds || (id !== null && !validIds.includes(id))) return { changed: false, state };
       // Teacher and room filters are lenses: at most one of them pivots the matrix at a time.
       const otherLens = id === null ? null : filter === 'teacherFilterId' ? 'roomId' : filter === 'roomId' ? 'teacherFilterId' : null;
-      state = { ...state, [filter]: id, ...(otherLens ? { [otherLens]: null } : {}) };
-      return { changed: true, state };
+      return leaveOrEnterLens({ ...state, [filter]: id, ...(otherLens ? { [otherLens]: null } : {}) }, scrollContext);
     },
-    resetFilters: () => {
-      state = { ...state, searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-        subjectOnly: false };
-      return { changed: true, state };
-    },
-    clearNarrowing: () => {
-      state = { ...state, cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-        subjectOnly: false };
-      return { changed: true, state };
-    },
+    resetFilters: () => leaveOrEnterLens({ ...state, searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null,
+      periodId: null, subjectOnly: false }),
+    clearNarrowing: () => leaveOrEnterLens({ ...state, cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
+      subjectOnly: false }),
     openFocused: (focusedType, focusedId, scrollContext) => {
       const validIds = focusedType === 'cohortId' ? cohortIds : focusedType === 'teacherId' ? teacherIds
         : focusedType === 'roomId' ? roomIds : null;

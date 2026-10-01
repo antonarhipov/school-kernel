@@ -3,22 +3,39 @@
 ## Current
 
 - Use case: UC-2
-- Status: IN_PROGRESS
-- Next eligible: UC-3, UC-4 (after UC-2 converges)
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none until UC-2 is APPROVED (then UC-3, UC-4)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
-| UC-2 | IN_PROGRESS | UC-1 | - | - |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence | - |
 | UC-3 | NOT_STARTED | UC-1 (extends UC-1 at 5a) | - | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
 ## UC-2 Evidence
 
-- Started from: (recorded at submission)
+- Started from: 002cc2f
 - Pre-existing dirty files: none
+- Implementation submission: HEAD at convergence
+- Changed files: `inspection-state.js`, `app.js`, and `messages.js` (workspace static); `MatrixLensBrowserIT.java`;
+  `checkpoints/UC-2.md`
+- Commands and results:
+  - `MatrixLensBrowserIT`: 11 run, 0 failures, 0 errors. A mutation check (with `settleMatrixScroll` made a no-op)
+    fails all three scroll tests.
+  - Full `./mvnw -q -pl timetable-workspace -am verify`: 117 integration tests, 2 failures, 9 errors. The failing set
+    is identical to the 064bf64 baseline. `AcceptedInspectionBrowserIT` passes 11/11, `ScaleTimingBrowserIT` 3/3, and
+    `WorkspaceManualDraftIT` 11/11.
+
+| Contract element | Evidence |
+|---|---|
+| UC-2 main steps 1-5 | `MatrixLensBrowserIT.java:345`, `:384`; `inspection-state.js:30`; `app.js:965`, `:983` |
+| UC-2 extensions 1a, 1b, 3a | `MatrixLensBrowserIT.java:419`, `:357-361` |
+| UC-2 extension 1c | `MatrixLensBrowserIT.java:455`; `app.js:1896`, `:1903` |
+| UC-2 G1, G2 | `MatrixLensBrowserIT.java:403`, `:377` |
+| RULE-1, 2, 3, 4, 6, 7, 10 | See `checkpoints/UC-2.md` |
 
 ## UC-1 Evidence
 

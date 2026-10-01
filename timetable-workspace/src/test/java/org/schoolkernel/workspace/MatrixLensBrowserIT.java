@@ -340,6 +340,158 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(before, storedDocument());
     }
 
+    @Test
+    @DisplayName("UC-2 main 1-5/G1/G2/state rule 2: clearing a lens restores class rows and the class-row scroll position")
+    void clearsALensBackToTheRecordedScroll() {
+        storeAccepted(fixtures.scaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+        workbench.value("document.querySelector('.matrix-wrap').scrollTo(0, 2400)");
+        double recorded = workbench.value("document.querySelector('.matrix-wrap').scrollTop").doubleValue();
+        assertTrue(recorded > 1000, "setup: the class rows are scrolled well past the top: " + recorded);
+
+        // Main 1 via the removable criterion; 1a and 1b in between never overwrite the recorded entry position.
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · Teacher 16");
+        workbench.filterTeacher("teacher-3");
+        workbench.awaitText("Lens: Teacher · Teacher 3");
+        workbench.filterRoom("room-5");
+        workbench.awaitText("Lens: Room · Room 5");
+        workbench.value("document.querySelector('.matrix-wrap').scrollTo(0, 120)");
+        workbench.removeLens();
+        workbench.awaitText("Showing 60 of 60 classes");
+        assertClassRowsRestoredAt(recorded);
+        assertEquals("Complete school population", workbench.string("document.querySelector('#filter-title').textContent"),
+                "UC-2 main 5: with no remaining criterion the status is complete");
+
+        // Main 1 via "All teachers" in the Filters select.
+        workbench.value("document.querySelector('.matrix-wrap').scrollTo(0, 1800)");
+        double second = workbench.value("document.querySelector('.matrix-wrap').scrollTop").doubleValue();
+        workbench.filterTeacher("teacher-30");
+        workbench.awaitText("Lens: Teacher · Teacher 30");
+        workbench.filterTeacher("");
+        workbench.awaitText("Showing 60 of 60 classes");
+        assertClassRowsRestoredAt(second);
+
+        workbench.expectNot("document.querySelector('.focused-schedule, #return-matrix')", "UC-2 G2: no separate surface or return control");
+        assertEquals(List.of(), mutations.requests(), "UC-2: changing and clearing lenses issues no mutation");
+        assertEquals(before, storedDocument());
+    }
+
+    @Test
+    @DisplayName("UC-2 main 2-5/G1/state rules 1-2: clearing retains range, day, search, highlights, filters and the selection in view")
+    void clearsALensRetainingTheInvestigativeContext() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+        workbench.range("DAY");
+        workbench.awaitText("Day · Monday");
+        workbench.search("Sixteen");
+        workbench.investigateSubject("subject-0");
+        workbench.investigateTeacher("teacher-17");
+        workbench.selectLesson("lesson-960");
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        workbench.focusPeriod("period-0");
+        workbench.expect("document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 1'");
+
+        workbench.filterTeacher("");
+        workbench.expect("document.querySelectorAll('.matrix tbody tr[data-row-kind=CLASS]:not([hidden])').length === 17 && document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 17'",
+                "UC-2 main 2: class rows return under the remaining period filter (classes 0-16 teach in period 0)");
+        workbench.expect("document.querySelector('[data-range=DAY]').getAttribute('aria-pressed') === 'true' && document.querySelector('#weekday').value === 'MONDAY' && document.querySelector('#lesson-search').value === 'Sixteen' && document.querySelector('#subject-investigation').value === 'subject-0' && document.querySelector('#teacher-investigation').value === 'teacher-17' && document.querySelector('#period-focus').value === 'period-0' && document.querySelector('#teacher-filter').value === ''",
+                "UC-2 main 3/G1: only the lens changed");
+        workbench.expect("document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 960'",
+                "UC-2 main 3: the selected lesson stays selected and inspected");
+        workbench.expect("(() => { const wrap = document.querySelector('.matrix-wrap'); const tile = document.querySelector('[data-lesson-id=lesson-960]').getBoundingClientRect(); const box = wrap.getBoundingClientRect(); return wrap.scrollTop > 0 && tile.top >= box.top && tile.bottom <= box.bottom && tile.left >= box.left && tile.right <= box.right; })()",
+                "UC-2 main 4/state rule 2: a represented selection is brought into view instead of restoring the scroll");
+        assertEquals("Filtered whole-school matrix", workbench.string("document.querySelector('#filter-title').textContent"),
+                "UC-2 main 5: the remaining period filter keeps the status narrowed");
+        workbench.expect("document.querySelector('#active-criteria').textContent === 'Period: Declared period 0' && !document.querySelector('#active-criteria [data-remove-lens]')");
+
+        assertEquals(List.of(), mutations.requests());
+        assertEquals(before, storedDocument());
+    }
+
+    @Test
+    @DisplayName("UC-2 ext 1a/1b/3a: changing the lens entity or type keeps the selection only when the lesson belongs to it")
+    void changesTheLensEntityOrType() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+        workbench.selectLesson("lesson-960");
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+
+        // Ext 1b: the other type, and the lesson belongs to it, so the selection stays.
+        workbench.showWeek("ROOM");
+        workbench.awaitText("Lens: Room · " + ROOM16);
+        assertLensRowGroup("week-matrix tbody", "ROOM", "room-16", "Room · " + ROOM16);
+        workbench.expect("document.querySelector('#teacher-filter').value === '' && document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-pressed') === 'true' && document.querySelector('#inspection-notice').textContent === ''",
+                "UC-2 ext 1b: the room lens replaces the teacher lens and keeps a lesson that belongs to it");
+
+        // Ext 1a + 3a: another room the lesson does not belong to clears the selection with an announcement.
+        workbench.filterRoom("room-3");
+        workbench.awaitText("Lens: Room · Room 3");
+        assertLensRowGroup("week-matrix tbody", "ROOM", "room-3", "Room · Room 3");
+        workbench.expect("document.querySelector('#inspection-notice').textContent === 'The selected lesson is not in the Room · Room 3 lens, so its details were closed.' && document.querySelector('#workbench-inspector').hidden && !document.querySelector('.lesson-cell.selected')",
+                "UC-2 ext 3a: an unrepresented selection is cleared and the reason announced");
+
+        // Ext 1b + 3a: the other type, without the lesson.
+        workbench.selectLesson("lesson-180");
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        workbench.expect("document.querySelector('#room-filter').value === '' && document.querySelector('#inspection-notice').textContent === 'The selected lesson is not in the Teacher · " + TEACHER16 + " lens, so its details were closed.'",
+                "UC-2 ext 1b/3a: switching type clears the other lens and an unrepresented selection");
+
+        assertEquals(List.of(), mutations.requests());
+        assertEquals(before, storedDocument());
+    }
+
+    @Test
+    @DisplayName("UC-2 ext 1c/main 4: reset and clear-filters clear the lens with every narrowing criterion and restore the scroll")
+    void resetsTheLensWithEveryNarrowingCriterion() {
+        storeAccepted(fixtures.scaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+        workbench.investigateSubject("subject-4");
+        workbench.search("Room");
+        workbench.value("document.querySelector('.matrix-wrap').scrollTo(0, 2000)");
+        double recorded = workbench.value("document.querySelector('.matrix-wrap').scrollTop").doubleValue();
+        workbench.filterRoom("room-4");
+        workbench.awaitText("Lens: Room · Room 4");
+        workbench.filterClass("cohort-4");
+        workbench.focusPeriod("period-3");
+
+        workbench.resetView();
+        workbench.awaitText("Showing 60 of 60 classes");
+        assertClassRowsRestoredAt(recorded);
+        workbench.expect("document.querySelector('#filter-title').textContent === 'Complete school population' && document.querySelector('#room-filter').value === '' && document.querySelector('#cohort-filter').value === '' && document.querySelector('#period-focus').value === '' && document.querySelector('#lesson-search').value === '' && document.querySelector('#subject-investigation').value === 'subject-4' && document.querySelector('[data-range=WEEK]').getAttribute('aria-pressed') === 'true'",
+                "UC-2 ext 1c: reset clears the lens and every narrowing criterion, retains range and returns the subject to highlight mode");
+
+        // The empty-lens reset offer (clear narrowing) takes the same path and keeps the search.
+        workbench.search("Room");
+        workbench.value("document.querySelector('.matrix-wrap').scrollTo(0, 1500)");
+        double again = workbench.value("document.querySelector('.matrix-wrap').scrollTop").doubleValue();
+        workbench.filterRoom("room-99");
+        workbench.awaitText("Lens: Room · Room 99");
+        workbench.click("#reset-empty");
+        workbench.awaitText("Showing 60 of 60 classes");
+        assertClassRowsRestoredAt(again);
+        assertEquals("Room", workbench.string("document.querySelector('#lesson-search').value"));
+
+        assertEquals(List.of(), mutations.requests());
+        assertEquals(before, storedDocument());
+    }
+
+    private void assertClassRowsRestoredAt(double scrollTop) {
+        workbench.expect("document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]').length === 60 && Math.abs(document.querySelector('.matrix-wrap').scrollTop - " + scrollTop + ") < 1",
+                "UC-2 main 2/4: class rows return at the scroll position recorded at lens entry (" + scrollTop + ")");
+    }
+
     private void assertLensRowGroup(String selector, String kind, String id, String header) {
         workbench.expect("(() => { const groups = document.querySelectorAll('." + selector + "'); return groups.length === 1 && !groups[0].hidden && groups[0].dataset.rowKind === '" + kind + "' && groups[0].dataset.rowId === '" + id + "' && groups[0].querySelector('th').textContent.startsWith(" + JSON.writeValueAsString(header) + "); })()",
                 "UC-1 main 3: exactly one " + kind + " row group for " + id + " headed '" + header + "'");
