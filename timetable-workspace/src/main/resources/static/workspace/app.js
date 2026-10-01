@@ -976,14 +976,15 @@ function applyLens(filter, id) {
 
 function matrixScroll() {
   const matrix = document.querySelector('#accepted-view .matrix-wrap');
-  return matrix ? { left: matrix.scrollLeft, top: matrix.scrollTop } : null;
+  return matrix ? { left: matrix.scrollLeft, top: matrix.scrollTop, range: view.range } : null;
 }
 
-// A represented selection is brought into view; otherwise leaving a lens returns to the class-row scroll position.
+// A represented selection is brought into view; otherwise leaving a lens returns to the class-row scroll position,
+// but only in the range it was recorded in: a Week offset means nothing on Day class rows.
 function settleMatrixScroll(restoreScroll) {
   const selected = document.querySelector('#accepted-view .lesson-cell.selected:not([hidden])');
   if (selected) selected.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  else if (restoreScroll) document.querySelector('#accepted-view .matrix-wrap')?.scrollTo(restoreScroll.left, restoreScroll.top);
+  else if (restoreScroll?.range === view.range) document.querySelector('#accepted-view .matrix-wrap')?.scrollTo(restoreScroll.left, restoreScroll.top);
 }
 
 function bindRunControls() {

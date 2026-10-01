@@ -3,19 +3,26 @@
 ## Current
 
 - Use case: UC-2
-- Status: NEEDS_REVISION
-- Next eligible: UC-2 revision only (G-1, G-2); UC-3 and UC-4 wait for UC-2 approval
+- Status: READY_FOR_CONVERGENCE (revision 1)
+- Next eligible: none until UC-2 is APPROVED (then UC-3, UC-4)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
-| UC-2 | NEEDS_REVISION | UC-1 | 013c12a | `convergence/UC-2.md` (REJECT: G-1, G-2; D-1 awaits user decision) |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence (rev. 1; first submission 013c12a) | `convergence/UC-2.md` (REJECT at 013c12a: G-1, G-2) |
 | UC-3 | NOT_STARTED | UC-1 (extends UC-1 at 5a) | - | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
 ## UC-2 Evidence
+
+- Revision 1 started from f54ec03 with no dirty files. It resolves G-1 and G-2 with three new tests
+  (`MatrixLensBrowserIT.java:492`, `:525`, `:548`). It implements the user's D-1 decision: scroll restore only in
+  the recorded range (`app.js:979`, `:984`). `MatrixLensBrowserIT`: 14 run, 0 failures, 0 errors. A precedence
+  mutant fails as intended. Full `./mvnw -q -pl timetable-workspace -am verify`: 120 integration tests, 2 failures,
+  9 errors. The failing set is identical to the 064bf64 baseline. `AcceptedInspectionBrowserIT` 11/11,
+  `ScaleTimingBrowserIT` 3/3, `WorkspaceManualDraftIT` 11/11.
 
 - Convergence: REJECT at 013c12a. Findings to resolve: G-1 (no committed evidence that Reset and `#clear-filters`
   return a "Show only matches" teacher lens and subject filter mode to highlight mode, per inspection-ux rule 7),
@@ -94,6 +101,10 @@
 none
 
 ## Deviations
+
+- UC-2, D-1 (user decision, 2026-10-01): the scroll position recorded when the lens was entered is restored only if
+  the range (Week/Day) is still the one it was recorded in. Otherwise class rows start at the top, or at a represented
+  selection. Spec reference: the presentation state model, rule 2.
 
 none approved. Two fixes outside the lens code are recorded in `checkpoints/UC-1.md` Notes: the draft model is now
 the filter source, and the manual editor is bound once per form. The interpretation D-1 (the lens follows a changed
