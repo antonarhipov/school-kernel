@@ -3,19 +3,25 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none until UC-2 is APPROVED (then UC-3, UC-4)
+- Status: NEEDS_REVISION
+- Next eligible: UC-2 revision only (G-1, G-2); UC-3 and UC-4 wait for UC-2 approval
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence | - |
+| UC-2 | NEEDS_REVISION | UC-1 | 013c12a | `convergence/UC-2.md` (REJECT: G-1, G-2; D-1 awaits user decision) |
 | UC-3 | NOT_STARTED | UC-1 (extends UC-1 at 5a) | - | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
 ## UC-2 Evidence
+
+- Convergence: REJECT at 013c12a. Findings to resolve: G-1 (no committed evidence that Reset and `#clear-filters`
+  return a "Show only matches" teacher lens and subject filter mode to highlight mode, per inspection-ux rule 7),
+  G-2 (the state-rule-2 precedence assertion at `MatrixLensBrowserIT.java:407` survives a mutation where the recorded
+  position wins over a represented selection). For the user: D-1 (after a range change inside a lens, the Week scroll
+  offset is reused on Day class rows). See `convergence/UC-2.md`.
 
 - Started from: 002cc2f
 - Pre-existing dirty files: none
