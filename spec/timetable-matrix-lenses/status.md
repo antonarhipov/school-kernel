@@ -3,19 +3,22 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE (revision 1)
-- Next eligible: none until UC-1 is APPROVED
+- Status: PENDING_WALKTHROUGH (revision 1 at cba775d; automated gate passed)
+- Next eligible: none until the user confirms the UC-1 walkthrough (including D-1) and UC-1 is APPROVED
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | HEAD at convergence (rev. 1; first submission e840460) | `convergence/UC-1.md` (REJECT at e840460: C-1, G-1) |
+| UC-1 | PENDING_WALKTHROUGH | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (PENDING WALKTHROUGH at cba775d; earlier REJECT at e840460: C-1, G-1) |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 (extends UC-1 at 5a) | - | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
 ## UC-1 Evidence
+
+- Convergence: PENDING WALKTHROUGH at cba775d. C-1, G-1, and K-1 resolved. Open for the user: walkthrough in
+  `convergence/UC-1.md`, including confirmation of D-1. Non-blocking: K-2, K-3.
 
 - Convergence: REJECT at e840460. Findings to resolve: C-1 (no "Show week" in the Proposal-mode comparison
   inspector), G-1 (no executable committed evidence for the SOLVING lens, the Day room-lens tile and header, or
