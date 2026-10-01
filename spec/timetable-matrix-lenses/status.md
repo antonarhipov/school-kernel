@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-3
-- Status: READY_FOR_CONVERGENCE (UC-2 revision 1 is also still awaiting its verdict)
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none until UC-3 is APPROVED (then UC-4)
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence (rev. 1; first submission 013c12a) | `convergence/UC-2.md` (REJECT at 013c12a: G-1, G-2) |
+| UC-2 | APPROVED | UC-1 | fee1bb5 (rev. 1; first submission 013c12a) | `convergence/UC-2.md` (APPROVE WITH NOTES; walkthrough reported 2026-10-01) |
 | UC-3 | READY_FOR_CONVERGENCE | UC-1 (extends UC-1 at 5a) | HEAD at convergence | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
@@ -42,6 +42,12 @@
 | RULE-1, 3, 4, 6, 7 | See `checkpoints/UC-3.md` |
 
 ## UC-2 Evidence
+
+- Convergence: APPROVE WITH NOTES on 2026-10-02. The focused and full-reactor `MatrixLensBrowserIT` runs both passed
+  18/18. The full workspace integration suite ran 124 tests with 2 failures and 9 errors, the exact same 11 failing
+  IDs as the first UC-2 baseline. G-1 and G-2 have strong committed browser evidence. The user's D-1 decision is
+  explicit in `spec.md` at 2cf808f. The UC-2 human walkthrough was reported as good on 2026-10-01, as recorded in
+  `checkpoints/UC-3.md`. See `convergence/UC-2.md` for the independent verdict.
 
 - Revision 1 started from f54ec03 with no dirty files. It resolves G-1 and G-2 with three new tests
   (`MatrixLensBrowserIT.java:492`, `:525`, `:548`). It implements the user's D-1 decision: scroll restore only in
@@ -128,10 +134,10 @@ none
 
 ## Deviations
 
-- UC-2, D-1 (user decision, 2026-10-01): the scroll position recorded when the lens was entered is restored only if
-  the range (Week/Day) is still the one it was recorded in. Otherwise class rows start at the top, or at a represented
-  selection. Spec reference: the presentation state model, rule 2.
+- UC-2, D-1 (user decision, 2026-10-01; incorporated into `spec.md` at 2cf808f): the scroll position recorded when
+  the lens was entered is restored only if the range (Week/Day) is still the one it was recorded in. Otherwise class
+  rows start at the top, or at a represented selection. Spec reference: the presentation state model, rule 2.
 
-none approved. Two fixes outside the lens code are recorded in `checkpoints/UC-1.md` Notes: the draft model is now
-the filter source, and the manual editor is bound once per form. The interpretation D-1 (the lens follows a changed
-teacher investigation) was confirmed by the user on 2026-10-01.
+Two fixes outside the lens code are recorded in `checkpoints/UC-1.md` Notes: the draft model is now the filter source,
+and the manual editor is bound once per form. The UC-1 interpretation D-1 (the lens follows a changed teacher
+investigation) was confirmed by the user on 2026-10-01.
