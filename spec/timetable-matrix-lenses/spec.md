@@ -94,8 +94,10 @@ Rules:
 
 1. Entering, changing, or clearing a lens retains range, weekday, search, subject and teacher highlights, class and
    period filters, and the selected lesson when it is still represented.
-2. Clearing the lens restores class rows and the matrix scroll position recorded when the lens was entered. If the
-   selected lesson is represented, it is scrolled into view instead.
+2. Clearing the lens restores class rows and the matrix scroll position recorded when the lens was entered, if the
+   range is still the same. If the range changed between Week and Day, class rows start at the top. If the selected
+   lesson is represented, it is scrolled into view instead of either position. Changing the weekday within Day does
+   not change the range.
 3. Filter reset clears the lens along with the other narrowing criteria.
 4. A lens whose entity is not declared in the displayed definition is refused, and the lens stays `NONE`.
 5. Reload returns the lens to `NONE`.
@@ -171,8 +173,8 @@ Rules:
 1. The administrator removes the lens criterion or chooses "All teachers" or "All rooms".
 2. The system restores class rows under the remaining active filters.
 3. The system retains range, weekday, search, highlights, class and period filters, and the selected lesson.
-4. The system restores the scroll position recorded at lens entry, or brings the selected lesson into view if one is
-   represented.
+4. The system restores the scroll position recorded at lens entry when the range is unchanged. After a Week/Day range
+   change, class rows start at the top. If a selected lesson is represented, the system brings it into view instead.
 5. The system updates the filter status to complete or narrowed, according to the remaining criteria.
 
 ### Extensions
