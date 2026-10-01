@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-3
-- Status: READY_FOR_CONVERGENCE
+- Status: PENDING_WALKTHROUGH
 - Next eligible: none until UC-3 is APPROVED (then UC-4)
 
 ## Progress
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
 | UC-2 | APPROVED | UC-1 | fee1bb5 (rev. 1; first submission 013c12a) | `convergence/UC-2.md` (APPROVE WITH NOTES; walkthrough reported 2026-10-01) |
-| UC-3 | READY_FOR_CONVERGENCE | UC-1 (extends UC-1 at 5a) | HEAD at convergence | - |
+| UC-3 | PENDING_WALKTHROUGH | UC-1 (extends UC-1 at 5a) | eb7680c | `convergence/UC-3.md` (PENDING WALKTHROUGH) |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
 ## UC-3 Evidence
