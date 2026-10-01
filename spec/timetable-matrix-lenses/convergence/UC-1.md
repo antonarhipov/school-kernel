@@ -9,7 +9,7 @@ evidence). This report grades revision 1.
 
 - Submission: `spec/timetable-matrix-lenses/checkpoints/UC-1.md` at `cba775d` (base `064bf64`; revision delta
   `69ac6e4..cba775d`)
-- Verdict: PENDING WALKTHROUGH
+- Verdict: APPROVE WITH NOTES (K-2, K-3 cosmetic)
 - Findings: 0 critical, 0 gap, 0 protocol, 1 drift (D-1, carried, needs user confirmation), 2 cosmetic (K-2, K-3).
   Prior C-1, G-1, and K-1 are resolved.
 - Suite: focused `MatrixLensBrowserIT` 7 run / 0 failed / 0 errors / 0 skipped. Full `./mvnw -q -pl
@@ -242,13 +242,15 @@ availability.
 
 Do not test 5a (UC-3 editing within a lens) or the ≤ 700 px narrow view (UC-4).
 
-User result: not yet performed.
+User result: walkthrough confirmed as passed by the user on 2026-10-01. D-1 was accepted: the teacher lens follows
+the investigated teacher while "Show only matches" holds it.
 
 ## Status Update
 
-UC-1: `READY_FOR_CONVERGENCE` (revision 1) -> `PENDING_WALKTHROUGH`. Next eligible: none. UC-2 to UC-4 stay blocked
-until the user confirms the walkthrough, including D-1, and UC-1 is `APPROVED`.
+UC-1: `PENDING_WALKTHROUGH` -> `APPROVED` after the user confirmed the walkthrough on 2026-10-01. D-1 is accepted as
+intended behavior. K-2 and K-3 stay as cosmetic notes. Next eligible: UC-2, UC-3, UC-4.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-1 automated gate passes (C-1, G-1, K-1 resolved); awaiting user walkthrough confirmation including the D-1 lens-follows-investigation interpretation; K-2 and K-3 are non-blocking cosmetic notes.
+APPROVED WITH NOTES: UC-1. The walkthrough was confirmed by the user, and D-1 was accepted. K-2 (stale evidence lines
+in `status.md`) and K-3 (the Proposal Show week label takes the entity name from the proposed side) are cosmetic.

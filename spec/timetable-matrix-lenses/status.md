@@ -2,21 +2,28 @@
 
 ## Current
 
-- Use case: UC-1
-- Status: PENDING_WALKTHROUGH (revision 1 at cba775d; automated gate passed)
-- Next eligible: none until the user confirms the UC-1 walkthrough (including D-1) and UC-1 is APPROVED
+- Use case: UC-2
+- Status: IN_PROGRESS
+- Next eligible: UC-3, UC-4 (after UC-2 converges)
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | PENDING_WALKTHROUGH | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (PENDING WALKTHROUGH at cba775d; earlier REJECT at e840460: C-1, G-1) |
-| UC-2 | NOT_STARTED | UC-1 | - | - |
+| UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
+| UC-2 | IN_PROGRESS | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 (extends UC-1 at 5a) | - | - |
 | UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
 
+## UC-2 Evidence
+
+- Started from: (recorded at submission)
+- Pre-existing dirty files: none
+
 ## UC-1 Evidence
 
+- Approved: the user confirmed the walkthrough on 2026-10-01 and accepted D-1 as intended. Cosmetic notes K-2 and K-3
+  remain.
 - Convergence: PENDING WALKTHROUGH at cba775d. C-1, G-1, and K-1 resolved. Open for the user: walkthrough in
   `convergence/UC-1.md`, including confirmation of D-1. Non-blocking: K-2, K-3.
 
@@ -67,4 +74,4 @@ none
 
 none approved. Two fixes outside the lens code are recorded in `checkpoints/UC-1.md` Notes: the draft model is now
 the filter source, and the manual editor is bound once per form. The interpretation D-1 (the lens follows a changed
-teacher investigation) is awaiting the user's confirmation in the walkthrough.
+teacher investigation) was confirmed by the user on 2026-10-01.
