@@ -2,113 +2,112 @@
 
 ## Summary
 
-- Status: READY_FOR_CONVERGENCE
-- Base commit: 064bf64
+- Status: READY_FOR_CONVERGENCE (revision 1)
+- Base commit: 064bf64. The first submission was e840460, rejected in 69ac6e4.
 - Submission commit: HEAD at convergence
-- Relations verified: UC-1 is the primary root (no Requires/Includes/Extends). The extension points 1a (UC-4) and 5a
-  (UC-3) are untouched. The narrow path still renders the focused agenda until UC-4, and tile selection opens the
+- Prior convergence findings addressed: C-1, G-1, D-1 (recorded for walkthrough confirmation), K-1
+- Relations verified: UC-1 is the primary root, with no Requires, Includes, or Extends. Extension points 1a (UC-4) and
+  5a (UC-3) are untouched: the narrow path still renders the focused agenda until UC-4, and tile selection opens the
   unchanged inspector.
 
-Paths below are relative to `timetable-workspace/src`. `MatrixLensBrowserIT` is
+Paths are relative to `timetable-workspace/src`. `MatrixLensBrowserIT` is
 `test/java/org/schoolkernel/workspace/MatrixLensBrowserIT.java`, and `app.js` is `main/resources/static/workspace/app.js`.
+
+## Revision 1
+
+| Finding | Resolution | Evidence |
+|---|---|---|
+| C-1: no Show week in the Proposal comparison inspector | The comparison inspector now renders `showWeekActions` for each distinct declared teacher and room across the accepted and proposed sides. | `app.js:1102`, `app.js:1231`; `MatrixLensBrowserIT.appliesAndLeavesLensesDuringProposalReview:271` |
+| G-1: Solving lens | Added a committed test that goes through `processes.blockReplan`, not the pin steps. It covers Show week, retained `#cancel-run` and inspector, the Day lens row, removal, no mutation, and an unchanged document. | `MatrixLensBrowserIT.appliesALensWhileARepairIsSolving:236` |
+| G-1: Day room-lens tile and header | The main test now asserts the Day room-lens row header, the "Room" heading, the Monday lesson set, the tile `[subject, teacher, class]` by value, the accessible name, and that no availability claim is made. | `MatrixLensBrowserIT:105-119` |
+| G-1: Proposal review-target navigation into and out of a lens | A target outside the lens clears it and announces "Cleared Teacher filter". A target inside the lens keeps it and selects the represented side. | `MatrixLensBrowserIT:286-296` |
+| D-1: the lens follows a changed teacher investigation | Behavior is unchanged. It is recorded as an interpretation for the user to confirm in the walkthrough (Notes). | `app.js:1537` |
+| K-1: understated executed evidence | The Notes now list exactly which rewritten blocks run. | Notes below |
 
 ## Contract Evidence
 
 | Contract element | Test or runtime evidence | Result |
 |---|---|---|
-| Trigger: Filters disclosure teacher/room | `MatrixLensBrowserIT.pivotsTheMatrixToOneTeacherOrRoom` (`:30`, filter selects at `:37`, `:90`) | PASS |
-| Trigger: inspector "Show week" | `MatrixLensBrowserIT.appliesLensesFromInspectorAndTeacherInvestigation` (`:122`); `app.js:1229` `showWeekActions`, `:1234` `bindShowWeek` | PASS |
-| Trigger: teacher investigation "Show only matches" | same test, `#teacher-only` check/uncheck; `app.js:1504`; `AcceptedInspectionBrowserIT.java:413` | PASS |
-| UC-1 main 1-2 (choose; clear other type first) | `MatrixLensBrowserIT:90-94` asserts that the room lens clears `#teacher-filter` and the teacher criterion; `inspection-state.js:80-82` | PASS |
-| UC-1 main 3 (one lens row group; header names entity and type) | `assertLensRowGroup` for Week (`:38`, `:92`) and Day (`:79`); header "Teacher"/"Room" at `:39`, `:80` | PASS |
-| UC-1 main 4 (every assignment in its period cell; Normative tile content) | Visible lesson set equals lessons 960-999 (`:45`); Week tile `[subject, room, class]` (`:51`) and Day tile (`:82`); room-lens tile `[subject, teacher, class]` with the room kept only in the accessible name (`:96-99`); accessible name adds teacher, weekday, period, and ID (`:53-56`) | PASS |
-| UC-1 main 4 (unavailable empty cells) | Exactly periods 41-59 are unavailable, period 40 is ordinary (`:59-60`), text cue and title (`:61`), all of Friday is unavailable in Day (`:87`) | PASS |
-| UC-1 main 5 (narrowed label, entity, unique count, removable criterion) | `:65-69` (`#filter-title`, `#matrix-summary` "Lens: Teacher · …", "Represented lessons: 40", remove-control aria-label) | PASS |
-| UC-1 main 6 | Read-only reading; covered by the rendered assertions above | PASS |
-| UC-1 extension 1a | Not triggered on desktop. The narrow path is unchanged (UC-4 scope). `AcceptedInspectionBrowserIT:68-72` still passes | PASS (unchanged base) |
-| UC-1 extension 4a | `MatrixLensBrowserIT.rendersAnEmptyLensRowGroup` (`:162`): room-99 has a full 60-cell empty group, zero lessons, and reset offered. A lens intersected to zero keeps its group (`:178-182`). `AcceptedInspectionBrowserIT:259` | PASS |
-| UC-1 extension 4b | `MatrixLensBrowserIT.stacksClashingLessonsInOneLensCell` (`:192`): a manual-draft `ROOM_CLASH` stacks lesson-0 and lesson-960 in the period-0 room-16 cell, both `.conflicting` with an indicator, and the overlay shows `ROOM_CLASH` | PASS |
-| UC-1 extension 4c | `:101-103`: room-16 without `availablePeriodIds` renders only ordinary empty cells | PASS |
-| UC-1 extension 5a | Tile selection opens the existing inspector inside the lens (`:128-136`). Full UC-3 behavior is not implemented here | PASS (entry only) |
-| UC-1 G1 same surface | `:73` has no `.focused-schedule`, `#return-matrix`, `[data-open-focus]`, or `.focused-entry`. The inspector stays open with the selection across Show week (`:133`) | PASS |
-| UC-1 G2 completeness | `:45-47`: the set is identical with the matrix scrolled to the start and the end | PASS |
-| UC-1 G3 honesty | Narrowed title, lens summary, text-cued unavailability (`:59-66`), no claim without declared availability (`:102`) | PASS |
-| UC-1 G4 non-mutation | `recordMutations()` is empty and `storedDocument()` is equal in all five tests (`:106-107`, `:156`, `:186`, `:214`, `:253`) | PASS |
-| UC-1 success postcondition | Exactly one lens row group with lens tiles (`assertLensRowGroup` plus the tile assertions) | PASS |
-| UC-1 minimal guarantee | `MatrixLensBrowserIT.refusesAnUndeclaredLensEntity` (`:220`): an injected undeclared teacher option is refused. The room lens, selects, and rows are unchanged | PASS |
-| State model rule 4 (undeclared refused), rule 5 (reload → NONE) | `:238-251` (real module in the browser); `:112-116` (reload) | PASS |
-| All lifecycles | Current (above), Manual Draft (`:192`), Repair Proposal (`ProposalReviewBrowserIT.retainsBothSidesInResourceLenses:66`), Solving (`RepairRunBrowserIT.java:164`, see Notes), Draft (`RepairDraftBrowserIT.java:139`, `:295`, see Notes), scale Proposal (`ScaleTimingBrowserIT.java:119-121`) | PASS / see Notes |
+| Trigger: Filters disclosure teacher/room | `MatrixLensBrowserIT.pivotsTheMatrixToOneTeacherOrRoom:30` (selects at `:37`, `:91`) | PASS |
+| Trigger: inspector "Show week" | Current: `appliesLensesFromInspectorAndTeacherInvestigation:138` (`:144-156`). Solving: `:236`. Proposal: `:271`. Repair Draft: `RepairDraftBrowserIT.java:295` (runs and passes). Code: `app.js:1231`, `:1239` | PASS |
+| Trigger: teacher investigation "Show only matches" | `MatrixLensBrowserIT:162-170`; `app.js:1509`; `AcceptedInspectionBrowserIT.java:413` | PASS |
+| UC-1 main 1-2 (choose; clear the other type first) | `MatrixLensBrowserIT:91-95`, `:152-154`; `inspection-state.js:80-82` | PASS |
+| UC-1 main 3 (one lens row group, header names the entity and type) | `assertLensRowGroup`. Week: `:39`, `:93`. Day: `:79`, `:108`. Headings at `:40`, `:80`, `:109` | PASS |
+| UC-1 main 4 (every assignment in its period cell; Normative tile content) | Lesson sets: `:45`, `:81`, `:96`, `:110`. Tiles by value: teacher Week `:51`, teacher Day `:82`, room Week `:97`, room Day `:111`. Accessible-name additions: `:53-56`, `:113-116`; room kept only in the accessible name `:99` | PASS |
+| UC-1 main 4 (unavailable empty cells) | `:59-61`, `:87` | PASS |
+| UC-1 main 5 (narrowed label, entity, unique count, removable criterion) | `:65-69` | PASS |
+| UC-1 main 6 | Reading only; covered by the assertions above | PASS |
+| UC-1 extension 1a | Not triggered on desktop. The narrow path is unchanged (UC-4 scope); `AcceptedInspectionBrowserIT:68-72` passes | PASS (unchanged base) |
+| UC-1 extension 4a | `rendersAnEmptyLensRowGroup:178`. A lens intersected down to zero lessons keeps its group (`:194-199`). Also `AcceptedInspectionBrowserIT:259` | PASS |
+| UC-1 extension 4b | `stacksClashingLessonsInOneLensCell:208` (`:218-228`) | PASS |
+| UC-1 extension 4c | `:101-103`, `:117` | PASS |
+| UC-1 extension 5a | Selecting a tile in a lens opens the inspector (`:144-151`, `:250-254`). UC-3 behavior itself is not implemented | PASS (entry only) |
+| UC-1 G1 same surface | `:73`, `:151`, `:254`, `:283` | PASS |
+| UC-1 G2 completeness | `:45-47` | PASS |
+| UC-1 G3 honesty | `:59-66`, `:102`, `:117` | PASS |
+| UC-1 G4 non-mutation | Mutation log and stored document compared in all seven tests: `:122`, `:172`, `:202`, `:230`, `:264-266`, `:298`, `:337` | PASS |
+| UC-1 success postcondition | `assertLensRowGroup` plus the tile assertions | PASS |
+| UC-1 minimal guarantee | `refusesAnUndeclaredLensEntity:304` (`:313-315`) | PASS |
+| State rule 4 (undeclared ID refused), rule 5 (reload resets to NONE) | `:318-336`; `:126-133` | PASS |
+| All lifecycles | Current: `:30`. Manual Draft: `:208`. Solving: `:236`. Repair Proposal: `:271` and `ProposalReviewBrowserIT.retainsBothSidesInResourceLenses:66`. Repair Draft: `RepairDraftBrowserIT:295` | PASS |
 
 ## Rule Evidence
 
 | Rule | Evidence | Result |
 |---|---|---|
-| RULE-1 lens is the filter state | `inspection-state.js:80-82` (mutual exclusion); `resetFilters`/`clearNarrowing` clear both (`:85-92`); `MatrixLensBrowserIT:238-251`; no parallel lens field | PASS |
-| RULE-2 never persisted | `persistPreference` is unchanged (`inspection-state.js:140`); `MatrixLensBrowserIT:110-116` checks the exact preference JSON, empty `sessionStorage`, and a clean URL | PASS |
-| RULE-3 one renderer path | `week-renderer.js:2`, `day-renderer.js:2` take `rows`/`cellItems`/`emptyMarkup`; a single call per range in `renderWholeSchool` (`app.js` `renderWholeSchool`, spread of `matrixArrangement`); tiles use `tileFields` (`app.js:954`) in all three tile builders | PASS |
-| RULE-4 population | `app.js:911` `matrixArrangement` (entity assignments, proposal pairs via `comparison.entries`); visibility via `isRepresented` in `applyFiltersInPlace`; draft source via `displayedModel()` (`app.js:308`); `ProposalReviewBrowserIT:66` both sides under a teacher and a room lens | PASS |
-| RULE-5 availability | `app.js:947` `emptyCellMarkup`, `availability` in `matrixArrangement`; `MatrixLensBrowserIT:59-61`, `:87`, `:102` | PASS |
-| RULE-6 no mutation | See G4 | PASS |
-| RULE-7 localization | New keys in `messages.js` (`lensSummary`, `unavailableCell`, `outsideAvailability`, `showWeek`, `showWeekOf`, `removeCriterion`); every `M.*` key used by `app.js` resolves (`node` check, except the pre-existing `savingChanges`) | PASS |
-| RULE-8 removal split | `grep -rn "data-open-focus\|return-matrix\|focusedEntry\|focused-entry" main/resources/static` returns nothing; `renderFocused()` is reachable only on `view.narrow` paths | PASS |
-| RULE-9 tests rewritten | Every removed desktop focused assertion has a lens replacement: `AcceptedInspectionBrowserIT:61-66`, `:147-151`, `:259`, `:267-270`, `:413`, `:465-480`, `:492`, `:513`; `ProposalReviewBrowserIT:66`, `:250-260`; `RepairCompletionBrowserIT:47-49`; `RepairDraftBrowserIT:139-146`, `:295-299`; `RepairRunBrowserIT:164-168`; `ScaleTimingBrowserIT:119-121`. `Workbench.openFocus`/`returnToMatrix` were removed; `showWeek`/`removeLens` were added | PASS |
-| RULE-10 scale | Lens transitions call only `renderWholeSchool()` (`app.js:964` `applyLens`); a single pass over the assignments in `matrixArrangement`; `ScaleTimingBrowserIT` 3/3 green | PASS |
+| RULE-1 | Lenses are mutually exclusive in `inspection-state.js:80-82`; `resetFilters` and `clearNarrowing` clear them (`:85-92`); `MatrixLensBrowserIT:318-336` | PASS |
+| RULE-2 | `persistPreference` is unchanged; `MatrixLensBrowserIT:126-133` checks the exact preference JSON, `sessionStorage`, the URL, and reload | PASS |
+| RULE-3 | `week-renderer.js:2` and `day-renderer.js:2` take row groups; one call per range comes from `matrixArrangement` (`app.js:911`); `tileFields` (`app.js:954`) is used by all three tile builders | PASS |
+| RULE-4 | `matrixArrangement` (`app.js:911`) builds proposal pairs; `displayedModel()` (`app.js:308`) supplies the draft source; `MatrixLensBrowserIT:224`, `:283`; `ProposalReviewBrowserIT:66` | PASS |
+| RULE-5 | `app.js:947`; `MatrixLensBrowserIT:59-61`, `:87`, `:102`, `:117` | PASS |
+| RULE-6 | See G4 | PASS |
+| RULE-7 | New keys are in `messages.js`. Every `M.*` key resolves except the pre-existing `savingChanges` | PASS |
+| RULE-8 | A grep for `data-open-focus`, `return-matrix`, `focusedEntry`, and `focused-entry` in the static sources returns nothing. Show week replaces the entry buttons in the lesson inspector and the Proposal inspector (C-1) | PASS |
+| RULE-9 | Every removed desktop focused assertion has a lens replacement (see the first submission's list). Blocks that cannot run are covered by the new `MatrixLensBrowserIT` tests (G-1) | PASS |
+| RULE-10 | `applyLens` (`app.js:964`) only calls `renderWholeSchool()`; there is one pass in `matrixArrangement`; `ScaleTimingBrowserIT` is green | PASS |
 
 ## Validation
 
-- Focused commands: `./mvnw -q -pl timetable-workspace -am '-Dit.test=MatrixLensBrowserIT' ... verify`. MatrixLensBrowserIT
-  5 run, 0 failures, 0 errors.
-- Full relevant suite: `./mvnw -q -pl timetable-workspace -am verify`. Integration tests: 111 run, 2 failures,
-  9 errors, 0 skipped. Unit tests all pass.
-- Baseline at 064bf64, same command in a clean worktree: 106 run, 2 failures, 9 errors. The failing test set is
-  byte-identical, confirmed with `diff`:
-  - `ProposalReviewBrowserIT.reviewsIndependentlyVerifiedNormativeRepair`
-  - `ProposalReviewBrowserIT.revisesAndDiscardsVerifiedNormativeRepair`
-  - `RepairCompletionBrowserIT.completesWholeSchoolRepairAndStartsNextFromAcceptedSuccessor`
-  - `RepairDraftBrowserIT.preparesProtectedRepairDraftWithKeyboard`
-  - `RepairDraftBrowserIT.preparesWideProtectedDraftAtNormativeScale`
-  - `RepairDraftBrowserIT.refusesSolveAfterRealDraftPersistenceFailure`
-  - `RepairDraftBrowserIT.resolvesConflictingPinAndUndoesOnlyConfirmedBulkSources`
-  - `RepairRunBrowserIT.followsAndRefusesWholeSchoolRepairOnVerifiedNormativeSnapshot`
-  - `RepairRunBrowserIT.generatesAndAcceptsSuccessiveRepairProposals`
-  - `RepairRunBrowserIT.inspectsFrozenRepairRunAndRecoversWithoutPublishing`
-  - `RepairRunBrowserIT.showsFailedRepairEvidenceAndGatedRetry`
-
-  All of them fail on repair pin controls (`[name=lesson-dimension]`, `#apply-pin`) that are not visible, or on
-  inspector geometry, after the inspector-popover redesign in 9294e54. None of them reaches a lens step before failing.
-- Working tree impact from tests: none. `git status --short` is the same before and after the runs.
-- Runtime evidence: headless Chrome through Playwright against an ephemeral Spring Boot server and PostgreSQL 18.6
-  Testcontainers, as described above.
-- Changed files:
-  - `spec/timetable-matrix-lenses/rules.md`, `status.md`, `checkpoints/UC-1.md`
-  - `timetable-workspace/src/main/resources/static/workspace/app.js`, `inspection-state.js`, `week-renderer.js`,
-    `day-renderer.js`, `focused-renderer.js`, `messages.js`, `styles.css`
-  - `timetable-workspace/src/test/java/org/schoolkernel/workspace/MatrixLensBrowserIT.java` (new),
-    `AcceptedInspectionBrowserIT.java`, `ProposalReviewBrowserIT.java`, `RepairCompletionBrowserIT.java`,
-    `RepairDraftBrowserIT.java`, `RepairRunBrowserIT.java`, `ScaleTimingBrowserIT.java`, `Workbench.java`
-- Approved UCs regression-tested: no UC of this feature is approved yet. Other features are covered by the full suite
-  above.
+- Focused command:
+  `./mvnw -q -pl timetable-workspace -am '-Dit.test=MatrixLensBrowserIT' -Dtest=NoSuchTest -Dsurefire.failIfNoSpecifiedTests=false -Dfailsafe.failIfNoSpecifiedTests=false verify`.
+  Result: 7 run, 0 failures, 0 errors.
+- Full relevant suite: `./mvnw -q -pl timetable-workspace -am verify`. Integration tests: 113 run, 2 failures,
+  9 errors, 0 skipped. Unit tests all pass. The failing set is identical to baseline `064bf64` (106 run, 2 failures,
+  9 errors), confirmed with `diff`. All of those are pre-existing repair pin and inspector geometry failures after
+  9294e54, as the first convergence also confirmed. `MatrixLensBrowserIT` passes 7/7 and `WorkspaceManualDraftIT`
+  passes 11/11.
+- Working tree impact from tests: none.
+- Changed files in revision 1: `app.js` (Proposal Show week, single editor binding), `MatrixLensBrowserIT.java`,
+  `checkpoints/UC-1.md`, `status.md`.
 
 ## Notes
 
-- Rewritten regression assertions that do not run: in `RepairDraftBrowserIT` (`:139`, `:295`), `RepairRunBrowserIT`
-  (`:164`), and `ProposalReviewBrowserIT.reviewsIndependentlyVerifiedNormativeRepair` (`:250-260`), the tests fail
-  earlier on the pre-existing pin/geometry defects listed above. The rewritten lens steps in those tests are therefore
-  not executed. The lens behavior they cover is exercised by `MatrixLensBrowserIT`, which covers Current and Manual
-  Draft, and by `ProposalReviewBrowserIT.retainsBothSidesInResourceLenses` and `ScaleTimingBrowserIT`, which cover
-  Proposal. There is no direct Repair Draft or Solving lens evidence until the pre-existing failures are fixed.
-- Fix outside the lens code, needed by RULE-4: `applyFiltersInPlace`, `filteredAssignments`, and `representedAssignment`
-  used to match filters against the accepted model in manual Draft mode. They now use `displayedModel()`. Without this,
-  a lens or filter hid lessons that the draft had moved into the entity.
-- Interpretation of resolved decision 5: while "Show only matches" holds the investigated teacher's lens, changing the
-  teacher investigation moves the lens to the new teacher, and clearing it clears the lens (`app.js:1532`). This
-  keeps the approved behavior of the old teacher-only filter mode and never leaves the checkbox unchecked while its lens
-  is still active.
-- Show week is offered in the lesson inspector. It is not offered in the Proposal-mode comparison inspector, which
-  shows two sides with possibly different teachers and rooms. The Filters disclosure still applies lenses in Proposal
-  mode.
-- The Day renderer's class-row markup is unchanged. The Week renderer adds a hidden empty-cell span only to lens rows.
-  This lets a cell whose tiles are all filtered out show its empty or unavailable cue without changing class-row
-  counts.
+- Rewritten regression blocks that do run:
+  - `AcceptedInspectionBrowserIT` (all of them)
+  - `ProposalReviewBrowserIT.retainsBothSidesInResourceLenses`
+  - `RepairDraftBrowserIT:295-299`
+  - `RepairCompletionBrowserIT:47-49`, before that test's pre-existing failure at `:69`
+  - `ScaleTimingBrowserIT:119-121`
+
+  Rewritten blocks that do not run, because their tests fail earlier on pre-existing defects:
+  - `RepairDraftBrowserIT:139-146`, after the failure at `:56`
+  - `RepairRunBrowserIT:164-168`, after the failure at `:133`
+  - `ProposalReviewBrowserIT:250-260`, after the failure at `:138`
+
+  The new `MatrixLensBrowserIT` Solving and Proposal tests cover their lens behavior.
+- Fix outside the lens code that RULE-4 requires: `applyFiltersInPlace`, `filteredAssignments`, and
+  `representedAssignment` now match against `displayedModel()`, which means manual-draft assignments in manual Draft
+  mode. Before this, they used the accepted model.
+- Second fix outside the lens code, found by the revision-1 full run: `selectLesson` bound the inline manual editor
+  twice, once directly and once through `bindCloseDetails`. As a result, every edit sent two
+  `PATCH /api/manual-draft` requests, and the second one landed after the test's draft snapshot. `bindManualEditor`
+  now binds each form once (a `WeakSet` guard). The ext 4b test now also asserts that the setup edit issues exactly
+  one `PATCH`. UC-3 ("exactly the manual-draft `PATCH` requests that the edits require") depends on this.
+- Interpretation D-1, to confirm in the walkthrough: while "Show only matches" holds the investigated teacher's lens,
+  changing the investigated teacher moves the lens to the new teacher, and clearing the investigation clears the lens
+  (`app.js:1537`). The checkbox shows as checked whenever the Teacher filter equals the investigated teacher
+  (`app.js:874`). This preserves the approved behavior of the old teacher-only mode.
+- Proposal-mode Show week only lists teachers and rooms that the accepted definition declares, because those are the
+  only IDs the lens state accepts (state rule 4). When both sides share a teacher or room, only one action is shown.
 
 READY FOR CONVERGENCE: UC-1

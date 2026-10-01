@@ -25,6 +25,7 @@ const boundLessonButtons = new WeakSet();
 const boundReviewControls = new WeakSet();
 const boundDiagnosticButtons = new WeakSet();
 const boundShowWeekButtons = new WeakSet();
+const boundManualForms = new WeakSet();
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
@@ -1099,6 +1100,7 @@ function selectedLessonDetails(id) {
           <h3 id="lesson-panel-title" tabindex="-1">${escapeHtml(reviewLessonName(id))}</h3>
           <p class="lesson-panel-subtitle">${escapeHtml(id)} &middot; ${change ? M.proposalChange : M.visuallyQuiet}</p>
         </div>
+        ${showWeekActions(...[pair.old, pair.proposed].filter(Boolean))}
       </div>
       <div class="panel-section review-target-section">
         <div class="review-target-card">
@@ -1226,9 +1228,13 @@ function lessonDetails(item) {
   </div>`;
 }
 
-function showWeekActions(item) {
+// One Show week action per distinct declared teacher and room of the given sides (both sides in Proposal review).
+function showWeekActions(...sides) {
   const action = (kind, id, label, name) => `<li><span>${label}: ${escapeHtml(name)}</span> <button type="button" class="link-button" data-show-week="${kind}" data-show-week-id="${escapeAttribute(id)}" aria-label="${escapeAttribute(M.showWeekOf(label, name))}">${M.showWeek}</button></li>`;
-  return `<ul class="show-week-actions" aria-label="${M.showWeek}">${action('TEACHER', item.teacherId, M.teacher, entityName(item.teacher, item.teacherId))}${action('ROOM', item.roomId, M.room, entityName(item.room, item.roomId))}</ul>`;
+  const actions = [['TEACHER', 'teacherId', 'teacher', M.teacher, acceptedModel.maps.teachers], ['ROOM', 'roomId', 'room', M.room, acceptedModel.maps.rooms]]
+    .flatMap(([kind, field, entity, label, declared]) => [...new Map(sides.filter(side => declared.has(side[field]))
+      .map(side => [side[field], side])).values()].map(side => action(kind, side[field], label, entityName(side[entity], side[field]))));
+  return `<ul class="show-week-actions" aria-label="${M.showWeek}">${actions.join('')}</ul>`;
 }
 
 function bindShowWeek() {
@@ -1704,7 +1710,9 @@ let manualDraftSaveQueue = Promise.resolve();
 
 function bindManualEditor() {
   const form = document.querySelector('#manual-edit-form');
-  if (!form) return;
+  // Several selection paths rebind; one edit must issue exactly one save.
+  if (!form || boundManualForms.has(form)) return;
+  boundManualForms.add(form);
 
   const performSave = () => {
     manualDraftSaveQueue = manualDraftSaveQueue.then(async () => {

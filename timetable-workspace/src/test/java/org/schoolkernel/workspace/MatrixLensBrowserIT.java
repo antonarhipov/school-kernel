@@ -102,12 +102,28 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(Set.of(), emptyCellTitles(true), "UC-1 ext 4c: no availability claim without declared availability");
         assertEquals(periodTitles(40, 59), emptyCellTitles(false), "UC-1 ext 4c: ordinary empty cells only");
 
+        // Main 3-4 in Day for the room lens: one row headed by the room, tile subject · teacher · class.
+        workbench.weekday("MONDAY");
+        workbench.awaitText("Day · Monday");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "ROOM", "room-16", "Room · " + ROOM16);
+        assertEquals("Room", workbench.string("document.querySelector('.matrix thead th').textContent"));
+        assertEquals(lessonRange(960, 971), visibleLessons(), "UC-1 main 4: Day shows the room's Monday lessons");
+        assertEquals(List.of(SUBJECT0, TEACHER16, CLASS16), tileFields("lesson-960"),
+                "UC-1 main 4: room-lens Day tile is subject · teacher · class");
+        String dayLabel = workbench.string("document.querySelector('[data-lesson-id=lesson-960]').getAttribute('aria-label')");
+        for (String part : List.of(ROOM16, "Monday", "Declared period 0", "lesson-960")) {
+            assertTrue(dayLabel.contains(part), "UC-1 main 4: room-lens accessible name adds " + part + ": " + dayLabel);
+        }
+        assertEquals(Set.of(), emptyCellTitles(true), "UC-1 ext 4c: the Day room lens makes no availability claim");
+        workbench.range("WEEK");
+        workbench.awaitText("Complete recurring Week");
+
         // G4 / RULE-6: presentation only.
         assertEquals(List.of(), mutations.requests(), "UC-1 G4: applying lenses issues no workspace mutation");
         assertEquals(before, storedDocument(), "UC-1 G4: applying lenses changes no durable state");
 
         // RULE-2: only range and weekday persist; reload returns to class rows.
-        assertEquals("{\"version\":1,\"range\":\"WEEK\",\"weekdayId\":\"FRIDAY\"}",
+        assertEquals("{\"version\":1,\"range\":\"WEEK\",\"weekdayId\":\"MONDAY\"}",
                 workbench.string("localStorage.getItem('" + PREFERENCE + "')"), "RULE-2: the lens is never persisted");
         assertEquals(0, workbench.value("sessionStorage.length").intValue());
         assertEquals("", workbench.string("location.search + location.hash"));
@@ -194,6 +210,7 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
         workbench.open().awaitText("Showing 60 of 60 classes");
         // Precondition: a manual draft moving lesson-0 into room-16 at period-0, where lesson-960 already is.
         workbench.selectLesson("lesson-0");
+        Workbench.MutationLog edit = workbench.recordMutations();
         workbench.select("#edit-room", "room-16");
         workbench.awaitText("2 conflicts");
         String draft = storedDocument();
@@ -213,6 +230,75 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
 
         assertEquals(List.of(), mutations.requests(), "UC-1 G4: the lens issues no draft mutation");
         assertEquals(draft, storedDocument());
+        assertEquals(List.of("PATCH /api/manual-draft"), edit.requests(), "setup: one inline edit issues exactly one save");
+    }
+
+    @Test
+    @DisplayName("UC-1 all lifecycles/G1/G4: a lens in Solving keeps the run controls and the inspector and writes nothing")
+    void appliesALensWhileARepairIsSolving() throws Exception {
+        storeAccepted(fixtures.validAcceptedDocument());
+        workbench.open().awaitText("Start a protected repair");
+        workbench.startRepair(null, null, "mon-1");
+        workbench.awaitText("Repair draft · not current");
+        processes.blockReplan = true;
+        workbench.click("#solve-draft");
+        processes.awaitBlocked();
+        workbench.awaitText("Repair generation · running");
+        assertEquals("SOLVING_REPAIR", storedLifecycle());
+        JsonNode running = storedWorkspaceDocument();
+        Workbench.MutationLog mutations = workbench.recordMutations();
+
+        workbench.mode("SOLVING");
+        workbench.selectLesson("lesson-math-1");
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · Alex");
+        assertLensRowGroup("week-matrix tbody", "TEACHER", "teacher-alex", "Teacher · Alex");
+        workbench.expect("document.querySelector('#workbench-task-area #cancel-run') && !document.querySelector('#workbench-inspector').hidden && document.querySelector('[data-lesson-id=lesson-math-1]').getAttribute('aria-pressed') === 'true' && document.querySelector('#filter-title').textContent === 'Filtered whole-school matrix'",
+                "UC-1 G1: in Solving the lens keeps the run controls, the inspector, and the selection");
+        assertEquals("Mathematics", tileFields("lesson-math-1").get(0));
+        assertEquals("Year 7A", tileFields("lesson-math-1").get(2), "UC-1 main 4: the Solving teacher-lens tile names the class");
+        workbench.range("DAY");
+        workbench.awaitText("Day · Monday");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "TEACHER", "teacher-alex", "Teacher · Alex");
+        workbench.removeLens();
+        workbench.expect("document.querySelectorAll('.matrix tbody tr[data-row-kind=CLASS]').length > 0 && document.querySelector('#workbench-task-area #cancel-run')");
+
+        assertEquals(List.of(), mutations.requests(), "UC-1 G4: a Solving lens issues no mutation");
+        assertEquals(running, storedWorkspaceDocument(), "UC-1 G4: a Solving lens changes nothing durable");
+        assertEquals("SOLVING_REPAIR", storedLifecycle());
+    }
+
+    @Test
+    @DisplayName("UC-1 trigger/all lifecycles/RULE-4: Proposal Show week applies a lens and review targets enter or clear it")
+    void appliesAndLeavesLensesDuringProposalReview() {
+        storeProposal(fixtures.comparisonShapeDocument());
+        String durable = storedDocument();
+        workbench.open().awaitText("Unique changed lessons");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+
+        workbench.click("[data-lesson-id=lesson-0][data-comparison-side=accepted]");
+        workbench.expect("document.querySelector('#workbench-inspector .comparison-details') && document.querySelector('#workbench-inspector [data-show-week=TEACHER]')?.dataset.showWeekId === 'teacher-0' && document.querySelector('#workbench-inspector [data-show-week=ROOM]')?.dataset.showWeekId === 'room-0'",
+                "UC-1 trigger: the Proposal inspector offers Show week for the lesson's teacher and room");
+        workbench.showWeek("TEACHER");
+        workbench.awaitText("Lens: Teacher · Teacher 0");
+        assertLensRowGroup("week-matrix tbody", "TEACHER", "teacher-0", "Teacher · Teacher 0");
+        workbench.expect("[...document.querySelectorAll('[data-lesson-id=lesson-0]:not([hidden])')].map(tile => tile.dataset.comparisonSide).sort().join() === 'accepted,proposed' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 0'",
+                "RULE-4: the Proposal lens keeps both comparison sides and the inspector stays on the lesson");
+
+        // A review target the lens does not represent clears it, with an announcement.
+        workbench.click("[data-category=periodMoves] [data-review-lesson=lesson-60][data-review-side=accepted]");
+        workbench.expect("document.querySelector('#teacher-filter').value === '' && document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]').length === 60 && document.querySelector('#inspection-notice').textContent.includes('Cleared Teacher filter') && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 60'",
+                "review navigation out of a lens clears it and announces the cleared criterion");
+
+        // A review target the lens represents keeps the lens and selects inside it.
+        workbench.filterTeacher("teacher-1");
+        workbench.awaitText("Lens: Teacher · Teacher 1");
+        workbench.click("[data-category=periodMoves] [data-review-lesson=lesson-61][data-review-side=proposed]");
+        workbench.expect("document.querySelector('#teacher-filter').value === 'teacher-1' && document.querySelector('.week-matrix tbody[data-row-id=teacher-1] [data-lesson-id=lesson-61][data-comparison-side=proposed]')?.getAttribute('aria-pressed') === 'true' && document.querySelector('#inspection-notice').textContent === '' && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 61'",
+                "review navigation into a lens keeps the lens and selects the represented side");
+
+        assertEquals(List.of(), mutations.requests(), "UC-1 G4: Proposal lenses issue no mutation");
+        assertEquals(durable, storedDocument());
     }
 
     @Test
