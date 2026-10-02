@@ -3,7 +3,7 @@
 ## Summary
 
 - Submission: `checkpoints/UC-4.md` and implementation at `2745269` (base `218adfe2a8bd47b8806160ea6caeba0484eead94`).
-- Verdict: PENDING WALKTHROUGH.
+- Verdict: APPROVE.
 - Findings: 0 critical, 0 gap, 0 protocol.
 - Suite: focused UC-4 browser journeys 2 run / 0 failures / 0 errors / 0 skipped; targeted Proposal journey 1 / 0 / 0 / 0; independent full workspace integration suite 126 / 3 / 12 / 0; isolated rerun of the four extra full-run failures 12 / 0 / 0 / 0. The full run's 11 other failing method IDs exactly match the pre-UC-4 baseline in `convergence/UC-1.md`.
 - Working tree impact from verification: none. `git status --short` was empty before and after the runs. `git diff --check 218adfe2..2745269` and `node --check` for all three changed JavaScript modules passed.
@@ -100,19 +100,19 @@ None. The full-suite variance and unchanged baseline are stated in Summary and R
 
 ## Walkthrough
 
-Automated evidence passes. UC-4 is a UI use case, so approval waits for the administrator's confirmation of this UC-derived script. Use a workspace with a displayed timetable and set the browser to 390 CSS px wide.
+Automated evidence passed. The administrator confirmed completion of this UC-derived walkthrough on 2026-10-02. The script used a workspace with a displayed timetable at 390 CSS px width.
 
 1. Open the workspace. Confirm it says **Read-only Day matrix**, names the current lifecycle, and shows the first class's day in one horizontally scrollable matrix row. Editing, run cancellation, and proposal decisions must not appear.
 2. Use **View by** to choose another class, then Teacher and Room. For each, check the one-row header and Day tile fields: class shows subject/teacher/room; teacher shows subject/room/class; room shows subject/teacher/class.
 3. Change the weekday to one with no lessons for the selected entity. The row remains empty. If that teacher or room declares availability, cells outside it say **Unavailable**; an entity without a declaration makes no availability claim.
 4. Return to a desktop width. The prior desktop Week/Day range remains selected. Narrow picker and weekday changes must not alter the accepted timetable, draft, or proposal.
 
-User result: pending.
+User result: "walkthrough complete; uc-4 approved" (2026-10-02).
 
 ## Status Update
 
-UC-4: `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH`. Next eligible: none while UC-3 and UC-4 await walkthrough confirmation.
+UC-4: `READY_FOR_CONVERGENCE` -> `PENDING_WALKTHROUGH` -> `APPROVED` after the administrator confirmed the walkthrough. Next eligible: none while UC-3 awaits walkthrough confirmation.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-4 automated convergence passes; await the administrator's 390 px class, teacher, room, and empty-day walkthrough confirmation.
+APPROVED
