@@ -26,6 +26,107 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
             "[...document.querySelectorAll('#accepted-view .lesson-cell[data-lesson-id]:not([hidden])')].map(button => button.dataset.lessonId)";
 
     @Test
+    @DisplayName("UC-4 main 1-4/G1-G3: a 390 px Day matrix pivots among one class, teacher, and room without mutating or replacing the desktop range")
+    void readsOneEntityDayOnANarrowScreen() throws Exception {
+        storeAccepted(fixtures.investigationScaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        workbench.range("WEEK");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+
+        workbench.viewport(390, 844);
+        workbench.awaitText("Read-only Day matrix");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "CLASS", "cohort-0", "Class 0");
+        assertEquals(lessonRange(0, 11), visibleLessons(), "UC-4 main 1: the first class's Monday is the initial Day");
+        assertEquals(List.of("Subject Zero" + LONG, "Teacher 0", "Room 0"), tileFields("lesson-0"),
+                "UC-4 main 4: class Day tiles show subject, teacher, and room");
+        workbench.expect("document.querySelector('#narrow-kind').value === 'CLASS' && document.querySelector('#narrow-entity').value === 'cohort-0' && document.querySelector('#weekday').value === 'MONDAY' && document.querySelector('[data-range=WEEK]') === null && document.querySelector('.matrix-wrap').getClientRects().length > 0 && document.querySelector('.matrix-wrap').getAttribute('aria-label') === 'Narrowed Day matrix' && document.querySelectorAll('.matrix tbody tr').length === 1 && [...document.querySelectorAll('.lesson-cell')].every(tile => tile.disabled) && document.documentElement.scrollWidth <= innerWidth && document.querySelector('.matrix-wrap').scrollWidth > document.querySelector('.matrix-wrap').clientWidth && document.querySelector('.matrix tbody td').getBoundingClientRect().width >= 150",
+                "UC-4 main 1-2/G1-G2: one visible, horizontally scrollable, read-only Day matrix replaces the agenda at 390 px");
+        workbench.screenshot("matrix-lenses-uc4-class-390.png");
+        workbench.expectNot("document.querySelector('.focused-schedule, #workbench-task-area, #cancel-run, #publish-manual-draft, #accept-repair, #accept-proposal')",
+                "UC-4 G2/RULE-8: no agenda or mutation controls remain");
+
+        workbench.narrowKind("TEACHER");
+        workbench.narrowEntity("teacher-16");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "TEACHER", "teacher-16", "Teacher · " + TEACHER16);
+        assertEquals(lessonRange(960, 971), visibleLessons());
+        assertEquals(List.of(SUBJECT0, ROOM16, CLASS16), tileFields("lesson-960"),
+                "UC-4 main 4: teacher Day tiles show subject, room, and class");
+        workbench.expect("document.querySelector('#filter-title').textContent === 'Narrowed Day matrix' && document.querySelector('#represented-lesson-count').textContent === 'Represented lessons: 12' && document.querySelector('#active-criteria').textContent.includes('Teacher: " + TEACHER16 + "')",
+                "UC-4 main 4: teacher lens keeps honest narrowed status and exact count");
+
+        workbench.weekday("FRIDAY");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "TEACHER", "teacher-16", "Teacher · " + TEACHER16);
+        assertEquals(Set.of(), visibleLessons(), "UC-4 ext 3a: an empty day never invents a lesson");
+        assertEquals(periodTitles(48, 59), emptyCellTitles(true), "UC-4 ext 3a/RULE-5: declared unavailability marks only empty Friday cells");
+        workbench.expect("[...document.querySelectorAll('.unavailable-cell')].every(cue => cue.textContent === 'Unavailable')");
+        assertEquals("{\"version\":1,\"range\":\"WEEK\",\"weekdayId\":\"FRIDAY\"}",
+                workbench.string("localStorage.getItem('" + PREFERENCE + "')"),
+                "UC-4 G3/RULE-2: choosing a narrow weekday leaves the desktop Week range untouched");
+
+        workbench.narrowKind("ROOM");
+        workbench.narrowEntity("room-16");
+        workbench.weekday("MONDAY");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "ROOM", "room-16", "Room · " + ROOM16);
+        assertEquals(List.of(SUBJECT0, TEACHER16, CLASS16), tileFields("lesson-960"),
+                "UC-4 main 4: room Day tiles show subject, teacher, and class");
+        assertEquals(Set.of(), emptyCellTitles(true), "UC-4/RULE-5: a room without declared availability has no unavailable cue");
+        workbench.weekday("FRIDAY");
+        assertEquals(List.of(), mutations.requests(), "UC-4 G2/RULE-6: narrow picker and weekday issue no mutation request");
+        assertEquals(before, storedDocument(), "UC-4 minimal guarantee: narrow reading changes no workspace data");
+
+        workbench.reload();
+        workbench.awaitText("Read-only Day matrix");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "CLASS", "cohort-0", "Class 0");
+        workbench.expect("document.querySelector('#weekday').value === 'FRIDAY'",
+                "UC-4 main 1: reload restores the last valid weekday without restoring the lens");
+        workbench.viewport(701, 844);
+        workbench.awaitText("Complete recurring Week");
+        workbench.expect("document.querySelectorAll('.week-matrix tbody[data-row-kind=CLASS]').length === 60 && document.querySelector('#cohort-filter').value === '' && document.querySelector('#weekday').value === 'FRIDAY'",
+                "UC-4 G3: the temporary first-class narrowing does not alter desktop class rows or range");
+        workbench.filterTeacher("teacher-16");
+        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        Workbench.MutationLog activeLensMutations = workbench.recordMutations();
+        workbench.viewport(390, 844);
+        workbench.awaitText("Read-only Day matrix");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "TEACHER", "teacher-16", "Teacher · " + TEACHER16);
+        workbench.expect("document.querySelector('#narrow-kind').value === 'TEACHER' && document.querySelector('#narrow-entity').value === 'teacher-16' && document.querySelector('#weekday').value === 'FRIDAY'",
+                "UC-4 main 1: an existing lens survives the narrow pivot on the saved weekday");
+        workbench.weekday("MONDAY");
+        assertEquals(lessonRange(960, 971), visibleLessons());
+        workbench.screenshot("matrix-lenses-uc4-teacher-390.png");
+        assertEquals(List.of(), activeLensMutations.requests());
+        assertEquals(before, storedDocument());
+    }
+
+    @Test
+    @DisplayName("UC-4 main 1/ext 3a: an existing class filter survives the narrow pivot and empty class cells carry no availability claim")
+    void preservesAnExplicitClassWhenNarrowing() {
+        storeAccepted(fixtures.scaleDocument());
+        String before = storedDocument();
+        workbench.open().awaitText("Showing 60 of 60 classes");
+        workbench.filterClass("cohort-16");
+        Workbench.MutationLog mutations = workbench.recordMutations();
+        workbench.viewport(390, 844);
+        workbench.awaitText("Read-only Day matrix");
+        assertLensRowGroup("matrix:not(.week-matrix) tbody tr", "CLASS", "cohort-16", "Class 16");
+        workbench.weekday("FRIDAY");
+        assertEquals(Set.of(), visibleLessons());
+        assertEquals(periodTitles(48, 59), emptyCellTitles(false),
+                "UC-4 ext 3a/RULE-5: an empty class row has ordinary empty cells");
+        assertEquals(Set.of(), emptyCellTitles(true), "class rows never claim resource unavailability");
+        workbench.narrowKind("TEACHER");
+        workbench.narrowEntity("teacher-16");
+        workbench.weekday("MONDAY");
+        assertEquals(lessonRange(960, 971), visibleLessons(), "UC-1 state rule 1: the explicit class filter intersects the narrow teacher lens");
+        workbench.narrowKind("CLASS");
+        workbench.expect("document.querySelector('#narrow-entity').value === 'cohort-16' && document.querySelector('.matrix tbody tr').dataset.rowId === 'cohort-16'",
+                "UC-4 main 3: choosing Class returns to the selected class row");
+        assertEquals(List.of(), mutations.requests());
+        assertEquals(before, storedDocument());
+    }
+
+    @Test
     @DisplayName("UC-1 main 1-6/G1-G4/ext 4c/RULE-1-6: teacher and room lenses pivot Week and Day to one row group with lens tiles")
     void pivotsTheMatrixToOneTeacherOrRoom() throws Exception {
         storeAccepted(fixtures.investigationScaleDocument());

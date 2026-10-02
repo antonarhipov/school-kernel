@@ -132,9 +132,9 @@ class RepairCompletionBrowserIT extends WorkbenchBrowserSupport {
         workbench.resetView();
         assertWideJourneyPhase("PROPOSAL", "#accept-repair", "proposal");
         workbench.viewport(390, 844);
-        workbench.expect("document.querySelector('.focused-schedule') !== null && document.querySelector('#workbench-task-area') === null");
+        workbench.expect("document.querySelector('.matrix tbody tr') !== null && document.querySelector('.matrix-wrap').getClientRects().length > 0 && document.querySelector('#workbench-task-area') === null");
         workbench.expect("document.body.innerText.includes('Repair proposal') && document.body.innerText.includes('Accepted baseline remains current') && !document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, #cancel-run') && document.documentElement.scrollWidth <= innerWidth",
-                "UC-5 G3/RULE-12: the same verified Proposal becomes a read-only narrow agenda");
+                "UC-5 G3/RULE-12: the same verified Proposal becomes a read-only narrow Day matrix");
         assertEquals(proposed, storedWorkspaceDocument(), "narrow reading cannot change the accepted/Draft/Proposal document");
         workbench.viewport(1280, 800);
         workbench.expect("document.querySelector('#workbench-task-area #accept-repair') !== null");

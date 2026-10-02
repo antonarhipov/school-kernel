@@ -3,7 +3,6 @@ import { makeAcceptedModel } from './accepted-model.js';
 import { createProposalComparison } from './proposal-comparison.js';
 import { createInspectionState } from './inspection-state.js';
 import { renderDayMatrix } from './day-renderer.js';
-import { renderFocusedSchedule } from './focused-renderer.js';
 import { renderWeekMatrix } from './week-renderer.js';
 
 let etag;
@@ -31,7 +30,7 @@ let detachedLessonId = null;
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
-  range: 'WEEK', selectedLessonId: null, reviewTargetSide: null, focusedType: null, focusedId: null,
+  range: 'WEEK', selectedLessonId: null, reviewTargetSide: null,
   subjectInvestigationId: null, teacherInvestigationId: null, subjectOnly: false,
   narrow: window.matchMedia('(max-width: 700px)').matches
 };
@@ -56,7 +55,8 @@ async function load(force = false) {
 
 function render(snapshot) {
   const matrix = stateCard.querySelector('.matrix-wrap');
-  if (matrix) canvasScroll = { left: matrix.scrollLeft, top: matrix.scrollTop };
+  if (matrix && stateCard.classList.contains('narrow-mode') === view.narrow) canvasScroll = { left: matrix.scrollLeft, top: matrix.scrollTop };
+  else canvasScroll = null;
   const previousState = currentSnapshot?.state;
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
@@ -104,9 +104,6 @@ function render(snapshot) {
         : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
       syncInspectionState(inspectionState.closeLesson());
     }
-    if (view.narrow && !view.focusedType) {
-      syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
-    }
     renderInitialProposal(snapshot, schoolName);
   } else if (snapshot.state === 'ACCEPTED_BASELINE') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
@@ -118,9 +115,6 @@ function render(snapshot) {
       selectionResetNotice = !selected ? M.comparisonSelectionCleared
         : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
       syncInspectionState(inspectionState.closeLesson());
-    }
-    if (view.narrow && !view.focusedType) {
-      syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
     }
     renderAccepted(snapshot, schoolName);
   } else if (snapshot.state === 'REPAIR_DRAFT') {
@@ -182,9 +176,6 @@ function render(snapshot) {
         : view.range === 'DAY' && selected.period?.weekday !== view.day ? M.selectionOutsideDay : M.selectionOutsideFilters;
       syncInspectionState(inspectionState.closeLesson());
     }
-    if (view.narrow && !view.focusedType) {
-      syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
-    }
     if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
     else renderManualDraft(snapshot, schoolName);
   }
@@ -216,6 +207,7 @@ function renderModeNavigation() {
 function renderInitialProposal(snapshot, schoolName) {
   const proposal = snapshot.workspace.proposal;
   const result = proposal.result;
+  if (view.narrow) { renderNarrowReadOnly(schoolName, M.initialProposal); return; }
   const taskOpen = inspectionState ? inspectionState.current().taskAreaOpen.PROPOSAL : true;
   stateCard.className = 'card workspace-card compact-density current-mode';
   stateCard.innerHTML = `
@@ -251,7 +243,7 @@ function renderInitialProposal(snapshot, schoolName) {
       </div>
     </section>`;
   bindUtilities();
-  if (view.narrow) renderFocused(); else renderWholeSchool();
+  renderWholeSchool();
   bindInitialProposalTaskArea();
 }
 
@@ -278,10 +270,7 @@ function bindInitialProposalTaskArea() {
 function renderRepairProposal(snapshot, schoolName) {
   const reviewStarted = performance.now();
   if (view.narrow) {
-    stateCard.className = 'card workspace-card';
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state proposal">${M.repairProposal}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice} ${M.acceptedStillCurrent}</p><div id="accepted-view"></div>`;
-    if (!view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
-    renderFocused(); return;
+    renderNarrowReadOnly(schoolName, M.repairProposal, M.acceptedStillCurrent); return;
   }
   stateCard.className = 'card workspace-card review-mode current-mode compact-density';
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairProposal}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.proposalNotCurrent} ${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${proposalTaskArea()}`;
@@ -470,7 +459,7 @@ function initializeInspectionState(schoolId) {
 }
 
 function syncInspectionState(state) {
-  view.range = state.range;
+  view.range = view.narrow ? 'DAY' : state.range;
   view.day = state.weekdayId;
   view.selectedLessonId = state.selectedLessonId;
   view.reviewTargetSide = state.reviewTargetSide;
@@ -482,9 +471,6 @@ function syncInspectionState(state) {
   view.teacherId = state.teacherFilterId || '';
   view.roomId = state.roomId || '';
   view.periodId = state.periodId || '';
-  view.focusedType = state.focusedType;
-  view.focusedId = state.focusedId;
-  view.scrollContext = state.scrollContext;
 }
 
 function setRange(range, day = view.day, manualDay = false) {
@@ -508,13 +494,20 @@ function setRange(range, day = view.day, manualDay = false) {
 }
 
 function renderAccepted(snapshot, schoolName) {
-  stateCard.className = 'card workspace-card compact-density current-mode';
   const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
     SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal, MANUAL_DRAFT: M.manualDraftState }[snapshot.state];
+  if (view.narrow) { renderNarrowReadOnly(schoolName, lifecycle); return; }
+  stateCard.className = 'card workspace-card compact-density current-mode';
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${lifecycle}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     <h3 class="sr-only">${M.timetableDetails}</h3><div id="accepted-view"></div>`;
   bindUtilities();
-  if (view.narrow) renderFocused(); else renderWholeSchool();
+  renderWholeSchool();
+}
+
+function renderNarrowReadOnly(schoolName, lifecycle, context = '') {
+  stateCard.className = 'card workspace-card current-mode narrow-mode compact-density';
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state">${lifecycle}</span></div></div><p class="narrow-banner" role="status">${M.narrowNotice}${context ? ` ${context}` : ''}</p><div id="accepted-view"></div>`;
+  renderWholeSchool();
 }
 
 function renderUtilities(snapshot) {
@@ -644,9 +637,7 @@ function renderManualDraft(snapshot, schoolName) {
   const publishDisabled = conflictsCount > 0;
   const publishTitle = publishDisabled ? M.publishConflictsWarning(conflictsCount) : '';
   if (view.narrow) {
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.manualDraftState}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.manualDraftDetail}</p><div class="task-launch manual-task-launch"><button id="discard-manual-draft" type="button" class="secondary">${M.discardDraft}</button><button id="publish-manual-draft" type="button" class="primary" ${publishDisabled ? 'disabled aria-disabled="true" title="' + escapeHtml(publishTitle) + '"' : ''}>${M.publishDraft}</button></div><p id="manual-publish-status" class="manual-publish-status" role="alert" hidden></p><div id="accepted-view"></div>`;
-    bindManualDraftActions();
-    renderFocused(); return;
+    renderNarrowReadOnly(schoolName, M.manualDraftState); return;
   }
   stateCard.innerHTML = `<div class="accepted-heading"><div class=\"school-identity\"><h2>${escapeHtml(schoolName)}</h2><span class=\"state draft-state\">${M.manualDraftState}</span><span id=\"conflict-summary-badge\" class=\"conflict-badge ${conflictsCount > 0 ? 'has-conflicts' : 'clean'}\">${conflictsCount > 0 ? M.conflictCount(conflictsCount) : M.zeroConflicts}</span><p class=\"revision\">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class=\"header-utilities\"><p class=\"mode-note\">${M.manualDraftDetail}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     <div class=\"task-launch manual-task-launch\">
@@ -663,8 +654,7 @@ function renderManualDraft(snapshot, schoolName) {
 function renderRepair(snapshot, schoolName) {
   stateCard.className = 'card workspace-card repair-mode current-mode compact-density';
   if (view.narrow) {
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state draft-state">${M.repairDraft}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.narrowNotice} ${M.acceptedStillCurrent}</p><div id="accepted-view"></div>`;
-    renderFocused(); return;
+    renderNarrowReadOnly(schoolName, M.repairDraft, M.acceptedStillCurrent); return;
   }
   const editable = snapshot.state === 'REPAIR_DRAFT';
   const taskOpen = inspectionState.current().taskAreaOpen.DRAFT;
@@ -694,9 +684,7 @@ function bindDraftTaskArea() {
 
 function renderSolving(snapshot, schoolName) {
   if (view.narrow) {
-    stateCard.className = 'card workspace-card';
-    stateCard.innerHTML = `<div class="accepted-heading"><div><span class="state running">${M.repairRunning}</span><h2>${escapeHtml(schoolName)}</h2></div></div><p class="narrow-banner">${M.acceptedStillCurrent}</p><div id="accepted-view"></div>`;
-    renderFocused(); return;
+    renderNarrowReadOnly(schoolName, M.repairRunning, M.acceptedStillCurrent); return;
   }
   stateCard.className = 'card workspace-card solving-mode current-mode compact-density';
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairRunning}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${runTaskArea()}`;
@@ -863,6 +851,10 @@ function renderWholeSchool() {
   const matches = narrowed ? investigation.represented : displayed.assignments.filter(isInSelectedRange);
   const visibleCohorts = narrowed && matches.length ? model.definition.cohorts.filter(cohort => matches.some(item => item.cohortId === cohort.id)) : model.definition.cohorts;
   const arrangement = matrixArrangement(model, displayed);
+  if (view.narrow) {
+    renderNarrowDay(host, model, arrangement, dayPeriods, investigation);
+    return;
+  }
   const mode = inspectionState.current().mode;
   const draftMode = currentSnapshot.state === 'REPAIR_DRAFT' && mode === 'DRAFT';
   const proposalDraft = currentSnapshot.state === 'REPAIR_PROPOSAL' && mode === 'DRAFT';
@@ -914,6 +906,64 @@ function renderWholeSchool() {
   restoreCanvasScroll();
 }
 
+function narrowKind() { return lensKind() || 'CLASS'; }
+
+function narrowEntityId(kind = narrowKind()) {
+  return kind === 'TEACHER' ? view.teacherId : kind === 'ROOM' ? view.roomId : effectiveCohortId();
+}
+
+function narrowEntities(kind) {
+  return kind === 'TEACHER' ? acceptedModel.definition.teachers
+    : kind === 'ROOM' ? acceptedModel.definition.rooms : acceptedModel.definition.cohorts;
+}
+
+function renderNarrowDay(host, model, arrangement, dayPeriods, investigation) {
+  const kind = narrowKind();
+  const entityLabel = kind === 'TEACHER' ? M.chooseTeacher : kind === 'ROOM' ? M.chooseRoom : M.chooseClass;
+  const selectedId = narrowEntityId(kind);
+  const selectedRows = kind === 'CLASS' ? arrangement.rows.filter(row => row.id === selectedId) : arrangement.rows;
+  const dayArrangement = { ...arrangement, rows: selectedRows,
+    cellItems: (row, period) => arrangement.cellItems(row, period).filter(isRepresented) };
+  host.innerHTML = `<div class="narrow-controls">
+      ${selectControl('narrow-kind', M.narrowPickerType, [['CLASS', M.class], ['TEACHER', M.teacher], ['ROOM', M.room]], kind)}
+      ${selectControl('narrow-entity', entityLabel, options(narrowEntities(kind)), selectedId)}
+      ${selectControl('weekday', M.weekdayLabel, model.weekdays.map(id => [id, M.days[id] || id]), view.day)}
+    </div>
+    <div class="filter-status" role="status"><strong id="filter-title">${M.narrowedDayMatrix}</strong><span id="range-summary">${M.dayRange(M.days[view.day] || view.day)}</span><span id="matrix-summary">${kind === 'CLASS' ? M.matrixSummary(selectedRows.length, model.definition.cohorts.length) : M.lensSummary(lensRowLabel(kind))}</span><span id="represented-lesson-count">${M.representedLessonCount(investigation.represented.length)}</span><span class="criteria-label">${M.activeFilters}:</span><span id="active-criteria" class="criteria">${criteriaMarkup()}</span><button id="reset-view" type="button" class="link-button">${M.reset}</button></div>
+    <p id="inspection-notice" class="notice" role="status"></p>
+    <div class="workbench-layout"><div class="canvas-region">${renderDayMatrix({ ...dayArrangement, periods: dayPeriods, periodId: view.periodId, labels: { ...M, completePopulation: M.narrowedDayMatrix }, lessonMarkup: item => lessonButton(item, false), escapeHtml })}</div></div>`;
+  document.querySelector('#narrow-kind').addEventListener('change', event => {
+    const nextKind = event.target.value;
+    const nextId = nextKind === 'CLASS' && view.cohortId ? view.cohortId : narrowEntities(nextKind)[0]?.id;
+    selectNarrowEntity(nextKind, nextId);
+  });
+  document.querySelector('#narrow-entity').addEventListener('change', event => selectNarrowEntity(kind, event.target.value));
+  document.querySelector('#weekday').addEventListener('change', event => {
+    const day = event.target.value;
+    const selectedWeekday = representedAssignment(view.selectedLessonId)?.period?.weekday;
+    if (view.periodId) syncInspectionState(inspectionState.selectFilter('periodId', null).state);
+    const transition = inspectionState.selectWeekday(day, selectedWeekday);
+    if (!transition.changed) return;
+    syncInspectionState(transition.state);
+    const persisted = inspectionState.persist();
+    renderWholeSchool();
+    if (!persisted) document.querySelector('#inspection-notice').textContent = M.preferenceUnavailable;
+  });
+  document.querySelector('#active-criteria [data-remove-lens]')?.addEventListener('click', () => applyLens(view.teacherId ? 'teacherFilterId' : 'roomId', null));
+  document.querySelector('#reset-view').addEventListener('click', resetView);
+  restoreCanvasScroll();
+}
+
+function selectNarrowEntity(kind, id) {
+  if (!narrowEntities(kind).some(entity => entity.id === id)) return;
+  if (kind === 'CLASS') {
+    if (view.teacherId || view.roomId) inspectionState.selectFilter(view.teacherId ? 'teacherFilterId' : 'roomId', null);
+    syncInspectionState(inspectionState.selectFilter('cohortId', id).state);
+    clearSelectedLessonOutsideRepresentation();
+    renderWholeSchool();
+  } else applyLens(kind === 'TEACHER' ? 'teacherFilterId' : 'roomId', id);
+}
+
 function lensKind() { return view.teacherId ? 'TEACHER' : view.roomId ? 'ROOM' : null; }
 
 // Class rows, or one row group for the lens teacher or room. Lens cells hold every assignment of that entity, and in
@@ -922,7 +972,7 @@ function lensKind() { return view.teacherId ? 'TEACHER' : view.roomId ? 'ROOM' :
 function matrixArrangement(model, displayed) {
   const kind = lensKind();
   if (!kind) return { lens: false, rowHeading: M.class,
-    rows: model.definition.cohorts.map(cohort => ({ id: cohort.id, kind: 'CLASS', label: entityName(cohort) })),
+    rows: model.definition.cohorts.filter(cohort => !view.narrow || cohort.id === effectiveCohortId()).map(cohort => ({ id: cohort.id, kind: 'CLASS', label: entityName(cohort) })),
     cellItems: (row, period) => displayed.assignmentsByCell.get(`${row.id}\u0000${period.id}`) || [],
     emptyMarkup: (row, period, hidden) => emptyCellMarkup(false, hidden) };
   const field = kind === 'TEACHER' ? 'teacherId' : 'roomId';
@@ -1039,16 +1089,6 @@ function weekLessonButton(item) {
   return `<button type="button" class="lesson-cell week-lesson ${subjectColorClass(item)}${selected ? ' selected' : ''}${cues.classes}${draft.direct ? ' directly-affected' : ''}${conflictClass}${modifiedClass}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong>${tileFields(item, true)}${draft.labels}${manual.labels}${indicator}${cues.weekMarkup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em>${overlay}</button>`;
 }
 
-function matrix(cohorts, periods, assignmentsByCell, filtered) {
-  const selectedPeriods = view.periodId ? periods.filter(period => period.id === view.periodId) : periods;
-  const headers = selectedPeriods.map(period => `<th scope="col"><span>${escapeHtml(period.displayName)}</span>${period.startTime ? `<small>${escapeHtml(M.optionalTime(period.startTime, period.endTime))}</small>` : ''}</th>`).join('');
-  const rows = cohorts.map(cohort => `<tr><th scope="row"><span>${escapeHtml(entityName(cohort))}</span><small>${escapeHtml(cohort.id)}</small></th>${selectedPeriods.map(period => {
-    const items = assignmentsByCell.get(`${cohort.id}\u0000${period.id}`) || [];
-    return items.length ? `<td>${items.map(item => lessonButton(item, filtered)).join('')}<span class="empty-cell" hidden>${M.emptyCell}</span></td>` : `<td><span class="empty-cell">${M.emptyCell}</span></td>`;
-  }).join('')}</tr>`).join('');
-  return `<div class="matrix-wrap" tabindex="0" aria-label="${filtered ? M.filteredMatrix : M.completeMatrix}"><table class="matrix"><thead><tr><th scope="col">${M.class}</th>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
 function lessonButton(item, matched) {
   if (proposalModeActive()) return comparisonLessonButton(item, false);
   const selected = item.lessonId === view.selectedLessonId;
@@ -1059,7 +1099,7 @@ function lessonButton(item, matched) {
   const modifiedClass = manual.modified ? ' modified' : '';
   const indicator = manual.conflict ? `<span class="conflict-indicator" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" data-conflict-target="conflict-overlay-${escapeAttribute(item.lessonId)}" title="${escapeAttribute(M.viewConflictExplanation)}">⚠️</span>` : '';
   const overlay = conflictOverlayMarkup(manual, item.lessonId);
-  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${conflictClass}${modifiedClass}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible, ...manual.accessible]))}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong>${tileFields(item, false)}${draftState.labels}${manual.labels}${indicator}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em>${overlay}</button>`;
+  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${matched ? ' match' : ''}${selected ? ' selected' : ''}${cues.classes}${draftState.direct ? ' directly-affected' : ''}${conflictClass}${modifiedClass}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" aria-label="${escapeAttribute(lessonAccessibleName(item, [...cues.accessible, ...draftState.accessible, ...manual.accessible]))}" aria-pressed="${selected}"${view.narrow ? ' disabled' : ''}><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong>${tileFields(item, false)}${draftState.labels}${manual.labels}${indicator}${cues.markup}<em class="match-label"${matched ? '' : ' hidden'}>${M.match}</em><em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em>${overlay}</button>`;
 }
 
 function comparisonLessonButton(item, week) {
@@ -1074,7 +1114,7 @@ function comparisonLessonButton(item, week) {
   const protection = comparisonProtection(item.lessonId);
   const compactProtection = comparisonProtectionCue(item.lessonId);
   const label = [lessonAccessibleName(item, [...cues.accessible, state, ...matched]), protection].filter(Boolean).join(' · ');
-  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong>${tileFields(item, week)}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${week ? cues.weekMarkup : cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
+  return `<button type="button" class="lesson-cell ${subjectColorClass(item)}${week ? ' week-lesson' : ''} comparison-${side}${selected ? ' selected' : ''}${cues.classes}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-subject-id="${escapeAttribute(item.subjectId)}" data-comparison-side="${side}" aria-label="${escapeAttribute(label)}" aria-pressed="${selected}"${view.narrow ? ' disabled' : ''}><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong>${tileFields(item, week)}${week && side === 'unchanged' ? '' : `<em class="comparison-cue"${week ? ` title="${escapeAttribute(state)}"` : ''}>${week ? shortState : state}</em>`}${effects}${protection ? `<em class="pin-label"${week ? ` title="${escapeAttribute(protection)}"` : ''}>${week ? compactProtection : escapeHtml(protection)}</em>` : ''}${week ? cues.weekMarkup : cues.markup}<em class="selected-label"${selected ? '' : ' hidden'}>${M.selected}</em></button>`;
 }
 
 function comparisonState(item) {
@@ -1468,44 +1508,6 @@ function reportDraftFailure(message) {
   const status = document.querySelector('#draft-save-status') || document.querySelector('#repair-setup-status');
   if (status) status.textContent = `${status.id === 'draft-save-status' ? `${M.draftSaveFailed} ` : ''}${message}`;
   else stateCard.insertAdjacentHTML('beforeend', `<p class="error" role="alert">${M.draftSaveFailed} ${escapeHtml(message)}</p>`);
-}
-
-function renderFocused() {
-  const host = document.querySelector('#accepted-view');
-  const type = view.focusedType || 'cohortId';
-  const source = type === 'cohortId' ? acceptedModel.definition.cohorts : type === 'teacherId' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms;
-  if (!source.some(item => item.id === view.focusedId)) {
-    const fallback = source[0]?.id || null;
-    if (inspectionState && fallback) syncInspectionState(inspectionState.changeFocusedType(type, fallback).state);
-    else view.focusedId = fallback;
-  }
-  const manualDraftMode = currentSnapshot.state === 'MANUAL_DRAFT' && inspectionState.current().mode === 'DRAFT';
-  const activeModel = (manualDraftMode && manualDraftModel) ? manualDraftModel : acceptedModel;
-  const relatedLessonIds = proposalModeActive() ? new Set(comparison.assignments.filter(item => item[type] === view.focusedId).map(item => item.lessonId)) : null;
-  host.innerHTML = renderFocusedSchedule({ type, focusedId: view.focusedId, source, relatedLessonIds,
-    assignments: proposalModeActive() ? comparison.assignments : activeModel.assignments, weekdays: activeModel.weekdays,
-    lessonMarkup: proposalModeActive() ? item => `<article class="focused-lesson ${subjectColorClass(item)}" data-lesson-id="${escapeAttribute(item.lessonId)}" data-comparison-side="${item.comparisonSide}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div><span class="accepted-text">${item.comparisonSide === 'accepted' ? item.change.proposed ? M.acceptedOrigin : M.cancellationCue : item.comparisonSide === 'proposed' ? item.change.old ? M.proposedDestination : M.additionCue : item.comparisonSide === 'combined' ? M.combinedChange : M.visuallyQuiet}</span>${item[type] !== view.focusedId ? `<span class="context-label">${M.linkedComparisonSide}</span>` : ''}</article>`
-      : manualDraftMode ? item => {
-          const manual = manualLessonState(item.lessonId);
-          const indicator = manual.conflict ? `<span class="conflict-indicator" role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" data-conflict-target="conflict-overlay-${escapeAttribute(item.lessonId)}" title="${escapeAttribute(M.viewConflictExplanation)}">⚠️</span>` : '';
-          const overlay = conflictOverlayMarkup(manual, item.lessonId);
-          return `<article class="focused-lesson ${subjectColorClass(item)}${manual.conflict ? ' conflicting' : ''}${manual.modified ? ' modified' : ''}" data-lesson-id="${escapeAttribute(item.lessonId)}"><time>${escapeHtml(periodLabel(item.period))}</time><div><strong>${escapeHtml(entityName(item.subject, item.subjectId))}</strong><span>${escapeHtml(entityName(item.cohort, item.cohortId))} · ${escapeHtml(entityName(item.teacher, item.teacherId))} · ${escapeHtml(entityName(item.room, item.roomId))}</span></div>${manual.labels}${indicator}<span class="accepted-text">${manual.conflict ? '⚠️ ' + M.conflict : manual.modified ? M.modifiedFromBaseline : '✓ ' + M.acceptedAssignment}</span>${overlay}</article>`;
-        }
-      : null,
-    labels: M, entityName, periodLabel, subjectColorClass, selectControl, options, escapeHtml });
-  if (manualDraftMode) bindConflictOverlays(host);
-  document.querySelectorAll('[data-focus-type]').forEach(button => button.addEventListener('click', () => {
-    const nextType = button.dataset.focusType;
-    const nextSource = nextType === 'cohortId' ? acceptedModel.definition.cohorts : nextType === 'teacherId' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms;
-    if (inspectionState) syncInspectionState(inspectionState.changeFocusedType(nextType, nextSource[0]?.id).state);
-    else { view.focusedType = nextType; view.focusedId = nextSource[0]?.id || null; }
-    renderFocused();
-  }));
-  document.querySelector('#focus-entity')?.addEventListener('change', event => {
-    if (inspectionState) syncInspectionState(inspectionState.changeFocusedType(type, event.target.value).state);
-    else view.focusedId = event.target.value;
-    renderFocused();
-  });
 }
 
 function bindInspectionControls() {
@@ -1960,7 +1962,7 @@ function filteredAssignments() {
 }
 
 function baseFilterMatches(item) {
-  return (!view.cohortId || item.cohortId === view.cohortId) && (!view.teacherId || item.teacherId === view.teacherId)
+  return (!effectiveCohortId() || item.cohortId === effectiveCohortId()) && (!view.teacherId || item.teacherId === view.teacherId)
     && (!view.roomId || item.roomId === view.roomId) && (!view.periodId || item.periodId === view.periodId);
 }
 
@@ -2002,6 +2004,7 @@ function searchable(item) {
 function activeCriteria() {
   const criteria = [];
   if (view.cohortId) criteria.push({ label: M.classCriterion(entityName(acceptedModel.maps.cohorts.get(view.cohortId), view.cohortId)) });
+  else if (view.narrow && !lensKind()) criteria.push({ label: M.classCriterion(entityName(acceptedModel.definition.cohorts[0], effectiveCohortId())) });
   if (view.teacherId) criteria.push({ label: M.teacherCriterion(entityName(lensEntity('TEACHER', view.teacherId), view.teacherId)), lens: true });
   if (view.roomId) criteria.push({ label: M.roomCriterion(entityName(lensEntity('ROOM', view.roomId), view.roomId)), lens: true });
   if (view.periodId) criteria.push({ label: M.periodCriterion(entityName(acceptedModel.maps.periods.get(view.periodId), view.periodId)) });
@@ -2015,7 +2018,11 @@ function criteriaMarkup() {
 }
 
 function hasNarrowingCriteria() {
-  return Boolean(view.cohortId || view.teacherId || view.roomId || view.periodId || view.subjectOnly);
+  return Boolean(view.narrow || view.cohortId || view.teacherId || view.roomId || view.periodId || view.subjectOnly);
+}
+
+function effectiveCohortId() {
+  return view.cohortId || (view.narrow && !lensKind() ? acceptedModel.definition.cohorts[0]?.id : null);
 }
 
 function investigationSummary() {
@@ -2219,11 +2226,10 @@ window.matchMedia('(max-width: 700px)').addEventListener('change', event => {
   view.narrow = event.matches;
   if (acceptedModel) {
     if (inspectionState) {
-      if (event.matches && !view.focusedType) syncInspectionState(inspectionState.openFocused('cohortId', acceptedModel.definition.cohorts[0]?.id, null).state);
-      if (!event.matches) syncInspectionState(inspectionState.returnToWholeSchool().state);
-    } else {
-      if (event.matches && !view.focusedType) { view.focusedType = 'cohortId'; view.focusedId = acceptedModel.definition.cohorts[0]?.id || null; }
-      if (!event.matches) view.focusedType = null;
+      if (event.matches && view.periodId && acceptedModel.maps.periods.get(view.periodId)?.weekday !== view.day) {
+        syncInspectionState(inspectionState.selectFilter('periodId', null).state);
+      }
+      syncInspectionState(inspectionState.current());
     }
     load(true);
   }

@@ -9,7 +9,7 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
   let state = { range: 'WEEK', weekdayId: firstWeekday, selectedLessonId: null, reviewTargetSide: null,
     subjectId: null, teacherId: null, subjectOnly: false,
     searchQuery: '', cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
-    focusedType: null, focusedId: null, scrollContext: null, lensScrollContext: null,
+    lensScrollContext: null,
     lifecycle: null, mode: 'CURRENT', inspectorOpen: window.matchMedia('(min-width: 1280px)').matches,
     filtersOpen: false, utilitiesOpen: false,
     taskAreaOpen: { CURRENT: false, DRAFT: true, SOLVING: true, PROPOSAL: true } };
@@ -95,24 +95,6 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       periodId: null, subjectOnly: false }),
     clearNarrowing: () => leaveOrEnterLens({ ...state, cohortId: null, teacherFilterId: null, roomId: null, periodId: null,
       subjectOnly: false }),
-    openFocused: (focusedType, focusedId, scrollContext) => {
-      const validIds = focusedType === 'cohortId' ? cohortIds : focusedType === 'teacherId' ? teacherIds
-        : focusedType === 'roomId' ? roomIds : null;
-      if (!validIds || !validIds.includes(focusedId)) return { changed: false, state };
-      state = { ...state, focusedType, focusedId, scrollContext: scrollContext || null };
-      return { changed: true, state };
-    },
-    changeFocusedType: (focusedType, focusedId) => {
-      const validIds = focusedType === 'cohortId' ? cohortIds : focusedType === 'teacherId' ? teacherIds
-        : focusedType === 'roomId' ? roomIds : null;
-      if (!validIds || !validIds.includes(focusedId)) return { changed: false, state };
-      state = { ...state, focusedType, focusedId };
-      return { changed: true, state };
-    },
-    returnToWholeSchool: () => {
-      state = { ...state, focusedType: null, focusedId: null };
-      return { changed: true, state };
-    },
     selectRange: (range, selectedWeekday) => {
       if (!['WEEK', 'DAY'].includes(range)) return { changed: false, state };
       const weekdayId = range === 'DAY' && weekdays.includes(selectedWeekday) ? selectedWeekday : state.weekdayId;
@@ -123,6 +105,13 @@ export function createInspectionState({ schoolId, weekdays, subjectIds = [], tea
       if (!weekdays.includes(weekdayId)) return { changed: false, selectionCleared: false, state };
       const selectionCleared = Boolean(state.selectedLessonId && selectedLessonWeekday !== weekdayId);
       state = { ...state, range: 'DAY', weekdayId, selectedLessonId: selectionCleared ? null : state.selectedLessonId,
+        reviewTargetSide: selectionCleared ? null : state.reviewTargetSide };
+      return { changed: true, selectionCleared, state };
+    },
+    selectWeekday: (weekdayId, selectedLessonWeekday) => {
+      if (!weekdays.includes(weekdayId)) return { changed: false, selectionCleared: false, state };
+      const selectionCleared = Boolean(state.selectedLessonId && selectedLessonWeekday !== weekdayId);
+      state = { ...state, weekdayId, selectedLessonId: selectionCleared ? null : state.selectedLessonId,
         reviewTargetSide: selectionCleared ? null : state.reviewTargetSide };
       return { changed: true, selectionCleared, state };
     },

@@ -244,8 +244,12 @@ final class Workbench {
         click("#active-criteria [data-remove-lens]");
     }
 
-    void focusEntity(String entityId) {
-        select("#focus-entity", entityId);
+    void narrowKind(String kind) {
+        select("#narrow-kind", kind);
+    }
+
+    void narrowEntity(String entityId) {
+        select("#narrow-entity", entityId);
     }
 
     void collapseInspector() {

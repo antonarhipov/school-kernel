@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-3
-- Status: PENDING_WALKTHROUGH
-- Next eligible: none until UC-3 is APPROVED (then UC-4)
+- Use case: UC-4
+- Status: READY_FOR_CONVERGENCE
+- Next eligible: none while UC-4 awaits convergence and UC-3 awaits walkthrough
 
 ## Progress
 
@@ -13,7 +13,29 @@
 | UC-1 | APPROVED | none | cba775d (rev. 1; first submission e840460) | `convergence/UC-1.md` (APPROVE WITH NOTES: K-2, K-3; walkthrough confirmed 2026-10-01) |
 | UC-2 | APPROVED | UC-1 | fee1bb5 (rev. 1; first submission 013c12a) | `convergence/UC-2.md` (APPROVE WITH NOTES; walkthrough reported 2026-10-01) |
 | UC-3 | PENDING_WALKTHROUGH | UC-1 (extends UC-1 at 5a) | eb7680c | `convergence/UC-3.md` (PENDING WALKTHROUGH) |
-| UC-4 | NOT_STARTED | UC-1 (extends UC-1 at 1a) | - | - |
+| UC-4 | READY_FOR_CONVERGENCE | UC-1 (extends UC-1 at 1a) | HEAD at convergence | - |
+
+## UC-4 Evidence
+
+- Started: 2026-10-02 12:34 UTC from 218adfe2a8bd47b8806160ea6caeba0484eead94.
+- Pre-existing dirty files: none.
+- UC-3 remains `PENDING_WALKTHROUGH`; the user's explicit UC-4 implementation request authorizes this independent UC-1 extension to proceed. No UC-3 verdict or approval is inferred.
+- Implementation submission: HEAD at convergence; see `checkpoints/UC-4.md`.
+- Changed files: workspace static `app.js`, deleted `focused-renderer.js`, `inspection-state.js`, `messages.js`, `styles.css`; browser tests `AcceptedInspectionBrowserIT.java`, `MatrixLensBrowserIT.java`, `ProposalReviewBrowserIT.java`, `RepairCompletionBrowserIT.java`, `RepairDraftBrowserIT.java`, `RepairRunBrowserIT.java`, `Workbench.java`; this ledger and `checkpoints/UC-4.md`.
+- Commands and results:
+  - Focused `MatrixLensBrowserIT#readsOneEntityDayOnANarrowScreen+preservesAnExplicitClassWhenNarrowing`: 2 run, 0 failures, 0 errors, 0 skipped on the final test source.
+  - Targeted `ProposalReviewBrowserIT#comparesOneSidedAndSameSlotChanges`: 1 run, 0 failures, 0 errors, 0 skipped.
+  - Full `./mvnw -q -pl timetable-workspace -am verify`: 126 workspace integration tests, 2 failures, 9 errors, 0 skipped; all 11 failing method IDs are exactly the pre-UC-4 baseline. The final UC-4 saved-weekday and preexisting-lens assertions were added afterward and passed in the focused rerun; production source did not change.
+  - `MatrixLensBrowserIT` 20/20, `AcceptedInspectionBrowserIT` 11/11, `WorkspaceManualDraftIT` 11/11, and `ScaleTimingBrowserIT` 3/3 in the full run. `git diff --check` passes; tests changed no tracked runtime data.
+
+| Contract element | Evidence |
+|---|---|
+| UC-4 main 1-4 | `MatrixLensBrowserIT.java:30-56,67-99,104-124`; `app.js:461-463,920-960`; inspected class and teacher screenshots at 390 px |
+| UC-4 extension 3a | `MatrixLensBrowserIT.java:58-62,73,113-117`; `app.js:972-1005` |
+| UC-4 G1-G3 | `MatrixLensBrowserIT.java:43-47,63-65,75-86,98-99`; `inspection-state.js:111-116,125-136`; `day-renderer.js:2-10` |
+| UC-4 success and minimal postconditions | `MatrixLensBrowserIT.java:39-56,75-99,125-126` checks the readable single-row Day matrix, exact stored preference, empty mutation logs, and unchanged workspace document |
+| UC-4 extends UC-1 at 1a | `app.js:853-856,920-960`; 20/20 matrix-lens browser cases, including the approved UC-1 path |
+| RULE-1, 2, 3, 5, 6, 7, 8, 9 | Code, test, and deletion evidence in `checkpoints/UC-4.md` |
 
 ## UC-3 Evidence
 

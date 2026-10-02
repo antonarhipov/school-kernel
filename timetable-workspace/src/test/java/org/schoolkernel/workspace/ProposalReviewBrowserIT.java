@@ -24,7 +24,7 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
     private static final Duration VERIFIED_SOLVE = Duration.ofSeconds(70);
 
     @Test
-    @DisplayName("UC-4 extensions 1b/1c/2a/3a/3b/4a/6c: comparison shapes and narrow read-only agenda in real browser")
+    @DisplayName("UC-4 extensions 1b/1c/2a/3a/3b/4a/6c: comparison shapes and narrow read-only Day matrix in real browser")
     void comparesOneSidedAndSameSlotChanges() {
         storeProposal(fixtures.comparisonShapeDocument());
         String before = storedDocument();
@@ -54,10 +54,14 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         workbench.selectLesson("lesson-200");
         workbench.expect("document.querySelector('.comparison-details')?.textContent.includes('Accepted and unchanged') && document.querySelector('.comparison-details')?.textContent.includes('Declared lesson 200')");
         workbench.viewport(390, 844);
-        String agenda = workbench.awaitText("Read-only focused schedule");
-        assertTrue(agenda.contains("Repair proposal") && agenda.contains("Accepted origin") && agenda.contains("Proposed destination"));
-        workbench.expectNot("document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, .matrix-wrap') !== null",
-                "UC-4 6c: narrow proposal agenda must not expose mutation or full-desktop controls");
+        String day = workbench.awaitText("Read-only Day matrix");
+        assertTrue(day.contains("Repair proposal") && day.contains("Narrowed Day matrix"));
+        workbench.narrowEntity("cohort-0");
+        workbench.weekday("MONDAY");
+        workbench.expect("document.querySelector('.matrix tbody tr[data-row-id=cohort-0] [data-lesson-id=lesson-0][data-comparison-side=accepted]')?.textContent.includes('Accepted origin')",
+                "UC-4 6c: the narrow Day matrix shows the accepted origin in Monday's cell");
+        workbench.expect("document.querySelector('.matrix tbody tr[data-row-id=cohort-0] [data-lesson-id=lesson-0][data-comparison-side=proposed]')?.textContent.includes('Proposed destination') && !document.querySelector('#accept-repair, #revise-proposal, #discard-proposal')",
+                "UC-4 6c: Monday shows the proposed destination in its distinct period cell without decisions");
         assertEquals(before, storedDocument(), "comparison and narrow viewing cannot mutate durable workspace data");
     }
 
@@ -316,10 +320,15 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         }
         for (int[] viewport : new int[][] { { 700, 844 }, { 390, 844 } }) {
             workbench.viewport(viewport[0], viewport[1]);
-            workbench.expect("document.querySelector('.focused-schedule') !== null && document.querySelector('#workbench-task-area') === null");
-            workbench.focusEntity("cohort-16");
-            workbench.expect("document.body.innerText.includes('Repair proposal') && document.body.innerText.includes('Accepted baseline remains current') && document.body.innerText.includes('Read-only focused schedule') && document.querySelectorAll('.focused-schedule [data-lesson-id=lesson-960]').length === 2 && document.querySelector('.focused-schedule [data-lesson-id=lesson-960][data-comparison-side=accepted]')?.textContent.includes('Accepted origin') && document.querySelector('.focused-schedule [data-lesson-id=lesson-960][data-comparison-side=proposed]')?.textContent.includes('Proposed destination') && !document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, #workbench-task-area, .matrix-wrap') && document.documentElement.scrollWidth <= innerWidth",
-                    "UC-4 extension 1b/G7: verified Proposal at " + viewport[0] + "px is a read-only accepted/proposed agenda without page overflow or decisions");
+            workbench.awaitText("Read-only Day matrix");
+            workbench.expect("document.querySelector('.matrix tbody tr') !== null && document.querySelector('#workbench-task-area') === null");
+            workbench.narrowEntity("cohort-16");
+            workbench.weekday("MONDAY");
+            workbench.expect("document.body.innerText.includes('Repair proposal') && document.body.innerText.includes('Accepted baseline remains current') && document.querySelector('.matrix tbody tr[data-row-id=cohort-16] [data-lesson-id=lesson-960][data-comparison-side=accepted]')?.textContent.includes('Accepted origin') && !document.querySelector('#accept-repair, #revise-proposal, #discard-proposal, #workbench-task-area') && document.documentElement.scrollWidth <= innerWidth",
+                    "UC-4 extension 1b/G7: verified Proposal at " + viewport[0] + "px has a read-only Monday origin without page overflow or decisions");
+            workbench.weekday("THURSDAY");
+            workbench.expect("document.querySelector('.matrix tbody tr[data-row-id=cohort-16] [data-lesson-id=lesson-960][data-comparison-side=proposed]')?.textContent.includes('Proposed destination') && document.querySelector('.matrix-wrap').getClientRects().length > 0",
+                    "UC-4 extension 1b/G7: the same Day matrix shows Thursday's proposed destination");
             assertEquals(stored, storedWorkspaceDocument(), "responsive Proposal reading must not change the durable workspace");
         }
         workbench.viewport(1280, 800);

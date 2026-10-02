@@ -68,10 +68,11 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.expect("document.querySelector('.workspace-card').classList.contains('compact-density') && !document.querySelector('[data-density]')");
 
         workbench.viewport(390, 844);
-        String narrow = workbench.awaitText("Read-only focused schedule");
-        assertTrue(narrow.contains("Class schedule · Year 7A"));
+        String narrow = workbench.awaitText("Read-only Day matrix");
+        assertTrue(narrow.contains("Year 7A") && narrow.contains("Day · Monday"));
         assertFalse(narrow.contains("Accept as current"));
-        workbench.expectNot("document.querySelector('.matrix-wrap')");
+        workbench.expect("document.querySelector('.matrix tbody tr[data-row-kind=CLASS][data-row-id=cohort-7a]') && document.querySelector('.matrix-wrap').getClientRects().length > 0 && !document.querySelector('.focused-schedule')",
+                "matrix lenses UC-4: narrow Current reads its first class in the Day matrix");
         assertEquals(before, storedDocument(), "UC-3 G6 inspection must not mutate accepted workspace state");
     }
 
@@ -178,11 +179,11 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(before, storedDocument(), "failed export cannot change the accepted bundle or workspace version");
 
         workbench.viewport(390, 844);
-        String narrow = workbench.awaitText("Read-only focused schedule");
+        String narrow = workbench.awaitText("Read-only Day matrix");
         assertTrue(narrow.contains("Accepted baseline"));
         assertFalse(narrow.contains("Complete school population"));
-        workbench.expectNot("document.querySelector('.matrix-wrap, #start-repair-form, #apply-pin, #cancel-run, #accept-repair')",
-                "narrow view must not expose desktop canvas or mutation controls");
+        workbench.expect("document.querySelector('.matrix tbody tr[data-row-kind=CLASS]') && document.querySelector('.matrix-wrap').getClientRects().length > 0 && !document.querySelector('#start-repair-form, #apply-pin, #cancel-run, #accept-repair')",
+                "narrow view reads the Day matrix without mutation controls");
         assertEquals(before, storedDocument(), "UC-1 workbench presentation and failed export must preserve exact durable state");
     }
 
@@ -314,13 +315,13 @@ class AcceptedInspectionBrowserIT extends WorkbenchBrowserSupport {
         workbench.expect("!document.querySelector('#workbench-inspector').hidden",
                 "UC-1 G1: the 701 px inspector is visible popover");
         workbench.viewport(700, 844);
-        assertTrue(workbench.awaitText("Read-only focused schedule").contains("Accepted baseline"));
-        workbench.expectNot("document.querySelector('#open-repair-setup, #start-repair-form, #workbench-modes, .matrix-wrap')",
-                "UC-1 ext 1b: 700 px is read-only and does not claim the desktop canvas");
+        assertTrue(workbench.awaitText("Read-only Day matrix").contains("Accepted baseline"));
+        workbench.expect("document.querySelector('.matrix tbody tr[data-row-kind=CLASS]') && document.querySelector('.matrix-wrap').getClientRects().length > 0 && !document.querySelector('#open-repair-setup, #start-repair-form, #workbench-modes')",
+                "UC-1 ext 1b: 700 px is read-only with one Day matrix row");
         assertEquals(1, workbench.value("document.querySelectorAll('.narrow-banner').length").intValue(),
                 "UC-1 ext 1b: narrow Current has one clear read-only notice");
         workbench.viewport(390, 844);
-        assertTrue(workbench.awaitText("Read-only focused schedule").contains("Accepted baseline"));
+        assertTrue(workbench.awaitText("Read-only Day matrix").contains("Accepted baseline"));
         workbench.screenshot("uc1-current-390.png");
         assertEquals(before, storedDocument(), "UC-1 G4/minimal: every presentation action leaves the exact durable document unchanged");
     }

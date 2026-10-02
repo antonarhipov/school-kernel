@@ -161,9 +161,9 @@ class RepairDraftBrowserIT extends WorkbenchBrowserSupport {
                 "UC-2 G6: intermediate width keeps a wide task area and below-canvas inspector");
         for (int[] narrow : new int[][] { { 700, 844 }, { 390, 844 } }) {
             workbench.viewport(narrow[0], narrow[1]);
-            workbench.awaitText("Read-only focused schedule");
-            workbench.expectNot("document.querySelector('#start-repair-form, #stage-repair-form, #apply-pin, #preview-bulk, #solve-draft, #discard-draft, #workbench-task-area')",
-                    "UC-2 ext 1b: " + narrow[0] + " px Draft is truly read-only");
+            workbench.awaitText("Read-only Day matrix");
+            workbench.expect("document.querySelector('.matrix tbody tr') && document.querySelector('.matrix-wrap').getClientRects().length > 0 && !document.querySelector('#start-repair-form, #stage-repair-form, #apply-pin, #preview-bulk, #solve-draft, #discard-draft, #workbench-task-area')",
+                    "UC-2 ext 1b: " + narrow[0] + " px Draft has a read-only Day row");
         }
         assertEquals(beforeStale, storedDocument());
         workbench.viewport(1280, 800);
@@ -218,10 +218,11 @@ class RepairDraftBrowserIT extends WorkbenchBrowserSupport {
         workbench.mode("DRAFT");
 
         workbench.viewport(390, 844);
-        String narrow = workbench.awaitText("Read-only focused schedule");
+        String narrow = workbench.awaitText("Read-only Day matrix");
         assertFalse(narrow.contains("Apply selected pins"));
         assertFalse(narrow.contains("Discard repair draft"));
-        workbench.expectNot("document.querySelector('.matrix-wrap')");
+        workbench.expect("document.querySelector('.matrix tbody tr') && document.querySelector('.matrix-wrap').getClientRects().length > 0 && !document.querySelector('.focused-schedule')",
+                "matrix lenses UC-4: narrow Draft uses the Day matrix");
         workbench.viewport(1280, 800);
         workbench.awaitText("Bulk-protect accepted assignments");
 
@@ -391,8 +392,8 @@ class RepairDraftBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(DEMO_LESSONS, workbench.renderedLessonIds());
         String beforeNarrow = storedDocument();
         workbench.viewport(390, 844);
-        assertTrue(workbench.awaitText("Read-only focused schedule").contains("Repair draft · not current"));
-        workbench.expectNot("document.querySelector('#start-repair-form, #apply-pin, #preview-bulk, #discard-draft, #solve-draft, #workbench-modes')");
+        assertTrue(workbench.awaitText("Read-only Day matrix").contains("Repair draft · not current"));
+        workbench.expect("document.querySelector('.matrix tbody tr') && !document.querySelector('#start-repair-form, #apply-pin, #preview-bulk, #discard-draft, #solve-draft, #workbench-modes')");
         assertEquals(beforeNarrow, storedDocument());
         workbench.viewport(1280, 800);
         workbench.awaitText("Discard repair draft");

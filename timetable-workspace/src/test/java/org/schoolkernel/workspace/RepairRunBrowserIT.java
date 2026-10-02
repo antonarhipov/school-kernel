@@ -168,7 +168,7 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         workbench.awaitText("Day · Monday");
 
         workbench.viewport(390, 800);
-        workbench.expect("document.querySelector('.focused-schedule') !== null && document.querySelector('#workbench-modes') === null && document.querySelector('#cancel-run') === null");
+        workbench.expect("document.querySelector('.matrix tbody tr') !== null && document.querySelector('.matrix-wrap').getClientRects().length > 0 && document.querySelector('#workbench-modes') === null && document.querySelector('#cancel-run') === null");
         assertEquals(running, storedWorkspaceDocument(), "narrow inspection must not mutate the active run");
         workbench.viewport(1280, 800);
         workbench.expect("document.querySelector('#workbench-task-area #cancel-run') !== null");
@@ -391,13 +391,13 @@ class RepairRunBrowserIT extends WorkbenchBrowserSupport {
         workbench.expect("document.querySelector('#workbench-inspector').getBoundingClientRect().top >= document.querySelector('.canvas-region').getBoundingClientRect().bottom && document.querySelector('#workbench-task-area #cancel-run') && document.documentElement.scrollWidth <= innerWidth",
                 "UC-3 G2/RULE-5: the last editing width retains a wide stacked task area");
         workbench.viewport(700, 844);
-        workbench.expect("document.querySelector('.focused-schedule') !== null && document.querySelector('#workbench-modes') === null && document.querySelector('#cancel-run, #toggle-run-detail, #workbench-task-area') === null");
+        workbench.expect("document.querySelector('.matrix tbody tr') !== null && document.querySelector('.matrix-wrap').getClientRects().length > 0 && document.querySelector('#workbench-modes') === null && document.querySelector('#cancel-run, #toggle-run-detail, #workbench-task-area') === null");
         workbench.expect("document.body.innerText.includes('Repair generation · running') && document.body.innerText.includes('Accepted baseline remains current') && document.documentElement.scrollWidth <= innerWidth",
-                "UC-3 G6/RULE-12: the 700px agenda names the true lifecycle and is read-only");
+                "UC-3 G6/RULE-12: the 700px Day matrix names the true lifecycle and is read-only");
         assertEquals(running, storedWorkspaceDocument(), "UC-3 G6: responsive inspection cannot mutate the run");
         workbench.viewport(390, 844);
-        workbench.expect("document.querySelector('.focused-schedule') !== null && document.querySelector('#cancel-run, #toggle-run-detail, #workbench-task-area') === null && document.documentElement.scrollWidth <= innerWidth",
-                "UC-3 G6/G7: normative 390px agenda remains read-only without page overflow");
+        workbench.expect("document.querySelector('.matrix tbody tr') !== null && document.querySelector('.matrix-wrap').getClientRects().length > 0 && document.querySelector('#cancel-run, #toggle-run-detail, #workbench-task-area') === null && document.documentElement.scrollWidth <= innerWidth",
+                "UC-3 G6/G7: normative 390px Day matrix remains read-only without page overflow");
         workbench.screenshot("uc3-solving-390.png");
         workbench.viewport(1280, 800);
         workbench.expect("document.querySelector('#workbench-task-area #cancel-run') !== null");
