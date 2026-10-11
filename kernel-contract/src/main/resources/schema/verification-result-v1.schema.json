@@ -11,7 +11,8 @@
     "kernelVersion": { "type": "string", "minLength": 1 },
     "correlationId": { "type": "string", "minLength": 1, "maxLength": 128 },
     "elapsedTimeMs": { "type": "integer", "minimum": 0 },
-    "mode": { "enum": ["INITIAL_DEFINITION", "ACCEPTED_BASELINE"] },
+    "basedOnRevision": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "mode": { "enum": ["INITIAL_DEFINITION", "ACCEPTED_BASELINE", "SUCCESSOR_DEFINITION"] },
     "schoolId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
     "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9] },
     "definitionRevision": { "$ref": "#/$defs/revision" },
@@ -20,6 +21,10 @@
     "safeMessage": { "type": "string", "minLength": 1 }
   },
   "allOf": [
+    {
+      "if": { "required": ["mode"], "properties": { "mode": { "const": "SUCCESSOR_DEFINITION" } } },
+      "then": { "required": ["basedOnRevision"], "not": { "required": ["timetableRevision"] } }
+    },
     {
       "if": { "properties": { "status": { "const": "VERIFIED" } } },
       "then": {

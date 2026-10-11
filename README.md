@@ -30,6 +30,8 @@ The build creates `kernel-cli/target/school-kernel.jar` and
   --output /tmp/verification.json
 ```
 
+`verify --successor --definition PATH --output PATH` verifies a complete successor definition without solving; it requires `basedOnRevision` and returns `SUCCESSOR_DEFINITION` evidence. The workspace independently verifies the accepted source and checks that lineage before finishing authoring.
+
 The output file contains the only machine-readable result. Human diagnostics use stderr. Existing output is preserved
 unless `--force` is supplied; replacement is atomic. `--time-limit` and `--step-limit` are mutually exclusive. The
 default is a 30-second time limit and seed `0`.

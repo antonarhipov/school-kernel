@@ -31,6 +31,22 @@ class VerifyCliIT {
     @TempDir
     Path temporaryDirectory;
 
+    @Test void explicitlyVerifiesCompleteSuccessorWithoutSolving() throws Exception {
+        ObjectNode definition = (ObjectNode) JsonSupport.mapper().readTree(Path.of("..", "examples", "initial-school.json"));
+        definition.put("catalogVersion",8).put("basedOnRevision","sha256:"+"0".repeat(64));
+        Path input=temporaryDirectory.resolve("successor-complete.json"),output=temporaryDirectory.resolve("successor-proof.json");
+        Files.write(input,JsonSupport.mapper().writeValueAsBytes(definition));
+        ProcessResult process=run("verify","--successor","--definition",input.toString(),"--output",output.toString());
+        assertEquals(0,process.exitCode(),process.stderr());
+        JsonNode evidence=JsonSupport.mapper().readTree(output);
+        assertEquals("SUCCESSOR_DEFINITION",evidence.path("mode").asString());
+        assertEquals(definition.path("basedOnRevision"),evidence.path("basedOnRevision"));
+        assertEquals(new RevisionService().definitionRevision(definition),evidence.path("definitionRevision").asString());
+        assertTrue(verificationSchema().validate(evidence).isEmpty());assertFalse(evidence.has("timetable"));
+        definition.remove("basedOnRevision");Files.write(input,JsonSupport.mapper().writeValueAsBytes(definition));
+        assertEquals(2,run("verify","--successor","--definition",input.toString(),"--output",output.toString(),"--force").exitCode());
+    }
+
     @Test
     @DisplayName("timetable-workspace UC-1 main definition mode: verify publishes non-solving structured evidence")
     void verifiesInitialDefinitionWithoutCandidateDisclosure() throws Exception {

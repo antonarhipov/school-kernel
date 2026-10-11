@@ -82,6 +82,7 @@ public class KernelVerifier {
                     "--definition", definition.toString(),
                     "--output", output.toString(),
                     "--correlation-id", correlationId));
+            if (documents.mode() == ImportDocuments.ImportMode.SUCCESSOR_DEFINITION) arguments.add("--successor");
             if (documents.result() != null) {
                 Path result = directory.resolve("timetable-result.json");
                 writePrivate(result, CanonicalJson.bytes(documents.result()));
@@ -105,7 +106,7 @@ public class KernelVerifier {
             int exit = process.exitValue();
             JsonNode verification = readVerification(output);
             if (exit == 0 && "VERIFIED".equals(verification.path("status").stringValue())) {
-                Verification trusted = trusted(verification, documents);
+                Verification trusted = trusted(verification, documents, correlationId);
                 log(correlationId, "VERIFIED", started);
                 logged = true;
                 return trusted;
@@ -138,24 +139,30 @@ public class KernelVerifier {
         }
     }
 
-    private static Verification trusted(JsonNode output, ImportDocuments documents) {
+    private static Verification trusted(JsonNode output, ImportDocuments documents, String correlationId) {
         String mode = output.path("mode").stringValue();
         String expectedMode = documents.mode().name();
         String schoolId = output.path("schoolId").stringValue();
         String definitionRevision = output.path("definitionRevision").stringValue();
-        if (!expectedMode.equals(mode)
+        if (!correlationId.equals(output.path("correlationId").asString(""))
+                || !output.path("kernelVersion").isTextual() || output.path("kernelVersion").asString().isBlank()
+                || !output.path("elapsedTimeMs").isIntegralNumber() || output.path("elapsedTimeMs").longValue()<0
+                || !expectedMode.equals(mode)
                 || schoolId == null
                 || !schoolId.equals(documents.definition().path("schoolId").stringValue())
-                || definitionRevision == null
+                || definitionRevision == null || !definitionRevision.matches("sha256:[0-9a-f]{64}")
                 || output.path("catalogVersion").intValue()
                         != documents.definition().path("catalogVersion").intValue()
                 || output.path("schemaVersion").intValue() != 1) {
             throw unavailable("School Kernel returned mismatched verification evidence.");
         }
+        if (documents.mode() == ImportDocuments.ImportMode.SUCCESSOR_DEFINITION
+                && !output.path("basedOnRevision").equals(documents.definition().path("basedOnRevision")))
+            throw unavailable("School Kernel returned mismatched successor lineage evidence.");
         String timetableRevision = null;
         if (documents.mode() == ImportDocuments.ImportMode.ACCEPTED_BASELINE) {
             timetableRevision = output.path("timetableRevision").stringValue();
-            if (timetableRevision == null
+            if (timetableRevision == null || !timetableRevision.matches("sha256:[0-9a-f]{64}")
                     || !definitionRevision.equals(documents.result().path("inputRevision").stringValue())
                     || !timetableRevision.equals(documents.result().path("timetableRevision").stringValue())) {
                 throw unavailable("School Kernel returned mismatched baseline evidence.");
@@ -178,14 +185,23 @@ public class KernelVerifier {
     }
 
     private static String safeValidationMessage(JsonNode verification) {
-        JsonNode errors = verification.path("validationReport").path("errors");
-        if (errors.isArray() && !errors.isEmpty()) {
-            String message = errors.get(0).path("message").stringValue();
-            if (message != null && !message.isBlank()) {
-                return "Import verification failed: " + message;
-            }
+        JsonNode report = verification.path("validationReport"), errors = report.path("errors");
+        if (!errors.isArray() || errors.isEmpty() || !report.path("truncated").isBoolean()
+                || report.path("truncated").booleanValue() || !report.path("totalErrors").isIntegralNumber()
+                || report.path("totalErrors").intValue() != errors.size()) {
+            throw unavailable("Kernel verification did not return a complete diagnostic report.");
         }
-        return "Import verification failed. Check the definition and matching result.";
+        StringBuilder message = new StringBuilder("Definition verification failed:");
+        for (JsonNode error : errors) {
+            if (!error.path("message").isTextual() || error.path("message").asString().isBlank()
+                    || !error.path("location").isTextual() || !error.path("entityIds").isArray()) {
+                throw unavailable("Kernel verification returned unmappable diagnostics.");
+            }
+            message.append("\n").append(error.path("location").asString().isEmpty() ? "/" : error.path("location").asString())
+                    .append(": ").append(error.path("message").asString());
+            if (!error.path("entityIds").isEmpty()) message.append(" • ").append(error.path("entityIds"));
+        }
+        return message.toString();
     }
 
     private static void writePrivate(Path path, byte[] bytes) throws IOException {

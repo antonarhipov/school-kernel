@@ -47,6 +47,7 @@ public class WorkspaceController {
     private final DefinitionRemovalService definitionRemoval;
     private final DefinitionRestorationService definitionRestoration;
     private final DefinitionReviewService definitionReview;
+    private final DefinitionFinishService definitionFinish;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -69,6 +70,7 @@ public class WorkspaceController {
             DefinitionRemovalService definitionRemoval,
             DefinitionRestorationService definitionRestoration,
             DefinitionReviewService definitionReview,
+            DefinitionFinishService definitionFinish,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -89,7 +91,20 @@ public class WorkspaceController {
         this.definitionRemoval = definitionRemoval;
         this.definitionRestoration = definitionRestoration;
         this.definitionReview = definitionReview;
+        this.definitionFinish = definitionFinish;
         this.json = json;
+    }
+
+    @PostMapping("/api/definition-draft/finish/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewDefinitionFinish(@RequestHeader(value=HttpHeaders.IF_MATCH,required=false) String ifMatch) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionFinish.preview(ifMatch));
+    }
+
+    @PostMapping("/api/definition-draft/finish")
+    @ResponseBody
+    public ResponseEntity<JsonNode> finishDefinition(@RequestHeader(value=HttpHeaders.IF_MATCH,required=false) String ifMatch,@RequestBody JsonNode request) {
+        return response(definitionFinish.finish(ifMatch,request));
     }
 
     @PostMapping("/api/definition-draft/preview")

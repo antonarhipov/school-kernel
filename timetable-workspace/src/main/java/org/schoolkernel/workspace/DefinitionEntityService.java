@@ -336,6 +336,13 @@ public class DefinitionEntityService {
     void refreshAllEntityIssues(ObjectNode draft) {
         JsonNode definition=draft.path("definition");ArrayNode issues=json.createArrayNode();
         for(JsonNode issue:draft.path("issues"))if(!Set.of("Subject","Teacher","Cohort","Room","RoomAssignment","Lesson","Preference","Requirement").contains(issue.path("ownerType").asString("")))issues.add(issue);
+        for (String field : List.of("schoolId", "displayName")) {
+            for (int i=issues.size()-1;i>=0;i--) if ("School".equals(issues.get(i).path("ownerType").asString())
+                    && field.equals(issues.get(i).path("field").asString())) issues.remove(i);
+            if (!definition.path(field).isTextual() || definition.path(field).asString().isBlank()
+                    || field.equals("schoolId") && !definition.path(field).asString().matches("[A-Za-z0-9][A-Za-z0-9._-]{0,127}"))
+                issue(issues,"School",definition.path("schoolId").asString(""),field,"Enter a valid nonblank school " + field + ".");
+        }
         for(JsonNode row:definition.path("subjects"))validateSubject(definition,row,issues);
         for(JsonNode row:definition.path("teachers"))validateTeacher(definition,row,issues);
         for(JsonNode row:definition.path("cohorts"))validateCohort(definition,row,issues);

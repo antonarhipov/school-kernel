@@ -40,7 +40,7 @@ public final class VerifyService {
         String correlationId = request.correlationId() == null ? UUID.randomUUID().toString() : request.correlationId();
         try {
             DefinitionLoader.Mode mode = request.resultPath() == null
-                    ? DefinitionLoader.Mode.INITIAL
+                    ? request.successor() ? DefinitionLoader.Mode.REPLAN : DefinitionLoader.Mode.INITIAL
                     : DefinitionLoader.Mode.BASELINE;
             DefinitionLoader.Outcome loaded = definitions.load(request.definitionPath(), mode);
             if (loaded instanceof DefinitionLoader.LimitExceeded) {
@@ -55,9 +55,13 @@ public final class VerifyService {
             String definitionRevision = accepted.revision();
 
             if (request.resultPath() == null) {
-                return new CommandOutcome.Succeeded(results.verifiedInitial(
-                        correlationId, elapsed(started), accepted.dto().schoolId(),
-                        accepted.dto().catalogVersion(), definitionRevision));
+                ObjectNode evidence = results.verifiedInitial(correlationId, elapsed(started), accepted.dto().schoolId(),
+                        accepted.dto().catalogVersion(), definitionRevision);
+                if (request.successor()) {
+                    evidence.put("mode", "SUCCESSOR_DEFINITION");
+                    evidence.put("basedOnRevision", accepted.dto().basedOnRevision());
+                }
+                return new CommandOutcome.Succeeded(evidence);
             }
 
             JsonNode resultNode = parse(files.read(request.resultPath(), maximumInputBytes()), "result");

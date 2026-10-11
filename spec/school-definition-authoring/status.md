@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-16
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-17 after UC-16 walkthrough
 
 ## Progress
@@ -25,7 +25,7 @@
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
 | UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
 | UC-15 | APPROVED | UC-1 | `ac6faa0` / [checkpoint](checkpoints/UC-15.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md) |
-| UC-16 | IN_PROGRESS | UC-1, UC-15 | - | - |
+| UC-16 | PENDING_WALKTHROUGH | UC-1, UC-15 | [checkpoint](checkpoints/UC-16.md) | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
 | UC-18 | NOT_STARTED | UC-16 | - | - |
 | UC-19 | NOT_STARTED | UC-1 | - | - |
@@ -336,3 +336,11 @@ UC-15 attempt4 action/state scripts PASS but screenshot inspection found obsolet
 ### UC-15 automatic approval
 
 Complete final-build repeat PASS, exact v9 and 18 inspected images, accurate Current/unpublished-draft distinction. [Ledger](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md). All earlier attempts retained. Five review/seven restoration journeys PASS, technical behavior unchanged by final message fix. Proceeding to UC-16 with exact nine-lesson onboarding requirement.
+
+### 2026-10-12 — UC-16 implementation and technical revision
+
+Finish now binds confirmation to the whole saved document/version, recomputes Review blockers, verifies complete initial/successor definitions, and atomically creates initial or seeded repair work. Kernel successor-only verification needed an explicit non-solving mode; source verification remains separate and exact. Initial acceptance retains authoring context. First checks retained in `/tmp/uc16-verify.log`: five Review and eight existing initial-planning journeys passed; Finish exposed the successor-verifier gap and persisted school-identity recomputation gap, now fixed. The malformed test requirement context was also corrected without weakening product assertions. Packaged CLI verification plus ten semantic checks passed in `/tmp/uc16-kernel-verify.log`. Revised Finish/Review check is running; no approval yet.
+
+### 2026-10-12 — UC-16 technical PASS
+
+Revised checks PASS: 6 Finish + 5 Review browser journeys and 8 verifier/architecture checks; packaged kernel 9 CLI journeys + 10 semantic checks. Evidence paths above and [checkpoint](checkpoints/UC-16.md). Beginning exact normative nine-lesson real-browser onboarding against isolated `authoring_loop_uc16`; no approval until ledger PASS.

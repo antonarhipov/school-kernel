@@ -1,3 +1,4 @@
+import { renderFinish, finishBusy } from './definition-finish.js';
 import { renderReview, resetReview } from './definition-review.js';
 import { renderRestoration, restorationBusy, restorationDirty, saveRestoration, discardRestoration, resetRestoration } from './definition-restoration.js';
 import { renderRemoval, removalBusy, removalDirty, saveRemoval, discardRemoval, resetRemoval } from './definition-removal.js';
@@ -62,7 +63,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     }
   };
   const leave = next => {
-    if (saving || restorationBusy() || removalBusy() || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
+    if (saving || finishBusy() || restorationBusy() || removalBusy() || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
     const leavingRestoration = section === 'Source restoration' && restorationDirty();
     const leavingRemoval = section === 'Guided removal' && removalDirty();
     const leavingGrid = section === 'Grid' && gridDirty();
@@ -143,6 +144,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   } else if (section === 'Subjects') {
     renderSubjects(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Review') {
+    renderFinish(content,snapshot,narrow,actions,leave);
     const restore = el('button', 'Restore source values'); restore.type = 'button'; restore.addEventListener('click', () => leave(() => { section = 'Source restoration'; rerender(); })); content.append(restore);
     const remove = el('button', 'Guided removal'); remove.type = 'button'; remove.addEventListener('click', catalogActions.removal); content.append(remove);
     if (reviewNotice) { const notice=el('p',reviewNotice); notice.id='review-navigation-notice'; notice.setAttribute('role','status'); content.append(notice); }

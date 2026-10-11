@@ -8,4 +8,5 @@ public record VerifyRequest(
         Path outputPath,
         String correlationId,
         boolean force,
-        boolean debug) {}
+        boolean debug,
+        boolean successor) {}

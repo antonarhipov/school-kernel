@@ -149,6 +149,7 @@ public class InitialPlanningService {
         }
         ObjectNode acceptedDocument = json.createObjectNode();
         acceptedDocument.set("school", current.document().path("school").deepCopy());
+        if (current.document().has("authoringContext")) acceptedDocument.set("authoringContext", current.document().path("authoringContext").deepCopy());
         acceptedDocument.put("importMode", "INITIAL_ACCEPTANCE");
         acceptedDocument.put("definitionRevision", verified.definitionRevision());
         acceptedDocument.put("timetableRevision", verified.timetableRevision());

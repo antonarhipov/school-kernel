@@ -80,9 +80,9 @@ class KernelVerifierTest {
                 assertPrivate(definition, false);
                 Files.writeString(output, """
                         {"schemaVersion":1,"status":"VERIFIED","mode":"INITIAL_DEFINITION",
-                         "schoolId":"school","catalogVersion":1,
+                         "schoolId":"school","catalogVersion":1,"kernelVersion":"test","elapsedTimeMs":0,"correlationId":"%s",
                          "definitionRevision":"sha256:0000000000000000000000000000000000000000000000000000000000000000"}
-                        """);
+                        """.formatted(arguments.get(arguments.indexOf("--correlation-id") + 1)));
                 return new CompletedProcess(0, new byte[70 * 1024], new byte[70 * 1024]);
             }
         };
@@ -97,6 +97,42 @@ class KernelVerifierTest {
         assertDirectoryEmpty();
         assertTrue(output.getAll().contains("kernelCommand=verify exitClass=VERIFIED"));
         assertFalse(output.getAll().contains("school-definition.json"));
+    }
+
+    @Test void incompleteOrMalformedEvidenceNeverVerifies() throws Exception {
+        for (String report : List.of(
+                "{\"schemaVersion\":1,\"status\":\"VERIFIED\",\"mode\":\"INITIAL_DEFINITION\",\"schoolId\":\"school\",\"catalogVersion\":1,\"definitionRevision\":\"\"}",
+                "{\"status\":\"INVALID_INPUT\",\"validationReport\":{\"errors\":[{\"location\":\"/\",\"message\":\"one\",\"entityIds\":[]}],\"totalErrors\":2,\"truncated\":true}}")) {
+            KernelProcessLauncher launcher = new KernelProcessLauncher() {
+                @Override public Process start(List<String> args) throws java.io.IOException {
+                    Files.writeString(Path.of(args.get(args.indexOf("--output") + 1)), report);
+                    return new CompletedProcess(report.contains("INVALID_INPUT") ? 2 : 0, new byte[0], new byte[0]);
+                }
+            };
+            WorkspaceProblem failure = org.junit.jupiter.api.Assertions.assertThrows(WorkspaceProblem.class,
+                    () -> new KernelVerifier("kernel", launcher, temporaryRoot).verify(initialDocuments()));
+            assertEquals("KERNEL_UNAVAILABLE", failure.code()); assertDirectoryEmpty();
+        }
+    }
+
+    @Test void allReturnedKernelLocationsAndErrorsRemainVisible() throws Exception {
+        KernelProcessLauncher launcher = new KernelProcessLauncher() {
+            @Override public Process start(List<String> args) throws java.io.IOException {
+                Files.writeString(Path.of(args.get(args.indexOf("--output") + 1)), """
+                        {"status":"INVALID_INPUT","validationReport":{"errors":[
+                        {"location":"/teachers/0","message":"first issue","entityIds":["teacher-a"]},
+                        {"location":"/lessons/1","message":"second issue","entityIds":["lesson-b"]}],
+                        "totalErrors":2,"truncated":false}}
+                        """);
+                return new CompletedProcess(2, new byte[0], new byte[0]);
+            }
+        };
+        WorkspaceProblem failure = org.junit.jupiter.api.Assertions.assertThrows(WorkspaceProblem.class,
+                () -> new KernelVerifier("kernel", launcher, temporaryRoot).verify(initialDocuments()));
+        assertEquals("KERNEL_VERIFICATION_FAILED", failure.code());
+        for (String text : List.of("/teachers/0", "first issue", "teacher-a", "/lessons/1", "second issue", "lesson-b"))
+            assertTrue(failure.getMessage().contains(text));
+        assertDirectoryEmpty();
     }
 
     private ImportDocuments initialDocuments() throws Exception {

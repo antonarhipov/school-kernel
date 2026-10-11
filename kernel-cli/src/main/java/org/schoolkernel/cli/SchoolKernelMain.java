@@ -258,6 +258,9 @@ public final class SchoolKernelMain {
         @Option(names = "--result", paramLabel = "PATH")
         private Path result;
 
+        @Option(names = "--successor", description = "Verify a complete successor definition without solving (requires basedOnRevision).")
+        private boolean successor;
+
         @Option(names = "--output", required = true, paramLabel = "PATH")
         private Path output;
 
@@ -280,6 +283,7 @@ public final class SchoolKernelMain {
                 errorWriter.println("--correlation-id must be nonblank and at most 128 characters");
                 return 64;
             }
+            if (successor && result != null) { errorWriter.println("--successor cannot be combined with --result"); return 64; }
             FileBoundary files = new FileBoundary();
             Integer preflight = result == null
                     ? prepare(files, errorWriter, output, force, definition)
@@ -299,7 +303,7 @@ public final class SchoolKernelMain {
                     new BaselineVerifier(),
                     new VerificationResultFactory());
             return mapOutcome(
-                    handler.handle(new VerifyRequest(definition, result, output, correlationId, force, debug)),
+                    handler.handle(new VerifyRequest(definition, result, output, correlationId, force, debug, successor)),
                     files, output, force, debug, errorWriter);
         }
     }
