@@ -1,0 +1,6 @@
+### Result
+"- banner:\n  - paragraph: Local school timetable\n  - heading \"Operations workspace\" [level=1]\n  - paragraph: No accepted timetable\n- main:\n  - text: Initial draft\n  - heading \"Demo School\" [level=2]\n  - group: Utilities\n  - paragraph: The definition is verified and durably stored. Review the summary before requesting the first timetable.\n  - term: Lessons\n  - definition: \"3\"\n  - term: Teachers\n  - definition: \"2\"\n  - term: Classes\n  - definition: \"1\"\n  - term: Rooms\n  - definition: \"2\"\n  - term: Weekly periods\n  - definition: \"3\"\n  - paragraph:\n    - text: Definition revision\n    - code: sha256:8b4b4019f628f2579c44a0150704a6dc4401e9afd784237834142929c2680cb9\n  - button \"Create 1-minute proposal\"\n  - text: Replace initial definition\n  - button \"Replace initial definition\"\n  - button \"Validate and replace draft\"\n  - button \"Author definition\" [disabled]\n  - status"
+### Ran Playwright code
+```js
+await (async (page) => { await page.getByRole("button",{name:"Author definition",exact:true}).click(); return await page.locator("body").ariaSnapshot(); })(page);
+```

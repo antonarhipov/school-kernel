@@ -1,0 +1,140 @@
+- banner:
+  - paragraph: Local school timetable
+  - heading "Operations workspace" [level=1]
+  - paragraph: No accepted timetable
+- main:
+  - text: Saved school-definition draft
+  - heading "Demo School" [level=2]
+  - status: Saved — Your saved school-definition changes are preserved.
+  - paragraph: "Draft • Source: INITIAL_DRAFT • Catalog 9 • No Current timetable"
+  - paragraph: "Source identity: Demo School • sha256:8b4b4019f628f2579c44a0150704a6dc4401e9afd784237834142929c2680cb9"
+  - paragraph: "Saved revision: sha256:6b433eb14224ff847018d885c68a4fc5e773386f93657198b7a6142395d269e6"
+  - paragraph: One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.
+  - paragraph: 2 subjects • 2 teachers • 1 classes • 2 rooms • 3 periods • 3 occurrences
+  - paragraph: "Incomplete: 0 blocking issues; 0 advisories."
+  - navigation "Definition sections":
+    - button "School"
+    - button "Grid"
+    - button "Subjects"
+    - button "Teachers"
+    - button "Classes"
+    - button "Rooms"
+    - button "Room policies"
+    - button "Weekly requirements"
+    - button "Occurrence details"
+    - button "Review"
+  - heading "Occurrence details" [level=3]
+  - group "Select occurrences to customize or reassign":
+    - text: Select occurrences to customize or reassign
+    - 'checkbox "Select occurrence: Other tab math name (lesson-math-1)" [checked]'
+    - text: Other tab math name (lesson-math-1) • teacher teacher-blair • class cohort-7a • subject math
+    - 'checkbox "Select occurrence: Primary science review (lesson-science-1)"'
+    - text: Primary science review (lesson-science-1) • teacher teacher-alex • class cohort-7a • subject science
+    - 'checkbox "Select occurrence: Keep imported name (imported.math.2)"'
+    - text: Keep imported name (imported.math.2) • teacher teacher-blair • class cohort-7a • subject math
+  - heading "Other tab math name (lesson-math-1)" [level=5]
+  - paragraph: "Series: New.Series_9"
+  - paragraph: "Occurrence name: \"Other tab math name\""
+  - paragraph: "Occurrence subject: \"math\""
+  - paragraph: "Occurrence class: \"cohort-7a\""
+  - paragraph: "Occurrence teacher: \"teacher-blair\" • Explicit exception"
+  - paragraph: "Occurrence required capabilities: [\"lab\"] • Explicit exception"
+  - paragraph: "Occurrence preferred rooms: [\"room-102\"] • Explicit exception"
+  - paragraph: "Occurrence undesirable periods: [\"mon-3\"] • Explicit exception"
+  - paragraph: "Occurrence persistent period lock: (omitted) • Explicit exception"
+  - paragraph: "Occurrence persistent room lock: (omitted) • Explicit exception"
+  - paragraph: "Saved teacher teacher-blair qualifications: [\"math\"]. No qualification is granted through reassignment."
+  - paragraph: Omitted or explicitly empty preferred rooms use the eligible cohort home-room preference fallback. Period and room locks saved explicitly are persistent policy, including when equal to an expired prior repair pin. Source restoration (UC-14) does not establish prior attempt pins as policy.
+  - group "Occurrence name":
+    - text: Occurrence name
+    - paragraph: "Saved value: \"Other tab math name\""
+    - combobox "Occurrence name choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit value"
+    - textbox "Occurrence name value" [disabled]: Other tab math name
+  - group "Occurrence subject":
+    - text: Occurrence subject
+    - paragraph: "Saved value: \"math\""
+    - combobox "Occurrence subject choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit value"
+    - combobox "Occurrence subject value" [disabled]: math
+  - group "Occurrence class":
+    - text: Occurrence class
+    - paragraph: "Saved value: \"cohort-7a\""
+    - combobox "Occurrence class choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit value"
+    - combobox "Occurrence class value" [disabled]: cohort-7a
+  - group "Occurrence teacher":
+    - text: Occurrence teacher
+    - paragraph: "Saved value: \"teacher-blair\""
+    - paragraph: Alex (teacher-alex) qualifies for ["math","science"]. Curator-subject qualification applies only for the cohort’s own curator.
+    - paragraph: Blair (teacher-blair) qualifies for ["math"]. Curator-subject qualification applies only for the cohort’s own curator.
+    - combobox "Occurrence teacher choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit exception (even when equal)"
+      - option "Omitted value (explicit exception)"
+      - option "Follow shared setting; clear exception"
+    - combobox "Occurrence teacher value" [disabled]: teacher-blair
+  - group "Occurrence required capabilities":
+    - text: Occurrence required capabilities
+    - paragraph: "Saved value: [\"lab\"]"
+    - combobox "Occurrence required capabilities choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit exception (even when equal)"
+      - option "Omitted value (explicit exception)"
+      - option "Follow shared setting; clear exception"
+    - textbox "Occurrence required capabilities identifiers (comma-separated)" [disabled]: lab
+  - group "Occurrence preferred rooms":
+    - text: Occurrence preferred rooms
+    - paragraph: "Saved value: [\"room-102\"]"
+    - combobox "Occurrence preferred rooms choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit exception (even when equal)"
+      - option "Omitted value (explicit exception)"
+      - option "Follow shared setting; clear exception"
+    - textbox "Occurrence preferred rooms identifiers (comma-separated)" [disabled]: room-102
+  - group "Occurrence undesirable periods":
+    - text: Occurrence undesirable periods
+    - paragraph: "Saved value: [\"mon-3\"]"
+    - combobox "Occurrence undesirable periods choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit exception (even when equal)"
+      - option "Omitted value (explicit exception)"
+      - option "Follow shared setting; clear exception"
+    - textbox "Occurrence undesirable periods identifiers (comma-separated)" [disabled]: mon-3
+  - group "Occurrence persistent period lock":
+    - text: Occurrence persistent period lock
+    - paragraph: "Saved value: (omitted)"
+    - combobox "Occurrence persistent period lock choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit exception (even when equal)"
+      - option "Omitted value (explicit exception)"
+      - option "Follow shared setting; clear exception"
+    - combobox "Occurrence persistent period lock value" [disabled]
+  - group "Occurrence persistent room lock":
+    - text: Occurrence persistent room lock
+    - paragraph: "Saved value: (omitted)"
+    - combobox "Occurrence persistent room lock choice":
+      - option "Keep each saved value" [selected]
+      - option "Explicit exception (even when equal)"
+      - option "Omitted value (explicit exception)"
+      - option "Follow shared setting; clear exception"
+    - combobox "Occurrence persistent room lock value" [disabled]
+  - group "Series membership":
+    - text: Series membership
+    - combobox "Series membership choice":
+      - option "Keep compatible membership; detach if class/subject changes" [selected]
+      - option "Remove series membership; keep lessons"
+      - option "Move to an existing compatible series"
+      - option "Group in a new stable series"
+    - combobox "Target series identifier" [disabled]
+    - paragraph: Grouping requires one common class and subject. Existing compatible series are suggested; a new series needs a fresh stable identity. The configured same-day spreading preference is ordinary, with no adjacency or hard one-per-day rule.
+  - group "Explicit teacher-scoped room-rule transfers":
+    - text: Explicit teacher-scoped room-rule transfers
+    - 'checkbox "Transfer teacher-scoped room rule: math-alex"'
+    - text: "math-alex: subject math, teacher teacher-blair, target [\"room-101\"]. Only selected rules transfer to the explicit replacement teacher."
+  - button "Preview selected occurrence changes"
+  - button "Discard working occurrence choices"
+  - paragraph: Delete occurrences through guided removal (UC-13); restore source values through UC-14. Neither operation is implicit in a selected edit.

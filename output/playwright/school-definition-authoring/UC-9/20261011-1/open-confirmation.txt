@@ -1,0 +1,53 @@
+### Page
+- Page URL: http://localhost:18084/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+```yaml
+- generic [ref=f15e1]:
+  - banner [ref=f15e2]:
+    - paragraph [ref=f15e3]: Local school timetable
+    - heading "Operations workspace" [level=1] [ref=f15e4]
+    - paragraph [ref=f15e5]: No accepted timetable
+  - main [ref=f15e6]:
+    - generic [ref=f15e7]:
+      - generic [ref=f15e33]:
+        - generic [ref=f15e34]:
+          - generic [ref=f15e35]: Initial draft
+          - heading "Demo School" [level=2] [ref=f15e36]
+        - group [ref=f15e38]:
+          - generic "Utilities" [ref=f15e39] [cursor=pointer]
+      - paragraph [ref=f15e40]: The definition is verified and durably stored. Review the summary before requesting the first timetable.
+      - generic [ref=f15e41]:
+        - generic [ref=f15e42]:
+          - term [ref=f15e43]: Lessons
+          - definition [ref=f15e44]: "3"
+        - generic [ref=f15e45]:
+          - term [ref=f15e46]: Teachers
+          - definition [ref=f15e47]: "2"
+        - generic [ref=f15e48]:
+          - term [ref=f15e49]: Classes
+          - definition [ref=f15e50]: "1"
+        - generic [ref=f15e51]:
+          - term [ref=f15e52]: Rooms
+          - definition [ref=f15e53]: "2"
+        - generic [ref=f15e54]:
+          - term [ref=f15e55]: Weekly periods
+          - definition [ref=f15e56]: "3"
+      - paragraph [ref=f15e57]:
+        - text: Definition revision
+        - code [ref=f15e58]: sha256:8b4b4019f628f2579c44a0150704a6dc4401e9afd784237834142929c2680cb9
+      - button "Create 1-minute proposal" [ref=f15e60] [cursor=pointer]
+      - generic [ref=f15e61]:
+        - generic [ref=f15e62]:
+          - text: Replace initial definition
+          - button "Replace initial definition" [ref=f15e63]
+        - button "Validate and replace draft" [ref=f15e64] [cursor=pointer]
+      - generic [ref=f15e65]:
+        - button "Author definition" [disabled] [ref=f15e66]
+        - status
+  - dialog [ref=f15e67]:
+    - heading "Open school-definition authoring" [level=3] [ref=f15e68]
+    - paragraph [ref=f15e69]: One durable definition draft will lock planning, repair, manual editing, import, clear, and replacement. Current stays unchanged.
+    - button "Cancel" [active] [ref=f15e70] [cursor=pointer]
+    - button "Open draft" [ref=f15e71] [cursor=pointer]
+```

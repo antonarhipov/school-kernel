@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-9
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-10 after UC-9 walkthrough
+- Use case: UC-10
+- Status: IN_PROGRESS
+- Next eligible: UC-11 after UC-10 walkthrough
 
 ## Progress
 
@@ -18,8 +18,8 @@
 | UC-6 | APPROVED | UC-1 | `6ca5e84` / [checkpoint](checkpoints/UC-6.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md) |
 | UC-7 | APPROVED | UC-1 | `6622f19` / [checkpoint](checkpoints/UC-7.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md) |
 | UC-8 | APPROVED | UC-1 | `42f3b53` / [checkpoint](checkpoints/UC-8.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md) |
-| UC-9 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-9.md) | pending |
-| UC-10 | NOT_STARTED | UC-1 | - | - |
+| UC-9 | APPROVED | UC-1 | `8109b2b` / [checkpoint](checkpoints/UC-9.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md) |
+| UC-10 | IN_PROGRESS | UC-1 | - | - |
 | UC-11 | NOT_STARTED | UC-1 | - | - |
 | UC-12 | NOT_STARTED | UC-1 | - | - |
 | UC-13 | NOT_STARTED | UC-1 | - | - |
@@ -243,3 +243,9 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Initial `/tmp/uc9-verify.log` test lambda compilation failure fixed. `/tmp/uc9-revision-verify.log` passes 26 unit/architecture and five affected teacher journeys; new fixtures exposed catalog/accepted-manifest mistakes and check() incorrectly asserting a pending unsaved selection had already committed. Corrected fixtures and use click followed by Stay/non-mutation assertions. Failures preserved; no production expectation weakened. Complete new occurrence/requirement journeys rerunning in `/tmp/uc9-fixture-verify.log`.
 
 - UC-9 final BUILD SUCCESS `/tmp/uc9-final-verify.log`: all 21 occurrence/requirement/authoring/teacher journeys and 26 unit/architecture checks pass. Single-origin manifest bug fixed; exact persistent/shared lock intent passes. Final UI adds replacement qualifications explanation and compatible target suggestions; syntax/diff checks pass. PENDING_WALKTHROUGH with verified fresh disposable fixture.
+
+- UC-9 standalone attempt 1 retained at [ledger](../../output/playwright/school-definition-authoring/UC-9/20261011-1/README.md), FAIL F-1: overly broad harness assertion omitted explicit completion of the retained zero-count Mixed source requirement. Selected occurrence operation is correct; no production defect inferred. Repeat entire journey with explicit remaining-context correction on fresh isolated data. Initial server connection override caught before mutations; relaunch Compose-disabled and verify isolation in log.
+
+## UC-9 approval
+
+- Automatically APPROVED on 8109b2b after [complete repeat Playwright PASS](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md). Exact isolated v18 document/intent/source, fourteen inspected screenshots and complete main/negative/responsive/stale/transport/reload journeys retained. F-1 is closed by explicit retained-context completion, no weakened guarantee. All 21 technical journeys plus 26 unit/architecture pass. No unresolved finding; no operator mutation. UC-5/8 occurrence destination routes now verified; UC-13/14 remain outstanding. Proceeding UC-10.
