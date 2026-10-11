@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-5
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-6 after UC-5 walkthrough
+- Status: APPROVED
+- Next eligible: UC-6
 
 ## Progress
 
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | APPROVED | UC-1 | `a30de35` / [checkpoint](checkpoints/UC-3.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md) |
 | UC-4 | APPROVED | UC-1 | `dd395c4` / [checkpoint](checkpoints/UC-4.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md) |
-| UC-5 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-5.md) | - |
+| UC-5 | APPROVED | UC-1 | `1084c81` / [checkpoint](checkpoints/UC-5.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md) |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
 | UC-7 | NOT_STARTED | UC-1 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
@@ -189,3 +189,9 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - UC-5 initial technical run retained at `/tmp/uc5-verify.log` (test compilation error corrected). `/tmp/uc5-final-verify.log` found one teacher assertion observing old diagnostics because pristine submits showed Saved during the write. Production fix gives both entity forms an explicit Saving status; stronger helpers assert each successful save advances the durable version exactly once. All 20 approved subject/grid/school journeys passed in that run. Repeating all affected teacher/subject journeys on the corrected code before walkthrough.
 
 - UC-5 revision BUILD SUCCESS: 26 unit/architecture and all 11 teacher/subject HTTP/browser journeys pass in `/tmp/uc5-revision-verify.log`; the prior run supplies all 14 unchanged grid/school regression passes. Exact version/source/Current assertions pass. Syntax/diff hygiene pass. Ready for recorded standalone Playwright walkthrough, not yet approved.
+
+## UC-5 approval
+
+- Automatically APPROVED after recorded real Playwright PASS on 1084c81: [ledger/screenshots](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md). Exact disposable v40 document retained; all five fields, refusal/invalid/correction, omission/empty, responsive, two-tab conflicts, injected transport retry, selection/save/reload journeys pass. Screenshots inspected, no open implementation finding.
+- Technical evidence: 26 unit/architecture and 25 teacher/subject/grid/school journeys pass across the final/revision logs; initial failures preserved and fixed. Source/Current remain exact in fresh initial/accepted variants. No operator data changed. UC-9/13/14 handoffs remain outstanding.
+- Main browser/server/database retained for immediately proceeding to UC-6 within authorization.

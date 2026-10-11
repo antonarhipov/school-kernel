@@ -13,7 +13,7 @@
 ./mvnw -pl timetable-workspace -am -Pworkspace-browser '-Dit.test=DefinitionTeachersBrowserIT,DefinitionSubjectsBrowserIT,SchoolIdentityBrowserIT,DefinitionGridBrowserIT' -Dfailsafe.failIfNoSpecifiedTests=false verify
 ```
 
-- Standalone real Playwright ledger pending under `output/playwright/school-definition-authoring/UC-5/`. Operator data untouched by tests; runtime proof uses disposable PostgreSQL/Chrome.
+- Standalone real Playwright [PASS ledger](../../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md), submission 1084c81; exact v40 evidence and inspected screenshots. Automatically APPROVED. Operator data untouched by tests; runtime proof uses disposable PostgreSQL/Chrome.
 
 ```sh
 ./mvnw -pl timetable-workspace -am -Pworkspace-browser '-Dit.test=DefinitionTeachersBrowserIT,DefinitionSubjectsBrowserIT' -Dfailsafe.failIfNoSpecifiedTests=false verify
