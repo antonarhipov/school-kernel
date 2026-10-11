@@ -94,7 +94,7 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
     if (type === 'boolean' && Object.hasOwn(working.item, field) && typeof working.item[field] !== 'boolean') { const option = el('option', `Saved invalid value: ${JSON.stringify(working.item[field])}`); option.value = String(working.item[field]); control.append(option); control.value = option.value; }
     control.disabled = busy || !available; wrapper.append(control);
     const input = type === 'number' ? el('input', undefined, `subject-${field}`) : null;
-    if (input) { input.type = 'text'; input.inputMode = 'numeric'; input.value = working.item[field] ?? ''; input.disabled = busy || !available || control.value === 'default';
+    if (input) { input.setAttribute('aria-label', `${label} value`); input.type = 'text'; input.inputMode = 'numeric'; input.value = working.item[field] ?? ''; input.disabled = busy || !available || control.value === 'default';
       input.addEventListener('input', () => { const raw = input.value; working.item[field] = /^-?\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? Number(raw) : raw; changed(); }); wrapper.append(input); }
     control.addEventListener('change', () => {
       if (control.value === 'default') delete working.item[field]; else working.item[field] = type === 'boolean' ? control.value === 'true' : input.value === '' ? '' : /^-?\d+$/.test(input.value) && Number.isSafeInteger(Number(input.value)) ? Number(input.value) : input.value;

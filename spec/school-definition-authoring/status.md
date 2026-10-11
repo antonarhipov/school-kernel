@@ -167,3 +167,9 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 
 - UC-4 construction: six new subject HTTP/browser journeys and 26 unit/architecture checks passed after fixing Add-subject selection; BUILD SUCCESS `/tmp/uc4-revision-verify.log`. All 24 existing authoring/grid/school/compatibility journeys passed in the initial run, whose three UC-4 failures remain recorded (`/tmp/uc4-verify.log`). One was an inadequate catalog-1 fixture for a catalog-8 curator control; corrected the labelled draft variant to catalog 9 while preserving exact source. No test assertion was weakened. No operator data changed. Syntax/diff hygiene passed.
 - UC-4 is PENDING_WALKTHROUGH. Outstanding destination handoffs: UC-12 catalog, UC-13 removal, UC-14 restoration. See checkpoint for boundaries and exact commands. No missing security test class is included in the pass count.
+
+## UC-4 walkthrough finding F-1
+
+- Attempt 1 on aba0f60: FAIL. Numeric value inputs have no accessible name in Chrome's accessible snapshot. Ledger/screenshots: [attempt 1](../../output/playwright/school-definition-authoring/UC-4/20261011-1/README.md). No durable mutation occurred. Added explicit labels and browser regression; a complete new attempt is required before approval.
+
+- F-1 technical revision passes: 26 unit/architecture checks and the strengthened main save/reload/restart browser journey, BUILD SUCCESS `/tmp/uc4-label-verify.log`. Repeat the complete standalone walkthrough on the corrected build.

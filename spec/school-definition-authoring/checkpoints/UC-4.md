@@ -16,3 +16,7 @@
 `WorkspaceLocalSecurityIT` does not exist in this checkout and is not counted. Subject tests directly prove CSRF, state and version protection; existing local Host/Origin protection is unchanged.
 - Runtime proof uses isolated Testcontainers PostgreSQL/Chrome. Operator data is untouched.
 - Standalone Playwright ledger: pending technical checks, under `output/playwright/school-definition-authoring/UC-4/`.
+
+## Walkthrough F-1 revision
+
+- Attempt 1 failed accessible numeric-control inspection; preserved ledger/screenshots in UC-4/20261011-1. Explicit accessible names added to both numeric values with a real-Chrome regression assertion. No persistence logic changed. Focused check passed: 26 unit/architecture checks and the strengthened main subject save/reload/restart journey; BUILD SUCCESS `/tmp/uc4-label-verify.log`.

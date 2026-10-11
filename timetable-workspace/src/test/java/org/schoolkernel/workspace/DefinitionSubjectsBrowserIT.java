@@ -15,6 +15,7 @@ class DefinitionSubjectsBrowserIT extends WorkbenchBrowserSupport {
         create(); String before=storedDocument(); name("Õäš <b>Math</b>");
         assertEquals("oas-b-math-b",workbench.page().locator("#subject-id").inputValue());
         assertEquals(before,storedDocument());
+        assertEquals(1, workbench.page().getByRole(com.microsoft.playwright.options.AriaRole.TEXTBOX, new com.microsoft.playwright.Page.GetByRoleOptions().setName("Maximum reserved lessons per class per week value").setExact(true)).count());
         workbench.page().locator("#subject-id").fill("Math.ID_9");
         mode("reservedPeriodsAllowed","true"); number("maxWeeklyReservedLessonsPerCohort","2147483647");
         mode("dayEdgeOnly","false"); number("maxDailyLessonsPerCohort","2"); mode("curatorLesson","true"); save();
