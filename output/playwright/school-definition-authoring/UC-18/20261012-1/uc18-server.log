@@ -1,0 +1,33 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T01:21:15.725+03:00  INFO 21100 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 21100 (/private/tmp/uc18-workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel)
+2026-10-12T01:21:15.731+03:00  INFO 21100 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T01:21:18.714+03:00  INFO 21100 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 18108 (http)
+2026-10-12T01:21:18.735+03:00  INFO 21100 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T01:21:18.735+03:00  INFO 21100 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T01:21:18.849+03:00  INFO 21100 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2898 ms
+2026-10-12T01:21:19.261+03:00  INFO 21100 --- [timetable-workspace] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-12T01:21:19.556+03:00  INFO 21100 --- [timetable-workspace] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3a38f122
+2026-10-12T01:21:19.560+03:00  INFO 21100 --- [timetable-workspace] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-12T01:21:19.789+03:00  INFO 21100 --- [timetable-workspace] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://127.0.0.1:24483/authoring_loop_uc17_inspection (PostgreSQL 18.6)
+2026-10-12T01:21:20.056+03:00  INFO 21100 --- [timetable-workspace] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.059s)
+2026-10-12T01:21:20.076+03:00  INFO 21100 --- [timetable-workspace] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T01:21:20.081+03:00  INFO 21100 --- [timetable-workspace] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T01:21:21.830+03:00  INFO 21100 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 18108 (http) with context path '/'
+2026-10-12T01:21:21.867+03:00  INFO 21100 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 7.212 seconds (process running for 8.376)
+2026-10-12T01:21:28.440+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T01:21:28.441+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T01:21:28.443+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-12T01:22:53.584+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-5] o.schoolkernel.workspace.KernelVerifier  : correlationId=a4367b36-5005-4f88-8ee4-560af98dd0fd kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2040
+2026-10-12T01:22:55.381+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-5] o.schoolkernel.workspace.KernelVerifier  : correlationId=b3e8e997-ffe5-46e9-a042-ecfa1a2b4134 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1785
+2026-10-12T01:22:57.864+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-3] o.schoolkernel.workspace.KernelVerifier  : correlationId=af8a802a-d566-4509-b35f-c62252254868 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2046
+2026-10-12T01:22:59.652+03:00  INFO 21100 --- [timetable-workspace] [.1-18108-exec-3] o.schoolkernel.workspace.KernelVerifier  : correlationId=e997d500-6918-4f9a-bbc7-1aecf67d4165 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1772
+2026-10-12T01:23:00.510+03:00  INFO 21100 --- [timetable-workspace] [pair-planning-0] o.schoolkernel.workspace.KernelPlanner   : correlationId=c2cba1fd-0c55-48f4-baba-376947a77edd runId=3799d93d-9839-437c-9fd3-641e7812421f kernelCommand=replan exitClass=CANCELLED elapsedTimeMs=693 configuredLimit=PT1M terminationReason=NONE feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0

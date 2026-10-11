@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-18
+- Use case: UC-19
 - Status: IN_PROGRESS
-- Next eligible: UC-19 after UC-18 walkthrough
+- Next eligible: UC-20 after UC-19 walkthrough
 
 ## Progress
 
@@ -27,8 +27,8 @@
 | UC-15 | APPROVED | UC-1 | `ac6faa0` / [checkpoint](checkpoints/UC-15.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md) |
 | UC-16 | APPROVED | UC-1, UC-15 | `56f8cdd` / [checkpoint](checkpoints/UC-16.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md) |
 | UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
-| UC-18 | IN_PROGRESS | UC-16 | UC-17 enabling implementation | - |
-| UC-19 | NOT_STARTED | UC-1 | - | - |
+| UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
+| UC-19 | IN_PROGRESS | UC-1 | - | - |
 | UC-20 | NOT_STARTED | none | - | - |
 
 ## Technical decision pass
@@ -366,3 +366,7 @@ Base `e86b5d1`, four carried UC-17 source edits only. Complete authored seed com
 ### 2026-10-12 — UC-17 automatic approval
 
 Production `88756ab`, [full PASS ledger](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md). Mandatory exact MVK authoring/restoration/re-Finish/packaged repair/independent verification/review/explicit acceptance complete.519 lessons,1 cancellation,0 period moves and11 timing impacts. Actual saved-proposal restart and acceptance-only storage failure preserved entire v10 snapshot; explicit retry atomically accepted exact definition/result/context/metadata v11; final packaged verification PASS. Extra staged-availability/pin variant on copied real proposal passed and survives reload; source/seed exact. Five seeded browser tests now PASS r5 after correcting API-start polling harness. Main images/contact sheet and readable timing supplemental inspected. UC-17 APPROVED; continue UC-18 separately using retained v13 seeded variant at18108. Operator data untouched.
+
+### 2026-10-12 — UC-18 automatic approval
+
+`99a8fac`, [PASS ledger](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md). Real saved MVK seed with extra teacher unavailability and both placement pin dimensions: cancel/narrow/stale two-tab refusal and actual return-storage refusal preserved whole v14; retry restored exact retained authoring/context/issues/omissions/source v15. Active solve refused return; actual cancel and explicit restoration exact v19. Copied real proposal showed proposal-only-discard-first guidance and refused direct return without mutation. Eight images/contact sheet inspected, compile/diff and immediately preceding unchanged backend technical checks PASS. UC-18 APPROVED; proceed UC-19.
