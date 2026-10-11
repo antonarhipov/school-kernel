@@ -1,0 +1,18 @@
+### Result
+{"step":"explicit save","result":"PASS","saved":{"state":"DEFINITION_DRAFT","version":2,"acceptedTimetable":false,"workspace":{"definitionDraft":{"issues":[{"field":"displayName","message":"Enter the school name.","ownerId":"","severity":"BLOCKING","ownerType":"School","relatedIds":[]},{"field":"schoolId","message":"Enter the school identifier.","ownerId":"","severity":"BLOCKING","ownerType":"School","relatedIds":[]}],"definition":{"rooms":[],"cohorts":[],"lessons":[],"periods":[{"id":"monday-1","order":1,"endTime":"09:45","weekday":"MONDAY","startTime":"09:00","displayName":"Monday 1"},{"id":"monday-2","order":2,"endTime":"10:45","weekday":"MONDAY","startTime":"10:00","displayName":"Monday 2"},{"id":"tuesday-1","order":1,"endTime":"09:45","weekday":"TUESDAY","startTime":"09:00","displayName":"Tuesday 1"},{"id":"tuesday-2","order":2,"endTime":"10:45","weekday":"TUESDAY","startTime":"10:00","displayName":"Tuesday 2"},{"id":"wednesday-1","order":1,"endTime":"09:45","weekday":"WEDNESDAY","startTime":"09:00","displayName":"Wednesday 1"},{"id":"wednesday-2","order":2,"endTime":"10:45","weekday":"WEDNESDAY","startTime":"10:00","displayName":"Wednesday 2"},{"id":"thursday-1","order":1,"endTime":"09:45","weekday":"THURSDAY","startTime":"09:00","displayName":"Thursday 1"},{"id":"thursday-2","order":2,"endTime":"10:45","weekday":"THURSDAY","startTime":"10:00","displayName":"Thursday 2"},{"id":"friday-1","order":1,"endTime":"09:45","weekday":"FRIDAY","startTime":"09:00","displayName":"Friday 1"},{"id":"friday-2","order":2,"endTime":"10:45","weekday":"FRIDAY","startTime":"10:00","displayName":"Friday 2"}],"subjects":[],"teachers":[],"schemaVersion":1,"catalogVersion":9},"expiredPins":[],"sourceState":"EMPTY","entrySection":"School","draftRevision":"sha256:1b45430da745a2d409fdbe074e81745469ee7e76c86fb88a57693b3870528fac","sourceVersion":0,"editingContext":{},"openedRevision":"sha256:19c5626138228552cc25445a741c80d4f4329f83fba47c8eb3fd18cad7584bec","sourceDocument":{},"gridTimingImpacts":[],"removedIdentities":[],"openingAdjustments":[]}}}}
+### Ran Playwright code
+```js
+await (async (page) => {
+await page.getByRole('button',{name:'Save reviewed grid',exact:true}).click();
+await page.locator('#grid-preview').waitFor({state:'detached'});
+const saved = await page.evaluate(async () => (await fetch('/api/workspace')).json());
+const expected = [];
+for(const day of ['monday','tuesday','wednesday','thursday','friday']) for(const slot of [1,2]) expected.push({id:day+'-'+slot,displayName:day[0].toUpperCase()+day.slice(1)+' '+slot,weekday:day.toUpperCase(),order:slot,startTime:slot===1?'09:00':'10:00',endTime:slot===1?'09:45':'10:45'});
+const stable = value => JSON.stringify(value,Object.keys(value).sort());
+const actual = saved.workspace.definitionDraft.definition.periods;
+if(actual.length!==expected.length || actual.some((p,i)=>stable(p)!==stable(expected[i]))) throw new Error('Saved grid mismatch');
+if(saved.state!=='DEFINITION_DRAFT' || saved.version!==2 || saved.acceptedTimetable || JSON.stringify(saved.workspace.definitionDraft.sourceDocument)!=='{}') throw new Error('Saved lifecycle/source mismatch');
+await page.screenshot({path:'output/playwright/school-definition-authoring/UC-3/20261011-2/saved-1600.png',fullPage:true});
+return {step:'explicit save',result:'PASS',saved};
+})(page);
+```

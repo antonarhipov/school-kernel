@@ -85,3 +85,7 @@ The user explicitly replaced the procedural gate with a recorded automatic Playw
 - Fixed in definition-grid.js: working base/version retained; refresh merges only locally edited fields into the latest grid, and requires an explicit choice for same-field conflicts. Unselected rows and optional presence come from the latest saved grid.
 - Added DefinitionGridBrowserIT.uc3F1StaleRefreshPreservesUntouchedNewerRowsAndRequiresConflictChoice. All 25 unchanged integration/browser journeys and 26 unit/architecture checks passed on the corrected code. A new test's premature assertion was synchronized with the actual asynchronous refresh; corrected focused regression passed 1/1 with 26 unit/architecture checks, BUILD SUCCESS. /tmp/uc3-f1-verify.log and /tmp/uc3-f1-focused.log. Syntax/diff checks passed.
 - Revised submission: HEAD at walkthrough. Full UC-3 browser journey will be repeated against the fresh disposable database authoring_loop_r2; no approval yet.
+
+## Automatic approval
+
+- Revised submission a30de35 passed the complete [attempt 2 walkthrough](../../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md). F-1 resolved; technical checks support all unchanged fault/source/restart boundaries. UC-3 APPROVED automatically; no separate converge/human gate. UC-13 destination handoff remains open until its own implementation.

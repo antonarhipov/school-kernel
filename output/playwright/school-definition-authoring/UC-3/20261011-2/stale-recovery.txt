@@ -1,0 +1,41 @@
+### Result
+{"step":"two-tab stale retry and explicit conflict resolution","result":"PASS","newerVersion":5,"retriedVersion":6,"resolvedVersion":8,"conflicts":"Newer saved fields conflict with working edits\n\nUntouched fields use the newer saved values. Resolve these fields explicitly before another preview/save.\n\nmonday-1 displayName: latest \"Their conflicting Monday\"; working \"My conflicting Monday\"\n\nKeep my reviewed conflicting valuesUse newer saved conflicting values"}
+### Ran Playwright code
+```js
+await (async (page) => {
+const read=()=>page.evaluate(async()=> (await fetch('/api/workspace')).json());
+const save=async p=>{await p.getByRole('button',{name:'Review grid operation',exact:true}).click();await p.locator('#grid-preview').waitFor();await p.locator('body').ariaSnapshot();await p.getByRole('button',{name:'Save reviewed grid',exact:true}).click();await p.locator('#grid-preview').waitFor({state:'detached'});};
+await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).fill('Working retry row');
+const second=await page.context().newPage();await second.goto(page.url());await second.getByRole('button',{name:'Grid',exact:true}).waitFor();await second.locator('body').ariaSnapshot();await second.getByRole('button',{name:'Grid',exact:true}).click();
+await second.getByRole('textbox',{name:'tuesday-1 displayName',exact:true}).fill('Newer tab row');await save(second);
+const newer=await read();
+await page.getByRole('button',{name:'Review grid operation',exact:true}).click();await page.locator('#grid-save-error').waitFor();
+if(JSON.stringify(newer)!==JSON.stringify(await read()))throw new Error('Stale refusal changed saved data');
+await page.screenshot({path:'output/playwright/school-definition-authoring/UC-3/20261011-2/stale-refusal.png',fullPage:true});await page.locator('body').ariaSnapshot();
+await page.getByRole('button',{name:'Review newer saved draft for retry',exact:true}).click();
+await page.waitForFunction(()=>document.querySelector('[aria-label="tuesday-1 displayName"]')?.value==='Newer tab row');
+if(await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).inputValue()!=='Working retry row')throw new Error('Refresh lost working edit');
+await save(page);const retried=await read();
+if(retried.workspace.definitionDraft.definition.periods.find(p=>p.id==='tuesday-1').displayName!=='Newer tab row')throw new Error('Unselected newer row overwritten');
+await second.reload();await second.getByRole('button',{name:'Grid',exact:true}).waitFor();await second.locator('body').ariaSnapshot();await second.getByRole('button',{name:'Grid',exact:true}).click();
+await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).fill('My conflicting Monday');
+await second.getByRole('textbox',{name:'monday-1 displayName',exact:true}).fill('Their conflicting Monday');await save(second);const conflictSaved=await read();
+await page.getByRole('button',{name:'Review grid operation',exact:true}).click();await page.locator('#grid-save-error').waitFor();await page.locator('body').ariaSnapshot();
+await page.getByRole('button',{name:'Review newer saved draft for retry',exact:true}).click();await page.locator('#grid-conflicts').waitFor();
+const conflicts=await page.locator('#grid-conflicts').innerText();
+if(!conflicts.includes('My conflicting Monday')||!conflicts.includes('Their conflicting Monday'))throw new Error('Missing both conflict sides');
+await page.getByRole('button',{name:'Review grid operation',exact:true}).click();await page.locator('#grid-save-error').waitFor();
+if(JSON.stringify(conflictSaved)!==JSON.stringify(await read()))throw new Error('Unresolved conflict mutated saved data');
+await page.screenshot({path:'output/playwright/school-definition-authoring/UC-3/20261011-2/conflict-choice.png',fullPage:true});await page.locator('body').ariaSnapshot();
+await page.getByRole('button',{name:'Use newer saved conflicting values',exact:true}).click();await save(page);
+const resolved=await read();if(resolved.workspace.definitionDraft.definition.periods[0].displayName!=='Their conflicting Monday')throw new Error('Explicit newer choice not saved');
+await second.close();
+return {step:'two-tab stale retry and explicit conflict resolution',result:'PASS',newerVersion:newer.version,retriedVersion:retried.version,resolvedVersion:resolved.version,conflicts};
+})(page);
+```
+### Page
+- Page URL: http://localhost:18083/workspace/
+- Page Title: School timetable workspace
+- Console: 2 errors, 0 warnings
+### Events
+- New console entries: .playwright-cli/console-2026-10-11T17-41-27-991Z.log#L2

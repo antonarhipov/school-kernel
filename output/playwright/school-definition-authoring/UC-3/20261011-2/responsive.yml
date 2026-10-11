@@ -1,0 +1,336 @@
+### Page
+- Page URL: http://localhost:18083/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+```yaml
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - paragraph [ref=f1e3]: Local school timetable
+    - heading "Operations workspace" [level=1] [ref=f1e4]
+    - paragraph [ref=f1e5]: No accepted timetable
+  - main [ref=f1e6]:
+    - generic [ref=f1e7]:
+      - generic [ref=f1e1075]: Saved school-definition draft
+      - heading "New school" [level=2] [ref=f1e1076]
+      - status [ref=f1e1077]: Saved — Your saved school-definition changes are preserved.
+      - paragraph [ref=f1e1078]: "Draft • Source: EMPTY • Catalog 9 • No Current timetable"
+      - paragraph [ref=f1e1079]: "Source identity: (new school) • (no source revision)"
+      - paragraph [ref=f1e1080]: "Saved revision: sha256:1b45430da745a2d409fdbe074e81745469ee7e76c86fb88a57693b3870528fac"
+      - paragraph [ref=f1e1081]: One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.
+      - paragraph [ref=f1e1082]: 0 subjects • 0 teachers • 0 classes • 0 rooms • 10 periods • 0 occurrences
+      - paragraph [ref=f1e1083]: "Incomplete: 2 blocking issues; 0 advisories."
+      - navigation "Definition sections" [ref=f1e1084]:
+        - button "School" [ref=f1e1085] [cursor=pointer]
+        - button "Grid" [ref=f1e1086] [cursor=pointer]
+        - button "Subjects" [ref=f1e1087] [cursor=pointer]
+        - button "Teachers" [ref=f1e1088] [cursor=pointer]
+        - button "Classes" [ref=f1e1089] [cursor=pointer]
+        - button "Rooms" [ref=f1e1090] [cursor=pointer]
+        - button "Room policies" [ref=f1e1091] [cursor=pointer]
+        - button "Weekly requirements" [ref=f1e1092] [cursor=pointer]
+        - button "Review" [ref=f1e1093] [cursor=pointer]
+      - generic [ref=f1e1094]:
+        - heading "Grid" [level=3] [ref=f1e1095]
+        - paragraph [ref=f1e1096]: Periods are explicit teaching slots. Reservations are separate from resource availability. Existing IDs stay fixed; removal requires guided dependency resolution.
+        - group [ref=f1e1097]:
+          - generic "Add generated slots (existing grid is preserved)" [ref=f1e1098]
+        - generic [ref=f1e1099]:
+          - group "Monday 1 • monday-1" [ref=f1e1100]:
+            - generic [ref=f1e1102]:
+              - text: Identifier
+              - textbox "monday-1 id" [ref=f1e1103]: monday-1
+            - generic [ref=f1e1104]:
+              - text: Name
+              - textbox "monday-1 displayName" [ref=f1e1105]: Monday 1
+            - generic [ref=f1e1106]:
+              - text: Weekday
+              - combobox "monday-1 weekday" [ref=f1e1107]:
+                - option "Monday" [selected]
+                - option "Tuesday"
+                - option "Wednesday"
+                - option "Thursday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1108]:
+              - text: Order
+              - textbox "monday-1 order" [ref=f1e1109]: "1"
+            - generic [ref=f1e1110]:
+              - text: Start time (optional)
+              - textbox "monday-1 startTime" [ref=f1e1111]: 09:00
+            - generic [ref=f1e1112]:
+              - text: End time (optional)
+              - textbox "monday-1 endTime" [ref=f1e1113]: 09:45
+            - generic [ref=f1e1114]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1115]
+          - group "Monday 2 • monday-2" [ref=f1e1116]:
+            - generic [ref=f1e1118]:
+              - text: Identifier
+              - textbox "monday-2 id" [ref=f1e1119]: monday-2
+            - generic [ref=f1e1120]:
+              - text: Name
+              - textbox "monday-2 displayName" [ref=f1e1121]: Monday 2
+            - generic [ref=f1e1122]:
+              - text: Weekday
+              - combobox "monday-2 weekday" [ref=f1e1123]:
+                - option "Monday" [selected]
+                - option "Tuesday"
+                - option "Wednesday"
+                - option "Thursday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1124]:
+              - text: Order
+              - textbox "monday-2 order" [ref=f1e1125]: "2"
+            - generic [ref=f1e1126]:
+              - text: Start time (optional)
+              - textbox "monday-2 startTime" [ref=f1e1127]: 10:00
+            - generic [ref=f1e1128]:
+              - text: End time (optional)
+              - textbox "monday-2 endTime" [ref=f1e1129]: 10:45
+            - generic [ref=f1e1130]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1131]
+          - group "Tuesday 1 • tuesday-1" [ref=f1e1132]:
+            - generic [ref=f1e1134]:
+              - text: Identifier
+              - textbox "tuesday-1 id" [ref=f1e1135]: tuesday-1
+            - generic [ref=f1e1136]:
+              - text: Name
+              - textbox "tuesday-1 displayName" [ref=f1e1137]: Tuesday 1
+            - generic [ref=f1e1138]:
+              - text: Weekday
+              - combobox "tuesday-1 weekday" [ref=f1e1139]:
+                - option "Tuesday" [selected]
+                - option "Monday"
+                - option "Wednesday"
+                - option "Thursday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1140]:
+              - text: Order
+              - textbox "tuesday-1 order" [ref=f1e1141]: "1"
+            - generic [ref=f1e1142]:
+              - text: Start time (optional)
+              - textbox "tuesday-1 startTime" [ref=f1e1143]: 09:00
+            - generic [ref=f1e1144]:
+              - text: End time (optional)
+              - textbox "tuesday-1 endTime" [ref=f1e1145]: 09:45
+            - generic [ref=f1e1146]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1147]
+          - group "Tuesday 2 • tuesday-2" [ref=f1e1148]:
+            - generic [ref=f1e1150]:
+              - text: Identifier
+              - textbox "tuesday-2 id" [ref=f1e1151]: tuesday-2
+            - generic [ref=f1e1152]:
+              - text: Name
+              - textbox "tuesday-2 displayName" [ref=f1e1153]: Tuesday 2
+            - generic [ref=f1e1154]:
+              - text: Weekday
+              - combobox "tuesday-2 weekday" [ref=f1e1155]:
+                - option "Tuesday" [selected]
+                - option "Monday"
+                - option "Wednesday"
+                - option "Thursday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1156]:
+              - text: Order
+              - textbox "tuesday-2 order" [ref=f1e1157]: "2"
+            - generic [ref=f1e1158]:
+              - text: Start time (optional)
+              - textbox "tuesday-2 startTime" [ref=f1e1159]: 10:00
+            - generic [ref=f1e1160]:
+              - text: End time (optional)
+              - textbox "tuesday-2 endTime" [ref=f1e1161]: 10:45
+            - generic [ref=f1e1162]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1163]
+          - group "Wednesday 1 • wednesday-1" [ref=f1e1164]:
+            - generic [ref=f1e1166]:
+              - text: Identifier
+              - textbox "wednesday-1 id" [ref=f1e1167]: wednesday-1
+            - generic [ref=f1e1168]:
+              - text: Name
+              - textbox "wednesday-1 displayName" [ref=f1e1169]: Wednesday 1
+            - generic [ref=f1e1170]:
+              - text: Weekday
+              - combobox "wednesday-1 weekday" [ref=f1e1171]:
+                - option "Wednesday" [selected]
+                - option "Monday"
+                - option "Tuesday"
+                - option "Thursday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1172]:
+              - text: Order
+              - textbox "wednesday-1 order" [ref=f1e1173]: "1"
+            - generic [ref=f1e1174]:
+              - text: Start time (optional)
+              - textbox "wednesday-1 startTime" [ref=f1e1175]: 09:00
+            - generic [ref=f1e1176]:
+              - text: End time (optional)
+              - textbox "wednesday-1 endTime" [ref=f1e1177]: 09:45
+            - generic [ref=f1e1178]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1179]
+          - group "Wednesday 2 • wednesday-2" [ref=f1e1180]:
+            - generic [ref=f1e1182]:
+              - text: Identifier
+              - textbox "wednesday-2 id" [ref=f1e1183]: wednesday-2
+            - generic [ref=f1e1184]:
+              - text: Name
+              - textbox "wednesday-2 displayName" [ref=f1e1185]: Wednesday 2
+            - generic [ref=f1e1186]:
+              - text: Weekday
+              - combobox "wednesday-2 weekday" [ref=f1e1187]:
+                - option "Wednesday" [selected]
+                - option "Monday"
+                - option "Tuesday"
+                - option "Thursday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1188]:
+              - text: Order
+              - textbox "wednesday-2 order" [ref=f1e1189]: "2"
+            - generic [ref=f1e1190]:
+              - text: Start time (optional)
+              - textbox "wednesday-2 startTime" [ref=f1e1191]: 10:00
+            - generic [ref=f1e1192]:
+              - text: End time (optional)
+              - textbox "wednesday-2 endTime" [ref=f1e1193]: 10:45
+            - generic [ref=f1e1194]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1195]
+          - group "Thursday 1 • thursday-1" [ref=f1e1196]:
+            - generic [ref=f1e1198]:
+              - text: Identifier
+              - textbox "thursday-1 id" [ref=f1e1199]: thursday-1
+            - generic [ref=f1e1200]:
+              - text: Name
+              - textbox "thursday-1 displayName" [ref=f1e1201]: Thursday 1
+            - generic [ref=f1e1202]:
+              - text: Weekday
+              - combobox "thursday-1 weekday" [ref=f1e1203]:
+                - option "Thursday" [selected]
+                - option "Monday"
+                - option "Tuesday"
+                - option "Wednesday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1204]:
+              - text: Order
+              - textbox "thursday-1 order" [ref=f1e1205]: "1"
+            - generic [ref=f1e1206]:
+              - text: Start time (optional)
+              - textbox "thursday-1 startTime" [ref=f1e1207]: 09:00
+            - generic [ref=f1e1208]:
+              - text: End time (optional)
+              - textbox "thursday-1 endTime" [ref=f1e1209]: 09:45
+            - generic [ref=f1e1210]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1211]
+          - group "Thursday 2 • thursday-2" [ref=f1e1212]:
+            - generic [ref=f1e1214]:
+              - text: Identifier
+              - textbox "thursday-2 id" [ref=f1e1215]: thursday-2
+            - generic [ref=f1e1216]:
+              - text: Name
+              - textbox "thursday-2 displayName" [ref=f1e1217]: Thursday 2
+            - generic [ref=f1e1218]:
+              - text: Weekday
+              - combobox "thursday-2 weekday" [ref=f1e1219]:
+                - option "Thursday" [selected]
+                - option "Monday"
+                - option "Tuesday"
+                - option "Wednesday"
+                - option "Friday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1220]:
+              - text: Order
+              - textbox "thursday-2 order" [ref=f1e1221]: "2"
+            - generic [ref=f1e1222]:
+              - text: Start time (optional)
+              - textbox "thursday-2 startTime" [ref=f1e1223]: 10:00
+            - generic [ref=f1e1224]:
+              - text: End time (optional)
+              - textbox "thursday-2 endTime" [ref=f1e1225]: 10:45
+            - generic [ref=f1e1226]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1227]
+          - group "Friday 1 • friday-1" [ref=f1e1228]:
+            - generic [ref=f1e1230]:
+              - text: Identifier
+              - textbox "friday-1 id" [ref=f1e1231]: friday-1
+            - generic [ref=f1e1232]:
+              - text: Name
+              - textbox "friday-1 displayName" [ref=f1e1233]: Friday 1
+            - generic [ref=f1e1234]:
+              - text: Weekday
+              - combobox "friday-1 weekday" [ref=f1e1235]:
+                - option "Friday" [selected]
+                - option "Monday"
+                - option "Tuesday"
+                - option "Wednesday"
+                - option "Thursday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1236]:
+              - text: Order
+              - textbox "friday-1 order" [ref=f1e1237]: "1"
+            - generic [ref=f1e1238]:
+              - text: Start time (optional)
+              - textbox "friday-1 startTime" [ref=f1e1239]: 09:00
+            - generic [ref=f1e1240]:
+              - text: End time (optional)
+              - textbox "friday-1 endTime" [ref=f1e1241]: 09:45
+            - generic [ref=f1e1242]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1243]
+          - group "Friday 2 • friday-2" [ref=f1e1244]:
+            - generic [ref=f1e1246]:
+              - text: Identifier
+              - textbox "friday-2 id" [ref=f1e1247]: friday-2
+            - generic [ref=f1e1248]:
+              - text: Name
+              - textbox "friday-2 displayName" [ref=f1e1249]: Friday 2
+            - generic [ref=f1e1250]:
+              - text: Weekday
+              - combobox "friday-2 weekday" [ref=f1e1251]:
+                - option "Friday" [selected]
+                - option "Monday"
+                - option "Tuesday"
+                - option "Wednesday"
+                - option "Thursday"
+                - option "Saturday"
+                - option "Sunday"
+            - generic [ref=f1e1252]:
+              - text: Order
+              - textbox "friday-2 order" [ref=f1e1253]: "2"
+            - generic [ref=f1e1254]:
+              - text: Start time (optional)
+              - textbox "friday-2 startTime" [ref=f1e1255]: 10:00
+            - generic [ref=f1e1256]:
+              - text: End time (optional)
+              - textbox "friday-2 endTime" [ref=f1e1257]: 10:45
+            - generic [ref=f1e1258]:
+              - text: Reserved period
+              - checkbox "Reserved period" [ref=f1e1259]
+        - generic [ref=f1e1260]:
+          - text: Reservation representation
+          - combobox "Reservation representation" [ref=f1e1261]:
+            - option "No reservations (omitted)" [selected]
+            - option "Explicit reservation membership"
+        - generic [ref=f1e1262]:
+          - button "Review grid operation" [ref=f1e1263] [cursor=pointer]
+          - button "Cancel working grid edits" [ref=f1e1264] [cursor=pointer]
+```

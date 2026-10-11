@@ -1,0 +1,30 @@
+### Result
+{"step":"responsive retention and unsaved stay/discard","result":"PASS","version":4,"viewports":[{"width":1280,"height":800,"readOnly":false,"overflow":false},{"width":390,"height":844,"readOnly":true,"overflow":false},{"width":700,"height":844,"readOnly":true,"overflow":false},{"width":1600,"height":900,"readOnly":false,"overflow":false}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+const read = () => page.evaluate(async () => (await fetch('/api/workspace')).json());
+const saved=await read();
+await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).fill('Working Õ period');
+const viewports=[];
+for(const [width,height] of [[1280,800],[390,844],[700,844],[1600,900]]) {
+await page.setViewportSize({width,height});
+await page.waitForFunction(()=>document.documentElement.scrollWidth<=innerWidth);
+await page.locator('body').ariaSnapshot();
+if(width<=700 && await page.locator('.grid-period-row input,.grid-period-row select,#save-grid,#generate-grid').count()!==0) throw new Error('Narrow mutation controls present');
+if(JSON.stringify(saved)!==JSON.stringify(await read())) throw new Error('Resize mutated durable state');
+await page.screenshot({path:'output/playwright/school-definition-authoring/UC-3/20261011-2/viewport-'+width+'.png',fullPage:width>700});
+if(width===390) await page.locator('.grid-period-row').first().screenshot({path:'output/playwright/school-definition-authoring/UC-3/20261011-2/narrow-row.png'});
+viewports.push({width,height,readOnly:width<=700,overflow:false});
+}
+if(await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).inputValue()!=='Working Õ period') throw new Error('Widening lost unsaved row');
+await page.getByRole('button',{name:'Review',exact:true}).click(); await page.getByRole('button',{name:'Stay',exact:true}).waitFor();
+await page.locator('body').ariaSnapshot(); await page.getByRole('button',{name:'Stay',exact:true}).click();
+if(await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).inputValue()!=='Working Õ period') throw new Error('Stay lost row');
+await page.getByRole('button',{name:'Review',exact:true}).click(); await page.getByRole('button',{name:'Discard working edits',exact:true}).click();
+await page.getByRole('button',{name:'Grid',exact:true}).click();
+if(await page.getByRole('textbox',{name:'monday-1 displayName',exact:true}).inputValue()!=='Monday 1') throw new Error('Discard did not restore saved row');
+if(JSON.stringify(saved)!==JSON.stringify(await read())) throw new Error('Unsaved navigation mutated durable state');
+return {step:'responsive retention and unsaved stay/discard',result:'PASS',version:saved.version,viewports};
+})(page);
+```

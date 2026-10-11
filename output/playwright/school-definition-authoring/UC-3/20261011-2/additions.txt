@@ -1,0 +1,18 @@
+### Result
+{"step":"existing-grid addition preview/cancel","result":"PASS","preservedRows":10,"version":12}
+### Ran Playwright code
+```js
+await (async (page) => {
+const read=()=>page.evaluate(async()=> (await fetch('/api/workspace')).json());const before=await read();
+await page.getByText('Add generated slots (existing grid is preserved)',{exact:true}).click();await page.locator('body').ariaSnapshot();
+for(const day of ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'])await page.locator('#grid-count-'+day).fill(day==='saturday'?'1':'0');
+await page.locator('#grid-count-saturday').dispatchEvent('change');
+await page.getByRole('button',{name:'Preview additions',exact:true}).click();
+if(await page.locator('#authoring-section > .grid-period-rows .grid-period-row').count()!==11)throw new Error('Additions replaced existing grid');
+for(const period of before.workspace.definitionDraft.definition.periods)if(await page.getByRole('textbox',{name:period.id+' displayName',exact:true}).inputValue()!==period.displayName)throw new Error('Untouched original row changed');
+await page.getByRole('button',{name:'Review grid operation',exact:true}).click();await page.locator('#grid-preview').waitFor();await page.locator('body').ariaSnapshot();
+await page.getByRole('button',{name:'Cancel working grid edits',exact:true}).click();
+if(JSON.stringify(before)!==JSON.stringify(await read()))throw new Error('Cancelled additions changed durable state');
+return {step:'existing-grid addition preview/cancel',result:'PASS',preservedRows:before.workspace.definitionDraft.definition.periods.length,version:before.version};
+})(page);
+```

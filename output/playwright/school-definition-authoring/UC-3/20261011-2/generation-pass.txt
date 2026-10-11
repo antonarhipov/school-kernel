@@ -1,0 +1,15 @@
+### Ran Playwright code
+```js
+await (async (page) => {
+const before = await page.evaluate(async () => (await fetch('/api/workspace')).json());
+await page.getByRole('textbox', {name:'Slot 1 start (optional)',exact:true}).fill('09:00');
+await page.getByRole('textbox', {name:'Slot 1 end (optional)',exact:true}).fill('09:45');
+await page.getByRole('textbox', {name:'Slot 2 start (optional)',exact:true}).fill('10:00');
+await page.getByRole('textbox', {name:'Slot 2 end (optional)',exact:true}).fill('10:40');
+await page.getByRole('button', {name:'Generate working rows',exact:true}).click();
+const after = await page.evaluate(async () => (await fetch('/api/workspace')).json());
+if (JSON.stringify(before) !== JSON.stringify(after)) throw new Error('Generation changed durable state');
+if (await page.locator('#authoring-section > .grid-period-rows .grid-period-row').count() !== 10) throw new Error('Expected ten working rows');
+console.log(JSON.stringify({step:'generation',result:'PASS',version:after.version,workingRows:10,savedRows:after.workspace.definitionDraft.definition.periods.length}));
+})(page);
+```
