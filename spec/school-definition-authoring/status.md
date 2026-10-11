@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
+- Status: NEEDS_REVISION
 - Next eligible: UC-2 through UC-15, UC-19, UC-20; next in document order: UC-2
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence / [checkpoint](checkpoints/UC-2.md) | - |
+| UC-2 | NEEDS_REVISION | UC-1 | `60ff34c` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
@@ -95,3 +95,8 @@ None.
 - Completed slice: 26 unit/architecture + 18 integration/browser tests passed, zero failures/errors/skips. All seven UC-1 journeys and three saved-draft compatibility journeys passed; two local security/route regressions passed.
 - JavaScript syntax and diff hygiene passed. No tracked runtime data or unrelated changes from verification.
 - Runnable isolated walkthrough: http://localhost:18082/workspace/, disposable UC-2 database on 24482; server session 85398. Operator school untouched. Administrator confirmation still required for this new UI goal.
+
+## UC-2 Initial Convergence
+
+- Submission `60ff34c`; all 44 checks rerun successfully, but standalone Chrome audit found C-1: long saved name gives 2402px page width at 1280px viewport.
+- Verdict NEEDS_REVISION. Fix heading wrapping and add the saved-long-name browser regression; no later UC selected.
