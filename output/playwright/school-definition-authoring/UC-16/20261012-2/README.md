@@ -1,0 +1,9 @@
+# UC-16 walkthrough — attempt 2
+
+Submission `0c360a4`, Chrome headed fresh session `authoring-uc16-r2`, 2026-10-12. URL http://localhost:18098/workspace/, build `/tmp/uc16-workspace.jar`, isolated database `authoring_loop_uc16_r2`, datasource verified in server log. Starting EMPTY. Operator data untouched.
+
+Primary and acceptance actions PASS: exact normative native definition built through forms (v12), partial reload exact, generated 10:40 second ends individually adjusted to10:45 before saved grid, nine exact IDs/names, Review zero blockers, narrow finish disabled/no overflow, confirmation cancel exact, authoritative Finish to INITIAL_DRAFT v13, whole native values/context exact, real PT1M planning and independent result verification, explicit first acceptance v16, nine assignments once each, context retained, desktop/narrow Current and exact reload. Full exact states: [authored](authored.json), [finished](finished.json), [proposal](proposal.json), [accepted](accepted.json). [Primary steps/assertions](primary.txt), [acceptance steps/assertions](acceptance.txt), [snapshot](proposal-snapshot.txt), [contact sheet](contact-sheet.png).
+
+Screenshots 01–15 accompany actions. Contact sheet inspected: readable controls, correct Draft/proposal/Current labels, literal values, no visible overflow. Primary controls and finish dialog inspected; narrow Current/acceptance still require final-build inspection.
+
+Overall: NEEDS_REVISION, no approval. Source inspection identified missing verified seeded-successor identity in resulting repair UI (UC-16 step5), and confirmation needed viewport-change persistence/read-only safeguards. Both presentation details now fixed. Full final-build repeat required. All attempt2 success/fault artifacts and database retained. No fabricated infrastructure screenshots: stale/storage/invalid paths covered by checkpoint technical checks, with additional browser variants to follow.

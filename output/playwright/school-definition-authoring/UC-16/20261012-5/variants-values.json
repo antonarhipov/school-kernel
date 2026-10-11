@@ -1,0 +1,3300 @@
+{
+  "baseline": {
+    "state": "ACCEPTED_BASELINE",
+    "version": 16,
+    "acceptedTimetable": true,
+    "workspace": {
+      "school": {
+        "id": "authoring-demo-school",
+        "displayName": "Authoring Demo School"
+      },
+      "lastRun": {
+        "id": "496b1cff-9e4a-429c-b607-a337bb2b3cf4",
+        "kind": "INITIAL",
+        "limit": "PT1M",
+        "status": "FEASIBLE",
+        "feasible": true,
+        "elapsedTimeMs": 61069,
+        "assignmentCount": 9,
+        "terminationReason": "TIME_LIMIT"
+      },
+      "importMode": "INITIAL_ACCEPTANCE",
+      "acceptedBaseline": {
+        "result": {
+          "seed": 0,
+          "limit": {
+            "type": "TIME",
+            "duration": "PT1M"
+          },
+          "score": {
+            "periodMoves": 0,
+            "roomOnlyMoves": 0,
+            "constraintBreakdown": [
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.teacher-gap",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-gap",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-late-start",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-week-balance",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.series-same-day",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.undesirable-period",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.non-preferred-room",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              }
+            ],
+            "ordinaryPreferencePenalty": 0
+          },
+          "status": "FEASIBLE",
+          "schoolId": "authoring-demo-school",
+          "timetable": {
+            "assignments": [
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.01",
+                "periodId": "monday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.02",
+                "periodId": "tuesday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.03",
+                "periodId": "wednesday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.04",
+                "periodId": "thursday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.01",
+                "periodId": "monday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.02",
+                "periodId": "tuesday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.03",
+                "periodId": "wednesday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.04",
+                "periodId": "thursday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.05",
+                "periodId": "friday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              }
+            ]
+          },
+          "correlationId": "f60273bc-e04b-4785-84ea-c215c514a624",
+          "elapsedTimeMs": 61069,
+          "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+          "kernelVersion": "1.0.0-SNAPSHOT",
+          "schemaVersion": 1,
+          "catalogVersion": 9,
+          "terminationReason": "TIME_LIMIT",
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "effectiveSoftWeights": {
+            "soft.cohort-gap": 1,
+            "soft.teacher-gap": 1,
+            "soft.series-same-day": 1,
+            "soft.cohort-late-start": 1,
+            "soft.non-preferred-room": 1,
+            "soft.undesirable-period": 1,
+            "soft.cohort-week-balance": 1
+          }
+        },
+        "manifest": {
+          "locks": [],
+          "schoolId": "authoring-demo-school",
+          "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+          "catalogVersion": 9,
+          "manifestVersion": 1,
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "resultSchemaVersion": 1,
+          "definitionSchemaVersion": 1
+        },
+        "definition": {
+          "rooms": [
+            {
+              "id": "b1",
+              "capacity": 25,
+              "displayName": "B1",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "b2",
+              "capacity": 25,
+              "displayName": "B2",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "5a",
+              "size": 20,
+              "displayName": "5A"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "5a-mathematics.01",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.02",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.03",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.04",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.05",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 5",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.01",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.02",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.03",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.04",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "periods": [
+            {
+              "id": "monday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "MONDAY",
+              "startTime": "09:00",
+              "displayName": "Monday 1"
+            },
+            {
+              "id": "monday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "MONDAY",
+              "startTime": "10:00",
+              "displayName": "Monday 2"
+            },
+            {
+              "id": "tuesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "TUESDAY",
+              "startTime": "09:00",
+              "displayName": "Tuesday 1"
+            },
+            {
+              "id": "tuesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "TUESDAY",
+              "startTime": "10:00",
+              "displayName": "Tuesday 2"
+            },
+            {
+              "id": "wednesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "09:00",
+              "displayName": "Wednesday 1"
+            },
+            {
+              "id": "wednesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "10:00",
+              "displayName": "Wednesday 2"
+            },
+            {
+              "id": "thursday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "THURSDAY",
+              "startTime": "09:00",
+              "displayName": "Thursday 1"
+            },
+            {
+              "id": "thursday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "THURSDAY",
+              "startTime": "10:00",
+              "displayName": "Thursday 2"
+            },
+            {
+              "id": "friday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "FRIDAY",
+              "startTime": "09:00",
+              "displayName": "Friday 1"
+            },
+            {
+              "id": "friday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "FRIDAY",
+              "startTime": "10:00",
+              "displayName": "Friday 2"
+            }
+          ],
+          "schoolId": "authoring-demo-school",
+          "subjects": [
+            {
+              "id": "mathematics",
+              "displayName": "Mathematics"
+            },
+            {
+              "id": "estonian",
+              "displayName": "Estonian"
+            }
+          ],
+          "teachers": [
+            {
+              "id": "mari",
+              "displayName": "Mari",
+              "qualifiedSubjectIds": [
+                "mathematics"
+              ]
+            },
+            {
+              "id": "jaan",
+              "displayName": "Jaan",
+              "qualifiedSubjectIds": [
+                "mathematics",
+                "estonian"
+              ]
+            }
+          ],
+          "displayName": "Authoring Demo School",
+          "schemaVersion": 1,
+          "catalogVersion": 9
+        }
+      },
+      "authoringContext": {
+        "requirements": {
+          "5a-estonian": {
+            "count": 4,
+            "cohortId": "5a",
+            "defaults": {
+              "teacherId": "jaan",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            "seriesId": "5a-estonian",
+            "subjectId": "estonian",
+            "exceptions": {},
+            "mixedFields": [],
+            "nextSequence": 5
+          },
+          "5a-mathematics": {
+            "count": 5,
+            "cohortId": "5a",
+            "defaults": {
+              "teacherId": "mari",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            "seriesId": "5a-mathematics",
+            "subjectId": "mathematics",
+            "exceptions": {},
+            "mixedFields": [],
+            "nextSequence": 6
+          }
+        },
+        "authoredLocks": {
+          "5a-estonian.01": {},
+          "5a-estonian.02": {},
+          "5a-estonian.03": {},
+          "5a-estonian.04": {},
+          "5a-mathematics.01": {},
+          "5a-mathematics.02": {},
+          "5a-mathematics.03": {},
+          "5a-mathematics.04": {},
+          "5a-mathematics.05": {}
+        }
+      },
+      "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+      "definitionRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+    }
+  },
+  "newer": {
+    "state": "DEFINITION_DRAFT",
+    "version": 19,
+    "acceptedTimetable": true,
+    "workspace": {
+      "school": {
+        "id": "authoring-demo-school",
+        "displayName": "Authoring Demo School"
+      },
+      "lastRun": {
+        "id": "496b1cff-9e4a-429c-b607-a337bb2b3cf4",
+        "kind": "INITIAL",
+        "limit": "PT1M",
+        "status": "FEASIBLE",
+        "feasible": true,
+        "elapsedTimeMs": 61069,
+        "assignmentCount": 9,
+        "terminationReason": "TIME_LIMIT"
+      },
+      "importMode": "INITIAL_ACCEPTANCE",
+      "definitionDraft": {
+        "issues": [],
+        "definition": {
+          "rooms": [
+            {
+              "id": "b1",
+              "capacity": 25,
+              "displayName": "B1",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "b2",
+              "capacity": 25,
+              "displayName": "B2",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "5a",
+              "size": 20,
+              "displayName": "5A"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "5a-mathematics.01",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.02",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.03",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.04",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.05",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 5",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.01",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.02",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.03",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.04",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "periods": [
+            {
+              "id": "monday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "MONDAY",
+              "startTime": "09:00",
+              "displayName": "Monday 1"
+            },
+            {
+              "id": "monday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "MONDAY",
+              "startTime": "10:00",
+              "displayName": "Monday 2"
+            },
+            {
+              "id": "tuesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "TUESDAY",
+              "startTime": "09:00",
+              "displayName": "Tuesday 1"
+            },
+            {
+              "id": "tuesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "TUESDAY",
+              "startTime": "10:00",
+              "displayName": "Tuesday 2"
+            },
+            {
+              "id": "wednesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "09:00",
+              "displayName": "Wednesday 1"
+            },
+            {
+              "id": "wednesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "10:00",
+              "displayName": "Wednesday 2"
+            },
+            {
+              "id": "thursday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "THURSDAY",
+              "startTime": "09:00",
+              "displayName": "Thursday 1"
+            },
+            {
+              "id": "thursday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "THURSDAY",
+              "startTime": "10:00",
+              "displayName": "Thursday 2"
+            },
+            {
+              "id": "friday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "FRIDAY",
+              "startTime": "09:00",
+              "displayName": "Friday 1"
+            },
+            {
+              "id": "friday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "FRIDAY",
+              "startTime": "10:00",
+              "displayName": "Friday 2"
+            }
+          ],
+          "schoolId": "authoring-demo-school",
+          "subjects": [
+            {
+              "id": "mathematics",
+              "displayName": "Mathematics"
+            },
+            {
+              "id": "estonian",
+              "displayName": "Estonian"
+            }
+          ],
+          "teachers": [
+            {
+              "id": "mari",
+              "displayName": "Mari",
+              "qualifiedSubjectIds": [
+                "mathematics"
+              ]
+            },
+            {
+              "id": "jaan",
+              "displayName": "Jaan",
+              "qualifiedSubjectIds": [
+                "mathematics",
+                "estonian"
+              ]
+            }
+          ],
+          "displayName": "Verified newer successor <literal>",
+          "schemaVersion": 1,
+          "catalogVersion": 9,
+          "basedOnRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+        },
+        "expiredPins": [],
+        "sourceState": "ACCEPTED_BASELINE",
+        "entrySection": "Review",
+        "draftRevision": "sha256:2b209f11f8db2af9a2a37b8746abd11b3e9453b08f8763b1ff97d855f7776c14",
+        "sourceVersion": 16,
+        "editingContext": {
+          "requirements": {
+            "5a-estonian": {
+              "count": 4,
+              "cohortId": "5a",
+              "defaults": {
+                "teacherId": "jaan",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "exceptions": {},
+              "mixedFields": [],
+              "nextSequence": 5
+            },
+            "5a-mathematics": {
+              "count": 5,
+              "cohortId": "5a",
+              "defaults": {
+                "teacherId": "mari",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "exceptions": {},
+              "mixedFields": [],
+              "nextSequence": 6
+            }
+          },
+          "authoredLocks": {
+            "5a-estonian.01": {},
+            "5a-estonian.02": {},
+            "5a-estonian.03": {},
+            "5a-estonian.04": {},
+            "5a-mathematics.01": {},
+            "5a-mathematics.02": {},
+            "5a-mathematics.03": {},
+            "5a-mathematics.04": {},
+            "5a-mathematics.05": {}
+          }
+        },
+        "openedRevision": "sha256:d4a545bc10eb4ad8259dc363872cf297b12dda495f4a467987937e88e57c4b57",
+        "sourceDocument": {
+          "school": {
+            "id": "authoring-demo-school",
+            "displayName": "Authoring Demo School"
+          },
+          "lastRun": {
+            "id": "496b1cff-9e4a-429c-b607-a337bb2b3cf4",
+            "kind": "INITIAL",
+            "limit": "PT1M",
+            "status": "FEASIBLE",
+            "feasible": true,
+            "elapsedTimeMs": 61069,
+            "assignmentCount": 9,
+            "terminationReason": "TIME_LIMIT"
+          },
+          "importMode": "INITIAL_ACCEPTANCE",
+          "acceptedBaseline": {
+            "result": {
+              "seed": 0,
+              "limit": {
+                "type": "TIME",
+                "duration": "PT1M"
+              },
+              "score": {
+                "periodMoves": 0,
+                "roomOnlyMoves": 0,
+                "constraintBreakdown": [
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.teacher-gap",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  },
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.cohort-gap",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  },
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.cohort-late-start",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  },
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.cohort-week-balance",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  },
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.series-same-day",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  },
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.undesirable-period",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  },
+                  {
+                    "category": "ORDINARY_PREFERENCE",
+                    "matchCount": 0,
+                    "constraintId": "soft.non-preferred-room",
+                    "effectiveWeight": 1,
+                    "aggregatePenalty": 0
+                  }
+                ],
+                "ordinaryPreferencePenalty": 0
+              },
+              "status": "FEASIBLE",
+              "schoolId": "authoring-demo-school",
+              "timetable": {
+                "assignments": [
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-estonian.01",
+                    "periodId": "monday-2",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-estonian.02",
+                    "periodId": "tuesday-2",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-estonian.03",
+                    "periodId": "wednesday-2",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-estonian.04",
+                    "periodId": "thursday-2",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-mathematics.01",
+                    "periodId": "monday-1",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-mathematics.02",
+                    "periodId": "tuesday-1",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-mathematics.03",
+                    "periodId": "wednesday-1",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-mathematics.04",
+                    "periodId": "thursday-1",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari"
+                  },
+                  {
+                    "roomId": "b1",
+                    "cohortId": "5a",
+                    "lessonId": "5a-mathematics.05",
+                    "periodId": "friday-1",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari"
+                  }
+                ]
+              },
+              "correlationId": "f60273bc-e04b-4785-84ea-c215c514a624",
+              "elapsedTimeMs": 61069,
+              "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+              "kernelVersion": "1.0.0-SNAPSHOT",
+              "schemaVersion": 1,
+              "catalogVersion": 9,
+              "terminationReason": "TIME_LIMIT",
+              "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+              "effectiveSoftWeights": {
+                "soft.cohort-gap": 1,
+                "soft.teacher-gap": 1,
+                "soft.series-same-day": 1,
+                "soft.cohort-late-start": 1,
+                "soft.non-preferred-room": 1,
+                "soft.undesirable-period": 1,
+                "soft.cohort-week-balance": 1
+              }
+            },
+            "manifest": {
+              "locks": [],
+              "schoolId": "authoring-demo-school",
+              "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+              "catalogVersion": 9,
+              "manifestVersion": 1,
+              "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+              "resultSchemaVersion": 1,
+              "definitionSchemaVersion": 1
+            },
+            "definition": {
+              "rooms": [
+                {
+                  "id": "b1",
+                  "capacity": 25,
+                  "displayName": "B1",
+                  "capabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "b2",
+                  "capacity": 25,
+                  "displayName": "B2",
+                  "capabilityIds": [
+                    "general-classroom"
+                  ]
+                }
+              ],
+              "cohorts": [
+                {
+                  "id": "5a",
+                  "size": 20,
+                  "displayName": "5A"
+                }
+              ],
+              "lessons": [
+                {
+                  "id": "5a-mathematics.01",
+                  "cohortId": "5a",
+                  "seriesId": "5a-mathematics",
+                  "subjectId": "mathematics",
+                  "teacherId": "mari",
+                  "displayName": "5A Mathematics 1",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-mathematics.02",
+                  "cohortId": "5a",
+                  "seriesId": "5a-mathematics",
+                  "subjectId": "mathematics",
+                  "teacherId": "mari",
+                  "displayName": "5A Mathematics 2",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-mathematics.03",
+                  "cohortId": "5a",
+                  "seriesId": "5a-mathematics",
+                  "subjectId": "mathematics",
+                  "teacherId": "mari",
+                  "displayName": "5A Mathematics 3",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-mathematics.04",
+                  "cohortId": "5a",
+                  "seriesId": "5a-mathematics",
+                  "subjectId": "mathematics",
+                  "teacherId": "mari",
+                  "displayName": "5A Mathematics 4",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-mathematics.05",
+                  "cohortId": "5a",
+                  "seriesId": "5a-mathematics",
+                  "subjectId": "mathematics",
+                  "teacherId": "mari",
+                  "displayName": "5A Mathematics 5",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-estonian.01",
+                  "cohortId": "5a",
+                  "seriesId": "5a-estonian",
+                  "subjectId": "estonian",
+                  "teacherId": "jaan",
+                  "displayName": "5A Estonian 1",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-estonian.02",
+                  "cohortId": "5a",
+                  "seriesId": "5a-estonian",
+                  "subjectId": "estonian",
+                  "teacherId": "jaan",
+                  "displayName": "5A Estonian 2",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-estonian.03",
+                  "cohortId": "5a",
+                  "seriesId": "5a-estonian",
+                  "subjectId": "estonian",
+                  "teacherId": "jaan",
+                  "displayName": "5A Estonian 3",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                {
+                  "id": "5a-estonian.04",
+                  "cohortId": "5a",
+                  "seriesId": "5a-estonian",
+                  "subjectId": "estonian",
+                  "teacherId": "jaan",
+                  "displayName": "5A Estonian 4",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                }
+              ],
+              "periods": [
+                {
+                  "id": "monday-1",
+                  "order": 1,
+                  "endTime": "09:45",
+                  "weekday": "MONDAY",
+                  "startTime": "09:00",
+                  "displayName": "Monday 1"
+                },
+                {
+                  "id": "monday-2",
+                  "order": 2,
+                  "endTime": "10:45",
+                  "weekday": "MONDAY",
+                  "startTime": "10:00",
+                  "displayName": "Monday 2"
+                },
+                {
+                  "id": "tuesday-1",
+                  "order": 1,
+                  "endTime": "09:45",
+                  "weekday": "TUESDAY",
+                  "startTime": "09:00",
+                  "displayName": "Tuesday 1"
+                },
+                {
+                  "id": "tuesday-2",
+                  "order": 2,
+                  "endTime": "10:45",
+                  "weekday": "TUESDAY",
+                  "startTime": "10:00",
+                  "displayName": "Tuesday 2"
+                },
+                {
+                  "id": "wednesday-1",
+                  "order": 1,
+                  "endTime": "09:45",
+                  "weekday": "WEDNESDAY",
+                  "startTime": "09:00",
+                  "displayName": "Wednesday 1"
+                },
+                {
+                  "id": "wednesday-2",
+                  "order": 2,
+                  "endTime": "10:45",
+                  "weekday": "WEDNESDAY",
+                  "startTime": "10:00",
+                  "displayName": "Wednesday 2"
+                },
+                {
+                  "id": "thursday-1",
+                  "order": 1,
+                  "endTime": "09:45",
+                  "weekday": "THURSDAY",
+                  "startTime": "09:00",
+                  "displayName": "Thursday 1"
+                },
+                {
+                  "id": "thursday-2",
+                  "order": 2,
+                  "endTime": "10:45",
+                  "weekday": "THURSDAY",
+                  "startTime": "10:00",
+                  "displayName": "Thursday 2"
+                },
+                {
+                  "id": "friday-1",
+                  "order": 1,
+                  "endTime": "09:45",
+                  "weekday": "FRIDAY",
+                  "startTime": "09:00",
+                  "displayName": "Friday 1"
+                },
+                {
+                  "id": "friday-2",
+                  "order": 2,
+                  "endTime": "10:45",
+                  "weekday": "FRIDAY",
+                  "startTime": "10:00",
+                  "displayName": "Friday 2"
+                }
+              ],
+              "schoolId": "authoring-demo-school",
+              "subjects": [
+                {
+                  "id": "mathematics",
+                  "displayName": "Mathematics"
+                },
+                {
+                  "id": "estonian",
+                  "displayName": "Estonian"
+                }
+              ],
+              "teachers": [
+                {
+                  "id": "mari",
+                  "displayName": "Mari",
+                  "qualifiedSubjectIds": [
+                    "mathematics"
+                  ]
+                },
+                {
+                  "id": "jaan",
+                  "displayName": "Jaan",
+                  "qualifiedSubjectIds": [
+                    "mathematics",
+                    "estonian"
+                  ]
+                }
+              ],
+              "displayName": "Authoring Demo School",
+              "schemaVersion": 1,
+              "catalogVersion": 9
+            }
+          },
+          "authoringContext": {
+            "requirements": {
+              "5a-estonian": {
+                "count": 4,
+                "cohortId": "5a",
+                "defaults": {
+                  "teacherId": "jaan",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                "seriesId": "5a-estonian",
+                "subjectId": "estonian",
+                "exceptions": {},
+                "mixedFields": [],
+                "nextSequence": 5
+              },
+              "5a-mathematics": {
+                "count": 5,
+                "cohortId": "5a",
+                "defaults": {
+                  "teacherId": "mari",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "exceptions": {},
+                "mixedFields": [],
+                "nextSequence": 6
+              }
+            },
+            "authoredLocks": {
+              "5a-estonian.01": {},
+              "5a-estonian.02": {},
+              "5a-estonian.03": {},
+              "5a-estonian.04": {},
+              "5a-mathematics.01": {},
+              "5a-mathematics.02": {},
+              "5a-mathematics.03": {},
+              "5a-mathematics.04": {},
+              "5a-mathematics.05": {}
+            }
+          },
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "definitionRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+        },
+        "removedIdentities": [],
+        "openingAdjustments": []
+      },
+      "acceptedBaseline": {
+        "result": {
+          "seed": 0,
+          "limit": {
+            "type": "TIME",
+            "duration": "PT1M"
+          },
+          "score": {
+            "periodMoves": 0,
+            "roomOnlyMoves": 0,
+            "constraintBreakdown": [
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.teacher-gap",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-gap",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-late-start",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-week-balance",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.series-same-day",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.undesirable-period",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.non-preferred-room",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              }
+            ],
+            "ordinaryPreferencePenalty": 0
+          },
+          "status": "FEASIBLE",
+          "schoolId": "authoring-demo-school",
+          "timetable": {
+            "assignments": [
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.01",
+                "periodId": "monday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.02",
+                "periodId": "tuesday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.03",
+                "periodId": "wednesday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.04",
+                "periodId": "thursday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.01",
+                "periodId": "monday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.02",
+                "periodId": "tuesday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.03",
+                "periodId": "wednesday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.04",
+                "periodId": "thursday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.05",
+                "periodId": "friday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              }
+            ]
+          },
+          "correlationId": "f60273bc-e04b-4785-84ea-c215c514a624",
+          "elapsedTimeMs": 61069,
+          "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+          "kernelVersion": "1.0.0-SNAPSHOT",
+          "schemaVersion": 1,
+          "catalogVersion": 9,
+          "terminationReason": "TIME_LIMIT",
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "effectiveSoftWeights": {
+            "soft.cohort-gap": 1,
+            "soft.teacher-gap": 1,
+            "soft.series-same-day": 1,
+            "soft.cohort-late-start": 1,
+            "soft.non-preferred-room": 1,
+            "soft.undesirable-period": 1,
+            "soft.cohort-week-balance": 1
+          }
+        },
+        "manifest": {
+          "locks": [],
+          "schoolId": "authoring-demo-school",
+          "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+          "catalogVersion": 9,
+          "manifestVersion": 1,
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "resultSchemaVersion": 1,
+          "definitionSchemaVersion": 1
+        },
+        "definition": {
+          "rooms": [
+            {
+              "id": "b1",
+              "capacity": 25,
+              "displayName": "B1",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "b2",
+              "capacity": 25,
+              "displayName": "B2",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "5a",
+              "size": 20,
+              "displayName": "5A"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "5a-mathematics.01",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.02",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.03",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.04",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.05",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 5",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.01",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.02",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.03",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.04",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "periods": [
+            {
+              "id": "monday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "MONDAY",
+              "startTime": "09:00",
+              "displayName": "Monday 1"
+            },
+            {
+              "id": "monday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "MONDAY",
+              "startTime": "10:00",
+              "displayName": "Monday 2"
+            },
+            {
+              "id": "tuesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "TUESDAY",
+              "startTime": "09:00",
+              "displayName": "Tuesday 1"
+            },
+            {
+              "id": "tuesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "TUESDAY",
+              "startTime": "10:00",
+              "displayName": "Tuesday 2"
+            },
+            {
+              "id": "wednesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "09:00",
+              "displayName": "Wednesday 1"
+            },
+            {
+              "id": "wednesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "10:00",
+              "displayName": "Wednesday 2"
+            },
+            {
+              "id": "thursday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "THURSDAY",
+              "startTime": "09:00",
+              "displayName": "Thursday 1"
+            },
+            {
+              "id": "thursday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "THURSDAY",
+              "startTime": "10:00",
+              "displayName": "Thursday 2"
+            },
+            {
+              "id": "friday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "FRIDAY",
+              "startTime": "09:00",
+              "displayName": "Friday 1"
+            },
+            {
+              "id": "friday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "FRIDAY",
+              "startTime": "10:00",
+              "displayName": "Friday 2"
+            }
+          ],
+          "schoolId": "authoring-demo-school",
+          "subjects": [
+            {
+              "id": "mathematics",
+              "displayName": "Mathematics"
+            },
+            {
+              "id": "estonian",
+              "displayName": "Estonian"
+            }
+          ],
+          "teachers": [
+            {
+              "id": "mari",
+              "displayName": "Mari",
+              "qualifiedSubjectIds": [
+                "mathematics"
+              ]
+            },
+            {
+              "id": "jaan",
+              "displayName": "Jaan",
+              "qualifiedSubjectIds": [
+                "mathematics",
+                "estonian"
+              ]
+            }
+          ],
+          "displayName": "Authoring Demo School",
+          "schemaVersion": 1,
+          "catalogVersion": 9
+        }
+      },
+      "authoringContext": {
+        "requirements": {
+          "5a-estonian": {
+            "count": 4,
+            "cohortId": "5a",
+            "defaults": {
+              "teacherId": "jaan",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            "seriesId": "5a-estonian",
+            "subjectId": "estonian",
+            "exceptions": {},
+            "mixedFields": [],
+            "nextSequence": 5
+          },
+          "5a-mathematics": {
+            "count": 5,
+            "cohortId": "5a",
+            "defaults": {
+              "teacherId": "mari",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            "seriesId": "5a-mathematics",
+            "subjectId": "mathematics",
+            "exceptions": {},
+            "mixedFields": [],
+            "nextSequence": 6
+          }
+        },
+        "authoredLocks": {
+          "5a-estonian.01": {},
+          "5a-estonian.02": {},
+          "5a-estonian.03": {},
+          "5a-estonian.04": {},
+          "5a-mathematics.01": {},
+          "5a-mathematics.02": {},
+          "5a-mathematics.03": {},
+          "5a-mathematics.04": {},
+          "5a-mathematics.05": {}
+        }
+      },
+      "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+      "definitionRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+    },
+    "definitionReview": {
+      "version": 19,
+      "draftRevision": "sha256:2b209f11f8db2af9a2a37b8746abd11b3e9453b08f8763b1ff97d855f7776c14",
+      "sourceState": "ACCEPTED_BASELINE",
+      "sourceRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+      "sourceIdentity": {
+        "schoolId": "authoring-demo-school",
+        "displayName": "Authoring Demo School",
+        "schemaVersion": 1,
+        "catalogVersion": 9
+      },
+      "draftIdentity": {
+        "schoolId": "authoring-demo-school",
+        "displayName": "Verified newer successor <literal>",
+        "schemaVersion": 1,
+        "catalogVersion": 9,
+        "basedOnRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+      },
+      "changes": [
+        {
+          "ownerType": "School",
+          "ownerId": "authoring-demo-school",
+          "field": "basedOnRevision",
+          "beforePresent": false,
+          "afterPresent": true,
+          "category": "Added",
+          "after": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+        },
+        {
+          "ownerType": "School",
+          "ownerId": "authoring-demo-school",
+          "field": "displayName",
+          "beforePresent": true,
+          "afterPresent": true,
+          "category": "Changed",
+          "before": "Authoring Demo School",
+          "after": "Verified newer successor <literal>"
+        }
+      ],
+      "catalogUpgrades": [],
+      "openingAdjustments": [],
+      "expiredPins": [],
+      "removedIdentities": [],
+      "issues": [],
+      "counts": {
+        "changes": 2,
+        "blockers": 0,
+        "advisories": 0,
+        "lessons": 9
+      },
+      "timingImpacts": [],
+      "placementExplanation": "Potential successor timing at surviving Current placements; a repair proposal is required to determine actual placements. Period-ID/room moves are separate from weekday/order/time changes.",
+      "verificationExplanation": "Definition verification is still required. No blocker does not establish timetable feasibility.",
+      "zeroLessonExplanation": ""
+    }
+  },
+  "finished": {
+    "state": "REPAIR_DRAFT",
+    "version": 20,
+    "acceptedTimetable": true,
+    "workspace": {
+      "school": {
+        "id": "authoring-demo-school",
+        "displayName": "Authoring Demo School"
+      },
+      "lastRun": {
+        "id": "496b1cff-9e4a-429c-b607-a337bb2b3cf4",
+        "kind": "INITIAL",
+        "limit": "PT1M",
+        "status": "FEASIBLE",
+        "feasible": true,
+        "elapsedTimeMs": 61069,
+        "assignmentCount": 9,
+        "terminationReason": "TIME_LIMIT"
+      },
+      "importMode": "INITIAL_ACCEPTANCE",
+      "repairDraft": {
+        "intent": {
+          "pins": [],
+          "changes": [],
+          "bulkActions": []
+        },
+        "conflicts": [],
+        "intentRevision": "sha256:e19eccea1a4b5c075d6c8a855562d9ec1be51c7788b04ea5d022674d7503a63f",
+        "seedDefinition": {
+          "rooms": [
+            {
+              "id": "b1",
+              "capacity": 25,
+              "displayName": "B1",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "b2",
+              "capacity": 25,
+              "displayName": "B2",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "5a",
+              "size": 20,
+              "displayName": "5A"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "5a-mathematics.01",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.02",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.03",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.04",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.05",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 5",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.01",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.02",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.03",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.04",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "periods": [
+            {
+              "id": "monday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "MONDAY",
+              "startTime": "09:00",
+              "displayName": "Monday 1"
+            },
+            {
+              "id": "monday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "MONDAY",
+              "startTime": "10:00",
+              "displayName": "Monday 2"
+            },
+            {
+              "id": "tuesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "TUESDAY",
+              "startTime": "09:00",
+              "displayName": "Tuesday 1"
+            },
+            {
+              "id": "tuesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "TUESDAY",
+              "startTime": "10:00",
+              "displayName": "Tuesday 2"
+            },
+            {
+              "id": "wednesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "09:00",
+              "displayName": "Wednesday 1"
+            },
+            {
+              "id": "wednesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "10:00",
+              "displayName": "Wednesday 2"
+            },
+            {
+              "id": "thursday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "THURSDAY",
+              "startTime": "09:00",
+              "displayName": "Thursday 1"
+            },
+            {
+              "id": "thursday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "THURSDAY",
+              "startTime": "10:00",
+              "displayName": "Thursday 2"
+            },
+            {
+              "id": "friday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "FRIDAY",
+              "startTime": "09:00",
+              "displayName": "Friday 1"
+            },
+            {
+              "id": "friday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "FRIDAY",
+              "startTime": "10:00",
+              "displayName": "Friday 2"
+            }
+          ],
+          "schoolId": "authoring-demo-school",
+          "subjects": [
+            {
+              "id": "mathematics",
+              "displayName": "Mathematics"
+            },
+            {
+              "id": "estonian",
+              "displayName": "Estonian"
+            }
+          ],
+          "teachers": [
+            {
+              "id": "mari",
+              "displayName": "Mari",
+              "qualifiedSubjectIds": [
+                "mathematics"
+              ]
+            },
+            {
+              "id": "jaan",
+              "displayName": "Jaan",
+              "qualifiedSubjectIds": [
+                "mathematics",
+                "estonian"
+              ]
+            }
+          ],
+          "displayName": "Verified newer successor <literal>",
+          "schemaVersion": 1,
+          "catalogVersion": 9,
+          "basedOnRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+        },
+        "retainedAuthoring": {
+          "issues": [],
+          "definition": {
+            "rooms": [
+              {
+                "id": "b1",
+                "capacity": 25,
+                "displayName": "B1",
+                "capabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "b2",
+                "capacity": 25,
+                "displayName": "B2",
+                "capabilityIds": [
+                  "general-classroom"
+                ]
+              }
+            ],
+            "cohorts": [
+              {
+                "id": "5a",
+                "size": 20,
+                "displayName": "5A"
+              }
+            ],
+            "lessons": [
+              {
+                "id": "5a-mathematics.01",
+                "cohortId": "5a",
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "teacherId": "mari",
+                "displayName": "5A Mathematics 1",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-mathematics.02",
+                "cohortId": "5a",
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "teacherId": "mari",
+                "displayName": "5A Mathematics 2",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-mathematics.03",
+                "cohortId": "5a",
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "teacherId": "mari",
+                "displayName": "5A Mathematics 3",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-mathematics.04",
+                "cohortId": "5a",
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "teacherId": "mari",
+                "displayName": "5A Mathematics 4",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-mathematics.05",
+                "cohortId": "5a",
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "teacherId": "mari",
+                "displayName": "5A Mathematics 5",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-estonian.01",
+                "cohortId": "5a",
+                "seriesId": "5a-estonian",
+                "subjectId": "estonian",
+                "teacherId": "jaan",
+                "displayName": "5A Estonian 1",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-estonian.02",
+                "cohortId": "5a",
+                "seriesId": "5a-estonian",
+                "subjectId": "estonian",
+                "teacherId": "jaan",
+                "displayName": "5A Estonian 2",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-estonian.03",
+                "cohortId": "5a",
+                "seriesId": "5a-estonian",
+                "subjectId": "estonian",
+                "teacherId": "jaan",
+                "displayName": "5A Estonian 3",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              },
+              {
+                "id": "5a-estonian.04",
+                "cohortId": "5a",
+                "seriesId": "5a-estonian",
+                "subjectId": "estonian",
+                "teacherId": "jaan",
+                "displayName": "5A Estonian 4",
+                "requiredRoomCapabilityIds": [
+                  "general-classroom"
+                ]
+              }
+            ],
+            "periods": [
+              {
+                "id": "monday-1",
+                "order": 1,
+                "endTime": "09:45",
+                "weekday": "MONDAY",
+                "startTime": "09:00",
+                "displayName": "Monday 1"
+              },
+              {
+                "id": "monday-2",
+                "order": 2,
+                "endTime": "10:45",
+                "weekday": "MONDAY",
+                "startTime": "10:00",
+                "displayName": "Monday 2"
+              },
+              {
+                "id": "tuesday-1",
+                "order": 1,
+                "endTime": "09:45",
+                "weekday": "TUESDAY",
+                "startTime": "09:00",
+                "displayName": "Tuesday 1"
+              },
+              {
+                "id": "tuesday-2",
+                "order": 2,
+                "endTime": "10:45",
+                "weekday": "TUESDAY",
+                "startTime": "10:00",
+                "displayName": "Tuesday 2"
+              },
+              {
+                "id": "wednesday-1",
+                "order": 1,
+                "endTime": "09:45",
+                "weekday": "WEDNESDAY",
+                "startTime": "09:00",
+                "displayName": "Wednesday 1"
+              },
+              {
+                "id": "wednesday-2",
+                "order": 2,
+                "endTime": "10:45",
+                "weekday": "WEDNESDAY",
+                "startTime": "10:00",
+                "displayName": "Wednesday 2"
+              },
+              {
+                "id": "thursday-1",
+                "order": 1,
+                "endTime": "09:45",
+                "weekday": "THURSDAY",
+                "startTime": "09:00",
+                "displayName": "Thursday 1"
+              },
+              {
+                "id": "thursday-2",
+                "order": 2,
+                "endTime": "10:45",
+                "weekday": "THURSDAY",
+                "startTime": "10:00",
+                "displayName": "Thursday 2"
+              },
+              {
+                "id": "friday-1",
+                "order": 1,
+                "endTime": "09:45",
+                "weekday": "FRIDAY",
+                "startTime": "09:00",
+                "displayName": "Friday 1"
+              },
+              {
+                "id": "friday-2",
+                "order": 2,
+                "endTime": "10:45",
+                "weekday": "FRIDAY",
+                "startTime": "10:00",
+                "displayName": "Friday 2"
+              }
+            ],
+            "schoolId": "authoring-demo-school",
+            "subjects": [
+              {
+                "id": "mathematics",
+                "displayName": "Mathematics"
+              },
+              {
+                "id": "estonian",
+                "displayName": "Estonian"
+              }
+            ],
+            "teachers": [
+              {
+                "id": "mari",
+                "displayName": "Mari",
+                "qualifiedSubjectIds": [
+                  "mathematics"
+                ]
+              },
+              {
+                "id": "jaan",
+                "displayName": "Jaan",
+                "qualifiedSubjectIds": [
+                  "mathematics",
+                  "estonian"
+                ]
+              }
+            ],
+            "displayName": "Verified newer successor <literal>",
+            "schemaVersion": 1,
+            "catalogVersion": 9,
+            "basedOnRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+          },
+          "expiredPins": [],
+          "sourceState": "ACCEPTED_BASELINE",
+          "entrySection": "Review",
+          "draftRevision": "sha256:2b209f11f8db2af9a2a37b8746abd11b3e9453b08f8763b1ff97d855f7776c14",
+          "sourceVersion": 16,
+          "editingContext": {
+            "requirements": {
+              "5a-estonian": {
+                "count": 4,
+                "cohortId": "5a",
+                "defaults": {
+                  "teacherId": "jaan",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                "seriesId": "5a-estonian",
+                "subjectId": "estonian",
+                "exceptions": {},
+                "mixedFields": [],
+                "nextSequence": 5
+              },
+              "5a-mathematics": {
+                "count": 5,
+                "cohortId": "5a",
+                "defaults": {
+                  "teacherId": "mari",
+                  "requiredRoomCapabilityIds": [
+                    "general-classroom"
+                  ]
+                },
+                "seriesId": "5a-mathematics",
+                "subjectId": "mathematics",
+                "exceptions": {},
+                "mixedFields": [],
+                "nextSequence": 6
+              }
+            },
+            "authoredLocks": {
+              "5a-estonian.01": {},
+              "5a-estonian.02": {},
+              "5a-estonian.03": {},
+              "5a-estonian.04": {},
+              "5a-mathematics.01": {},
+              "5a-mathematics.02": {},
+              "5a-mathematics.03": {},
+              "5a-mathematics.04": {},
+              "5a-mathematics.05": {}
+            }
+          },
+          "openedRevision": "sha256:d4a545bc10eb4ad8259dc363872cf297b12dda495f4a467987937e88e57c4b57",
+          "sourceDocument": {
+            "school": {
+              "id": "authoring-demo-school",
+              "displayName": "Authoring Demo School"
+            },
+            "lastRun": {
+              "id": "496b1cff-9e4a-429c-b607-a337bb2b3cf4",
+              "kind": "INITIAL",
+              "limit": "PT1M",
+              "status": "FEASIBLE",
+              "feasible": true,
+              "elapsedTimeMs": 61069,
+              "assignmentCount": 9,
+              "terminationReason": "TIME_LIMIT"
+            },
+            "importMode": "INITIAL_ACCEPTANCE",
+            "acceptedBaseline": {
+              "result": {
+                "seed": 0,
+                "limit": {
+                  "type": "TIME",
+                  "duration": "PT1M"
+                },
+                "score": {
+                  "periodMoves": 0,
+                  "roomOnlyMoves": 0,
+                  "constraintBreakdown": [
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.teacher-gap",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    },
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.cohort-gap",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    },
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.cohort-late-start",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    },
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.cohort-week-balance",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    },
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.series-same-day",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    },
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.undesirable-period",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    },
+                    {
+                      "category": "ORDINARY_PREFERENCE",
+                      "matchCount": 0,
+                      "constraintId": "soft.non-preferred-room",
+                      "effectiveWeight": 1,
+                      "aggregatePenalty": 0
+                    }
+                  ],
+                  "ordinaryPreferencePenalty": 0
+                },
+                "status": "FEASIBLE",
+                "schoolId": "authoring-demo-school",
+                "timetable": {
+                  "assignments": [
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-estonian.01",
+                      "periodId": "monday-2",
+                      "subjectId": "estonian",
+                      "teacherId": "jaan"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-estonian.02",
+                      "periodId": "tuesday-2",
+                      "subjectId": "estonian",
+                      "teacherId": "jaan"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-estonian.03",
+                      "periodId": "wednesday-2",
+                      "subjectId": "estonian",
+                      "teacherId": "jaan"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-estonian.04",
+                      "periodId": "thursday-2",
+                      "subjectId": "estonian",
+                      "teacherId": "jaan"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-mathematics.01",
+                      "periodId": "monday-1",
+                      "subjectId": "mathematics",
+                      "teacherId": "mari"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-mathematics.02",
+                      "periodId": "tuesday-1",
+                      "subjectId": "mathematics",
+                      "teacherId": "mari"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-mathematics.03",
+                      "periodId": "wednesday-1",
+                      "subjectId": "mathematics",
+                      "teacherId": "mari"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-mathematics.04",
+                      "periodId": "thursday-1",
+                      "subjectId": "mathematics",
+                      "teacherId": "mari"
+                    },
+                    {
+                      "roomId": "b1",
+                      "cohortId": "5a",
+                      "lessonId": "5a-mathematics.05",
+                      "periodId": "friday-1",
+                      "subjectId": "mathematics",
+                      "teacherId": "mari"
+                    }
+                  ]
+                },
+                "correlationId": "f60273bc-e04b-4785-84ea-c215c514a624",
+                "elapsedTimeMs": 61069,
+                "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+                "kernelVersion": "1.0.0-SNAPSHOT",
+                "schemaVersion": 1,
+                "catalogVersion": 9,
+                "terminationReason": "TIME_LIMIT",
+                "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+                "effectiveSoftWeights": {
+                  "soft.cohort-gap": 1,
+                  "soft.teacher-gap": 1,
+                  "soft.series-same-day": 1,
+                  "soft.cohort-late-start": 1,
+                  "soft.non-preferred-room": 1,
+                  "soft.undesirable-period": 1,
+                  "soft.cohort-week-balance": 1
+                }
+              },
+              "manifest": {
+                "locks": [],
+                "schoolId": "authoring-demo-school",
+                "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+                "catalogVersion": 9,
+                "manifestVersion": 1,
+                "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+                "resultSchemaVersion": 1,
+                "definitionSchemaVersion": 1
+              },
+              "definition": {
+                "rooms": [
+                  {
+                    "id": "b1",
+                    "capacity": 25,
+                    "displayName": "B1",
+                    "capabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "b2",
+                    "capacity": 25,
+                    "displayName": "B2",
+                    "capabilityIds": [
+                      "general-classroom"
+                    ]
+                  }
+                ],
+                "cohorts": [
+                  {
+                    "id": "5a",
+                    "size": 20,
+                    "displayName": "5A"
+                  }
+                ],
+                "lessons": [
+                  {
+                    "id": "5a-mathematics.01",
+                    "cohortId": "5a",
+                    "seriesId": "5a-mathematics",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari",
+                    "displayName": "5A Mathematics 1",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-mathematics.02",
+                    "cohortId": "5a",
+                    "seriesId": "5a-mathematics",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari",
+                    "displayName": "5A Mathematics 2",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-mathematics.03",
+                    "cohortId": "5a",
+                    "seriesId": "5a-mathematics",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari",
+                    "displayName": "5A Mathematics 3",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-mathematics.04",
+                    "cohortId": "5a",
+                    "seriesId": "5a-mathematics",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari",
+                    "displayName": "5A Mathematics 4",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-mathematics.05",
+                    "cohortId": "5a",
+                    "seriesId": "5a-mathematics",
+                    "subjectId": "mathematics",
+                    "teacherId": "mari",
+                    "displayName": "5A Mathematics 5",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-estonian.01",
+                    "cohortId": "5a",
+                    "seriesId": "5a-estonian",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan",
+                    "displayName": "5A Estonian 1",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-estonian.02",
+                    "cohortId": "5a",
+                    "seriesId": "5a-estonian",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan",
+                    "displayName": "5A Estonian 2",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-estonian.03",
+                    "cohortId": "5a",
+                    "seriesId": "5a-estonian",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan",
+                    "displayName": "5A Estonian 3",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  {
+                    "id": "5a-estonian.04",
+                    "cohortId": "5a",
+                    "seriesId": "5a-estonian",
+                    "subjectId": "estonian",
+                    "teacherId": "jaan",
+                    "displayName": "5A Estonian 4",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  }
+                ],
+                "periods": [
+                  {
+                    "id": "monday-1",
+                    "order": 1,
+                    "endTime": "09:45",
+                    "weekday": "MONDAY",
+                    "startTime": "09:00",
+                    "displayName": "Monday 1"
+                  },
+                  {
+                    "id": "monday-2",
+                    "order": 2,
+                    "endTime": "10:45",
+                    "weekday": "MONDAY",
+                    "startTime": "10:00",
+                    "displayName": "Monday 2"
+                  },
+                  {
+                    "id": "tuesday-1",
+                    "order": 1,
+                    "endTime": "09:45",
+                    "weekday": "TUESDAY",
+                    "startTime": "09:00",
+                    "displayName": "Tuesday 1"
+                  },
+                  {
+                    "id": "tuesday-2",
+                    "order": 2,
+                    "endTime": "10:45",
+                    "weekday": "TUESDAY",
+                    "startTime": "10:00",
+                    "displayName": "Tuesday 2"
+                  },
+                  {
+                    "id": "wednesday-1",
+                    "order": 1,
+                    "endTime": "09:45",
+                    "weekday": "WEDNESDAY",
+                    "startTime": "09:00",
+                    "displayName": "Wednesday 1"
+                  },
+                  {
+                    "id": "wednesday-2",
+                    "order": 2,
+                    "endTime": "10:45",
+                    "weekday": "WEDNESDAY",
+                    "startTime": "10:00",
+                    "displayName": "Wednesday 2"
+                  },
+                  {
+                    "id": "thursday-1",
+                    "order": 1,
+                    "endTime": "09:45",
+                    "weekday": "THURSDAY",
+                    "startTime": "09:00",
+                    "displayName": "Thursday 1"
+                  },
+                  {
+                    "id": "thursday-2",
+                    "order": 2,
+                    "endTime": "10:45",
+                    "weekday": "THURSDAY",
+                    "startTime": "10:00",
+                    "displayName": "Thursday 2"
+                  },
+                  {
+                    "id": "friday-1",
+                    "order": 1,
+                    "endTime": "09:45",
+                    "weekday": "FRIDAY",
+                    "startTime": "09:00",
+                    "displayName": "Friday 1"
+                  },
+                  {
+                    "id": "friday-2",
+                    "order": 2,
+                    "endTime": "10:45",
+                    "weekday": "FRIDAY",
+                    "startTime": "10:00",
+                    "displayName": "Friday 2"
+                  }
+                ],
+                "schoolId": "authoring-demo-school",
+                "subjects": [
+                  {
+                    "id": "mathematics",
+                    "displayName": "Mathematics"
+                  },
+                  {
+                    "id": "estonian",
+                    "displayName": "Estonian"
+                  }
+                ],
+                "teachers": [
+                  {
+                    "id": "mari",
+                    "displayName": "Mari",
+                    "qualifiedSubjectIds": [
+                      "mathematics"
+                    ]
+                  },
+                  {
+                    "id": "jaan",
+                    "displayName": "Jaan",
+                    "qualifiedSubjectIds": [
+                      "mathematics",
+                      "estonian"
+                    ]
+                  }
+                ],
+                "displayName": "Authoring Demo School",
+                "schemaVersion": 1,
+                "catalogVersion": 9
+              }
+            },
+            "authoringContext": {
+              "requirements": {
+                "5a-estonian": {
+                  "count": 4,
+                  "cohortId": "5a",
+                  "defaults": {
+                    "teacherId": "jaan",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  "seriesId": "5a-estonian",
+                  "subjectId": "estonian",
+                  "exceptions": {},
+                  "mixedFields": [],
+                  "nextSequence": 5
+                },
+                "5a-mathematics": {
+                  "count": 5,
+                  "cohortId": "5a",
+                  "defaults": {
+                    "teacherId": "mari",
+                    "requiredRoomCapabilityIds": [
+                      "general-classroom"
+                    ]
+                  },
+                  "seriesId": "5a-mathematics",
+                  "subjectId": "mathematics",
+                  "exceptions": {},
+                  "mixedFields": [],
+                  "nextSequence": 6
+                }
+              },
+              "authoredLocks": {
+                "5a-estonian.01": {},
+                "5a-estonian.02": {},
+                "5a-estonian.03": {},
+                "5a-estonian.04": {},
+                "5a-mathematics.01": {},
+                "5a-mathematics.02": {},
+                "5a-mathematics.03": {},
+                "5a-mathematics.04": {},
+                "5a-mathematics.05": {}
+              }
+            },
+            "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+            "definitionRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+          },
+          "removedIdentities": [],
+          "openingAdjustments": []
+        },
+        "directEffectRevision": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "directEffectLessonIds": [],
+        "seedDefinitionRevision": "sha256:b17fd0254615d5b661b3a9f8084718c0f048f85766b2a6fd534580c1e105eb25"
+      },
+      "acceptedBaseline": {
+        "result": {
+          "seed": 0,
+          "limit": {
+            "type": "TIME",
+            "duration": "PT1M"
+          },
+          "score": {
+            "periodMoves": 0,
+            "roomOnlyMoves": 0,
+            "constraintBreakdown": [
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.teacher-gap",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-gap",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-late-start",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.cohort-week-balance",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.series-same-day",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.undesirable-period",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              },
+              {
+                "category": "ORDINARY_PREFERENCE",
+                "matchCount": 0,
+                "constraintId": "soft.non-preferred-room",
+                "effectiveWeight": 1,
+                "aggregatePenalty": 0
+              }
+            ],
+            "ordinaryPreferencePenalty": 0
+          },
+          "status": "FEASIBLE",
+          "schoolId": "authoring-demo-school",
+          "timetable": {
+            "assignments": [
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.01",
+                "periodId": "monday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.02",
+                "periodId": "tuesday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.03",
+                "periodId": "wednesday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-estonian.04",
+                "periodId": "thursday-2",
+                "subjectId": "estonian",
+                "teacherId": "jaan"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.01",
+                "periodId": "monday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.02",
+                "periodId": "tuesday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.03",
+                "periodId": "wednesday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.04",
+                "periodId": "thursday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              },
+              {
+                "roomId": "b1",
+                "cohortId": "5a",
+                "lessonId": "5a-mathematics.05",
+                "periodId": "friday-1",
+                "subjectId": "mathematics",
+                "teacherId": "mari"
+              }
+            ]
+          },
+          "correlationId": "f60273bc-e04b-4785-84ea-c215c514a624",
+          "elapsedTimeMs": 61069,
+          "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+          "kernelVersion": "1.0.0-SNAPSHOT",
+          "schemaVersion": 1,
+          "catalogVersion": 9,
+          "terminationReason": "TIME_LIMIT",
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "effectiveSoftWeights": {
+            "soft.cohort-gap": 1,
+            "soft.teacher-gap": 1,
+            "soft.series-same-day": 1,
+            "soft.cohort-late-start": 1,
+            "soft.non-preferred-room": 1,
+            "soft.undesirable-period": 1,
+            "soft.cohort-week-balance": 1
+          }
+        },
+        "manifest": {
+          "locks": [],
+          "schoolId": "authoring-demo-school",
+          "inputRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73",
+          "catalogVersion": 9,
+          "manifestVersion": 1,
+          "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+          "resultSchemaVersion": 1,
+          "definitionSchemaVersion": 1
+        },
+        "definition": {
+          "rooms": [
+            {
+              "id": "b1",
+              "capacity": 25,
+              "displayName": "B1",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "b2",
+              "capacity": 25,
+              "displayName": "B2",
+              "capabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "5a",
+              "size": 20,
+              "displayName": "5A"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "5a-mathematics.01",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.02",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.03",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.04",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-mathematics.05",
+              "cohortId": "5a",
+              "seriesId": "5a-mathematics",
+              "subjectId": "mathematics",
+              "teacherId": "mari",
+              "displayName": "5A Mathematics 5",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.01",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 1",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.02",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 2",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.03",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 3",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            {
+              "id": "5a-estonian.04",
+              "cohortId": "5a",
+              "seriesId": "5a-estonian",
+              "subjectId": "estonian",
+              "teacherId": "jaan",
+              "displayName": "5A Estonian 4",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            }
+          ],
+          "periods": [
+            {
+              "id": "monday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "MONDAY",
+              "startTime": "09:00",
+              "displayName": "Monday 1"
+            },
+            {
+              "id": "monday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "MONDAY",
+              "startTime": "10:00",
+              "displayName": "Monday 2"
+            },
+            {
+              "id": "tuesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "TUESDAY",
+              "startTime": "09:00",
+              "displayName": "Tuesday 1"
+            },
+            {
+              "id": "tuesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "TUESDAY",
+              "startTime": "10:00",
+              "displayName": "Tuesday 2"
+            },
+            {
+              "id": "wednesday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "09:00",
+              "displayName": "Wednesday 1"
+            },
+            {
+              "id": "wednesday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "WEDNESDAY",
+              "startTime": "10:00",
+              "displayName": "Wednesday 2"
+            },
+            {
+              "id": "thursday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "THURSDAY",
+              "startTime": "09:00",
+              "displayName": "Thursday 1"
+            },
+            {
+              "id": "thursday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "THURSDAY",
+              "startTime": "10:00",
+              "displayName": "Thursday 2"
+            },
+            {
+              "id": "friday-1",
+              "order": 1,
+              "endTime": "09:45",
+              "weekday": "FRIDAY",
+              "startTime": "09:00",
+              "displayName": "Friday 1"
+            },
+            {
+              "id": "friday-2",
+              "order": 2,
+              "endTime": "10:45",
+              "weekday": "FRIDAY",
+              "startTime": "10:00",
+              "displayName": "Friday 2"
+            }
+          ],
+          "schoolId": "authoring-demo-school",
+          "subjects": [
+            {
+              "id": "mathematics",
+              "displayName": "Mathematics"
+            },
+            {
+              "id": "estonian",
+              "displayName": "Estonian"
+            }
+          ],
+          "teachers": [
+            {
+              "id": "mari",
+              "displayName": "Mari",
+              "qualifiedSubjectIds": [
+                "mathematics"
+              ]
+            },
+            {
+              "id": "jaan",
+              "displayName": "Jaan",
+              "qualifiedSubjectIds": [
+                "mathematics",
+                "estonian"
+              ]
+            }
+          ],
+          "displayName": "Authoring Demo School",
+          "schemaVersion": 1,
+          "catalogVersion": 9
+        }
+      },
+      "authoringContext": {
+        "requirements": {
+          "5a-estonian": {
+            "count": 4,
+            "cohortId": "5a",
+            "defaults": {
+              "teacherId": "jaan",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            "seriesId": "5a-estonian",
+            "subjectId": "estonian",
+            "exceptions": {},
+            "mixedFields": [],
+            "nextSequence": 5
+          },
+          "5a-mathematics": {
+            "count": 5,
+            "cohortId": "5a",
+            "defaults": {
+              "teacherId": "mari",
+              "requiredRoomCapabilityIds": [
+                "general-classroom"
+              ]
+            },
+            "seriesId": "5a-mathematics",
+            "subjectId": "mathematics",
+            "exceptions": {},
+            "mixedFields": [],
+            "nextSequence": 6
+          }
+        },
+        "authoredLocks": {
+          "5a-estonian.01": {},
+          "5a-estonian.02": {},
+          "5a-estonian.03": {},
+          "5a-estonian.04": {},
+          "5a-mathematics.01": {},
+          "5a-mathematics.02": {},
+          "5a-mathematics.03": {},
+          "5a-mathematics.04": {},
+          "5a-mathematics.05": {}
+        }
+      },
+      "timetableRevision": "sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8",
+      "definitionRevision": "sha256:3594e6cc1fe98f9ca607f57681473f70f2173f0fd080dd8d675f37200e9ccb73"
+    }
+  },
+  "log": [],
+  "verdict": "PASS",
+  "snapshot": "- banner:\n  - paragraph: Local school timetable\n  - heading \"Operations workspace\" [level=1]\n- main:\n  - heading \"Authoring Demo School\" [level=2]\n  - text: ✓ Current · accepted Repair draft · not current\n  - paragraph: \"Accepted revision: sha256:2fea6802e335236e1e2464e22c0a1e7033ca4a1288458fefcc38751db4301ab8\"\n  - paragraph: Accepted baseline remains current\n  - group: Utilities\n  - navigation \"Timetable views\":\n    - button \"Current\"\n    - button \"Draft\" [pressed]\n  - paragraph: \"Verified authored successor: Verified newer successor <literal> • sha256:b17fd0254615d5b661b3a9f8084718c0f048f85766b2a6fd534580c1e105eb25. Authored changes and editing context are retained. Current remains the accepted source; this definition has not been solved or published.\"\n  - group \"Time range\":\n    - text: Time range\n    - button \"Week\" [pressed]\n    - button \"Day\"\n  - text: Weekday\n  - combobox \"Weekday\":\n    - option \"Monday\" [selected]\n    - option \"Tuesday\"\n    - option \"Wednesday\"\n    - option \"Thursday\"\n    - option \"Friday\"\n  - text: Search lessons\n  - searchbox \"Search lessons\"\n  - text: Subject investigation\n  - combobox \"Subject investigation\":\n    - option \"No subject selected\" [selected]\n    - option \"Mathematics\"\n    - option \"Estonian\"\n  - text: Teacher investigation\n  - combobox \"Teacher investigation\":\n    - option \"No teacher selected\" [selected]\n    - option \"Mari\"\n    - option \"Jaan\"\n  - group: Filters\n  - status:\n    - strong: Complete school population\n    - text: \"Complete recurring Week Showing 1 of 1 classes Represented lessons: 9 Active filters: No active filters\"\n    - button \"Reset view\"\n  - status: \"Subject matches: 0 Teacher matches: 0 Dual matches: 0\"\n  - table:\n    - rowgroup:\n      - row \"Class Period Monday Tuesday Wednesday Thursday Friday\":\n        - columnheader \"Class\"\n        - columnheader \"Period\"\n        - columnheader \"Monday\"\n        - columnheader \"Tuesday\"\n        - columnheader \"Wednesday\"\n        - columnheader \"Thursday\"\n        - columnheader \"Friday\"\n    - rowgroup:\n      - row \"5A 109:00–09:45 Mathematics · Mari · B1 · 5A · Monday · Monday 1 · 09:00–09:45 · 5a-mathematics.01 Mathematics · Mari · B1 · 5A · Tuesday · Tuesday 1 · 09:00–09:45 · 5a-mathematics.02 Mathematics · Mari · B1 · 5A · Wednesday · Wednesday 1 · 09:00–09:45 · 5a-mathematics.03 Mathematics · Mari · B1 · 5A · Thursday · Thursday 1 · 09:00–09:45 · 5a-mathematics.04 Mathematics · Mari · B1 · 5A · Friday · Friday 1 · 09:00–09:45 · 5a-mathematics.05\":\n        - rowheader \"5A\"\n        - rowheader \"109:00–09:45\"\n        - cell \"Mathematics · Mari · B1 · 5A · Monday · Monday 1 · 09:00–09:45 · 5a-mathematics.01\":\n          - button \"Mathematics · Mari · B1 · 5A · Monday · Monday 1 · 09:00–09:45 · 5a-mathematics.01\":\n            - strong: Mathematics\n            - text: B1\n        - cell \"Mathematics · Mari · B1 · 5A · Tuesday · Tuesday 1 · 09:00–09:45 · 5a-mathematics.02\":\n          - button \"Mathematics · Mari · B1 · 5A · Tuesday · Tuesday 1 · 09:00–09:45 · 5a-mathematics.02\":\n            - strong: Mathematics\n            - text: B1\n        - cell \"Mathematics · Mari · B1 · 5A · Wednesday · Wednesday 1 · 09:00–09:45 · 5a-mathematics.03\":\n          - button \"Mathematics · Mari · B1 · 5A · Wednesday · Wednesday 1 · 09:00–09:45 · 5a-mathematics.03\":\n            - strong: Mathematics\n            - text: B1\n        - cell \"Mathematics · Mari · B1 · 5A · Thursday · Thursday 1 · 09:00–09:45 · 5a-mathematics.04\":\n          - button \"Mathematics · Mari · B1 · 5A · Thursday · Thursday 1 · 09:00–09:45 · 5a-mathematics.04\":\n            - strong: Mathematics\n            - text: B1\n        - cell \"Mathematics · Mari · B1 · 5A · Friday · Friday 1 · 09:00–09:45 · 5a-mathematics.05\":\n          - button \"Mathematics · Mari · B1 · 5A · Friday · Friday 1 · 09:00–09:45 · 5a-mathematics.05\":\n            - strong: Mathematics\n            - text: B1\n      - row \"210:00–10:45 Estonian · Jaan · B1 · 5A · Monday · Monday 2 · 10:00–10:45 · 5a-estonian.01 Estonian · Jaan · B1 · 5A · Tuesday · Tuesday 2 · 10:00–10:45 · 5a-estonian.02 Estonian · Jaan · B1 · 5A · Wednesday · Wednesday 2 · 10:00–10:45 · 5a-estonian.03 Estonian · Jaan · B1 · 5A · Thursday · Thursday 2 · 10:00–10:45 · 5a-estonian.04 Empty\":\n        - rowheader \"210:00–10:45\"\n        - cell \"Estonian · Jaan · B1 · 5A · Monday · Monday 2 · 10:00–10:45 · 5a-estonian.01\":\n          - button \"Estonian · Jaan · B1 · 5A · Monday · Monday 2 · 10:00–10:45 · 5a-estonian.01\":\n            - strong: Estonian\n            - text: B1\n        - cell \"Estonian · Jaan · B1 · 5A · Tuesday · Tuesday 2 · 10:00–10:45 · 5a-estonian.02\":\n          - button \"Estonian · Jaan · B1 · 5A · Tuesday · Tuesday 2 · 10:00–10:45 · 5a-estonian.02\":\n            - strong: Estonian\n            - text: B1\n        - cell \"Estonian · Jaan · B1 · 5A · Wednesday · Wednesday 2 · 10:00–10:45 · 5a-estonian.03\":\n          - button \"Estonian · Jaan · B1 · 5A · Wednesday · Wednesday 2 · 10:00–10:45 · 5a-estonian.03\":\n            - strong: Estonian\n            - text: B1\n        - cell \"Estonian · Jaan · B1 · 5A · Thursday · Thursday 2 · 10:00–10:45 · 5a-estonian.04\":\n          - button \"Estonian · Jaan · B1 · 5A · Thursday · Thursday 2 · 10:00–10:45 · 5a-estonian.04\":\n            - strong: Estonian\n            - text: B1\n        - cell \"Empty\"\n  - region \"Repair draft · not current\":\n    - heading \"Repair draft · not current\" [level=3]\n    - button \"Collapse Draft task area\"\n    - alert\n    - region \"Draft summary\":\n      - heading \"Staged weekly changes\" [level=4]\n      - paragraph: No weekly resource changes are staged.\n      - group: Stage weekly unavailability\n      - heading \"Directly affected lessons\" [level=4]\n      - term: Directly affected lessons\n      - definition: \"0\"\n      - term: Attempt-scoped pins\n      - definition: \"0\"\n      - term: Blocking conflicts\n      - definition: \"0\"\n      - paragraph: This rule currently conflicts with no accepted assignment. The staged intent remains saved.\n      - paragraph: ✓ Draft is durably saved with no blocking conflict.\n      - heading \"Protect accepted assignment dimensions\" [level=4]\n      - paragraph: Select an accepted lesson on the canvas to protect its period or room.\n      - group: Protected accepted assignments · 0\n      - group: Bulk-protect accepted assignments\n      - checkbox \"I confirm the staged changes and attempt-scoped pins should be discarded.\"\n      - text: I confirm the staged changes and attempt-scoped pins should be discarded.\n      - button \"Discard repair draft\" [disabled]\n      - button \"Resolve conflicts before repair generation\" [disabled]\n  - status: Authoring unavailable while REPAIR_DRAFT is active. Finish or abandon this workflow first."
+}

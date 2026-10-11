@@ -1,0 +1,10 @@
+### Browser `authoring-uc16-r5` opened with pid 16000.
+### Ran Playwright code
+```js
+await page.goto('http://localhost:18104/workspace/');
+```
+### Page
+- Page URL: http://localhost:18104/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-11T21-50-50-615Z.yml)

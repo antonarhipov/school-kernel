@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-16
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-17 after UC-16 walkthrough
+- Use case: UC-17
+- Status: IN_PROGRESS
+- Next eligible: UC-18 after UC-17 walkthrough; UC-18 enabling work is required for UC-17 MVK journey
 
 ## Progress
 
@@ -25,8 +25,8 @@
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
 | UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
 | UC-15 | APPROVED | UC-1 | `ac6faa0` / [checkpoint](checkpoints/UC-15.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md) |
-| UC-16 | PENDING_WALKTHROUGH | UC-1, UC-15 | [checkpoint](checkpoints/UC-16.md) | - |
-| UC-17 | NOT_STARTED | UC-16 | - | - |
+| UC-16 | APPROVED | UC-1, UC-15 | `56f8cdd` / [checkpoint](checkpoints/UC-16.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md) |
+| UC-17 | IN_PROGRESS | UC-16 | - | - |
 | UC-18 | NOT_STARTED | UC-16 | - | - |
 | UC-19 | NOT_STARTED | UC-1 | - | - |
 | UC-20 | NOT_STARTED | none | - | - |
@@ -348,3 +348,7 @@ Revised checks PASS: 6 Finish + 5 Review browser journeys and 8 verifier/archite
 ### 2026-10-12 — UC-16 walkthrough revisions and baseline comparison
 
 Attempts1–3 retained under `output/playwright/school-definition-authoring/UC-16/`. Exact nine-lesson onboarding/first acceptance passed twice. Attempt1 selector typo fixed; attempt2 led to explicit verified seed identity and viewport-safe confirmation; attempt3 found long SHA notice narrow overflow, now wrapped. Final6 Finish test repeat is running. Resize-wait check passes (`/tmp/uc16-viewport-verify.log`). Ordinary repair regression failures are unchanged: same four IDs at `0c360a4` in isolated `/tmp/uc16-baseline`, `/tmp/uc16-repair-baseline.log`; pointer interception and geometry failures occur without authored seed. Preserve and resolve relevant operational defects during UC-17. Older agent-owned servers stopped after disposable PostgreSQL reached connection limit; their databases/evidence remain. No operator runtime changes.
+
+### 2026-10-12 — UC-16 APPROVED; UC-17 started
+
+Final-build complete normative repeat5 PASS v20 with20 inspected images; same-build separate fault journey from attempt4 also PASS and linked. Exact9-lesson form onboarding, realPT1M plan/result verification/first acceptance, saved-context retention; initial/accepted/zero/invalid/unavailable/stale/transport/storage paths, exact complete source/Current preservation and narrow seeded identity. [Passing ledger](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md). No human confirmation gate. Beginning UC-17, including UC-18 enabling restoration for mandatory MVK journey; neither destination approved yet.
