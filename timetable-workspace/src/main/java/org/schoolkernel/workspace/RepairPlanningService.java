@@ -25,6 +25,7 @@ public class RepairPlanningService {
     private final WorkspaceMutation mutation;
     private final RepairDraftService drafts;
     private final KernelPlanner planner;
+    private final KernelVerifier verifier;
     private final ProposalReviewService reviews;
     private final ObjectMapper json;
     private final ExecutorService executor = Executors.newSingleThreadExecutor(
@@ -35,12 +36,14 @@ public class RepairPlanningService {
             WorkspaceMutation mutation,
             RepairDraftService drafts,
             KernelPlanner planner,
+            KernelVerifier verifier,
             ProposalReviewService reviews,
             ObjectMapper json) {
         this.repository = repository;
         this.mutation = mutation;
         this.drafts = drafts;
         this.planner = planner;
+        this.verifier = verifier;
         this.reviews = reviews;
         this.json = json;
     }
@@ -57,7 +60,9 @@ public class RepairPlanningService {
                     "DRAFT_NOT_DURABLE",
                     "Repair generation is unavailable after an auto-save failure. Reapply or discard the unsaved change first.");
         }
-        JsonNode draft = current.document().path("repairDraft");
+        ObjectNode checkedDocument = (ObjectNode) current.document().deepCopy();
+        drafts.refreshSavedDraft(checkedDocument);
+        JsonNode draft = checkedDocument.path("repairDraft");
         if (!draft.path("readyToSolve").booleanValue() || !draft.path("conflicts").isEmpty()) {
             throw new WorkspaceProblem(
                     HttpStatus.CONFLICT,
@@ -86,8 +91,18 @@ public class RepairPlanningService {
                     "The repair draft no longer matches the accepted baseline.");
         }
 
+        if (RepairDraftService.seeded(current.document())) {
+            KernelVerifier.Verification source = verifier.verify(new ImportDocuments(currentDefinition, currentResult,
+                    null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+            KernelVerifier.Verification seed = verifier.verify(new ImportDocuments(draft.path("seedDefinition"), null,
+                    null, ImportDocuments.ImportMode.SUCCESSOR_DEFINITION));
+            if (!source.definitionRevision().equals(acceptedInputRevision)
+                    || !source.timetableRevision().equals(acceptedTimetableRevision)
+                    || !seed.definitionRevision().equals(draft.path("seedDefinitionRevision").asString("")))
+                throw transition("The saved seed or source verification identity changed. No run started.");
+        }
         UUID runId = UUID.randomUUID();
-        ObjectNode document = (ObjectNode) current.document().deepCopy();
+        ObjectNode document = checkedDocument;
         document.remove("proposal");
         ObjectNode run = document.putObject("run");
         run.put("id", runId.toString());
@@ -204,6 +219,14 @@ public class RepairPlanningService {
         }
 
         ObjectNode document = (ObjectNode) current.document().deepCopy();
+        try {
+            drafts.refreshSavedDraft(document);
+            if (!intentRevision.equals(document.path("repairDraft").path("intentRevision").asString(""))
+                    || !successorDefinition.equals(drafts.compiledDefinition(document)))
+                outcome = KernelPlanner.Outcome.failed("REJECTED_OUTPUT", "The frozen seed, source or repair intent changed.");
+        } catch (WorkspaceProblem invalid) {
+            outcome = KernelPlanner.Outcome.failed("REJECTED_OUTPUT", "The frozen seed or source is no longer eligible.");
+        }
         document.remove("run");
         ObjectNode lastRun = document.putObject("lastRun");
         lastRun.put("id", runId.toString());

@@ -121,6 +121,8 @@ export const M = Object.freeze({
   weeklyUnavailablePeriods: 'Explicit weekly periods when this resource is unavailable',
   stageChange: 'Stage weekly unavailability',
   unsupportedRepairActions: 'Class unavailability, cancellation, required moves, and teacher reassignment are outside this increment.',
+  timingChanges: 'Actual timing changed',
+  definitionChanges: 'Native lesson definition changed',
   repairDraft: 'Repair draft · not current',
   acceptedStillCurrent: 'Accepted baseline remains current',
   repairDraftIntro: 'Review staged intent, direct effects, policy locks, and attempt-scoped pins. Changes are auto-saved separately from accepted data.',

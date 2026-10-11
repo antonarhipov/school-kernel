@@ -18,6 +18,7 @@ public class RepairProposalService {
     private final ManifestService manifests;
     private final ProposalReviewService reviews;
     private final ObjectMapper json;
+    private final RepairDraftService drafts;
 
     public RepairProposalService(
             WorkspaceRepository repository,
@@ -25,13 +26,14 @@ public class RepairProposalService {
             KernelVerifier verifier,
             ManifestService manifests,
             ProposalReviewService reviews,
-            ObjectMapper json) {
+            ObjectMapper json, RepairDraftService drafts) {
         this.repository = repository;
         this.mutation = mutation;
         this.verifier = verifier;
         this.manifests = manifests;
         this.reviews = reviews;
         this.json = json;
+        this.drafts = drafts;
     }
 
     public WorkspaceAggregate discard(String ifMatch) {
@@ -59,6 +61,18 @@ public class RepairProposalService {
 
         KernelVerifier.Verification verified;
         try {
+            if (RepairDraftService.seeded(current.document())) {
+                JsonNode source = current.document().path("acceptedBaseline");
+                verifier.verify(new ImportDocuments(source.path("definition"), source.path("result"), null,
+                        ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+                KernelVerifier.Verification seed = verifier.verify(new ImportDocuments(
+                        current.document().path("repairDraft").path("seedDefinition"), null, null,
+                        ImportDocuments.ImportMode.SUCCESSOR_DEFINITION));
+                if (!seed.definitionRevision().equals(current.document().path("repairDraft").path("seedDefinitionRevision").asString(""))) {
+                    invalidate(current);
+                    throw staleProposal();
+                }
+            }
             verified = verifier.verify(new ImportDocuments(
                     definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
         } catch (WorkspaceProblem problem) {
@@ -75,7 +89,12 @@ public class RepairProposalService {
         }
 
         ObjectNode acceptedDocument = json.createObjectNode();
-        acceptedDocument.set("school", current.document().path("school").deepCopy());
+        acceptedDocument.putObject("school").put("id", verified.schoolId())
+                .put("displayName", definition.path("displayName").asString());
+        if (RepairDraftService.seeded(current.document())) acceptedDocument.set("authoringContext",
+                current.document().path("repairDraft").path("retainedAuthoring").path("editingContext").deepCopy());
+        else if (current.document().has("authoringContext")) acceptedDocument.set("authoringContext",
+                current.document().path("authoringContext").deepCopy());
         acceptedDocument.put("importMode", "REPAIR_ACCEPTANCE");
         acceptedDocument.put("definitionRevision", verified.definitionRevision());
         acceptedDocument.put("timetableRevision", verified.timetableRevision());
@@ -112,6 +131,15 @@ public class RepairProposalService {
                 || !accepted.path("result").path("inputRevision").stringValue()
                         .equals(text(definition.path("basedOnRevision")))) {
             return false;
+        }
+        if (RepairDraftService.seeded(current.document())) {
+            try {
+                ObjectNode checked = copy(current.document());
+                drafts.refreshSavedDraft(checked);
+                if (!draft.path("intentRevision").equals(checked.path("repairDraft").path("intentRevision"))
+                        || !checked.path("repairDraft").path("readyToSolve").booleanValue()
+                        || !definition.equals(drafts.compiledDefinition(checked))) return false;
+            } catch (WorkspaceProblem invalid) { return false; }
         }
         JsonNode report = result.path("changeReport");
         if (!report.isObject() || report.size() != ProposalReviewService.CATEGORIES.size()) return false;

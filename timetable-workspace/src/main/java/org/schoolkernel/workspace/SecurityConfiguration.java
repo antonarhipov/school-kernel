@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/", "/workspace/**", "/api/csrf", "/api/workspace",
                                 "/api/runs/*", "/api/proposal", "/api/accepted/export", "/api/definition-draft/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/import", "/api/initial-draft/replace",
-                                "/api/repair-draft", "/api/repair-draft/bulk-pin-preview",
+                                "/api/repair-draft", "/api/repair-draft/bulk-pin-preview", "/api/repair-draft/return-to-authoring",
                                 "/api/runs", "/api/proposal/accept",
                                 "/api/workspace/clear", "/api/workspace/upload-definition",
                                 "/api/manual-draft", "/api/manual-draft/publish",

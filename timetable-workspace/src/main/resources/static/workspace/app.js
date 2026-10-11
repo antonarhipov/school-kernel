@@ -385,13 +385,18 @@ function bindInitialProposalTaskArea() {
 function renderRepairProposal(snapshot, schoolName) {
   const reviewStarted = performance.now();
   if (view.narrow) {
-    renderNarrowReadOnly(schoolName, M.repairProposal, M.acceptedStillCurrent); return;
+    renderNarrowReadOnly(schoolName, M.repairProposal, M.acceptedStillCurrent); renderSeedIdentity(snapshot);
+    const review = snapshot.workspace.proposal.review;
+    const detail = document.createElement('section'); detail.innerHTML = nativeChangesHtml(review.definitionChanges);
+    const timing = document.createElement('p'); timing.textContent = `Actual timing impacts: ${review.timingImpactCount || 0}. ${review.timingImpactLessonIds?.join(', ') || ''}`;
+    detail.append(timing); detail.style.overflowWrap = 'anywhere'; stateCard.append(detail); return;
   }
   stateCard.className = 'card workspace-card review-mode current-mode compact-density';
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairProposal}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.proposalNotCurrent} ${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${proposalTaskArea()}`;
   bindUtilities();
   renderWholeSchool();
   bindProposalTaskArea();
+  renderSeedIdentity(snapshot);
   window.__workspaceProposalReviewMs = performance.now() - reviewStarted;
 }
 
@@ -440,7 +445,7 @@ function reviewSide(title, side, changed, model) {
   if (!side) return `<section><h5>${title}</h5><p>${M.notPresent}</p></section>`;
   const values = [['subjectId', M.subject, model.maps.subjects], ['cohortId', M.class, model.maps.cohorts], ['teacherId', M.teacher, model.maps.teachers], ['periodId', M.period, model.maps.periods], ['roomId', M.room, model.maps.rooms]];
   const day = model.maps.periods.get(side.periodId)?.weekday;
-  return `<section><h5>${title}</h5><dl>${detail(M.weekdayLabel, day ? M.days[day] || day : M.nameUnavailable)}${values.map(([field, label, map]) => `<div class="${changed.includes(field) ? 'changed-dimension' : ''}"><dt>${label}${changed.includes(field) ? ` · ${M.changedDimension}` : ''}</dt><dd>${escapeHtml(entityName(map.get(side[field]), side[field] || ''))}<small>${escapeHtml(side[field] || M.nameUnavailable)}</small></dd></div>`).join('')}</dl></section>`;
+  return `<section><h5>${title}</h5><dl>${detail(M.weekdayLabel, day ? M.days[day] || day : M.nameUnavailable)}${detail("Actual timing", formatPeriodSlot(model.maps.periods.get(side.periodId)))}${values.map(([field, label, map]) => `<div class="${changed.includes(field) ? 'changed-dimension' : ''}"><dt>${label}${changed.includes(field) ? ` · ${M.changedDimension}` : ''}</dt><dd>${escapeHtml(entityName(map.get(side[field]), side[field] || ''))}<small>${escapeHtml(side[field] || M.nameUnavailable)}</small></dd></div>`).join('')}</dl></section>`;
 }
 
 function proposalContext() {
@@ -454,6 +459,7 @@ function proposalContext() {
     <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
     <details class="review-groups"><summary>${M.protectedAssignments} · ${protectedIds.length}</summary>${protectedIds.length ? `<ul>${protectedIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button> · ${escapeHtml(comparisonProtection(id))}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>
     <div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div><p>${M.overlappingTotals}</p>
+    ${nativeChangesHtml(review.definitionChanges)}${review.timingImpactLessonIds ? `<details class="timing-impact"><summary>Actual timing impacts · ${review.timingImpactCount} (separate from period-ID moves)</summary><ul>${review.timingImpactLessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul></details>` : ''}
     <h4>${M.changeCategories}</h4><div class="review-categories">${categories}</div>
     <h4>${M.impactGroups}</h4>${reviewGroup('classes', M.groupClasses)}${reviewGroup('teachers', M.groupTeachers)}${reviewGroup('rooms', M.groupRooms)}${reviewGroup('days', M.groupDays)}
     ${unchanged.length ? `<section class="unchanged-review"><h4>${M.unchangedLesson}</h4><select id="unchanged-lesson">${unchanged.map(item => `<option value="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(item.lesson, item.lessonId))}</option>`).join('')}</select><button type="button" id="show-unchanged" class="secondary">${M.showUnchanged}</button></section>` : ''}
@@ -467,7 +473,7 @@ function reviewSelection() {
   const change = pair.change;
   const target = reviewTargetLabel(pair);
   return `<section class="review-selection" aria-label="${M.changedLessonDetails}"><h4>${M.changedLessonDetails}: ${escapeHtml(reviewLessonName(id))}</h4><p>${M.reviewTarget}: ${target} · ${escapeHtml(id)}</p>
-    <p>${change ? change.categories.map(category => M[category]).join(' · ') : M.visuallyQuiet}</p>
+    <p>${change ? change.categories.map(category => M[category] || category).join(' · ') : M.visuallyQuiet}</p>
     ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}${comparisonProtection(id) ? `<p>${escapeHtml(comparisonProtection(id))}</p>` : ''}
     <div class="before-after">${reviewSide(M.oldAssignment, pair.old, change?.changedDimensions || [], acceptedModel)}${reviewSide(M.proposedAssignment, pair.proposed, change?.changedDimensions || [], proposedModel)}</div>
     ${change ? `<div class="review-targets">${reviewLessonActions(id)}</div>` : ''}</section>`;
@@ -730,7 +736,7 @@ function bindStartRepair() {
   if (!form) return;
   const type = form.querySelector('#repair-resource-type');
   const resource = form.querySelector('#repair-resource');
-  const fill = () => { const source = type.value === 'TEACHER' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms; resource.innerHTML = options(source).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const selected = acceptedModel.assignmentMap.get(view.selectedLessonId); const preferred = type.value === 'TEACHER' ? selected?.teacherId || view.teacherId : selected?.roomId || view.roomId; if (preferred) resource.value = preferred; };
+  const fill = () => { const source = type.value === 'TEACHER' ? successorDefinition().teachers : successorDefinition().rooms; resource.innerHTML = options(source).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const selected = acceptedModel.assignmentMap.get(view.selectedLessonId); const preferred = type.value === 'TEACHER' ? selected?.teacherId || view.teacherId : selected?.roomId || view.roomId; if (preferred) resource.value = preferred; };
   fill(); type.addEventListener('change', fill);
   form.addEventListener('submit', async event => {
     event.preventDefault();
@@ -791,6 +797,12 @@ function renderSeedIdentity(snapshot) {
   notice.textContent = `Verified authored successor: ${seed.displayName} • ${snapshot.workspace.repairDraft.seedDefinitionRevision}. Authored changes and editing context are retained. Current remains the accepted source; this definition has not been solved or published.`;
   stateCard.querySelector('.accepted-heading')?.after(notice);
   if (!notice.isConnected) stateCard.prepend(notice);
+  const detail = document.createElement('details'); detail.className = 'seed-definition-inspection';
+  const summary = document.createElement('summary'); summary.textContent = 'Authored successor grid, resources and complete definition';
+  const pre = document.createElement('pre'); pre.textContent = JSON.stringify(seed, null, 2);
+  detail.append(summary, pre); notice.after(detail);
+  const changes = document.createElement('section'); changes.innerHTML = nativeChangesHtml(snapshot.workspace.repairDraft.definitionChanges);
+  detail.after(changes);
 }
 
 function bindDraftTaskArea() {
@@ -811,13 +823,14 @@ function bindDraftTaskArea() {
 
 function renderSolving(snapshot, schoolName) {
   if (view.narrow) {
-    renderNarrowReadOnly(schoolName, M.repairRunning, M.acceptedStillCurrent); return;
+    renderNarrowReadOnly(schoolName, M.repairRunning, M.acceptedStillCurrent); renderSeedIdentity(snapshot); return;
   }
   stateCard.className = 'card workspace-card solving-mode current-mode compact-density';
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairRunning}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${runTaskArea()}`;
   bindUtilities();
   renderWholeSchool();
   bindRunTaskArea();
+  renderSeedIdentity(snapshot);
 }
 
 function runTaskArea() {
@@ -854,12 +867,13 @@ function draftContext(frozen = false) {
     <section class="draft-task-section"><details class="repair-controls"${bulkPreview ? ' open' : ''}><summary>${M.bulkPin}</summary><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></details>
       <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)} · ${escapeHtml(action.id)} · ${action.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div></section>
     </div><div class="draft-task-decisions">${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
-    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></div></section>`;
+    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${draft.seedDefinition ? "Remove repair staging and pins; keep authored changes and return to authoring." : M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${draft.seedDefinition ? "Discard repair draft and return to authoring" : M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></div></section>`;
 }
 
 function draftSelectedProtection() {
   const item = acceptedModel.assignmentMap.get(view.selectedLessonId);
   if (!item) return `<p>${M.selectAcceptedToProtect}</p>`;
+  if (!successorDefinition().lessons.some(lesson => lesson.id === item.lessonId)) return '<p>This occurrence is cancelled in the successor and cannot be pinned.</p>';
   const state = repairLessonState(item.lessonId);
   return `<div class="pin-actions"><p><strong>${escapeHtml(entityName(item.lesson, item.lessonId))}</strong> · ${escapeHtml(item.lessonId)}</p>${pinDimensionControls('lesson')}<div class="actions"><button type="button" id="apply-pin">${M.applyPin}</button><button type="button" id="remove-pin" class="secondary">${M.removePin}</button></div><p>${state.labels}${state.periodPinned || state.roomPinned ? '' : `<span class="state unpinned-state">${M.unpinned}</span>`} <span class="state ${state.periodPinned ? 'pin-label' : 'unpinned-state'}">${state.periodPinned ? M.periodPinned : M.periodUnpinned}</span> <span class="state ${state.roomPinned ? 'pin-label' : 'unpinned-state'}">${state.roomPinned ? M.roomPinned : M.roomUnpinned}</span></p>${state.conflictMessages.map(message => `<p class="error">${escapeHtml(message)}</p>`).join('')}</div>`;
 }
@@ -880,10 +894,18 @@ function draftProtectionSummary(draft) {
   return `<details class="protection-list"><summary>${M.protectedAssignments} · ${protectedIds.size}</summary><ul>${[...pins, ...locks].join('')}</ul></details>`;
 }
 
+function successorDefinition() { return currentSnapshot.workspace.repairDraft?.seedDefinition || acceptedModel.definition; }
+
+function nativeChangesHtml(changes) {
+  if (!changes?.length) return '<p>No native definition differences.</p>';
+  const value = (present, item) => present ? JSON.stringify(item) : 'Absent';
+  return `<details class="native-definition-changes"><summary>Native definition changes · ${changes.length}</summary><ul>${changes.map(change => `<li><strong>${escapeHtml(change.ownerType)} ${escapeHtml(change.ownerId)} · ${escapeHtml(change.field || change.category)}</strong><div>Source: ${escapeHtml(value(change.beforePresent, change.before))}</div><div>Successor: ${escapeHtml(value(change.afterPresent, change.after))}</div></li>`).join('')}</ul></details>`;
+}
+
 function repairIntentForm(draft) {
   const change = draft.intent.changes[0];
   return `<form id="stage-repair-form"><p>${M.startRepairIntro}</p>${selectControl('stage-resource-type', M.resourceType, [['TEACHER', M.teacher], ['ROOM', M.room]], change?.resourceType || 'TEACHER')}
-    <label><span>${M.resource}</span><select id="stage-resource"></select></label><fieldset class="period-choices"><legend>${M.weeklyUnavailablePeriods}</legend>${acceptedModel.definition.periods.map(period => `<label><input type="checkbox" name="stage-period" value="${escapeAttribute(period.id)}"${change?.unavailablePeriodIds.includes(period.id) ? ' checked' : ''}> <span>${escapeHtml(periodLabel(period))} · ${escapeHtml(M.days[period.weekday] || period.weekday)}</span></label>`).join('')}</fieldset><button type="submit">${M.stageChange}</button></form>`;
+    <label><span>${M.resource}</span><select id="stage-resource"></select></label><fieldset class="period-choices"><legend>${M.weeklyUnavailablePeriods}</legend>${successorDefinition().periods.map(period => `<label><input type="checkbox" name="stage-period" value="${escapeAttribute(period.id)}"${change?.unavailablePeriodIds.includes(period.id) ? ' checked' : ''}> <span>${escapeHtml(periodLabel(period))} · ${escapeHtml(M.days[period.weekday] || period.weekday)}</span></label>`).join('')}</fieldset><button type="submit">${M.stageChange}</button></form>`;
 }
 
 function repairChange(change) {
@@ -904,7 +926,7 @@ function bulkPreviewHtml() {
 function bindRepairControls() {
   const form = document.querySelector('#stage-repair-form');
   const type = form.querySelector('#stage-resource-type'); const resource = form.querySelector('#stage-resource');
-  const fill = () => { const items = type.value === 'TEACHER' ? acceptedModel.definition.teachers : acceptedModel.definition.rooms; resource.innerHTML = options(items).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const staged = currentSnapshot.workspace.repairDraft.intent.changes.find(change => change.resourceType === type.value); if (staged) resource.value = staged.resourceId; };
+  const fill = () => { const items = type.value === 'TEACHER' ? successorDefinition().teachers : successorDefinition().rooms; resource.innerHTML = options(items).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const staged = currentSnapshot.workspace.repairDraft.intent.changes.find(change => change.resourceType === type.value); if (staged) resource.value = staged.resourceId; };
   fill(); type.addEventListener('change', fill);
   form.addEventListener('submit', event => { event.preventDefault(); mutateJson('/api/repair-draft', 'PATCH', { action: 'STAGE_UNAVAILABILITY', resourceType: type.value, resourceId: resource.value, periodIds: [...form.querySelectorAll('[name=stage-period]:checked')].map(input => input.value) }); });
   const scope = document.querySelector('#bulk-scope'); const scopeId = document.querySelector('#bulk-scope-id');
@@ -926,7 +948,7 @@ function bindRepairControls() {
   document.querySelectorAll('[data-undo-bulk]').forEach(button => button.addEventListener('click', () => mutateJson('/api/repair-draft', 'PATCH', { action: 'UNDO_BULK_PIN', bulkActionId: button.dataset.undoBulk })));
   const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
   confirmation.addEventListener('change', () => { discard.disabled = !confirmation.checked; });
-  discard.addEventListener('click', () => mutateJson('/api/repair-draft', 'DELETE', { confirmed: true }));
+  discard.addEventListener('click', () => mutateJson(currentSnapshot.workspace.repairDraft.seedDefinition ? '/api/repair-draft/return-to-authoring' : '/api/repair-draft', currentSnapshot.workspace.repairDraft.seedDefinition ? 'POST' : 'DELETE', { confirmed: true }));
   document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT1M' }));
   document.querySelector('#retry-repair')?.addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT2M' }));
   document.querySelectorAll('[data-draft-conflict], [data-draft-effect], [data-draft-protection]').forEach(button => button.addEventListener('click', () => selectDraftLesson(button.dataset.draftConflict || button.dataset.draftEffect || button.dataset.draftProtection)));
@@ -1266,6 +1288,8 @@ function comparisonProtectionCue(id) {
 }
 
 function policyLocks(lessonId) {
+  const seed = currentSnapshot.workspace.repairDraft?.seedDefinition;
+  if (seed) { const lesson = seed.lessons.find(item => item.id === lessonId); return { period: Boolean(lesson?.periodLock), room: Boolean(lesson?.roomLock) }; }
   const lesson = acceptedModel.maps.lessons.get(lessonId);
   const origin = currentSnapshot.workspace.acceptedBaseline.manifest?.locks?.find(lock => lock.lessonId === lessonId);
   return { period: origin?.periodLockOrigin ? origin.periodLockOrigin === 'PERSISTENT_POLICY' : Boolean(lesson?.periodLock),
@@ -1307,7 +1331,7 @@ function selectedLessonDetails(id) {
           <p class="review-target-line"><strong>${M.reviewTarget}:</strong> ${target}</p>
           ${change?.directEffect ? `<p class="direct-label">${M.directlyAffected}</p>` : ''}
           ${change?.rippleEffect ? `<p class="ripple-label">${M.rippleEffectChanges}</p>` : ''}
-          ${change ? `<p class="review-categories">${change.categories.map(category => M[category]).join(', ')}</p>` : ''}
+          ${change ? `<p class="review-categories">${change.categories.map(category => M[category] || category).join(', ')}</p>` : ''}
           ${comparisonMatchedSides(id).length ? `<p class="matched-sides">${comparisonMatchedSides(id).join(' · ')}</p>` : ''}
           ${comparisonProtection(id) ? `<p class="protection-note">${escapeHtml(comparisonProtection(id))}</p>` : ''}
         </div>
@@ -1776,6 +1800,11 @@ function positionPopover(button) {
     inspector.hidden = true;
     return;
   }
+  if (stateCard.classList.contains('repair-mode')) {
+    inspector.hidden = false; inspector.style.position = 'static'; inspector.style.width = '100%';
+    inspector.style.left = ''; inspector.style.top = ''; inspector.style.zIndex = '';
+    return;
+  }
   const targetBtn = button || document.querySelector(`.lesson-cell[data-lesson-id="${view.selectedLessonId}"]`);
   const visibleTarget = targetBtn && !targetBtn.hidden && !targetBtn.closest('[hidden]');
   const canvas = !visibleTarget && detachedLessonId === view.selectedLessonId ? document.querySelector('.canvas-region') : null;
@@ -1788,7 +1817,7 @@ function positionPopover(button) {
   const btnRect = visibleTarget ? targetBtn.getBoundingClientRect() : canvasAnchor(canvas);
   const popoverWidth = Math.min(420, window.innerWidth - 32);
   const gap = 8;
-  const estimatedHeight = 360;
+  const estimatedHeight = Math.min(inspector.getBoundingClientRect().height || 360, window.innerHeight - 32);
 
   let left;
   let top;

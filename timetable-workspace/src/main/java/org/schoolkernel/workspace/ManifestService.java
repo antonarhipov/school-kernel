@@ -39,9 +39,16 @@ public class ManifestService {
         Set<String> persistentRoom = lockIds(previousManifest, "roomLockOrigin", "PERSISTENT_POLICY");
         Set<String> attemptPeriod = pinIds(repairDraft, "periodSources");
         Set<String> attemptRoom = pinIds(repairDraft, "roomSources");
+        boolean seeded = repairDraft.has("seedDefinition");
         for (JsonNode lockNode : manifest.path("locks")) {
             ObjectNode lock = (ObjectNode) lockNode;
             String lessonId = lock.path("lessonId").stringValue();
+            JsonNode seedLesson = seeded ? findLesson(repairDraft.path("seedDefinition"), lessonId) : null;
+            if (seeded) {
+                if (lock.has("periodLockOrigin")) lock.put("periodLockOrigin", seedLesson != null && seedLesson.has("periodLock") ? "PERSISTENT_POLICY" : "ATTEMPT_SCOPED");
+                if (lock.has("roomLockOrigin")) lock.put("roomLockOrigin", seedLesson != null && seedLesson.has("roomLock") ? "PERSISTENT_POLICY" : "ATTEMPT_SCOPED");
+                continue;
+            }
             if (lock.has("periodLockOrigin")) {
                 lock.put("periodLockOrigin", persistentPeriod.contains(lessonId)
                         ? "PERSISTENT_POLICY" : attemptPeriod.contains(lessonId) ? "ATTEMPT_SCOPED" : "PERSISTENT_POLICY");

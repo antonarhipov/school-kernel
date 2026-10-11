@@ -291,6 +291,14 @@ public class WorkspaceController {
         return response(repairs.update(ifMatch, request));
     }
 
+    @PostMapping("/api/repair-draft/return-to-authoring")
+    @ResponseBody
+    public ResponseEntity<JsonNode> returnToAuthoring(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(repairs.returnToAuthoring(ifMatch, request));
+    }
+
     @DeleteMapping("/api/repair-draft")
     @ResponseBody
     public ResponseEntity<JsonNode> discardRepair(

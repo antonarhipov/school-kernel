@@ -48,8 +48,8 @@ public class RepairDraftService {
         intent.putArray("changes");
         intent.putArray("pins");
         intent.putArray("bulkActions");
-        stageAvailability(intent, request, acceptedDefinition(current));
-        refresh(draft, acceptedDefinition(current), acceptedAssignments(current), current.document().path("acceptedBaseline").path("manifest"));
+        stageAvailability(intent, request, effectiveDefinition(current));
+        refreshSavedDraft(document);
         WorkspaceAggregate started = mutation.replaceRepair(expectedVersion, WorkspaceState.ACCEPTED_BASELINE,
                 WorkspaceState.REPAIR_DRAFT, document);
         failedAutosaveVersion = -1;
@@ -66,14 +66,15 @@ public class RepairDraftService {
         ObjectNode intent = (ObjectNode) draft.path("intent");
         String action = requiredText(request, "action");
         switch (action) {
-            case "STAGE_UNAVAILABILITY" -> stageAvailability(intent, request, acceptedDefinition(current));
-            case "PIN" -> applyIndividualPin(intent, request, acceptedAssignments(current));
+            case "STAGE_UNAVAILABILITY" -> stageAvailability(intent, request, effectiveDefinition(current));
+            case "PIN" -> { requireSeedPin(current,request); applyIndividualPin(intent, request, acceptedAssignments(current)); }
             case "UNPIN" -> removeIndividualPin(intent, request);
             case "CONFIRM_BULK_PIN" -> confirmBulk(intent, request.path("preview"), current);
             case "UNDO_BULK_PIN" -> undoBulk(intent, requiredText(request, "bulkActionId"));
             default -> throw invalid("This repair action is not supported in the current increment.");
         }
-        refresh(draft, acceptedDefinition(current), acceptedAssignments(current), current.document().path("acceptedBaseline").path("manifest"));
+        refreshSavedDraft(document);
+        if (seeded(document) && !draft.path("conflicts").isEmpty()) throw invalid("Additional intent contradicts authored policy or a surviving accepted placement. Existing staging and the seed remain unchanged.");
         try {
             WorkspaceAggregate saved = mutation.replaceRepair(expectedVersion, WorkspaceState.REPAIR_DRAFT,
                     WorkspaceState.REPAIR_DRAFT, document);
@@ -93,6 +94,10 @@ public class RepairDraftService {
         if (current.state() != WorkspaceState.REPAIR_DRAFT) {
             throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
                     "A repair draft can be edited only while no solve is running.");
+        }
+        if (current.repairDraft().has("seedDefinition")) {
+            WorkspaceAggregate saved=update(ifMatch,request);
+            return new MinimalUpdate((ObjectNode)saved.document().path("repairDraft"),saved.version());
         }
         String lessonId = requiredText(request, "lessonId");
         ObjectNode draft = current.repairDraft();
@@ -132,8 +137,8 @@ public class RepairDraftService {
         JsonNode draft = current.document().path("repairDraft");
         Set<String> directlyAffected = textSet(draft.path("directEffectLessonIds"));
         List<JsonNode> selected = new ArrayList<>();
-        Map<String, JsonNode> lessons = byId(acceptedDefinition(current).path("lessons"));
-        Map<String, JsonNode> periods = byId(acceptedDefinition(current).path("periods"));
+        Map<String, JsonNode> lessons = byId(effectiveDefinition(current).path("lessons"));
+        Map<String, JsonNode> periods = byId(effectiveDefinition(current).path("periods"));
         for (JsonNode assignment : acceptedAssignments(current)) {
             JsonNode lesson = lessons.get(assignment.path("lessonId").stringValue());
             JsonNode period = periods.get(assignment.path("periodId").stringValue());
@@ -159,8 +164,8 @@ public class RepairDraftService {
         preview.put("count", selected.size());
         ArrayNode conflicts = preview.putArray("conflicts");
         Set<String> selectedIds = textSet(lessonIds);
-        conflictsFor(acceptedDefinition(current), acceptedAssignments(current), draft.path("intent"),
-                current.document().path("acceptedBaseline").path("manifest"), selectedIds, Set.copyOf(dimensions))
+        conflictsFor(effectiveDefinition(current), acceptedAssignments(current), draft.path("intent"),
+                effectiveManifest(current.document()), selectedIds, Set.copyOf(dimensions))
                 .forEach(conflicts::add);
         return preview;
     }
@@ -173,17 +178,36 @@ public class RepairDraftService {
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
         requireState(current, WorkspaceState.REPAIR_DRAFT,
                 "Only a repair draft can be discarded.");
+        if (seeded(current.document())) throw invalid("Discard repair draft and return to authoring first. Authored work cannot be discarded through ordinary repair discard.");
         ObjectNode document = copy(current.document());
         document.remove("repairDraft");
         return mutation.replaceRepair(expectedVersion, WorkspaceState.REPAIR_DRAFT,
                 WorkspaceState.ACCEPTED_BASELINE, document);
     }
 
+    public WorkspaceAggregate returnToAuthoring(String ifMatch, JsonNode request) {
+        WorkspaceAggregate current = repository.load();
+        long version = ImportService.requireMatchingVersion(ifMatch, current);
+        requireState(current, WorkspaceState.REPAIR_DRAFT,
+                "Return to authoring requires a repair draft. Cancel an active solve or discard only the proposal first.");
+        if (!seeded(current.document())) throw invalid("This is an ordinary repair; discard it to return to Current.");
+        if (!request.path("confirmed").isBoolean() || !request.path("confirmed").booleanValue())
+            throw invalid("Confirm removal of repair staging and pins. Authored changes will remain.");
+        validateSeed(current.document());
+        ObjectNode document = copy(current.document().path("repairDraft").path("retainedAuthoring").path("sourceDocument"));
+        document.set("definitionDraft", current.document().path("repairDraft").path("retainedAuthoring").deepCopy());
+        WorkspaceAggregate restored = mutation.replaceRepair(version, WorkspaceState.REPAIR_DRAFT,
+                WorkspaceState.DEFINITION_DRAFT, document);
+        failedAutosaveVersion = -1;
+        return restored;
+    }
+
     ObjectNode compiledDefinition(JsonNode workspaceDocument) {
-        ObjectNode definition = copy(workspaceDocument.path("acceptedBaseline").path("definition"));
+        validateSeed(workspaceDocument);
+        ObjectNode definition = copy(seeded(workspaceDocument)?workspaceDocument.path("repairDraft").path("seedDefinition"):workspaceDocument.path("acceptedBaseline").path("definition"));
         JsonNode result = workspaceDocument.path("acceptedBaseline").path("result");
         JsonNode intent = workspaceDocument.path("repairDraft").path("intent");
-        clearPriorAttemptScopedLocks(
+        if (!seeded(workspaceDocument)) clearPriorAttemptScopedLocks(
                 definition, workspaceDocument.path("acceptedBaseline").path("manifest"));
         definition.put("catalogVersion", Math.max(8, definition.path("catalogVersion").intValue()));
         definition.put("basedOnRevision", result.path("inputRevision").stringValue());
@@ -206,11 +230,78 @@ public class RepairDraftService {
         for (JsonNode pin : intent.path("pins")) {
             ObjectNode lesson = lessons.get(pin.path("lessonId").stringValue());
             JsonNode assignment = assignments.get(pin.path("lessonId").stringValue());
-            if (pin.path("periodSources").size() > 0) lesson.put("periodLock", assignment.path("periodId").stringValue());
-            if (pin.path("roomSources").size() > 0) lesson.put("roomLock", assignment.path("roomId").stringValue());
+            if (lesson==null || assignment==null) throw invalid("Only surviving accepted placements can be pinned.");
+            if (pin.path("periodSources").size() > 0) { if (seeded(workspaceDocument)) checkSeedDimension(definition,lesson,assignment,"PERIOD"); lesson.put("periodLock", assignment.path("periodId").stringValue()); }
+            if (pin.path("roomSources").size() > 0) { if (seeded(workspaceDocument)) checkSeedDimension(definition,lesson,assignment,"ROOM"); lesson.put("roomLock", assignment.path("roomId").stringValue()); }
         }
         return definition;
     }
+
+    static boolean seeded(JsonNode document) { return document.path("repairDraft").has("seedDefinition"); }
+
+    static void validateSeed(JsonNode document) {
+        if (!seeded(document)) return;
+        JsonNode draft=document.path("repairDraft"),retained=draft.path("retainedAuthoring"),source=retained.path("sourceDocument"),seed=draft.path("seedDefinition");
+        if (!"ACCEPTED_BASELINE".equals(retained.path("sourceState").asString(""))
+                || !seed.isObject() || !seed.equals(retained.path("definition"))
+                || !document.path("acceptedBaseline").equals(source.path("acceptedBaseline"))
+                || !document.path("school").equals(source.path("school"))
+                || !seed.path("schoolId").equals(document.path("acceptedBaseline").path("definition").path("schoolId"))
+                || !seed.path("basedOnRevision").equals(document.path("acceptedBaseline").path("result").path("inputRevision")))
+            throw invalid("The authored seed or its accepted source no longer matches retained authoring. No repair operation was committed.");
+    }
+
+    void refreshSavedDraft(ObjectNode document) {
+        validateSeed(document);
+        ObjectNode draft=(ObjectNode)document.path("repairDraft");
+        JsonNode definition=seeded(document)?draft.path("seedDefinition"):document.path("acceptedBaseline").path("definition");
+        refresh(draft,definition,document.path("acceptedBaseline").path("result").path("timetable").path("assignments"),effectiveManifest(document));
+        if (!seeded(document)) return;
+        Set<String> direct=new java.util.TreeSet<>(textSet(draft.path("directEffectLessonIds")));
+        JsonNode source=document.path("acceptedBaseline").path("definition");
+        draft.set("definitionChanges",DefinitionComparison.compare(json,source,definition));
+        for(JsonNode change:draft.path("definitionChanges")) {
+            String type=change.path("ownerType").asString(""),id=change.path("ownerId").asString("");
+            if(type.equals("Lesson"))direct.add(id);
+            for(JsonNode lesson:definition.path("lessons")) {
+                String lessonId=lesson.path("id").asString("");
+                if(type.equals("Teacher")&&id.equals(lesson.path("teacherId").asString(""))
+                        ||type.equals("Cohort")&&id.equals(lesson.path("cohortId").asString(""))
+                        ||type.equals("Subject")&&id.equals(lesson.path("subjectId").asString("")))direct.add(lessonId);
+                if(type.equals("Period")||type.equals("Room"))for(JsonNode placement:document.path("acceptedBaseline").path("result").path("timetable").path("assignments"))
+                    if(lessonId.equals(placement.path("lessonId").asString(""))&&id.equals(placement.path(type.equals("Period")?"periodId":"roomId").asString("")))direct.add(lessonId);
+            }
+        }
+        ArrayNode ids=draft.putArray("directEffectLessonIds");direct.forEach(ids::add);draft.put("directEffectRevision",revision(ids));
+        ObjectNode bound=json.createObjectNode();bound.set("intent",draft.path("intent"));bound.set("seed",draft.path("seedDefinition"));bound.set("source",document.path("acceptedBaseline"));bound.set("retainedAuthoring",draft.path("retainedAuthoring"));
+        draft.put("intentRevision",revision(bound));
+        ArrayNode conflicts=(ArrayNode)draft.path("conflicts");
+        for(JsonNode change:draft.path("intent").path("changes"))for(JsonNode lesson:definition.path("lessons")) {
+            String type=change.path("resourceType").asString(""),resource=change.path("resourceId").asString("");
+            boolean matches=type.equals("TEACHER")?resource.equals(lesson.path("teacherId").asString("")):resource.equals(lesson.path("roomLock").asString(""));
+            if(matches&&lesson.has("periodLock")&&textSet(change.path("unavailablePeriodIds")).contains(lesson.path("periodLock").asString("")))
+                conflicts.addObject().put("lessonId",lesson.path("id").asString()).put("code","INTENT_CONTRADICTS_AUTHORED_LOCK").put("message","Additional unavailability contradicts a persistent authored placement.");
+        }
+        draft.put("readyToSolve",conflicts.isEmpty());
+    }
+
+    private void requireSeedPin(WorkspaceAggregate current,JsonNode request) {
+        if(!seeded(current.document()))return;
+        validateSeed(current.document());
+        JsonNode definition=effectiveDefinition(current),lesson=byId(definition.path("lessons")).get(requiredText(request,"lessonId")),assignment=byId(acceptedAssignments(current),"lessonId").get(requiredText(request,"lessonId"));
+        if(lesson==null||assignment==null)throw invalid("Only surviving accepted lessons can be pinned. New or cancelled occurrences have no eligible accepted placement.");
+        for(String dimension:requiredDimensions(request.path("dimensions")))checkSeedDimension(definition,lesson,assignment,dimension);
+    }
+    private static void checkSeedDimension(JsonNode definition,JsonNode lesson,JsonNode assignment,String dimension) {
+        String field=dimension.equals("PERIOD")?"periodLock":"roomLock",placement=dimension.equals("PERIOD")?"periodId":"roomId",collection=dimension.equals("PERIOD")?"periods":"rooms";
+        if(!byId(definition.path(collection)).containsKey(assignment.path(placement).asString("")))throw invalid("The accepted placement references a removed successor resource or period.");
+        if(lesson.has(field)&&!lesson.path(field).equals(assignment.path(placement)))throw invalid("A repair pin cannot overwrite a conflicting persistent authored lock.");
+    }
+    private JsonNode effectiveManifest(JsonNode document) {
+        if(!seeded(document))return document.path("acceptedBaseline").path("manifest");
+        ObjectNode manifest=json.createObjectNode();ArrayNode locks=manifest.putArray("locks");for(JsonNode lesson:document.path("repairDraft").path("seedDefinition").path("lessons"))if(lesson.has("periodLock")||lesson.has("roomLock")){ObjectNode lock=locks.addObject().put("lessonId",lesson.path("id").asString());if(lesson.has("periodLock"))lock.put("periodLockOrigin","PERSISTENT_POLICY");if(lesson.has("roomLock"))lock.put("roomLockOrigin","PERSISTENT_POLICY");}return manifest;
+    }
+    private static JsonNode effectiveDefinition(WorkspaceAggregate current) { return seeded(current.document())?current.document().path("repairDraft").path("seedDefinition"):acceptedDefinition(current); }
 
     private static void clearPriorAttemptScopedLocks(ObjectNode definition, JsonNode manifest) {
         Map<String, ObjectNode> lessons = mutableById(definition.path("lessons"));
@@ -306,7 +397,9 @@ public class RepairDraftService {
         if (preview.path("scopeId").isTextual()) bulk.put("scopeId", preview.path("scopeId").stringValue());
         bulk.set("dimensions", preview.path("dimensions").deepCopy());
         bulk.set("lessonIds", preview.path("lessonIds").deepCopy());
+        if (seeded(current.document()) && !expected.path("conflicts").isEmpty()) throw invalid("The selected bulk pins contradict authored policy or availability. No pins were saved.");
         for (String lessonId : lessonIds) {
+            if (seeded(current.document())) requireSeedPin(current,json.createObjectNode().put("lessonId",lessonId).set("dimensions",preview.path("dimensions")));
             ObjectNode pin = pin(intent, lessonId, true);
             dimensions.forEach(dimension -> addSource(pin, dimension, source));
         }

@@ -855,3 +855,16 @@ body.authoring .current-label { margin: 8px 0; }
 .review-filters { display: flex; flex-wrap: wrap; gap: .5rem; }
 .review-filters input { min-width: 0; max-width: 100%; }
 .review-item-link { margin: .2rem .35rem .2rem 0; max-width: 100%; overflow-wrap: anywhere; }
+
+/* Native successor inspection preserves literal values at desktop and read-only widths. */
+.seed-definition-inspection, .native-definition-changes { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.seed-definition-inspection pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 40vh; overflow: auto; }
+.native-definition-changes ul { padding-left: 20px; }
+#workbench-inspector { overflow-y: auto; max-height: calc(100vh - 32px); }
+
+/* Repair decisions and canvas remain reachable while inspecting a placement. */
+@media (min-width: 1280px) {
+  .repair-mode.current-mode .workbench-layout:not(.inspector-collapsed) { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 12px; align-items: start; }
+}
+.repair-mode #workbench-inspector { position: static; width: 100%; margin-top: 8px; }
+@media (min-width: 1280px) { .repair-mode #workbench-inspector { margin-top: 0; } }

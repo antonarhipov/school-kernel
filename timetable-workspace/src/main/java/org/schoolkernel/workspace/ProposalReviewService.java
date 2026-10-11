@@ -58,6 +58,33 @@ public class ProposalReviewService {
         Map<String, JsonNode> oldPeriods = byId(acceptedBaseline.path("definition").path("periods"), "id");
         Map<String, JsonNode> proposedPeriods = byId(successorDefinition.path("periods"), "id");
 
+        if (repairDraft.has("seedDefinition")) {
+            ArrayNode definitionChanges = DefinitionComparison.compare(json, acceptedBaseline.path("definition"), successorDefinition);
+            review.set("definitionChanges", definitionChanges);
+            ArrayNode timingIds = review.putArray("timingImpactLessonIds");
+            Set<String> allIds = new java.util.TreeSet<>(oldAssignments.keySet());
+            allIds.addAll(proposedAssignments.keySet());
+            for (String id : allIds) {
+                JsonNode oldAssignment = oldAssignments.get(id), proposedAssignment = proposedAssignments.get(id);
+                if (oldAssignment == null || proposedAssignment == null) continue;
+                JsonNode oldPeriod = oldPeriods.get(text(oldAssignment.path("periodId")));
+                JsonNode newPeriod = proposedPeriods.get(text(proposedAssignment.path("periodId")));
+                if (!timing(oldPeriod).equals(timing(newPeriod))) {
+                    timingIds.add(id);
+                    changedIds.add(id);
+                    lessonCategories.computeIfAbsent(id, ignored -> new ArrayList<>()).add("timingChanges");
+                }
+            }
+            for (JsonNode change : definitionChanges) {
+                if (!"Lesson".equals(change.path("ownerType").asString(""))) continue;
+                String id = change.path("ownerId").asString();
+                changedIds.add(id);
+                List<String> values = lessonCategories.computeIfAbsent(id, ignored -> new ArrayList<>());
+                if (!values.contains("definitionChanges")) values.add("definitionChanges");
+            }
+            review.put("timingImpactCount", timingIds.size());
+            review.put("uniqueChangedLessonCount", changedIds.size());
+        }
         ArrayNode changedLessons = review.putArray("changedLessons");
         Map<String, Group> classGroups = new LinkedHashMap<>();
         Map<String, Group> teacherGroups = new LinkedHashMap<>();
@@ -76,12 +103,18 @@ public class ProposalReviewService {
             lessonCategories.getOrDefault(lessonId, List.of()).forEach(itemCategories::add);
             ObjectNode oldValue = side(oldAssignment, oldLesson);
             ObjectNode proposedValue = side(proposedAssignment, proposedLesson);
+            if (repairDraft.has("seedDefinition")) {
+                if (oldValue != null && oldAssignment != null) oldValue.set("timing", timing(oldPeriods.get(text(oldAssignment.path("periodId")))));
+                if (proposedValue != null && proposedAssignment != null) proposedValue.set("timing", timing(proposedPeriods.get(text(proposedAssignment.path("periodId")))));
+            }
             if (oldValue != null) item.set("old", oldValue);
             if (proposedValue != null) item.set("proposed", proposedValue);
             ArrayNode dimensions = item.putArray("changedDimensions");
             for (String dimension : List.of("subjectId", "cohortId", "teacherId", "periodId", "roomId")) {
                 if (!same(oldValue, proposedValue, dimension)) dimensions.add(dimension);
             }
+            if (repairDraft.has("seedDefinition") && oldValue != null && proposedValue != null
+                    && !oldValue.path("timing").equals(proposedValue.path("timing"))) dimensions.add("timing");
             addGroup(classGroups, oldValue, proposedValue, "cohortId", lessonId);
             addGroup(teacherGroups, oldValue, proposedValue, "teacherId", lessonId);
             addGroup(roomGroups, oldValue, proposedValue, "roomId", lessonId);
@@ -95,6 +128,14 @@ public class ProposalReviewService {
         writeGroups(groupings.putArray("rooms"), roomGroups);
         writeGroups(groupings.putArray("days"), dayGroups);
         return review;
+    }
+
+    private ObjectNode timing(JsonNode period) {
+        ObjectNode value = json.createObjectNode();
+        if (period != null) for (String field : List.of("weekday", "order", "startTime", "endTime")) {
+            if (period.has(field)) value.set(field, period.path(field).deepCopy());
+        }
+        return value;
     }
 
     private ObjectNode side(JsonNode assignment, JsonNode lesson) {
