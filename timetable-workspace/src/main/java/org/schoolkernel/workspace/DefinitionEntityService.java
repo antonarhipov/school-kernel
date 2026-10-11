@@ -22,6 +22,7 @@ public class DefinitionEntityService {
             Map.entry("undesirablePeriodIds",1), Map.entry("maxDailyLessonSpread",4), Map.entry("maxDailyGaps",5),
             Map.entry("latestStartSlot",6), Map.entry("preferredLatestStartSlot",6), Map.entry("dailyLessonSpreadLimit",7),
             Map.entry("curatorTeacherId",8), Map.entry("homeRoomId",8));
+    private static final Map<String,Integer> ROOM_FIELDS = Map.of("id",1,"displayName",1,"capacity",1,"capabilityIds",1,"availablePeriodIds",1);
     private final WorkspaceRepository repository;
     private final ObjectMapper json;
     public DefinitionEntityService(WorkspaceRepository repository, ObjectMapper json) { this.repository=repository; this.json=json; }
@@ -39,6 +40,11 @@ public class DefinitionEntityService {
     @Transactional
     public WorkspaceAggregate saveCohort(String ifMatch, JsonNode request) {
         return saveEntity(ifMatch, request, "cohorts", "Cohort", COHORT_FIELDS);
+    }
+
+    @Transactional
+    public WorkspaceAggregate saveRoom(String ifMatch, JsonNode request) {
+        return saveEntity(ifMatch, request, "rooms", "Room", ROOM_FIELDS);
     }
 
     private WorkspaceAggregate saveEntity(String ifMatch, JsonNode request, String collection,
@@ -85,16 +91,20 @@ public class DefinitionEntityService {
         ArrayNode issues = json.createArrayNode();
         Set<String> affected = new HashSet<>();
         String reference = type.equals("Subject") ? "subjectId" : type.equals("Teacher") ? "teacherId" : "cohortId";
-        for (JsonNode lesson : definition.path("lessons")) if (id.equals(lesson.path(reference).asString(""))) affected.add(lesson.path("id").asString(""));
+        for (JsonNode lesson : definition.path("lessons")) if (type.equals("Room") || id.equals(lesson.path(reference).asString(""))) affected.add(lesson.path("id").asString(""));
         for (JsonNode issue : draft.path("issues")) {
             boolean owned = type.equals(issue.path("ownerType").asString("")) && id.equals(issue.path("ownerId").asString(""));
             boolean dependent = Set.of("SUBJECT_POLICY", "TEACHER_POLICY", "ENTITY_LESSON", "COHORT_FEASIBILITY").contains(issue.path("diagnosticSource").asString(""))
                     && affected.contains(issue.path("ownerId").asString(""));
-            if (!owned && !dependent) issues.add(issue);
+            if (!owned && !dependent && !(type.equals("Room") && "COHORT_FEASIBILITY".equals(issue.path("diagnosticSource").asString("")))) issues.add(issue);
         }
         if (type.equals("Subject")) validateSubject(definition, item, issues);
         else if (type.equals("Teacher")) validateTeacher(definition, item, issues);
-        else validateCohort(definition, item, issues);
+        else if (type.equals("Cohort")) validateCohort(definition, item, issues);
+        else {
+            validateRoom(definition, item, issues);
+            for (JsonNode cohort : definition.path("cohorts")) validateCohortFeasibility(definition, cohort, issues);
+        }
         validateLessons(definition, affected, issues);
         draft.set("issues", ordered(issues));
         draft.put("draftRevision", DefinitionDraftService.revision(definition));
@@ -165,6 +175,28 @@ public class DefinitionEntityService {
                 issue.withArray("relatedIds").add(value.asString(""));
             }
         }
+        validateCohortFeasibility(definition, cohort, issues);
+    }
+
+    private void validateRoom(JsonNode definition, JsonNode room, ArrayNode issues) {
+        String id = room.path("id").asString("");
+        if (!room.path("displayName").isTextual() || room.path("displayName").stringValue().isBlank()) issue(issues, "Room", id, "displayName", "Enter a nonblank room name.");
+        numeric(room, "capacity", true, 0, "Room", issues);
+        JsonNode tokens = room.path("capabilityIds");
+        if (!tokens.isArray()) issue(issues, "Room", id, "capabilityIds", "Enter a unique array of capability tokens; empty is allowed.");
+        else {
+            Set<String> seen = new HashSet<>();
+            for (JsonNode token : tokens) {
+                String value = token.asString("");
+                if (!token.isTextual() || !validId(value)) issue(issues, "Room", id, "capabilityIds", "Invalid capability token: " + token + ".");
+                else if (!seen.add(value)) issue(issues, "Room", id, "capabilityIds", "Duplicate capability token: " + value + ".");
+            }
+        }
+        validateReferences(room, "availablePeriodIds", false, definition.path("periods"), "Room", issues);
+    }
+
+    private void validateCohortFeasibility(JsonNode definition, JsonNode cohort, ArrayNode issues) {
+        String id = cohort.path("id").asString("");
         List<JsonNode> lessons = new ArrayList<>();
         for (JsonNode lesson : definition.path("lessons")) if (id.equals(lesson.path("cohortId").asString(""))) lessons.add(lesson);
         if (lessons.isEmpty()) return;
@@ -236,6 +268,11 @@ public class DefinitionEntityService {
                 if (cohort != null && cohort.has("availablePeriodIds") && !contains(cohort.path("availablePeriodIds"), period)) dependent(issues, lesson, "periodLock", "The persistent period lock is outside this class's saved availability.");
                 if (contains(definition.path("reservedPeriodIds"), period) && (subject == null || !isTrue(subject.path("reservedPeriodsAllowed")))) dependent(issues, lesson, "periodLock", "The subject does not permit this reserved-period lock.");
             }
+            JsonNode locked = find(definition.path("rooms"), lesson.path("roomLock").asString(""));
+            if (lesson.has("roomLock") && locked != null) {
+                if (cohort != null && validNumber(cohort.path("size"), 1) && validNumber(locked.path("capacity"), 0) && locked.path("capacity").intValue() < cohort.path("size").intValue()) dependent(issues, lesson, "roomLock", "Persistent room lock has insufficient capacity for the class.");
+                if (!capable(locked, lesson)) dependent(issues, lesson, "roomLock", "Persistent room lock cannot supply required room capabilities.");
+            }
             Set<String> allowed = null;
             for (JsonNode policy : definition.path("roomAssignments")) {
                 if (!policy.path("subjectId").equals(lesson.path("subjectId")) || policy.has("teacherId") && !policy.path("teacherId").equals(lesson.path("teacherId"))) continue;
@@ -245,6 +282,17 @@ public class DefinitionEntityService {
                     else target.add(cohort.path("homeRoomId").asString(""));
                 } else for (JsonNode room : policy.path("allowedRoomIds")) target.add(room.asString(""));
                 if (allowed == null) allowed = target; else allowed.retainAll(target);
+            }
+            if (lesson.has("periodLock")) {
+                String period = lesson.path("periodLock").asString("");
+                JsonNode home = curator && cohort != null ? find(definition.path("rooms"), cohort.path("homeRoomId").asString("")) : null;
+                if (locked != null && locked.has("availablePeriodIds") && !contains(locked.path("availablePeriodIds"), period)) dependent(issues, lesson, "periodLock", "Persistent room lock is unavailable at the locked period.");
+                if (home != null && home.has("availablePeriodIds") && !contains(home.path("availablePeriodIds"), period)) dependent(issues, lesson, "periodLock", "Curator home room is unavailable at the locked period.");
+                if (allowed != null) {
+                    boolean available = false;
+                    for (JsonNode room : definition.path("rooms")) if (allowed.contains(room.path("id").asString("")) && (!room.has("availablePeriodIds") || contains(room.path("availablePeriodIds"), period))) available = true;
+                    if (!available) dependent(issues, lesson, "periodLock", "No matched policy room is available at the persistent period lock.");
+                }
             }
             if (allowed != null) {
                 if (allowed.isEmpty()) dependent(issues, lesson, "roomAssignments", "Matching room policies have no room in common.");
@@ -263,7 +311,9 @@ public class DefinitionEntityService {
     private void dependent(ArrayNode issues, JsonNode lesson, String field, String message) {
         ObjectNode issue = issue(issues, "Lesson", lesson.path("id").asString(""), field, message);
         issue.put("diagnosticSource", "ENTITY_LESSON");
-        for (String reference : List.of("subjectId", "teacherId", "cohortId")) issue.withArray("relatedIds").add(lesson.path(reference).asString(""));
+        for (String reference : List.of("subjectId", "teacherId", "cohortId", "roomLock")) if (lesson.has(reference)) issue.withArray("relatedIds").add(lesson.path(reference).asString(""));
+        // Room edits can affect alternatives, home-room obligations and matching policy intersections.
+        // The room view also shows all recomputed lesson/class advisories, so no central capability catalog is inferred.
     }
 
     private ObjectNode issue(ArrayNode issues,String type,String id,String field,String message) {
