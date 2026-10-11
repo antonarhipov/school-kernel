@@ -803,6 +803,13 @@ function renderSeedIdentity(snapshot) {
   detail.append(summary, pre); notice.after(detail);
   const changes = document.createElement('section'); changes.innerHTML = nativeChangesHtml(snapshot.workspace.repairDraft.definitionChanges);
   detail.after(changes);
+  const guidance = document.createElement('p'); guidance.className = 'notice seeded-return-guidance';
+  guidance.textContent = snapshot.state === 'REPAIR_PROPOSAL'
+    ? 'To return to authoring, first discard only the generated proposal. Then discard the repair draft; its staging and pins will be removed while authored changes remain.'
+    : snapshot.state === 'SOLVING_REPAIR'
+      ? 'To return to authoring, cancel the active generation first. After it returns to Repair draft, explicitly discard its staging and pins; authored changes remain.'
+      : 'Discard repair draft and return to authoring removes only repair staging and pins. Authored changes remain; discarding authoring itself is a separate confirmation.';
+  changes.after(guidance);
 }
 
 function bindDraftTaskArea() {
