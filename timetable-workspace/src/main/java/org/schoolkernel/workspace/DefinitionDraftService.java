@@ -130,6 +130,41 @@ public class DefinitionDraftService {
         return repository.load();
     }
 
+    /** UC-19: restore the recorded source verbatim, including old catalog and provenance. */
+    @Transactional
+    public WorkspaceAggregate discard(String ifMatch, JsonNode request) {
+        WorkspaceAggregate current = repository.load();
+        long version = ImportService.requireMatchingVersion(ifMatch, current);
+        if (current.document().path("repairDraft").has("retainedAuthoring")) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "SEEDED_REPAIR_ACTIVE",
+                    "Return to authoring first: cancel an active solve or discard only its proposal, then explicitly abandon repair staging and pins. Discard authoring is a separate confirmation.");
+        }
+        if (current.state() != WorkspaceState.DEFINITION_DRAFT) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
+                    "Discard authoring requires DEFINITION_DRAFT; " + current.state() + " is active. No change was committed.");
+        }
+        if (!(request instanceof ObjectNode fields) || fields.size() != 1
+                || !fields.path("confirmed").isBoolean() || !fields.path("confirmed").booleanValue()) {
+            throw new WorkspaceProblem(HttpStatus.BAD_REQUEST, "DISCARD_CONFIRMATION_REQUIRED",
+                    "Explicitly confirm whole-authoring discard. Saved work and source are unchanged.");
+        }
+        JsonNode draft = current.document().path("definitionDraft");
+        WorkspaceState sourceState;
+        try { sourceState = WorkspaceState.valueOf(draft.path("sourceState").asString("")); }
+        catch (IllegalArgumentException exception) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_AUTHORING_SOURCE", "Recorded source state is unavailable. Nothing was discarded.");
+        }
+        if (!List.of(WorkspaceState.EMPTY, WorkspaceState.INITIAL_DRAFT, WorkspaceState.ACCEPTED_BASELINE).contains(sourceState)
+                || !(draft.path("sourceDocument") instanceof ObjectNode source)) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_AUTHORING_SOURCE", "Recorded authoring source is unavailable. Nothing was discarded.");
+        }
+        if (repository.replace(version, WorkspaceState.DEFINITION_DRAFT, sourceState, source.deepCopy()).isEmpty()) {
+            throw new WorkspaceProblem(HttpStatus.PRECONDITION_FAILED, "STALE_WORKSPACE_VERSION",
+                    "The workspace changed. Nothing was discarded; review the newer saved draft before retrying.");
+        }
+        return repository.load();
+    }
+
     /** UC-2: change identity fields only, never the recorded source or Current. */
     @Transactional
     public WorkspaceAggregate saveSchool(String ifMatch, JsonNode request) {

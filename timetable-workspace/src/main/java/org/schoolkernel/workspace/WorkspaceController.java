@@ -122,6 +122,14 @@ public class WorkspaceController {
         return response(definitionDrafts.open(ifMatch, request));
     }
 
+    @DeleteMapping("/api/definition-draft")
+    @ResponseBody
+    public ResponseEntity<JsonNode> discardDefinitionDraft(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(definitionDrafts.discard(ifMatch, request));
+    }
+
     @PostMapping("/api/definition-draft/school")
     @ResponseBody
     public ResponseEntity<JsonNode> saveSchoolIdentity(

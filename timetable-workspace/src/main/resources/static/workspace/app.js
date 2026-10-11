@@ -83,6 +83,15 @@ function render(snapshot) {
     renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(currentSnapshot); }, {
       render: candidate => { if (candidate.version >= currentSnapshot.version) render(candidate); },
       refresh: () => load(true),
+      discard: async version => {
+        const response = await fetchWithCsrf('/api/definition-draft', {
+          method: 'DELETE', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify({ confirmed: true })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Discard failed.');
+        etag = response.headers.get('ETag'); authoringCurrent = false; resetAuthoringSection();
+        return result;
+      },
       occurrence: async (fields, version, preview = false) => {
         const response = await fetchWithCsrf(`/api/definition-draft/occurrences${preview ? '/preview' : ''}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)

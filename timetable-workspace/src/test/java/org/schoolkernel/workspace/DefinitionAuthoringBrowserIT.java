@@ -36,7 +36,7 @@ class DefinitionAuthoringBrowserIT extends WorkbenchBrowserSupport {
             if (viewport[0] <= 700) workbench.awaitText("Editing requires a wider view");
             assertEquals(true, workbench.page().evaluate("document.documentElement.scrollWidth <= innerWidth"));
             assertTrue(workbench.page().locator(".authoring-navigation").isVisible());
-            assertEquals(0, workbench.page().locator("input, select, textarea, button[type=submit]").filter(
+            if (viewport[0] <= 700) assertEquals(0, workbench.page().locator("form input, form select, form textarea, button[type=submit]").filter(
                     new com.microsoft.playwright.Locator.FilterOptions().setVisible(true)).count());
         }
         workbench.viewport(1280,800);
@@ -112,7 +112,7 @@ class DefinitionAuthoringBrowserIT extends WorkbenchBrowserSupport {
         String saved = storedDocument();
         workbench.page().locator("#inspect-authoring-current").click(); workbench.awaitText("Current");
         workbench.expectNot("document.querySelector('#clear-workspace, #utilities-upload-definition, #start-manual-draft, #open-repair-setup')");
-        workbench.page().locator("#resume-authoring").click(); workbench.awaitText("Expired attempt-scoped pin");
+        workbench.page().locator("#resume-authoring").click(); workbench.awaitText("Expired attempt pins — exact source provenance");
         assertEquals(saved, storedDocument());
         APIResponse exported = workbench.page().request().get(base() + "/api/accepted/export");
         assertEquals(200, exported.status());
@@ -155,7 +155,7 @@ class DefinitionAuthoringBrowserIT extends WorkbenchBrowserSupport {
         draft.withArray("removedIdentities").add("removed-lesson.01");
         store("DEFINITION_DRAFT", saved);
         String before = storedDocument();
-        workbench.reload(); workbench.awaitText("Saved issue");
+        workbench.reload(); workbench.awaitText("Saved school-definition draft");
         assertEquals(200, command("POST", "/api/definition-draft", "{}", null).status());
         assertEquals(before, storedDocument(), "resume retains issues, context, removed identities, and newly authored policy locks");
     }

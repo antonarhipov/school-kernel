@@ -1,3 +1,4 @@
+import { renderDiscard, discardBusy } from './definition-discard.js';
 import { renderFinish, finishBusy } from './definition-finish.js';
 import { renderReview, resetReview } from './definition-review.js';
 import { renderRestoration, restorationBusy, restorationDirty, saveRestoration, discardRestoration, resetRestoration } from './definition-restoration.js';
@@ -63,7 +64,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     }
   };
   const leave = next => {
-    if (saving || finishBusy() || restorationBusy() || removalBusy() || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
+    if (saving || discardBusy() || finishBusy() || restorationBusy() || removalBusy() || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
     const leavingRestoration = section === 'Source restoration' && restorationDirty();
     const leavingRemoval = section === 'Guided removal' && removalDirty();
     const leavingGrid = section === 'Grid' && gridDirty();
@@ -117,6 +118,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     const link = el('a', 'Export Current'); link.href = '/api/accepted/export'; link.id = 'export-accepted'; nav.append(link);
   }
   host.append(nav);
+  renderDiscard(host, snapshot, narrow, actions, saving || finishBusy() || restorationBusy() || removalBusy() || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy());
   const content = el('section'); content.id = 'authoring-section'; content.append(el('h3', section));
   const occurrenceActions = { ...actions, removal: () => leave(() => { section = 'Guided removal'; rerender(); }), openOccurrences: ids => leave(latest => { chooseOccurrences(ids); section = 'Occurrence details'; actions.render(latest); }) };
   const catalogActions = { ...actions, removal: () => leave(() => { section = 'Guided removal'; rerender(); }), catalog: () => leave(() => { section = 'School'; rerender(); }) };
