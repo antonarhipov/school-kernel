@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-14
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-15 after UC-14 walkthrough
+- Use case: UC-15
+- Status: IN_PROGRESS
+- Next eligible: UC-16 after UC-15 walkthrough
 
 ## Progress
 
@@ -23,8 +23,8 @@
 | UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
-| UC-14 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-14.md) | Running isolated walkthrough |
-| UC-15 | NOT_STARTED | UC-1 | - | - |
+| UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
+| UC-15 | IN_PROGRESS | UC-1 | - | - |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
 | UC-18 | NOT_STARTED | UC-16 | - | - |
@@ -316,3 +316,9 @@ Recorded complete first standalone attempt PASS, exact v13, 17 inspected screens
 ### UC-14 technical submission
 
 Seven restoration journeys plus 27 unit/architecture checks pass in `/tmp/uc14-context-verify.log`. Seven approved removal regressions pass in retained `/tmp/uc14-revision-verify.log`. Exact grouped/occurrence regression class names corrected and running separately. Individual preference and weekly source context restoration retain unrelated native data and exception intent; no member resurrection. Earlier compile/assertion/build-overlap failures retained.
+
+UC-14 first walkthrough FAIL retained: harness assumed a common teacher despite an explicitly mixed source. Production saved exact no-default/mixed/exception context. Correct the source-derived assertion and repeat complete walkthrough on fresh data.
+
+### UC-14 automatic approval
+
+Complete repeat PASS, exact v18, 14 inspected screenshots. Seven restoration, seven removal and nine grouped/occurrence journeys PASS. [Ledger](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md). Source-restoration handoffs closed; proceeding to UC-15.
