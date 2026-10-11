@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-11
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-12 after UC-11 walkthrough
+- Use case: UC-12
+- Status: IN_PROGRESS
+- Next eligible: UC-13 after UC-12 walkthrough
 
 ## Progress
 
@@ -20,8 +20,8 @@
 | UC-8 | APPROVED | UC-1 | `42f3b53` / [checkpoint](checkpoints/UC-8.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md) |
 | UC-9 | APPROVED | UC-1 | `8109b2b` / [checkpoint](checkpoints/UC-9.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md) |
 | UC-10 | APPROVED | UC-1 | `c997bd6` / [checkpoint](checkpoints/UC-10.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md) |
-| UC-11 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-11.md) | - |
-| UC-12 | NOT_STARTED | UC-1 | - | - |
+| UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
+| UC-12 | IN_PROGRESS | UC-1 | - | - |
 | UC-13 | NOT_STARTED | UC-1 | - | - |
 | UC-14 | NOT_STARTED | UC-1 | - | - |
 | UC-15 | NOT_STARTED | UC-1 | - | - |
@@ -270,3 +270,9 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Initial UC-11 run retained at /tmp/uc11-verify.log. All grid checks pass; School identity viewport regression exposes added navigation wrapping that pushes its Save below 800px. Compact section buttons restore the existing visible-controls contract. Explicit default-only test fixture also corrected to omit imported overrides; invalid numeric assertions compare exact JSON types. Repeat affected checks before approval.
 
 - Final UC-11 technical BUILD SUCCESS /tmp/uc11-revision-verify.log: all three preference/seven School journeys plus 27 unit/architecture checks pass. Initial log supplies unchanged seven grid/four room-policy passes. Exact raw types/default omission/selected repair, source/Current/restart, state/CSRF/stale/storage/transport and responsive contracts pass. Navigation regression fixed. Module syntax/diff hygiene pass. PENDING_WALKTHROUGH; failures retained.
+
+- UC-11 standalone attempt 1 FAIL F-1: entry harness clicked the already-present EMPTY Create-school control before import completed. Source inspection caught blank instead of intended nonempty fixture. [Retained ledger](../../output/playwright/school-definition-authoring/UC-11/20261011-1/README.md). Fix harness wait/assertions and repeat the entire journey in a fresh database; no production defect inferred.
+
+## UC-11 approval
+
+- Automatically APPROVED on 1fc3328 after [complete repeat Playwright PASS](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md). Exact v35/source/native and twelve inspected screenshots retained. All seven IDs/defaults/zero/maximum, invalid/correction, responsive/transport/stale/conflict/navigation/discard/reload pass. F-1 corrected by explicit import/source synchronization; failed attempt preserved. Relevant 21 journeys and 27 unit/architecture pass across retained logs. No operator mutation or unresolved finding; UC-12/14 remain handoffs. Proceeding UC-12.
