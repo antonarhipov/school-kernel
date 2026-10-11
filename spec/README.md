@@ -8,7 +8,7 @@ spec/<feature>/
   proposal.md
   decisions.md        # when proposal decisions need a separate record
   spec.md             # use-case specification
-  rules.md            # technical rules
+  rules.md            # optional feature-specific technical constraints
   status.md            # execution ledger
   checkpoints/        # executor evidence
   convergence/        # independent verdicts

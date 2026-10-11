@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Turn a feature proposal into a complete, declarative use-case specification in its feature directory, including use-case relationships, scenarios, guarantees, and observable outcomes. Use before technical rules or implementation.
+description: Turn a feature proposal into a complete, declarative use-case specification in its feature directory, including use-case relationships, scenarios, guarantees, and observable outcomes. Use before implementation or an optional technical-rules pass.
 ---
 
 # Use-Case Specification Skill
@@ -9,7 +9,11 @@ Create the behavioral contract for a feature as a set of related use cases. The 
 units that `execute` implements and `converge` verifies. Do not create a separate behavior list, acceptance-criteria
 file, task plan, artifact map, or implementation checklist.
 
-Pipeline position: proposal -> **spec** -> rules -> execute <-> converge (once per use case)
+Pipeline position: proposal -> **spec** -> [rules, optional] -> execute <-> converge (once per use case)
+
+A complete specification can proceed directly to `execute`. The executor checks technical implications against
+project guidance and existing architecture; a separate rules stage or `rules.md` is needed only when material
+feature-specific constraints warrant recording. Existing applicable rules remain binding.
 
 ## Feature Directory
 
@@ -163,7 +167,7 @@ Before writing, verify all of the following:
 - Access failures name what is denied and what remains undisclosed and unchanged.
 - Normative data is self-contained and exact.
 - Every product behavior is inside a use case; there are no B-N or AC-N identifiers and no generated task plan.
-- No question remains that the rules or execute stages would have to answer as a product decision.
+- No question remains that implementation or an optional rules pass would have to answer as a product decision.
 
 Do not write a partial specification.
 

@@ -1,6 +1,6 @@
 ---
 name: rules
-description: Confirm feature-level technical decisions and constraints for a use-case specification, recording validatable rules in its feature directory and tracing each rule directly to the use cases it governs.
+description: Record material feature-specific technical constraints or architectural deviations for a use-case specification. Use when explicitly requested or when consequential constraints need a separate record; routine implementation does not require this stage.
 ---
 
 # Technical Rules Skill
@@ -8,7 +8,11 @@ description: Confirm feature-level technical decisions and constraints for a use
 Confirm how the application must be built to realize the use cases in `<feature-dir>/spec.md`. Use cases define behavior; rules
 define technical constraints. Do not create acceptance criteria, an implementation task list, file map, or phase plan.
 
-Pipeline position: proposal -> spec -> **rules** -> execute <-> converge (once per use case)
+Pipeline position: proposal -> spec -> **[rules, optional]** -> execute <-> converge (once per use case)
+
+The rules stage and `rules.md` are optional. `execute` always performs a scoped technical decision pass; invoke this
+skill when new constraints or deliberate architectural deviations need a separate record. Do not create an empty
+rules file just to satisfy the pipeline. Existing applicable rules remain binding whether or not this stage runs.
 
 ## Feature Directory
 
@@ -18,9 +22,10 @@ feature could apply, ask which feature is in scope. Never read a proposal from o
 
 ## Role
 
-Resolve technical decisions that an executor should not invent during implementation. Ground each decision in the
-actual codebase, confirm judgment calls with the user, and write only constraints that materially change or validate
-the implementation. If a decision changes product behavior, route it back to `spec`.
+Resolve consequential technical constraints that need to outlive an individual implementation choice. Ground each
+decision in the actual codebase and write only constraints that materially govern the implementation. Routine choices
+within the specification and established architecture belong to the executor. If a decision changes product
+behavior, route it back to `spec`.
 
 ## Inputs
 
@@ -70,24 +75,28 @@ canonical options.
 
 ## Interactive Resolution
 
-Ask one technical judgment question at a time. Offer two to four concrete options, including the leanest viable path,
-mark the recommendation, and state the trade-off of each. Do not ask when the codebase or an existing project rule
-already determines the answer.
+Ask only when a consequential trade-off needs user judgment, such as long-term architectural coupling or a
+deviation from an existing constraint. Ask one question at a time, offer two to four concrete options including the
+leanest viable path, mark the recommendation, and explain the trade-offs. Resolve routine choices autonomously; do
+not ask when the specification, codebase, project guidance, or existing rules determine the answer.
 
 If a decision needs an unavailable stakeholder, record the question, blocker, and default under `External
 dependencies`. Do not hide an unresolved decision behind `SHOULD`.
 
-## Required Rule Areas
+## Areas to Assess
 
-The following are mandatory when applicable, even if they partially repeat a convention:
+Assess these areas when applicable. Record only constraints beyond the specification and inherited project guidance,
+or a deliberate deviation that needs an explicit decision. Their correctness and verification remain required when
+no rules file is produced:
 
 - Lifecycle: allowed transitions and service/domain-level refusal of every other transition, including the named
   exception or result and prohibited side effects.
-- Security: a full route-to-access table for the whole affected application surface, including existing routes,
-  login/logout, static content, and explicit public access.
+- Security: access requirements across the affected application surface, including existing routes, login/logout,
+  static content, and explicit public access. Include a full route-to-access table when recording a new or changed
+  access policy; otherwise inherit the established policy.
 - Normative data: one source of truth from `spec.md`, fresh-database verification by value, absence of extra values,
   and credential verification when secrets are seeded.
-- Presentation: reuse of layout/navigation/form conventions and localization of every user-visible string.
+- Presentation: reuse of layout/navigation/form conventions and the specification's language/localization choices.
 - Verification: how each use case is proven at its real boundary, including its main scenario, extensions, guarantees,
   postconditions, and relations.
 
@@ -110,8 +119,8 @@ The testing strategy must establish these constraints without generating per-fil
 8. UI use cases require a human walkthrough after automated verification; the script comes directly from the use
    case's scenario and extensions.
 
-The rule may strengthen or specialize these levels for the project. It must not weaken them to whatever tests already
-exist.
+A recorded rule may strengthen or specialize these levels for the project. An absent rules file does not weaken
+verification: `execute` and `converge` still enforce their contract, boundary, isolation, and walkthrough requirements.
 
 ## Rule Format
 
@@ -150,13 +159,16 @@ Return to `spec` when:
 
 ## Completion Gate
 
-Before writing, verify:
+If no constraint meets the recording bar, report that implementation can use the specification and inherited
+conventions directly, and leave `rules.md` absent. Do not delete an existing rules file or bypass its constraints.
+
+Before writing a rules file, verify:
 
 - Every use case and relationship was considered for technical risk.
-- Every judgment call from the ecosystem survey was confirmed interactively.
+- Consequential trade-offs needing user judgment were resolved; routine choices were grounded in existing guidance.
 - Every rule meets the recording bar and has ID, applicability, modal constraint, reason, and verification.
 - Every referenced UC exists and every UC appears in the cross-reference table, even if it needs no special rule.
-- Required lifecycle, security, normative-data, presentation, and verification rules exist when applicable.
+- Material lifecycle, security, normative-data, presentation, and verification deltas are recorded when applicable.
 - Rules are mutually consistent, compatible with the codebase, and do not change use-case behavior.
 - No rule references criteria, reviews, tasks, phases, artifact maps, or files that a future executor is required to
   create by exact name.
@@ -166,7 +178,9 @@ Do not write a partial rules file.
 
 ## Output
 
-Write `<feature-dir>/rules.md`:
+Write `<feature-dir>/rules.md` only when material constraints meet the recording bar. Otherwise give a concise
+no-special-rules conclusion without creating a placeholder artifact. When a file is warranted, use this format and
+omit sections that do not apply:
 
 ```markdown
 # Technical Rules: <feature>

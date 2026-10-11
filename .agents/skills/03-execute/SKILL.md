@@ -9,13 +9,13 @@ Implement the use cases in `<feature-dir>/spec.md` as vertical slices. A use cas
 guarantees, postconditions, relations, and applicable technical rules, is the unit of work. Do not generate or depend on
 `criteria.md`, `review.md`, `plan-review.md`, `tasks.yaml`, phases, or a file-level implementation plan.
 
-Pipeline position: proposal -> spec -> rules -> **execute -> converge** -> execute -> converge ...
+Pipeline position: proposal -> spec -> [rules, optional] -> **execute -> converge** -> execute -> converge ...
 
 ## Feature Directory
 
 Resolve one `<feature-dir>` under `spec/` before reading, implementing, or writing evidence. Use the directory
-explicitly named by the user. If none is named, use the only directory with an executable specification and rules that
-clearly match the request. When more than one feature could apply, ask which feature is in scope. Never mix status,
+explicitly named by the user. If none is named, use the only directory with an executable specification that clearly
+matches the request. When more than one feature could apply, ask which feature is in scope. Never mix status,
 checkpoints, or convergence reports between feature directories.
 
 Convergence is mandatory after every use case. Once a use case is implemented, stop all other implementation work,
@@ -24,22 +24,30 @@ not start another use case until the current one is `APPROVED`.
 
 ## Role
 
-You are the builder. You choose implementation details within `<feature-dir>/rules.md` and established project conventions,
-implement one actor goal end to end, prove its observable behavior, and keep a small status ledger. You do not turn the
-use case into a low-level task list or predeclare exact files. Files changed are recorded afterward as evidence, not
+You are the builder. You choose implementation details within the specification, established project conventions,
+and applicable recorded rules when present. Implement one actor goal end to end, prove its observable behavior, and
+keep a small status ledger. Do not turn the use case into a low-level task list or predeclare exact files. Files changed are recorded afterward as evidence, not
 beforehand as the plan.
 
 ## Inputs
 
 - Behavioral contract: `<feature-dir>/spec.md`
-- Technical constraints: `<feature-dir>/rules.md`
+- Technical constraints: project guidance and `<feature-dir>/rules.md`, when present
 - Progress ledger: `<feature-dir>/status.md` (create if missing)
 - Prior convergence reports: `<feature-dir>/convergence/UC-*.md`
 - Codebase, project guidance, build files, and tests
 
-`<feature-dir>/spec.md` and `<feature-dir>/rules.md` are required. The rules file may state that the feature introduces no special
-constraint, but the technical decision pass must still have happened. A missing or incomplete behavioral decision is a
-blocker, not an implementation choice.
+`<feature-dir>/spec.md` is required; `rules.md` and a separate rules stage are optional. A missing rules file is not a
+blocker and does not require an empty replacement. Existing applicable rules remain binding. A missing or incomplete
+behavioral decision is a blocker, not an implementation choice.
+
+Before implementation, perform a scoped technical decision pass against the specification, project guidance, and
+existing architecture. Check boundaries, persistence and fidelity, transactions/concurrency, lifecycle guards,
+security, external integrations, presentation, and verification where affected. Resolve routine choices autonomously.
+Record a concise conclusion and the applicable constraint sources in `status.md`; do not create a separate design or
+task plan. Use `rules` only when material new constraints or deliberate architectural deviations need a separate
+record, and ask the user only for consequential trade-offs requiring their judgment. Product decisions return to
+`spec`. Absence of rules never reduces use-case verification or convergence requirements.
 
 ## Status Model
 
@@ -62,8 +70,9 @@ duplicate of the scenarios in `spec.md`.
 
 ## Initialization
 
-1. Read every use-case definition, the use-case map, state models, normative data, out-of-scope decisions, and all
-   rules. Do not implement from the summary table alone.
+1. Read every use-case definition, the use-case map, state models, normative data, out-of-scope decisions, project
+   guidance, and applicable rules when present. Perform the technical decision pass above. Do not implement from the
+   summary table alone.
 2. Validate the relationship graph. Every `Requires`, `Includes`, and `Extends` target must exist. Dependencies
    must be acyclic. If not, raise a `SPEC_AMBIGUITY` blocker.
 3. Create `<feature-dir>/status.md` from the format below if absent. Add every UC as `NOT_STARTED`; do not invent rows.
@@ -91,13 +100,13 @@ files that predate the work. Read the UC in full and collect:
 - guarantees and both postconditions;
 - required, included, and extending relationships;
 - state-model transitions and normative data it uses;
-- every rule whose `Applies to` includes this UC or all use cases.
+- every existing rule whose `Applies to` includes this UC or all use cases, plus applicable project constraints.
 
 ### 2. Implement a vertical slice
 
 Build the smallest coherent production slice that realizes the whole actor goal at its real boundary. Add all layers,
 wiring, migrations, templates, messages, and tests that the use case actually needs. Follow the existing architecture
-and the rules; do not expose partially wired behavior just to show progress.
+and applicable constraints; do not expose partially wired behavior just to show progress.
 
 Technical enabling work is allowed when it is necessary for this UC. Keep shared infrastructure general enough for
 known related UCs, but do not implement another UC's scenarios early. If a discovered need changes actor-visible
@@ -213,7 +222,7 @@ Write a concise blocker with type `SPEC_AMBIGUITY`, `SPEC_CONFLICT`, `TECHNICAL`
 | UC-n extension 2a | <evidence> |
 | UC-n G1 | <evidence> |
 | UC-n success postcondition | <evidence> |
-| RULE-n | <code/config/test file:line> |
+| RULE-n, when applicable | <code/config/test file:line> |
 
 ## Blockers
 
@@ -235,6 +244,7 @@ Write a concise blocker with type `SPEC_AMBIGUITY`, `SPEC_CONFLICT`, `TECHNICAL`
 - Base commit: <hash>
 - Submission commit: HEAD at convergence
 - Relations verified: <ids and relationship>
+- Technical constraints: <project guidance and rules sources, or no special feature rules>
 
 ## Contract Evidence
 
@@ -247,6 +257,8 @@ Write a concise blocker with type `SPEC_AMBIGUITY`, `SPEC_CONFLICT`, `TECHNICAL`
 | UC-n minimal guarantee | <evidence> | PASS |
 
 ## Rule Evidence
+
+<If no feature rules apply, state that explicitly; omit the table rather than inventing RULE rows.>
 
 | Rule | Evidence | Result |
 |---|---|---|

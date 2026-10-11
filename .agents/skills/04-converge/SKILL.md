@@ -9,7 +9,7 @@ Verify one implemented use case immediately after execution submits it. Grade ev
 verdict in `<feature-dir>/convergence/UC-n.md`, and update `<feature-dir>/status.md`. Do not wait for a phase, batch several use cases,
 or depend on criteria, review, plan, task, or artifact-map files.
 
-Pipeline position: proposal -> spec -> rules -> execute -> **converge UC-n** -> execute ...
+Pipeline position: proposal -> spec -> [rules, optional] -> execute -> **converge UC-n** -> execute ...
 
 ## Feature Directory
 
@@ -29,11 +29,15 @@ walkthrough before approval.
 ## Inputs
 
 - Target use case and all related use cases: `<feature-dir>/spec.md`
-- Applicable constraints and verification strategy: `<feature-dir>/rules.md`
+- Applicable constraints: project guidance and `<feature-dir>/rules.md`, when present
 - Executor ledger: `<feature-dir>/status.md`
 - Executor submission: `<feature-dir>/checkpoints/UC-n.md`
 - Earlier convergence reports: `<feature-dir>/convergence/UC-*.md`
 - Git history and diff, code, tests, configuration, migrations, templates, messages, and runtime data
+
+A missing rules file is not a protocol finding or a blocker. Use the specification, project guidance, and this
+skill's verification requirements directly. Read and enforce every applicable existing rule; if a submission cites a
+missing constraint source, investigate that discrepancy rather than silently ignoring it.
 
 Read the detailed UC, not only the use-case map. The contract consists of every main-scenario step, extension,
 guarantee, success and minimal postcondition, state transition, normative-data dependency, and relationship.
@@ -129,9 +133,12 @@ unmappable values follow the declared extension.
 
 ### 5. Security surface
 
-Enumerate the routes the UC uses plus affected existing routes and compare them with the rules' complete access matrix.
+Enumerate the routes the UC uses plus affected existing routes and compare their access with the specification,
+project security guidance, and any applicable rules/access matrix. If no matrix is recorded, derive the route-to-access
+mapping during the audit from those sources and actual configuration; an absent rules file is not a security failure.
 Reproduce anonymous, wrong-role, and wrong-owner cases where applicable. Verify denial, no disclosure, and no mutation.
-An unmapped route, broad `permitAll`, or test scoped narrower than the UC guarantee is blocking.
+An unexplained access mapping, `permitAll` contrary to the declared policy, or test scoped narrower than the UC
+guarantee is blocking.
 
 ### 6. Presentation and walkthrough
 
@@ -142,8 +149,10 @@ invent extra steps or approve before confirmation.
 
 ### 7. Technical rules
 
-For every rule applying to the UC or all use cases, quote the modal constraint and point to the code, configuration,
-test, or runtime evidence that satisfies it. A rule listed in the checkpoint without evidence is not satisfied.
+For every existing rule applying to the UC or all use cases, quote the modal constraint and point to the code,
+configuration, test, or runtime evidence that satisfies it. A rule listed in the checkpoint without evidence is not
+satisfied. Also verify applicable project constraints. When no feature rules apply, record that conclusion without
+inventing rule IDs; all other applicable verification categories still run.
 
 ### 8. Test and repository hygiene
 
@@ -184,10 +193,11 @@ changes and do not let a later implementation submission absorb them.
 
 ## Specification Changes
 
-Ordinary convergence does not rewrite `spec.md` or `rules.md` to match the implementation. When code reveals a
-genuine product or technical decision, report it as blocked. Change the specification only after the user explicitly
-chooses the new contract. Then mark every approved UC affected by that change `NEEDS_REVISION` and reconverge it; do
-not accept as-built drift silently.
+Ordinary convergence does not rewrite `spec.md` or an existing `rules.md` to match the implementation. Routine
+implementation choices within the contract and established architecture do not require a new rule or user decision.
+When code reveals an unresolved product decision or a consequential deviation from an applicable constraint, report
+it as blocked. Change the affected contract only after the user explicitly chooses it. Then mark every approved UC
+affected by that change `NEEDS_REVISION` and reconverge it; do not accept as-built drift silently.
 
 ## Completion Gate
 
@@ -234,6 +244,8 @@ Write or replace `<feature-dir>/convergence/UC-n.md`:
 |---|---|---|---|---|
 
 ## Rule Conformance
+
+<If no feature rules apply, state that explicitly; omit the table. Project constraints still require verification.>
 
 | Rule | Constraint | Evidence | Result |
 |---|---|---|---|
