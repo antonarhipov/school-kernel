@@ -841,3 +841,5 @@ body.authoring .current-label { margin: 8px 0; }
 @media (max-width: 700px) { .preference-table td, .preference-table th { padding: .4rem; font-size: .8rem; } }
 /* Keep primary authoring controls visible when all definition destinations are present. */
 .authoring-navigation button { padding: 8px 10px; font-size: .9rem; }
+#catalog-upgrade-dialog { width: min(52rem, 90vw); max-height: calc(100dvh - 2rem); box-sizing: border-box; overflow: auto; padding: 1.25rem; }
+#catalog-upgrade-dialog p { margin: .65rem 0; }
