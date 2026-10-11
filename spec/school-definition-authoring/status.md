@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-12
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-13 after UC-12 walkthrough
+- Use case: UC-13
+- Status: IN_PROGRESS
+- Next eligible: UC-14 after UC-13 walkthrough
 
 ## Progress
 
@@ -21,8 +21,8 @@
 | UC-9 | APPROVED | UC-1 | `8109b2b` / [checkpoint](checkpoints/UC-9.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md) |
 | UC-10 | APPROVED | UC-1 | `c997bd6` / [checkpoint](checkpoints/UC-10.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md) |
 | UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
-| UC-12 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-12.md) | - |
-| UC-13 | NOT_STARTED | UC-1 | - | - |
+| UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
+| UC-13 | IN_PROGRESS | UC-1 | - | - |
 | UC-14 | NOT_STARTED | UC-1 | - | - |
 | UC-15 | NOT_STARTED | UC-1 | - | - |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
@@ -288,3 +288,9 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - UC-12 standalone attempt 1 FAIL F-1: recovery dialog disappeared during stale-refresh/transport/screenshot sequence, preventing its refresh control. [Retained evidence](../../output/playwright/school-definition-authoring/UC-12/20261011-1/README.md). Non-mutation during failed sequence observed; subsequent reproduction after CLI route lifetime ended legitimately saved v4 and is distinguished. Bind closure to owned modal, bound modal layout, assert visible failure controls after capture, rerun affected checks and complete fresh walkthrough.
 
 - F-1 revision BUILD SUCCESS /tmp/uc12-revision-verify.log, all four catalog journeys and 27 unit/architecture checks including visible transport-dialog controls after screenshot. Prior 26 unchanged affected journeys remain green. Repeat full standalone journey on revised build/fresh source; not yet approved.
+
+- Attempt 2 FAIL F-2 [ledger](../../output/playwright/school-definition-authoring/UC-12/20261011-2/README.md): F-1 recovery/capture assertions pass through exact v4 upgrade; host script structuredClone unavailable while comparing cohort. Replace host clone with JSON roundtrip and repeat entire walkthrough on fresh data; no production defect inferred.
+
+## UC-12 approval
+
+- Automatically APPROVED on dfabfd8 after [complete recorded Playwright PASS](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md). Exact v5/source/native and eleven inspected screenshots retained. Preview/cancel/compensation/stale/transport/fresh review/atomic upgrade/deliberate newer default/responsive/reload pass. F-1/F-2 fixed, failed attempts preserved. All 30 technical journeys and 27 unit/architecture pass; strengthened four recovery journeys and final handoff/restart check pass (/tmp/uc12-handoffs-verify.log BUILD SUCCESS). Catalog destination handoffs from UC-3/4/6/10/11 are now implemented and verified. No operator mutation/unresolved finding. Proceeding UC-13.

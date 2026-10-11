@@ -1,0 +1,366 @@
+{
+  "state": "DEFINITION_DRAFT",
+  "version": 5,
+  "acceptedTimetable": false,
+  "workspace": {
+    "school": {
+      "id": "demo-school",
+      "displayName": "Demo School"
+    },
+    "importMode": "INITIAL_DEFINITION",
+    "definitionDraft": {
+      "issues": [],
+      "definition": {
+        "rooms": [
+          {
+            "id": "room-101",
+            "capacity": 30,
+            "displayName": "Room 101",
+            "capabilityIds": [
+              "lab"
+            ]
+          },
+          {
+            "id": "room-102",
+            "capacity": 30,
+            "displayName": "Room 102",
+            "capabilityIds": []
+          }
+        ],
+        "cohorts": [
+          {
+            "id": "cohort-7a",
+            "size": 24,
+            "displayName": "Year 7A",
+            "maxDailyGaps": 2147483647
+          }
+        ],
+        "lessons": [
+          {
+            "id": "lesson-math-1",
+            "cohortId": "cohort-7a",
+            "seriesId": "series-math-7a",
+            "subjectId": "math",
+            "teacherId": "teacher-alex",
+            "displayName": "Mathematics 1",
+            "preferredRoomIds": [
+              "room-102"
+            ]
+          },
+          {
+            "id": "lesson-science-1",
+            "cohortId": "cohort-7a",
+            "subjectId": "science",
+            "teacherId": "teacher-alex",
+            "displayName": "Science 1",
+            "preferredRoomIds": [
+              "room-101"
+            ],
+            "requiredRoomCapabilityIds": [
+              "lab"
+            ]
+          }
+        ],
+        "periods": [
+          {
+            "id": "mon-1",
+            "order": 1,
+            "weekday": "MONDAY",
+            "displayName": "Monday 1"
+          },
+          {
+            "id": "mon-2",
+            "order": 2,
+            "weekday": "MONDAY",
+            "displayName": "Monday 2"
+          },
+          {
+            "id": "mon-3",
+            "order": 3,
+            "weekday": "MONDAY",
+            "displayName": "Monday 3"
+          }
+        ],
+        "schoolId": "demo-school",
+        "subjects": [
+          {
+            "id": "math",
+            "displayName": "Mathematics"
+          },
+          {
+            "id": "science",
+            "displayName": "Science"
+          }
+        ],
+        "teachers": [
+          {
+            "id": "teacher-alex",
+            "displayName": "Alex",
+            "qualifiedSubjectIds": [
+              "math",
+              "science"
+            ],
+            "undesirablePeriodIds": [
+              "mon-3"
+            ]
+          }
+        ],
+        "displayName": "Demo School",
+        "schemaVersion": 1,
+        "catalogVersion": 9,
+        "softConstraintOverrides": [
+          {
+            "weight": 4,
+            "constraintId": "soft.teacher-gap"
+          },
+          {
+            "weight": 0,
+            "constraintId": "soft.cohort-week-balance"
+          },
+          {
+            "weight": 0,
+            "constraintId": "soft.cohort-late-start"
+          }
+        ]
+      },
+      "expiredPins": [],
+      "sourceState": "INITIAL_DRAFT",
+      "entrySection": "Review",
+      "draftRevision": "sha256:40a0e113204fe51ad7dde595f93591495606a52f1848a602c2d2a96a91e8407a",
+      "sourceVersion": 1,
+      "editingContext": {},
+      "openedRevision": "sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14",
+      "sourceDocument": {
+        "school": {
+          "id": "demo-school",
+          "displayName": "Demo School"
+        },
+        "importMode": "INITIAL_DEFINITION",
+        "initialDefinition": {
+          "rooms": [
+            {
+              "id": "room-101",
+              "capacity": 30,
+              "displayName": "Room 101",
+              "capabilityIds": [
+                "lab"
+              ]
+            },
+            {
+              "id": "room-102",
+              "capacity": 30,
+              "displayName": "Room 102",
+              "capabilityIds": []
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "cohort-7a",
+              "size": 24,
+              "displayName": "Year 7A"
+            }
+          ],
+          "lessons": [
+            {
+              "id": "lesson-math-1",
+              "cohortId": "cohort-7a",
+              "seriesId": "series-math-7a",
+              "subjectId": "math",
+              "teacherId": "teacher-alex",
+              "displayName": "Mathematics 1",
+              "preferredRoomIds": [
+                "room-102"
+              ]
+            },
+            {
+              "id": "lesson-science-1",
+              "cohortId": "cohort-7a",
+              "subjectId": "science",
+              "teacherId": "teacher-alex",
+              "displayName": "Science 1",
+              "preferredRoomIds": [
+                "room-101"
+              ],
+              "requiredRoomCapabilityIds": [
+                "lab"
+              ]
+            }
+          ],
+          "periods": [
+            {
+              "id": "mon-1",
+              "order": 1,
+              "weekday": "MONDAY",
+              "displayName": "Monday 1"
+            },
+            {
+              "id": "mon-2",
+              "order": 2,
+              "weekday": "MONDAY",
+              "displayName": "Monday 2"
+            },
+            {
+              "id": "mon-3",
+              "order": 3,
+              "weekday": "MONDAY",
+              "displayName": "Monday 3"
+            }
+          ],
+          "schoolId": "demo-school",
+          "subjects": [
+            {
+              "id": "math",
+              "displayName": "Mathematics"
+            },
+            {
+              "id": "science",
+              "displayName": "Science"
+            }
+          ],
+          "teachers": [
+            {
+              "id": "teacher-alex",
+              "displayName": "Alex",
+              "qualifiedSubjectIds": [
+                "math",
+                "science"
+              ],
+              "undesirablePeriodIds": [
+                "mon-3"
+              ]
+            }
+          ],
+          "displayName": "Demo School",
+          "schemaVersion": 1,
+          "catalogVersion": 1,
+          "softConstraintOverrides": [
+            {
+              "weight": 2,
+              "constraintId": "soft.teacher-gap"
+            }
+          ]
+        },
+        "definitionRevision": "sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14"
+      },
+      "catalogUpgrades": [
+        {
+          "toCatalog": 9,
+          "adjustments": [
+            "soft.cohort-gap = 0 (preserve previously inactive preference)",
+            "soft.cohort-week-balance = 0 (preserve previously inactive preference)",
+            "soft.cohort-late-start = 0 (preserve previously inactive preference)",
+            "Class cohort-7a: maxDailyGaps = No limit (preserve unrestricted gaps)"
+          ],
+          "fromCatalog": 1
+        }
+      ],
+      "removedIdentities": [],
+      "openingAdjustments": []
+    },
+    "initialDefinition": {
+      "rooms": [
+        {
+          "id": "room-101",
+          "capacity": 30,
+          "displayName": "Room 101",
+          "capabilityIds": [
+            "lab"
+          ]
+        },
+        {
+          "id": "room-102",
+          "capacity": 30,
+          "displayName": "Room 102",
+          "capabilityIds": []
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "cohort-7a",
+          "size": 24,
+          "displayName": "Year 7A"
+        }
+      ],
+      "lessons": [
+        {
+          "id": "lesson-math-1",
+          "cohortId": "cohort-7a",
+          "seriesId": "series-math-7a",
+          "subjectId": "math",
+          "teacherId": "teacher-alex",
+          "displayName": "Mathematics 1",
+          "preferredRoomIds": [
+            "room-102"
+          ]
+        },
+        {
+          "id": "lesson-science-1",
+          "cohortId": "cohort-7a",
+          "subjectId": "science",
+          "teacherId": "teacher-alex",
+          "displayName": "Science 1",
+          "preferredRoomIds": [
+            "room-101"
+          ],
+          "requiredRoomCapabilityIds": [
+            "lab"
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "id": "mon-1",
+          "order": 1,
+          "weekday": "MONDAY",
+          "displayName": "Monday 1"
+        },
+        {
+          "id": "mon-2",
+          "order": 2,
+          "weekday": "MONDAY",
+          "displayName": "Monday 2"
+        },
+        {
+          "id": "mon-3",
+          "order": 3,
+          "weekday": "MONDAY",
+          "displayName": "Monday 3"
+        }
+      ],
+      "schoolId": "demo-school",
+      "subjects": [
+        {
+          "id": "math",
+          "displayName": "Mathematics"
+        },
+        {
+          "id": "science",
+          "displayName": "Science"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "teacher-alex",
+          "displayName": "Alex",
+          "qualifiedSubjectIds": [
+            "math",
+            "science"
+          ],
+          "undesirablePeriodIds": [
+            "mon-3"
+          ]
+        }
+      ],
+      "displayName": "Demo School",
+      "schemaVersion": 1,
+      "catalogVersion": 1,
+      "softConstraintOverrides": [
+        {
+          "weight": 2,
+          "constraintId": "soft.teacher-gap"
+        }
+      ]
+    },
+    "definitionRevision": "sha256:c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14"
+  }
+}
