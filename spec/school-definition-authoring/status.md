@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-15
-- Status: NEEDS_REVISION
-- Next eligible: UC-16 after UC-15 walkthrough
+- Use case: UC-16
+- Status: IN_PROGRESS
+- Next eligible: UC-17 after UC-16 walkthrough
 
 ## Progress
 
@@ -24,8 +24,8 @@
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
 | UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
-| UC-15 | NEEDS_REVISION | UC-1 | [checkpoint](checkpoints/UC-15.md) | Running isolated walkthrough |
-| UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
+| UC-15 | APPROVED | UC-1 | `ac6faa0` / [checkpoint](checkpoints/UC-15.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md) |
+| UC-16 | IN_PROGRESS | UC-1, UC-15 | - | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
 | UC-18 | NOT_STARTED | UC-16 | - | - |
 | UC-19 | NOT_STARTED | UC-1 | - | - |
@@ -332,3 +332,7 @@ UC-15 attempt1 FAIL retained: import wait raced existing Create school, opening 
 UC-15 attempts2/3 FAIL retained: observed Classes selector corrected; residual page/context fault route aborted cohort saves. Exact request-failure evidence and explicit UI retry after clearing routes prove v6 legitimate recovery. Fresh Chrome context and full repeat required. Failed UC-15 servers (18092–18094) stopped after evidence capture; disposable databases/logs retained.
 
 UC-15 attempt4 action/state scripts PASS but screenshot inspection found obsolete Current draft-editing guidance. NEEDS_REVISION retained; corrected message now accurately says Current is accepted and draft changes unpublished. Relevant prior technical behavior checks unchanged; full new-build walkthrough repeat required.
+
+### UC-15 automatic approval
+
+Complete final-build repeat PASS, exact v9 and 18 inspected images, accurate Current/unpublished-draft distinction. [Ledger](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md). All earlier attempts retained. Five review/seven restoration journeys PASS, technical behavior unchanged by final message fix. Proceeding to UC-16 with exact nine-lesson onboarding requirement.

@@ -1,0 +1,40 @@
+### Open tabs
+- 0: (current) [School timetable workspace](http://localhost:18093/workspace/)
+- 1: [School timetable workspace](http://localhost:18088/workspace/)
+- 2: [School timetable workspace](http://localhost:18088/workspace/)
+### Page
+- Page URL: http://localhost:18093/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+```yaml
+- generic [active] [ref=f33e1]:
+  - banner [ref=f33e2]:
+    - paragraph [ref=f33e3]: Local school timetable
+    - heading "Operations workspace" [level=1] [ref=f33e4]
+    - paragraph [ref=f33e5]: No accepted timetable
+  - main [ref=f33e6]:
+    - generic [ref=f33e7]:
+      - generic [ref=f33e8]: Empty workspace
+      - heading "Bring this school into the workspace" [level=2] [ref=f33e9]
+      - paragraph [ref=f33e10]: No draft or timetable has been imported.
+      - generic [ref=f33e11]:
+        - button "Create school" [ref=f33e12] [cursor=pointer]
+        - status
+    - generic [ref=f33e13]:
+      - heading "Import school data" [level=2] [ref=f33e14]
+      - paragraph [ref=f33e15]: Start with an initial school definition, a matching definition and feasible result, or an accepted-bundle ZIP.
+      - group "JSON documents" [ref=f33e17]:
+        - generic [ref=f33e19]:
+          - generic [ref=f33e20]: School definition
+          - button "School definition" [ref=f33e21]
+        - generic [ref=f33e22]:
+          - generic [ref=f33e23]: Matching feasible result (optional)
+          - button "Matching feasible result (optional)" [ref=f33e24]
+        - button "Import JSON documents" [ref=f33e25] [cursor=pointer]
+      - group "Accepted-bundle archive" [ref=f33e27]:
+        - generic [ref=f33e29]:
+          - generic [ref=f33e30]: Accepted bundle
+          - button "Accepted bundle" [ref=f33e31]
+        - button "Import accepted bundle" [ref=f33e32] [cursor=pointer]
+      - status
+```
