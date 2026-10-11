@@ -1,0 +1,12 @@
+[
+  {
+    "session": "discard-legacy-repro",
+    "exit": 0,
+    "output": "Browser 'discard-legacy-repro' closed\n\n"
+  },
+  {
+    "session": "discard-legacy-final",
+    "exit": 0,
+    "output": "Browser 'discard-legacy-final' closed\n\n"
+  }
+]

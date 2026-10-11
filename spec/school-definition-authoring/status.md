@@ -2,10 +2,10 @@
 
 ## Current
 
-- Use case: UC-19 (persisted legacy discard compatibility)
-- Status: NEEDS_REVISION
-- Feature: compatibility repair in progress; prior approvals retained
-- Next eligible: corrected legacy discard checks and recorded walkthrough
+- Use case: none (all 20 complete)
+- Status: APPROVED
+- Feature: IMPLEMENTED (20/20 approved, legacy discard correction verified)
+- Next eligible: none
 
 ## Progress
 
@@ -29,7 +29,7 @@
 | UC-16 | APPROVED | UC-1, UC-15 | `56f8cdd` / [checkpoint](checkpoints/UC-16.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md) |
 | UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
 | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
-| UC-19 | NEEDS_REVISION | UC-1 | `e90d7a5` / [checkpoint](checkpoints/UC-19.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md) |
+| UC-19 | APPROVED | UC-1 | `e90d7a5` + correction `726774d` / [checkpoint](checkpoints/UC-19.md) | [original PASS](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md), [legacy correction PASS](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-4/README.md) |
 | UC-20 | APPROVED | none | `1090151` / [checkpoint](checkpoints/UC-20.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md) |
 
 ## Technical decision pass
@@ -407,3 +407,7 @@ User-reported `definition-discard.js:12` uncaught school access reproduced on an
 ### 2026-10-12 — UC-19 correction technical and walkthrough PASS
 
 33 unit/architecture +8 discard/persistence browser cases PASS, reordered legacy fixtures and8 refused malformed/mismatched sources. Whole actual MVK copy restored exactly via independently verified kernel source revision; authoring raw JSON hash differs because kernel normalizes entity/set order. Repeat4 actor journey PASS: legacy v233→234, modern source re-entry/discard, initial/EMPTY, null-source409, no uncaught errors,8 inspected images. Actual operator8080 dialog/cancel PASS and complete v233 unchanged. Fixed build `/tmp/discard-authoring-fixed-r2.jar` restored stopped8080 using existing local database; no migrations/data changes, original browser working values preserved. Final approval ledger being recorded; earlier failure/interrupted evidence retained.
+
+### 2026-10-12 — UC-19 legacy correction automatic approval
+
+Submission `726774d`, [complete repeat4 PASS ledger](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-4/README.md).33 unit/architecture +8 discard/persistence cases PASS. Exact actual MVK legacy source restored/reloaded in isolated copy v233→234; modern accepted, initial,EMPTY and explicit null-source refusal PASS;8 inspected screenshots, zero uncaught errors. Actual8080 confirmation/cancel preserves entire operator v233; corrected local runtime retained, user's original browser/working values untouched. Source revision is independently kernel-verified, not authoring JSON hash; initial/canonical-order and refusal regressions strengthened. Failed/interrupted attempts immutable. All20 approved, no outstanding handoff/blocker; original final regression coverage remains applicable and new affected checks PASS.
