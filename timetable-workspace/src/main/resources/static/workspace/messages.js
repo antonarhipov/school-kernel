@@ -175,7 +175,7 @@ export const M = Object.freeze({
   proposalChange: 'Proposed change · not current',
   acceptedOrigin: 'Accepted origin · current',
   proposedDestination: 'Proposed destination · not current',
-  combinedChange: 'Accepted and proposed · same time and class',
+  combinedChange: 'Accepted and proposed · same period and class',
   additionCue: 'Proposed addition · not current',
   cancellationCue: 'Accepted lesson · proposed cancellation',
   originCue: 'Origin',

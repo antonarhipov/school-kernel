@@ -1,0 +1,19 @@
+### Error
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#proposal-context .timing-impact [data-review-lesson="1b.klassitund.16"]').first()[22m
+[2m    - locator resolved to <button type="button" class="link-button" data-review-side="combined" data-review-lesson="1b.klassitund.16">1B Klassitund 16 · Accepted and proposed · same t…</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    59 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is not visible[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+

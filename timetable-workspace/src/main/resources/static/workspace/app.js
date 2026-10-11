@@ -794,7 +794,7 @@ function renderSeedIdentity(snapshot) {
   const seed = snapshot.workspace.repairDraft?.seedDefinition;
   if (!seed) return;
   const notice = document.createElement('p'); notice.id = 'authored-seed-identity'; notice.className = 'notice'; notice.style.overflowWrap = 'anywhere';
-  notice.textContent = `Verified authored successor: ${seed.displayName} • ${snapshot.workspace.repairDraft.seedDefinitionRevision}. Authored changes and editing context are retained. Current remains the accepted source; this definition has not been solved or published.`;
+  notice.textContent = `Verified authored successor: ${seed.displayName} • ${snapshot.workspace.repairDraft.seedDefinitionRevision}. Authored changes and editing context are retained. Current remains the accepted source; ${snapshot.state === "REPAIR_PROPOSAL" ? "a verified feasible proposal awaits explicit acceptance." : snapshot.state === "SOLVING_REPAIR" ? "repair generation is running and has not published this definition." : "this definition has not been solved or published."}`;
   stateCard.querySelector('.accepted-heading')?.after(notice);
   if (!notice.isConnected) stateCard.prepend(notice);
   const detail = document.createElement('details'); detail.className = 'seed-definition-inspection';

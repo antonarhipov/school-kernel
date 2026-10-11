@@ -31,6 +31,32 @@ class SeededRepairBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(200,command("DELETE","/api/runs/"+id,JSON.createObjectNode()).status());assertEquals("REPAIR_DRAFT",storedLifecycle());assertEquals(saved.path("repairDraft"),storedWorkspaceDocument().path("repairDraft"));
         recovery.recoverInterruptedRun();workbench.reload();assertEquals(saved.path("repairDraft"),storedWorkspaceDocument().path("repairDraft"));
     }
+    @Test void verifiedAcceptancePublishesWholeSeedContextMetadataAndFailedStorageRetainsProposal() throws Exception {
+        seed();JsonNode source=storedWorkspaceDocument().path("acceptedBaseline").deepCopy();
+        JsonNode retained=storedWorkspaceDocument().path("repairDraft").path("retainedAuthoring").deepCopy();
+        assertEquals(202,command("POST","/api/runs",JSON.createObjectNode()).status());
+        workbench.awaitText("Repair proposal · not current",java.time.Duration.ofSeconds(90));
+        assertEquals("REPAIR_PROPOSAL",storedLifecycle());JsonNode proposal=storedWorkspaceDocument().path("proposal").deepCopy();
+        assertEquals(retained.path("definition"),proposal.path("definition"));assertEquals(source,storedWorkspaceDocument().path("acceptedBaseline"));
+        recovery.recoverInterruptedRun();workbench.reload();assertEquals(proposal,storedWorkspaceDocument().path("proposal"));
+        String before=storedDocument();withRejectedWorkspaceUpdates("NEW.lifecycle_state='ACCEPTED_BASELINE'",()->{
+            assertEquals(503,command("POST","/api/proposal/accept",JSON.createObjectNode()).status());assertEquals(before,storedDocument());});
+        assertEquals(200,command("POST","/api/proposal/accept",JSON.createObjectNode()).status());
+        JsonNode accepted=storedWorkspaceDocument();assertEquals("ACCEPTED_BASELINE",storedLifecycle());
+        assertEquals(proposal.path("definition"),accepted.path("acceptedBaseline").path("definition"));
+        assertEquals(proposal.path("result"),accepted.path("acceptedBaseline").path("result"));
+        assertEquals(retained.path("editingContext"),accepted.path("authoringContext"));
+        assertEquals("Seeded successor",accepted.path("school").path("displayName").asString());
+        assertFalse(accepted.has("repairDraft"));assertFalse(accepted.has("definitionDraft"));
+    }
+    @Test void incompleteOutputAndChangedRetainedContextCannotBecomeCurrent() {
+        seed();JsonNode before=storedWorkspaceDocument().deepCopy();
+        processes.failure=WorkspaceRepairPlanningIT.RepairFailure.MISMATCHED;
+        assertEquals(202,command("POST","/api/runs",JSON.createObjectNode()).status());
+        workbench.awaitText("unverified repair result",java.time.Duration.ofSeconds(30));
+        assertEquals("REPAIR_DRAFT",storedLifecycle());assertEquals(before.path("acceptedBaseline"),storedWorkspaceDocument().path("acceptedBaseline"));
+        assertEquals(before.path("repairDraft"),storedWorkspaceDocument().path("repairDraft"));assertFalse(storedWorkspaceDocument().has("proposal"));
+    }
     private void seed() {
         storeAccepted(fixtures.validAcceptedDocument());workbench.open();
         workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");
