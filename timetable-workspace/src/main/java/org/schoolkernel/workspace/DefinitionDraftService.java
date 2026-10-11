@@ -257,7 +257,7 @@ public class DefinitionDraftService {
         }
     }
 
-    private static String revision(JsonNode definition) {
+    static String revision(JsonNode definition) {
         try {
             return "sha256:" + HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(CanonicalJson.bytes(definition)));
         } catch (NoSuchAlgorithmException exception) { throw new IllegalStateException(exception); }

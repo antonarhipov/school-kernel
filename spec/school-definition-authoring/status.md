@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-2
-- Status: APPROVED
-- Next eligible: UC-3 in document order
+- Use case: UC-3
+- Status: PENDING_WALKTHROUGH
+- Next eligible: UC-4 after UC-3 walkthrough
 
 ## Progress
 
@@ -12,7 +12,7 @@
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
 | UC-2 | APPROVED | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
-| UC-3 | NOT_STARTED | UC-1 | - | - |
+| UC-3 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-3.md) | walkthrough pending |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
@@ -54,7 +54,7 @@
 
 ## Blockers
 
-None.
+None. Prior UC-3 procedural blocker resolved by the user-authorized workflow update below.
 
 ## Deviations
 
@@ -131,3 +131,19 @@ None.
 - User authorized automatic Playwright walkthroughs after checkpoint and technical convergence to support the autonomous implementation loop. Updated spec UC-1 G7 and all dependent walkthrough references: passing agent-run real-browser and durable-state evidence now permits automatic approval; isolation, failure checks and exact fidelity requirements remain intact. This supersedes the prior confirmation policy, without changing actor-visible behavior or invalidating existing UC-1/UC-2 evidence.
 - Updated spec/rules/execute/converge skills to retain one-UC immutable checkpoints, commit technical convergence before the walkthrough, immediately run Playwright, record and commit final approval, and continue within the authorized scope. Behavioral failures return to revision; inaccessible tooling/runtime blocks approval. Explicit human gates remain supported when required.
 - UC-3 is next eligible; this approval/workflow request does not start its implementation. No runtime/operator data changed by this update.
+
+## UC-3 Evidence
+
+- Started: 2026-10-11; base commit `dc06893`; pre-existing dirty files: none. UC-1 is APPROVED.
+- Scoped technical decision: retain JSON trees and optional clock representations; grid preview is read-only and bound to workspace version; one transactional CAS saves all selected rows/reservations and grid diagnostics. Existing IDs cannot be removed or renamed through this route. Availability arrays remain exact; omission automatically includes added slots. Timing review derives from exact source definition/accepted assignments and explicit proposed lesson locks. No feature rules exist; sources are UC-3, Period fields, Identifier rules, form/lifecycle models and approved UC-1 security/presentation boundaries.
+
+- Grid construction checks: BUILD SUCCESS; 26 unit/architecture and 25 integration/browser checks, zero failures/errors/skips (/tmp/uc3-final-verify.log). Additional stronger conflict/addition assertions: two browser checks plus 26 unit/architecture checks passed (/tmp/uc3-assertions-verify.log). Syntax/diff hygiene passed. Existing UC-1 and UC-2 journeys remain green; operator data untouched.
+- [Current construction evidence](checkpoints/UC-3.md). Not yet ready for convergence: extension 3b routes deletion through unimplemented UC-13. Direct deletion is safely refused without mutation, but guidance alone is not the complete continuation. User ordering decision requested; no later UC started and no contract/approval claim changed.
+
+- Cleanup: unused agent-owned packaged server PID 73192/session 97656 stopped; disposable UC-3 walkthrough container removed. No browser session was opened and no operator/earlier walkthrough data was changed. Cached Playwright CLI is available; the wrapper attempted a registry lookup that failed under restricted network, so future walkthroughs can use the installed cached CLI.
+
+## Automated execution policy update — 2026-10-11
+
+- User explicitly requested loosening the execute skill, durable Playwright walkthrough ledgers with applicable screenshots, automatic approval on PASS, and production fixes/repeated walkthroughs on FAIL followed by the next UC. Updated repository execute and installed Playwright skills; both pass quick_validate.py. Separate converge reviews are optional; no two-attempt limit or procedural approval pause remains.
+- Cross-UC “continue with” references are destination handoffs, not implicit Requires dependencies. UC-3 checks safe period-removal guidance/refusal now; UC-13 owns its complete guided-removal journey. This pending handoff must be implemented and verified in UC-13 before feature completion. Explicit relationship dependencies, product behavior, isolation, exact fidelity and negative-path evidence remain required. No specification has been weakened and no UC-13 completion is claimed.
+- Resumed UC-3 from the existing preserved implementation and 51 passing relevant checks plus final strengthened assertions. No changed production code requires another technical run. Next is its standalone real-browser walkthrough and recorded automatic approval, then UC-4.

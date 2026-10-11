@@ -38,6 +38,7 @@ public class WorkspaceController {
     private final AcceptedBaselineExportService exports;
     private final ManualDraftService manualDrafts;
     private final DefinitionDraftService definitionDrafts;
+    private final DefinitionGridService definitionGrid;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -51,6 +52,7 @@ public class WorkspaceController {
             AcceptedBaselineExportService exports,
             ManualDraftService manualDrafts,
             DefinitionDraftService definitionDrafts,
+            DefinitionGridService definitionGrid,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -62,6 +64,7 @@ public class WorkspaceController {
         this.exports = exports;
         this.manualDrafts = manualDrafts;
         this.definitionDrafts = definitionDrafts;
+        this.definitionGrid = definitionGrid;
         this.json = json;
     }
 
@@ -86,6 +89,20 @@ public class WorkspaceController {
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody JsonNode request) {
         return response(definitionDrafts.saveSchool(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/grid/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewGrid(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionGrid.preview(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/grid")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveGrid(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(definitionGrid.save(ifMatch, request));
     }
 
     @PostMapping("/api/repair-draft")

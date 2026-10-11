@@ -82,6 +82,15 @@ function render(snapshot) {
     renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(currentSnapshot); }, {
       render,
       refresh: () => load(true),
+      grid: async (fields, version, preview = false) => {
+        const response = await fetchWithCsrf(`/api/definition-draft/grid${preview ? '/preview' : ''}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Grid operation failed.');
+        if (!preview) etag = response.headers.get('ETag');
+        return result;
+      },
       save: async (fields, version) => {
         const response = await fetchWithCsrf('/api/definition-draft/school', {
           method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)

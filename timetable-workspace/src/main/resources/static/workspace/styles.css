@@ -804,3 +804,13 @@ body.authoring .current-label { margin: 8px 0; }
 #school-identity-form label { margin: 5px 0; }
 #school-identity-form input { font: inherit; padding: 8px; border: 1px solid #b8c5bc; border-radius: 3px; }
 #school-identity-form input[readonly] { background: #ebf0ec; color: #43594e; }
+
+/* Grid cards keep all controls readable without page-level horizontal scrolling. */
+.grid-generator-days, .grid-generator-bells, .grid-period-rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 12px; }
+.grid-period-row { min-width: 0; border: 1px solid var(--border, #ced5de); border-radius: 8px; padding: 12px; }
+.grid-period-row legend { overflow-wrap: anywhere; }
+.grid-period-row label, .grid-generator-days label, .grid-bell-pair label { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; min-width: 0; }
+.grid-period-row input, .grid-period-row select, .grid-generator-days input, .grid-bell-pair input { width: 100%; min-width: 0; box-sizing: border-box; }
+.grid-period-row input[type=checkbox] { width: auto; align-self: flex-start; }
+.grid-period-row span { overflow-wrap: anywhere; }
+#grid-preview { margin-top: 16px; padding: 12px; border: 2px solid #7196b8; border-radius: 8px; }
