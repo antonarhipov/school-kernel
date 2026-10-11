@@ -61,7 +61,8 @@ function render(snapshot) {
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
   const school = snapshot.workspace.school;
-  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'INITIAL_PROPOSAL', 'MANUAL_DRAFT'].includes(snapshot.state));
+  document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'INITIAL_PROPOSAL', 'MANUAL_DRAFT'].includes(snapshot.state)
+    || (snapshot.state === 'DEFINITION_DRAFT' && snapshot.acceptedTimetable));
   if (snapshot.state === 'EMPTY') {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
@@ -71,7 +72,11 @@ function render(snapshot) {
   }
   importCard.hidden = true;
   const schoolName = school?.displayName || M.nameUnavailable;
-  if (snapshot.state === 'INITIAL_DRAFT') {
+  if (snapshot.state === 'DEFINITION_DRAFT' && !snapshot.acceptedTimetable) {
+    currentLabel.textContent = M.noAccepted;
+    stateCard.className = 'card';
+    stateCard.innerHTML = `<span class="state">${M.savedDefinitionDraft}</span><h2>${escapeHtml(schoolName)}</h2><p role="status">${M.savedDefinitionDraftDetail}</p>${summary(snapshot.workspace.definitionDraft.definition)}`;
+  } else if (snapshot.state === 'INITIAL_DRAFT') {
     currentLabel.textContent = M.noAccepted;
     const definition = snapshot.workspace.initialDefinition;
     const lastRun = snapshot.workspace.lastRun;
@@ -105,7 +110,7 @@ function render(snapshot) {
       syncInspectionState(inspectionState.closeLesson());
     }
     renderInitialProposal(snapshot, schoolName);
-  } else if (snapshot.state === 'ACCEPTED_BASELINE') {
+  } else if (snapshot.state === 'ACCEPTED_BASELINE' || snapshot.state === 'DEFINITION_DRAFT') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
     initializeInspectionState(snapshot.workspace.school?.id);
@@ -117,6 +122,9 @@ function render(snapshot) {
       syncInspectionState(inspectionState.closeLesson());
     }
     renderAccepted(snapshot, schoolName);
+    if (snapshot.state === 'DEFINITION_DRAFT') {
+      stateCard.insertAdjacentHTML('afterbegin', `<p class="notice" role="status">${M.savedDefinitionDraftDetail}</p>`);
+    }
   } else if (snapshot.state === 'REPAIR_DRAFT') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
@@ -188,10 +196,10 @@ function render(snapshot) {
 }
 
 function renderModeNavigation() {
-  if (!inspectionState || !['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'MANUAL_DRAFT'].includes(currentSnapshot.state) || view.narrow) return;
+  if (!inspectionState || !['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'MANUAL_DRAFT', 'DEFINITION_DRAFT'].includes(currentSnapshot.state) || view.narrow || !currentSnapshot.acceptedTimetable) return;
   const modes = { ACCEPTED_BASELINE: ['CURRENT'], REPAIR_DRAFT: ['CURRENT', 'DRAFT'],
     SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'],
-    MANUAL_DRAFT: ['CURRENT', 'DRAFT'] }[currentSnapshot.state];
+    MANUAL_DRAFT: ['CURRENT', 'DRAFT'], DEFINITION_DRAFT: ['CURRENT'] }[currentSnapshot.state];
   const labels = { CURRENT: M.modeCurrent, DRAFT: M.modeDraft, SOLVING: M.modeSolving, PROPOSAL: M.modeProposal };
   stateCard.querySelector('.accepted-heading')?.insertAdjacentHTML('beforeend', `<nav id="workbench-modes" aria-label="${M.presentationModes}">${modes.map(mode => `<button type="button" data-mode="${mode}" aria-pressed="${inspectionState.current().mode === mode}">${labels[mode]}</button>`).join('')}</nav>`);
   stateCard.querySelectorAll('[data-mode]').forEach(button => button.addEventListener('click', () => {
@@ -495,7 +503,8 @@ function setRange(range, day = view.day, manualDay = false) {
 
 function renderAccepted(snapshot, schoolName) {
   const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
-    SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal, MANUAL_DRAFT: M.manualDraftState }[snapshot.state];
+    SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal, MANUAL_DRAFT: M.manualDraftState,
+    DEFINITION_DRAFT: M.savedDefinitionDraft }[snapshot.state];
   if (view.narrow) { renderNarrowReadOnly(schoolName, lifecycle); return; }
   stateCard.className = 'card workspace-card compact-density current-mode';
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${lifecycle}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
@@ -1253,7 +1262,7 @@ function lessonDetails(item) {
       <div class="popover-field">
         <label for="edit-period">
           <span class="popover-field-label">${M.period}</span>
-          <select id="edit-period" name="periodId" class="popover-select">
+          <select id="edit-period" name="periodId" class="popover-select"${currentSnapshot?.state === 'DEFINITION_DRAFT' ? ' disabled' : ''}>
             ${acceptedModel.definition.periods.map(p => `<option value="${escapeAttribute(p.id)}"${p.id === item.periodId ? ' selected' : ''}>${escapeHtml(formatPeriodSlot(p))}</option>`).join('')}
           </select>
         </label>
@@ -1263,7 +1272,7 @@ function lessonDetails(item) {
         <div class="popover-field">
           <label for="edit-room">
             <span class="popover-field-label">${M.room}</span>
-            <select id="edit-room" name="roomId" class="popover-select">
+            <select id="edit-room" name="roomId" class="popover-select"${currentSnapshot?.state === 'DEFINITION_DRAFT' ? ' disabled' : ''}>
               ${acceptedModel.definition.rooms.map(r => `<option value="${escapeAttribute(r.id)}"${r.id === item.roomId ? ' selected' : ''}>${escapeHtml(entityName(r, r.id))}</option>`).join('')}
             </select>
           </label>
@@ -1272,7 +1281,7 @@ function lessonDetails(item) {
         <div class="popover-field">
           <label for="edit-teacher">
             <span class="popover-field-label">${M.teacher}</span>
-            <select id="edit-teacher" name="teacherId" class="popover-select">
+            <select id="edit-teacher" name="teacherId" class="popover-select"${currentSnapshot?.state === 'DEFINITION_DRAFT' ? ' disabled' : ''}>
               ${acceptedModel.definition.teachers.map(t => `<option value="${escapeAttribute(t.id)}"${t.id === item.teacherId ? ' selected' : ''}>${escapeHtml(entityName(t, t.id))}</option>`).join('')}
             </select>
           </label>

@@ -2,7 +2,7 @@ const PREFERENCE_VERSION = 1;
 const PREFERENCE_LIMIT = 1024;
 const AVAILABLE_MODES = Object.freeze({ INITIAL_PROPOSAL: ['PROPOSAL'], ACCEPTED_BASELINE: ['CURRENT'], REPAIR_DRAFT: ['CURRENT', 'DRAFT'],
   SOLVING_REPAIR: ['CURRENT', 'DRAFT', 'SOLVING'], REPAIR_PROPOSAL: ['CURRENT', 'DRAFT', 'PROPOSAL'],
-  MANUAL_DRAFT: ['CURRENT', 'DRAFT'] });
+  MANUAL_DRAFT: ['CURRENT', 'DRAFT'], DEFINITION_DRAFT: ['CURRENT'] });
 
 export function createInspectionState({ schoolId, weekdays, subjectIds = [], teacherIds = [], cohortIds = [], roomIds = [], periodIds = [], storage = window.localStorage }) {
   const firstWeekday = weekdays[0] || null;

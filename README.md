@@ -160,6 +160,10 @@ workspace across ordinary restarts. Open <http://localhost:8080/workspace/>. An 
 initial definition, a matching verified definition/result pair, or an accepted-bundle ZIP. Import verification runs
 through the packaged kernel; the browser does not require JSON editing or command-line use.
 
+Saved school-definition drafts from newer local builds also load without changing their stored data. This version
+can inspect and export their accepted timetable; continuing the saved definition edits requires a build that
+includes school-definition editing.
+
 To deliberately erase the local walkthrough database and start over:
 
 ```bash

@@ -33,7 +33,9 @@ public class AcceptedBaselineExportService {
 
     public ExportedBaseline export() {
         WorkspaceAggregate current = repository.load();
-        if (current.state() != WorkspaceState.ACCEPTED_BASELINE) {
+        if (current.state() != WorkspaceState.ACCEPTED_BASELINE
+                && !(current.state() == WorkspaceState.DEFINITION_DRAFT
+                    && current.document().path("acceptedBaseline").isObject())) {
             throw new WorkspaceProblem(
                     HttpStatus.CONFLICT,
                     "ACCEPTED_BASELINE_REQUIRED",

@@ -304,6 +304,7 @@ public class WorkspaceController {
         body.put("version", aggregate.version());
         body.put("acceptedTimetable", switch (aggregate.state()) {
             case ACCEPTED_BASELINE, REPAIR_DRAFT, SOLVING_REPAIR, REPAIR_PROPOSAL, MANUAL_DRAFT -> true;
+            case DEFINITION_DRAFT -> aggregate.document().path("acceptedBaseline").isObject();
             default -> false;
         });
         ObjectNode workspace = (ObjectNode) aggregate.document().deepCopy();
