@@ -43,6 +43,7 @@ public class WorkspaceController {
     private final DefinitionRequirementService definitionRequirements;
     private final DefinitionOccurrenceService definitionOccurrences;
     private final DefinitionPreferenceService definitionPreferences;
+    private final DefinitionCatalogService definitionCatalog;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -61,6 +62,7 @@ public class WorkspaceController {
             DefinitionRequirementService definitionRequirements,
             DefinitionOccurrenceService definitionOccurrences,
             DefinitionPreferenceService definitionPreferences,
+            DefinitionCatalogService definitionCatalog,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -77,6 +79,7 @@ public class WorkspaceController {
         this.definitionRequirements = definitionRequirements;
         this.definitionOccurrences = definitionOccurrences;
         this.definitionPreferences = definitionPreferences;
+        this.definitionCatalog = definitionCatalog;
         this.json = json;
     }
 
@@ -149,6 +152,20 @@ public class WorkspaceController {
     public ResponseEntity<JsonNode> saveRequirement(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody JsonNode request) {
         return response(definitionRequirements.save(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/catalog/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewCatalog(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionCatalog.preview(ifMatch,request));
+    }
+
+    @PostMapping("/api/definition-draft/catalog")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveCatalog(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(definitionCatalog.save(ifMatch,request));
     }
 
     @PostMapping("/api/definition-draft/preferences")

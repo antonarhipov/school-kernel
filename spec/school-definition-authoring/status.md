@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-12
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-13 after UC-12 walkthrough
 
 ## Progress
@@ -21,7 +21,7 @@
 | UC-9 | APPROVED | UC-1 | `8109b2b` / [checkpoint](checkpoints/UC-9.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md) |
 | UC-10 | APPROVED | UC-1 | `c997bd6` / [checkpoint](checkpoints/UC-10.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md) |
 | UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
-| UC-12 | IN_PROGRESS | UC-1 | - | - |
+| UC-12 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-12.md) | - |
 | UC-13 | NOT_STARTED | UC-1 | - | - |
 | UC-14 | NOT_STARTED | UC-1 | - | - |
 | UC-15 | NOT_STARTED | UC-1 | - | - |
@@ -276,3 +276,11 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-11 approval
 
 - Automatically APPROVED on 1fc3328 after [complete repeat Playwright PASS](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md). Exact v35/source/native and twelve inspected screenshots retained. All seven IDs/defaults/zero/maximum, invalid/correction, responsive/transport/stale/conflict/navigation/discard/reload pass. F-1 corrected by explicit import/source synchronization; failed attempt preserved. Relevant 21 journeys and 27 unit/architecture pass across retained logs. No operator mutation or unresolved finding; UC-12/14 remain handoffs. Proceeding UC-12.
+
+## UC-12 evidence
+
+- Started from 9a9a3e6, clean worktree. Preview/token-bound atomic catalog 9 transition reuses the exact accepted-opening preservation table, keeps explicit/native/source/Current values, and records changed defaults/new settings/exact compensations. Full entity/teaching/preference issues refresh. School preview/confirm/cancel and unavailable-setting navigation handoffs implemented; pending/version/failure guards require fresh review. Technical checks pending.
+
+- UC-12 primary technical BUILD SUCCESS /tmp/uc12-verify.log: all 24 catalog/preference/authoring/subject/policy journeys and 27 unit/architecture checks pass. Six class journeys are running separately (/tmp/uc12-cohort-verify.log); the initial command mistakenly named DefinitionClassesBrowserIT rather than DefinitionCohortsBrowserIT, so no omitted checks are counted. All catalog crossings, exact compensation/native/source values, stale/token/storage/transport/CSRF/state/restart and guarded UI pass. Module syntax/diff hygiene pass.
+
+- Class regression BUILD SUCCESS /tmp/uc12-cohort-verify.log, all six journeys. Final total 30 relevant journeys + 27 unit/architecture pass. Ready for standalone recorded Playwright walkthrough; no technical finding.

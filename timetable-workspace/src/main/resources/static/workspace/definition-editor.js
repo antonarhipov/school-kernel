@@ -1,3 +1,4 @@
+import { renderCatalog, catalogBusy, resetCatalog } from './definition-catalog.js';
 import { renderPreferences, preferencesBusy, preferencesDirty, savePreference, discardPreferences, resetPreferences } from './definition-preferences.js';
 import { renderPolicies, policiesBusy, policiesDirty, savePolicy, discardPolicies, resetPolicies } from './definition-room-policies.js';
 import { renderOccurrences, occurrencesBusy, occurrencesDirty, saveOccurrences, discardOccurrences, resetOccurrences, chooseOccurrences } from './definition-occurrences.js';
@@ -32,13 +33,13 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); }
+export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); }
 
 export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); }
+  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); }
   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
   const rerender = () => actions.render(snapshot);
   const save = async () => {
@@ -57,7 +58,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     }
   };
   const leave = next => {
-    if (saving || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
+    if (saving || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
     const leavingGrid = section === 'Grid' && gridDirty();
     const leavingSubject = section === 'Subjects' && subjectsDirty();
     const leavingTeacher = section === 'Teachers' && teachersDirty();
@@ -111,10 +112,11 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   host.append(nav);
   const content = el('section'); content.id = 'authoring-section'; content.append(el('h3', section));
   const occurrenceActions = { ...actions, openOccurrences: ids => leave(latest => { chooseOccurrences(ids); section = 'Occurrence details'; actions.render(latest); }) };
+  const catalogActions = { ...actions, catalog: () => leave(() => { section = 'School'; rerender(); }) };
   if (section === 'Preferences') {
-    renderPreferences(content, snapshot, narrow, actions, status, leave);
+    renderPreferences(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Room policies') {
-    renderPolicies(content, snapshot, narrow, actions, status, leave);
+    renderPolicies(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Occurrence details') {
     renderOccurrences(content, snapshot, narrow, actions, status, leave);
   } else if (section === 'Grid') {
@@ -125,22 +127,24 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   } else if (section === 'Rooms') {
     renderRooms(content, snapshot, narrow, actions, status, leave);
   } else if (section === 'Classes') {
-    renderClasses(content, snapshot, narrow, actions, status, leave);
+    renderClasses(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Teachers') {
     renderTeachers(content, snapshot, narrow, occurrenceActions, status, leave);
   } else if (section === 'Subjects') {
-    renderSubjects(content, snapshot, narrow, actions, status, leave);
+    renderSubjects(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Review') {
     content.append(el('p', 'Saved draft inspection. Definition verification is required before finishing.'));
     if (!definition.lessons?.length) content.append(el('p', 'No lessons configured; planning will produce an empty timetable'));
     for (const issue of issues) content.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId || ''} • ${issue.field}: ${issue.message}`));
     for (const adjustment of draft.openingAdjustments || []) content.append(el('p', `Catalog adjustment: ${adjustment}`));
+    for (const upgrade of draft.catalogUpgrades || []) content.append(el('p', `Catalog upgrade ${upgrade.fromCatalog} → ${upgrade.toCatalog}: ${upgrade.adjustments.join('; ') || 'No compensating values required.'}`));
     for (const pin of draft.expiredPins || []) content.append(el('p', `Expired attempt-scoped pin: ${pin.lessonId} ${pin.field} = ${JSON.stringify(pin.sourceValue)}. Exact source provenance is retained.`));
     if (!issues.length) content.append(el('p', 'No opening issues. This does not establish timetable feasibility.'));
   } else {
     for (const [label, key] of sections[section]) {
       const block = el('details'); block.open = true; block.append(el('summary', label));
       if (label === 'Advanced Preferences') { const open = el('button', 'Inspect advanced preferences'); open.type = 'button'; open.addEventListener('click', () => leave(() => { section = 'Preferences'; rerender(); })); block.append(open); }
+      if (label === 'Catalog') { renderCatalog(block, snapshot, narrow, actions, leave); content.append(block); continue; }
       if (label === 'School identity' && !narrow) {
         renderSchoolForm(block, definition, draft, schoolForm, saving, status, save, actions, saveError);
         for (const issue of issues) block.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId || ''} • ${issue.field}: ${issue.message}`));

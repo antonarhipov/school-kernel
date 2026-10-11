@@ -332,6 +332,17 @@ public class DefinitionEntityService {
         for(int i=start;i<issues.size();i++)((ObjectNode)issues.get(i)).put("diagnosticSource","ROOM_POLICY_FIELDS");
     }
 
+    /** Re-evaluate saved native entity fields after a catalog-wide operation. */
+    void refreshAllEntityIssues(ObjectNode draft) {
+        JsonNode definition=draft.path("definition");ArrayNode issues=json.createArrayNode();
+        for(JsonNode issue:draft.path("issues"))if(!Set.of("Subject","Teacher","Cohort","Room","RoomAssignment","Lesson","Preference","Requirement").contains(issue.path("ownerType").asString("")))issues.add(issue);
+        for(JsonNode row:definition.path("subjects"))validateSubject(definition,row,issues);
+        for(JsonNode row:definition.path("teachers"))validateTeacher(definition,row,issues);
+        for(JsonNode row:definition.path("cohorts"))validateCohort(definition,row,issues);
+        for(JsonNode row:definition.path("rooms"))validateRoom(definition,row,issues);
+        draft.set("issues",ordered(issues));refreshTeachingIssues(draft);
+    }
+
     /** Refresh complete teaching consequences after an atomic occurrence operation. */
     void refreshTeachingIssues(ObjectNode draft) {
         JsonNode definition=draft.path("definition");ArrayNode issues=json.createArrayNode();

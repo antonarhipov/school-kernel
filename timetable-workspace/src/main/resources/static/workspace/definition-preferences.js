@@ -9,6 +9,8 @@ function select(snapshot,id='soft.teacher-gap'){const rows=saved(snapshot,id);wo
 export function discardPreferences(snapshot){select(snapshot,working?.id);}
 export async function savePreference(snapshot,actions){if(busy)return false;busy=true;error=null;actions.render(snapshot);try{if(working.conflict)throw Error('Resolve the newer saved preference conflict before saving.');const result=await actions.entity('preferences',working.request,snapshot.version);select(result,working.id);busy=false;actions.render(result);return result;}catch(failure){busy=false;working.dirty=true;error=`No preference was committed. ${failure.message} Working choices remain Unsaved.`;actions.render(snapshot);return false;}}
 export function renderPreferences(host,snapshot,narrow,actions,status,leave){
+ if (!narrow && snapshot.workspace.definitionDraft.definition.catalogVersion < 3) { const upgrade = el('button', 'Review catalog upgrade'); upgrade.type = 'button'; upgrade.addEventListener('click', actions.catalog); host.append(upgrade); }
+
  const draft=snapshot.workspace.definitionDraft,definition=draft.definition;
  if(!working||!working.dirty)select(snapshot,working?.id);else if(working.version!==snapshot.version){const latest=saved(snapshot,working.id);working.conflict=!same(latest,working.base)?latest:null;working.base=structuredClone(latest);working.version=snapshot.version;error=null;}
  if(busy)status.textContent='Saving… Working preference is not yet durable.';else if(working.dirty)status.textContent=narrow?'Unsaved preference choices retained; read-only view shows saved weights.':'Unsaved — Working preference differs from the saved draft.';

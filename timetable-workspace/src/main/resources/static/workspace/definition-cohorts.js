@@ -44,6 +44,8 @@ export async function saveCohort(snapshot, actions) {
   } catch (failure) { busy = false; error = `No change was committed. ${failure.message} Working values remain Unsaved.`; working.dirty = true; actions.render(snapshot); return false; }
 }
 export function renderClasses(host, snapshot, narrow, actions, status, leave) {
+ if (!narrow && snapshot.workspace.definitionDraft.definition.catalogVersion < 8) { const upgrade = el('button', 'Review catalog upgrade'); upgrade.type = 'button'; upgrade.addEventListener('click', actions.catalog); host.append(upgrade); }
+
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   if (!working || !working.dirty) select(snapshot, working && !working.originalId ? '' : definition.cohorts.some(row => row.id === working?.originalId) ? working.originalId : definition.cohorts[0]?.id || '');
   else mergeNewer(snapshot);

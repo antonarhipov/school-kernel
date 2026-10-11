@@ -54,6 +54,8 @@ export async function saveSubject(snapshot, actions) {
   }
 }
 export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
+ if (!narrow && snapshot.workspace.definitionDraft.definition.catalogVersion < 8) { const upgrade = el('button', 'Review catalog upgrade'); upgrade.type = 'button'; upgrade.addEventListener('click', actions.catalog); host.append(upgrade); }
+
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   if (!working || !working.dirty) select(draft, snapshot.version, working && !working.originalId ? '' : definition.subjects.some(row => row.id === working?.originalId) ? working.originalId : definition.subjects[0]?.id || '');
   else mergeNewer(snapshot);

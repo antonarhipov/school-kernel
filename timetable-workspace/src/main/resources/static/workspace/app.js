@@ -53,6 +53,7 @@ async function load(force = false) {
   etag = workspaceResponse.headers.get('ETag');
   if (unchangedRun && !force) { pollTimer = setTimeout(load, 300); return; }
   render(snapshot);
+  return snapshot;
 }
 
 function render(snapshot) {
@@ -106,7 +107,7 @@ function render(snapshot) {
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.message || 'Saving failed.');
-        etag = response.headers.get('ETag'); return result;
+        if (!collection.endsWith('/preview')) etag = response.headers.get('ETag'); return result;
       },
       grid: async (fields, version, preview = false) => {
         const response = await fetchWithCsrf(`/api/definition-draft/grid${preview ? '/preview' : ''}`, {

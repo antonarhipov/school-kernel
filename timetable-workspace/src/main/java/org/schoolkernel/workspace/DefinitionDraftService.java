@@ -221,8 +221,12 @@ public class DefinitionDraftService {
     }
 
     static void upgrade(ObjectNode definition, ArrayNode adjustments) {
+        upgrade(definition, 8, adjustments);
+    }
+
+    static void upgrade(ObjectNode definition, int target, ArrayNode adjustments) {
         int source = definition.path("catalogVersion").intValue();
-        if (source >= 8) return;
+        if (source >= target) return;
         for (String id : List.of("soft.cohort-gap", "soft.cohort-week-balance", "soft.cohort-late-start")) {
             int since = id.equals("soft.cohort-late-start") ? 3 : 2;
             if (source >= since) continue;
@@ -241,7 +245,7 @@ public class DefinitionDraftService {
                 adjustments.add("Class " + cohort.path("id").stringValue() + ": maxDailyGaps = No limit (preserve unrestricted gaps)");
             }
         }
-        definition.put("catalogVersion", 8);
+        definition.put("catalogVersion", target);
     }
 
     private static void expirePins(ObjectNode definition, JsonNode manifest, ArrayNode expired) {

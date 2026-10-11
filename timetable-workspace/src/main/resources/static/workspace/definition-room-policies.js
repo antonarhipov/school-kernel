@@ -43,6 +43,8 @@ export async function savePolicy(snapshot, actions) {
 }
 export const policiesBusy = () => busy;
 export function renderPolicies(host,snapshot,narrow,actions,status,leave) {
+ if (!narrow && snapshot.workspace.definitionDraft.definition.catalogVersion < 9) { const upgrade = el('button', 'Review catalog upgrade'); upgrade.type = 'button'; upgrade.addEventListener('click', actions.catalog); host.append(upgrade); }
+
   const draft=snapshot.workspace.definitionDraft,definition=draft.definition,rows=definition.roomAssignments || [];
   host.append(el('p','Room policies are hard requirements. Every matching rule intersects with all other matching rules; capacity, required capabilities, room availability, persistent locks and curator home rooms still apply. No rule is inferred from repeated source placements.'));
   if(definition.catalogVersion<9){host.append(el('p','Room policies require scheduling catalog 9. Open School → Catalog to review an upgrade before choosing this setting.'));return;}
