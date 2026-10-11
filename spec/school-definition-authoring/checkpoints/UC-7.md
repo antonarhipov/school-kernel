@@ -9,3 +9,5 @@
 - Technical browser suite running in /tmp/uc7-verify.log. Standalone Playwright walkthrough and approval pending.
 
 - Technical evidence: `./mvnw -pl timetable-workspace -am -Pworkspace-browser -Dit.test=DefinitionRoomsBrowserIT,DefinitionCohortsBrowserIT,DefinitionSubjectsBrowserIT,DefinitionTeachersBrowserIT -Dfailsafe.failIfNoSpecifiedTests=false verify` passes all 17 existing entity journeys and three/four room journeys. One room fixture lacked its asserted lab requirement; explicitly added lab and repeated all four room journeys with `-Dit.test=DefinitionRoomsBrowserIT`: BUILD SUCCESS, plus 26 unit/architecture. Logs /tmp/uc7-verify.log and /tmp/uc7-revision-verify.log preserve both attempts. All five fields, open tokens, invalid types/ranges, source/accepted fidelity, restart, responsive/unsaved/storage/transport/stale/identity/state/CSRF boundaries pass. Standalone walkthrough pending.
+
+- Automatically APPROVED after [recorded standalone Playwright PASS](../../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md), submission 6622f19. Exact isolated v34 document and inspected screenshots retained, no unresolved finding.

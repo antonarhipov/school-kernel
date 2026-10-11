@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-7
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-8 after UC-7 walkthrough
+- Use case: UC-8
+- Status: IN_PROGRESS
+- Next eligible: UC-9 after UC-8 walkthrough
 
 ## Progress
 
@@ -16,8 +16,8 @@
 | UC-4 | APPROVED | UC-1 | `dd395c4` / [checkpoint](checkpoints/UC-4.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md) |
 | UC-5 | APPROVED | UC-1 | `1084c81` / [checkpoint](checkpoints/UC-5.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md) |
 | UC-6 | APPROVED | UC-1 | `6ca5e84` / [checkpoint](checkpoints/UC-6.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md) |
-| UC-7 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-7.md) | pending |
-| UC-8 | NOT_STARTED | UC-1 | - | - |
+| UC-7 | APPROVED | UC-1 | `6622f19` / [checkpoint](checkpoints/UC-7.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md) |
+| UC-8 | IN_PROGRESS | UC-1 | - | - |
 | UC-9 | NOT_STARTED | UC-1 | - | - |
 | UC-10 | NOT_STARTED | UC-1 | - | - |
 | UC-11 | NOT_STARTED | UC-1 | - | - |
@@ -218,3 +218,7 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Started 2026-10-11 from bce5872; pre-existing dirty files none. Five Room fields, exact open tokens, zero capacity and omitted/empty availability implemented with selected-room CAS and local protections. Shared dependent room/class/lesson diagnostics refresh without changing source/Current or dependents. UC-13/14 are outstanding destination handoffs. [Checkpoint](checkpoints/UC-7.md); technical suite /tmp/uc7-verify.log running.
 
 - UC-7 technical BUILD SUCCESS `/tmp/uc7-revision-verify.log`: 26 unit/architecture and all four room journeys pass. Initial `/tmp/uc7-verify.log` passes all 17 affected class/subject/teacher journeys and three room journeys; one fixture lacked the capability it asserted, corrected explicitly without weakening assertions. Initial failure retained. Syntax/diff checks pass, operator data untouched. PENDING_WALKTHROUGH.
+
+## UC-7 approval
+
+- Automatically APPROVED on 6622f19 after [recorded Playwright PASS](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md). Exact v34 document, all five fields, capacity zero/open/empty tokens, omitted/empty availability, linked policy blockers/advisories, invalid/cancel/correction, responsive/stale/conflict/transport/add/selection/reload pass; screenshots inspected. Technical four room and 17 affected entity journeys plus 26 unit/architecture pass. Automation-only wrong fault route is retained and corrected, not classified as a product bug. Source/Current intact, no open finding. UC-13/14 remain handoffs; proceeding UC-8.
