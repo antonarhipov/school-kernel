@@ -248,7 +248,7 @@ public class DefinitionDraftService {
         for (JsonNode lock : manifest.path("locks")) for (JsonNode lesson : definition.path("lessons")) {
             if (!lesson.path("id").equals(lock.path("lessonId"))) continue;
             for (String field : List.of("periodLock", "roomLock")) {
-                if ("ATTEMPT_SCOPED".equals(lock.path(field + "Origin").stringValue()) && lesson.has(field)) {
+                if ("ATTEMPT_SCOPED".equals(lock.path(field + "Origin").asString("")) && lesson.has(field)) {
                     expired.addObject().put("lessonId", lesson.path("id").stringValue()).put("field", field)
                             .set("sourceValue", lesson.path(field).deepCopy());
                     ((ObjectNode) lesson).remove(field);

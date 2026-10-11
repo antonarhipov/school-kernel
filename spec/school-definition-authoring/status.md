@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-9
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-10 after UC-9 walkthrough
 
 ## Progress
@@ -18,7 +18,7 @@
 | UC-6 | APPROVED | UC-1 | `6ca5e84` / [checkpoint](checkpoints/UC-6.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md) |
 | UC-7 | APPROVED | UC-1 | `6622f19` / [checkpoint](checkpoints/UC-7.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md) |
 | UC-8 | APPROVED | UC-1 | `42f3b53` / [checkpoint](checkpoints/UC-8.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md) |
-| UC-9 | IN_PROGRESS | UC-1 | - | - |
+| UC-9 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-9.md) | pending |
 | UC-10 | NOT_STARTED | UC-1 | - | - |
 | UC-11 | NOT_STARTED | UC-1 | - | - |
 | UC-12 | NOT_STARTED | UC-1 | - | - |
@@ -236,3 +236,10 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-8 approval
 
 - Automatically APPROVED on 42f3b53 after [recorded standalone Playwright PASS](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md). Exact isolated v19 document/context and inspected screenshots retained. Mixed/equal exceptions, selected/Apply-all scopes, canceled/refused count operations, stable IDs/names, incomplete/zero context, all native shared settings/lock blockers, responsive/stale/conflict/transport/navigation/reload/source fidelity pass. Zero blockers and two necessary-load advisories at final state; no timetable-feasibility claim. Relevant 39 journeys plus final four identity-contract journeys and 26 unit/architecture pass; failed evidence preserved and fixed. No operator change or open finding. UC-9/14 destination handoffs remain; starting UC-9.
+
+## UC-9 evidence
+
+- Started from ac0af58 with only preserved agent-owned UC-9 work. Full Lesson field, explicit inheritance/exception, compatible membership and selected teaching/rule-transfer contracts implemented in JSON-tree atomic preview/save. Source/Current exact; persistent lock choices retain authored provenance. Integrated dedicated Occurrence details navigation and requirement/teacher destination routes. UC-13/14 remain destination handoffs.
+- Initial `/tmp/uc9-verify.log` test lambda compilation failure fixed. `/tmp/uc9-revision-verify.log` passes 26 unit/architecture and five affected teacher journeys; new fixtures exposed catalog/accepted-manifest mistakes and check() incorrectly asserting a pending unsaved selection had already committed. Corrected fixtures and use click followed by Stay/non-mutation assertions. Failures preserved; no production expectation weakened. Complete new occurrence/requirement journeys rerunning in `/tmp/uc9-fixture-verify.log`.
+
+- UC-9 final BUILD SUCCESS `/tmp/uc9-final-verify.log`: all 21 occurrence/requirement/authoring/teacher journeys and 26 unit/architecture checks pass. Single-origin manifest bug fixed; exact persistent/shared lock intent passes. Final UI adds replacement qualifications explanation and compatible target suggestions; syntax/diff checks pass. PENDING_WALKTHROUGH with verified fresh disposable fixture.

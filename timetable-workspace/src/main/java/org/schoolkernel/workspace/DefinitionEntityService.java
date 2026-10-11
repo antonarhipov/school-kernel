@@ -320,8 +320,13 @@ public class DefinitionEntityService {
     /** Refresh complete teaching consequences after an atomic occurrence operation. */
     void refreshTeachingIssues(ObjectNode draft) {
         JsonNode definition=draft.path("definition");ArrayNode issues=json.createArrayNode();
-        Set<String> refreshed=Set.of("ENTITY_LESSON","COHORT_FEASIBILITY","TEACHING_FIELDS","TEACHING_FEASIBILITY","REQUIREMENT_CONTEXT");
+        Set<String> refreshed=Set.of("ENTITY_LESSON","COHORT_FEASIBILITY","TEACHING_FIELDS","TEACHING_FEASIBILITY","REQUIREMENT_CONTEXT","ROOM_POLICY_FIELDS");
         for(JsonNode issue:draft.path("issues"))if(!refreshed.contains(issue.path("diagnosticSource").asString("")))issues.add(issue);
+        for(JsonNode policy:definition.path("roomAssignments")) {
+            String id=policy.path("id").asString("");int start=issues.size();
+            for(String field:List.of("subjectId","teacherId"))if(field.equals("subjectId")||policy.has(field))if(!policy.path(field).isTextual()||!validId(policy.path(field).asString(""))||find(definition.path(field.equals("subjectId")?"subjects":"teachers"),policy.path(field).asString(""))==null)issue(issues,"RoomAssignment",id,field,"Choose an existing "+field+" for this room policy.");
+            for(int i=start;i<issues.size();i++)((ObjectNode)issues.get(i)).put("diagnosticSource","ROOM_POLICY_FIELDS");
+        }
         Set<String> ids=new HashSet<>();Map<String,JsonNode> series=new HashMap<>();
         for(JsonNode lesson:definition.path("lessons")) {
             String id=lesson.path("id").asString("");ids.add(id);validateLessonFields(definition,lesson,issues);

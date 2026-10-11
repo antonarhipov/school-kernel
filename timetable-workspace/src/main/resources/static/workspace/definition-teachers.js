@@ -123,6 +123,7 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
     for (const cohort of definition.cohorts.filter(row => row.curatorTeacherId === id)) effects.append(el('p', `Class curator: ${cohort.displayName} (${cohort.id})`));
     for (const policy of (definition.roomAssignments || []).filter(row => row.teacherId === id)) effects.append(el('p', `Room policy ${policy.id}: ${JSON.stringify(policy)}`));
     for (const issue of draft.issues || []) if ((issue.ownerType === 'Teacher' && issue.ownerId === id) || issue.relatedIds?.includes(id)) effects.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId} • ${issue.field}: ${issue.message}`));
+    const reassign = el('button', 'Select this teacher’s occurrences to reassign', 'reassign-teacher-occurrences'); reassign.type = 'button'; reassign.disabled = busy; reassign.addEventListener('click', () => actions.openOccurrences(definition.lessons.filter(row => row.teacherId === id).map(row => row.id))); effects.append(reassign);
     effects.append(el('p', 'Reassign teaching through occurrence editing (UC-9). Remove this teacher through guided dependency resolution (UC-13); restore source values through source restoration (UC-14). No dependent record changes through teacher save.')); host.append(effects);
   }
 }

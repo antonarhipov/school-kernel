@@ -41,6 +41,7 @@ public class WorkspaceController {
     private final DefinitionGridService definitionGrid;
     private final DefinitionEntityService definitionEntities;
     private final DefinitionRequirementService definitionRequirements;
+    private final DefinitionOccurrenceService definitionOccurrences;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -57,6 +58,7 @@ public class WorkspaceController {
             DefinitionGridService definitionGrid,
             DefinitionEntityService definitionEntities,
             DefinitionRequirementService definitionRequirements,
+            DefinitionOccurrenceService definitionOccurrences,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -71,6 +73,7 @@ public class WorkspaceController {
         this.definitionGrid = definitionGrid;
         this.definitionEntities = definitionEntities;
         this.definitionRequirements = definitionRequirements;
+        this.definitionOccurrences = definitionOccurrences;
         this.json = json;
     }
 
@@ -109,6 +112,20 @@ public class WorkspaceController {
     public ResponseEntity<JsonNode> saveGrid(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody JsonNode request) {
         return response(definitionGrid.save(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/occurrences/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewOccurrences(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionOccurrences.preview(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/occurrences")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveOccurrences(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(definitionOccurrences.save(ifMatch, request));
     }
 
     @GetMapping("/api/definition-draft/requirements")
