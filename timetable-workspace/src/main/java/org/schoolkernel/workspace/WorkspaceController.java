@@ -39,6 +39,7 @@ public class WorkspaceController {
     private final ManualDraftService manualDrafts;
     private final DefinitionDraftService definitionDrafts;
     private final DefinitionGridService definitionGrid;
+    private final DefinitionEntityService definitionEntities;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -53,6 +54,7 @@ public class WorkspaceController {
             ManualDraftService manualDrafts,
             DefinitionDraftService definitionDrafts,
             DefinitionGridService definitionGrid,
+            DefinitionEntityService definitionEntities,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -65,6 +67,7 @@ public class WorkspaceController {
         this.manualDrafts = manualDrafts;
         this.definitionDrafts = definitionDrafts;
         this.definitionGrid = definitionGrid;
+        this.definitionEntities = definitionEntities;
         this.json = json;
     }
 
@@ -103,6 +106,13 @@ public class WorkspaceController {
     public ResponseEntity<JsonNode> saveGrid(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody JsonNode request) {
         return response(definitionGrid.save(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/subjects")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveSubject(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(definitionEntities.saveSubject(ifMatch, request));
     }
 
     @PostMapping("/api/repair-draft")

@@ -82,6 +82,14 @@ function render(snapshot) {
     renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(currentSnapshot); }, {
       render,
       refresh: () => load(true),
+      entity: async (collection, fields, version) => {
+        const response = await fetchWithCsrf(`/api/definition-draft/${collection}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Saving failed.');
+        etag = response.headers.get('ETag'); return result;
+      },
       grid: async (fields, version, preview = false) => {
         const response = await fetchWithCsrf(`/api/definition-draft/grid${preview ? '/preview' : ''}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)

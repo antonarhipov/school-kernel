@@ -814,3 +814,10 @@ body.authoring .current-label { margin: 8px 0; }
 .grid-period-row input[type=checkbox] { width: auto; align-self: flex-start; }
 .grid-period-row span { overflow-wrap: anywhere; }
 #grid-preview { margin-top: 16px; padding: 12px; border: 2px solid #7196b8; border-radius: 8px; }
+
+.definition-entity-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; }
+.definition-entity-form label { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.definition-entity-form label span { font-size: .9rem; overflow-wrap: anywhere; }
+.definition-entity-form input, .definition-entity-form select { width: 100%; min-width: 0; box-sizing: border-box; }
+.definition-entity-form > p, .definition-entity-form > section, .definition-entity-form > .actions { grid-column: 1 / -1; }
+#subject-effects { margin-top: 16px; }

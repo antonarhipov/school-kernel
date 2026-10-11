@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-3
-- Status: APPROVED
-- Next eligible: UC-4
+- Use case: UC-4
+- Status: PENDING_WALKTHROUGH
+- Next eligible: UC-5 after UC-4 walkthrough
 
 ## Progress
 
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
 | UC-2 | APPROVED | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | APPROVED | UC-1 | `a30de35` / [checkpoint](checkpoints/UC-3.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md) |
-| UC-4 | NOT_STARTED | UC-1 | - | - |
+| UC-4 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-4.md) | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
 | UC-7 | NOT_STARTED | UC-1 | - | - |
@@ -159,3 +159,11 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-3 automatic approval
 
 - Submission a30de35; [attempt 2 ledger and screenshots](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md): PASS. Complete main/negative/responsive/stale/conflict/save/reload/addition journey repeated in fresh isolated Chrome workspace; F-1 resolved with unrelated newer rows retained and explicit same-field conflict choice. Technical evidence and final v12 API document linked in ledger. UC-3 is APPROVED automatically under the user-updated workflow; next UC-4. Destination UC-13 removal handoff remains tracked and is not approved by this slice.
+
+## UC-4 Evidence
+
+- Started 2026-10-11; base 63c2f24; pre-existing dirty files none. Explicit Requires UC-1 is APPROVED. Sources: UC-4, Subject fields, identifier/form/lifecycle models, existing local security and atomic aggregate. No feature rules.
+- Technical choices: save only the selected subject, immutable valid identity, supported incomplete numeric/text work retained with issues; optional fields retain omission. Catalog-unavailable fields are refused at HTTP and explained in the UI. Recompute subject and affected-lesson issues, without editing qualifications/lessons/policies/source/Current. Reuse form state/version recovery and preserve newer unselected values. UC-12/13/14 remain destination handoffs, not implicit ordering blockers.
+
+- UC-4 construction: six new subject HTTP/browser journeys and 26 unit/architecture checks passed after fixing Add-subject selection; BUILD SUCCESS `/tmp/uc4-revision-verify.log`. All 24 existing authoring/grid/school/compatibility journeys passed in the initial run, whose three UC-4 failures remain recorded (`/tmp/uc4-verify.log`). One was an inadequate catalog-1 fixture for a catalog-8 curator control; corrected the labelled draft variant to catalog 9 while preserving exact source. No test assertion was weakened. No operator data changed. Syntax/diff hygiene passed.
+- UC-4 is PENDING_WALKTHROUGH. Outstanding destination handoffs: UC-12 catalog, UC-13 removal, UC-14 restoration. See checkpoint for boundaries and exact commands. No missing security test class is included in the pass count.
