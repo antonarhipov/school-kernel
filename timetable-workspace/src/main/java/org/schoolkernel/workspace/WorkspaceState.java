@@ -10,6 +10,5 @@ public enum WorkspaceState {
     SOLVING_REPAIR,
     REPAIR_PROPOSAL,
     MANUAL_DRAFT,
-    // Read compatibility with school-definition drafts persisted by newer local builds.
     DEFINITION_DRAFT
 }

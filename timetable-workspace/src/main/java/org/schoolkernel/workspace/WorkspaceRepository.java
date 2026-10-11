@@ -74,6 +74,7 @@ public class WorkspaceRepository {
                             document = '{}'::jsonb
                         WHERE workspace_id = 1
                           AND version = :expected_version
+                          AND lifecycle_state <> 'DEFINITION_DRAFT'
                         RETURNING version
                         """)
                 .param("expected_version", expectedVersion)
@@ -99,6 +100,7 @@ public class WorkspaceRepository {
                             document = CAST(:document AS jsonb)
                         WHERE workspace_id = 1
                           AND version = :expected_version
+                          AND lifecycle_state <> 'DEFINITION_DRAFT'
                         RETURNING version
                         """)
                 .param("next_state", nextState.name())

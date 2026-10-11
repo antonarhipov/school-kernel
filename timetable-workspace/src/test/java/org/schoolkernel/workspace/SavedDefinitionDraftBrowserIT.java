@@ -25,6 +25,7 @@ class SavedDefinitionDraftBrowserIT extends WorkbenchBrowserSupport {
         assertTrue(rendered.contains("Demo School"));
         assertTrue(rendered.contains("Your saved school-definition changes are preserved."));
         workbench.expectNot("document.querySelector('#open-repair-setup, #start-manual-draft')");
+        workbench.page().locator("#inspect-authoring-current").click();
         workbench.selectLesson(document.path("acceptedBaseline").path("result")
                 .path("timetable").path("assignments").get(0).path("lessonId").stringValue());
         workbench.expect("document.querySelector('#edit-period').disabled");

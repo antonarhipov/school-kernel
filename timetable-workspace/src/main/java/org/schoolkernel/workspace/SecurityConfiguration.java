@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(
-            HttpSecurity http, HostOriginFilter hostOriginFilter, ProblemResponder problems) throws Exception {
+            HttpSecurity http, HostOriginFilter hostOriginFilter, ProblemResponder problems, WorkspaceRepository repository) throws Exception {
         return http
                 .cors(cors -> cors.disable())
                 .httpBasic(basic -> basic.disable())
@@ -29,7 +29,8 @@ public class SecurityConfiguration {
                                 "/api/repair-draft", "/api/repair-draft/bulk-pin-preview",
                                 "/api/runs", "/api/proposal/accept",
                                 "/api/workspace/clear", "/api/workspace/upload-definition",
-                                "/api/manual-draft", "/api/manual-draft/publish").permitAll()
+                                "/api/manual-draft", "/api/manual-draft/publish",
+                                "/api/definition-draft", "/api/definition-draft/preview").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/repair-draft", "/api/manual-draft").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/repair-draft", "/api/runs/*", "/api/proposal", "/api/workspace", "/api/manual-draft").permitAll()
                         .requestMatchers("/error").permitAll()
@@ -49,6 +50,8 @@ public class SecurityConfiguration {
                         .contentSecurityPolicy(csp -> csp.policyDirectives(
                                 "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")))
                 .addFilterBefore(hostOriginFilter, BasicAuthenticationFilter.class)
+                .addFilterAfter(new DefinitionDraftAccess(repository, problems),
+                        org.springframework.security.web.access.intercept.AuthorizationFilter.class)
                 .build();
     }
 

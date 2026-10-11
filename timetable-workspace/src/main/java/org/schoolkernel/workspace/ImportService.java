@@ -38,6 +38,7 @@ public class ImportService {
             MultipartFile archive) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = requireMatchingVersion(ifMatch, current);
+        DefinitionDraftService.requireNotAuthoring(current);
         if (current.state() != WorkspaceState.EMPTY) {
             throw new WorkspaceProblem(
                     HttpStatus.CONFLICT,
@@ -71,6 +72,7 @@ public class ImportService {
     public WorkspaceAggregate clearWorkspace(String ifMatch) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = requireMatchingVersion(ifMatch, current);
+        DefinitionDraftService.requireNotAuthoring(current);
         return mutation.clear(expectedVersion);
     }
 
@@ -81,6 +83,7 @@ public class ImportService {
             MultipartFile archive) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = requireMatchingVersion(ifMatch, current);
+        DefinitionDraftService.requireNotAuthoring(current);
         ImportDocuments documents = reader.read(definition, result, archive);
         KernelVerifier.Verification verification = verifier.verify(documents);
         var manifest = manifests.validatedOrGenerated(documents);
@@ -108,6 +111,7 @@ public class ImportService {
     public WorkspaceAggregate replaceInitial(String ifMatch, MultipartFile definition) {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = requireMatchingVersion(ifMatch, current);
+        DefinitionDraftService.requireNotAuthoring(current);
         if (current.state() != WorkspaceState.INITIAL_DRAFT) {
             throw new WorkspaceProblem(
                     HttpStatus.CONFLICT,

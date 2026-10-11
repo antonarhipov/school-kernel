@@ -1,10 +1,12 @@
 import { M } from './messages.js';
+import { renderDefinitionEditor, resetAuthoringSection } from './definition-editor.js';
 import { makeAcceptedModel } from './accepted-model.js';
 import { createProposalComparison } from './proposal-comparison.js';
 import { createInspectionState } from './inspection-state.js';
 import { renderDayMatrix } from './day-renderer.js';
 import { renderWeekMatrix } from './week-renderer.js';
 
+let authoringCurrent = false;
 let etag;
 let csrf;
 let pollTimer;
@@ -67,11 +69,18 @@ function render(snapshot) {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
     stateCard.innerHTML = `<span class="state">${M.emptyState}</span><h2>${M.emptyHeading}</h2><p>${M.emptyDetail}</p>`;
-    importCard.hidden = false;
+    importCard.hidden = view.narrow;
+    bindAuthoringEntry(snapshot);
     return;
   }
   importCard.hidden = true;
   const schoolName = school?.displayName || M.nameUnavailable;
+  if (snapshot.state === 'DEFINITION_DRAFT' && !authoringCurrent) {
+    currentLabel.textContent = snapshot.acceptedTimetable ? M.acceptedTimetable(schoolName) : M.noAccepted;
+    document.body.classList.remove('operational');
+    renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(snapshot); });
+    return;
+  }
   if (snapshot.state === 'DEFINITION_DRAFT' && !snapshot.acceptedTimetable) {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
@@ -187,12 +196,61 @@ function render(snapshot) {
     if (inspectionState.current().mode === 'CURRENT') renderAccepted(snapshot, schoolName);
     else renderManualDraft(snapshot, schoolName);
   }
+  if (snapshot.state === 'DEFINITION_DRAFT' && authoringCurrent) {
+    const back = document.createElement('button'); back.id = 'resume-authoring'; back.textContent = 'Resume authoring';
+    back.addEventListener('click', () => { authoringCurrent = false; resetAuthoringSection(); render(snapshot); });
+    stateCard.prepend(back);
+  } else bindAuthoringEntry(snapshot);
   renderModeNavigation();
   if (selectionResetNotice) {
     const notice = document.querySelector('#inspection-notice') || document.querySelector('.narrow-banner');
     if (notice) notice.textContent = selectionResetNotice;
     selectionResetNotice = null;
   }
+}
+
+function bindAuthoringEntry(snapshot) {
+  const allowed = ['EMPTY', 'INITIAL_DRAFT', 'ACCEPTED_BASELINE'].includes(snapshot.state);
+  const entry = document.createElement('section'); entry.className = 'authoring-entry';
+  const status = document.createElement('p'); status.id = 'authoring-status'; status.setAttribute('role', 'status');
+  if (!allowed) {
+    status.textContent = `Authoring unavailable while ${snapshot.state} is active. Finish or abandon this workflow first.`;
+    entry.append(status); stateCard.append(entry); return;
+  }
+  if (view.narrow) { status.textContent = 'Creating or authoring a school requires a wider view (more than 700 CSS px).'; entry.append(status); stateCard.append(entry); return; }
+  const button = document.createElement('button'); button.id = 'open-authoring';
+  button.textContent = snapshot.state === 'EMPTY' ? 'Create school' : 'Author definition';
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    try {
+      const response = await fetchWithCsrf('/api/definition-draft/preview', { method: 'POST' });
+      const preview = await response.json();
+      if (!response.ok) throw new Error(preview.message || 'Authoring could not open.');
+      const dialog = document.createElement('dialog'); dialog.id = 'authoring-confirmation';
+      const title = document.createElement('h3'); title.textContent = 'Open school-definition authoring'; dialog.append(title);
+      const detail = document.createElement('p'); detail.textContent = 'One durable definition draft will lock planning, repair, manual editing, import, clear, and replacement. Current stays unchanged.'; dialog.append(detail);
+      if (snapshot.state === 'EMPTY') { const p = document.createElement('p'); p.textContent = 'Create a new school with catalog 9 and no Current timetable. Import remains another way to start.'; dialog.append(p); }
+      if (preview.upgradeRequired) { const p = document.createElement('p'); p.textContent = `Required upgrade: catalog ${preview.sourceCatalog} → ${preview.targetCatalog}.`; dialog.append(p); }
+      for (const adjustment of preview.adjustments || []) { const p = document.createElement('p'); p.textContent = adjustment; dialog.append(p); }
+      for (const pin of preview.expiredPins || []) { const p = document.createElement('p'); p.textContent = `Expire prior attempt-scoped pin: ${pin.lessonId} ${pin.field} = ${JSON.stringify(pin.sourceValue)}`; dialog.append(p); }
+      const cancel = document.createElement('button'); cancel.textContent = 'Cancel'; cancel.id = 'cancel-authoring';
+      cancel.addEventListener('click', () => { dialog.close(); dialog.remove(); button.disabled = false; }); dialog.append(cancel);
+      dialog.addEventListener('cancel', () => { dialog.remove(); button.disabled = false; });
+      const confirm = document.createElement('button'); confirm.id = 'confirm-authoring'; confirm.textContent = preview.upgradeRequired ? 'Confirm upgrade and open draft' : 'Open draft';
+      confirm.addEventListener('click', async () => {
+        confirm.disabled = true;
+        try {
+          const result = await fetchWithCsrf('/api/definition-draft', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ confirmUpgrade: preview.upgradeRequired }) });
+          const opened = await result.json();
+          if (!result.ok) throw new Error(opened.message || 'No draft was opened.');
+          etag = result.headers.get('ETag'); authoringCurrent = false;
+          resetAuthoringSection(snapshot.state === 'EMPTY' ? 'School' : 'Review');
+          dialog.close(); dialog.remove(); render(opened);
+        } catch (error) { status.textContent = `No draft was opened. ${error.message}`; dialog.close(); dialog.remove(); button.disabled = false; }
+      }); dialog.append(confirm); document.body.append(dialog); dialog.showModal();
+    } catch (error) { status.textContent = `No draft was opened. ${error.message}`; button.disabled = false; }
+  });
+  entry.append(button, status); stateCard.append(entry);
 }
 
 function renderModeNavigation() {
@@ -521,6 +579,7 @@ function renderNarrowReadOnly(schoolName, lifecycle, context = '') {
 
 function renderUtilities(snapshot) {
   const hasAccepted = Boolean(snapshot?.workspace?.acceptedBaseline);
+  if (snapshot.state === 'DEFINITION_DRAFT') return `<details id="utilities"><summary>${M.utilities}</summary>${hasAccepted ? exportAcceptedSection(snapshot) : ''}</details>`;
   const lastRun = snapshot?.workspace?.lastRun;
   const runFeedback = lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED'
     ? repairRunFeedback(lastRun)
@@ -2233,6 +2292,7 @@ document.querySelector('#json-import').addEventListener('submit', event => { eve
 document.querySelector('#archive-import').addEventListener('submit', event => { event.preventDefault(); submit(event.currentTarget); });
 window.matchMedia('(max-width: 700px)').addEventListener('change', event => {
   view.narrow = event.matches;
+  if (currentSnapshot?.state === 'EMPTY' || currentSnapshot?.state === 'DEFINITION_DRAFT') { render(currentSnapshot); return; }
   if (acceptedModel) {
     if (inspectionState) {
       if (event.matches && view.periodId && acceptedModel.maps.periods.get(view.periodId)?.weekday !== view.day) {

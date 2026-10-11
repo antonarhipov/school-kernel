@@ -772,3 +772,16 @@ body.operational .utility-disclosure > summary { padding: 6px 9px; font-size: .7
   .narrow-controls { grid-template-columns: minmax(0, 1fr); }
   .narrow-mode .matrix-wrap { max-height: 58vh; }
 }
+
+/* Definition authoring is a document view; Current keeps its existing workbench. */
+.definition-authoring { min-width: 0; max-width: 100%; }
+.definition-authoring p, .authoring-revision { overflow-wrap: anywhere; }
+.authoring-navigation { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+.authoring-navigation .selected { outline: 2px solid currentColor; outline-offset: 2px; }
+.authoring-values { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 22rem; overflow: auto; font-size: .85rem; }
+.definition-authoring details { padding: .5rem 0; }
+.authoring-entry { margin-top: 1rem; }
+#authoring-confirmation { max-width: min(42rem, 90vw); max-height: 85vh; overflow: auto; border-radius: .6rem; padding: 1.5rem; }
+#authoring-confirmation button { margin: .5rem; }
+.authoring-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: .4rem 1rem; }
+.authoring-fields div, .authoring-fields dd { min-width: 0; overflow-wrap: anywhere; }

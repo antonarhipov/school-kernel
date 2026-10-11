@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${networknt.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.schoolkernel</groupId>
             <artifactId>kernel-contract</artifactId>
             <version>${project.version}</version>

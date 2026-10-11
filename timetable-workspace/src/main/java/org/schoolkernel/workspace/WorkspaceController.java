@@ -37,6 +37,7 @@ public class WorkspaceController {
     private final ProposalReviewService proposalReviews;
     private final AcceptedBaselineExportService exports;
     private final ManualDraftService manualDrafts;
+    private final DefinitionDraftService definitionDrafts;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -49,6 +50,7 @@ public class WorkspaceController {
             ProposalReviewService proposalReviews,
             AcceptedBaselineExportService exports,
             ManualDraftService manualDrafts,
+            DefinitionDraftService definitionDrafts,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -59,7 +61,23 @@ public class WorkspaceController {
         this.proposalReviews = proposalReviews;
         this.exports = exports;
         this.manualDrafts = manualDrafts;
+        this.definitionDrafts = definitionDrafts;
         this.json = json;
+    }
+
+    @PostMapping("/api/definition-draft/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewDefinitionDraft(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionDrafts.preview(ifMatch));
+    }
+
+    @PostMapping("/api/definition-draft")
+    @ResponseBody
+    public ResponseEntity<JsonNode> openDefinitionDraft(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody(required = false) JsonNode request) {
+        return response(definitionDrafts.open(ifMatch, request));
     }
 
     @PostMapping("/api/repair-draft")

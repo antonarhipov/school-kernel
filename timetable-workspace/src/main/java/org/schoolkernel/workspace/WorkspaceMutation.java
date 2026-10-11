@@ -18,8 +18,10 @@ public class WorkspaceMutation {
 
     @Transactional
     public WorkspaceAggregate clear(long expectedVersion) {
+        DefinitionDraftService.requireNotAuthoring(repository.load());
         if (repository.clear(expectedVersion).isEmpty()) {
             WorkspaceAggregate current = repository.load();
+            DefinitionDraftService.requireNotAuthoring(current);
             if (current.version() != expectedVersion) {
                 throw new WorkspaceProblem(
                         HttpStatus.PRECONDITION_FAILED,
@@ -35,8 +37,10 @@ public class WorkspaceMutation {
             long expectedVersion,
             WorkspaceState nextState,
             JsonNode document) {
+        DefinitionDraftService.requireNotAuthoring(repository.load());
         if (repository.resetAndReplace(expectedVersion, nextState, document).isEmpty()) {
             WorkspaceAggregate current = repository.load();
+            DefinitionDraftService.requireNotAuthoring(current);
             if (current.version() != expectedVersion) {
                 throw new WorkspaceProblem(
                         HttpStatus.PRECONDITION_FAILED,
@@ -54,6 +58,7 @@ public class WorkspaceMutation {
             JsonNode document) {
         if (repository.replace(expectedVersion, WorkspaceState.EMPTY, nextState, document).isEmpty()) {
             WorkspaceAggregate current = repository.load();
+            DefinitionDraftService.requireNotAuthoring(current);
             if (current.version() != expectedVersion) {
                 throw new WorkspaceProblem(
                         HttpStatus.PRECONDITION_FAILED,

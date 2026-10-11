@@ -728,7 +728,8 @@ class WorkspaceImportIT {
                     Map.of("definition", new FilePart("definition.json", definition)), true, true);
 
             assertEquals(409, response.statusCode(), state.name());
-            assertCurrentProblem(response, "INVALID_WORKSPACE_TRANSITION", state.name(), "\"ws-41\"");
+            assertCurrentProblem(response, state == WorkspaceState.DEFINITION_DRAFT
+                    ? "DEFINITION_DRAFT_ACTIVE" : "INVALID_WORKSPACE_TRANSITION", state.name(), "\"ws-41\"");
             assertEquals(41L, version(), state.name());
             assertEquals(sentinel, storedDocument(), state.name());
             assertEquals(0, processes.count(), state.name());
