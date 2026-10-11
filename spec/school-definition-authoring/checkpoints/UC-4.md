@@ -15,7 +15,7 @@
 
 `WorkspaceLocalSecurityIT` does not exist in this checkout and is not counted. Subject tests directly prove CSRF, state and version protection; existing local Host/Origin protection is unchanged.
 - Runtime proof uses isolated Testcontainers PostgreSQL/Chrome. Operator data is untouched.
-- Standalone Playwright ledger: pending technical checks, under `output/playwright/school-definition-authoring/UC-4/`.
+- Standalone Playwright: [attempt 1 FAIL](../../../output/playwright/school-definition-authoring/UC-4/20261011-1/README.md) preserved; [attempt 2 PASS](../../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md), submission dd395c4. Automatically APPROVED with exact v25 durable evidence and inspected screenshots.
 
 ## Walkthrough F-1 revision
 

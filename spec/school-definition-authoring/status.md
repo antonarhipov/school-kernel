@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-4
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-5 after UC-4 walkthrough
+- Status: APPROVED
+- Next eligible: UC-5
 
 ## Progress
 
@@ -13,7 +13,7 @@
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
 | UC-2 | APPROVED | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | APPROVED | UC-1 | `a30de35` / [checkpoint](checkpoints/UC-3.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md) |
-| UC-4 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-4.md) | - |
+| UC-4 | APPROVED | UC-1 | `dd395c4` / [checkpoint](checkpoints/UC-4.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md) |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
 | UC-7 | NOT_STARTED | UC-1 | - | - |
@@ -173,3 +173,9 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Attempt 1 on aba0f60: FAIL. Numeric value inputs have no accessible name in Chrome's accessible snapshot. Ledger/screenshots: [attempt 1](../../output/playwright/school-definition-authoring/UC-4/20261011-1/README.md). No durable mutation occurred. Added explicit labels and browser regression; a complete new attempt is required before approval.
 
 - F-1 technical revision passes: 26 unit/architecture checks and the strengthened main save/reload/restart browser journey, BUILD SUCCESS `/tmp/uc4-label-verify.log`. Repeat the complete standalone walkthrough on the corrected build.
+
+## UC-4 approval
+
+- Automatically APPROVED after complete repeat Playwright PASS on dd395c4. [Attempt 2 ledger and screenshots](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md). F-1 closed; Add-subject regression closed by technical/browser evidence. Final exact disposable workspace v25 preserved in the ledger, source {} and no Current; source/accepted fidelity also passes labelled technical variants.
+- Six subject and 24 affected existing browser journeys pass, with 26 unit/architecture checks. Focused F-1 regression additionally passes; failures remain recorded, not reclassified green. No unresolved implementation finding. Catalog/removal/restoration handoffs remain for UC-12/13/14.
+- Browser/server/data retained for immediately continuing UC-5 under existing authorization; no additional approval required.

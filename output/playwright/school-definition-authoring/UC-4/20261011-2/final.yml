@@ -1,0 +1,64 @@
+- banner:
+  - paragraph: Local school timetable
+  - heading "Operations workspace" [level=1]
+  - paragraph: No accepted timetable
+- main:
+  - text: Saved school-definition draft
+  - heading "New school" [level=2]
+  - status: Saved — Your saved school-definition changes are preserved.
+  - paragraph: "Draft • Source: EMPTY • Catalog 9 • No Current timetable"
+  - paragraph: "Source identity: (new school) • (no source revision)"
+  - paragraph: "Saved revision: sha256:fd01577e89291379ff703f22f33da663291a9f402a39cde4cd53e37e896e4aa2"
+  - paragraph: One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.
+  - paragraph: 2 subjects • 0 teachers • 0 classes • 0 rooms • 10 periods • 0 occurrences
+  - paragraph: "Incomplete: 2 blocking issues; 0 advisories."
+  - navigation "Definition sections":
+    - button "School"
+    - button "Grid"
+    - button "Subjects"
+    - button "Teachers"
+    - button "Classes"
+    - button "Rooms"
+    - button "Room policies"
+    - button "Weekly requirements"
+    - button "Review"
+  - heading "Subjects" [level=3]
+  - 'button "Edit subject: Mathematics"'
+  - 'button "Edit subject: Science"'
+  - button "Add subject"
+  - text: Subject name
+  - textbox "Subject name": Mathematics
+  - text: Subject identifier (read-only)
+  - textbox "Subject identifier (read-only)": Math.ID_9
+  - paragraph: The saved identifier is permanent; renaming changes only the display name.
+  - text: Reserved periods allowed
+  - combobox "Reserved periods allowed Default false. Explicit permission to use school-reserved periods.":
+    - 'option "Use catalog default (omitted: false)" [selected]'
+    - option "Explicit true"
+    - option "Explicit false"
+  - text: Default false. Explicit permission to use school-reserved periods. Maximum reserved lessons per class per week
+  - combobox "Maximum reserved lessons per class per week Default unlimited. A value requires explicit reserved-period permission.":
+    - 'option "Use catalog default (omitted: unlimited)" [selected]'
+    - option "Explicit value"
+  - textbox "Maximum reserved lessons per class per week value" [disabled]
+  - text: Default unlimited. A value requires explicit reserved-period permission. Day edges only
+  - combobox "Day edges only Default false. Hard rule restricting placement to supported class-day edges.":
+    - 'option "Use catalog default (omitted: false)" [selected]'
+    - option "Explicit true"
+    - option "Explicit false"
+  - text: Default false. Hard rule restricting placement to supported class-day edges. Maximum lessons per class per day
+  - combobox "Maximum lessons per class per day Default unlimited. Hard daily subject count per class.":
+    - 'option "Use catalog default (omitted: unlimited)" [selected]'
+    - option "Explicit value"
+  - textbox "Maximum lessons per class per day value" [disabled]
+  - text: Default unlimited. Hard daily subject count per class. Curator subject
+  - combobox "Curator subject Default false. Lessons use the class curator and its home-room obligations; ordinary qualification is exempt.":
+    - 'option "Use catalog default (omitted: false)" [selected]'
+    - option "Explicit true"
+    - option "Explicit false"
+  - text: Default false. Lessons use the class curator and its home-room obligations; ordinary qualification is exempt.
+  - button "Save subject"
+  - button "Discard working subject edits"
+  - heading "Saved subject effects" [level=4]
+  - paragraph: Qualifications, lessons and room policies stay as saved. Curator subjects require the class curator and home room; ordinary subjects require teacher qualification.
+  - paragraph: To remove this subject, resolve its references through guided removal (UC-13). To restore source values, use source restoration (UC-14). These operations do not run through subject save.
