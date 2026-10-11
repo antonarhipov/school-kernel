@@ -3,8 +3,8 @@
 ## Current
 
 - Use case: UC-20
-- Status: PENDING_WALKTHROUGH
-- Next eligible: final regression after UC-20 walkthrough
+- Status: APPROVED
+- Next eligible: final feature regression (all 20 use cases approved)
 
 ## Progress
 
@@ -29,7 +29,7 @@
 | UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
 | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
 | UC-19 | APPROVED | UC-1 | `e90d7a5` / [checkpoint](checkpoints/UC-19.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md) |
-| UC-20 | PENDING_WALKTHROUGH | none | [checkpoint](checkpoints/UC-20.md) | final-build repeat pending |
+| UC-20 | APPROVED | none | `1090151` / [checkpoint](checkpoints/UC-20.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md) |
 
 ## Technical decision pass
 
@@ -386,3 +386,7 @@ Real actor attempts3–6 passed behavioral assertions but remained unapproved wh
 ### 2026-10-12 — UC-20 final technical PASS
 
 Final r8:33 unit/architecture,11 manual API,4 teacher-route browser and exact normative proposal review PASS. The remaining assertion expected excluded selection to survive explicit narrow class/day changes, contrary to the inspection contract; now verifies clearing and explicitly reselects before collapse/reopen scroll preservation. Full changed-build standalone repeat7 PASS;17 screenshots/contact sheet inspected, direct409 lifecycle refusals and exact Current, legacy full revert, native cancellation and real shared/occurrence controls. Approval ledger being finalized; reactor/source/grouped/occurrence/discard/persistence/repair final checks running. Earlier failed evidence retained.
+
+### 2026-10-12 — UC-20 automatic approval
+
+Submission `1090151`, full changed-build repeat7 PASS.17 inspected screenshots, native manual cancel/discard exact v55–56; source/Current and legacy422/full revert/publication/reload v59–61; actual shared/selected teacher controls and restoration v62–63. Real retained MVK proposal/draft/solve direct409 with state-specific guidance and exact snapshots, real cancellation v22–25.33 workspace unit/architecture +16 final UC/regression paths PASS r8; related accepted/lens/proposal/Finish/seeded/repair-completion coverage retained. [Passing ledger](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md). All20 approved; no destination handoffs remain. Final reactor and representative feature regressions running.
