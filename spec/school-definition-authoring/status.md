@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-8
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-9 after UC-8 walkthrough
+- Use case: UC-9
+- Status: IN_PROGRESS
+- Next eligible: UC-10 after UC-9 walkthrough
 
 ## Progress
 
@@ -17,8 +17,8 @@
 | UC-5 | APPROVED | UC-1 | `1084c81` / [checkpoint](checkpoints/UC-5.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md) |
 | UC-6 | APPROVED | UC-1 | `6ca5e84` / [checkpoint](checkpoints/UC-6.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md) |
 | UC-7 | APPROVED | UC-1 | `6622f19` / [checkpoint](checkpoints/UC-7.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md) |
-| UC-8 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-8.md) | pending |
-| UC-9 | NOT_STARTED | UC-1 | - | - |
+| UC-8 | APPROVED | UC-1 | `42f3b53` / [checkpoint](checkpoints/UC-8.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md) |
+| UC-9 | IN_PROGRESS | UC-1 | - | - |
 | UC-10 | NOT_STARTED | UC-1 | - | - |
 | UC-11 | NOT_STARTED | UC-1 | - | - |
 | UC-12 | NOT_STARTED | UC-1 | - | - |
@@ -232,3 +232,7 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - `/tmp/uc8-modal-verify.log` BUILD SUCCESS: all four requirement journeys and 26 unit/architecture pass after dialog attachment, complete teaching/context diagnostic refresh and pending/stale render guards. `/tmp/uc8-final-verify.log` BUILD SUCCESS: all 39 requirement/entity/grid/school journeys plus 26 unit/architecture. During final review, distinguished new versus existing series identity explicitly; added collision/immutability refusals and tests. Final request-contract suite running /tmp/uc8-identity-verify.log. No walkthrough approval inferred yet.
 
 - UC-8 final identity contract BUILD SUCCESS `/tmp/uc8-identity-verify.log`: four requirement journeys plus 26 unit/architecture pass, including new-series collision and immutable saved ID guards. All 39 affected journeys pass in /tmp/uc8-final-verify.log; only the UC-8 request shape/identity guards and incomplete-count explanation changed afterward and have been verified. Syntax/diff checks pass. PENDING_WALKTHROUGH against a fresh verified mixed-source fixture/database, no operator data touched.
+
+## UC-8 approval
+
+- Automatically APPROVED on 42f3b53 after [recorded standalone Playwright PASS](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md). Exact isolated v19 document/context and inspected screenshots retained. Mixed/equal exceptions, selected/Apply-all scopes, canceled/refused count operations, stable IDs/names, incomplete/zero context, all native shared settings/lock blockers, responsive/stale/conflict/transport/navigation/reload/source fidelity pass. Zero blockers and two necessary-load advisories at final state; no timetable-feasibility claim. Relevant 39 journeys plus final four identity-contract journeys and 26 unit/architecture pass; failed evidence preserved and fixed. No operator change or open finding. UC-9/14 destination handoffs remain; starting UC-9.
