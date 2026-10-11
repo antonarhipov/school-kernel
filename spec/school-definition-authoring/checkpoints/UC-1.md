@@ -58,3 +58,15 @@ No feature rules apply. Existing architecture tests passed without exemptions. N
 This slice supplies saved-content inspection/navigation only. Identity/resource editing, save forms, comprehensive change review, finish and authoring discard are dependent UCs and remain NOT_STARTED. There are no unsaved edit forms in UC-1; resizing must leave the durable draft unchanged and will retain working inputs when later editor UCs add them. No runtime school was modified. The full reactor/API/browser suites are not claimed green; validation is scoped to this UC and affected shared boundaries per the user's request to avoid unnecessary slow checks.
 
 READY FOR CONVERGENCE: UC-1
+
+## Administrator-confirmed navigation revision
+
+- Revision base: `d858598fd6d419b29cde395d6799bbbedbe5ca6f`.
+- Revision submission: HEAD at convergence; original source/lifecycle submission remains `06c0201`.
+- Product decision: administrator confirmed "All good", requested dedicated Teachers/Rooms tabs instead of Resources, and explicitly instructed approval after splitting them. UC-1 main step 5 and the proposal's navigation summary now record that choice.
+- Navigation: School, Grid, Subjects, Teachers, Classes, Rooms, Room policies, Weekly requirements, Review. Every previous Resources subsection remains directly reachable.
+- Changed files in this revision: spec.md, proposal.md, definition-editor.js, DefinitionAuthoringBrowserIT.java, status.md, this checkpoint.
+- Focused command: `./mvnw -pl timetable-workspace -am -Pworkspace-browser -DskipTests=false -Dtest=ArchitectureTest -Dsurefire.failIfNoSpecifiedTests=false '-Dit.test=DefinitionAuthoringBrowserIT#uc1EmptyEntryNavigationResumeAndResponsiveInspection' -Dfailsafe.failIfNoSpecifiedTests=false verify`.
+- Result: BUILD SUCCESS; 4 architecture checks + 1 real-browser journey passed, zero failures/errors/skips. The browser visits all nine sections, asserts Resources is absent, checks all four specified widths, reloads and resumes, and verifies exact saved-document/version preservation. Log: `/tmp/school-authoring-tab-split.log`.
+- JavaScript syntax and `git diff --check`: PASS. Broader source/lifecycle/security/Current evidence from the previous convergence is unchanged and not redundantly rerun for this presentation-only revision.
+- User confirmation covers the requested navigation change; no further walkthrough approval request is needed.

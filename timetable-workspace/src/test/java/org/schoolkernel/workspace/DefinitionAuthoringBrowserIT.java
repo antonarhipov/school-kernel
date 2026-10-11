@@ -26,10 +26,11 @@ class DefinitionAuthoringBrowserIT extends WorkbenchBrowserSupport {
         assertEquals("EMPTY", draft.path("sourceState").stringValue());
         assertEquals(2, draft.path("issues").size());
         String saved = storedDocument();
-        for (String name : List.of("School", "Grid", "Subjects", "Resources", "Weekly requirements", "Review")) {
+        for (String name : List.of("School", "Grid", "Subjects", "Teachers", "Classes", "Rooms", "Room policies", "Weekly requirements", "Review")) {
             workbench.page().locator("button[data-section='" + name + "']").click();
             assertEquals(name, workbench.page().locator("#authoring-section h3").textContent());
         }
+        assertEquals(0, workbench.page().locator("button[data-section='Resources']").count());
         for (int[] viewport : List.of(new int[]{1600,900}, new int[]{1280,800}, new int[]{390,844}, new int[]{700,844})) {
             workbench.viewport(viewport[0], viewport[1]);
             if (viewport[0] <= 700) workbench.awaitText("Editing requires a wider view");

@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: PENDING_WALKTHROUGH
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: none until UC-1 convergence and walkthrough
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | PENDING_WALKTHROUGH | none | `06c0201` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
+| UC-1 | READY_FOR_CONVERGENCE | none | `06c0201` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
@@ -67,3 +67,12 @@ None.
 - Verdict: PENDING_WALKTHROUGH; no implementation findings.
 - User walkthrough result: not yet received. Isolated workspace: http://localhost:18081/workspace/; exact script and environment lifecycle recorded in convergence report.
 - Full unrelated reactor/browser/solver suites were not rerun or claimed green; user requested slow checks only when necessary.
+
+## UC-1 Navigation Revision
+
+- User decision: walkthrough accepted ("All good."); replace Resources with dedicated Teachers and Rooms tabs and approve UC-1 after the split.
+- Updated UC-1 main step 5 to reflect the approved navigation decision. Classes and Room policies also have dedicated tabs so all existing sections remain directly reachable without the Resources grouping.
+- Scope: navigation labels/grouping only; source data, persistence, lifecycle, and editing scope are unchanged.
+- Verification: focused existing real-browser navigation/viewport/reload journey; prior complete UC-1 evidence remains applicable to unchanged behavior. No redundant broad slow suite run.
+- Focused revision validation: 4 architecture checks and 1 real-browser navigation/responsive/reload journey passed, zero failures/errors/skips; JavaScript syntax and diff hygiene passed.
+- Revised submission: HEAD at convergence. UC-1 is ready to record the already-received administrator confirmation and approve.

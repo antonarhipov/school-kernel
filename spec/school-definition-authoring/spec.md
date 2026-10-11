@@ -166,9 +166,9 @@ preview stale. A stale operation reports the change and requires a new review; i
 4. The system opens and durably saves the definition draft, preserving the source. EMPTY starts with catalog 9,
    empty collections, and identity still to be entered; existing sources retain their data and supported catalog,
    except for the explained required upgrade and prior attempt-pin expiry.
-5. The system presents freely navigable School, Grid, Subjects, Resources, Weekly requirements, and Review sections,
+5. The system presents freely navigable School, Grid, Subjects, Teachers, Classes, Rooms, Room policies, Weekly requirements, and Review sections,
    incomplete counts, source identity, saved status, and draft/Current labels. New creation starts in School; existing
-   and resumed drafts start in Review. Resources exposes Teachers, Classes, Rooms, and Room policies; School exposes
+   and resumed drafts start in Review. Teachers, Classes, Rooms, and Room policies have dedicated tabs; School exposes
    catalog and advanced Preferences; Weekly requirements exposes series, ungrouped lessons, and occurrence details.
 6. The administrator enters a section or inspects the unchanged Current timetable.
 

@@ -2,7 +2,10 @@ const sections = {
   School: [['School identity', null], ['Catalog', null], ['Advanced Preferences', 'softConstraintOverrides']],
   Grid: [['Periods', 'periods'], ['Reservations', 'reservedPeriodIds']],
   Subjects: [['Subjects', 'subjects']],
-  Resources: [['Teachers', 'teachers'], ['Classes', 'cohorts'], ['Rooms', 'rooms'], ['Room policies', 'roomAssignments']],
+  Teachers: [['Teachers', 'teachers']],
+  Classes: [['Classes', 'cohorts']],
+  Rooms: [['Rooms', 'rooms']],
+  'Room policies': [['Room policies', 'roomAssignments']],
   'Weekly requirements': [['Series', 'series'], ['Ungrouped lessons', 'ungrouped'], ['Occurrence details', 'lessons']],
   Review: []
 };

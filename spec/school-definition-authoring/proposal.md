@@ -64,7 +64,7 @@ intact.
   - The specification will enumerate the supported attributes and catalog requirements in a normative attribute
     table. Authoring uses the current kernel's teaching model.
 - Guided setup and editing:
-  - Freely navigable sections for school identity, period grid, subjects, resources, weekly requirements, and review.
+  - Freely navigable sections for school identity, period grid, subjects, teachers, classes, rooms, room policies, weekly requirements, and review.
   - A suggested setup order and visible incomplete work; existing schools use the same sections directly.
   - Initial grid generation from teaching weekdays, periods per day, and optional bell times, followed by individual
     adjustments. Existing grids open directly for editing.
