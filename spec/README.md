@@ -52,6 +52,8 @@ Current feature directories:
   [proposal](school-definition-authoring/proposal.md) for full supported definition authoring from an empty workspace,
   an initial definition, or an accepted baseline. Durable drafts cover weekly requirements, all supported settings,
   and verified finish into initial planning or seeded repair with explicit acceptance.
+  **IMPLEMENTED:** all20 use cases approved through recorded actor walkthroughs;
+  [status and final regression evidence](school-definition-authoring/status.md).
 - [`timetable-matrix-lenses`](timetable-matrix-lenses/) proposes turning the Teacher and Room filters into lenses that
   pivot the whole-school Week/Day matrix to one teacher or room, superseding the separate focused schedule surface.
 

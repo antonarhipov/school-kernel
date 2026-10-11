@@ -2,9 +2,10 @@
 
 ## Current
 
-- Use case: UC-20
+- Use case: none (all 20 complete)
 - Status: APPROVED
-- Next eligible: final feature regression (all 20 use cases approved)
+- Feature: IMPLEMENTED (20/20 use cases approved)
+- Next eligible: none
 
 ## Progress
 
@@ -390,3 +391,11 @@ Final r8:33 unit/architecture,11 manual API,4 teacher-route browser and exact no
 ### 2026-10-12 — UC-20 automatic approval
 
 Submission `1090151`, full changed-build repeat7 PASS.17 inspected screenshots, native manual cancel/discard exact v55–56; source/Current and legacy422/full revert/publication/reload v59–61; actual shared/selected teacher controls and restoration v62–63. Real retained MVK proposal/draft/solve direct409 with state-specific guidance and exact snapshots, real cancellation v22–25.33 workspace unit/architecture +16 final UC/regression paths PASS r8; related accepted/lens/proposal/Finish/seeded/repair-completion coverage retained. [Passing ledger](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md). All20 approved; no destination handoffs remain. Final reactor and representative feature regressions running.
+
+### 2026-10-12 — final regression harness correction
+
+Reactor unit checks and source/discard/grouped/occurrence journeys pass so far. SavedDefinitionDraftBrowserIT expected a disabled `#edit-teacher`, superseded by UC-20's required absence. Correct only that assertion; disabled period/room and exact saved draft/source/Current refusal/reload assertions retained. [Failed regression evidence](../../output/playwright/school-definition-authoring/final-regression/20261012-1/README.md). Production/walkthrough unchanged. Repeat all three saved-draft compatibility cases after final ordinary repair checks.
+
+### 2026-10-12 — feature IMPLEMENTED
+
+All20 use cases APPROVED, all explicit dependencies and destination handoffs complete. Final136 unit checks and28 representative source/authoring/grouped/occurrence/discard/persistence/ordinary-repair API/browser paths PASS across complete reactor attempt and focused corrected compatibility repeat. Initial stale teacher-selector assertion failure retained, single test expectation updated, all3 saved-draft cases and33 workspace unit/architecture repeat PASS. Production and complete passing UC-20 walkthrough unchanged. [Final completion/regression/runtime ledger](../../output/playwright/school-definition-authoring/final-regression/20261012-2/README.md).17 superseded browsers and3 agent-owned servers closed; disposable evidence/data retained. Final accepted demo v63 available at18110, no active solve/fault trigger, operator runtime/data untouched. No human confirmation or separate convergence gate claimed.

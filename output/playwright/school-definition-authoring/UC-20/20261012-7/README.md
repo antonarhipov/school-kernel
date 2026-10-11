@@ -37,3 +37,5 @@ Related unchanged passing coverage: r7 six Finish +five seeded repair +one repai
 No additional infrastructure failure is claimed in this walkthrough. Existing access/stale/storage boundaries are covered by approved UC-1/UC-19 and retained technical negative paths. No destination handoffs remain: UC-1/UC-8/UC-9 are approved and actual teacher controls were observed.
 
 Overall **PASS**. Automatically **APPROVED** under the user-authorized execute/Playwright loop; no human confirmation claimed. During recording,18110 retained accepted v63,18109 retained real authored REPAIR_DRAFT v25 after cancellation; all test-only legacy changes explicitly recovered, no active solve/fault trigger remains. Final cleanup disposition is recorded by feature completion.
+
+Final feature regression and cleanup **PASS**: [completion ledger](../../final-regression/20261012-2/README.md). Final accepted demo18110 retained; superseded repair18109 and prior18107/18108 servers closed with databases/evidence preserved. All20 UCs approved.

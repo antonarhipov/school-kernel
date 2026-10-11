@@ -1,0 +1,947 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/anton/.sdkman/candidates/maven/current/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/anton/.sdkman/candidates/maven/current/lib/guava-33.2.0-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Kernel                                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/4]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/4]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ kernel-contract ---
+[INFO] 
+[INFO] --------------------< org.schoolkernel:kernel-cli >---------------------
+[INFO] Building School Kernel 1.0.0-SNAPSHOT                              [3/4]
+[INFO]   from kernel-cli/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-cli ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-cli ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-cli/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-cli ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-cli ---
+[INFO] Copying 9 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-cli ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-cli ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.contract.ContractTest
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.232 s -- in org.schoolkernel.contract.ContractTest
+[INFO] Running org.schoolkernel.contract.KernelMetadataTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s -- in org.schoolkernel.contract.KernelMetadataTest
+[INFO] Running org.schoolkernel.contract.JsonSupportLimitsTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.055 s -- in org.schoolkernel.contract.JsonSupportLimitsTest
+[INFO] Running org.schoolkernel.solver.SolverConfigurationTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 s -- in org.schoolkernel.solver.SolverConfigurationTest
+[INFO] Running org.schoolkernel.solver.ComponentBoundaryTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.088 s -- in org.schoolkernel.solver.ComponentBoundaryTest
+[INFO] Running org.schoolkernel.solver.RoomAssignmentConstraintTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.683 s -- in org.schoolkernel.solver.RoomAssignmentConstraintTest
+[INFO] Running org.schoolkernel.solver.DailySpreadConstraintTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.527 s -- in org.schoolkernel.solver.DailySpreadConstraintTest
+[INFO] Running org.schoolkernel.solver.DayEdgeConstraintTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.404 s -- in org.schoolkernel.solver.DayEdgeConstraintTest
+[INFO] Running org.schoolkernel.solver.SchoolConstraintProviderTest
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.159 s -- in org.schoolkernel.solver.SchoolConstraintProviderTest
+[INFO] Running org.schoolkernel.solver.ReplanningSolverTest
+[pool-2-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving started: time spent (8), best score ([0/0]hard/[0/0/0]soft), environment mode (PHASE_ASSERT), move thread count (NONE), random (seed 0).
+[pool-2-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Problem scale: genuine entity count (1), genuine variable count (2), approximate value count (4), approximate problem scale (4).
+[pool-2-thread-1] INFO ai.timefold.solver.core.impl.constructionheuristic.DefaultConstructionHeuristicPhase - Construction Heuristic phase (0) ended: time spent (66), best score ([0/0]hard/[0/-1/-1]soft), move evaluation speed (142/sec), step total (1).
+[pool-2-thread-1] INFO ai.timefold.solver.core.impl.localsearch.DefaultLocalSearchPhase - Local Search phase (1) ended: time spent (146), best score ([0/0]hard/[0/-1/-1]soft), move evaluation speed (1333/sec), step total (1).
+[pool-2-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving ended: time spent (150), best score ([0/0]hard/[0/-1/-1]soft), move evaluation speed (666/sec), phase total (2), environment mode (PHASE_ASSERT), move thread count (NONE).
+[pool-4-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving started: time spent (8), best score ([0/0]hard/[0/0/-1]soft), environment mode (PHASE_ASSERT), move thread count (NONE), random (seed 0).
+[pool-4-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Problem scale: genuine entity count (1), genuine variable count (2), approximate value count (3), approximate problem scale (2).
+[pool-4-thread-1] INFO ai.timefold.solver.core.impl.constructionheuristic.DefaultConstructionHeuristicPhase - Construction Heuristic phase (0) ended: time spent (16), best score ([0/0]hard/[0/0/-1]soft), move evaluation speed (0/sec), step total (0).
+[pool-4-thread-1] INFO ai.timefold.solver.core.impl.localsearch.DefaultLocalSearchPhase - Local Search phase (1) ended: time spent (59), best score ([0/0]hard/[0/0/-1]soft), move evaluation speed (2777/sec), step total (1).
+[pool-4-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving ended: time spent (60), best score ([0/0]hard/[0/0/-1]soft), move evaluation speed (1666/sec), phase total (2), environment mode (PHASE_ASSERT), move thread count (NONE).
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.596 s -- in org.schoolkernel.solver.ReplanningSolverTest
+[INFO] Running org.schoolkernel.solver.SchoolQualityConstraintTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.299 s -- in org.schoolkernel.solver.SchoolQualityConstraintTest
+[INFO] Running org.schoolkernel.solver.HomeRoomConstraintTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.078 s -- in org.schoolkernel.solver.HomeRoomConstraintTest
+[INFO] Running org.schoolkernel.architecture.KernelArchitectureTest
+[main] INFO com.tngtech.archunit.core.PluginLoader - Detected Java version 25.0.1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.619 s -- in org.schoolkernel.architecture.KernelArchitectureTest
+[INFO] Running org.schoolkernel.application.ReplanServiceTest
+[pool-6-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving started: time spent (3), best score ([0/0]hard/[0/0/0]soft), environment mode (PHASE_ASSERT), move thread count (NONE), random (seed 0).
+[pool-6-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Problem scale: genuine entity count (1), genuine variable count (2), approximate value count (2), approximate problem scale (1).
+[pool-6-thread-1] INFO ai.timefold.solver.core.impl.constructionheuristic.DefaultConstructionHeuristicPhase - Construction Heuristic phase (0) ended: time spent (15), best score ([0/0]hard/[0/0/0]soft), move evaluation speed (111/sec), step total (1).
+[pool-6-thread-1] INFO ai.timefold.solver.core.impl.localsearch.DefaultLocalSearchPhase - Local Search phase (1) has no entities or values to move.
+[pool-6-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving ended: time spent (18), best score ([0/0]hard/[0/0/0]soft), move evaluation speed (55/sec), phase total (2), environment mode (PHASE_ASSERT), move thread count (NONE).
+[pool-8-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving started: time spent (3), best score ([0/0]hard/[0/0/0]soft), environment mode (PHASE_ASSERT), move thread count (NONE), random (seed 0).
+[pool-8-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Problem scale: genuine entity count (1), genuine variable count (2), approximate value count (2), approximate problem scale (1).
+[pool-8-thread-1] INFO ai.timefold.solver.core.impl.constructionheuristic.DefaultConstructionHeuristicPhase - Construction Heuristic phase (0) ended: time spent (8), best score ([0/0]hard/[0/0/0]soft), move evaluation speed (250/sec), step total (1).
+[pool-8-thread-1] INFO ai.timefold.solver.core.impl.localsearch.DefaultLocalSearchPhase - Local Search phase (1) has no entities or values to move.
+[pool-8-thread-1] INFO ai.timefold.solver.core.impl.solver.DefaultSolver - Solving ended: time spent (10), best score ([0/0]hard/[0/0/0]soft), move evaluation speed (100/sec), phase total (2), environment mode (PHASE_ASSERT), move thread count (NONE).
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.420 s -- in org.schoolkernel.application.ReplanServiceTest
+[INFO] Running org.schoolkernel.application.FileBoundaryTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.310 s -- in org.schoolkernel.application.FileBoundaryTest
+[INFO] Running org.schoolkernel.application.PlanServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.204 s -- in org.schoolkernel.application.PlanServiceTest
+[INFO] Running org.schoolkernel.domain.BaselineVerifierTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.047 s -- in org.schoolkernel.domain.BaselineVerifierTest
+[INFO] Running org.schoolkernel.domain.KernelCatalogTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in org.schoolkernel.domain.KernelCatalogTest
+[INFO] Running org.schoolkernel.domain.RoomAssignmentContractTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.121 s -- in org.schoolkernel.domain.RoomAssignmentContractTest
+[INFO] Running org.schoolkernel.domain.DefinitionValidatorTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.063 s -- in org.schoolkernel.domain.DefinitionValidatorTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 103, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ kernel-cli ---
+[INFO] 
+[INFO] --- shade:3.6.2:shade (default) @ kernel-cli ---
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+[WARNING] micrometer-core-1.17.1.jar, school-kernel.jar define 584 overlapping classes and resources: 
+[WARNING]   - META-INF/micrometer-core.kotlin_module
+[WARNING]   - META-INF/micrometer-core.properties
+[WARNING]   - META-INF/native-image/io.micrometer/micrometer-core/proxy-config.json
+[WARNING]   - META-INF/native-image/io.micrometer/micrometer-core/reflect-config.json
+[WARNING]   - io.micrometer.core.annotation.Counted
+[WARNING]   - io.micrometer.core.annotation.Incubating
+[WARNING]   - io.micrometer.core.annotation.Timed
+[WARNING]   - io.micrometer.core.annotation.TimedSet
+[WARNING]   - io.micrometer.core.annotation.package-info
+[WARNING]   - io.micrometer.core.aop.CountedAspect
+[WARNING]   - 574 more...
+[WARNING] school-kernel.jar, slf4j-simple-2.0.17.jar define 8 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.slf4j/slf4j-simple/pom.properties
+[WARNING]   - META-INF/maven/org.slf4j/slf4j-simple/pom.xml
+[WARNING]   - org.slf4j.simple.OutputChoice
+[WARNING]   - org.slf4j.simple.OutputChoice$OutputChoiceType
+[WARNING]   - org.slf4j.simple.SimpleLogger
+[WARNING]   - org.slf4j.simple.SimpleLoggerConfiguration
+[WARNING]   - org.slf4j.simple.SimpleLoggerFactory
+[WARNING]   - org.slf4j.simple.SimpleServiceProvider
+[WARNING] istack-commons-runtime-4.1.2.jar, school-kernel.jar define 24 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/com.sun.istack/istack-commons-runtime/pom.properties
+[WARNING]   - META-INF/maven/com.sun.istack/istack-commons-runtime/pom.xml
+[WARNING]   - com.sun.istack.Builder
+[WARNING]   - com.sun.istack.ByteArrayDataSource
+[WARNING]   - com.sun.istack.FinalArrayList
+[WARNING]   - com.sun.istack.FragmentContentHandler
+[WARNING]   - com.sun.istack.Interned
+[WARNING]   - com.sun.istack.NotNull
+[WARNING]   - com.sun.istack.Nullable
+[WARNING]   - com.sun.istack.Pool
+[WARNING]   - 14 more...
+[WARNING] picocli-4.7.7.jar, school-kernel.jar define 228 overlapping classes: 
+[WARNING]   - picocli.AutoComplete
+[WARNING]   - picocli.AutoComplete$1
+[WARNING]   - picocli.AutoComplete$2
+[WARNING]   - picocli.AutoComplete$App
+[WARNING]   - picocli.AutoComplete$Bashify
+[WARNING]   - picocli.AutoComplete$BooleanArgFilter
+[WARNING]   - picocli.AutoComplete$CommandDescriptor
+[WARNING]   - picocli.AutoComplete$Function
+[WARNING]   - picocli.AutoComplete$GenerateCompletion
+[WARNING]   - picocli.AutoComplete$NullFunction
+[WARNING]   - 218 more...
+[WARNING] school-kernel.jar, snakeyaml-engine-3.0.1.jar define 222 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.snakeyaml/snakeyaml-engine/pom.properties
+[WARNING]   - META-INF/maven/org.snakeyaml/snakeyaml-engine/pom.xml
+[WARNING]   - org.snakeyaml.engine.external.com.google.gdata.util.common.base.Escaper
+[WARNING]   - org.snakeyaml.engine.external.com.google.gdata.util.common.base.PercentEscaper
+[WARNING]   - org.snakeyaml.engine.external.com.google.gdata.util.common.base.UnicodeEscaper
+[WARNING]   - org.snakeyaml.engine.external.com.google.gdata.util.common.base.UnicodeEscaper$1
+[WARNING]   - org.snakeyaml.engine.external.com.google.gdata.util.common.base.UnicodeEscaper$2
+[WARNING]   - org.snakeyaml.engine.v2.api.ConstructNode
+[WARNING]   - org.snakeyaml.engine.v2.api.Dump
+[WARNING]   - org.snakeyaml.engine.v2.api.DumpSettings
+[WARNING]   - 212 more...
+[WARNING] jaxb-runtime-4.0.9.jar, school-kernel.jar define 662 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.glassfish.jaxb/jaxb-runtime/pom.properties
+[WARNING]   - META-INF/maven/org.glassfish.jaxb/jaxb-runtime/pom.xml
+[WARNING]   - org.glassfish.jaxb.runtime.AccessorFactory
+[WARNING]   - org.glassfish.jaxb.runtime.AccessorFactoryImpl
+[WARNING]   - org.glassfish.jaxb.runtime.AnyTypeAdapter
+[WARNING]   - org.glassfish.jaxb.runtime.CycleRecoverable
+[WARNING]   - org.glassfish.jaxb.runtime.CycleRecoverable$Context
+[WARNING]   - org.glassfish.jaxb.runtime.DatatypeConverterImpl
+[WARNING]   - org.glassfish.jaxb.runtime.DatatypeConverterImpl$1
+[WARNING]   - org.glassfish.jaxb.runtime.DatatypeConverterImpl$CalendarFormatter
+[WARNING]   - 652 more...
+[WARNING] jackson-dataformat-yaml-3.2.2.jar, school-kernel.jar define 29 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/tools.jackson.dataformat/jackson-dataformat-yaml/pom.properties
+[WARNING]   - META-INF/maven/tools.jackson.dataformat/jackson-dataformat-yaml/pom.xml
+[WARNING]   - tools.jackson.dataformat.yaml.JacksonYAMLParseException
+[WARNING]   - tools.jackson.dataformat.yaml.JacksonYAMLWriteException
+[WARNING]   - tools.jackson.dataformat.yaml.PackageVersion
+[WARNING]   - tools.jackson.dataformat.yaml.UTF8Reader
+[WARNING]   - tools.jackson.dataformat.yaml.UTF8Writer
+[WARNING]   - tools.jackson.dataformat.yaml.WriterWrapper
+[WARNING]   - tools.jackson.dataformat.yaml.YAMLAnchorReplayingFactory
+[WARNING]   - tools.jackson.dataformat.yaml.YAMLAnchorReplayingFactoryBuilder
+[WARNING]   - 19 more...
+[WARNING] jackson-databind-3.2.2.jar, school-kernel.jar define 909 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/tools.jackson.core/jackson-databind/pom.properties
+[WARNING]   - META-INF/maven/tools.jackson.core/jackson-databind/pom.xml
+[WARNING]   - tools.jackson.databind.AbstractTypeResolver
+[WARNING]   - tools.jackson.databind.AnnotationIntrospector
+[WARNING]   - tools.jackson.databind.AnnotationIntrospector$ReferenceProperty
+[WARNING]   - tools.jackson.databind.AnnotationIntrospector$ReferenceProperty$Type
+[WARNING]   - tools.jackson.databind.AnnotationIntrospector$XmlExtensions
+[WARNING]   - tools.jackson.databind.BeanDescription
+[WARNING]   - tools.jackson.databind.BeanDescription$EagerSupplier
+[WARNING]   - tools.jackson.databind.BeanDescription$LazySupplier
+[WARNING]   - 899 more...
+[WARNING] HdrHistogram-2.2.2.jar, school-kernel.jar, slf4j-api-2.0.18.jar, slf4j-simple-2.0.17.jar define 1 overlapping resource: 
+[WARNING]   - META-INF/LICENSE.txt
+[WARNING] angus-activation-2.0.3.jar, school-kernel.jar define 13 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.eclipse.angus/angus-activation/pom.properties
+[WARNING]   - META-INF/maven/org.eclipse.angus/angus-activation/pom.xml
+[WARNING]   - META-INF/native-image/org.eclipse.angus/angus-activation/native-image.properties
+[WARNING]   - META-INF/native-image/org.eclipse.angus/angus-activation/resource-config.json
+[WARNING]   - org.eclipse.angus.activation.LineTokenizer
+[WARNING]   - org.eclipse.angus.activation.LogSupport
+[WARNING]   - org.eclipse.angus.activation.MailcapFile
+[WARNING]   - org.eclipse.angus.activation.MailcapParseException
+[WARNING]   - org.eclipse.angus.activation.MailcapRegistryProviderImpl
+[WARNING]   - org.eclipse.angus.activation.MailcapTokenizer
+[WARNING]   - 3 more...
+[WARNING] angus-activation-2.0.3.jar, jakarta.activation-api-2.1.4.jar, jakarta.xml.bind-api-4.0.5.jar, jaxb-core-4.0.9.jar, jaxb-runtime-4.0.9.jar, school-kernel.jar, txw2-4.0.9.jar define 2 overlapping resources: 
+[WARNING]   - META-INF/LICENSE.md
+[WARNING]   - META-INF/NOTICE.md
+[WARNING] gizmo2-2.1.1.jar, school-kernel.jar define 371 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/io.quarkus.gizmo/gizmo2/pom.properties
+[WARNING]   - META-INF/maven/io.quarkus.gizmo/gizmo2/pom.xml
+[WARNING]   - io.quarkus.gizmo2.Assignable
+[WARNING]   - io.quarkus.gizmo2.ClassOutput
+[WARNING]   - io.quarkus.gizmo2.ClassOutput$1
+[WARNING]   - io.quarkus.gizmo2.ClassVersion
+[WARNING]   - io.quarkus.gizmo2.Const
+[WARNING]   - io.quarkus.gizmo2.Expr
+[WARNING]   - io.quarkus.gizmo2.FieldVar
+[WARNING]   - io.quarkus.gizmo2.GenericType
+[WARNING]   - 361 more...
+[WARNING] jspecify-1.0.1.jar, school-kernel.jar define 4 overlapping classes: 
+[WARNING]   - org.jspecify.annotations.NonNull
+[WARNING]   - org.jspecify.annotations.NullMarked
+[WARNING]   - org.jspecify.annotations.NullUnmarked
+[WARNING]   - org.jspecify.annotations.Nullable
+[WARNING] jboss-logging-3.6.3.Final.jar, school-kernel.jar define 36 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.jboss.logging/jboss-logging/pom.properties
+[WARNING]   - META-INF/maven/org.jboss.logging/jboss-logging/pom.xml
+[WARNING]   - org.jboss.logging.AbstractLoggerProvider
+[WARNING]   - org.jboss.logging.AbstractLoggerProvider$Entry
+[WARNING]   - org.jboss.logging.AbstractMdcLoggerProvider
+[WARNING]   - org.jboss.logging.BasicLogger
+[WARNING]   - org.jboss.logging.DelegatingBasicLogger
+[WARNING]   - org.jboss.logging.JBossLogManagerLogger
+[WARNING]   - org.jboss.logging.JBossLogManagerProvider
+[WARNING]   - org.jboss.logging.JBossLogRecord
+[WARNING]   - 26 more...
+[WARNING] school-kernel.jar, smallrye-common-resource-2.16.0.jar define 19 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/io.smallrye.common/smallrye-common-resource/pom.properties
+[WARNING]   - META-INF/maven/io.smallrye.common/smallrye-common-resource/pom.xml
+[WARNING]   - io.smallrye.common.resource.EmptyDirectoryStream
+[WARNING]   - io.smallrye.common.resource.JarFileResource
+[WARNING]   - io.smallrye.common.resource.JarFileResource$1
+[WARNING]   - io.smallrye.common.resource.JarFileResourceLoader
+[WARNING]   - io.smallrye.common.resource.MappedDirectoryStream
+[WARNING]   - io.smallrye.common.resource.MappedDirectoryStream$1
+[WARNING]   - io.smallrye.common.resource.MemoryInputStream
+[WARNING]   - io.smallrye.common.resource.MemoryResource
+[WARNING]   - 9 more...
+[WARNING] HdrHistogram-2.2.2.jar, school-kernel.jar define 99 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.hdrhistogram/HdrHistogram/pom.properties
+[WARNING]   - META-INF/maven/org.hdrhistogram/HdrHistogram/pom.xml
+[WARNING]   - org.HdrHistogram.AbstractHistogram
+[WARNING]   - org.HdrHistogram.AbstractHistogram$1
+[WARNING]   - org.HdrHistogram.AbstractHistogram$AllValues
+[WARNING]   - org.HdrHistogram.AbstractHistogram$LinearBucketValues
+[WARNING]   - org.HdrHistogram.AbstractHistogram$LogarithmicBucketValues
+[WARNING]   - org.HdrHistogram.AbstractHistogram$Percentiles
+[WARNING]   - org.HdrHistogram.AbstractHistogram$RecordedValues
+[WARNING]   - org.HdrHistogram.AbstractHistogramBase
+[WARNING]   - 89 more...
+[WARNING] school-kernel.jar, slf4j-api-2.0.18.jar define 57 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.slf4j/slf4j-api/pom.properties
+[WARNING]   - META-INF/maven/org.slf4j/slf4j-api/pom.xml
+[WARNING]   - org.slf4j.ILoggerFactory
+[WARNING]   - org.slf4j.IMarkerFactory
+[WARNING]   - org.slf4j.Logger
+[WARNING]   - org.slf4j.LoggerFactory
+[WARNING]   - org.slf4j.LoggerFactoryFriend
+[WARNING]   - org.slf4j.MDC
+[WARNING]   - org.slf4j.MDC$1
+[WARNING]   - org.slf4j.MDC$MDCCloseable
+[WARNING]   - 47 more...
+[WARNING] itu-1.14.0.jar, json-schema-validator-3.0.7.jar, picocli-4.7.7.jar, school-kernel.jar, slf4j-api-2.0.18.jar, slf4j-simple-2.0.17.jar define 1 overlapping classes: 
+[WARNING]   - META-INF.versions.9.module-info
+[WARNING] jackson-core-3.2.2.jar, school-kernel.jar define 223 overlapping classes and resources: 
+[WARNING]   - META-INF.versions.17.tools.jackson.core.internal.shaded.fdp.FastDoubleSwar
+[WARNING]   - META-INF.versions.17.tools.jackson.core.internal.shaded.fdp.FastIntegerMath
+[WARNING]   - META-INF.versions.21.tools.jackson.core.internal.shaded.fdp.FastDoubleSwar
+[WARNING]   - META-INF.versions.21.tools.jackson.core.internal.shaded.fdp.FastIntegerMath
+[WARNING]   - META-INF.versions.23.tools.jackson.core.internal.shaded.fdp.FastDoubleSwar
+[WARNING]   - META-INF.versions.23.tools.jackson.core.internal.shaded.fdp.FastIntegerMath
+[WARNING]   - META-INF/FastDoubleParser-LICENSE
+[WARNING]   - META-INF/FastDoubleParser-ThirdParty-LICENSE
+[WARNING]   - META-INF/Schubfach-LICENSE
+[WARNING]   - META-INF/maven/tools.jackson.core/jackson-core/pom.properties
+[WARNING]   - 213 more...
+[WARNING] school-kernel.jar, smallrye-common-constraint-2.16.0.jar define 8 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/io.smallrye.common/smallrye-common-constraint/pom.properties
+[WARNING]   - META-INF/maven/io.smallrye.common/smallrye-common-constraint/pom.xml
+[WARNING]   - io.smallrye.common.constraint.Assert
+[WARNING]   - io.smallrye.common.constraint.Messages
+[WARNING]   - io.smallrye.common.constraint.Messages_$bundle
+[WARNING]   - io.smallrye.common.constraint.NotNull
+[WARNING]   - io.smallrye.common.constraint.Nullable
+[WARNING]   - io/smallrye/common/constraint/Messages.i18n.properties
+[WARNING] school-kernel.jar, timefold-solver-core-2.6.0.jar define 2009 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/ai.timefold.solver/timefold-solver-core/pom.properties
+[WARNING]   - META-INF/maven/ai.timefold.solver/timefold-solver-core/pom.xml
+[WARNING]   - ai.timefold.solver.core.api.domain.common.ComparatorFactory
+[WARNING]   - ai.timefold.solver.core.api.domain.common.Lookup
+[WARNING]   - ai.timefold.solver.core.api.domain.common.PlanningId
+[WARNING]   - ai.timefold.solver.core.api.domain.common.package-info
+[WARNING]   - ai.timefold.solver.core.api.domain.entity.PlanningEntity
+[WARNING]   - ai.timefold.solver.core.api.domain.entity.PlanningEntity$NullComparator
+[WARNING]   - ai.timefold.solver.core.api.domain.entity.PlanningEntity$NullComparatorFactory
+[WARNING]   - ai.timefold.solver.core.api.domain.entity.PlanningPin
+[WARNING]   - 1999 more...
+[WARNING] micrometer-observation-1.17.1.jar, school-kernel.jar define 68 overlapping class and resource: 
+[WARNING]   - META-INF/micrometer-observation.properties
+[WARNING]   - io.micrometer.observation.GlobalObservationConvention
+[WARNING]   - io.micrometer.observation.KeyValuesConvention
+[WARNING]   - io.micrometer.observation.NoopButScopeHandlingObservation
+[WARNING]   - io.micrometer.observation.NoopContext
+[WARNING]   - io.micrometer.observation.NoopObservationConfig
+[WARNING]   - io.micrometer.observation.NullObservation
+[WARNING]   - io.micrometer.observation.NullObservation$NullContext
+[WARNING]   - io.micrometer.observation.Observation
+[WARNING]   - io.micrometer.observation.Observation$1
+[WARNING]   - 58 more...
+[WARNING] HdrHistogram-2.2.2.jar, angus-activation-2.0.3.jar, gizmo2-2.1.1.jar, istack-commons-runtime-4.1.2.jar, itu-1.14.0.jar, jackson-annotations-2.22.jar, jackson-core-3.2.2.jar, jackson-databind-3.2.2.jar, jackson-dataformat-yaml-3.2.2.jar, jakarta.activation-api-2.1.4.jar, jakarta.xml.bind-api-4.0.5.jar, java-json-canonicalization-1.1.jar, jaxb-core-4.0.9.jar, jaxb-runtime-4.0.9.jar, jboss-logging-3.6.3.Final.jar, jdk-classfile-backport-26.jar, json-schema-validator-3.0.7.jar, jspecify-1.0.1.jar, kernel-contract-1.0.0-SNAPSHOT.jar, micrometer-commons-1.17.1.jar, micrometer-core-1.17.1.jar, micrometer-observation-1.17.1.jar, picocli-4.7.7.jar, school-kernel.jar, slf4j-api-2.0.18.jar, slf4j-simple-2.0.17.jar, smallrye-common-constraint-2.16.0.jar, smallrye-common-resource-2.16.0.jar, snakeyaml-engine-3.0.1.jar, timefold-solver-core-2.6.0.jar, txw2-4.0.9.jar define 1 overlapping resource: 
+[WARNING]   - META-INF/MANIFEST.MF
+[WARNING] json-schema-validator-3.0.7.jar, school-kernel.jar define 370 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/com.networknt/json-schema-validator/pom.properties
+[WARNING]   - META-INF/maven/com.networknt/json-schema-validator/pom.xml
+[WARNING]   - META-INF/native-image/com.networknt/json-schema-validator/native-image.properties
+[WARNING]   - META-INF/native-image/com.networknt/json-schema-validator/reflect-config.json
+[WARNING]   - META-INF/native-image/com.networknt/json-schema-validator/resource-config.json
+[WARNING]   - com.networknt.org.apache.commons.validator.routines.DomainValidator
+[WARNING]   - com.networknt.org.apache.commons.validator.routines.DomainValidator$1
+[WARNING]   - com.networknt.org.apache.commons.validator.routines.DomainValidator$ArrayType
+[WARNING]   - com.networknt.org.apache.commons.validator.routines.DomainValidator$IDNBUGHOLDER
+[WARNING]   - com.networknt.org.apache.commons.validator.routines.DomainValidator$Item
+[WARNING]   - 360 more...
+[WARNING] itu-1.14.0.jar, school-kernel.jar define 37 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/com.ethlo.time/itu/pom.properties
+[WARNING]   - META-INF/maven/com.ethlo.time/itu/pom.xml
+[WARNING]   - THIRD-PARTY.txt
+[WARNING]   - com.ethlo.time.DateTime
+[WARNING]   - com.ethlo.time.DateTimeParser
+[WARNING]   - com.ethlo.time.DateTimeParsers
+[WARNING]   - com.ethlo.time.DateTimeTokens
+[WARNING]   - com.ethlo.time.Duration
+[WARNING]   - com.ethlo.time.Field
+[WARNING]   - com.ethlo.time.ITU
+[WARNING]   - 27 more...
+[WARNING] micrometer-commons-1.17.1.jar, school-kernel.jar define 40 overlapping class and resource: 
+[WARNING]   - META-INF/micrometer-commons.properties
+[WARNING]   - io.micrometer.common.ImmutableKeyValue
+[WARNING]   - io.micrometer.common.KeyValue
+[WARNING]   - io.micrometer.common.KeyValues
+[WARNING]   - io.micrometer.common.KeyValues$1
+[WARNING]   - io.micrometer.common.KeyValues$ArrayIterator
+[WARNING]   - io.micrometer.common.ValidatedKeyValue
+[WARNING]   - io.micrometer.common.annotation.AnnotatedObject
+[WARNING]   - io.micrometer.common.annotation.AnnotationHandler
+[WARNING]   - io.micrometer.common.annotation.AnnotationUtils
+[WARNING]   - 30 more...
+[WARNING] kernel-contract-1.0.0-SNAPSHOT.jar, school-kernel.jar define 5 overlapping resources: 
+[WARNING]   - META-INF/maven/org.schoolkernel/kernel-contract/pom.properties
+[WARNING]   - META-INF/maven/org.schoolkernel/kernel-contract/pom.xml
+[WARNING]   - schema/result-v1.schema.json
+[WARNING]   - schema/school-definition-v1.schema.json
+[WARNING]   - schema/verification-result-v1.schema.json
+[WARNING] java-json-canonicalization-1.1.jar, school-kernel.jar define 12 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/io.github.erdtman/java-json-canonicalization/pom.properties
+[WARNING]   - META-INF/maven/io.github.erdtman/java-json-canonicalization/pom.xml
+[WARNING]   - org.erdtman.jcs.JsonCanonicalizer
+[WARNING]   - org.erdtman.jcs.JsonDecoder
+[WARNING]   - org.erdtman.jcs.NumberCachedPowers
+[WARNING]   - org.erdtman.jcs.NumberCachedPowers$CachedPower
+[WARNING]   - org.erdtman.jcs.NumberDToA
+[WARNING]   - org.erdtman.jcs.NumberDiyFp
+[WARNING]   - org.erdtman.jcs.NumberDoubleHelper
+[WARNING]   - org.erdtman.jcs.NumberFastDtoa
+[WARNING]   - 2 more...
+[WARNING] jakarta.xml.bind-api-4.0.5.jar, school-kernel.jar define 122 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/jakarta.xml.bind/jakarta.xml.bind-api/pom.properties
+[WARNING]   - META-INF/maven/jakarta.xml.bind/jakarta.xml.bind-api/pom.xml
+[WARNING]   - jakarta.xml.bind.Binder
+[WARNING]   - jakarta.xml.bind.ContextFinder
+[WARNING]   - jakarta.xml.bind.ContextFinder$1
+[WARNING]   - jakarta.xml.bind.ContextFinder$2
+[WARNING]   - jakarta.xml.bind.ContextFinder$3
+[WARNING]   - jakarta.xml.bind.ContextFinder$4
+[WARNING]   - jakarta.xml.bind.ContextFinder$5
+[WARNING]   - jakarta.xml.bind.DataBindingException
+[WARNING]   - 112 more...
+[WARNING] jaxb-core-4.0.9.jar, school-kernel.jar define 127 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.glassfish.jaxb/jaxb-core/pom.properties
+[WARNING]   - META-INF/maven/org.glassfish.jaxb/jaxb-core/pom.xml
+[WARNING]   - org.glassfish.jaxb.core.Locatable
+[WARNING]   - org.glassfish.jaxb.core.StackHelper
+[WARNING]   - org.glassfish.jaxb.core.Utils
+[WARNING]   - org.glassfish.jaxb.core.WhiteSpaceProcessor
+[WARNING]   - org.glassfish.jaxb.core.annotation.OverrideAnnotationOf
+[WARNING]   - org.glassfish.jaxb.core.annotation.XmlIsSet
+[WARNING]   - org.glassfish.jaxb.core.annotation.XmlLocation
+[WARNING]   - org.glassfish.jaxb.core.api.ErrorListener
+[WARNING]   - 117 more...
+[WARNING] jdk-classfile-backport-26.jar, school-kernel.jar define 677 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/io.smallrye.classfile/jdk-classfile-backport/pom.properties
+[WARNING]   - META-INF/maven/io.smallrye.classfile/jdk-classfile-backport/pom.xml
+[WARNING]   - io.smallrye.classfile.AccessFlags
+[WARNING]   - io.smallrye.classfile.Annotation
+[WARNING]   - io.smallrye.classfile.AnnotationElement
+[WARNING]   - io.smallrye.classfile.AnnotationValue
+[WARNING]   - io.smallrye.classfile.AnnotationValue$OfAnnotation
+[WARNING]   - io.smallrye.classfile.AnnotationValue$OfArray
+[WARNING]   - io.smallrye.classfile.AnnotationValue$OfBoolean
+[WARNING]   - io.smallrye.classfile.AnnotationValue$OfByte
+[WARNING]   - 667 more...
+[WARNING] school-kernel.jar, txw2-4.0.9.jar define 58 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/org.glassfish.jaxb/txw2/pom.properties
+[WARNING]   - META-INF/maven/org.glassfish.jaxb/txw2/pom.xml
+[WARNING]   - com.sun.xml.txw2.Attribute
+[WARNING]   - com.sun.xml.txw2.Cdata
+[WARNING]   - com.sun.xml.txw2.Comment
+[WARNING]   - com.sun.xml.txw2.ContainerElement
+[WARNING]   - com.sun.xml.txw2.Content
+[WARNING]   - com.sun.xml.txw2.ContentVisitor
+[WARNING]   - com.sun.xml.txw2.DatatypeWriter
+[WARNING]   - com.sun.xml.txw2.DatatypeWriter$1
+[WARNING]   - 48 more...
+[WARNING] jackson-annotations-2.22.jar, school-kernel.jar define 79 overlapping classes and resources: 
+[WARNING]   - META-INF/maven/com.fasterxml.jackson.core/jackson-annotations/pom.properties
+[WARNING]   - META-INF/maven/com.fasterxml.jackson.core/jackson-annotations/pom.xml
+[WARNING]   - com.fasterxml.jackson.annotation.JacksonAnnotation
+[WARNING]   - com.fasterxml.jackson.annotation.JacksonAnnotationValue
+[WARNING]   - com.fasterxml.jackson.annotation.JacksonAnnotationsInside
+[WARNING]   - com.fasterxml.jackson.annotation.JacksonInject
+[WARNING]   - com.fasterxml.jackson.annotation.JacksonInject$Value
+[WARNING]   - com.fasterxml.jackson.annotation.JsonAlias
+[WARNING]   - com.fasterxml.jackson.annotation.JsonAnyGetter
+[WARNING]   - com.fasterxml.jackson.annotation.JsonAnySetter
+[WARNING]   - 69 more...
+[WARNING] jakarta.activation-api-2.1.4.jar, school-kernel.jar define 49 overlapping classes and resources: 
+[WARNING]   - META-INF/jakarta.mailcap.default
+[WARNING]   - META-INF/jakarta.mimetypes.default
+[WARNING]   - META-INF/maven/jakarta.activation/jakarta.activation-api/pom.properties
+[WARNING]   - META-INF/maven/jakarta.activation/jakarta.activation-api/pom.xml
+[WARNING]   - jakarta.activation.ActivationDataFlavor
+[WARNING]   - jakarta.activation.CommandInfo
+[WARNING]   - jakarta.activation.CommandInfo$Beans
+[WARNING]   - jakarta.activation.CommandInfo$Beans$1
+[WARNING]   - jakarta.activation.CommandMap
+[WARNING]   - jakarta.activation.CommandObject
+[WARNING]   - 39 more...
+[WARNING] jackson-annotations-2.22.jar, jackson-core-3.2.2.jar, jackson-databind-3.2.2.jar, jackson-dataformat-yaml-3.2.2.jar, micrometer-commons-1.17.1.jar, micrometer-core-1.17.1.jar, micrometer-observation-1.17.1.jar, school-kernel.jar define 2 overlapping resources: 
+[WARNING]   - META-INF/LICENSE
+[WARNING]   - META-INF/NOTICE
+[WARNING] maven-shade-plugin has detected that some files are
+[WARNING] present in two or more JARs. When this happens, only one
+[WARNING] single version of the file is copied to the uber jar.
+[WARNING] Usually this is not harmful and you can skip these warnings,
+[WARNING] otherwise try to manually exclude artifacts based on
+[WARNING] mvn dependency:tree -Ddetail=true and the above output.
+[WARNING] See https://maven.apache.org/plugins/maven-shade-plugin/
+[INFO] Replacing original artifact with shaded artifact.
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default) @ kernel-cli ---
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default) @ kernel-cli ---
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [4/4]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 30 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.434 s -- in org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Running org.schoolkernel.workspace.KernelVerifierTest
+02:17:42.969 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=e4e6609a-7b5d-473f-ba36-6f93d46d6831 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=28
+02:17:43.012 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=ccf16963-1b10-4266-8af4-f554cf349195 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=3
+02:17:43.047 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=a7260842-9185-4106-b90d-074092acc4b7 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=4
+02:17:43.068 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=ec327fa3-190b-4874-b26f-676b948edc72 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=3
+02:17:43.084 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=0f38577d-38e9-4cb0-8557-2719acfe4136 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.198 s -- in org.schoolkernel.workspace.KernelVerifierTest
+[INFO] Running org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Running org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.084 s -- in org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Running org.schoolkernel.workspace.ArchitectureTest
+02:17:43.222 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.623 s -- in org.schoolkernel.workspace.ArchitectureTest
+[INFO] Running org.schoolkernel.workspace.KernelPlannerTest
+02:17:48.866 [ForkJoinPool.commonPool-worker-1] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=8bd704b2-13cd-4230-87af-d9bc945115bd runId=b22dd664-f85e-458c-9624-f452c6b38b14 kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2023 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.916 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=b7f39835-2209-4c5c-b73e-126c53c2110f runId=f054c778-1326-4fa3-8cbc-d7ff6bed9b89 kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=13 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.922 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=35596706-59a4-4fc6-ba91-7b4d35089850 runId=178e1de7-5ad7-4e6d-bd74-48fe40a4ee74 kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+02:17:48.925 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=a14eb2a4-964f-4d11-ae70-aac43448096b runId=0faecd5b-3e65-4a05-9368-db2eb422e083 kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.929 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=74c588c5-e0ae-4548-8989-3813e03eec11 runId=db49d76a-df93-4e83-9ea3-7a24beecb5e4 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.939 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=80be50c2-141d-4000-89fc-aa09f29c7d46 runId=5bcbf922-647a-498a-843f-223e3543ddcb kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.947 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=b4e2c80a-5ee7-4970-ab2e-a6c06fb1d43d runId=2cd042f5-1aef-453b-a9e0-d5d5962bf6f6 kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.950 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=8f307a28-b06a-4619-952f-7c5223e5ec06 runId=dd9b8d46-0872-4e65-8f97-ef1b3cba9bd8 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.956 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=0c29a88e-4282-47b2-8e51-e3803f7c1d9a runId=1fbfbb4f-19e7-4962-9da9-57286ea07b30 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=4 configuredLimit=PT1M terminationReason=NONE feasible=false
+02:17:48.970 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=1077d6c3-3667-45eb-97da-71c458e592a3 runId=53d9c909-4c72-4de7-aaa0-e603287fde99 kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=7 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+02:17:48.974 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=8e1759d5-d3d4-40a1-9bc6-8130feac0f29 runId=003c3f42-63a9-4c68-bfaf-5dc8b975a18e kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+02:17:49.007 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=1602b5ba-d436-4f09-8ba4-e6ff9030e9ea runId=70b30289-6dd6-402e-9ed6-dc835639233a kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=25 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+02:17:49.028 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=4e1a4182-e0d2-4e4e-80d1-aa9e8dcdc08d runId=20102aa1-491c-4dca-bb05-aee18366fe4b kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=17 configuredLimit=PT1M terminationReason=NONE feasible=false
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.206 s -- in org.schoolkernel.workspace.KernelPlannerTest
+[INFO] Running org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 s -- in org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Running org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ timetable-workspace ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (default) @ timetable-workspace ---
+[INFO] Replacing main artifact /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DefinitionDiscardBrowserIT
+02:17:51.788 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+02:17:51.817 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+02:17:51.845 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+02:17:52.298 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+02:17:52.941 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=unix:///Users/anton/.docker/run/docker.sock
+02:17:52.946 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+02:17:52.981 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 29.8.0
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7933 MB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/anton/Library/Containers/com.docker.docker/Data/docker-cli.sock
+02:17:53.041 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Creating container for image: testcontainers/ryuk:0.14.0
+02:17:53.160 [main] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+02:17:53.318 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 is starting: 3738190f13f411245034d9a767f7df08240b0232b12b9e4960dfa63085ff938b
+02:17:53.598 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 started in PT0.556238S
+02:17:53.605 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+02:17:53.606 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+02:17:53.607 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+02:17:53.615 [main] INFO tc.postgres:18.6 -- Creating container for image: postgres:18.6
+02:17:53.648 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 is starting: 5bbbff61cb991eebc7deccea9b3333691c11edac99b3e3c6f8e50820b7ea9717
+02:17:54.344 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 started in PT0.728711S
+02:17:54.347 [main] INFO tc.postgres:18.6 -- Container is started (JDBC URL: jdbc:postgresql://localhost:49443/browser_workspace?loggerLevel=OFF)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T02:18:14.238+03:00  INFO 30790 --- [           main] o.s.w.DefinitionDiscardBrowserIT         : Starting DefinitionDiscardBrowserIT using Java 25.0.1 with PID 30790 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T02:18:14.244+03:00  INFO 30790 --- [           main] o.s.w.DefinitionDiscardBrowserIT         : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T02:18:15.821+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T02:18:15.833+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T02:18:15.835+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T02:18:15.877+03:00  INFO 30790 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1589 ms
+2026-10-12T02:18:16.107+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-12T02:18:16.298+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@619854a3
+2026-10-12T02:18:16.302+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-12T02:18:16.324+03:00  INFO 30790 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:49443/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T02:18:16.376+03:00  INFO 30790 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-12T02:18:16.380+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.015s)
+2026-10-12T02:18:16.401+03:00  INFO 30790 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-12T02:18:16.460+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-12T02:18:16.475+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create workspace aggregate"
+2026-10-12T02:18:16.501+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - add manual draft state"
+2026-10-12T02:18:16.516+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - add definition draft state"
+2026-10-12T02:18:16.530+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 3 migrations to schema "public", now at version v3 (execution time 00:00.019s)
+2026-10-12T02:18:18.257+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 49487 (http) with context path '/'
+2026-10-12T02:18:18.284+03:00  INFO 30790 --- [           main] o.s.w.DefinitionDiscardBrowserIT         : Started DefinitionDiscardBrowserIT in 4.813 seconds (process running for 28.744)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/Users/anton/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-12T02:18:20.231+03:00  INFO 30790 --- [o-auto-1-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T02:18:20.233+03:00  INFO 30790 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T02:18:20.236+03:00  INFO 30790 --- [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 45.57 s -- in org.schoolkernel.workspace.DefinitionDiscardBrowserIT
+[INFO] Running org.schoolkernel.workspace.DefinitionAuthoringBrowserIT
+2026-10-12T02:18:40.659+03:00  INFO 30790 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=c4d2ca4e-2dd5-4720-b253-c9fd1bba169f kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1474
+2026-10-12T02:18:46.812+03:00  INFO 30790 --- [o-auto-1-exec-5] o.schoolkernel.workspace.KernelVerifier  : correlationId=e2de3b43-9411-4513-a18e-fa273ee3c4ad kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1369
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T02:19:03.885+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 30790 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T02:19:03.887+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T02:19:04.939+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T02:19:04.958+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T02:19:04.960+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T02:19:04.999+03:00  INFO 30790 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1098 ms
+2026-10-12T02:19:05.119+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-12T02:19:05.184+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@2140de63
+2026-10-12T02:19:05.186+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-12T02:19:05.196+03:00  INFO 30790 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:49443/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T02:19:05.274+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.038s)
+2026-10-12T02:19:05.316+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T02:19:05.318+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T02:19:05.762+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 49608 (http) with context path '/'
+2026-10-12T02:19:05.772+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 1.971 seconds (process running for 76.232)
+2026-10-12T02:19:05.864+03:00  INFO 30790 --- [o-auto-2-exec-5] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T02:19:05.865+03:00  INFO 30790 --- [o-auto-2-exec-5] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T02:19:05.866+03:00  INFO 30790 --- [o-auto-2-exec-5] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-12T02:19:06.364+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T02:19:06.369+03:00  INFO 30790 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T02:19:06.384+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-12T02:19:06.390+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-10-12T02:19:06.392+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T02:19:06.393+03:00  INFO 30790 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T02:19:06.451+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 30790 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T02:19:06.452+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T02:19:06.744+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T02:19:06.746+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T02:19:06.747+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T02:19:06.766+03:00  INFO 30790 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 309 ms
+2026-10-12T02:19:06.808+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-10-12T02:19:06.832+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@1d5e0621
+2026-10-12T02:19:06.832+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-10-12T02:19:06.835+03:00  INFO 30790 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:49443/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T02:19:06.852+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.005s)
+2026-10-12T02:19:06.877+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T02:19:06.878+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T02:19:07.239+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 49623 (http) with context path '/'
+2026-10-12T02:19:07.249+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 0.843 seconds (process running for 77.709)
+2026-10-12T02:19:07.287+03:00  INFO 30790 --- [o-auto-3-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T02:19:07.292+03:00  INFO 30790 --- [o-auto-3-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T02:19:07.293+03:00  INFO 30790 --- [o-auto-3-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-12T02:19:07.458+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T02:19:07.460+03:00  INFO 30790 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T02:19:07.466+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-10-12T02:19:07.468+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-10-12T02:19:07.469+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T02:19:07.469+03:00  INFO 30790 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 30.74 s -- in org.schoolkernel.workspace.DefinitionAuthoringBrowserIT
+[INFO] Running org.schoolkernel.workspace.SavedDefinitionDraftBrowserIT
+2026-10-12T02:19:15.927+03:00  INFO 30790 --- [o-auto-1-exec-4] o.schoolkernel.workspace.KernelVerifier  : correlationId=5cca6cd6-7423-41b0-9131-d6d221b78bc6 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1617
+[ERROR] Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 8.450 s <<< FAILURE! -- in org.schoolkernel.workspace.SavedDefinitionDraftBrowserIT
+[ERROR] org.schoolkernel.workspace.SavedDefinitionDraftBrowserIT.inspectsAcceptedTimetableAndPreservesSavedDraftAcrossReloadAndNarrowView -- Time elapsed: 4.633 s <<< FAILURE!
+java.lang.AssertionError: 
+browser condition did not hold
+Expression: document.querySelector('#edit-teacher').disabled
+	at org.schoolkernel.workspace.Workbench.expect(Workbench.java:98)
+	at org.schoolkernel.workspace.Workbench.expect(Workbench.java:103)
+	at org.schoolkernel.workspace.SavedDefinitionDraftBrowserIT.inspectsAcceptedTimetableAndPreservesSavedDraftAcrossReloadAndNarrowView(SavedDefinitionDraftBrowserIT.java:33)
+	Suppressed: org.opentest4j.AssertionFailedError: uncaught browser errors: [http://localhost:49487/workspace/: TypeError: Cannot read properties of null (reading 'disabled')
+TypeError: Cannot read properties of null (reading 'disabled')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:54)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)] ==> expected: <true> but was: <false>
+		at org.schoolkernel.workspace.WorkbenchBrowserSupport.closeBrowserContext(WorkbenchBrowserSupport.java:155)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+		at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+		at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: com.microsoft.playwright.PlaywrightException: Error {
+  message='TypeError: Cannot read properties of null (reading 'disabled')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:54)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Cannot read properties of null (reading 'disabled')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:54)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:19519:12)
+    at async /private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:24434:20
+    at async _Frame.retryWithProgressAndTimeouts (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:24011:29)
+    at async _FrameDispatcher.waitForFunction (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:54870:24)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:58)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.waitForFunction(FrameImpl.java:819)
+	at com.microsoft.playwright.impl.PageImpl.waitForFunction(PageImpl.java:1469)
+	at org.schoolkernel.workspace.Workbench.expect(Workbench.java:95)
+	... 2 more
+Caused by: com.microsoft.playwright.impl.DriverException: Error {
+  message='TypeError: Cannot read properties of null (reading 'disabled')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:54)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Cannot read properties of null (reading 'disabled')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:54)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:19519:12)
+    at async /private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:24434:20
+    at async _Frame.retryWithProgressAndTimeouts (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:24011:29)
+    at async _FrameDispatcher.waitForFunction (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:54870:24)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16705111647712041230/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:278)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 7 more
+
+[INFO] Running org.schoolkernel.workspace.DefinitionOccurrencesBrowserIT
+2026-10-12T02:19:26.488+03:00  INFO 30790 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=5efb217e-1ea0-4b15-8ba7-d9b8062c1c4f kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1514
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T02:19:40.906+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 30790 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T02:19:40.908+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T02:19:41.434+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T02:19:41.438+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T02:19:41.438+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T02:19:41.464+03:00  INFO 30790 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 540 ms
+2026-10-12T02:19:41.522+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-10-12T02:19:41.555+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@7e49ab66
+2026-10-12T02:19:41.556+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-10-12T02:19:41.560+03:00  INFO 30790 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:49443/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T02:19:41.582+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.007s)
+2026-10-12T02:19:41.606+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T02:19:41.609+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T02:19:41.845+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 49707 (http) with context path '/'
+2026-10-12T02:19:41.851+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 1.054 seconds (process running for 112.311)
+2026-10-12T02:19:41.866+03:00  INFO 30790 --- [o-auto-4-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T02:19:41.868+03:00  INFO 30790 --- [o-auto-4-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T02:19:41.869+03:00  INFO 30790 --- [o-auto-4-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-12T02:19:42.098+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T02:19:42.102+03:00  INFO 30790 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T02:19:42.110+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-10-12T02:19:42.113+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2026-10-12T02:19:42.114+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T02:19:42.114+03:00  INFO 30790 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 35.34 s -- in org.schoolkernel.workspace.DefinitionOccurrencesBrowserIT
+[INFO] Running org.schoolkernel.workspace.DefinitionRequirementsBrowserIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T02:20:02.208+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 30790 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T02:20:02.216+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T02:20:02.704+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T02:20:02.708+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T02:20:02.708+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T02:20:02.730+03:00  INFO 30790 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 489 ms
+2026-10-12T02:20:02.813+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-10-12T02:20:02.856+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@7669d7a2
+2026-10-12T02:20:02.859+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-10-12T02:20:02.862+03:00  INFO 30790 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:49443/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T02:20:02.898+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.012s)
+2026-10-12T02:20:02.921+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T02:20:02.924+03:00  INFO 30790 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T02:20:03.179+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 49758 (http) with context path '/'
+2026-10-12T02:20:03.184+03:00  INFO 30790 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 1.137 seconds (process running for 133.643)
+2026-10-12T02:20:03.209+03:00  INFO 30790 --- [o-auto-5-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T02:20:03.210+03:00  INFO 30790 --- [o-auto-5-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T02:20:03.212+03:00  INFO 30790 --- [o-auto-5-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-12T02:20:03.501+03:00  INFO 30790 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T02:20:03.504+03:00  INFO 30790 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T02:20:03.510+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-10-12T02:20:03.513+03:00  INFO 30790 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2026-10-12T02:20:03.515+03:00  INFO 30790 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T02:20:03.516+03:00  INFO 30790 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 29.57 s -- in org.schoolkernel.workspace.DefinitionRequirementsBrowserIT
+[INFO] Running org.schoolkernel.workspace.RepairDraftBrowserIT
+2026-10-12T02:20:22.762+03:00  INFO 30790 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=4ebe7643-a939-4a51-b4ae-99f2eccaca38 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1567
+2026-10-12T02:20:53.004+03:00  INFO 30790 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=7b317e6d-1003-44eb-9c00-6f07cc5d47ae kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1950
+2026-10-12T02:20:55.243+03:00  INFO 30790 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=fe7ef2af-919f-4764-83a8-c0eaab90c6f0 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2087
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 99.56 s -- in org.schoolkernel.workspace.RepairDraftBrowserIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   SavedDefinitionDraftBrowserIT.inspectsAcceptedTimetableAndPreservesSavedDraftAcrossReloadAndNarrowView:33 browser condition did not hold
+Expression: document.querySelector('#edit-teacher').disabled
+[INFO] 
+[ERROR] Tests run: 28, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default) @ timetable-workspace ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.571 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  1.558 s]
+[INFO] School Kernel ...................................... SUCCESS [ 13.479 s]
+[INFO] School Timetable Operations Workspace .............. FAILURE [04:21 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:37 min
+[INFO] Finished at: 2026-10-12T02:22:01+03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default) on project timetable-workspace: There are test failures.
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

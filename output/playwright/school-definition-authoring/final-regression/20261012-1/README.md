@@ -1,0 +1,3 @@
+# Final regression attempt1 — NEEDS_REVISION
+
+Submission production `1090151`, approval `45b8e68`. Final reactor/representative check found a stale saved-definition compatibility assertion expecting the removed manual teacher control to exist and be disabled. UC-20 requires its absence; changed only that test assertion, retaining period/room disabled and whole saved draft/source/Current nonmutation. Failure screenshot/snapshot retained here; final log copied when command finishes. No production change, no passing walkthrough invalidated. Repeat affected three compatibility cases before feature completion.

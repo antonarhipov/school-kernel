@@ -30,7 +30,7 @@ class SavedDefinitionDraftBrowserIT extends WorkbenchBrowserSupport {
                 .path("timetable").path("assignments").get(0).path("lessonId").stringValue());
         workbench.expect("document.querySelector('#edit-period').disabled");
         workbench.expect("document.querySelector('#edit-room').disabled");
-        workbench.expect("document.querySelector('#edit-teacher').disabled");
+        workbench.expectNot("document.querySelector('#edit-teacher')");
 
         APIResponse response = workbench.page().request().get("http://localhost:" + port + "/api/workspace");
         assertEquals(200, response.status());
