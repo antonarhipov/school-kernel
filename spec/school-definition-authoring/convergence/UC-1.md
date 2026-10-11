@@ -2,17 +2,18 @@
 
 ## Summary
 
-- Submission: [UC-1 checkpoint](../checkpoints/UC-1.md) at `06c0201f24b127f75efeec89f145966aa60b10ea`.
-- Verdict: PENDING WALKTHROUGH.
-- Findings: zero critical, gap, or protocol findings; human confirmation remains outstanding.
-- Suite obtained in this audit: 26 workspace unit/architecture tests + 17 integration/browser tests, zero failures/errors/skips; BUILD SUCCESS.
+- Submission: [UC-1 checkpoint](../checkpoints/UC-1.md) at `d4a66f68fb8dbff44a3e34998ebe8ae850b06d51`; original source/lifecycle submission `06c0201f24b127f75efeec89f145966aa60b10ea`.
+- Verdict: APPROVE.
+- Findings: zero critical, gap, or protocol findings; administrator confirmation received and requested navigation revision verified.
+- Original complete audit: 26 workspace unit/architecture tests + 17 integration/browser tests, zero failures/errors/skips; BUILD SUCCESS.
+- Navigation revision audit: 4 architecture tests + 1 existing real-browser navigation/layout/reload/resume journey, zero failures/errors/skips; BUILD SUCCESS. Unchanged broader behavior retains the original evidence without redundant slow reruns.
 - Shared accepted Current regression: 11/11 passed in the earlier completed-slice run. Not repeated because later changes affected authoring rendering/command guards, not that read-only Current path, and the user requested avoidance of unnecessary slow checks.
 - Working tree impact from verification: none; status was clean before and after.
 
 ## Protocol Gate
 
 1. Exactly UC-1 was READY_FOR_CONVERGENCE.
-2. Checkpoint and implementation are together in the immutable submission commit above; the diff was inspected against `0fd30998e2b20e79ed61392a2125c73067d2c76e`.
+2. Checkpoint and navigation revision are together in immutable submission `d4a66f6`; the six-file revision diff was inspected against `d858598`. Original implementation evidence remains bound to `06c0201` and its original base.
 3. UC-1 has no relationship dependencies. All other authoring UCs remain NOT_STARTED.
 4. No other UC is IN_PROGRESS or READY_FOR_CONVERGENCE.
 5. Checkpoint accounts for all main steps, seven extensions, seven guarantees, both postconditions, validation and affected regressions. No separate feature rules exist.
@@ -88,25 +89,35 @@ No feature `rules.md` applies. Existing local protections and architecture were 
 
 ## Findings
 
-None. The mandatory human walkthrough remains a gate, not an implementation defect. Expensive unrelated solver/repair/proposal/browser suites were not rerun and are not claimed green. Verification is limited to UC-1 and shared affected boundaries. UC-1 adds no working edit form, so preservation of unsaved editor inputs becomes an exercised requirement when the dependent editor UCs add those forms; resizing here is verified not to write/reset saved content.
+None. The administrator confirmed the walkthrough and explicitly requested approval after splitting Teachers and Rooms out of Resources. The requested change is implemented and verified; the human gate is satisfied. Expensive unrelated solver/repair/proposal/browser suites were not rerun and are not claimed green. Verification is limited to UC-1 and shared affected boundaries. UC-1 adds no working edit form, so preservation of unsaved editor inputs becomes an exercised requirement when the dependent editor UCs add those forms; resizing here is verified not to write/reset saved content.
 
 ## Walkthrough
 
-Isolated runnable environment: `http://localhost:18081/workspace/`, fresh disposable database separate from the operator's runtime school. Server session 89056, log `/tmp/school-authoring-walkthrough.log`; container `school-authoring-uc1-walkthrough-20261011`, loopback port 24481. This is for inspection/confirmation, not a deployed runtime update. Native Chrome UI inspection was attempted but the computer-use tool refused interaction while the user was active in Chrome; this does not substitute for a user result.
+Isolated runnable environment: `http://localhost:18081/workspace/`, fresh disposable database separate from the operator's runtime school. Refreshed server session 56606, log `/tmp/school-authoring-walkthrough-tabs.log`; container `school-authoring-uc1-walkthrough-20261011`, loopback port 24481. This is for inspection/confirmation, not a deployed runtime update. Native Chrome UI inspection was attempted but the computer-use tool refused interaction while the user was active in Chrome; this does not substitute for a user result.
 
 1. From Empty, confirm Create school appears alongside import. Open Create school, read the single-draft lock/no-Current explanation, cancel, and confirm Empty/import remain.
 2. Open again and confirm Open draft. Confirm New school, catalog 9, Saved, source EMPTY, two identity blockers, and School as the opening section.
-3. Visit Grid, Subjects, Resources (Teachers, Classes, Rooms, Room policies), Weekly requirements (Series, Ungrouped lessons, Occurrence details), School (Catalog/Advanced Preferences) and Review. Confirm the selected heading and saved empty/default values are understandable and the draft remains distinct from Current.
+3. Visit Grid, Subjects, Teachers, Classes, Rooms, Room policies, Weekly requirements (Series, Ungrouped lessons, Occurrence details), School (Catalog/Advanced Preferences) and Review. Confirm the selected heading and saved empty/default values are understandable and the draft remains distinct from Current.
 4. Reload. Confirm the same saved draft returns in Review, with the same issues and no Current or automatic acceptance.
 5. Narrow the view to mobile width, confirm the wider-view explanation and read-only content, then widen. Confirm no data was saved/reset by resizing.
 6. For an initial or accepted-source variant, entry starts in Review; accepted Current inspection/export stays unchanged. If a required catalog upgrade is offered, its adjustments/expired pins are shown before confirmation and cancellation leaves the source unchanged. These source variants have automated real-browser evidence; additional isolated setup can be supplied for administrator inspection.
 
-User result: NOT RECEIVED. Confirm PASS or report the specific step needing revision. Identity/resource edits and finish/discard belong to later UCs and are intentionally absent in this checkpoint.
+User result: CONFIRMED on 2026-10-11: "All good." The administrator requested dedicated Teachers/Rooms tabs and instructed: "Split the two and approve the UC". This is confirmation of UC-1 with the named navigation correction, not a reason to request another walkthrough. The correction is verified below. Identity/resource edits and finish/discard belong to later UCs and are intentionally absent in this checkpoint.
 
 ## Status Update
 
-UC-1 READY_FOR_CONVERGENCE -> PENDING_WALKTHROUGH. No dependent UC is eligible until confirmation. UC-20 is an independent root in the graph, but no other implementation begins while this convergence is pending.
+UC-1 READY_FOR_CONVERGENCE -> APPROVED after the administrator-confirmed navigation revision. Eligible: UC-2 through UC-15, UC-19 and the independent UC-20; UC-2 is next in document order. No later UC is started in this approval turn.
+
+## Navigation Revision Verification
+
+- Approved product decision: Teachers and Rooms have dedicated tabs instead of the Resources grouping. Classes and Room policies also remain directly accessible in their own tabs. The spec/proposal match the administrator's choice.
+- Immutable revision reviewed: `d4a66f68fb8dbff44a3e34998ebe8ae850b06d51`. Only the section map, existing browser navigation expectations, spec/proposal and checkpoint/status changed. No source/lifecycle/security/persistence behavior changed.
+- Real-browser evidence: `DefinitionAuthoringBrowserIT.uc1EmptyEntryNavigationResumeAndResponsiveInspection` reaches all nine named tabs, asserts Resources absent, checks 1600x900/1280x800/390x844/700x844 without page horizontal overflow or mutation controls, reloads/resumes in Review, and compares the complete persisted document/version unchanged. PASS, 1 test, zero failures/errors/skips.
+- Architecture evidence: ArchitectureTest 4/4 passed, no exemptions. JavaScript syntax and diff hygiene passed. Test command is recorded in the revised checkpoint; fresh output `/tmp/school-authoring-tab-split.log` inspected directly.
+- Runtime refresh: isolated localhost:18081 serves the new Teachers/Classes/Rooms/Room policies section map. GET workspace checksum before and after server restart was identical: `0e1ad6584390e4f1b5cef9acf9115cdcb4b7da62678415bf88182c03ff65ba7d`. No operator database was used.
+- Working tree clean at the revision submission; verification produced no unrelated/tracked runtime data changes.
+- Broader slow suites were not repeated for this navigation-only revision, per the user's test-cadence instruction. Original full UC-1 and affected regression evidence remains above.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-1 automated checks passed; obtain explicit administrator confirmation of the recorded walkthrough before implementing dependent editors.
+APPROVED

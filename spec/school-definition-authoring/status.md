@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: none until UC-1 convergence and walkthrough
+- Status: APPROVED
+- Next eligible: UC-2 through UC-15, UC-19, UC-20; next in document order: UC-2
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | `06c0201` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
+| UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
@@ -64,8 +64,8 @@ None.
 
 - Independent committed-submission audit: all 26 workspace unit tests and 17 selected integration/browser tests passed, zero failures/errors/skips. Shared accepted Current regression previously passed 11/11. Exact command and coverage: [convergence report](convergence/UC-1.md).
 - Repository clean before/after verification; no runtime school data changed.
-- Verdict: PENDING_WALKTHROUGH; no implementation findings.
-- User walkthrough result: not yet received. Isolated workspace: http://localhost:18081/workspace/; exact script and environment lifecycle recorded in convergence report.
+- Initial verdict: PENDING_WALKTHROUGH; no implementation findings. Superseded by the administrator-confirmed approval below.
+- Initial walkthrough result: not yet received at the original convergence; confirmation has since been received (below). Isolated workspace: http://localhost:18081/workspace/; exact script and environment lifecycle recorded in convergence report.
 - Full unrelated reactor/browser/solver suites were not rerun or claimed green; user requested slow checks only when necessary.
 
 ## UC-1 Navigation Revision
@@ -76,3 +76,11 @@ None.
 - Verification: focused existing real-browser navigation/viewport/reload journey; prior complete UC-1 evidence remains applicable to unchanged behavior. No redundant broad slow suite run.
 - Focused revision validation: 4 architecture checks and 1 real-browser navigation/responsive/reload journey passed, zero failures/errors/skips; JavaScript syntax and diff hygiene passed.
 - Revised submission: HEAD at convergence. UC-1 is ready to record the already-received administrator confirmation and approve.
+
+## UC-1 Approval
+
+- Administrator confirmation: "All good." Requested dedicated Teachers/Rooms tabs instead of Resources and explicitly instructed approval after the split.
+- Revision submission: `d4a66f68fb8dbff44a3e34998ebe8ae850b06d51`.
+- Convergence verdict: APPROVED; zero blocking findings. Spec and implementation now reflect the requested navigation; focused checks passed. Prior source/lifecycle/security/regression evidence remains applicable to unchanged behavior.
+- Isolated walkthrough refreshed at http://localhost:18081/workspace/ with the new tabs; complete saved workspace checksum unchanged across restart.
+- No additional approval requested; no dependent UC started in this turn.
