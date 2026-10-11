@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-15
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-16 after UC-15 walkthrough
 
 ## Progress
@@ -24,7 +24,7 @@
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
 | UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
-| UC-15 | IN_PROGRESS | UC-1 | - | - |
+| UC-15 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-15.md) | Running isolated walkthrough |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
 | UC-18 | NOT_STARTED | UC-16 | - | - |
@@ -322,3 +322,7 @@ UC-14 first walkthrough FAIL retained: harness assumed a common teacher despite 
 ### UC-14 automatic approval
 
 Complete repeat PASS, exact v18, 14 inspected screenshots. Seven restoration, seven removal and nine grouped/occurrence journeys PASS. [Ledger](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md). Source-restoration handoffs closed; proceeding to UC-15.
+
+### UC-15 technical submission
+
+Five complete review journeys and 27 unit/architecture checks PASS (`/tmp/uc15-revision-verify.log`); seven restoration regressions PASS in retained `/tmp/uc15-verify.log`. Initial review fixture errors (hidden collapsed evidence and new-school entry in School) corrected; source/Current, issue sorting across restart, literal text, timing/addition/cancellation sides, exact/stale/removed links and unsaved boundary verified.

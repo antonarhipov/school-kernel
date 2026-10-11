@@ -130,3 +130,5 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
   }
 }
 window.addEventListener('beforeunload', event => { if (teachersDirty()) { event.preventDefault(); event.returnValue = ''; } });
+
+export function chooseTeacher(snapshot,id) { select(snapshot, id); }

@@ -848,3 +848,10 @@ body.authoring .current-label { margin: 8px 0; }
 .removal-reference { border: 1px solid #ced5de; border-radius: 6px; padding: .75rem; margin: .5rem 0; }
 .removal-reference label { display: grid; gap: .4rem; }
 .removal-reference input, .removal-reference select { max-width: 100%; box-sizing: border-box; }
+
+.definition-review-row { border-top: 1px solid var(--line, #cbd2c9); margin-top: .7rem; padding-top: .6rem; }
+.definition-review-row pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .82rem; }
+.definition-review-row h5 { font-size: .94rem; margin: .35rem 0; overflow-wrap: anywhere; }
+.review-filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+.review-filters input { min-width: 0; max-width: 100%; }
+.review-item-link { margin: .2rem .35rem .2rem 0; max-width: 100%; overflow-wrap: anywhere; }

@@ -28,3 +28,5 @@ export function renderPreferences(host,snapshot,narrow,actions,status,leave){
  if(error){const message=el('p',error,'preference-save-error');message.className='error';message.setAttribute('role','alert');form.append(message);const refresh=el('button','Review newer saved draft for retry','preference-refresh');refresh.type='button';refresh.addEventListener('click',actions.refresh);form.append(refresh);}host.append(form);
 }
 window.addEventListener('beforeunload',event=>{if(preferencesDirty()){event.preventDefault();event.returnValue='';}});
+
+export function choosePreference(snapshot,id) { select(snapshot, id); }

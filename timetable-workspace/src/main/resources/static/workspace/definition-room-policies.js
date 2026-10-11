@@ -82,3 +82,5 @@ function effects(host,policy,draft){
  if(!matched.length)block.append(el('p','No occurrences currently match. The explicit saved policy remains; no teaching or home room is inferred.'));host.append(block);
 }
 window.addEventListener('beforeunload',event=>{if(policiesDirty()){event.preventDefault();event.returnValue='';}});
+
+export function choosePolicy(snapshot,id) { select(snapshot, id); }

@@ -168,3 +168,5 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
 
 }
 window.addEventListener('beforeunload', event => { if (classesDirty()) { event.preventDefault(); event.returnValue = ''; } });
+
+export function chooseClass(snapshot,id) { select(snapshot, id); }

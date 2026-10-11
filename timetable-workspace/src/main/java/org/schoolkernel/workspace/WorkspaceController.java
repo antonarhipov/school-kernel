@@ -46,6 +46,7 @@ public class WorkspaceController {
     private final DefinitionCatalogService definitionCatalog;
     private final DefinitionRemovalService definitionRemoval;
     private final DefinitionRestorationService definitionRestoration;
+    private final DefinitionReviewService definitionReview;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -67,6 +68,7 @@ public class WorkspaceController {
             DefinitionCatalogService definitionCatalog,
             DefinitionRemovalService definitionRemoval,
             DefinitionRestorationService definitionRestoration,
+            DefinitionReviewService definitionReview,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -86,6 +88,7 @@ public class WorkspaceController {
         this.definitionCatalog = definitionCatalog;
         this.definitionRemoval = definitionRemoval;
         this.definitionRestoration = definitionRestoration;
+        this.definitionReview = definitionReview;
         this.json = json;
     }
 
@@ -500,6 +503,7 @@ public class WorkspaceController {
                     proposal.path("result")));
         }
         body.set("workspace", workspace);
+        if (aggregate.state() == WorkspaceState.DEFINITION_DRAFT) body.set("definitionReview", definitionReview.create(workspace.path("definitionDraft"), aggregate.version()));
         return body;
     }
 

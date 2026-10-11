@@ -1,14 +1,15 @@
+import { renderReview, resetReview } from './definition-review.js';
 import { renderRestoration, restorationBusy, restorationDirty, saveRestoration, discardRestoration, resetRestoration } from './definition-restoration.js';
 import { renderRemoval, removalBusy, removalDirty, saveRemoval, discardRemoval, resetRemoval } from './definition-removal.js';
 import { renderCatalog, catalogBusy, resetCatalog } from './definition-catalog.js';
-import { renderPreferences, preferencesBusy, preferencesDirty, savePreference, discardPreferences, resetPreferences } from './definition-preferences.js';
-import { renderPolicies, policiesBusy, policiesDirty, savePolicy, discardPolicies, resetPolicies } from './definition-room-policies.js';
+import { choosePreference, renderPreferences, preferencesBusy, preferencesDirty, savePreference, discardPreferences, resetPreferences } from './definition-preferences.js';
+import { choosePolicy, renderPolicies, policiesBusy, policiesDirty, savePolicy, discardPolicies, resetPolicies } from './definition-room-policies.js';
 import { renderOccurrences, occurrencesBusy, occurrencesDirty, saveOccurrences, discardOccurrences, resetOccurrences, chooseOccurrences } from './definition-occurrences.js';
-import { renderRequirements, requirementsBusy, requirementsDirty, saveRequirement, discardRequirements, resetRequirements } from './definition-requirements.js';
-import { renderRooms, roomsDirty, saveRoom, discardRooms, resetRooms } from './definition-rooms.js';
-import { renderClasses, classesDirty, saveCohort, discardClasses, resetClasses } from './definition-cohorts.js';
-import { renderTeachers, teachersDirty, saveTeacher, discardTeachers, resetTeachers } from './definition-teachers.js';
-import { renderSubjects, subjectsDirty, saveSubject, discardSubjects, resetSubjects } from './definition-subjects.js';
+import { chooseRequirement, renderRequirements, requirementsBusy, requirementsDirty, saveRequirement, discardRequirements, resetRequirements } from './definition-requirements.js';
+import { chooseRoom, renderRooms, roomsDirty, saveRoom, discardRooms, resetRooms } from './definition-rooms.js';
+import { chooseClass, renderClasses, classesDirty, saveCohort, discardClasses, resetClasses } from './definition-cohorts.js';
+import { chooseTeacher, renderTeachers, teachersDirty, saveTeacher, discardTeachers, resetTeachers } from './definition-teachers.js';
+import { chooseSubject, renderSubjects, subjectsDirty, saveSubject, discardSubjects, resetSubjects } from './definition-subjects.js';
 import { renderGrid, gridDirty, saveGrid, discardGrid, resetGrid } from './definition-grid.js';
 const sections = {
   School: [['School identity', null], ['Catalog', null], ['Advanced Preferences', 'softConstraintOverrides']],
@@ -24,6 +25,7 @@ const sections = {
   Review: []
 };
 let section = 'Review';
+let reviewNotice = null;
 let draftIdentity;
 let schoolForm;
 let saving = false;
@@ -35,13 +37,13 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); }
+export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
 
 export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); }
+  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
   const rerender = () => actions.render(snapshot);
   const save = async () => {
@@ -98,7 +100,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   if (draft.draftRevision) host.append(el('p', `Saved revision: ${draft.draftRevision}`, 'authoring-revision'));
   host.append(el('p', 'One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.'));
   if (narrow) host.append(el('p', 'Read-only inspection. Editing requires a wider view (more than 700 CSS px).', 'narrow-banner'));
-  const issues = draft.issues || [];
+  const issues = snapshot.definitionReview?.issues || draft.issues || [];
   host.append(el('p', `${definition.subjects?.length || 0} subjects • ${definition.teachers?.length || 0} teachers • ${definition.cohorts?.length || 0} classes • ${definition.rooms?.length || 0} rooms • ${definition.periods?.length || 0} periods • ${definition.lessons?.length || 0} occurrences`));
   host.append(el('p', `Incomplete: ${issues.filter(issue => issue.severity === 'BLOCKING').length} blocking issues; ${issues.filter(issue => issue.severity === 'ADVISORY').length} advisories.`, 'authoring-counts'));
   const nav = el('nav'); nav.className = 'authoring-navigation'; nav.setAttribute('aria-label', 'Definition sections');
@@ -143,13 +145,20 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   } else if (section === 'Review') {
     const restore = el('button', 'Restore source values'); restore.type = 'button'; restore.addEventListener('click', () => leave(() => { section = 'Source restoration'; rerender(); })); content.append(restore);
     const remove = el('button', 'Guided removal'); remove.type = 'button'; remove.addEventListener('click', catalogActions.removal); content.append(remove);
-    content.append(el('p', 'Saved draft inspection. Definition verification is required before finishing.'));
-    if (!definition.lessons?.length) content.append(el('p', 'No lessons configured; planning will produce an empty timetable'));
-    for (const issue of issues) content.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId || ''} • ${issue.field}: ${issue.message}`));
-    for (const adjustment of draft.openingAdjustments || []) content.append(el('p', `Catalog adjustment: ${adjustment}`));
-    for (const upgrade of draft.catalogUpgrades || []) content.append(el('p', `Catalog upgrade ${upgrade.fromCatalog} → ${upgrade.toCatalog}: ${upgrade.adjustments.join('; ') || 'No compensating values required.'}`));
-    for (const pin of draft.expiredPins || []) content.append(el('p', `Expired attempt-scoped pin: ${pin.lessonId} ${pin.field} = ${JSON.stringify(pin.sourceValue)}. Exact source provenance is retained.`));
-    if (!issues.length) content.append(el('p', 'No opening issues. This does not establish timetable feasibility.'));
+    if (reviewNotice) { const notice=el('p',reviewNotice); notice.id='review-navigation-notice'; notice.setAttribute('role','status'); content.append(notice); }
+    renderReview(content, snapshot, narrow, { ...actions, open: (type,id,field,version) => leave(async () => {
+      try { const latest=await actions.refresh(); const saved=latest.workspace.definitionDraft; if(!saved) return;
+        const collections={Subject:'subjects',Teacher:'teachers',Cohort:'cohorts',Room:'rooms',Period:'periods',Lesson:'lessons',RoomAssignment:'roomAssignments',Preference:'softConstraintOverrides'};
+        const exists=type==='School'||type==='Editing context'||type==='Requirement'||type==='Series' ? type==='School'||type==='Editing context'||Object.hasOwn(saved.editingContext?.requirements||{},id)||saved.definition.lessons.some(row=>row.seriesId===id) : (saved.definition[collections[type]]||[]).some(row=>(type==='Preference'?row.constraintId:row.id)===id)||(type==='Preference'&&id.startsWith('soft.'));
+        if(!exists){reviewNotice=`${type} ${id} was removed or is an unresolved literal identity. Saved review refreshed at version ${latest.version}; no unrelated record was opened.`;section='Review';actions.render(latest);return;}
+        const destinations={Subject:'Subjects',Teacher:'Teachers',Cohort:'Classes',Room:'Rooms',Period:'Grid',Lesson:'Occurrence details',RoomAssignment:'Room policies',Preference:'Preferences',Requirement:'Weekly requirements',Series:'Weekly requirements',School:'School','Editing context':'Weekly requirements'};
+        if(!destinations[type]){reviewNotice=`${type} ${id}: no editable record for this saved change. Review refreshed.`;section='Review';actions.render(latest);return;}
+        if(latest.version!==version){reviewNotice=`Saved review changed from version ${version} to ${latest.version}. Review the refreshed item before editing.`;section='Review';actions.render(latest);return;}
+        const choices={Subject:chooseSubject,Teacher:chooseTeacher,Cohort:chooseClass,Room:chooseRoom,RoomAssignment:choosePolicy,Preference:choosePreference};if(choices[type])choices[type](latest,id);else if(type==='Lesson')chooseOccurrences([id]);else if(type==='Requirement'||type==='Series')chooseRequirement(id);
+        reviewNotice=null;section=destinations[type];actions.render(latest);
+        requestAnimationFrame(()=>{if(type==='Period'){const row=[...document.querySelectorAll('.grid-period-row')].find(row=>row.dataset.periodId===id); row?.scrollIntoView({block:'center'}); row?.querySelector(`[data-field="${field}"]`)?.focus();}const prefixes={Subject:'subject',Teacher:'teacher',Cohort:'cohort',Room:'room',RoomAssignment:'policy',Preference:'preference'};document.getElementById(`${prefixes[type]}-${field}`)?.focus();});
+      } catch(failure){reviewNotice=`Saved review could not refresh: ${failure.message}. No record was opened.`;section='Review';actions.render(snapshot);}
+    }) });
   } else {
     for (const [label, key] of sections[section]) {
       const block = el('details'); block.open = true; block.append(el('summary', label));

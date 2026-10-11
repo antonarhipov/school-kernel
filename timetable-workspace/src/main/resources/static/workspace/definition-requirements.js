@@ -1,3 +1,4 @@
+let requestedId = null;
 const fields = [['teacherId', 'Common teacher', 'teachers'], ['requiredRoomCapabilityIds', 'Required room capabilities', 'tokens'], ['preferredRoomIds', 'Preferred rooms', 'rooms'], ['undesirablePeriodIds', 'Undesirable periods', 'periods'], ['periodLock', 'Persistent period lock', 'periods'], ['roomLock', 'Persistent room lock', 'rooms']];
 const arrayFields = new Set(['requiredRoomCapabilityIds', 'preferredRoomIds', 'undesirablePeriodIds']);
 const el = (tag, text, id) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (id) node.id = id; return node; };
@@ -5,7 +6,7 @@ const parse = raw => /^-?\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? 
 let working, model, loading, busy, error, resolveReview, loadFailed;
 export const requirementsBusy = () => !!busy;
 export const requirementsDirty = () => !!working?.dirty;
-export function resetRequirements() { working = model = loading = error = null; busy = false; loadFailed = false; resolveReview?.(false); resolveReview = null; }
+export function resetRequirements() { requestedId = null; working = model = loading = error = null; busy = false; loadFailed = false; resolveReview?.(false); resolveReview = null; }
 function suggestion(definition, cohort, subject, draft) {
   const name = (kind, id) => definition[kind].find(row => row.id === id)?.displayName || id;
   const base = (`${name('cohorts', cohort)} ${name('subjects', subject)}`.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9._-]/g, '-').replace(/-+/g, '-').replace(/^[^a-z0-9]+/, '').replace(/-+$/, '') || 'series').slice(0, 128);
@@ -38,7 +39,7 @@ export function renderRequirements(host, snapshot, narrow, actions, status, leav
     }
     host.append(el('p', 'Loading saved weekly requirements…')); return;
   }
-  if (!working) select(snapshot, model.requirements[0]?.seriesId || '');
+  if (!working) { select(snapshot, requestedId || model.requirements[0]?.seriesId || ''); requestedId = null; }
   if (busy) status.textContent = 'Reviewing… Working requirement choices are not yet durable.';
   else if (working.dirty) status.textContent = narrow ? 'Unsaved working choices retained; read-only view shows saved requirements.' : 'Unsaved — Working requirement differs from the saved draft.';
   if (narrow) {
@@ -103,3 +104,5 @@ function renderPreview(host, snapshot, actions) {
   }); dialog.append(cancel, save); dialog.addEventListener('cancel', event => { event.preventDefault(); close(); }); host.append(dialog); queueMicrotask(() => { if (dialog.isConnected && !dialog.open) dialog.showModal(); });
 }
 window.addEventListener('beforeunload', event => { if (requirementsDirty()) { event.preventDefault(); event.returnValue = ''; } });
+
+export function chooseRequirement(id) { working = null; requestedId = id; }

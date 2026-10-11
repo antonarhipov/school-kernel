@@ -137,3 +137,5 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
   }
 }
 window.addEventListener('beforeunload', event => { if (subjectsDirty()) { event.preventDefault(); event.returnValue = ''; } });
+
+export function chooseSubject(snapshot,id) { select(snapshot.workspace.definitionDraft, snapshot.version, id); }

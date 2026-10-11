@@ -131,3 +131,5 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
   }
 }
 window.addEventListener('beforeunload', event => { if (roomsDirty()) { event.preventDefault(); event.returnValue = ''; } });
+
+export function chooseRoom(snapshot,id) { select(snapshot, id); }
