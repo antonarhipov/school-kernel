@@ -23,3 +23,7 @@ Real headed Chrome session `uc2-walkthrough`, driven with the Playwright CLI aga
 Desktop, mobile and final saved screenshots were visually inspected. The expected stale-save HTTP 409 produced a browser console error; recovery succeeded. Its inherited message says “before importing” although the action is an identity save; the no-commit explanation and recovery control are accurate. No functional defect was found.
 
 This records the requested automated walkthrough, not administrator confirmation. Existing specification UC-1 G7 and converge approval requirements remain applicable. No subsequent UC was started. Application remains available for inspection; agent-owned browser session closed after capture. No code changed and the already-passing 26 unit/architecture + 19 integration/browser checks were not repeated.
+
+## Subsequent approval
+
+On 2026-10-11 the administrator confirmed the automated walkthrough worked and explicitly requested UC-2 approval. The convergence report now records APPROVED with a non-blocking wording note. The user also authorized automatic agent-run walkthroughs and approval for future slices; the feature specification and skills were updated accordingly. The capture-time confirmation note above is historical.

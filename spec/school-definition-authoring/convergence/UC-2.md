@@ -3,8 +3,8 @@
 ## Summary
 
 - Submission: [UC-2 checkpoint](../checkpoints/UC-2.md) at `9b595839745ef96578aadd9a70bcebbd4ee8a550`; original implementation `60ff34ce8f4062ae0b3b2ac69ab5a05a0e31e6f0`, original base `80146e7f00d5f51500ca0e48a71de9ade477651d`.
-- Verdict: PENDING WALKTHROUGH.
-- Findings: zero open critical, gap or protocol findings. Initial C-1 is resolved by the committed heading correction and real-browser regression.
+- Verdict: APPROVE WITH NOTES.
+- Findings: zero open critical, gap or protocol findings; one non-blocking cosmetic wording note. Initial C-1 is resolved by the committed heading correction and real-browser regression.
 - Suite: 26 unit/architecture + 19 integration/browser tests; zero failures/errors/skips; BUILD SUCCESS. Fresh reconvergence log `/tmp/uc2-reconvergence.log`.
 - Working tree clean before and after verification. No tracked runtime or unrelated changes. Standalone audit used only the disposable UC-2 database.
 
@@ -41,7 +41,7 @@ Standalone browser session `uc2-audit` independently reproduced the original ove
 
 ## Evidence Ledger
 
-Test pointers are `timetable-workspace/src/test/java/org/schoolkernel/workspace/SchoolIdentityBrowserIT.java` unless stated otherwise. Strength grades below concern automated behavioral evidence; administrator confirmation remains the explicit human gate below.
+Test pointers are `timetable-workspace/src/test/java/org/schoolkernel/workspace/SchoolIdentityBrowserIT.java` unless stated otherwise. Strength grades below concern automated behavioral evidence. The requested Playwright walkthrough passed and administrator approval has now been received.
 
 | Contract element | Executor claim | Evidence obtained | Strength | Verified |
 |---|---|---|---|---|
@@ -84,7 +84,7 @@ Broader unrelated solver/repair/proposal/reactor suites were not repeated or cla
 
 ## Findings
 
-No open findings. C-1 from the initial rejection (report committed at 8153851) is closed: styles.css:800 supplies overflow-wrap:anywhere; SchoolIdentityBrowserIT:214 proves saved long-name layout at 1600x900, 1280x800, 390x844 and 700x844 while preserving exact saved text, ID and full durable document. No spec weakening or extra approval is needed for this correction.
+No blocking findings. Cosmetic K-1: the stale-save refusal reuses “before importing” for an identity save. It correctly explains no commit, preserves working values and exposes successful review/retry; this wording does not block approval. C-1 from the initial rejection (report committed at 8153851) is closed: styles.css:800 supplies overflow-wrap:anywhere; SchoolIdentityBrowserIT:214 proves saved long-name layout at 1600x900, 1280x800, 390x844 and 700x844 while preserving exact saved text, ID and full durable document. No spec weakening or extra approval is needed for this correction.
 
 ## Walkthrough
 
@@ -103,12 +103,14 @@ Automated walkthrough result (2026-10-11): **PASS, all six steps**, performed in
 
 No functional defect was found. The stale-save refusal reuses the wording “before importing”; its no-commit statement, retained inputs and review/retry behavior are accurate. This is a non-blocking presentation note.
 
-The agent-owned browser session is closed; the isolated application remains available. No code changed or later UC started, and the passing convergence suite was not redundantly repeated. User requested automated walkthrough execution, which is completed; no administrator approval is inferred. Prior UC-1 approval applies only to UC-1. Specification UC-1 G7 and converge retain the explicit administrator-confirmation gate; no repeat walkthrough is requested.
+The agent-owned browser session is closed; the isolated application remains available. No code changed or later UC started, and the passing convergence suite was not redundantly repeated.
+
+Administrator result (2026-10-11): “ok. it seems that the automated walkthrough worked fine. let's approve the UC”. This explicitly confirms UC-2 and authorizes approval using the committed walkthrough evidence at `9c14c5c`. The user also authorized changing the skills to automatically perform this walkthrough after checkpoint and convergence. The active feature verification policy (UC-1 G7 and its references) now permits automatic approval after passing agent-run browser/durable evidence. This changes the confirmation workflow, not product behavior or required verification boundaries; existing UC-1 approval/evidence remains valid.
 
 ## Status Update
 
-UC-2 READY_FOR_CONVERGENCE -> PENDING_WALKTHROUGH. No later UC starts while this human gate is pending. UC-1 remains APPROVED; UC-3 is next in document order after UC-2 approval.
+UC-2 PENDING_WALKTHROUGH -> APPROVED following the explicit user confirmation and passing six-step Playwright walkthrough. UC-1 remains APPROVED; UC-3 is next eligible in document order. No later UC started: this request approves UC-2 and updates the workflow.
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-2 contract, regressions and requested six-step automated Playwright walkthrough pass; formal administrator confirmation remains unrecorded.
+APPROVED WITH NOTES: UC-2 contract, regressions and six-step Playwright walkthrough pass; administrator explicitly approved. Non-blocking inherited stale-save wording note K-1.

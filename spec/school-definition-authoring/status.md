@@ -3,15 +3,15 @@
 ## Current
 
 - Use case: UC-2
-- Status: PENDING_WALKTHROUGH
-- Next eligible: none while UC-2 awaits walkthrough; UC-3 next in document order after UC-2 approval
+- Status: APPROVED
+- Next eligible: UC-3 in document order
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
-| UC-2 | PENDING_WALKTHROUGH | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
+| UC-2 | APPROVED | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
@@ -123,3 +123,11 @@ None.
 - Verified creation/invalid ID/advanced override, rename/reload, Stay/Discard/Save and continue, blank-name blocker/correction, responsive read-only inspection and retained edits, and real two-tab stale-save review/retry. Final reload restores version 8, `Working resize name`, stable ID `Demo.ID_9`, empty source/issues and no Current.
 - [Durable walkthrough evidence and screenshots](../../output/playwright/uc2-walkthrough/README.md). Only the disposable UC-2 database changed. Browser closed; application remains available at localhost:18082.
 - Requested automated execution is complete. No human approval is inferred, so PENDING_WALKTHROUGH remains under spec UC-1 G7 and converge; no repeat walkthrough requested and no later UC started. Existing 45 passing checks remain applicable; no code changed.
+
+## UC-2 Approval and Walkthrough Policy
+
+- Administrator confirmation (2026-10-11): “ok. it seems that the automated walkthrough worked fine. let's approve the UC”. UC-2 is APPROVED, with the non-blocking inherited stale-save wording note K-1 recorded in convergence.
+- Evidence: immutable implementation `9b59583`, complete passing convergence (26 unit/architecture + 19 integration/browser checks), and six-step real Playwright walkthrough committed at `9c14c5c`. No changed code or unresolved behavioral evidence requires another test run.
+- User authorized automatic Playwright walkthroughs after checkpoint and technical convergence to support the autonomous implementation loop. Updated spec UC-1 G7 and all dependent walkthrough references: passing agent-run real-browser and durable-state evidence now permits automatic approval; isolation, failure checks and exact fidelity requirements remain intact. This supersedes the prior confirmation policy, without changing actor-visible behavior or invalidating existing UC-1/UC-2 evidence.
+- Updated spec/rules/execute/converge skills to retain one-UC immutable checkpoints, commit technical convergence before the walkthrough, immediately run Playwright, record and commit final approval, and continue within the authorized scope. Behavioral failures return to revision; inaccessible tooling/runtime blocks approval. Explicit human gates remain supported when required.
+- UC-3 is next eligible; this approval/workflow request does not start its implementation. No runtime/operator data changed by this update.
