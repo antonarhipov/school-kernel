@@ -1,0 +1,32 @@
+{
+  "state": "DEFINITION_DRAFT",
+  "version": 8,
+  "acceptedTimetable": false,
+  "workspace": {
+    "definitionDraft": {
+      "issues": [],
+      "definition": {
+        "rooms": [],
+        "cohorts": [],
+        "lessons": [],
+        "periods": [],
+        "schoolId": "Demo.ID_9",
+        "subjects": [],
+        "teachers": [],
+        "displayName": "Working resize name",
+        "schemaVersion": 1,
+        "catalogVersion": 9
+      },
+      "expiredPins": [],
+      "sourceState": "EMPTY",
+      "entrySection": "School",
+      "draftRevision": "sha256:05c96968515ac1735ca0b49a80f42f9a37f4fca66950beb581ff9026b9bf750e",
+      "sourceVersion": 0,
+      "editingContext": {},
+      "openedRevision": "sha256:19c5626138228552cc25445a741c80d4f4329f83fba47c8eb3fd18cad7584bec",
+      "sourceDocument": {},
+      "removedIdentities": [],
+      "openingAdjustments": []
+    }
+  }
+}

@@ -1,0 +1,47 @@
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - paragraph [ref=f1e3]: Local school timetable
+    - heading "Operations workspace" [level=1] [ref=f1e4]
+    - paragraph [ref=f1e5]: No accepted timetable
+  - main [ref=f1e6]:
+    - generic [ref=f1e7]:
+      - generic [ref=f1e415]: Saved school-definition draft
+      - heading "Working resize name" [level=2] [ref=f1e416]
+      - status [ref=f1e417]: Saved — Your saved school-definition changes are preserved.
+      - paragraph [ref=f1e418]: "Draft • Source: EMPTY • Catalog 9 • No Current timetable"
+      - paragraph [ref=f1e419]: "Source identity: (new school) • (no source revision)"
+      - paragraph [ref=f1e420]: "Saved revision: sha256:05c96968515ac1735ca0b49a80f42f9a37f4fca66950beb581ff9026b9bf750e"
+      - paragraph [ref=f1e421]: One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.
+      - paragraph [ref=f1e422]: 0 subjects • 0 teachers • 0 classes • 0 rooms • 0 periods • 0 occurrences
+      - paragraph [ref=f1e423]: "Incomplete: 0 blocking issues; 0 advisories."
+      - navigation "Definition sections" [ref=f1e424]:
+        - button "School" [ref=f1e425] [cursor=pointer]
+        - button "Grid" [ref=f1e426] [cursor=pointer]
+        - button "Subjects" [ref=f1e427] [cursor=pointer]
+        - button "Teachers" [ref=f1e428] [cursor=pointer]
+        - button "Classes" [ref=f1e429] [cursor=pointer]
+        - button "Rooms" [ref=f1e430] [cursor=pointer]
+        - button "Room policies" [ref=f1e431] [cursor=pointer]
+        - button "Weekly requirements" [ref=f1e432] [cursor=pointer]
+        - button "Review" [ref=f1e433] [cursor=pointer]
+      - generic [ref=f1e434]:
+        - heading "School" [level=3] [ref=f1e435]
+        - group [ref=f1e436]:
+          - generic "School identity" [ref=f1e437]
+          - generic [ref=f1e438]:
+            - generic [ref=f1e439]:
+              - text: School name
+              - textbox "School name" [ref=f1e440]: Working resize name
+            - generic [ref=f1e441]:
+              - text: School identifier (read-only)
+              - textbox "School identifier (read-only)" [ref=f1e442]: Demo.ID_9
+            - paragraph [ref=f1e443]: The established identifier stays the same when the school name changes.
+            - button "Save school identity" [ref=f1e444] [cursor=pointer]
+        - group [ref=f1e445]:
+          - generic "Catalog" [ref=f1e446]
+          - generic [ref=f1e448]:
+            - term [ref=f1e449]: Scheduling catalog
+            - definition [ref=f1e450]: "9"
+        - group [ref=f1e451]:
+          - generic "Advanced Preferences" [ref=f1e452]
+          - paragraph [ref=f1e453]: Use catalog default (omitted)

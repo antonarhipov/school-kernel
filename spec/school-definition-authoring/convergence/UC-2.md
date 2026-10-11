@@ -88,7 +88,7 @@ No open findings. C-1 from the initial rejection (report committed at 8153851) i
 
 ## Walkthrough
 
-Open http://localhost:18082/workspace/ — isolated disposable workspace; editing here does not touch the operator's school. Corrected packaged server session 73332, log `/tmp/uc2-walkthrough-final.log`; PostgreSQL container `school-authoring-uc2-walkthrough-20261011`, loopback port 24482. Starts EMPTY, version 0.
+Open http://localhost:18082/workspace/ — isolated disposable workspace; editing here does not touch the operator's school. Corrected packaged server session 73332, log `/tmp/uc2-walkthrough-final.log`; PostgreSQL container `school-authoring-uc2-walkthrough-20261011`, loopback port 24482. Started EMPTY, version 0; the completed automated walkthrough now leaves its disposable draft at version 8.
 
 1. Choose Create school → Open draft. In School, enter `Õäš Kool`; confirm suggested `oas-kool`, catalog 9 and Unsaved. Enter an invalid identifier such as `INVALID ID`, save and confirm the explanation, retained working inputs and Unsaved status. Correct the identifier to the suggestion or a chosen valid advanced override, save, and confirm Saved and the read-only identifier.
 2. Edit only the school name, save, reload, then return to School. Confirm the saved name is restored and the identifier is unchanged; draft and No Current labels remain clear.
@@ -97,9 +97,13 @@ Open http://localhost:18082/workspace/ — isolated disposable workspace; editin
 5. Make an unsaved edit, narrow to mobile width, then widen. Confirm read-only saved inspection with a wider-view explanation, no editing controls in narrow view, and retained unsaved working text after widening. At desktop width, check the form, navigation, save/status and literal entered names are clear.
 6. For the stale-save extension, keep working edits in the first tab, open a second tab and save a different name. Save in the first tab: confirm it refuses the stale save and retains working values; use Review newer saved draft for retry, inspect the newer saved name, then explicitly save or discard your working edits.
 
-Storage and access failures, accepted-source fidelity and actual process restart have automated production-boundary evidence; the administrator is not asked to manipulate the database or security configuration. Confirm this School identity journey or report the step that needs correction.
+Storage and access failures, accepted-source fidelity and actual process restart have automated production-boundary evidence.
 
-User result: not yet received for UC-2. Prior UC-1 walkthrough approval applies to UC-1 only.
+Automated walkthrough result (2026-10-11): **PASS, all six steps**, performed in real headed Chrome through Playwright CLI at the user's request. Creation/invalid ID/override, rename/reload, all three unsaved navigation choices, blank-name blocker/correction, four viewport inspections and retained unsaved edits, and a real two-tab stale-save refusal/review/explicit retry all passed. Final durable state is version 8, name `Working resize name`, stable ID `Demo.ID_9`, source `{}`, no issues and no Current. Reload preserves the exact identity. [Step results, screenshots, accessible snapshots and final API document](../../../output/playwright/uc2-walkthrough/README.md).
+
+No functional defect was found. The stale-save refusal reuses the wording “before importing”; its no-commit statement, retained inputs and review/retry behavior are accurate. This is a non-blocking presentation note.
+
+The agent-owned browser session is closed; the isolated application remains available. No code changed or later UC started, and the passing convergence suite was not redundantly repeated. User requested automated walkthrough execution, which is completed; no administrator approval is inferred. Prior UC-1 approval applies only to UC-1. Specification UC-1 G7 and converge retain the explicit administrator-confirmation gate; no repeat walkthrough is requested.
 
 ## Status Update
 
@@ -107,4 +111,4 @@ UC-2 READY_FOR_CONVERGENCE -> PENDING_WALKTHROUGH. No later UC starts while this
 
 ## Response to execute
 
-PENDING WALKTHROUGH: UC-2 automated contract and regressions pass; confirm the School identity journey at localhost:18082.
+PENDING WALKTHROUGH: UC-2 contract, regressions and requested six-step automated Playwright walkthrough pass; formal administrator confirmation remains unrecorded.

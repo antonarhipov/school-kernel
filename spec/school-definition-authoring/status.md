@@ -116,3 +116,10 @@ None.
 - C-1 resolved by wrapping and the saved-long-name real-browser regression. Zero open implementation/protocol findings.
 - Verdict: PENDING_WALKTHROUGH. Administrator confirmation of UC-2 has not been received; UC-1 remains approved and later UCs remain untouched.
 - [Walkthrough and complete evidence](convergence/UC-2.md) at http://localhost:18082/workspace/; corrected isolated server session 73332; fresh EMPTY workspace.
+
+## UC-2 Automated Walkthrough
+
+- User requested the agent perform the walkthrough using Playwright. Completed all six declared steps in real headed Chrome on 2026-10-11: PASS.
+- Verified creation/invalid ID/advanced override, rename/reload, Stay/Discard/Save and continue, blank-name blocker/correction, responsive read-only inspection and retained edits, and real two-tab stale-save review/retry. Final reload restores version 8, `Working resize name`, stable ID `Demo.ID_9`, empty source/issues and no Current.
+- [Durable walkthrough evidence and screenshots](../../output/playwright/uc2-walkthrough/README.md). Only the disposable UC-2 database changed. Browser closed; application remains available at localhost:18082.
+- Requested automated execution is complete. No human approval is inferred, so PENDING_WALKTHROUGH remains under spec UC-1 G7 and converge; no repeat walkthrough requested and no later UC started. Existing 45 passing checks remain applicable; no code changed.
