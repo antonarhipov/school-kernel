@@ -3,15 +3,15 @@
 ## Current
 
 - Use case: UC-2
-- Status: READY_FOR_CONVERGENCE
-- Next eligible: UC-2 through UC-15, UC-19, UC-20; next in document order: UC-2
+- Status: PENDING_WALKTHROUGH
+- Next eligible: none while UC-2 awaits walkthrough; UC-3 next in document order after UC-2 approval
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
-| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence / [checkpoint](checkpoints/UC-2.md) | [prior rejection](convergence/UC-2.md) |
+| UC-2 | PENDING_WALKTHROUGH | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
@@ -109,3 +109,10 @@ None.
 - Revision validation: 26 unit/architecture + 19 integration/browser tests passed, zero failures/errors/skips; `/tmp/uc2-revision-verify.log`. Standalone real Chrome repeats C-1 with no overflow (1280/1280, 390/390) and narrow read-only inspection.
 - Revised submission: HEAD at convergence; only heading CSS, the new browser regression, status and checkpoint changed after 8153851. No tracked runtime data changed.
 - Isolated walkthrough refreshed to corrected packaged server session 73332, `/tmp/uc2-walkthrough-final.log`, same localhost:18082 and disposable PostgreSQL 24482. Conditional cleanup removed only the agent-owned long-name variant; starts EMPTY, version 0.
+
+## UC-2 Reconvergence
+
+- Revised immutable submission `9b595839745ef96578aadd9a70bcebbd4ee8a550` audited. Fresh rerun: 26 unit/architecture + 19 integration/browser tests, zero failures/errors/skips, BUILD SUCCESS; `/tmp/uc2-reconvergence.log`. Repository clean before/after.
+- C-1 resolved by wrapping and the saved-long-name real-browser regression. Zero open implementation/protocol findings.
+- Verdict: PENDING_WALKTHROUGH. Administrator confirmation of UC-2 has not been received; UC-1 remains approved and later UCs remain untouched.
+- [Walkthrough and complete evidence](convergence/UC-2.md) at http://localhost:18082/workspace/; corrected isolated server session 73332; fresh EMPTY workspace.
