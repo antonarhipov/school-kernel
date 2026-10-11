@@ -210,6 +210,25 @@ class SchoolIdentityBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(403, host.status()); assertFalse(host.text().contains("definitionDraft"));
     }
 
+    @Test
+    void uc2G3LongSavedNameWrapsAtEveryRequiredViewportWithoutChangingIdentityOrText() {
+        create(); String longName = "A".repeat(140); name(longName); save();
+        assertEquals(longName, definition().path("displayName").stringValue());
+        assertEquals("a".repeat(128), definition().path("schoolId").stringValue());
+        String saved = storedDocument();
+        for (int[] size : List.of(new int[]{1600,900}, new int[]{1280,800}, new int[]{390,844}, new int[]{700,844})) {
+            workbench.viewport(size[0], size[1]);
+            workbench.expect("document.documentElement.scrollWidth <= innerWidth");
+            assertEquals(longName, workbench.page().locator(".definition-authoring h2").textContent());
+            assertEquals(saved, storedDocument());
+            if (size[0] <= 700) assertEquals(0, workbench.page().locator("#school-identity-form").count());
+        }
+        workbench.viewport(1280,800);
+        assertEquals(longName, workbench.page().locator("#school-display-name").inputValue());
+        assertEquals("a".repeat(128), workbench.page().locator("#school-identifier").inputValue());
+        assertEquals(saved, storedDocument());
+    }
+
     private void create() { workbench.open(); open(); }
     private void open() { workbench.page().locator("#open-authoring").click(); workbench.page().locator("#confirm-authoring").click(); workbench.awaitText("Saved school-definition draft"); }
     private void school() { workbench.page().locator("button[data-section=School]").click(); workbench.awaitText("School name"); }

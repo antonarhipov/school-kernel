@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-2
-- Status: NEEDS_REVISION
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: UC-2 through UC-15, UC-19, UC-20; next in document order: UC-2
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
-| UC-2 | NEEDS_REVISION | UC-1 | `60ff34c` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence / [checkpoint](checkpoints/UC-2.md) | [prior rejection](convergence/UC-2.md) |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
@@ -100,3 +100,12 @@ None.
 
 - Submission `60ff34c`; all 44 checks rerun successfully, but standalone Chrome audit found C-1: long saved name gives 2402px page width at 1280px viewport.
 - Verdict NEEDS_REVISION. Fix heading wrapping and add the saved-long-name browser regression; no later UC selected.
+
+## UC-2 C-1 Revision
+
+- Started from `8153851`; prior finding C-1; pre-existing dirty files none.
+- Added wrapping for unrestricted school headings and a saved-140-character-name real-browser regression at 1600x900, 1280x800, 390x844 and 700x844. Stored name/ID and complete document remain exact.
+
+- Revision validation: 26 unit/architecture + 19 integration/browser tests passed, zero failures/errors/skips; `/tmp/uc2-revision-verify.log`. Standalone real Chrome repeats C-1 with no overflow (1280/1280, 390/390) and narrow read-only inspection.
+- Revised submission: HEAD at convergence; only heading CSS, the new browser regression, status and checkpoint changed after 8153851. No tracked runtime data changed.
+- Isolated walkthrough refreshed to corrected packaged server session 73332, `/tmp/uc2-walkthrough-final.log`, same localhost:18082 and disposable PostgreSQL 24482. Conditional cleanup removed only the agent-owned long-name variant; starts EMPTY, version 0.

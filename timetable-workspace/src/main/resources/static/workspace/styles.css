@@ -796,7 +796,7 @@ body.operational .utility-disclosure > summary { padding: 6px 9px; font-size: .7
 body.authoring > header { padding: 18px 0 10px; }
 body.authoring h1 { font-size: 2rem; margin: 4px 0; }
 body.authoring .current-label { margin: 8px 0; }
-.definition-authoring > h2 { margin: 5px 0 10px; }
+.definition-authoring > h2 { margin: 5px 0 10px; overflow-wrap: anywhere; }
 .definition-authoring p { margin: 7px 0; }
 .definition-authoring .notice { padding: 9px; }
 .definition-authoring .authoring-revision { font-size: .8rem; }
