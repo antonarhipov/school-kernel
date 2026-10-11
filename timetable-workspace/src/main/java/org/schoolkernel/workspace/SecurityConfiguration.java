@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                                 "/api/runs", "/api/proposal/accept",
                                 "/api/workspace/clear", "/api/workspace/upload-definition",
                                 "/api/manual-draft", "/api/manual-draft/publish",
-                                "/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers").permitAll()
+                                "/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers", "/api/definition-draft/cohorts").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/repair-draft", "/api/manual-draft").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/repair-draft", "/api/runs/*", "/api/proposal", "/api/workspace", "/api/manual-draft").permitAll()
                         .requestMatchers("/error").permitAll()

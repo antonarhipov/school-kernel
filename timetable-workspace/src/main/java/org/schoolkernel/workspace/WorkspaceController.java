@@ -108,6 +108,14 @@ public class WorkspaceController {
         return response(definitionGrid.save(ifMatch, request));
     }
 
+    @PostMapping("/api/definition-draft/cohorts")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveDefinitionCohort(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody(required = false) JsonNode request) {
+        return response(definitionEntities.saveCohort(ifMatch, request));
+    }
+
     @PostMapping("/api/definition-draft/teachers")
     @ResponseBody
     public ResponseEntity<JsonNode> saveDefinitionTeacher(

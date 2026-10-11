@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-5
-- Status: APPROVED
-- Next eligible: UC-6
+- Use case: UC-6
+- Status: PENDING_WALKTHROUGH
+- Next eligible: UC-7 after UC-6 walkthrough
 
 ## Progress
 
@@ -15,7 +15,7 @@
 | UC-3 | APPROVED | UC-1 | `a30de35` / [checkpoint](checkpoints/UC-3.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md) |
 | UC-4 | APPROVED | UC-1 | `dd395c4` / [checkpoint](checkpoints/UC-4.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md) |
 | UC-5 | APPROVED | UC-1 | `1084c81` / [checkpoint](checkpoints/UC-5.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md) |
-| UC-6 | NOT_STARTED | UC-1 | - | - |
+| UC-6 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-6.md) | pending |
 | UC-7 | NOT_STARTED | UC-1 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 | UC-9 | NOT_STARTED | UC-1 | - | - |
@@ -195,3 +195,16 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Automatically APPROVED after recorded real Playwright PASS on 1084c81: [ledger/screenshots](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md). Exact disposable v40 document retained; all five fields, refusal/invalid/correction, omission/empty, responsive, two-tab conflicts, injected transport retry, selection/save/reload journeys pass. Screenshots inspected, no open implementation finding.
 - Technical evidence: 26 unit/architecture and 25 teacher/subject/grid/school journeys pass across the final/revision logs; initial failures preserved and fixed. Source/Current remain exact in fresh initial/accepted variants. No operator data changed. UC-9/13/14 handoffs remain outstanding.
 - Main browser/server/database retained for immediately proceeding to UC-6 within authorization.
+
+## UC-6 evidence
+
+- Started 2026-10-11 from ea2356c; pre-existing dirty files none. Sources: UC-6, all 12 Cohort fields, Identifier rules, form/lifecycle/validation meaning tables and kernel curator/home-room/policy semantics. UC-1 APPROVED; no feature rules.md.
+- Preserve exact JSON optional presence and source/Current via selected-class version/state CAS. Explicit default/value/no-limit choices; supported incomplete values and references save with blockers. Curator/home-room changes never rewrite lessons or policies. Necessary-condition advisories remain distinct from definition blockers. UC-12/13/14 are outstanding destination handoffs.
+
+- UC-6 initial `/tmp/uc6-verify.log` passes 26 unit/architecture, all five teacher/seven grid/seven school journeys and five of six new class journeys. Subject/class room-policy variants exposed a strict Jackson boolean read of omitted useHomeRoom. Fixed optional boolean reads for policies and reserved permission; the affected full entity suite is rerunning in `/tmp/uc6-revision-verify.log`. Added explicit typed-invalid linked/array value fidelity assertions for the class HTTP boundary; those will run in the final focused check.
+
+- UC-6 revision BUILD SUCCESS `/tmp/uc6-revision-verify.log`: 26 unit/architecture and all 17 class/subject/teacher journeys pass. Prior unchanged grid/school checks pass 14/14. Optional boolean failure resolved. Final strengthened class types/catalog check running `/tmp/uc6-types-verify.log`; no production change after full revision pass.
+
+- Final typed-invalid assertion (`/tmp/uc6-types-verify.log`) found another strict Jackson coercion: an array-valued homeRoomId threw on asString(), returning 500 instead of saving supported invalid work. JSON tree diagnostics now use the explicit fallback string reader; type validators still report blockers and the original JSON value stays exact. Full class/subject/teacher suite repeated on this production fix (`/tmp/uc6-final-verify.log`); the stronger typed assertions remain intact.
+
+- UC-6 final BUILD SUCCESS `/tmp/uc6-final-verify.log`: 26 unit/architecture and all 17 class/subject/teacher journeys pass with strengthened invalid-type fidelity checks. Fourteen unchanged grid/school journeys pass in retained initial evidence. Strict optional boolean/string diagnostic failures are fixed; failed logs preserved. Ready for standalone recorded Playwright walkthrough on a fresh disposable fixture.
