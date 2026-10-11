@@ -1,0 +1,6 @@
+### Result
+"Exact source imported"
+### Ran Playwright code
+```js
+await (async page => { await page.setViewportSize({width:1440,height:1000}); await page.locator("#definition").setInputFiles("/Users/anton/IdeaProjects/school-kernel/school-kernel/examples/mvk.json"); await page.locator("#result").setInputFiles("/tmp/uc17-mvk-baseline-result.json"); await page.locator("#json-import button[type=submit]").click(); await page.locator("#open-authoring").waitFor({timeout:30000}); return "Exact source imported"; })(page);
+```

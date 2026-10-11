@@ -35,7 +35,8 @@ class SeededRepairBrowserIT extends WorkbenchBrowserSupport {
         seed();JsonNode source=storedWorkspaceDocument().path("acceptedBaseline").deepCopy();
         JsonNode retained=storedWorkspaceDocument().path("repairDraft").path("retainedAuthoring").deepCopy();
         assertEquals(202,command("POST","/api/runs",JSON.createObjectNode()).status());
-        workbench.awaitText("Repair proposal · not current",java.time.Duration.ofSeconds(90));
+        workbench.reload();
+        workbench.awaitText("Repair proposal · feasible",java.time.Duration.ofSeconds(90));
         assertEquals("REPAIR_PROPOSAL",storedLifecycle());JsonNode proposal=storedWorkspaceDocument().path("proposal").deepCopy();
         assertEquals(retained.path("definition"),proposal.path("definition"));assertEquals(source,storedWorkspaceDocument().path("acceptedBaseline"));
         recovery.recoverInterruptedRun();workbench.reload();assertEquals(proposal,storedWorkspaceDocument().path("proposal"));
@@ -53,6 +54,7 @@ class SeededRepairBrowserIT extends WorkbenchBrowserSupport {
         seed();JsonNode before=storedWorkspaceDocument().deepCopy();
         processes.failure=WorkspaceRepairPlanningIT.RepairFailure.MISMATCHED;
         assertEquals(202,command("POST","/api/runs",JSON.createObjectNode()).status());
+        workbench.reload();
         workbench.awaitText("unverified repair result",java.time.Duration.ofSeconds(30));
         assertEquals("REPAIR_DRAFT",storedLifecycle());assertEquals(before.path("acceptedBaseline"),storedWorkspaceDocument().path("acceptedBaseline"));
         assertEquals(before.path("repairDraft"),storedWorkspaceDocument().path("repairDraft"));assertFalse(storedWorkspaceDocument().has("proposal"));

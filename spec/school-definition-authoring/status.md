@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-17
+- Use case: UC-18
 - Status: IN_PROGRESS
-- Next eligible: UC-18 after UC-17 walkthrough; UC-18 enabling work is required for UC-17 MVK journey
+- Next eligible: UC-19 after UC-18 walkthrough
 
 ## Progress
 
@@ -26,8 +26,8 @@
 | UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
 | UC-15 | APPROVED | UC-1 | `ac6faa0` / [checkpoint](checkpoints/UC-15.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-15/20261012-5/README.md) |
 | UC-16 | APPROVED | UC-1, UC-15 | `56f8cdd` / [checkpoint](checkpoints/UC-16.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md) |
-| UC-17 | IN_PROGRESS | UC-16 | - | - |
-| UC-18 | NOT_STARTED | UC-16 | - | - |
+| UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
+| UC-18 | IN_PROGRESS | UC-16 | UC-17 enabling implementation | - |
 | UC-19 | NOT_STARTED | UC-1 | - | - |
 | UC-20 | NOT_STARTED | none | - | - |
 
@@ -362,3 +362,7 @@ Base `e86b5d1`, four carried UC-17 source edits only. Complete authored seed com
 ### 2026-10-12 — UC-17 corrected technical PASS and second walkthrough findings
 
 `/tmp/uc17-checks-r2.log`:5 focused service tests,3 seeded lifecycle/refusal/storage-failure browser tests,6 ordinary repair browser journeys PASS; all four baseline failure IDs repaired without weakening tests. [Attempt2](../../output/playwright/school-definition-authoring/UC-17/20261012-2/README.md) exact MVK full authoring/restoration/re-finish/real repair PASS; generated feasible TIME_LIMIT proposal has1 cancellation,0 period-ID moves,11 actual timing impacts. Review harness failed opening disclosure through DOM mutation; final journey uses rendered summary clicks. Corrected product wording from same-time to same-period/class and proposal seed notice to verified proposal awaiting acceptance. Final acceptance/storage/rejected-output and Finish regressions running `/tmp/uc17-checks-r3.log`;16 verification/planning/service unit tests PASS. Screenshots attempt1/2 contact sheets inspected; review full-page images excessively tall, final captures use meaningful viewport states.
+
+### 2026-10-12 — UC-17 automatic approval
+
+Production `88756ab`, [full PASS ledger](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md). Mandatory exact MVK authoring/restoration/re-Finish/packaged repair/independent verification/review/explicit acceptance complete.519 lessons,1 cancellation,0 period moves and11 timing impacts. Actual saved-proposal restart and acceptance-only storage failure preserved entire v10 snapshot; explicit retry atomically accepted exact definition/result/context/metadata v11; final packaged verification PASS. Extra staged-availability/pin variant on copied real proposal passed and survives reload; source/seed exact. Five seeded browser tests now PASS r5 after correcting API-start polling harness. Main images/contact sheet and readable timing supplemental inspected. UC-17 APPROVED; continue UC-18 separately using retained v13 seeded variant at18108. Operator data untouched.
