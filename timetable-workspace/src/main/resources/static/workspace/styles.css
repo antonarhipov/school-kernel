@@ -826,3 +826,7 @@ body.authoring .current-label { margin: 8px 0; }
 .definition-entity-form fieldset label { margin-bottom: 8px; overflow-wrap: anywhere; }
 .definition-entity-form input[type=checkbox] { width: auto; align-self: flex-start; }
 #teacher-effects { margin-top: 16px; }
+
+#requirement-form > fieldset:last-of-type { grid-column: 1 / -1; }
+#requirement-preview { max-width: min(66rem, 90vw); max-height: 85vh; overflow: auto; padding: 1.5rem; border-radius: .6rem; }
+#requirement-preview button { margin: .4rem; }

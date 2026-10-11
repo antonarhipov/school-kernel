@@ -24,13 +24,13 @@ public class SecurityConfiguration {
                 .requestCache(cache -> cache.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/", "/workspace/**", "/api/csrf", "/api/workspace",
-                                "/api/runs/*", "/api/proposal", "/api/accepted/export").permitAll()
+                                "/api/runs/*", "/api/proposal", "/api/accepted/export", "/api/definition-draft/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/import", "/api/initial-draft/replace",
                                 "/api/repair-draft", "/api/repair-draft/bulk-pin-preview",
                                 "/api/runs", "/api/proposal/accept",
                                 "/api/workspace/clear", "/api/workspace/upload-definition",
                                 "/api/manual-draft", "/api/manual-draft/publish",
-                                "/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers", "/api/definition-draft/cohorts", "/api/definition-draft/rooms").permitAll()
+                                "/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers", "/api/definition-draft/cohorts", "/api/definition-draft/rooms", "/api/definition-draft/requirements", "/api/definition-draft/requirements/preview").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/repair-draft", "/api/manual-draft").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/repair-draft", "/api/runs/*", "/api/proposal", "/api/workspace", "/api/manual-draft").permitAll()
                         .requestMatchers("/error").permitAll()

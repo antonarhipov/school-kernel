@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-8
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-9 after UC-8 walkthrough
 
 ## Progress
@@ -17,7 +17,7 @@
 | UC-5 | APPROVED | UC-1 | `1084c81` / [checkpoint](checkpoints/UC-5.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md) |
 | UC-6 | APPROVED | UC-1 | `6ca5e84` / [checkpoint](checkpoints/UC-6.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md) |
 | UC-7 | APPROVED | UC-1 | `6622f19` / [checkpoint](checkpoints/UC-7.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md) |
-| UC-8 | IN_PROGRESS | UC-1 | - | - |
+| UC-8 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-8.md) | pending |
 | UC-9 | NOT_STARTED | UC-1 | - | - |
 | UC-10 | NOT_STARTED | UC-1 | - | - |
 | UC-11 | NOT_STARTED | UC-1 | - | - |
@@ -222,3 +222,13 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-7 approval
 
 - Automatically APPROVED on 6622f19 after [recorded Playwright PASS](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md). Exact v34 document, all five fields, capacity zero/open/empty tokens, omitted/empty availability, linked policy blockers/advisories, invalid/cancel/correction, responsive/stale/conflict/transport/add/selection/reload pass; screenshots inspected. Technical four room and 17 affected entity journeys plus 26 unit/architecture pass. Automation-only wrong fault route is retained and corrected, not classified as a product bug. Source/Current intact, no open finding. UC-13/14 remain handoffs; proceeding UC-8.
+
+## UC-8 evidence
+
+- Started 2026-10-11 from 2438513, pre-existing dirty files none. Durable requirement context and conservative imported inference, complete atomic preview/save, exact cancellation choices, stable generated IDs/names, scopes and explicit equal exceptions, supported incomplete count work, zero-count context implemented. Native fields remain native, source/Current unchanged. [Checkpoint](checkpoints/UC-8.md). UC-9/14 are destination handoffs. Technical suite /tmp/uc8-verify.log running; initial compile cast error retained in /tmp/uc8-compile.log, corrected package passes.
+
+- UC-8 initial `/tmp/uc8-verify.log`: 26 unit/architecture and all 21 approved room/class/subject/teacher journeys pass; all four new requirement journeys fail because the GET inspection route lacked local allowlist access. Added GET allowlist and explicit read-failure Retry UI. Revision `/tmp/uc8-revision-verify.log`: backend mixed/default/exception and incomplete/zero-count journeys pass, two form journeys expose showModal on a detached parent. Attached-before-open scheduling fixes it; pending-request navigation and stale render guards added. Full requirement suite repeated in /tmp/uc8-modal-verify.log. Failed logs retained, no operator data changed.
+
+- `/tmp/uc8-modal-verify.log` BUILD SUCCESS: all four requirement journeys and 26 unit/architecture pass after dialog attachment, complete teaching/context diagnostic refresh and pending/stale render guards. `/tmp/uc8-final-verify.log` BUILD SUCCESS: all 39 requirement/entity/grid/school journeys plus 26 unit/architecture. During final review, distinguished new versus existing series identity explicitly; added collision/immutability refusals and tests. Final request-contract suite running /tmp/uc8-identity-verify.log. No walkthrough approval inferred yet.
+
+- UC-8 final identity contract BUILD SUCCESS `/tmp/uc8-identity-verify.log`: four requirement journeys plus 26 unit/architecture pass, including new-series collision and immutable saved ID guards. All 39 affected journeys pass in /tmp/uc8-final-verify.log; only the UC-8 request shape/identity guards and incomplete-count explanation changed afterward and have been verified. Syntax/diff checks pass. PENDING_WALKTHROUGH against a fresh verified mixed-source fixture/database, no operator data touched.

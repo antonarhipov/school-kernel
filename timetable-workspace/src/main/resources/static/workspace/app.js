@@ -80,8 +80,19 @@ function render(snapshot) {
     currentLabel.textContent = snapshot.acceptedTimetable ? M.acceptedTimetable(schoolName) : M.noAccepted;
     document.body.classList.remove('operational');
     renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(currentSnapshot); }, {
-      render,
+      render: candidate => { if (candidate.version >= currentSnapshot.version) render(candidate); },
       refresh: () => load(true),
+      requirementsView: async () => {
+        const response = await fetch('/api/definition-draft/requirements', { cache: 'no-store' });
+        const result = await response.json(); if (!response.ok) throw new Error(result.message || 'Requirement inspection failed.'); return result;
+      },
+      requirement: async (fields, version, preview = false) => {
+        const response = await fetchWithCsrf(`/api/definition-draft/requirements${preview ? '/preview' : ''}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)
+        });
+        const result = await response.json(); if (!response.ok) throw new Error(result.message || 'Requirement operation failed.');
+        if (!preview) etag = response.headers.get('ETag'); return result;
+      },
       entity: async (collection, fields, version) => {
         const response = await fetchWithCsrf(`/api/definition-draft/${collection}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)

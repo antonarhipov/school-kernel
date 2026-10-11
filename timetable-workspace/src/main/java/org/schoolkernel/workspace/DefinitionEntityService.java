@@ -107,6 +107,7 @@ public class DefinitionEntityService {
         }
         validateLessons(definition, affected, issues);
         draft.set("issues", ordered(issues));
+        if(draft.path("editingContext").path("requirements").isObject()) refreshTeachingIssues(draft);
         draft.put("draftRevision", DefinitionDraftService.revision(definition));
         if (repository.replace(version, WorkspaceState.DEFINITION_DRAFT, WorkspaceState.DEFINITION_DRAFT, document).isEmpty())
             throw problem(HttpStatus.PRECONDITION_FAILED, "STALE_WORKSPACE_VERSION", "The workspace changed. Review the newer saved draft before retrying. No change was committed.");
@@ -314,6 +315,69 @@ public class DefinitionEntityService {
         for (String reference : List.of("subjectId", "teacherId", "cohortId", "roomLock")) if (lesson.has(reference)) issue.withArray("relatedIds").add(lesson.path(reference).asString(""));
         // Room edits can affect alternatives, home-room obligations and matching policy intersections.
         // The room view also shows all recomputed lesson/class advisories, so no central capability catalog is inferred.
+    }
+
+    /** Refresh complete teaching consequences after an atomic occurrence operation. */
+    void refreshTeachingIssues(ObjectNode draft) {
+        JsonNode definition=draft.path("definition");ArrayNode issues=json.createArrayNode();
+        Set<String> refreshed=Set.of("ENTITY_LESSON","COHORT_FEASIBILITY","TEACHING_FIELDS","TEACHING_FEASIBILITY","REQUIREMENT_CONTEXT");
+        for(JsonNode issue:draft.path("issues"))if(!refreshed.contains(issue.path("diagnosticSource").asString("")))issues.add(issue);
+        Set<String> ids=new HashSet<>();Map<String,JsonNode> series=new HashMap<>();
+        for(JsonNode lesson:definition.path("lessons")) {
+            String id=lesson.path("id").asString("");ids.add(id);validateLessonFields(definition,lesson,issues);
+            if(lesson.path("seriesId").isTextual()) {
+                JsonNode previous=series.putIfAbsent(lesson.path("seriesId").asString(""),lesson);
+                if(previous!=null&&(!previous.path("cohortId").equals(lesson.path("cohortId"))||!previous.path("subjectId").equals(lesson.path("subjectId"))))dependent(issues,lesson,"seriesId","Every series member must share its class and subject.");
+            }
+        }
+        for(JsonNode cohort:definition.path("cohorts"))validateCohortFeasibility(definition,cohort,issues);
+        validateLessons(definition,ids,issues);
+        for(JsonNode teacher:definition.path("teachers")) {
+            Set<String> eligible=new HashSet<>();int load=0;
+            for(JsonNode lesson:definition.path("lessons"))if(teacher.path("id").equals(lesson.path("teacherId"))) {
+                load++;JsonNode cohort=find(definition.path("cohorts"),lesson.path("cohortId").asString("")),subject=find(definition.path("subjects"),lesson.path("subjectId").asString(""));
+                for(JsonNode period:definition.path("periods")){String periodId=period.path("id").asString("");if(teacher.has("availablePeriodIds")&&!contains(teacher.path("availablePeriodIds"),periodId))continue;if(cohort!=null&&cohort.has("availablePeriodIds")&&!contains(cohort.path("availablePeriodIds"),periodId))continue;if(contains(definition.path("reservedPeriodIds"),periodId)&&(subject==null||!isTrue(subject.path("reservedPeriodsAllowed"))))continue;if(lesson.has("periodLock")&&!periodId.equals(lesson.path("periodLock").asString("")))continue;eligible.add(periodId);}
+            }
+            if(load>eligible.size()){ObjectNode issue=issue(issues,"Teacher",teacher.path("id").asString(""),"availablePeriodIds","Configured teacher load "+load+" exceeds its eligible-period upper bound "+eligible.size()+". Necessary-condition advisory, not complete feasibility.");issue.put("severity","ADVISORY").put("diagnosticSource","TEACHING_FEASIBILITY");}
+        }
+        List<JsonNode> lessons=new ArrayList<>();definition.path("lessons").forEach(lessons::add);
+        for(int i=0;i<lessons.size();i++)for(int j=i+1;j<lessons.size();j++) {
+            JsonNode a=lessons.get(i),b=lessons.get(j);if(!a.has("periodLock")||!a.path("periodLock").equals(b.path("periodLock")))continue;
+            for(String field:List.of("teacherId","cohortId","roomLock"))if(a.has(field)&&a.path(field).equals(b.path(field))){dependent(issues,a,"periodLock","Persistent locked collision with "+b.path("id").asString("")+" on "+field+".");dependent(issues,b,"periodLock","Persistent locked collision with "+a.path("id").asString("")+" on "+field+".");}
+        }
+        for(var entry:draft.path("editingContext").path("requirements").properties()) {
+            JsonNode row=entry.getValue(),count=row.path("count");String id=entry.getKey();
+            if(!count.isIntegralNumber()||!count.canConvertToInt()||count.intValue()<0) requirementIssue(issues,id,"count","Complete the nonnegative integer weekly count; existing occurrences are unchanged.");
+            if(row.path("mixedFields").isEmpty()) validateRequirementDefaults(definition,row,issues);
+            else if(count.isIntegralNumber() && count.intValue()==0) for(JsonNode field:row.path("mixedFields")) requirementIssue(issues,id,field.asString(""),"Complete the Mixed shared setting in this zero-count requirement, or explicitly remove its context.");
+            for(String field:List.of("cohortId","subjectId"))if(!row.path("mixedFields").isEmpty() && (!row.path(field).isTextual()||find(definition.path(field.equals("cohortId")?"cohorts":"subjects"),row.path(field).asString(""))==null)) requirementIssue(issues,id,field,"Choose an existing "+field+" for this saved requirement.");
+        }
+        draft.set("issues",ordered(issues));
+    }
+
+    private void requirementIssue(ArrayNode issues,String id,String field,String message) { issue(issues,"Requirement",id,field,message).put("diagnosticSource","REQUIREMENT_CONTEXT"); }
+
+    private void validateLessonFields(JsonNode definition,JsonNode lesson,ArrayNode issues) {
+        int start=issues.size();String id=lesson.path("id").asString("");
+        if(!lesson.path("displayName").isTextual()||lesson.path("displayName").asString("").isBlank())issue(issues,"Lesson",id,"displayName","Enter a nonblank occurrence name.");
+        for(String field:List.of("subjectId","cohortId","teacherId","periodLock","roomLock","seriesId")) {
+            if(!lesson.has(field)&&List.of("periodLock","roomLock","seriesId").contains(field))continue;
+            String target=lesson.path(field).asString("");String collection=switch(field){case "subjectId"->"subjects";case "cohortId"->"cohorts";case "teacherId"->"teachers";case "periodLock"->"periods";case "roomLock"->"rooms";default->null;};
+            if(!lesson.path(field).isTextual()||!validId(target)||(collection!=null&&find(definition.path(collection),target)==null))issue(issues,"Lesson",id,field,"Choose a valid "+field+(collection==null?" identity.":" from the configured school."));
+        }
+        validateReferences(lesson,"preferredRoomIds",false,definition.path("rooms"),"Lesson",issues);validateReferences(lesson,"undesirablePeriodIds",false,definition.path("periods"),"Lesson",issues);
+        if(lesson.has("requiredRoomCapabilityIds")) {
+            JsonNode tokens=lesson.path("requiredRoomCapabilityIds");Set<String> seen=new HashSet<>();
+            if(!tokens.isArray())issue(issues,"Lesson",id,"requiredRoomCapabilityIds","Use a unique capability token array or omitted default.");
+            else for(JsonNode token:tokens)if(!token.isTextual()||!validId(token.asString(""))||!seen.add(token.asString("")))issue(issues,"Lesson",id,"requiredRoomCapabilityIds","Invalid or duplicate capability token: "+token+".");
+        }
+        for(int i=start;i<issues.size();i++)((ObjectNode)issues.get(i)).put("diagnosticSource","TEACHING_FIELDS");
+    }
+
+    void validateRequirementDefaults(JsonNode definition,JsonNode row,ArrayNode issues) {
+        ObjectNode sample=json.createObjectNode().put("id",row.path("seriesId").asString("")).put("displayName","Requirement defaults");sample.set("subjectId",row.path("subjectId"));sample.set("cohortId",row.path("cohortId"));for(var field:row.path("defaults").properties())sample.set(field.getKey(),field.getValue());
+        int start=issues.size();validateLessonFields(definition,sample,issues);
+        for(int i=start;i<issues.size();i++)((ObjectNode)issues.get(i)).put("ownerType","Requirement").put("diagnosticSource","REQUIREMENT_CONTEXT");
     }
 
     private ObjectNode issue(ArrayNode issues,String type,String id,String field,String message) {

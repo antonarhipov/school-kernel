@@ -40,6 +40,7 @@ public class WorkspaceController {
     private final DefinitionDraftService definitionDrafts;
     private final DefinitionGridService definitionGrid;
     private final DefinitionEntityService definitionEntities;
+    private final DefinitionRequirementService definitionRequirements;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -55,6 +56,7 @@ public class WorkspaceController {
             DefinitionDraftService definitionDrafts,
             DefinitionGridService definitionGrid,
             DefinitionEntityService definitionEntities,
+            DefinitionRequirementService definitionRequirements,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -68,6 +70,7 @@ public class WorkspaceController {
         this.definitionDrafts = definitionDrafts;
         this.definitionGrid = definitionGrid;
         this.definitionEntities = definitionEntities;
+        this.definitionRequirements = definitionRequirements;
         this.json = json;
     }
 
@@ -106,6 +109,26 @@ public class WorkspaceController {
     public ResponseEntity<JsonNode> saveGrid(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody JsonNode request) {
         return response(definitionGrid.save(ifMatch, request));
+    }
+
+    @GetMapping("/api/definition-draft/requirements")
+    @ResponseBody
+    public ResponseEntity<JsonNode> definitionRequirements() {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionRequirements.view());
+    }
+
+    @PostMapping("/api/definition-draft/requirements/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewRequirement(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionRequirements.preview(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/requirements")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveRequirement(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody JsonNode request) {
+        return response(definitionRequirements.save(ifMatch, request));
     }
 
     @PostMapping("/api/definition-draft/rooms")
