@@ -16,3 +16,5 @@
 - Standalone Playwright walkthrough pending; no UC-6 approval yet.
 
 - Final corrected production check: `./mvnw -pl timetable-workspace -am -Pworkspace-browser -Dit.test=DefinitionCohortsBrowserIT,DefinitionSubjectsBrowserIT,DefinitionTeachersBrowserIT -Dfailsafe.failIfNoSpecifiedTests=false verify`; BUILD SUCCESS, 26 unit/architecture checks and all 17 entity journeys, `/tmp/uc6-final-verify.log`. Typed-invalid array homeRoomId initially exposed strict string coercion (`/tmp/uc6-types-verify.log`); fallback diagnostic reads now retain invalid JSON and report blockers. Standalone walkthrough is PENDING_WALKTHROUGH.
+
+- APPROVED automatically after [standalone Playwright PASS](../../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md), submission 6ca5e84; exact v18 document and inspected screenshots retained. No open finding.

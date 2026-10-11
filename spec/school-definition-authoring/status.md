@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-6
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-7 after UC-6 walkthrough
+- Use case: UC-7
+- Status: IN_PROGRESS
+- Next eligible: UC-8 after UC-7 walkthrough
 
 ## Progress
 
@@ -15,8 +15,8 @@
 | UC-3 | APPROVED | UC-1 | `a30de35` / [checkpoint](checkpoints/UC-3.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md) |
 | UC-4 | APPROVED | UC-1 | `dd395c4` / [checkpoint](checkpoints/UC-4.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md) |
 | UC-5 | APPROVED | UC-1 | `1084c81` / [checkpoint](checkpoints/UC-5.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-5/20261011-1/README.md) |
-| UC-6 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-6.md) | pending |
-| UC-7 | NOT_STARTED | UC-1 | - | - |
+| UC-6 | APPROVED | UC-1 | `6ca5e84` / [checkpoint](checkpoints/UC-6.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md) |
+| UC-7 | IN_PROGRESS | UC-1 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
 | UC-9 | NOT_STARTED | UC-1 | - | - |
 | UC-10 | NOT_STARTED | UC-1 | - | - |
@@ -208,3 +208,7 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Final typed-invalid assertion (`/tmp/uc6-types-verify.log`) found another strict Jackson coercion: an array-valued homeRoomId threw on asString(), returning 500 instead of saving supported invalid work. JSON tree diagnostics now use the explicit fallback string reader; type validators still report blockers and the original JSON value stays exact. Full class/subject/teacher suite repeated on this production fix (`/tmp/uc6-final-verify.log`); the stronger typed assertions remain intact.
 
 - UC-6 final BUILD SUCCESS `/tmp/uc6-final-verify.log`: 26 unit/architecture and all 17 class/subject/teacher journeys pass with strengthened invalid-type fidelity checks. Fourteen unchanged grid/school journeys pass in retained initial evidence. Strict optional boolean/string diagnostic failures are fixed; failed logs preserved. Ready for standalone recorded Playwright walkthrough on a fresh disposable fixture.
+
+## UC-6 approval
+
+- Automatically APPROVED on submission 6ca5e84 after [recorded Playwright PASS](../../output/playwright/school-definition-authoring/UC-6/20261011-1/README.md). Exact isolated v18 document and inspected screenshots retained; all twelve fields, linked curator/policy issues, advisories/defaults/no-limit, responsive/stale/conflict/transport/identity/add/selection/reload pass. Relevant technical checks pass; failed diagnostic logs preserved and fixed. Source/Current untouched. UC-12/13/14 destination handoffs remain. Proceeding directly to UC-7.
