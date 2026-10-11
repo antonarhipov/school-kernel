@@ -23,6 +23,8 @@ function details(host, lesson, context = {}) {
   for (const [field, label] of fields) block.append(el('p', `${label}: ${Object.hasOwn(lesson, field) ? JSON.stringify(lesson[field]) : '(omitted)'}${shared.has(field) && row ? ` • ${exceptions.has(field) ? 'Explicit exception' : row.mixedFields.includes(field) ? 'Mixed; no shared default' : 'Follows shared setting'}` : ''}`)); host.append(block);
 }
 export function renderOccurrences(host, snapshot, narrow, actions, status, leave) {
+ if (!narrow) { const removal = el('button', 'Guided removal'); removal.type = 'button'; removal.addEventListener('click', actions.removal); host.append(removal); }
+
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   if (!intent || intent.version !== snapshot.version) {
     if (loadError) { const message = el('p', `Saved occurrence inspection unavailable. ${loadError}`); message.setAttribute('role', 'alert'); host.append(message); const retry = el('button', 'Retry saved occurrence inspection'); retry.addEventListener('click', () => { loadError = null; actions.render(snapshot); }); host.append(retry); return; }

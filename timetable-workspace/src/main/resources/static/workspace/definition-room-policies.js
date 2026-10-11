@@ -43,6 +43,8 @@ export async function savePolicy(snapshot, actions) {
 }
 export const policiesBusy = () => busy;
 export function renderPolicies(host,snapshot,narrow,actions,status,leave) {
+ if (!narrow) { const removal = el('button', 'Guided removal'); removal.type = 'button'; removal.addEventListener('click', actions.removal); host.append(removal); }
+
  if (!narrow && snapshot.workspace.definitionDraft.definition.catalogVersion < 9) { const upgrade = el('button', 'Review catalog upgrade'); upgrade.type = 'button'; upgrade.addEventListener('click', actions.catalog); host.append(upgrade); }
 
   const draft=snapshot.workspace.definitionDraft,definition=draft.definition,rows=definition.roomAssignments || [];

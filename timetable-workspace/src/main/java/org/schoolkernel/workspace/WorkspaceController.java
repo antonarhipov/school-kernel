@@ -44,6 +44,7 @@ public class WorkspaceController {
     private final DefinitionOccurrenceService definitionOccurrences;
     private final DefinitionPreferenceService definitionPreferences;
     private final DefinitionCatalogService definitionCatalog;
+    private final DefinitionRemovalService definitionRemoval;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -63,6 +64,7 @@ public class WorkspaceController {
             DefinitionOccurrenceService definitionOccurrences,
             DefinitionPreferenceService definitionPreferences,
             DefinitionCatalogService definitionCatalog,
+            DefinitionRemovalService definitionRemoval,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -80,6 +82,7 @@ public class WorkspaceController {
         this.definitionOccurrences = definitionOccurrences;
         this.definitionPreferences = definitionPreferences;
         this.definitionCatalog = definitionCatalog;
+        this.definitionRemoval = definitionRemoval;
         this.json = json;
     }
 
@@ -152,6 +155,22 @@ public class WorkspaceController {
     public ResponseEntity<JsonNode> saveRequirement(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody JsonNode request) {
         return response(definitionRequirements.save(ifMatch, request));
+    }
+
+    @PostMapping("/api/definition-draft/removal/inspect")
+    @ResponseBody
+    public ResponseEntity<JsonNode> inspectRemoval(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch, @RequestBody JsonNode target) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionRemoval.inspect(ifMatch,target));
+    }
+    @PostMapping("/api/definition-draft/removal/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewRemoval(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch, @RequestBody JsonNode request) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionRemoval.preview(ifMatch,request));
+    }
+    @PostMapping("/api/definition-draft/removal")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveRemoval(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch, @RequestBody JsonNode request) {
+        return response(definitionRemoval.save(ifMatch,request));
     }
 
     @PostMapping("/api/definition-draft/catalog/preview")

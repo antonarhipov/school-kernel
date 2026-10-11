@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-13
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-14 after UC-13 walkthrough
 
 ## Progress
@@ -22,7 +22,7 @@
 | UC-10 | APPROVED | UC-1 | `c997bd6` / [checkpoint](checkpoints/UC-10.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md) |
 | UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
-| UC-13 | IN_PROGRESS | UC-1 | - | - |
+| UC-13 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-13.md) | Running isolated walkthrough |
 | UC-14 | NOT_STARTED | UC-1 | - | - |
 | UC-15 | NOT_STARTED | UC-1 | - | - |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
@@ -294,3 +294,17 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-12 approval
 
 - Automatically APPROVED on dfabfd8 after [complete recorded Playwright PASS](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md). Exact v5/source/native and eleven inspected screenshots retained. Preview/cancel/compensation/stale/transport/fresh review/atomic upgrade/deliberate newer default/responsive/reload pass. F-1/F-2 fixed, failed attempts preserved. All 30 technical journeys and 27 unit/architecture pass; strengthened four recovery journeys and final handoff/restart check pass (/tmp/uc12-handoffs-verify.log BUILD SUCCESS). Catalog destination handoffs from UC-3/4/6/10/11 are now implemented and verified. No operator mutation/unresolved finding. Proceeding UC-13.
+
+## UC-13 evidence
+
+- Started from cfa24c3, clean worktree. Full seven-target native dependency table plus saved requirement defaults/context, separate historical Current placements, explicit cancellation/policy removal/ref replacement and target-mode choices. Inspect/preview are non-mutating; exact document/version/request token governs one atomic complete operation. No unknown/unresolved replacement or final-empty policy target accepted. Counts, reservations, authored locks, issues and selected lineage identity reservations updated explicitly; source/Current exact. UI guided resolution/preview/cancel/stale/read-only/navigation flow and entity handoffs in construction; technical checks/approval pending.
+
+- Initial /tmp/uc13-verify.log retained: 27 unit/architecture, all seven grid/five occurrence/four requirement journeys and four of six new removal journeys pass. Two new journeys used source room-102 as a no-dependency target despite existing preferred-room references; explicitly create unused-room and retain no-dependency/new-identity assertions. Strengthen Current placement expansion to selected owned groups/policy matches and explicit differing default/occurrence replacement exception intent. Full six removal journeys repeat on updated submission.
+
+- /tmp/uc13-revision-verify.log retains five backend removal passes + 27 unit/architecture; UI fixture added unused-room through HTTP but did not reload before selecting it. Add explicit reload after fixture mutation, keeping the rendered actor path required. New regroup regression preserves equal-valued exception intent and all native constraints; selected membership/default differences become explicit exceptions, no future implicit overwrite. Repeat complete seven removal journeys on the updated code/tests.
+
+- /tmp/uc13-final-verify.log passes six backend removal journeys and 27 unit/architecture. Newly strengthened all-editor handoff walk finds Occurrence details was passed base actions instead of the wrapper carrying guided-removal navigation. Fix the production action wiring; complete seven-journey suite repeats. No backend finding; failed evidence retained.
+
+### UC-13 technical submission
+
+All seven removal journeys and 27 unit/architecture checks pass in `/tmp/uc13-modal-verify.log`; 16 unchanged grid/occurrence/requirement regressions passed in `/tmp/uc13-verify.log`. Retained failed checks exposed the missing occurrence handoff and disabled controls after preview cancellation; both production fixes verified.

@@ -76,6 +76,8 @@ export async function saveGrid(snapshot, actions) {
 }
 
 export function renderGrid(host, snapshot, narrow, actions, status) {
+ if (!narrow) { const removal = el('button', 'Guided removal'); removal.type = 'button'; removal.addEventListener('click', actions.removal); host.append(removal); }
+
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   const nextIdentity = draft.openedRevision || draft.draftRevision;
   if (identity !== nextIdentity) { identity = nextIdentity; working = null; preview = null; error = null; }

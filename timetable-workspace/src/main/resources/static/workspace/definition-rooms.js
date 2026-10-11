@@ -42,6 +42,8 @@ export async function saveRoom(snapshot, actions) {
   } catch (failure) { busy = false; error = `No change was committed. ${failure.message} Working values remain Unsaved.`; working.dirty = true; actions.render(snapshot); return false; }
 }
 export function renderRooms(host, snapshot, narrow, actions, status, leave) {
+ if (!narrow) { const removal = el('button', 'Guided removal'); removal.type = 'button'; removal.addEventListener('click', actions.removal); host.append(removal); }
+
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   if (!working || !working.dirty) select(snapshot, working && !working.originalId ? '' : definition.rooms.some(row => row.id === working?.originalId) ? working.originalId : definition.rooms[0]?.id || '');
   else mergeNewer(snapshot);

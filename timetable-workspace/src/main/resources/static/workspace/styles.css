@@ -843,3 +843,8 @@ body.authoring .current-label { margin: 8px 0; }
 .authoring-navigation button { padding: 8px 10px; font-size: .9rem; }
 #catalog-upgrade-dialog { width: min(52rem, 90vw); max-height: calc(100dvh - 2rem); box-sizing: border-box; overflow: auto; padding: 1.25rem; }
 #catalog-upgrade-dialog p { margin: .65rem 0; }
+.definition-operation-dialog { width: min(60rem, 90vw); max-height: calc(100dvh - 2rem); overflow: auto; box-sizing: border-box; padding: 1.25rem; }
+.definition-operation-dialog pre, .removal-reference, #authoring-section > label { white-space: pre-wrap; overflow-wrap: anywhere; }
+.removal-reference { border: 1px solid #ced5de; border-radius: 6px; padding: .75rem; margin: .5rem 0; }
+.removal-reference label { display: grid; gap: .4rem; }
+.removal-reference input, .removal-reference select { max-width: 100%; box-sizing: border-box; }

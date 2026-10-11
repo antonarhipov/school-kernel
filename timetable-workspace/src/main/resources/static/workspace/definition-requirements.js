@@ -29,6 +29,8 @@ const describe = (lesson, row) => {
   return `${lesson.displayName || '(blank name)'} (${lesson.id}) • class ${lesson.cohortId ?? '(missing)'} • subject ${lesson.subjectId ?? '(missing)'} • ${fields.map(([field, label]) => `${label}: ${Object.hasOwn(lesson, field) ? JSON.stringify(lesson[field]) : '(omitted)'} [${exceptions.has(field) ? 'explicit exception' : row.mixedFields?.includes(field) ? 'Mixed' : 'follows shared setting'}]`).join('; ')}`;
 };
 export function renderRequirements(host, snapshot, narrow, actions, status, leave) {
+ if (!narrow) { const removal = el('button', 'Guided removal'); removal.type = 'button'; removal.addEventListener('click', actions.removal); host.append(removal); }
+
   if (!model || model.version !== snapshot.version) {
     if (loadFailed) { const message = el('p', error); message.setAttribute('role', 'alert'); host.append(message); const retry = el('button', 'Retry saved requirement inspection'); retry.addEventListener('click', () => { loadFailed = false; actions.render(snapshot); }); host.append(retry); return; }
     if (!loading) {

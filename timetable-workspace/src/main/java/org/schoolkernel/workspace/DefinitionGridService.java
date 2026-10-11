@@ -89,6 +89,14 @@ public class DefinitionGridService {
         definition.set("periods", request.path("periods").deepCopy());
         if (request.has("reservedPeriodIds")) definition.set("reservedPeriodIds", request.path("reservedPeriodIds").deepCopy());
         else definition.remove("reservedPeriodIds");
+        refreshIssues(draft);
+        draft.set("gridTimingImpacts", timingImpacts(draft));
+        draft.put("draftRevision", DefinitionDraftService.revision(definition));
+        return document;
+    }
+
+    void refreshIssues(ObjectNode draft) {
+        JsonNode definition = draft.path("definition");
         ArrayNode issues = json.createArrayNode();
         for (JsonNode issue : draft.path("issues")) if (!"Period".equals(issue.path("ownerType").asString())
                 && !("School".equals(issue.path("ownerType").asString()) && "reservedPeriodIds".equals(issue.path("field").asString()))) issues.add(issue);
@@ -98,10 +106,7 @@ public class DefinitionGridService {
                 .thenComparing(n -> n.path("ownerType").asString()).thenComparing(n -> n.path("ownerId").asString())
                 .thenComparing(n -> n.path("field").asString()).thenComparing(n -> n.path("message").asString()));
         ArrayNode ordered = json.createArrayNode(); sorted.forEach(ordered::add); draft.set("issues", ordered);
-        draft.set("gridTimingImpacts", timingImpacts(draft));
         DefinitionPreferenceService.refresh(draft, json);
-        draft.put("draftRevision", DefinitionDraftService.revision(definition));
-        return document;
     }
 
     private void validate(JsonNode definition, ArrayNode issues) {

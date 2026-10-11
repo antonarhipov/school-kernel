@@ -1,3 +1,4 @@
+import { renderRemoval, removalBusy, removalDirty, saveRemoval, discardRemoval, resetRemoval } from './definition-removal.js';
 import { renderCatalog, catalogBusy, resetCatalog } from './definition-catalog.js';
 import { renderPreferences, preferencesBusy, preferencesDirty, savePreference, discardPreferences, resetPreferences } from './definition-preferences.js';
 import { renderPolicies, policiesBusy, policiesDirty, savePolicy, discardPolicies, resetPolicies } from './definition-room-policies.js';
@@ -33,13 +34,13 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); }
+export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); }
 
 export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); }
+  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); }
   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
   const rerender = () => actions.render(snapshot);
   const save = async () => {
@@ -58,7 +59,8 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     }
   };
   const leave = next => {
-    if (saving || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
+    if (saving || removalBusy() || catalogBusy() || requirementsBusy() || occurrencesBusy() || policiesBusy() || preferencesBusy()) return;
+    const leavingRemoval = section === 'Guided removal' && removalDirty();
     const leavingGrid = section === 'Grid' && gridDirty();
     const leavingSubject = section === 'Subjects' && subjectsDirty();
     const leavingTeacher = section === 'Teachers' && teachersDirty();
@@ -68,13 +70,13 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     const leavingRequirement = section === 'Weekly requirements' && requirementsDirty();
     const leavingRoom = section === 'Rooms' && roomsDirty();
     const leavingClass = section === 'Classes' && classesDirty();
-    if ((!schoolForm.dirty && !leavingGrid && !leavingSubject && !leavingTeacher && !leavingClass && !leavingRoom && !leavingRequirement && !leavingOccurrence && !leavingPolicy && !leavingPreference) || narrow) { next(snapshot); return; }
+    if ((!schoolForm.dirty && !leavingRemoval && !leavingGrid && !leavingSubject && !leavingTeacher && !leavingClass && !leavingRoom && !leavingRequirement && !leavingOccurrence && !leavingPolicy && !leavingPreference) || narrow) { next(snapshot); return; }
     const dialog = el('dialog'); dialog.id = 'school-unsaved-dialog';
-    dialog.append(el('h3', leavingPreference ? 'Unsaved preference' : leavingPolicy ? 'Unsaved room policy' : leavingOccurrence ? 'Unsaved occurrence choices' : leavingRequirement ? 'Unsaved weekly requirement' : leavingRoom ? 'Unsaved room' : leavingClass ? 'Unsaved class' : leavingTeacher ? 'Unsaved teacher' : leavingSubject ? 'Unsaved subject' : leavingGrid ? 'Unsaved weekly grid' : 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
+    dialog.append(el('h3', leavingRemoval ? 'Unsaved guided removal' : leavingPreference ? 'Unsaved preference' : leavingPolicy ? 'Unsaved room policy' : leavingOccurrence ? 'Unsaved occurrence choices' : leavingRequirement ? 'Unsaved weekly requirement' : leavingRoom ? 'Unsaved room' : leavingClass ? 'Unsaved class' : leavingTeacher ? 'Unsaved teacher' : leavingSubject ? 'Unsaved subject' : leavingGrid ? 'Unsaved weekly grid' : 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
     const close = () => { dialog.close(); dialog.remove(); };
     for (const [label, id, handler] of [
-      ['Save and continue', 'school-save-continue', async () => { close(); if (leavingGrid || leavingSubject || leavingTeacher || leavingClass || leavingRoom || leavingRequirement || leavingOccurrence || leavingPolicy || leavingPreference) { const result = leavingPreference ? await savePreference(snapshot, actions) : leavingPolicy ? await savePolicy(snapshot, actions) : leavingOccurrence ? await saveOccurrences(snapshot, actions) : leavingRequirement ? await saveRequirement(snapshot, actions) : leavingRoom ? await saveRoom(snapshot, actions) : leavingClass ? await saveCohort(snapshot, actions) : leavingTeacher ? await saveTeacher(snapshot, actions) : leavingSubject ? await saveSubject(snapshot, actions) : await saveGrid(snapshot, actions); if (result) { snapshot = result; next(snapshot); } } else if (await save()) next(snapshot); }],
-      ['Discard working edits', 'school-discard-working', () => { if (leavingPreference) discardPreferences(snapshot); else if (leavingPolicy) discardPolicies(snapshot); else if (leavingOccurrence) discardOccurrences(snapshot); else if (leavingRequirement) discardRequirements(snapshot); else if (leavingRoom) discardRooms(snapshot); else if (leavingClass) discardClasses(snapshot); else if (leavingTeacher) discardTeachers(snapshot); else if (leavingSubject) discardSubjects(snapshot); else if (leavingGrid) discardGrid(definition); else schoolForm = schoolValues(definition, draft); saveError = null; close(); next(snapshot); }],
+      ['Save and continue', 'school-save-continue', async () => { close(); if (leavingRemoval || leavingGrid || leavingSubject || leavingTeacher || leavingClass || leavingRoom || leavingRequirement || leavingOccurrence || leavingPolicy || leavingPreference) { const result = leavingRemoval ? await saveRemoval(snapshot, actions) : leavingPreference ? await savePreference(snapshot, actions) : leavingPolicy ? await savePolicy(snapshot, actions) : leavingOccurrence ? await saveOccurrences(snapshot, actions) : leavingRequirement ? await saveRequirement(snapshot, actions) : leavingRoom ? await saveRoom(snapshot, actions) : leavingClass ? await saveCohort(snapshot, actions) : leavingTeacher ? await saveTeacher(snapshot, actions) : leavingSubject ? await saveSubject(snapshot, actions) : await saveGrid(snapshot, actions); if (result) { snapshot = result; next(snapshot); } } else if (await save()) next(snapshot); }],
+      ['Discard working edits', 'school-discard-working', () => { if (leavingRemoval) discardRemoval(snapshot); else if (leavingPreference) discardPreferences(snapshot); else if (leavingPolicy) discardPolicies(snapshot); else if (leavingOccurrence) discardOccurrences(snapshot); else if (leavingRequirement) discardRequirements(snapshot); else if (leavingRoom) discardRooms(snapshot); else if (leavingClass) discardClasses(snapshot); else if (leavingTeacher) discardTeachers(snapshot); else if (leavingSubject) discardSubjects(snapshot); else if (leavingGrid) discardGrid(definition); else schoolForm = schoolValues(definition, draft); saveError = null; close(); next(snapshot); }],
       ['Stay', 'school-stay', () => { close(); rerender(); }]
     ]) {
       const button = el('button', label); button.id = id; button.addEventListener('click', handler); dialog.append(button);
@@ -111,21 +113,23 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   }
   host.append(nav);
   const content = el('section'); content.id = 'authoring-section'; content.append(el('h3', section));
-  const occurrenceActions = { ...actions, openOccurrences: ids => leave(latest => { chooseOccurrences(ids); section = 'Occurrence details'; actions.render(latest); }) };
-  const catalogActions = { ...actions, catalog: () => leave(() => { section = 'School'; rerender(); }) };
-  if (section === 'Preferences') {
+  const occurrenceActions = { ...actions, removal: () => leave(() => { section = 'Guided removal'; rerender(); }), openOccurrences: ids => leave(latest => { chooseOccurrences(ids); section = 'Occurrence details'; actions.render(latest); }) };
+  const catalogActions = { ...actions, removal: () => leave(() => { section = 'Guided removal'; rerender(); }), catalog: () => leave(() => { section = 'School'; rerender(); }) };
+  if (section === 'Guided removal') {
+    renderRemoval(content, snapshot, narrow, actions, status, leave);
+  } else if (section === 'Preferences') {
     renderPreferences(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Room policies') {
     renderPolicies(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Occurrence details') {
-    renderOccurrences(content, snapshot, narrow, actions, status, leave);
+    renderOccurrences(content, snapshot, narrow, occurrenceActions, status, leave);
   } else if (section === 'Grid') {
     if (gridDirty()) status.textContent = 'Unsaved — Working grid differs from the saved draft.';
-    renderGrid(content, snapshot, narrow, actions, status);
+    renderGrid(content, snapshot, narrow, catalogActions, status);
   } else if (section === 'Weekly requirements') {
     renderRequirements(content, snapshot, narrow, occurrenceActions, status, leave);
   } else if (section === 'Rooms') {
-    renderRooms(content, snapshot, narrow, actions, status, leave);
+    renderRooms(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Classes') {
     renderClasses(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Teachers') {
@@ -133,6 +137,7 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   } else if (section === 'Subjects') {
     renderSubjects(content, snapshot, narrow, catalogActions, status, leave);
   } else if (section === 'Review') {
+    const remove = el('button', 'Guided removal'); remove.type = 'button'; remove.addEventListener('click', catalogActions.removal); content.append(remove);
     content.append(el('p', 'Saved draft inspection. Definition verification is required before finishing.'));
     if (!definition.lessons?.length) content.append(el('p', 'No lessons configured; planning will produce an empty timetable'));
     for (const issue of issues) content.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId || ''} • ${issue.field}: ${issue.message}`));
