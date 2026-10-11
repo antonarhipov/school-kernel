@@ -3,14 +3,14 @@
 ## Current
 
 - Use case: UC-1
-- Status: READY_FOR_CONVERGENCE
+- Status: PENDING_WALKTHROUGH
 - Next eligible: none until UC-1 convergence and walkthrough
 
 ## Progress
 
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
-| UC-1 | READY_FOR_CONVERGENCE | none | [checkpoint](checkpoints/UC-1.md) | pending |
+| UC-1 | PENDING_WALKTHROUGH | none | `06c0201` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
 | UC-2 | NOT_STARTED | UC-1 | - | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
@@ -47,7 +47,7 @@
 - Pre-existing dirty files: none
 - Prior notes described a removed partial implementation; live checkout has only persisted-draft read compatibility, not a prior approved submission.
 
-- Implementation submission: HEAD at convergence
+- Implementation submission: `06c0201f24b127f75efeec89f145966aa60b10ea`
 - Completed focused checks: 16 unit/architecture + 10 browser tests, zero failures/errors/skips; accepted Current regression 11/11 passed separately. See checkpoint for exact commands and contract coverage.
 - Changed files and technical evidence: [UC-1 checkpoint](checkpoints/UC-1.md).
 - Test impact: no tracked runtime data or unrelated files changed.
@@ -59,3 +59,11 @@ None.
 ## Deviations
 
 - Test cadence: user requested slow tests only when necessary; consolidate runtime checks at the slice boundary.
+
+## UC-1 Convergence Evidence
+
+- Independent committed-submission audit: all 26 workspace unit tests and 17 selected integration/browser tests passed, zero failures/errors/skips. Shared accepted Current regression previously passed 11/11. Exact command and coverage: [convergence report](convergence/UC-1.md).
+- Repository clean before/after verification; no runtime school data changed.
+- Verdict: PENDING_WALKTHROUGH; no implementation findings.
+- User walkthrough result: not yet received. Isolated workspace: http://localhost:18081/workspace/; exact script and environment lifecycle recorded in convergence report.
+- Full unrelated reactor/browser/solver suites were not rerun or claimed green; user requested slow checks only when necessary.
