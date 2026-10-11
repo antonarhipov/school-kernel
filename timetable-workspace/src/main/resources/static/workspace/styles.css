@@ -821,3 +821,8 @@ body.authoring .current-label { margin: 8px 0; }
 .definition-entity-form input, .definition-entity-form select { width: 100%; min-width: 0; box-sizing: border-box; }
 .definition-entity-form > p, .definition-entity-form > section, .definition-entity-form > .actions { grid-column: 1 / -1; }
 #subject-effects { margin-top: 16px; }
+.definition-entity-form fieldset { min-width: 0; border: 1px solid #ced5de; border-radius: 8px; padding: 12px; }
+.definition-entity-form fieldset legend { overflow-wrap: anywhere; }
+.definition-entity-form fieldset label { margin-bottom: 8px; overflow-wrap: anywhere; }
+.definition-entity-form input[type=checkbox] { width: auto; align-self: flex-start; }
+#teacher-effects { margin-top: 16px; }

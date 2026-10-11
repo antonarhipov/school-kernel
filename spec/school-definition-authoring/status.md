@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-4
-- Status: APPROVED
-- Next eligible: UC-5
+- Use case: UC-5
+- Status: PENDING_WALKTHROUGH
+- Next eligible: UC-6 after UC-5 walkthrough
 
 ## Progress
 
@@ -14,7 +14,7 @@
 | UC-2 | APPROVED | UC-1 | `9b59583` / [checkpoint](checkpoints/UC-2.md) | [convergence](convergence/UC-2.md) |
 | UC-3 | APPROVED | UC-1 | `a30de35` / [checkpoint](checkpoints/UC-3.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-3/20261011-2/README.md) |
 | UC-4 | APPROVED | UC-1 | `dd395c4` / [checkpoint](checkpoints/UC-4.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md) |
-| UC-5 | NOT_STARTED | UC-1 | - | - |
+| UC-5 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-5.md) | - |
 | UC-6 | NOT_STARTED | UC-1 | - | - |
 | UC-7 | NOT_STARTED | UC-1 | - | - |
 | UC-8 | NOT_STARTED | UC-1 | - | - |
@@ -179,3 +179,13 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - Automatically APPROVED after complete repeat Playwright PASS on dd395c4. [Attempt 2 ledger and screenshots](../../output/playwright/school-definition-authoring/UC-4/20261011-2/README.md). F-1 closed; Add-subject regression closed by technical/browser evidence. Final exact disposable workspace v25 preserved in the ledger, source {} and no Current; source/accepted fidelity also passes labelled technical variants.
 - Six subject and 24 affected existing browser journeys pass, with 26 unit/architecture checks. Focused F-1 regression additionally passes; failures remain recorded, not reclassified green. No unresolved implementation finding. Catalog/removal/restoration handoffs remain for UC-12/13/14.
 - Browser/server/data retained for immediately continuing UC-5 under existing authorization; no additional approval required.
+
+## UC-5 evidence
+
+- Started 2026-10-11 from 9208002; pre-existing dirty files none. UC-1 is APPROVED. Sources: UC-5, Teacher fields, Identifier rules, form model, preserved source/Current and local security contracts. No rules.md exists.
+- Selected-teacher JSON-tree save uses the same transactional version/state CAS, exact optional presence, identity reservation and local access checks. Qualification/availability/undesirability remain distinct; supported invalid references persist with complete issues, never inferred qualifications or reassigned lessons. Real-browser form/reload/stale/responsive/failure evidence will control automatic approval.
+- Destination handoffs: teaching reassignment UC-9, guided removal UC-13, source restoration UC-14; pending until those UCs run.
+
+- UC-5 initial technical run retained at `/tmp/uc5-verify.log` (test compilation error corrected). `/tmp/uc5-final-verify.log` found one teacher assertion observing old diagnostics because pristine submits showed Saved during the write. Production fix gives both entity forms an explicit Saving status; stronger helpers assert each successful save advances the durable version exactly once. All 20 approved subject/grid/school journeys passed in that run. Repeating all affected teacher/subject journeys on the corrected code before walkthrough.
+
+- UC-5 revision BUILD SUCCESS: 26 unit/architecture and all 11 teacher/subject HTTP/browser journeys pass in `/tmp/uc5-revision-verify.log`; the prior run supplies all 14 unchanged grid/school regression passes. Exact version/source/Current assertions pass. Syntax/diff hygiene pass. Ready for recorded standalone Playwright walkthrough, not yet approved.

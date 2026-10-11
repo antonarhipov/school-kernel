@@ -129,7 +129,7 @@ class DefinitionSubjectsBrowserIT extends WorkbenchBrowserSupport {
     private void mode(String field,String value){workbench.page().locator("#subject-"+field+"-mode").selectOption(value);}
     private void number(String field,String value){mode(field,"value");workbench.page().locator("#subject-"+field).fill(value);}
     private void clickSave(){workbench.page().locator("#save-subject").click();}
-    private void save(){clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");}
+    private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}
     private String base(){return "http://localhost:"+port;}
     private String request(String original,JsonNode item){ObjectNode request=JSON.createObjectNode().put("originalId",original);request.set("item",item);return JSON.writeValueAsString(request);}
     private APIResponse command(String original,JsonNode item,String version){JsonNode csrf=JSON.readTree(workbench.page().request().get(base()+"/api/csrf").text());return workbench.page().request().post(base()+"/api/definition-draft/subjects",RequestOptions.create().setData(request(original,item)).setHeader("Content-Type","application/json").setHeader("Origin",base()).setHeader("If-Match",version==null?"\"ws-"+storedVersion()+"\"":version).setHeader(csrf.path("headerName").asString(),csrf.path("token").asString()));}

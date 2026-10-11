@@ -57,7 +57,8 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   if (!working || !working.dirty) select(draft, snapshot.version, working && !working.originalId ? '' : definition.subjects.some(row => row.id === working?.originalId) ? working.originalId : definition.subjects[0]?.id || '');
   else mergeNewer(snapshot);
-  if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved subjects.' : 'Unsaved — Working subject differs from the saved draft.';
+  if (busy) status.textContent = 'Saving… Working subject values are not yet durable.';
+  else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved subjects.' : 'Unsaved — Working subject differs from the saved draft.';
   if (narrow) {
     for (const item of definition.subjects) {
       const block = el('section'); block.append(el('h4', item.displayName || item.id));

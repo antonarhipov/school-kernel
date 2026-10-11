@@ -1,3 +1,4 @@
+import { renderTeachers, teachersDirty, saveTeacher, discardTeachers, resetTeachers } from './definition-teachers.js';
 import { renderSubjects, subjectsDirty, saveSubject, discardSubjects, resetSubjects } from './definition-subjects.js';
 import { renderGrid, gridDirty, saveGrid, discardGrid, resetGrid } from './definition-grid.js';
 const sections = {
@@ -23,13 +24,13 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); }
+export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); }
 
 export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); }
+  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); }
   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
   const rerender = () => actions.render(snapshot);
   const save = async () => {
@@ -51,13 +52,14 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     if (saving) return;
     const leavingGrid = section === 'Grid' && gridDirty();
     const leavingSubject = section === 'Subjects' && subjectsDirty();
-    if ((!schoolForm.dirty && !leavingGrid && !leavingSubject) || narrow) { next(snapshot); return; }
+    const leavingTeacher = section === 'Teachers' && teachersDirty();
+    if ((!schoolForm.dirty && !leavingGrid && !leavingSubject && !leavingTeacher) || narrow) { next(snapshot); return; }
     const dialog = el('dialog'); dialog.id = 'school-unsaved-dialog';
-    dialog.append(el('h3', leavingSubject ? 'Unsaved subject' : leavingGrid ? 'Unsaved weekly grid' : 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
+    dialog.append(el('h3', leavingTeacher ? 'Unsaved teacher' : leavingSubject ? 'Unsaved subject' : leavingGrid ? 'Unsaved weekly grid' : 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
     const close = () => { dialog.close(); dialog.remove(); };
     for (const [label, id, handler] of [
-      ['Save and continue', 'school-save-continue', async () => { close(); if (leavingGrid || leavingSubject) { const result = leavingSubject ? await saveSubject(snapshot, actions) : await saveGrid(snapshot, actions); if (result) { snapshot = result; next(snapshot); } } else if (await save()) next(snapshot); }],
-      ['Discard working edits', 'school-discard-working', () => { if (leavingSubject) discardSubjects(snapshot); else if (leavingGrid) discardGrid(definition); else schoolForm = schoolValues(definition, draft); saveError = null; close(); next(snapshot); }],
+      ['Save and continue', 'school-save-continue', async () => { close(); if (leavingGrid || leavingSubject || leavingTeacher) { const result = leavingTeacher ? await saveTeacher(snapshot, actions) : leavingSubject ? await saveSubject(snapshot, actions) : await saveGrid(snapshot, actions); if (result) { snapshot = result; next(snapshot); } } else if (await save()) next(snapshot); }],
+      ['Discard working edits', 'school-discard-working', () => { if (leavingTeacher) discardTeachers(snapshot); else if (leavingSubject) discardSubjects(snapshot); else if (leavingGrid) discardGrid(definition); else schoolForm = schoolValues(definition, draft); saveError = null; close(); next(snapshot); }],
       ['Stay', 'school-stay', close]
     ]) {
       const button = el('button', label); button.id = id; button.addEventListener('click', handler); dialog.append(button);
@@ -97,6 +99,8 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   if (section === 'Grid') {
     if (gridDirty()) status.textContent = 'Unsaved — Working grid differs from the saved draft.';
     renderGrid(content, snapshot, narrow, actions, status);
+  } else if (section === 'Teachers') {
+    renderTeachers(content, snapshot, narrow, actions, status, leave);
   } else if (section === 'Subjects') {
     renderSubjects(content, snapshot, narrow, actions, status, leave);
   } else if (section === 'Review') {
