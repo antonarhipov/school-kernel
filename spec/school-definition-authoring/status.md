@@ -344,3 +344,7 @@ Finish now binds confirmation to the whole saved document/version, recomputes Re
 ### 2026-10-12 — UC-16 technical PASS
 
 Revised checks PASS: 6 Finish + 5 Review browser journeys and 8 verifier/architecture checks; packaged kernel 9 CLI journeys + 10 semantic checks. Evidence paths above and [checkpoint](checkpoints/UC-16.md). Beginning exact normative nine-lesson real-browser onboarding against isolated `authoring_loop_uc16`; no approval until ledger PASS.
+
+### 2026-10-12 — UC-16 walkthrough revisions and baseline comparison
+
+Attempts1–3 retained under `output/playwright/school-definition-authoring/UC-16/`. Exact nine-lesson onboarding/first acceptance passed twice. Attempt1 selector typo fixed; attempt2 led to explicit verified seed identity and viewport-safe confirmation; attempt3 found long SHA notice narrow overflow, now wrapped. Final6 Finish test repeat is running. Resize-wait check passes (`/tmp/uc16-viewport-verify.log`). Ordinary repair regression failures are unchanged: same four IDs at `0c360a4` in isolated `/tmp/uc16-baseline`, `/tmp/uc16-repair-baseline.log`; pointer interception and geometry failures occur without authored seed. Preserve and resolve relevant operational defects during UC-17. Older agent-owned servers stopped after disposable PostgreSQL reached connection limit; their databases/evidence remain. No operator runtime changes.

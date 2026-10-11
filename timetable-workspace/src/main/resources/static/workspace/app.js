@@ -771,16 +771,26 @@ function renderManualDraft(snapshot, schoolName) {
 function renderRepair(snapshot, schoolName) {
   stateCard.className = 'card workspace-card repair-mode current-mode compact-density';
   if (view.narrow) {
-    renderNarrowReadOnly(schoolName, M.repairDraft, M.acceptedStillCurrent); return;
+    renderNarrowReadOnly(schoolName, M.repairDraft, M.acceptedStillCurrent); renderSeedIdentity(snapshot); return;
   }
   const editable = snapshot.state === 'REPAIR_DRAFT';
   const taskOpen = inspectionState.current().taskAreaOpen.DRAFT;
   stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairDraft}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     ${editable ? '' : `<p>${M.proposalDraftDetail}</p>`}<div id="accepted-view"></div>
     ${editable ? `<div class="task-launch"><button id="reopen-draft-task" type="button" class="secondary" aria-expanded="false" aria-controls="workbench-task-area"${taskOpen ? ' hidden' : ''}>${M.reopenDraftTask}</button></div><section id="workbench-task-area" class="task-area draft-task-area" aria-label="${M.repairDraft}"${taskOpen ? '' : ' hidden'}><div class="task-area-heading"><h3>${M.repairDraft}</h3><button id="collapse-draft-task" type="button" class="secondary">${M.collapseDraftTask}</button></div><p id="draft-save-status" class="error" role="alert"></p>${draftContext()}</section>` : ''}`;
+  renderSeedIdentity(snapshot);
   bindUtilities();
   renderWholeSchool();
   if (editable) bindDraftTaskArea();
+}
+
+function renderSeedIdentity(snapshot) {
+  const seed = snapshot.workspace.repairDraft?.seedDefinition;
+  if (!seed) return;
+  const notice = document.createElement('p'); notice.id = 'authored-seed-identity'; notice.className = 'notice'; notice.style.overflowWrap = 'anywhere';
+  notice.textContent = `Verified authored successor: ${seed.displayName} • ${snapshot.workspace.repairDraft.seedDefinitionRevision}. Authored changes and editing context are retained. Current remains the accepted source; this definition has not been solved or published.`;
+  stateCard.querySelector('.accepted-heading')?.after(notice);
+  if (!notice.isConnected) stateCard.prepend(notice);
 }
 
 function bindDraftTaskArea() {
