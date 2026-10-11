@@ -785,3 +785,22 @@ body.operational .utility-disclosure > summary { padding: 6px 9px; font-size: .7
 #authoring-confirmation button { margin: .5rem; }
 .authoring-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: .4rem 1rem; }
 .authoring-fields div, .authoring-fields dd { min-width: 0; overflow-wrap: anywhere; }
+
+#school-identity-form { display: grid; gap: .7rem; max-width: 40rem; }
+#school-identity-form label { display: grid; gap: .3rem; }
+#school-identity-form input { width: 100%; min-width: 0; box-sizing: border-box; }
+#school-identity-form button { justify-self: start; }
+#school-unsaved-dialog { max-width: min(35rem, 90vw); padding: 1.5rem; }
+#school-unsaved-dialog button { margin: .3rem; }
+
+body.authoring > header { padding: 18px 0 10px; }
+body.authoring h1 { font-size: 2rem; margin: 4px 0; }
+body.authoring .current-label { margin: 8px 0; }
+.definition-authoring > h2 { margin: 5px 0 10px; }
+.definition-authoring p { margin: 7px 0; }
+.definition-authoring .notice { padding: 9px; }
+.definition-authoring .authoring-revision { font-size: .8rem; }
+.definition-authoring .authoring-navigation { margin: 12px 0; }
+#school-identity-form label { margin: 5px 0; }
+#school-identity-form input { font: inherit; padding: 8px; border: 1px solid #b8c5bc; border-radius: 3px; }
+#school-identity-form input[readonly] { background: #ebf0ec; color: #43594e; }

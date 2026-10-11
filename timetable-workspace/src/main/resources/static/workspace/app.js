@@ -62,6 +62,7 @@ function render(snapshot) {
   const previousState = currentSnapshot?.state;
   currentSnapshot = snapshot;
   clearTimeout(pollTimer);
+  document.body.classList.toggle('authoring', snapshot.state === 'DEFINITION_DRAFT' && !authoringCurrent);
   const school = snapshot.workspace.school;
   document.body.classList.toggle('operational', ['ACCEPTED_BASELINE', 'REPAIR_DRAFT', 'SOLVING_REPAIR', 'REPAIR_PROPOSAL', 'INITIAL_PROPOSAL', 'MANUAL_DRAFT'].includes(snapshot.state)
     || (snapshot.state === 'DEFINITION_DRAFT' && snapshot.acceptedTimetable));
@@ -78,7 +79,19 @@ function render(snapshot) {
   if (snapshot.state === 'DEFINITION_DRAFT' && !authoringCurrent) {
     currentLabel.textContent = snapshot.acceptedTimetable ? M.acceptedTimetable(schoolName) : M.noAccepted;
     document.body.classList.remove('operational');
-    renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(snapshot); });
+    renderDefinitionEditor(stateCard, snapshot, view.narrow, () => { authoringCurrent = true; render(currentSnapshot); }, {
+      render,
+      refresh: () => load(true),
+      save: async (fields, version) => {
+        const response = await fetchWithCsrf('/api/definition-draft/school', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'If-Match': `"ws-${version}"` }, body: JSON.stringify(fields)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Saving failed.');
+        etag = response.headers.get('ETag');
+        return result;
+      }
+    });
     return;
   }
   if (snapshot.state === 'DEFINITION_DRAFT' && !snapshot.acceptedTimetable) {
@@ -198,7 +211,7 @@ function render(snapshot) {
   }
   if (snapshot.state === 'DEFINITION_DRAFT' && authoringCurrent) {
     const back = document.createElement('button'); back.id = 'resume-authoring'; back.textContent = 'Resume authoring';
-    back.addEventListener('click', () => { authoringCurrent = false; resetAuthoringSection(); render(snapshot); });
+    back.addEventListener('click', () => { authoringCurrent = false; render(snapshot); });
     stateCard.prepend(back);
   } else bindAuthoringEntry(snapshot);
   renderModeNavigation();

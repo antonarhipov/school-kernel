@@ -130,6 +130,60 @@ public class DefinitionDraftService {
         return repository.load();
     }
 
+    /** UC-2: change identity fields only, never the recorded source or Current. */
+    @Transactional
+    public WorkspaceAggregate saveSchool(String ifMatch, JsonNode request) {
+        WorkspaceAggregate current = repository.load();
+        long version = ImportService.requireMatchingVersion(ifMatch, current);
+        if (current.state() != WorkspaceState.DEFINITION_DRAFT) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
+                    "School identity can only be saved in DEFINITION_DRAFT; " + current.state() + " is active. No change was committed.");
+        }
+        if (!(request instanceof ObjectNode fields) || fields.size() != 2
+                || !fields.path("schoolId").isTextual() || !fields.path("displayName").isTextual()) {
+            throw new WorkspaceProblem(HttpStatus.BAD_REQUEST, "INVALID_SCHOOL_FIELDS",
+                    "Supply only schoolId and displayName as text. Schema, revisions and catalog are system-managed. No change was committed.");
+        }
+        ObjectNode document = ((ObjectNode) current.document()).deepCopy();
+        ObjectNode draft = (ObjectNode) document.path("definitionDraft");
+        ObjectNode definition = (ObjectNode) draft.path("definition");
+        String id = fields.path("schoolId").stringValue();
+        if (definition.has("schoolId") && !definition.path("schoolId").stringValue().equals(id)) {
+            throw new WorkspaceProblem(HttpStatus.CONFLICT, "SCHOOL_ID_IMMUTABLE",
+                    "The established school identifier is read-only. No change was committed.");
+        }
+        if (!id.matches("[A-Za-z0-9][A-Za-z0-9._-]{0,127}")) {
+            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_SCHOOL_ID",
+                    "Use 1–128 ASCII letters, digits, dots, underscores or hyphens, starting with a letter or digit. No change was committed.");
+        }
+        if (!definition.has("schoolId")) {
+            for (JsonNode reserved : draft.path("removedIdentities")) {
+                if ("School".equals(reserved.path("ownerType").stringValue())
+                        && id.equals(reserved.path("id").stringValue())) {
+                    throw new WorkspaceProblem(HttpStatus.CONFLICT, "SCHOOL_ID_RESERVED",
+                            "That school identifier is reserved in this authoring lineage. No change was committed.");
+                }
+            }
+        }
+        definition.put("schoolId", id).put("displayName", fields.path("displayName").stringValue());
+        ArrayNode issues = json.createArrayNode();
+        for (JsonNode issue : draft.path("issues")) {
+            if (!("School".equals(issue.path("ownerType").stringValue())
+                    && List.of("schoolId", "displayName").contains(issue.path("field").stringValue()))) issues.add(issue);
+        }
+        if (definition.path("displayName").stringValue().isBlank()) {
+            issues.addObject().put("severity", "BLOCKING").put("ownerType", "School").put("ownerId", id)
+                    .put("field", "displayName").put("message", "Enter a nonblank school name.").putArray("relatedIds");
+        }
+        draft.set("issues", issues);
+        draft.put("draftRevision", revision(definition));
+        if (repository.replace(version, WorkspaceState.DEFINITION_DRAFT, WorkspaceState.DEFINITION_DRAFT, document).isEmpty()) {
+            throw new WorkspaceProblem(HttpStatus.PRECONDITION_FAILED, "STALE_WORKSPACE_VERSION",
+                    "The workspace changed. No change was committed; review the newer saved draft before retrying.");
+        }
+        return repository.load();
+    }
+
     static void requireNotAuthoring(WorkspaceAggregate current) {
         if (current.state() == WorkspaceState.DEFINITION_DRAFT) {
             throw new WorkspaceProblem(HttpStatus.CONFLICT, "DEFINITION_DRAFT_ACTIVE",

@@ -2,8 +2,8 @@
 
 ## Current
 
-- Use case: UC-1
-- Status: APPROVED
+- Use case: UC-2
+- Status: READY_FOR_CONVERGENCE
 - Next eligible: UC-2 through UC-15, UC-19, UC-20; next in document order: UC-2
 
 ## Progress
@@ -11,7 +11,7 @@
 | Use case | Status | Depends on | Implementation | Convergence |
 |---|---|---|---|---|
 | UC-1 | APPROVED | none | `d4a66f6` / [checkpoint](checkpoints/UC-1.md) | [convergence](convergence/UC-1.md) |
-| UC-2 | NOT_STARTED | UC-1 | - | - |
+| UC-2 | READY_FOR_CONVERGENCE | UC-1 | HEAD at convergence / [checkpoint](checkpoints/UC-2.md) | - |
 | UC-3 | NOT_STARTED | UC-1 | - | - |
 | UC-4 | NOT_STARTED | UC-1 | - | - |
 | UC-5 | NOT_STARTED | UC-1 | - | - |
@@ -84,3 +84,14 @@ None.
 - Convergence verdict: APPROVED; zero blocking findings. Spec and implementation now reflect the requested navigation; focused checks passed. Prior source/lifecycle/security/regression evidence remains applicable to unchanged behavior.
 - Isolated walkthrough refreshed at http://localhost:18081/workspace/ with the new tabs; complete saved workspace checksum unchanged across restart.
 - No additional approval requested; no dependent UC started in this turn.
+
+## UC-2 Evidence
+
+- Started: 2026-10-11; base commit `80146e7f00d5f51500ca0e48a71de9ade477651d`; pre-existing dirty files: none.
+- Dependency: UC-1 is APPROVED at its committed convergence report.
+- Technical decision pass: use the existing version/state CAS and aggregate transaction; update only schoolId/displayName, draft revision and school identity diagnostics. Existing or first-saved identity is immutable. Preserve source, Current, optional presence and all editor context. New route uses existing local Host/Origin/CSRF protections. Explicit form save; working inputs live only in browser memory and survive responsive rendering. No new feature rules or architecture deviations are needed. Sources: spec UC-2, School fields, Identifier rules, form/lifecycle models; UC-1 approved boundary; existing repository and security configuration.
+
+- Implementation submission: HEAD at convergence; [UC-2 checkpoint](checkpoints/UC-2.md) records actual changed files, contract evidence and exact commands.
+- Completed slice: 26 unit/architecture + 18 integration/browser tests passed, zero failures/errors/skips. All seven UC-1 journeys and three saved-draft compatibility journeys passed; two local security/route regressions passed.
+- JavaScript syntax and diff hygiene passed. No tracked runtime data or unrelated changes from verification.
+- Runnable isolated walkthrough: http://localhost:18082/workspace/, disposable UC-2 database on 24482; server session 85398. Operator school untouched. Administrator confirmation still required for this new UI goal.

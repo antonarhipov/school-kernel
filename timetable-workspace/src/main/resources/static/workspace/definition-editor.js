@@ -11,6 +11,9 @@ const sections = {
 };
 let section = 'Review';
 let draftIdentity;
+let schoolForm;
+let saving = false;
+let saveError = null;
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
   if (text !== undefined) node.textContent = text;
@@ -18,18 +21,52 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; }
+export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; }
 
-export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent) {
+export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; }
+  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; }
+  if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
+  const rerender = () => actions.render(snapshot);
+  const save = async () => {
+    if (saving || narrow) return false;
+    saving = true; saveError = null; rerender();
+    try {
+      const result = await actions.save({ schoolId: schoolForm.schoolId, displayName: schoolForm.displayName }, snapshot.version);
+      snapshot = result;
+      schoolForm = schoolValues(result.workspace.definitionDraft.definition, result.workspace.definitionDraft);
+      saving = false;
+      actions.render(result);
+      return true;
+    } catch (error) {
+      saving = false; saveError = `No change was committed. ${error.message} Working values remain Unsaved.`;
+      schoolForm.dirty = true; rerender(); return false;
+    }
+  };
+  const leave = next => {
+    if (saving) return;
+    if (!schoolForm.dirty || narrow) { next(); return; }
+    const dialog = el('dialog'); dialog.id = 'school-unsaved-dialog';
+    dialog.append(el('h3', 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
+    const close = () => { dialog.close(); dialog.remove(); };
+    for (const [label, id, handler] of [
+      ['Save and continue', 'school-save-continue', async () => { close(); if (await save()) next(); }],
+      ['Discard working edits', 'school-discard-working', () => { schoolForm = schoolValues(definition, draft); saveError = null; close(); next(); }],
+      ['Stay', 'school-stay', close]
+    ]) {
+      const button = el('button', label); button.id = id; button.addEventListener('click', handler); dialog.append(button);
+    }
+    dialog.addEventListener('cancel', () => dialog.remove()); host.append(dialog); dialog.showModal();
+  };
   host.className = 'card definition-authoring';
   host.replaceChildren();
   host.append(el('span', 'Saved school-definition draft', 'state'));
   host.append(el('h2', definition.displayName || 'New school'));
-  host.append(el('p', 'Saved — Your saved school-definition changes are preserved.', 'notice'));
+  const status = el('p', saving ? 'Saving… Working values are not yet durable.' : schoolForm.dirty ? 'Unsaved — Working school identity differs from the saved draft.' : 'Saved — Your saved school-definition changes are preserved.', 'notice');
+  status.id = 'school-save-status'; status.setAttribute('role', 'status'); host.append(status);
+  if (saveError) { const error = el('p', saveError, 'error'); error.id = 'school-save-error'; error.setAttribute('role', 'alert'); host.append(error); }
   const sourceState = draft.sourceState || (snapshot.acceptedTimetable ? 'ACCEPTED_BASELINE' : 'INITIAL_DRAFT');
   host.append(el('p', `Draft • Source: ${sourceState} • Catalog ${definition.catalogVersion} • ${snapshot.acceptedTimetable ? 'Current remains unchanged' : 'No Current timetable'}`, 'authoring-identity'));
   host.append(el('p', `Source identity: ${draft.sourceDocument?.school?.displayName || draft.sourceDocument?.initialDefinition?.displayName || draft.sourceDocument?.acceptedBaseline?.definition?.displayName || '(new school)'} • ${draft.sourceDocument?.definitionRevision || '(no source revision)'}`, 'authoring-identity'));
@@ -43,12 +80,12 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent) {
   for (const name of Object.keys(sections)) {
     const button = el('button', name, name === section ? 'selected' : 'secondary');
     button.type = 'button'; button.dataset.section = name; button.setAttribute('aria-current', name === section ? 'page' : 'false');
-    button.addEventListener('click', () => { section = name; renderDefinitionEditor(host, snapshot, narrow, inspectCurrent); });
+    button.addEventListener('click', () => leave(() => { section = name; rerender(); }));
     nav.append(button);
   }
   if (snapshot.acceptedTimetable) {
     const button = el('button', 'Inspect Current', 'secondary'); button.id = 'inspect-authoring-current';
-    button.addEventListener('click', inspectCurrent); nav.append(button);
+    button.addEventListener('click', () => leave(inspectCurrent)); nav.append(button);
     const link = el('a', 'Export Current'); link.href = '/api/accepted/export'; link.id = 'export-accepted'; nav.append(link);
   }
   host.append(nav);
@@ -63,6 +100,11 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent) {
   } else {
     for (const [label, key] of sections[section]) {
       const block = el('details'); block.open = true; block.append(el('summary', label));
+      if (label === 'School identity' && !narrow) {
+        renderSchoolForm(block, definition, draft, schoolForm, saving, status, save, actions, saveError);
+        for (const issue of issues) block.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId || ''} • ${issue.field}: ${issue.message}`));
+        content.append(block); continue;
+      }
       let values;
       if (key === 'series') values = Object.entries(Object.groupBy(definition.lessons?.filter(lesson => lesson.seriesId) || [], lesson => lesson.seriesId));
       else if (key === 'ungrouped') values = definition.lessons?.filter(lesson => !lesson.seriesId) || [];
@@ -112,3 +154,51 @@ function renderSavedValues(host, values) {
   }
   host.append(list);
 }
+
+function schoolValues(definition, draft) {
+  return { schoolId: definition.schoolId ?? suggestSchoolId(definition.displayName ?? '', draft),
+    displayName: definition.displayName ?? '', override: false, dirty: false };
+}
+function suggestSchoolId(name, draft) {
+  const base = name.normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase()
+    .replace(/[^a-z0-9._-]/g, '-').replace(/-+/g, '-').replace(/^[^a-z0-9]+/, '').replace(/-+$/, '');
+  const suggestion = (base || 'school').slice(0, 128);
+  const reserved = new Set((draft.removedIdentities || []).filter(item => item.ownerType === 'School').map(item => item.id));
+  if (!reserved.has(suggestion)) return suggestion;
+  for (let suffix = 2; ; suffix++) {
+    const ending = `-${suffix}`;
+    const candidate = suggestion.slice(0, 128 - ending.length) + ending;
+    if (!reserved.has(candidate)) return candidate;
+  }
+}
+function renderSchoolForm(host, definition, draft, values, busy, status, save, actions, error) {
+  const form = el('form'); form.id = 'school-identity-form';
+  const nameLabel = el('label', 'School name');
+  const name = el('input'); name.id = 'school-display-name'; name.name = 'displayName'; name.value = values.displayName; name.disabled = busy;
+  nameLabel.append(name); form.append(nameLabel);
+  const idLabel = el('label', definition.schoolId === undefined ? 'School identifier suggestion / advanced override' : 'School identifier (read-only)');
+  const id = el('input'); id.id = 'school-identifier'; id.name = 'schoolId'; id.value = values.schoolId;
+  id.readOnly = definition.schoolId !== undefined; id.disabled = busy; idLabel.append(id); form.append(idLabel);
+  form.append(el('p', definition.schoolId === undefined ? 'Review the readable suggestion or enter an advanced override. The identifier becomes permanent on its first save.' : 'The established identifier stays the same when the school name changes.'));
+  const changed = () => {
+    values.dirty = true;
+    status.textContent = 'Unsaved — Working school identity differs from the saved draft.';
+    const staleError = document.querySelector('#school-save-error'); if (staleError) staleError.remove();
+  };
+  name.addEventListener('input', () => {
+    values.displayName = name.value;
+    if (definition.schoolId === undefined && !values.override) { values.schoolId = suggestSchoolId(name.value, draft); id.value = values.schoolId; }
+    changed();
+  });
+  id.addEventListener('input', () => { values.schoolId = id.value; values.override = true; changed(); });
+  const button = el('button', 'Save school identity'); button.id = 'save-school-identity'; button.type = 'submit'; button.disabled = busy; form.append(button);
+  form.addEventListener('submit', event => { event.preventDefault(); save(); });
+  if (error) {
+    const refresh = el('button', 'Review newer saved draft for retry', 'secondary'); refresh.type = 'button'; refresh.id = 'school-refresh';
+    refresh.addEventListener('click', () => actions.refresh()); form.append(refresh);
+  }
+  host.append(form);
+}
+window.addEventListener('beforeunload', event => {
+  if (schoolForm?.dirty) { event.preventDefault(); event.returnValue = ''; }
+});
