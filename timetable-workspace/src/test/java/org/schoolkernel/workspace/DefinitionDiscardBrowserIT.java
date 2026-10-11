@@ -7,6 +7,7 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 
 class DefinitionDiscardBrowserIT extends WorkbenchBrowserSupport {
+    @org.springframework.beans.factory.annotation.Autowired KernelVerifier verifier;
     @Test void exactRestorationForAllThreeSourcesIncludingPreUpgradeCatalog() {
         workbench.open();
         for (String state : java.util.List.of("EMPTY", "INITIAL_DRAFT", "ACCEPTED_BASELINE")) {
@@ -66,6 +67,86 @@ class DefinitionDiscardBrowserIT extends WorkbenchBrowserSupport {
         store("REPAIR_DRAFT",doc);String before=storedDocument();var response=command("{\"confirmed\":true}",null,true);
         assertEquals(409,response.status());assertTrue(response.text().contains("Return to authoring first"));assertEquals(before,storedDocument());
         store("INITIAL_DRAFT",initial());before=storedDocument();assertEquals(409,command("{\"confirmed\":true}",null,true).status());assertEquals(before,storedDocument());
+    }
+
+    @Test void legacyPreservedSourcesCanBeCancelledAndExplicitlyRestoredWithoutAdoptingAuthoredValues() {
+        workbench.open();
+        for (String state : java.util.List.of("INITIAL_DRAFT", "ACCEPTED_BASELINE")) {
+            ObjectNode source = state.equals("INITIAL_DRAFT") ? initial() : fixtures.validAcceptedDocument();
+            source.putObject("authoringContext").put("retained", "exact source defaults");
+            ObjectNode legacy = legacy(state, source);
+            store("DEFINITION_DRAFT", legacy);
+            workbench.reload();
+            workbench.page().locator("button[data-section='School']").click();
+            workbench.page().locator("#school-display-name").fill("Unsaved <literal> Õ");
+            String before = storedDocument();
+            workbench.page().locator("#discard-authoring").click();
+            workbench.awaitText("Restore recorded source: " + state);
+            workbench.awaitText("This older draft retains its source in the workspace");
+            workbench.page().locator("#cancel-discard-authoring").click();
+            assertEquals("Unsaved <literal> Õ", workbench.page().locator("#school-display-name").inputValue());
+            assertEquals(before, storedDocument());
+            workbench.page().locator("#discard-authoring").click();
+            workbench.page().locator("#confirm-discard-authoring").click();
+            workbench.expectNot("document.querySelector('#discard-authoring-dialog, #discard-authoring')");
+            assertEquals(state, storedLifecycle());
+            assertEquals(source, storedWorkspaceDocument(), "remove only legacy authoring; preserve exact source and provenance");
+            workbench.reload();
+            assertEquals(source, storedWorkspaceDocument());
+        }
+    }
+
+    @Test void missingNullAndMismatchedSourcesReportRefusalWithoutConsoleErrorsOrDataLoss() {
+        workbench.open();
+        for (String failure : java.util.List.of("missing", "null", "array", "revision", "catalog", "source-definition", "source-name", "competing-draft")) {
+            ObjectNode source = fixtures.validAcceptedDocument();
+            ObjectNode document = legacy("ACCEPTED_BASELINE", source);
+            ObjectNode draft = (ObjectNode) document.path("definitionDraft");
+            switch (failure) {
+                case "missing" -> draft.remove("sourceDefinitionRevision");
+                case "null" -> draft.putNull("sourceDocument");
+                case "array" -> draft.putArray("sourceDocument");
+                case "revision" -> draft.put("sourceDefinitionRevision", "sha256:" + "0".repeat(64));
+                case "catalog" -> draft.put("sourceCatalogVersion", 9);
+                case "source-definition" -> document.withObject("acceptedBaseline").withObject("definition").put("displayName", "Changed source");
+                case "source-name" -> document.withObject("school").put("displayName", "Authored source name");
+                case "competing-draft" -> document.putObject("manualDraft");
+            }
+            store("DEFINITION_DRAFT", document);
+            String before = storedDocument();
+            workbench.reload();
+            workbench.page().locator("#discard-authoring").click();
+            workbench.page().locator("#confirm-discard-authoring").click();
+            workbench.awaitText("Authoring was not discarded");
+            assertEquals(before, storedDocument(), failure + " must preserve the complete saved workspace/version");
+            var response = command("{\"confirmed\":true}", null, true);
+            assertEquals(409, response.status());
+            assertTrue(response.text().contains("INVALID_AUTHORING_SOURCE"));
+            assertEquals(before, storedDocument());
+            workbench.page().locator("#cancel-discard-authoring").click();
+        }
+    }
+
+    private ObjectNode legacy(String state, ObjectNode source) {
+        JsonNode definition = state.equals("INITIAL_DRAFT") ? source.path("initialDefinition") : source.path("acceptedBaseline").path("definition");
+        var originalLessons = new java.util.ArrayList<JsonNode>();
+        definition.path("lessons").forEach(originalLessons::add);
+        java.util.Collections.reverse(originalLessons);
+        var reordered = ((ObjectNode) definition).putArray("lessons");
+        originalLessons.forEach(reordered::add);
+        String revision = verifier.verify(new ImportDocuments(definition, null, null,
+                ImportDocuments.ImportMode.INITIAL_DEFINITION)).definitionRevision();
+        source.put("definitionRevision", revision);
+        ObjectNode document = source.deepCopy();
+        ObjectNode draft = document.putObject("definitionDraft");
+        draft.put("sourceState", state).put("sourceDefinitionRevision", revision)
+                .put("sourceCatalogVersion", definition.path("catalogVersion").intValue());
+        ObjectNode authored = (ObjectNode) definition.deepCopy();
+        authored.put("displayName", "Authored <img> Õ");
+        draft.set("definition", authored);
+        draft.put("draftRevision", DefinitionDraftService.revision(authored));
+        draft.putArray("issues");
+        return document;
     }
     private ObjectNode initial(){ObjectNode doc=JSON.createObjectNode();doc.set("initialDefinition",fixtures.validAcceptedDocument().path("acceptedBaseline").path("definition"));return doc;}
     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}

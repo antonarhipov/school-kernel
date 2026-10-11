@@ -24,11 +24,13 @@ public class DefinitionDraftService {
     private final ObjectMapper json;
     private final Schema schema;
     private final ManifestService manifests;
+    private final KernelVerifier verifier;
 
-    public DefinitionDraftService(WorkspaceRepository repository, ObjectMapper json, ManifestService manifests) {
+    public DefinitionDraftService(WorkspaceRepository repository, ObjectMapper json, ManifestService manifests, KernelVerifier verifier) {
         this.repository = repository;
         this.json = json;
         this.manifests = manifests;
+        this.verifier = verifier;
         try (var input = getClass().getResourceAsStream("/schema/school-definition-v1.schema.json")) {
             if (input == null) throw new IllegalStateException("Definition schema missing");
             schema = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_2020_12).getSchema(input);
@@ -154,15 +156,61 @@ public class DefinitionDraftService {
         catch (IllegalArgumentException exception) {
             throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_AUTHORING_SOURCE", "Recorded source state is unavailable. Nothing was discarded.");
         }
-        if (!List.of(WorkspaceState.EMPTY, WorkspaceState.INITIAL_DRAFT, WorkspaceState.ACCEPTED_BASELINE).contains(sourceState)
-                || !(draft.path("sourceDocument") instanceof ObjectNode source)) {
+        if (!List.of(WorkspaceState.EMPTY, WorkspaceState.INITIAL_DRAFT, WorkspaceState.ACCEPTED_BASELINE).contains(sourceState)) {
             throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_AUTHORING_SOURCE", "Recorded authoring source is unavailable. Nothing was discarded.");
         }
+        ObjectNode source = discardSource(current, draft, sourceState);
         if (repository.replace(version, WorkspaceState.DEFINITION_DRAFT, sourceState, source.deepCopy()).isEmpty()) {
             throw new WorkspaceProblem(HttpStatus.PRECONDITION_FAILED, "STALE_WORKSPACE_VERSION",
                     "The workspace changed. Nothing was discarded; review the newer saved draft before retrying.");
         }
         return repository.load();
+    }
+
+    /** Older drafts retained the unchanged source alongside the draft, identified by its revision and catalog. */
+    private ObjectNode discardSource(WorkspaceAggregate current, JsonNode draft, WorkspaceState sourceState) {
+        if (draft.path("sourceDocument") instanceof ObjectNode source) return source.deepCopy();
+        JsonNode document = current.document();
+        JsonNode definition = sourceState == WorkspaceState.ACCEPTED_BASELINE
+                ? document.path("acceptedBaseline").path("definition") : document.path("initialDefinition");
+        String recordedRevision = draft.path("sourceDefinitionRevision").asString("");
+        boolean sourceMatches = !draft.has("sourceDocument")
+                && List.of(WorkspaceState.INITIAL_DRAFT, WorkspaceState.ACCEPTED_BASELINE).contains(sourceState)
+                && definition.isObject()
+                && recordedRevision.matches("sha256:[0-9a-f]{64}")
+                && recordedRevision.equals(document.path("definitionRevision").asString(""))
+                && draft.path("sourceCatalogVersion").isIntegralNumber()
+                && draft.path("sourceCatalogVersion").equals(definition.path("catalogVersion"))
+                && (sourceState != WorkspaceState.ACCEPTED_BASELINE
+                    || recordedRevision.equals(document.path("acceptedBaseline").path("result").path("inputRevision").asString("")))
+                && (!document.has("school")
+                    || document.path("school").path("id").equals(definition.path("schoolId"))
+                        && document.path("school").path("displayName").equals(definition.path("displayName")))
+                && !document.has("manualDraft") && !document.has("repairDraft")
+                && !document.has("proposal") && !document.has("run");
+        if (!sourceMatches) {
+            throw invalidDiscardSource();
+        }
+        // Kernel source revisions normalize entity/set order; authoring JSON revisions intentionally do not.
+        KernelVerifier.Verification verified;
+        try {
+            verified = verifier.verify(new ImportDocuments(definition,
+                    sourceState == WorkspaceState.ACCEPTED_BASELINE ? document.path("acceptedBaseline").path("result") : null,
+                    null, sourceState == WorkspaceState.ACCEPTED_BASELINE
+                        ? ImportDocuments.ImportMode.ACCEPTED_BASELINE : ImportDocuments.ImportMode.INITIAL_DEFINITION));
+        } catch (WorkspaceProblem problem) {
+            if (problem.status() == HttpStatus.UNPROCESSABLE_ENTITY) throw invalidDiscardSource();
+            throw problem;
+        }
+        if (!recordedRevision.equals(verified.definitionRevision())) throw invalidDiscardSource();
+        ObjectNode source = ((ObjectNode) document).deepCopy();
+        source.remove("definitionDraft");
+        return source;
+    }
+
+    private static WorkspaceProblem invalidDiscardSource() {
+        return new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_AUTHORING_SOURCE",
+                "Recorded authoring source is unavailable or no longer matches its saved revision. Nothing was discarded.");
     }
 
     /** UC-2: change identity fields only, never the recorded source or Current. */

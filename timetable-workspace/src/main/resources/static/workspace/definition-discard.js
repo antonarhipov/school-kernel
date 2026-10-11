@@ -8,11 +8,16 @@ export function renderDiscard(host, snapshot, narrow, actions, busy) {
   button.disabled = narrow || busy || discardBusy(); host.append(button);
   button.addEventListener('click', () => {
     if (innerWidth <= 700 || busy || discardBusy()) return;
-    const draft = snapshot.workspace.definitionDraft, source = draft.sourceDocument;
-    const name = source.school?.displayName || source.initialDefinition?.displayName || source.acceptedBaseline?.definition?.displayName || '(no school)';
+    const draft = snapshot.workspace.definitionDraft;
+    const legacySource = !Object.hasOwn(draft, 'sourceDocument') && typeof draft.sourceDefinitionRevision === 'string';
+    const source = draft.sourceDocument ?? (legacySource ? snapshot.workspace : null);
+    const name = source?.school?.displayName || source?.initialDefinition?.displayName || source?.acceptedBaseline?.definition?.displayName || (source ? '(no school)' : '(source unavailable)');
+    const changes = draft.sourceDocument ? `${snapshot.definitionReview?.counts?.changes ?? 0} saved changes` : 'All saved authoring changes';
     const dialog = el('dialog'); dialog.id = 'discard-authoring-dialog';
-    dialog.append(el('h3', 'Discard all authoring changes?'), el('p', `Restore recorded source: ${draft.sourceState} • ${name}.`),
-      el('p', `${snapshot.definitionReview?.counts?.changes ?? 0} saved changes will be abandoned, together with all unsaved working values. The recorded source content and revisions will be restored exactly.`));
+    dialog.append(el('h3', 'Discard all authoring changes?'), el('p', `Restore recorded source: ${draft.sourceState || '(unavailable)'} • ${name}.`),
+      el('p', `${changes} will be abandoned, together with all unsaved working values. The recorded source content and revisions will be restored exactly.`));
+    if (legacySource) dialog.append(el('p', 'This older draft retains its source in the workspace. Discard will restore it only if the recorded source revision still matches. Otherwise nothing will be discarded.'));
+    else if (!source || typeof source !== 'object' || Array.isArray(source)) dialog.append(el('p', 'The recorded authoring source is unavailable. Discard cannot restore it; saved work will remain unchanged.'));
     if (draft.sourceState === 'EMPTY') dialog.append(el('p', 'This returns to EMPTY. The newly created school definition will be removed; no school or Current timetable remains.'));
     const feedback = el('p'); feedback.setAttribute('role', 'alert');
     const confirm = el('button', 'Confirm discard authoring'); confirm.id = 'confirm-discard-authoring'; confirm.className = 'danger';

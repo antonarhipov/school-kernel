@@ -2,10 +2,10 @@
 
 ## Current
 
-- Use case: none (all 20 complete)
-- Status: APPROVED
-- Feature: IMPLEMENTED (20/20 use cases approved)
-- Next eligible: none
+- Use case: UC-19 (persisted legacy discard compatibility)
+- Status: NEEDS_REVISION
+- Feature: compatibility repair in progress; prior approvals retained
+- Next eligible: corrected legacy discard checks and recorded walkthrough
 
 ## Progress
 
@@ -29,7 +29,7 @@
 | UC-16 | APPROVED | UC-1, UC-15 | `56f8cdd` / [checkpoint](checkpoints/UC-16.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md) |
 | UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
 | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
-| UC-19 | APPROVED | UC-1 | `e90d7a5` / [checkpoint](checkpoints/UC-19.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md) |
+| UC-19 | NEEDS_REVISION | UC-1 | `e90d7a5` / [checkpoint](checkpoints/UC-19.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md) |
 | UC-20 | APPROVED | none | `1090151` / [checkpoint](checkpoints/UC-20.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md) |
 
 ## Technical decision pass
@@ -399,3 +399,11 @@ Reactor unit checks and source/discard/grouped/occurrence journeys pass so far. 
 ### 2026-10-12 — feature IMPLEMENTED
 
 All20 use cases APPROVED, all explicit dependencies and destination handoffs complete. Final136 unit checks and28 representative source/authoring/grouped/occurrence/discard/persistence/ordinary-repair API/browser paths PASS across complete reactor attempt and focused corrected compatibility repeat. Initial stale teacher-selector assertion failure retained, single test expectation updated, all3 saved-draft cases and33 workspace unit/architecture repeat PASS. Production and complete passing UC-20 walkthrough unchanged. [Final completion/regression/runtime ledger](../../output/playwright/school-definition-authoring/final-regression/20261012-2/README.md).17 superseded browsers and3 agent-owned servers closed; disposable evidence/data retained. Final accepted demo v63 available at18110, no active solve/fault trigger, operator runtime/data untouched. No human confirmation or separate convergence gate claimed.
+
+### 2026-10-12 — UC-19 persisted legacy discard finding
+
+User-reported `definition-discard.js:12` uncaught school access reproduced on an exact isolated copy of operator v233: legacy draft has sourceState/sourceDefinitionRevision/sourceCatalogVersion, no sourceDocument. Accepted MVK source remains in the outer aggregate. [FAIL ledger](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-1/README.md). Operator workspace/API process not mutated. Correct UI source lookup and add guarded explicit legacy restoration: require source state, preserved definition canonical revision, top-level revision, accepted result input revision, source catalog and school identity agreement; remove only the authoring subtree. Null/malformed/unknown/mismatched source still refuses409 without mutation. Normal recorded-source discard remains exact. Technical and changed-build walkthrough pending; historical approval evidence preserved.
+
+### 2026-10-12 — UC-19 correction technical and walkthrough PASS
+
+33 unit/architecture +8 discard/persistence browser cases PASS, reordered legacy fixtures and8 refused malformed/mismatched sources. Whole actual MVK copy restored exactly via independently verified kernel source revision; authoring raw JSON hash differs because kernel normalizes entity/set order. Repeat4 actor journey PASS: legacy v233→234, modern source re-entry/discard, initial/EMPTY, null-source409, no uncaught errors,8 inspected images. Actual operator8080 dialog/cancel PASS and complete v233 unchanged. Fixed build `/tmp/discard-authoring-fixed-r2.jar` restored stopped8080 using existing local database; no migrations/data changes, original browser working values preserved. Final approval ledger being recorded; earlier failure/interrupted evidence retained.

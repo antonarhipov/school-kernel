@@ -1,0 +1,10 @@
+### Browser `discard-legacy-repro` opened with pid 33754.
+### Ran Playwright code
+```js
+await page.goto('http://127.0.0.1:18111/workspace/');
+```
+### Page
+- Page URL: http://127.0.0.1:18111/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-11T23-32-51-321Z.yml)
