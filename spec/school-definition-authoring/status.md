@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-13
-- Status: PENDING_WALKTHROUGH
-- Next eligible: UC-14 after UC-13 walkthrough
+- Use case: UC-14
+- Status: IN_PROGRESS
+- Next eligible: UC-15 after UC-14 walkthrough
 
 ## Progress
 
@@ -22,8 +22,8 @@
 | UC-10 | APPROVED | UC-1 | `c997bd6` / [checkpoint](checkpoints/UC-10.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md) |
 | UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
-| UC-13 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-13.md) | Running isolated walkthrough |
-| UC-14 | NOT_STARTED | UC-1 | - | - |
+| UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
+| UC-14 | IN_PROGRESS | UC-1 | - | - |
 | UC-15 | NOT_STARTED | UC-1 | - | - |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
@@ -308,3 +308,7 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ### UC-13 technical submission
 
 All seven removal journeys and 27 unit/architecture checks pass in `/tmp/uc13-modal-verify.log`; 16 unchanged grid/occurrence/requirement regressions passed in `/tmp/uc13-verify.log`. Retained failed checks exposed the missing occurrence handoff and disabled controls after preview cancellation; both production fixes verified.
+
+### UC-13 automatic approval
+
+Recorded complete first standalone attempt PASS, exact v13, 17 inspected screenshots, source/Current fidelity and recovery evidence. [Walkthrough ledger](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md). Approved under the authorized autonomous loop; proceeding with UC-14 source restoration.
