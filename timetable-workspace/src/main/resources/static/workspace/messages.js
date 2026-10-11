@@ -6,7 +6,7 @@ export const M = Object.freeze({
   unavailable: 'Workspace unavailable',
   unavailableDetail: 'The local workspace could not be loaded.',
   savedDefinitionDraft: 'Saved school-definition draft',
-  savedDefinitionDraftDetail: 'Your saved school-definition changes are preserved. This version can inspect the current timetable, but editing this draft requires a version with school-definition editing.',
+  savedDefinitionDraftDetail: 'Your saved school-definition changes are preserved. Current is the accepted source timetable; authored changes have not been published. Resume authoring to edit the draft.',
   noAccepted: 'No accepted timetable',
   emptyState: 'Empty workspace',
   emptyHeading: 'Bring this school into the workspace',

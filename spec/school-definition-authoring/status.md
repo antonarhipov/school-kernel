@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-15
-- Status: PENDING_WALKTHROUGH
+- Status: NEEDS_REVISION
 - Next eligible: UC-16 after UC-15 walkthrough
 
 ## Progress
@@ -24,7 +24,7 @@
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
 | UC-14 | APPROVED | UC-1 | `7eaef7a` / [checkpoint](checkpoints/UC-14.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-14/20261012-2/README.md) |
-| UC-15 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-15.md) | Running isolated walkthrough |
+| UC-15 | NEEDS_REVISION | UC-1 | [checkpoint](checkpoints/UC-15.md) | Running isolated walkthrough |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
 | UC-18 | NOT_STARTED | UC-16 | - | - |
@@ -326,3 +326,9 @@ Complete repeat PASS, exact v18, 14 inspected screenshots. Seven restoration, se
 ### UC-15 technical submission
 
 Five complete review journeys and 27 unit/architecture checks PASS (`/tmp/uc15-revision-verify.log`); seven restoration regressions PASS in retained `/tmp/uc15-verify.log`. Initial review fixture errors (hidden collapsed evidence and new-school entry in School) corrected; source/Current, issue sorting across restart, literal text, timing/addition/cancellation sides, exact/stale/removed links and unsaved boundary verified.
+
+UC-15 attempt1 FAIL retained: import wait raced existing Create school, opening EMPTY rather than accepted source; CAS refused concurrent import. Await named rendered accepted-source Author definition and assert durable accepted state before proceeding. Full repeat required.
+
+UC-15 attempts2/3 FAIL retained: observed Classes selector corrected; residual page/context fault route aborted cohort saves. Exact request-failure evidence and explicit UI retry after clearing routes prove v6 legitimate recovery. Fresh Chrome context and full repeat required. Failed UC-15 servers (18092–18094) stopped after evidence capture; disposable databases/logs retained.
+
+UC-15 attempt4 action/state scripts PASS but screenshot inspection found obsolete Current draft-editing guidance. NEEDS_REVISION retained; corrected message now accurately says Current is accepted and draft changes unpublished. Relevant prior technical behavior checks unchanged; full new-build walkthrough repeat required.
