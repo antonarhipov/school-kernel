@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-11
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-12 after UC-11 walkthrough
 
 ## Progress
@@ -20,7 +20,7 @@
 | UC-8 | APPROVED | UC-1 | `42f3b53` / [checkpoint](checkpoints/UC-8.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md) |
 | UC-9 | APPROVED | UC-1 | `8109b2b` / [checkpoint](checkpoints/UC-9.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md) |
 | UC-10 | APPROVED | UC-1 | `c997bd6` / [checkpoint](checkpoints/UC-10.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md) |
-| UC-11 | IN_PROGRESS | UC-1 | - | - |
+| UC-11 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-11.md) | - |
 | UC-12 | NOT_STARTED | UC-1 | - | - |
 | UC-13 | NOT_STARTED | UC-1 | - | - |
 | UC-14 | NOT_STARTED | UC-1 | - | - |
@@ -262,3 +262,11 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-10 approval
 
 - Automatically APPROVED on c997bd6 after [recorded real Playwright PASS](../../output/playwright/school-definition-authoring/UC-10/20261011-1/README.md). Exact isolated v22 document/native/source, fourteen inspected screenshots and scope/target/invalid/intersection/lock/unmatched/responsive/stale/conflict/transport/navigation/reload outcomes retained. All 34 affected technical journeys plus 26 unit/architecture pass across final evidence. Failed parse/diagnostic expectation logs preserved; no open finding or operator mutation. UC-12/13/14 remain destination handoffs. Proceeding UC-11.
+
+## UC-11 evidence
+
+- Base 35787da, only agent-owned preference edits in progress. All seven ordinary weights, default omission, explicit zero, raw invalid supported values, selected-only CAS and exact kernel-equivalent overflow calculation implemented. Grid/entity/requirement/occurrence changes refresh dependent bounds. UI saved/effective table, fixed preference identity, stale selected conflicts, Save/Discard/Stay and narrow saved-only inspection. UC-12/14 destination handoffs remain. Technical/browser checks in progress; approval pending.
+
+- Initial UC-11 run retained at /tmp/uc11-verify.log. All grid checks pass; School identity viewport regression exposes added navigation wrapping that pushes its Save below 800px. Compact section buttons restore the existing visible-controls contract. Explicit default-only test fixture also corrected to omit imported overrides; invalid numeric assertions compare exact JSON types. Repeat affected checks before approval.
+
+- Final UC-11 technical BUILD SUCCESS /tmp/uc11-revision-verify.log: all three preference/seven School journeys plus 27 unit/architecture checks pass. Initial log supplies unchanged seven grid/four room-policy passes. Exact raw types/default omission/selected repair, source/Current/restart, state/CSRF/stale/storage/transport and responsive contracts pass. Navigation regression fixed. Module syntax/diff hygiene pass. PENDING_WALKTHROUGH; failures retained.

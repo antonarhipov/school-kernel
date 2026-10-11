@@ -369,6 +369,7 @@ public class DefinitionEntityService {
             for(String field:List.of("cohortId","subjectId"))if(!row.path("mixedFields").isEmpty() && (!row.path(field).isTextual()||find(definition.path(field.equals("cohortId")?"cohorts":"subjects"),row.path(field).asString(""))==null)) requirementIssue(issues,id,field,"Choose an existing "+field+" for this saved requirement.");
         }
         draft.set("issues",ordered(issues));
+        DefinitionPreferenceService.refresh(draft,json);
     }
 
     private void requirementIssue(ArrayNode issues,String id,String field,String message) { issue(issues,"Requirement",id,field,message).put("diagnosticSource","REQUIREMENT_CONTEXT"); }

@@ -99,6 +99,7 @@ public class DefinitionGridService {
                 .thenComparing(n -> n.path("field").asString()).thenComparing(n -> n.path("message").asString()));
         ArrayNode ordered = json.createArrayNode(); sorted.forEach(ordered::add); draft.set("issues", ordered);
         draft.set("gridTimingImpacts", timingImpacts(draft));
+        DefinitionPreferenceService.refresh(draft, json);
         draft.put("draftRevision", DefinitionDraftService.revision(definition));
         return document;
     }

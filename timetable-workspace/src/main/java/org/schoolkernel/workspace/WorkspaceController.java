@@ -42,6 +42,7 @@ public class WorkspaceController {
     private final DefinitionEntityService definitionEntities;
     private final DefinitionRequirementService definitionRequirements;
     private final DefinitionOccurrenceService definitionOccurrences;
+    private final DefinitionPreferenceService definitionPreferences;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -59,6 +60,7 @@ public class WorkspaceController {
             DefinitionEntityService definitionEntities,
             DefinitionRequirementService definitionRequirements,
             DefinitionOccurrenceService definitionOccurrences,
+            DefinitionPreferenceService definitionPreferences,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -74,6 +76,7 @@ public class WorkspaceController {
         this.definitionEntities = definitionEntities;
         this.definitionRequirements = definitionRequirements;
         this.definitionOccurrences = definitionOccurrences;
+        this.definitionPreferences = definitionPreferences;
         this.json = json;
     }
 
@@ -147,6 +150,10 @@ public class WorkspaceController {
             @RequestBody JsonNode request) {
         return response(definitionRequirements.save(ifMatch, request));
     }
+
+    @PostMapping("/api/definition-draft/preferences")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveDefinitionPreference(@RequestHeader(value=HttpHeaders.IF_MATCH,required=false)String ifMatch,@RequestBody JsonNode request){return response(definitionPreferences.save(ifMatch,request));}
 
     @PostMapping("/api/definition-draft/room-policies")
     @ResponseBody

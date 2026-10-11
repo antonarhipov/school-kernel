@@ -23,7 +23,7 @@ final class DefinitionDraftAccess extends OncePerRequestFilter {
             throws ServletException, IOException {
         if (request.getRequestURI().startsWith("/api/")
                 && !java.util.Set.of("GET", "HEAD", "OPTIONS").contains(request.getMethod())
-                && !java.util.Set.of("/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers", "/api/definition-draft/cohorts", "/api/definition-draft/rooms", "/api/definition-draft/room-policies", "/api/definition-draft/requirements", "/api/definition-draft/requirements/preview", "/api/definition-draft/occurrences", "/api/definition-draft/occurrences/preview").contains(request.getRequestURI())
+                && !java.util.Set.of("/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers", "/api/definition-draft/cohorts", "/api/definition-draft/rooms", "/api/definition-draft/room-policies", "/api/definition-draft/preferences", "/api/definition-draft/requirements", "/api/definition-draft/requirements/preview", "/api/definition-draft/occurrences", "/api/definition-draft/occurrences/preview").contains(request.getRequestURI())
                 && repository.load().state() == WorkspaceState.DEFINITION_DRAFT) {
             problems.write(response, HttpStatus.CONFLICT, "DEFINITION_DRAFT_ACTIVE",
                     "A school-definition draft is open. Resume authoring and finish or discard it first.");

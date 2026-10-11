@@ -1,0 +1,51 @@
+package org.schoolkernel.workspace;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+import com.microsoft.playwright.APIResponse;
+import com.microsoft.playwright.options.RequestOptions;
+import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
+
+class DefinitionPreferencesBrowserIT extends WorkbenchBrowserSupport {
+    @Test void allOrdinaryChoicesInvalidCorrectionOmissionAndRestart(){
+        initial(9);open();preferences();JsonNode source=draft().path("sourceDocument").deepCopy(),before=definition().deepCopy();
+        assertEquals(7,page().locator(".preference-table tr").count()-1);
+        for(String id:new java.util.TreeSet<>(DefinitionPreferenceService.SINCE.keySet())){
+            page().getByText("Edit preference: "+id,new com.microsoft.playwright.Page.GetByTextOptions().setExact(true)).click();
+            page().locator("#preference-mode").selectOption("value");page().locator("#preference-weight").fill("0");save();assertEquals(0,override(id).path("weight").intValue());workbench.awaitText("disabled");
+            page().locator("#preference-weight").fill("1000000");save();assertEquals(1000000,override(id).path("weight").intValue());page().locator("#preference-mode").selectOption("default");save();assertNull(override(id));
+        }
+        for(String raw:List.of("unfinished","1.5","-1","1000001","")){page().locator("#preference-mode").selectOption("value");page().locator("#preference-weight").fill(raw);save();assertTrue(draft().path("issues").toString().contains("PREFERENCE_FIELDS"));assertEquals(raw.equals("-1")||raw.equals("1000001")?JSON.readTree(raw):JSON.getNodeFactory().textNode(raw),override("soft.undesirable-period").path("weight"));}
+        page().locator("#preference-weight").fill("1");save();assertEquals(1,override("soft.undesirable-period").path("weight").intValue());assertFalse(draft().path("issues").toString().contains("PREFERENCE_FIELDS"));page().locator("#preference-mode").selectOption("default");save();assertNull(override("soft.undesirable-period"));
+        assertEquals(source,draft().path("sourceDocument"));ObjectNode actual=((ObjectNode)definition()).deepCopy();actual.remove("softConstraintOverrides");ObjectNode expected=((ObjectNode)before).deepCopy();expected.remove("softConstraintOverrides");assertEquals(expected,actual);String saved=storedDocument();workbench.reload();preferences();assertEquals(saved,storedDocument());try(var restarted=startRestartableWorkspace()){workbench.open(((org.springframework.boot.web.server.context.WebServerApplicationContext)restarted).getWebServer().getPort());preferences();assertEquals(saved,storedDocument());}
+    }
+    @Test void unsupportedUnavailableTypedRawDuplicatesSourceCurrentStateAndCsrf(){
+        initial(1);open();preferences();String unchanged=storedDocument();assertFalse(definition().has("softConstraintOverrides"));assertEquals(200,command(choice("soft.teacher-gap","default"),null).status());assertFalse(definition().has("softConstraintOverrides"));unchanged=storedDocument();
+        for(String id:List.of("hard.teacher-overlap","stability.period","unknown","soft.cohort-gap")){assertEquals(409,command(choice(id,"value").put("weight",1),null).status());assertEquals(unchanged,storedDocument());}
+        assertEquals(403,page().request().post(base()+"/api/definition-draft/preferences",RequestOptions.create().setData("{}").setHeader("Content-Type","application/json").setHeader("Origin",base()).setHeader("If-Match","\"ws-"+storedVersion()+"\"")).status());assertEquals(unchanged,storedDocument());
+        assertEquals(200,command(choice("soft.teacher-gap","value").put("weight",false),null).status());assertFalse(override("soft.teacher-gap").path("weight").booleanValue());assertTrue(draft().path("issues").toString().contains("integer weight"));
+        ObjectNode document=((ObjectNode)storedWorkspaceDocument()).deepCopy();var rows=document.withObject("definitionDraft").withObject("definition").withArray("softConstraintOverrides");rows.addObject().put("constraintId","soft.teacher-gap").put("weight",7);rows.addObject().put("constraintId","unknown").put("weight",2);store("DEFINITION_DRAFT",document);assertEquals(200,command(choice("soft.teacher-gap","value").put("weight",0),null).status());assertEquals(2,definition().path("softConstraintOverrides").size());assertTrue(draft().path("issues").toString().contains("available ordinary preference"));assertEquals("unknown",definition().path("softConstraintOverrides").get(1).path("constraintId").asString());
+        storeAccepted(fixtures.validAcceptedDocument());workbench.reload();open();JsonNode source=draft().path("sourceDocument").deepCopy();assertEquals(200,command(choice("soft.teacher-gap","value").put("weight",0),null).status());assertEquals(source,draft().path("sourceDocument"));for(var entry:source.properties())assertEquals(entry.getValue(),storedWorkspaceDocument().path(entry.getKey()));
+        for(WorkspaceState state:WorkspaceState.values())if(state!=WorkspaceState.DEFINITION_DRAFT){store(state.name(),storedWorkspaceDocument());unchanged=storedDocument();assertEquals(409,command(choice("soft.teacher-gap","default"),null).status());assertEquals(unchanged,storedDocument());}
+    }
+    @Test void responsiveWorkingStaleUnrelatedConflictStorageTransportNavigation() throws Exception {
+        initial(9);open();preferences();page().locator("#preference-mode").selectOption("value");page().locator("#preference-weight").fill("5");String unchanged=storedDocument();for(int width:List.of(1600,1280,390,700)){workbench.viewport(width,844);workbench.expect("document.documentElement.scrollWidth <= innerWidth");assertEquals(unchanged,storedDocument());if(width<=700)assertEquals(0,page().locator("#preference-form").count());}workbench.viewport(1280,800);assertEquals("5",page().locator("#preference-weight").inputValue());nav("Review");page().locator("#school-stay").click();assertEquals("5",page().locator("#preference-weight").inputValue());
+        assertEquals(200,command(choice("soft.non-preferred-room","value").put("weight",4),null).status());String newer=storedDocument();page().locator("#save-preference").click();workbench.awaitText("No preference was committed");assertEquals(newer,storedDocument());page().locator("#preference-refresh").click();workbench.expect("document.querySelector('#preference-weight')?.value === '5' && !document.querySelector('#preference-conflict')");save();assertEquals(4,override("soft.non-preferred-room").path("weight").intValue());
+        page().locator("#preference-weight").fill("6");assertEquals(200,command(choice("soft.teacher-gap","value").put("weight",7),null).status());page().locator("#save-preference").click();workbench.awaitText("No preference was committed");page().locator("#preference-refresh").click();workbench.awaitText("Newer saved preference conflicts");assertTrue(page().locator("#save-preference").isDisabled());page().getByText("Keep my reviewed preference",new com.microsoft.playwright.Page.GetByTextOptions().setExact(true)).click();String before=storedDocument();withRejectedWorkspaceUpdates("NEW.lifecycle_state = 'DEFINITION_DRAFT'",()->{page().locator("#save-preference").click();workbench.awaitText("No preference was committed");assertEquals(before,storedDocument());assertEquals("6",page().locator("#preference-weight").inputValue());});page().route("**/api/definition-draft/preferences",route->route.abort());page().locator("#save-preference").click();workbench.awaitText("No preference was committed");assertEquals(before,storedDocument());page().unroute("**/api/definition-draft/preferences");nav("Review");page().locator("#school-save-continue").click();workbench.expect("document.querySelector('#authoring-section h3')?.textContent === 'Review'");assertEquals(6,override("soft.teacher-gap").path("weight").intValue());
+    }
+    private void initial(int catalog){ObjectNode def=((ObjectNode)fixtures.validAcceptedDocument().path("acceptedBaseline").path("definition")).deepCopy().put("catalogVersion",catalog);def.remove("softConstraintOverrides");ObjectNode doc=JSON.createObjectNode();doc.set("initialDefinition",def);store("INITIAL_DRAFT",doc);workbench.open();}
+    private void open(){page().locator("#open-authoring").click();page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
+    private void nav(String section){page().locator("button[data-section='"+section+"']").click();}
+    private void preferences(){nav("Preferences");page().locator("#preference-form").waitFor();}
+    private com.microsoft.playwright.Page page(){return workbench.page();}
+    private void save(){long v=storedVersion();page().locator("#save-preference").click();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(v+1,storedVersion());}
+    private JsonNode draft(){return storedWorkspaceDocument().path("definitionDraft");}
+    private JsonNode definition(){return draft().path("definition");}
+    private JsonNode override(String id){for(JsonNode row:definition().path("softConstraintOverrides"))if(id.equals(row.path("constraintId").asString()))return row;return null;}
+    private ObjectNode choice(String id,String mode){return JSON.createObjectNode().put("constraintId",id).put("mode",mode);}
+    private String base(){return "http://localhost:"+port;}
+    private APIResponse command(JsonNode body,String version){JsonNode csrf=JSON.readTree(page().request().get(base()+"/api/csrf").text());return page().request().post(base()+"/api/definition-draft/preferences",RequestOptions.create().setData(JSON.writeValueAsString(body)).setHeader("Content-Type","application/json").setHeader("Origin",base()).setHeader("If-Match",version==null?"\"ws-"+storedVersion()+"\"":version).setHeader(csrf.path("headerName").asString(),csrf.path("token").asString()));}
+    private void store(String state,JsonNode document){jdbc.sql("UPDATE workspace_aggregate SET lifecycle_state=:state,version=version+1,active_run_id=NULL,document=CAST(:document AS jsonb) WHERE workspace_id=1").param("state",state).param("document",JSON.writeValueAsString(document)).update();}
+}
