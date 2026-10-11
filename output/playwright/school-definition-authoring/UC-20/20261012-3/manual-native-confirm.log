@@ -1,0 +1,10 @@
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Discard repair draft' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:18110/workspace/
+### Modal state
+- ["confirm" dialog with message "I confirm the staged changes and attempt-scoped pins should be discarded."]: can be handled by dialog-accept or dialog-dismiss
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-11T22-48-12-024Z.yml)

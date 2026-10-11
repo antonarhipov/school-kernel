@@ -1,0 +1,101 @@
+### Page
+- Page URL: http://127.0.0.1:18110/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - paragraph [ref=e3]: Local school timetable
+    - heading "Operations workspace" [level=1] [ref=e4]
+  - main [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - heading "Demo School" [level=2] [ref=e10]
+          - generic [ref=e11]: ✓ Current · accepted
+          - text: Accepted baseline · current timetable
+          - paragraph [ref=e12]: "Accepted revision: sha256:232c53bcf2ee6b373cb3965afc87849d245040c9c171f0cc543dff8742bf6b3c"
+        - group [ref=e14]:
+          - generic "Utilities" [ref=e15] [cursor=pointer]
+        - navigation "Timetable views" [ref=e16]:
+          - button "Current" [pressed] [ref=e17] [cursor=pointer]
+      - heading "Timetable details" [level=3] [ref=e18]
+      - generic [ref=e19]:
+        - generic "Whole school" [ref=e20]:
+          - group "Time range" [ref=e21]:
+            - button "Week" [pressed] [ref=e23] [cursor=pointer]
+            - button "Day" [ref=e24] [cursor=pointer]
+          - generic [ref=e25]:
+            - generic [ref=e26]: Weekday
+            - combobox "Weekday" [ref=e27]:
+              - option "Monday" [selected]
+          - generic [ref=e28]:
+            - generic [ref=e29]: Search lessons
+            - searchbox "Search lessons" [ref=e30]
+          - generic [ref=e31]:
+            - generic [ref=e32]: Subject investigation
+            - combobox "Subject investigation" [ref=e33]:
+              - option "No subject selected" [selected]
+              - option "Mathematics"
+              - option "Science"
+          - generic [ref=e34]:
+            - generic [ref=e35]: Teacher investigation
+            - combobox "Teacher investigation" [ref=e36]:
+              - option "No teacher selected" [selected]
+              - option "Alex"
+        - group [ref=e37]:
+          - generic "Filters" [ref=e38] [cursor=pointer]
+          - option "All classes" [selected]
+          - option "Year 7A"
+          - option "All teachers" [selected]
+          - option "Alex"
+          - option "All rooms" [selected]
+          - option "Room 101"
+          - option "Room 102"
+          - option "All periods" [selected]
+          - option "Monday 1"
+          - option "Monday 2"
+          - option "Monday 3"
+        - status [ref=e39]:
+          - strong [ref=e40]: Complete school population
+          - generic [ref=e41]: Complete recurring Week
+          - generic [ref=e42]: Showing 1 of 1 classes
+          - generic [ref=e43]: "Represented lessons: 2"
+          - generic [ref=e44]: "Active filters:"
+          - generic [ref=e45]: No active filters
+          - button "Reset view" [ref=e46] [cursor=pointer]
+        - status [ref=e47]:
+          - generic [ref=e48]: "Subject matches: 0"
+          - generic [ref=e49]: "Teacher matches: 0"
+          - generic [ref=e50]: "Dual matches: 0"
+        - generic "Complete whole-school matrix" [ref=e53]:
+          - table [ref=e54]:
+            - rowgroup [ref=e55]:
+              - row [ref=e56]:
+                - columnheader "Class" [ref=e57]
+                - columnheader "Period" [ref=e58]
+                - columnheader "Monday" [ref=e59]
+            - rowgroup [ref=e60]:
+              - row [ref=e61]:
+                - rowheader "Year 7A" [ref=e62]
+                - rowheader "1" [ref=e63]
+                - cell [ref=e64]:
+                  - button "Mathematics · Alex · Room 102 · Year 7A · Monday · Monday 1 · lesson-math-1" [ref=e66] [cursor=pointer]:
+                    - strong [ref=e67]: Mathematics
+                    - generic [ref=e68]: Room 102
+              - row [ref=e69]:
+                - rowheader "2" [ref=e70]
+                - cell [ref=e71]:
+                  - button "Science · Alex · Room 101 · Year 7A · Monday · Monday 2 · lesson-science-1" [ref=e73] [cursor=pointer]:
+                    - strong [ref=e74]: Science
+                    - generic [ref=e75]: Room 101
+              - row [ref=e76]:
+                - rowheader "3" [ref=e77]
+                - cell "Empty" [ref=e78]
+        - button "Start a protected repair" [ref=e82] [cursor=pointer]
+      - generic [ref=e83]:
+        - button "Author definition" [ref=e84] [cursor=pointer]
+        - status
+      - group [ref=e85]:
+        - generic "Change a lesson’s teacher" [ref=e86]
+```

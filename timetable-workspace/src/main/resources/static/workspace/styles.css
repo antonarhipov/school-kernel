@@ -868,3 +868,10 @@ body.authoring .current-label { margin: 8px 0; }
 }
 .repair-mode #workbench-inspector { position: static; width: 100%; margin-top: 8px; }
 @media (min-width: 1280px) { .repair-mode #workbench-inspector { margin-top: 0; } }
+
+/* Proposal review targets stay reachable beside or below the placement inspector. */
+@media (min-width: 1280px) {
+  .review-mode.current-mode .workbench-layout:not(.inspector-collapsed), .solving-mode.current-mode .workbench-layout:not(.inspector-collapsed) { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 12px; align-items: start; }
+}
+.review-mode #workbench-inspector, .solving-mode #workbench-inspector { position: static; width: 100%; margin-top: 8px; }
+@media (min-width: 1280px) { .review-mode #workbench-inspector, .solving-mode #workbench-inspector { margin-top: 0; } }

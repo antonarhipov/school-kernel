@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-20
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: final regression after UC-20 walkthrough
 
 ## Progress
@@ -29,7 +29,7 @@
 | UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
 | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
 | UC-19 | APPROVED | UC-1 | `e90d7a5` / [checkpoint](checkpoints/UC-19.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md) |
-| UC-20 | IN_PROGRESS | none | - | - |
+| UC-20 | PENDING_WALKTHROUGH | none | [checkpoint](checkpoints/UC-20.md) | final-build repeat pending |
 
 ## Technical decision pass
 
@@ -374,3 +374,15 @@ Production `88756ab`, [full PASS ledger](../../output/playwright/school-definiti
 ### 2026-10-12 — UC-19 automatic approval
 
 Submission e90d7a5; full standalone repeat3 PASS. All three source states, exact pre-upgrade catalog1 restoration after real solve/accept/upgrade, unsaved cancellation/resize, stale412 and actual storage503/retry/source/Current fidelity/reload.14 original screenshots and contact sheet inspected.3 discard+7 authoring browser checks and1 unit PASS r3; earlier harness label/desktop-filter assumptions corrected without weakening durability assertions. Failed/superseded artifacts retained. [Ledger](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md). UC-19 APPROVED; continue UC-20.
+
+### 2026-10-12 — UC-20 implementation and walkthrough revision
+
+Direct teacher fields (including same/null) refused without auto-draft; manual teacher selector removed; lifecycle/shared/occurrence route and explicit legacy full-assignment revert/publication block.11 existing manual API checks and5 unit checks PASS r2;3 of4 new browser paths PASS. Accepted inspection and route-entry checks exposed inspector overlap; compact responsibility text plus explicit close-and-show-route handoff added. First two standalone attempts retained, no approval; full changed-build repeat required.
+
+### 2026-10-12 — UC-20 regression repair loop
+
+Real actor attempts3–6 passed behavioral assertions but remained unapproved while final regressions exposed inspector reachability defects. Current popovers avoid toolbar/filter controls; Draft/Proposal/Solving inspectors use side/stack layout. Old manual teacher lens test replaced by supported room departure with exact teacher preservation; old proposal expectations now include independently specified Actual timing rows.2 corrected lens paths and4 teacher paths PASS r6; solving completion and old timing expectation corrected for r7. All failed attempts/logs/images retained; no human gate introduced.
+
+### 2026-10-12 — UC-20 final technical PASS
+
+Final r8:33 unit/architecture,11 manual API,4 teacher-route browser and exact normative proposal review PASS. The remaining assertion expected excluded selection to survive explicit narrow class/day changes, contrary to the inspection contract; now verifies clearing and explicitly reselects before collapse/reopen scroll preservation. Full changed-build standalone repeat7 PASS;17 screenshots/contact sheet inspected, direct409 lifecycle refusals and exact Current, legacy full revert, native cancellation and real shared/occurrence controls. Approval ledger being finalized; reactor/source/grouped/occurrence/discard/persistence/repair final checks running. Earlier failed evidence retained.

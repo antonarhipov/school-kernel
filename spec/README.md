@@ -43,9 +43,11 @@ Current feature directories:
   room assignments, allowed-room sets, and cohort-home-room targets.
 - [`kernel-reserved-periods`](kernel-reserved-periods/) specifies school-wide period reservations for ordinary
   planning and repair, with MVK's five `*-0` periods reserved.
-- [`timetable-manual-editing`](timetable-manual-editing/) specifies direct manual editing of scheduled lesson slot,
-  room, and teacher assignments, automatic real-time conflict validation with explanatory overlays, durable draft
-  persistence, and conflict-gated publication.
+- [`timetable-manual-editing`](timetable-manual-editing/) records the original manual assignment-editing specification.
+  Current manual editing supports period and room changes, durable drafts, conflict explanations and publication.
+  [School-definition authoring UC-20](school-definition-authoring/spec.md#uc-20---find-the-supported-route-for-a-teacher-change)
+  supersedes its teacher-change path: teaching responsibility is authored in the definition; saved legacy manual
+  teacher differences block publication until explicitly reverted or discarded.
 - [`school-definition-authoring`](school-definition-authoring/spec.md) specifies the
   [proposal](school-definition-authoring/proposal.md) for full supported definition authoring from an empty workspace,
   an initial definition, or an accepted baseline. Durable drafts cover weekly requirements, all supported settings,

@@ -259,6 +259,7 @@ function render(snapshot) {
     back.addEventListener('click', () => { authoringCurrent = false; render(snapshot); });
     stateCard.prepend(back);
   } else bindAuthoringEntry(snapshot);
+  renderTeacherChangeGuidance(snapshot);
   renderModeNavigation();
   if (selectionResetNotice) {
     const notice = document.querySelector('#inspection-notice') || document.querySelector('.narrow-banner');
@@ -623,6 +624,38 @@ function setRange(range, day = view.day, manualDay = false) {
   }
 }
 
+function legacyTeacherDifferences(snapshot) {
+  const lessons = new Map((snapshot.workspace.acceptedBaseline?.definition.lessons || []).map(lesson => [lesson.id, lesson]));
+  return (snapshot.workspace.manualDraft?.assignments || []).filter(assignment => lessons.has(assignment.lessonId) && assignment.teacherId !== lessons.get(assignment.lessonId).teacherId).map(assignment => assignment.lessonId).sort();
+}
+
+function teacherChangeMarkup(snapshot) {
+  const state = snapshot.state, differences = legacyTeacherDifferences(snapshot);
+  const routes = {
+    ACCEPTED_BASELINE: 'Current is accepted. Open definition authoring to change shared teaching settings or selected occurrences.',
+    MANUAL_DRAFT: differences.length ? `MANUAL_DRAFT contains legacy teacher differences for lessons: ${differences.join(', ')}. Publication is blocked. Explicitly revert each affected lesson to its full accepted assignment (period, room and teacher), then publish supported edits or discard the manual draft before authoring.` : 'MANUAL_DRAFT is active. Explicitly publish supported period/room edits or discard the manual draft before authoring.',
+    DEFINITION_DRAFT: 'DEFINITION_DRAFT is active. Resume authoring; use Weekly requirements or Occurrence details, then Review and Finish.',
+    REPAIR_DRAFT: 'REPAIR_DRAFT is active. Explicitly finish repair through solve, review and acceptance, or discard it; seeded repair must return to retained authoring first.',
+    SOLVING_REPAIR: 'SOLVING_REPAIR is active. Cancel the solve first, then finish or abandon its repair work; seeded repair can return to retained authoring.',
+    REPAIR_PROPOSAL: 'REPAIR_PROPOSAL is active. Review and explicitly accept, or discard only the generated proposal before returning to repair or retained authoring.',
+    INITIAL_PROPOSAL: 'INITIAL_PROPOSAL is active. Explicitly accept or discard its proposal before opening authoring.',
+    SOLVING_INITIAL: 'SOLVING_INITIAL is active. Cancel or finish the solve before opening authoring.'
+  };
+  return `<section class="teacher-change-guidance"><h4>Change a lesson’s teacher</h4><p>Teaching responsibility belongs to the school definition. Use definition authoring for shared teaching settings or selected occurrences. After an accepted timetable, finish authoring, generate a repair proposal, review it and explicitly accept it.</p><p>${escapeHtml(routes[state] || `${state} is active. Finish or explicitly abandon that workflow before authoring.`)} No pending changes are transferred automatically.</p>${state === 'ACCEPTED_BASELINE' && !view.narrow ? '<button type="button" class="secondary" data-teacher-authoring>Open definition authoring for a teacher change</button>' : ''}</section>`;
+}
+
+function bindTeacherAuthoring(host) {
+  host.querySelectorAll('[data-show-teacher-route]').forEach(button => button.addEventListener('click', () => { toggleInspector(false); const route = document.querySelector('#teacher-change-route'); if (route) { route.open = true; route.scrollIntoView({ block: 'center' }); } }));
+  host.querySelectorAll('[data-teacher-authoring]').forEach(button => button.addEventListener('click', () => document.querySelector('#open-authoring')?.click()));
+}
+
+function renderTeacherChangeGuidance(snapshot) {
+  if (!snapshot.acceptedTimetable && !['INITIAL_PROPOSAL', 'SOLVING_INITIAL'].includes(snapshot.state)) return;
+  const details = document.createElement('details'); details.id = 'teacher-change-route';
+  const summary = document.createElement('summary'); summary.textContent = 'Change a lesson’s teacher'; details.append(summary);
+  const body = document.createElement('div'); body.innerHTML = teacherChangeMarkup(snapshot); details.append(body); stateCard.append(details); bindTeacherAuthoring(details);
+}
+
 function renderAccepted(snapshot, schoolName) {
   const lifecycle = { ACCEPTED_BASELINE: M.acceptedState, REPAIR_DRAFT: M.repairDraft,
     SOLVING_REPAIR: M.repairRunning, REPAIR_PROPOSAL: M.repairProposal, MANUAL_DRAFT: M.manualDraftState,
@@ -765,7 +798,7 @@ function prefillRepairResourceFromSelection() {
 
 function renderManualDraft(snapshot, schoolName) {
   stateCard.className = 'card workspace-card manual-draft-mode current-mode compact-density';
-  const conflictsCount = snapshot.workspace.manualDraft?.conflicts?.length || 0;
+  const conflictsCount = (snapshot.workspace.manualDraft?.conflicts?.length || 0) + legacyTeacherDifferences(snapshot).filter(id => !(snapshot.workspace.manualDraft.conflicts || []).some(conflict => conflict.code === 'TEACHER_DEFINITION_MISMATCH' && conflict.lessonId === id)).length;
   const publishDisabled = conflictsCount > 0;
   const publishTitle = publishDisabled ? M.publishConflictsWarning(conflictsCount) : '';
   if (view.narrow) {
@@ -773,7 +806,7 @@ function renderManualDraft(snapshot, schoolName) {
   }
   stateCard.innerHTML = `<div class="accepted-heading"><div class=\"school-identity\"><h2>${escapeHtml(schoolName)}</h2><span class=\"state draft-state\">${M.manualDraftState}</span><span id=\"conflict-summary-badge\" class=\"conflict-badge ${conflictsCount > 0 ? 'has-conflicts' : 'clean'}\">${conflictsCount > 0 ? M.conflictCount(conflictsCount) : M.zeroConflicts}</span><p class=\"revision\">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class=\"header-utilities\"><p class=\"mode-note\">${M.manualDraftDetail}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div>
     <div class=\"task-launch manual-task-launch\">
-      <button id=\"discard-manual-draft\" type=\"button\" class=\"secondary\">${M.discardDraft}</button>
+      <button id=\"discard-manual-draft\" type=\"button\" class=\"secondary\">${M.discardManualDraft}</button>
       <button id=\"publish-manual-draft\" type=\"button\" class=\"primary\" ${publishDisabled ? 'disabled aria-disabled=\"true\" title=\"' + escapeHtml(publishTitle) + '\"' : ''}>${M.publishDraft}</button>
     </div>
     <p id="manual-publish-status" class="manual-publish-status" role="alert" hidden></p>
@@ -1413,6 +1446,8 @@ function lessonDetails(item) {
 
     ${showWeekActions(item)}
 
+    <p class="teacher-change-guidance">Teaching responsibility belongs to the school definition. Manual editing supports period and room changes.</p>
+    <button type="button" class="secondary" data-show-teacher-route>See teacher-change authoring route</button>
     ${conflictAlert}
     ${repairCues ? `<div class="popover-repair-cues">${repairCues}</div>` : ''}
 
@@ -1436,14 +1471,6 @@ function lessonDetails(item) {
           </label>
         </div>
 
-        <div class="popover-field">
-          <label for="edit-teacher">
-            <span class="popover-field-label">${M.teacher}</span>
-            <select id="edit-teacher" name="teacherId" class="popover-select"${currentSnapshot?.state === 'DEFINITION_DRAFT' ? ' disabled' : ''}>
-              ${acceptedModel.definition.teachers.map(t => `<option value="${escapeAttribute(t.id)}"${t.id === item.teacherId ? ' selected' : ''}>${escapeHtml(entityName(t, t.id))}</option>`).join('')}
-            </select>
-          </label>
-        </div>
       </div>
 
       <div class="popover-actions">
@@ -1590,7 +1617,7 @@ function manualLessonState(lessonId) {
   if (!draft) return { modified: false, conflict: false, labels: '', accessible: [], conflictMessages: [], conflicts: [] };
 
   const conflicts = (draft.conflicts || []).filter(c => c.lessonId === lessonId || (c.competingLessonIds && c.competingLessonIds.includes(lessonId)));
-  const modified = Boolean(draft.modifications && draft.modifications[lessonId]);
+  const modified = Boolean(draft.modifications && draft.modifications[lessonId]) || legacyTeacherDifferences(currentSnapshot).includes(lessonId);
   const labels = [];
   if (modified) labels.push(`<em class="modified-label">${M.modifiedFromBaseline}</em>`);
   if (conflicts.length > 0) labels.push(`<em class="conflict-label">${M.conflict}</em>`);
@@ -1816,7 +1843,7 @@ function positionPopover(button) {
     inspector.hidden = true;
     return;
   }
-  if (stateCard.classList.contains('repair-mode')) {
+  if (['repair-mode', 'review-mode', 'solving-mode'].some(mode => stateCard.classList.contains(mode))) {
     inspector.hidden = false; inspector.style.position = 'static'; inspector.style.width = '100%';
     inspector.style.left = ''; inspector.style.top = ''; inspector.style.zIndex = '';
     return;
@@ -1856,6 +1883,10 @@ function positionPopover(button) {
   }
 
   top = Math.max(16, Math.min(window.innerHeight - estimatedHeight - 16, top));
+  // Keep the inspection toolbar/lens controls reachable above the placement popover.
+  const toolbarBottom = Math.max(0, ...[...document.querySelectorAll('.inspection-toolbar, .filter-status')].map(control => control.getBoundingClientRect().bottom));
+  if (toolbarBottom > 0 && toolbarBottom < window.innerHeight - 120) top = Math.max(top, toolbarBottom + 8);
+  inspector.style.maxHeight = `${Math.max(100, window.innerHeight - top - 16)}px`;
 
   inspector.style.position = 'fixed';
   inspector.style.left = `${Math.round(left)}px`;
@@ -1945,6 +1976,7 @@ function bindManualEditor() {
   // Several selection paths rebind; one edit must issue exactly one save.
   if (!form || boundManualForms.has(form)) return;
   boundManualForms.add(form);
+  bindTeacherAuthoring(form.parentElement);
 
   const performSave = () => {
     manualDraftSaveQueue = manualDraftSaveQueue.then(async () => {
@@ -1956,7 +1988,6 @@ function bindManualEditor() {
       }
       const periodId = document.querySelector('#edit-period')?.value;
       const roomId = document.querySelector('#edit-room')?.value;
-      const teacherId = document.querySelector('#edit-teacher')?.value;
       if (periodId && view.range === 'DAY') {
         const chosenPeriod = acceptedModel?.definition?.periods?.find(p => p.id === periodId);
         if (chosenPeriod && chosenPeriod.weekday !== view.day) {
@@ -1969,8 +2000,7 @@ function bindManualEditor() {
           action: 'REASSIGN_LESSON',
           lessonId: view.selectedLessonId,
           periodId,
-          roomId,
-          teacherId
+          roomId
         });
       } catch (err) {
         if (statusEl) {
@@ -1989,9 +2019,8 @@ function bindManualEditor() {
 
   const periodSelect = document.querySelector('#edit-period');
   const roomSelect = document.querySelector('#edit-room');
-  const teacherSelect = document.querySelector('#edit-teacher');
 
-  [periodSelect, roomSelect, teacherSelect].forEach(select => {
+  [periodSelect, roomSelect].forEach(select => {
     if (select) {
       select.addEventListener('change', performSave);
     }
@@ -2035,7 +2064,7 @@ function bindManualDraftActions() {
   if (discardBtn && !discardBtn.dataset.bound) {
     discardBtn.dataset.bound = 'true';
     discardBtn.addEventListener('click', async () => {
-      const confirmed = window.confirm(M.confirmDiscardDraft);
+      const confirmed = window.confirm(M.confirmDiscardManualDraft);
       if (!confirmed) return;
       await mutateJson('/api/manual-draft', 'DELETE', { confirmed: true });
     });

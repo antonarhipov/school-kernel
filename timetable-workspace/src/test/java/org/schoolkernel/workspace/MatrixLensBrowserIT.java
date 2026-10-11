@@ -718,18 +718,19 @@ class MatrixLensBrowserIT extends WorkbenchBrowserSupport {
     void keepsALessonEditedOutOfTheLens() throws Exception {
         storeAccepted(fixtures.investigationScaleDocument());
         workbench.open().awaitText("Showing 60 of 60 classes");
-        workbench.filterTeacher("teacher-16");
-        workbench.awaitText("Lens: Teacher · " + TEACHER16);
+        // UC-20 supersedes manual teacher editing; exercise lens departure through supported room edits.
+        workbench.filterRoom("room-16");
+        workbench.awaitText("Lens: Room · " + ROOM16);
         Workbench.MutationLog mutations = workbench.recordMutations();
-
         workbench.selectLesson("lesson-961");
-        workbench.select("#edit-teacher", "teacher-17");
-        workbench.awaitText("Declared lesson 961 left the Teacher · " + TEACHER16 + " lens: its teacher is now Teacher 17. It stays open in the inspector.");
-        workbench.expect("!document.querySelector('[data-lesson-id=lesson-961]') && document.querySelector('#teacher-filter').value === 'teacher-16' && document.querySelector('.week-matrix tbody').dataset.rowId === 'teacher-16' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 961' && document.querySelector('#edit-teacher').value === 'teacher-17'",
-                "UC-3 ext 5a 1-4: the tile leaves the lens, the lesson stays selected and inspected, and the lens is unchanged");
-        assertEquals("teacher-17", draftAssignment("lesson-961").path("teacherId").stringValue());
+        assertEquals(0, workbench.page().locator("#edit-teacher").count());
+        workbench.select("#edit-room", "room-90");
+        workbench.awaitText("Declared lesson 961 left the Room · " + ROOM16 + " lens: its room is now Room 90. It stays open in the inspector.");
+        workbench.expect("!document.querySelector('[data-lesson-id=lesson-961]') && document.querySelector('#room-filter').value === 'room-16' && !document.querySelector('#workbench-inspector').hidden && document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 961'",
+                "UC-3 ext 5a: supported room reassignment leaves the lens while retaining inspection");
+        assertEquals("teacher-16", draftAssignment("lesson-961").path("teacherId").stringValue());
 
-        // The same for a room lens.
+        // A second supported room edit preserves the same boundary.
         workbench.filterRoom("room-16");
         workbench.awaitText("Lens: Room · " + ROOM16);
         workbench.selectLesson("lesson-962");

@@ -1,0 +1,503 @@
+LOCAL SCHOOL TIMETABLE
+
+Operations workspace
+Scale School✓ Current · acceptedRepair proposal · feasible
+
+Accepted revision: sha256:5db09cfadaa12e1fe7984b417d41e04d29893776f66d53337f3578f760dad410
+
+Proposal · not current. Accepted baseline remains current
+
+Utilities
+Current
+Draft
+Proposal
+Time range
+Week
+Day
+Weekday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Search lessons
+Subject investigation
+No subject selected
+Subject Zero with a deliberately long authoritative display name for timetable tiles
+Subject 1
+Subject 2
+Subject 3
+Subject 4
+Subject 5
+Subject 6
+Subject 7
+Subject 8
+Subject 9
+Subject 10
+Subject 11
+Subject 12
+Subject 13
+Subject 14
+Subject 15
+Subject 16
+Subject 17
+Subject 18
+Subject 19
+Teacher investigation
+No teacher selected
+Teacher 0
+Teacher 1
+Teacher 2
+Teacher 3
+Teacher 4
+Teacher 5
+Teacher 6
+Teacher 7
+Teacher 8
+Teacher 9
+Teacher 10
+Teacher 11
+Teacher 12
+Teacher 13
+Teacher 14
+Teacher 15
+Teacher Sixteen with a deliberately long authoritative display name for timetable tiles
+Teacher 17
+Teacher 18
+Teacher 19
+Teacher 20
+Teacher 21
+Teacher 22
+Teacher 23
+Teacher 24
+Teacher 25
+Teacher 26
+Teacher 27
+Teacher 28
+Teacher 29
+Teacher 30
+Teacher 31
+Teacher 32
+Teacher 33
+Teacher 34
+Teacher 35
+Teacher 36
+Teacher 37
+Teacher 38
+Teacher 39
+Teacher 40
+Teacher 41
+Teacher 42
+Teacher 43
+Teacher 44
+Teacher 45
+Teacher 46
+Teacher 47
+Teacher 48
+Teacher 49
+Teacher 50
+Teacher 51
+Teacher 52
+Teacher 53
+Teacher 54
+Teacher 55
+Teacher 56
+Teacher 57
+Teacher 58
+Teacher 59
+Teacher 60
+Teacher 61
+Teacher 62
+Teacher 63
+Teacher 64
+Teacher 65
+Teacher 66
+Teacher 67
+Teacher 68
+Teacher 69
+Teacher 70
+Teacher 71
+Teacher 72
+Teacher 73
+Teacher 74
+Teacher 75
+Teacher 76
+Teacher 77
+Teacher 78
+Teacher 79
+Teacher 80
+Teacher 81
+Teacher 82
+Teacher 83
+Teacher 84
+Teacher 85
+Teacher 86
+Teacher 87
+Teacher 88
+Teacher 89
+Teacher 90
+Teacher 91
+Teacher 92
+Teacher 93
+Teacher 94
+Teacher 95
+Teacher 96
+Teacher 97
+Teacher 98
+Teacher 99
+Filters
+Filtered whole-school matrix
+Complete recurring Week
+Showing 1 of 60 classes
+Represented lessons: 40
+Active filters:
+Class: Class Sixteen with a deliberately long authoritative display name for timetable tiles
+Clear filters
+Reset view
+Subject matches: 0
+Teacher matches: 40
+Dual matches: 0
+Proposed teacher load by period · not current · Teacher Sixteen with a deliberately long authoritative display name for timetable tiles
+Declared period 0
+Unavailable
+Declared period 1
+Assigned
+Declared period 2
+Assigned
+Declared period 3
+Assigned
+Declared period 4
+Assigned
+Declared period 5
+Assigned
+Declared period 6
+Assigned
+Declared period 7
+Assigned
+Declared period 8
+Assigned
+Declared period 9
+Assigned
+Declared period 10
+Assigned
+Declared period 11
+Assigned
+Declared period 12
+Assigned
+Declared period 13
+Assigned
+Declared period 14
+Assigned
+Declared period 15
+Assigned
+Declared period 16
+Assigned
+Declared period 17
+Assigned
+Declared period 18
+Assigned
+Declared period 19
+Assigned
+Declared period 20
+Assigned
+Declared period 21
+Assigned
+Declared period 22
+Assigned
+Declared period 23
+Assigned
+Declared period 24
+Assigned
+Declared period 25
+Assigned
+Declared period 26
+Assigned
+Declared period 27
+Assigned
+Declared period 28
+Assigned
+Declared period 29
+Assigned
+Declared period 30
+Assigned
+Declared period 31
+Assigned
+Declared period 32
+Assigned
+Declared period 33
+Assigned
+Declared period 34
+Assigned
+Declared period 35
+Assigned
+Declared period 36
+Assigned
+Declared period 37
+Assigned
+Declared period 38
+Assigned
+Declared period 39
+Assigned
+Declared period 40
+Assigned
+Declared period 41
+Unavailable
+Declared period 42
+Unavailable
+Declared period 43
+Unavailable
+Declared period 44
+Unavailable
+Declared period 45
+Unavailable
+Declared period 46
+Unavailable
+Declared period 47
+Unavailable
+Declared period 48
+Unavailable
+Declared period 49
+Unavailable
+Declared period 50
+Unavailable
+Declared period 51
+Unavailable
+Declared period 52
+Unavailable
+Declared period 53
+Unavailable
+Declared period 54
+Unavailable
+Declared period 55
+Unavailable
+Declared period 56
+Unavailable
+Declared period 57
+Unavailable
+Declared period 58
+Unavailable
+Declared period 59
+Unavailable
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+Class Sixteen with a deliberately long authoritative display name for timetable tiles	1	
+Subject Zero with a deliberately long authoritative display name for timetable tiles
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+Origin
+DIRECT
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+
+2	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+
+3	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+
+4	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+
+5	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject Zero with a deliberately long authoritative display name for timetable tiles
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+Destination
+DIRECT
+TEACHER
+	
+Empty
+
+6	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+
+7	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+
+8	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+
+9	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+
+10	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+
+11	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+
+12	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Subject 16
+Room Sixteen with a deliberately long authoritative display name for timetable tiles
+TEACHER
+	
+Empty
+	
+Empty
+Reopen Proposal task area
+
+Authoring unavailable while REPAIR_PROPOSAL is active. Finish or abandon this workflow first.
+
+Change a lesson’s teacher

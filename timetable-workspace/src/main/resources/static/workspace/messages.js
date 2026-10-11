@@ -48,6 +48,8 @@ export const M = Object.freeze({
   startManualEditing: 'Manual editing',
   manualDraft: name => `Manual draft · ${name}`,
   manualDraftState: 'Manual draft open',
+  discardManualDraft: 'Discard manual draft',
+  confirmDiscardManualDraft: 'Discard all manual assignment edits and return to Current? Current remains unchanged.',
   manualDraftDetail: 'Manual editing session is active. Select any lesson to adjust its assignment.',
   zeroConflicts: '0 conflicts',
   conflictCount: count => `${count} ${count === 1 ? 'conflict' : 'conflicts'}`,

@@ -1,0 +1,3 @@
+# UC-20 attempt6 — NEEDS_REVISION
+
+Full final-build real actor walkthrough passes; all17 images/contact sheet inspected, exact source/Current/native cancellation and explicit discard, direct teacher refusals, shared/selected occurrence settings, legacy mismatch refusal/full revert/publication, actual MVK proposal/draft/solve/cancel. Corrected2 lens paths PASS,4 teacher browser+5 unit+5 ordinary proposal paths PASS. Wider technical checks exposed old Actual timing expectations missing UC-17's required timing row, now updated by exact expected names/IDs; solving inspector needed the same sidebar/stack behavior as Draft/Proposal to keep task controls reachable. Repeat changed-build journey and repaired regressions; no approval yet. All evidence retained.

@@ -90,6 +90,24 @@ public class ManualDraftService {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
         boolean isBaseline = current.state() == WorkspaceState.ACCEPTED_BASELINE;
+        if (payload.has("teacherId")) {
+            String route = switch (current.state()) {
+                case ACCEPTED_BASELINE -> "Open Author definition from Current.";
+                case MANUAL_DRAFT -> "MANUAL_DRAFT is active: explicitly publish supported period/room edits or discard it first. Legacy teacher differences block publication; revert each affected lesson to its full accepted assignment or discard the draft.";
+                case DEFINITION_DRAFT -> "DEFINITION_DRAFT is active: resume authoring through Weekly requirements or Occurrence details, then Review and Finish.";
+                case REPAIR_DRAFT -> "REPAIR_DRAFT is active: finish repair through solve, review and explicit acceptance, or explicitly discard it; seeded repair must return to retained authoring first.";
+                case SOLVING_REPAIR -> "SOLVING_REPAIR is active: cancel the solve first, then finish or explicitly abandon repair work; seeded repair can return to retained authoring.";
+                case REPAIR_PROPOSAL -> "REPAIR_PROPOSAL is active: review and explicitly accept, or discard only the proposal before returning to repair or retained authoring.";
+                case EMPTY -> "EMPTY is active: create a school through definition authoring first.";
+                case INITIAL_DRAFT -> "INITIAL_DRAFT is active: open Author definition to edit teaching settings, then Finish into initial planning.";
+                case SOLVING_INITIAL -> "SOLVING_INITIAL is active: cancel or finish the initial solve before opening authoring.";
+                case INITIAL_PROPOSAL -> "INITIAL_PROPOSAL is active: explicitly accept or discard its proposal before opening authoring.";
+            };
+            throw new WorkspaceProblem(isBaseline || current.state() == WorkspaceState.MANUAL_DRAFT
+                    ? HttpStatus.UNPROCESSABLE_ENTITY : HttpStatus.CONFLICT, "TEACHER_CHANGE_REQUIRES_AUTHORING",
+                    "Teaching responsibility belongs to the school definition. Use definition authoring, then repair and explicit acceptance. "
+                    + route + " No changes were transferred.");
+        }
         if (!isBaseline) {
             requireState(current, WorkspaceState.MANUAL_DRAFT,
                     "Manual editing mutations require MANUAL_DRAFT state.");
@@ -125,7 +143,6 @@ public class ManualDraftService {
         Map<String, JsonNode> baselineByLesson = byId(baselineAssignments, "lessonId");
         Map<String, JsonNode> definitionPeriods = byId(definition.path("periods"));
         Map<String, JsonNode> definitionRooms = byId(definition.path("rooms"));
-        Map<String, JsonNode> definitionTeachers = byId(definition.path("teachers"));
 
         if ("REASSIGN_LESSON".equals(action)) {
             String lessonId = payload.path("lessonId").stringValue();
@@ -157,14 +174,6 @@ public class ManualDraftService {
                     throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_ROOM", "Unknown room id: " + newRoomId);
                 }
                 targetAssignment.put("roomId", newRoomId);
-            }
-
-            if (payload.has("teacherId") && !payload.path("teacherId").isNull()) {
-                String newTeacherId = payload.path("teacherId").stringValue();
-                if (!definitionTeachers.containsKey(newTeacherId)) {
-                    throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_TEACHER", "Unknown teacher id: " + newTeacherId);
-                }
-                targetAssignment.put("teacherId", newTeacherId);
             }
 
             // Update modification record
@@ -254,6 +263,16 @@ public class ManualDraftService {
             JsonNode period = periods.get(periodId);
             String periodName = period != null ? textOrDefault(period, "displayName", periodId) : periodId;
 
+            JsonNode lesson = lessons.get(lessonId);
+            if (lesson != null && !assignment.path("teacherId").equals(lesson.path("teacherId"))) {
+                ObjectNode conflict = json.createObjectNode();
+                conflict.put("code", "TEACHER_DEFINITION_MISMATCH").put("lessonId", lessonId)
+                        .put("periodId", periodId).put("resourceType", "TEACHER").put("resourceId", teacherId);
+                conflict.putArray("competingLessonIds");
+                conflict.put("description", "Lesson " + lessonId + " has a legacy manual teacher difference. Publication is blocked. Explicitly revert its full accepted assignment (period, room and teacher), or discard MANUAL_DRAFT before definition authoring. No teacher change is transferred automatically.");
+                conflicts.add(conflict);
+            }
+
             // Teacher availability
             JsonNode teacher = teachers.get(teacherId);
             if (teacher != null && teacher.has("availablePeriodIds")) {
@@ -291,7 +310,6 @@ public class ManualDraftService {
             }
 
             // 6. ROOM_INCOMPATIBLE
-            JsonNode lesson = lessons.get(lessonId);
             boolean roomIncompatible = false;
             String reason = null;
 
@@ -550,6 +568,17 @@ public class ManualDraftService {
                 "Manual draft publication requires MANUAL_DRAFT state.");
 
         JsonNode manualDraft = current.document().path("manualDraft");
+        List<ObjectNode> evaluated = evaluateConflicts(current.document().path("acceptedBaseline").path("definition"), manualDraft.path("assignments"));
+        List<String> mismatches = evaluated.stream().filter(conflict -> "TEACHER_DEFINITION_MISMATCH".equals(conflict.path("code").asString()))
+                .map(conflict -> conflict.path("lessonId").asString()).sorted().toList();
+        if (!mismatches.isEmpty()) {
+            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "TEACHER_CHANGE_REQUIRES_AUTHORING",
+                    "Legacy manual teacher differences block publication for lessons: " + String.join(", ", mismatches)
+                    + ". Explicitly revert each full accepted assignment (period, room and teacher), or discard MANUAL_DRAFT before definition authoring. No changes were transferred.");
+        }
+        if (!evaluated.isEmpty()) {
+            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "UNRESOLVED_CONFLICTS", "All hard conflicts must be resolved before publishing (" + evaluated.size() + " remaining).");
+        }
         ArrayNode conflicts = (ArrayNode) manualDraft.path("conflicts");
         if (conflicts != null && !conflicts.isEmpty()) {
             throw new WorkspaceProblem(
@@ -607,6 +636,7 @@ public class ManualDraftService {
             newAccepted.set("manifest", newManifest);
         }
 
+        if (current.document().has("authoringContext")) updatedDocument.set("authoringContext", current.document().path("authoringContext").deepCopy());
         if (current.document().has("lastRun")) {
             updatedDocument.set("lastRun", current.document().path("lastRun").deepCopy());
         }

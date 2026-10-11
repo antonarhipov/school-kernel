@@ -1,0 +1,3 @@
+# UC-20 attempt4 — NEEDS_REVISION
+
+All real teacher-route/manual/legacy/repair-state actions passed,17 images inspected. Actual direct422 refusal, cancel/discard native confirmation and exact Current; both actual authoring teacher controls reached; full legacy revert then publication; real MVK proposal-only discard/solve/cancel. Repair selector ambiguity preserved in repair.log, corrected scope PASS in repair-r2.log. Technical4 teacher-browser+11 manual+5 unit checks PASS;10/11 accepted-inspection paths PASS. The remaining accepted-inspection geometry failure showed the lens controls sit in filter-status below the main toolbar; inspector avoided only the main toolbar. Include both bars in the boundary and repeat final changed-build walkthrough. No approval yet.

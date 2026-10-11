@@ -142,7 +142,6 @@ class WorkspaceManualDraftIT {
         payload.put("lessonId", "lesson-science-1");
         payload.put("periodId", "mon-3");
         payload.put("roomId", "room-101");
-        payload.put("teacherId", "teacher-alex");
 
         HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(payload));
         assertEquals(200, mutateResponse.statusCode());
@@ -177,7 +176,6 @@ class WorkspaceManualDraftIT {
         payload.put("lessonId", "lesson-science-1");
         payload.put("periodId", "mon-1");
         payload.put("roomId", "room-102");
-        payload.put("teacherId", "teacher-alex");
 
         HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(payload));
         assertEquals(200, mutateResponse.statusCode());
@@ -217,7 +215,6 @@ class WorkspaceManualDraftIT {
         payload.put("lessonId", "lesson-science-1");
         payload.put("periodId", "mon-3");
         payload.put("roomId", "room-101");
-        payload.put("teacherId", "teacher-alex");
 
         HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(payload));
         String mutatedEtag = mutateResponse.headers().firstValue("ETag").orElseThrow();
@@ -271,13 +268,13 @@ class WorkspaceManualDraftIT {
 
         // Nonexistent lesson
         ObjectNode badLesson = JSON.createObjectNode().put("action", "REASSIGN_LESSON").put("lessonId", "unknown-lesson")
-                .put("periodId", "mon-1").put("roomId", "room-101").put("teacherId", "teacher-alex");
+                .put("periodId", "mon-1").put("roomId", "room-101");
         HttpResponse<String> badLessonResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(badLesson));
         assertEquals(422, badLessonResp.statusCode());
 
         // Nonexistent period
         ObjectNode badPeriod = JSON.createObjectNode().put("action", "REASSIGN_LESSON").put("lessonId", "lesson-science-1")
-                .put("periodId", "unknown-period").put("roomId", "room-101").put("teacherId", "teacher-alex");
+                .put("periodId", "unknown-period").put("roomId", "room-101");
         HttpResponse<String> badPeriodResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(badPeriod));
         assertEquals(422, badPeriodResp.statusCode());
     }
@@ -296,7 +293,6 @@ class WorkspaceManualDraftIT {
         mutatePayload.put("lessonId", "lesson-science-1");
         mutatePayload.put("periodId", "mon-1");
         mutatePayload.put("roomId", "room-102");
-        mutatePayload.put("teacherId", "teacher-alex");
 
         HttpResponse<String> mutateResp = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(mutatePayload));
         assertEquals(200, mutateResp.statusCode());
@@ -368,7 +364,6 @@ class WorkspaceManualDraftIT {
         mutatePayload.put("lessonId", "lesson-science-1");
         mutatePayload.put("periodId", "mon-3");
         mutatePayload.put("roomId", "room-101");
-        mutatePayload.put("teacherId", "teacher-alex");
 
         HttpResponse<String> mutateResponse = command("PATCH", "/api/manual-draft", draftSession, JSON.writeValueAsString(mutatePayload));
         assertEquals(200, mutateResponse.statusCode());
@@ -425,8 +420,7 @@ class WorkspaceManualDraftIT {
                   "action": "REASSIGN_LESSON",
                   "lessonId": "lesson-science-1",
                   "periodId": "mon-1",
-                  "roomId": "room-102",
-                  "teacherId": "teacher-alex"
+                  "roomId": "room-102"
                 }
                 """;
         HttpResponse<String> mutateResp = command("PATCH", "/api/manual-draft", draftSession, clashPayload);
@@ -467,8 +461,7 @@ class WorkspaceManualDraftIT {
                   "action": "REASSIGN_LESSON",
                   "lessonId": "lesson-science-1",
                   "periodId": "mon-3",
-                  "roomId": "room-101",
-                  "teacherId": "teacher-alex"
+                  "roomId": "room-101"
                 }
                 """;
         HttpResponse<String> mutateResp = command("PATCH", "/api/manual-draft", draftSession, movePayload);

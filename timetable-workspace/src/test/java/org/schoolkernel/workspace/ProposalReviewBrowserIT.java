@@ -201,13 +201,13 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         workbench.click("[data-lesson-id=lesson-960][data-comparison-side=accepted]");
         workbench.expect("document.querySelector('.comparison-details')?.textContent.includes('period-0') && document.querySelector('.comparison-details')?.textContent.includes('period-40') && document.querySelector('.comparison-details')?.textContent.includes('room-16') && document.querySelector('.comparison-details')?.textContent.includes('Directly affected')");
         assertDisplayedComparisonSides("""
-                [["Old assignment",[["Weekday","Monday",null],
+                [["Old assignment",[["Weekday","Monday",null],["Actual timing","Mon Declared period 0",null],
                 ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
                 ["Class","Class Sixteen with a deliberately long authoritative display name for timetable tiles","cohort-16"],
                 ["Teacher","Teacher Sixteen with a deliberately long authoritative display name for timetable tiles","teacher-16"],
                 ["Period · Changed","Declared period 0","period-0"],
                 ["Room","Room Sixteen with a deliberately long authoritative display name for timetable tiles","room-16"]]],
-                ["Proposed assignment",[["Weekday","Thursday",null],
+                ["Proposed assignment",[["Weekday","Thursday",null],["Actual timing","Thu Declared period 40",null],
                 ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
                 ["Class","Class Sixteen with a deliberately long authoritative display name for timetable tiles","cohort-16"],
                 ["Teacher","Teacher Sixteen with a deliberately long authoritative display name for timetable tiles","teacher-16"],
@@ -217,11 +217,11 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         workbench.click("[data-lesson-id=lesson-0][data-comparison-side=combined]");
         workbench.expect("document.querySelector('.comparison-details')?.textContent.includes('room-0') && document.querySelector('.comparison-details')?.textContent.includes('room-50') && document.querySelector('.comparison-details')?.textContent.includes('Solver ripple')");
         assertDisplayedComparisonSides("""
-                [["Old assignment",[["Weekday","Monday",null],
+                [["Old assignment",[["Weekday","Monday",null],["Actual timing","Mon Declared period 0",null],
                 ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
                 ["Class","Class 0","cohort-0"],["Teacher","Teacher 0","teacher-0"],
                 ["Period","Declared period 0","period-0"],["Room · Changed","Room 0","room-0"]]],
-                ["Proposed assignment",[["Weekday","Monday",null],
+                ["Proposed assignment",[["Weekday","Monday",null],["Actual timing","Mon Declared period 0",null],
                 ["Subject","Subject Zero with a deliberately long authoritative display name for timetable tiles","subject-0"],
                 ["Class","Class 0","cohort-0"],["Teacher","Teacher 0","teacher-0"],
                 ["Period","Declared period 0","period-0"],["Room · Changed","Room 50","room-50"]]]]
@@ -333,6 +333,11 @@ class ProposalReviewBrowserIT extends WorkbenchBrowserSupport {
         }
         workbench.viewport(1280, 800);
         workbench.expect("document.querySelector('.matrix-wrap') !== null && document.querySelector('#workbench-task-area') !== null");
+        workbench.expect("document.querySelector('#lesson-panel-title') === null",
+                "explicit narrow class/day selection clears an excluded lesson according to the inspection contract");
+        workbench.click("[data-review-lesson=lesson-500]");
+        workbench.expect("document.querySelector('#lesson-panel-title')?.textContent === 'Declared lesson 500'",
+                "explicit review navigation restores the protected lesson before task collapse");
         JsonNode beforeCollapseScroll = workbench.value("(() => { const matrix=document.querySelector('.matrix-wrap'); matrix.scrollTo(140,120); return {left:matrix.scrollLeft, top:matrix.scrollTop}; })()");
         assertTrue(beforeCollapseScroll.path("left").intValue() > 0 && beforeCollapseScroll.path("top").intValue() > 0,
                 "UC-4 G3: the Proposal matrix must have a real horizontal and vertical scroll position before collapse: " + beforeCollapseScroll);

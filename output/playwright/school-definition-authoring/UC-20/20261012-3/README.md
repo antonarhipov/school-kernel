@@ -1,0 +1,3 @@
+# UC-20 attempt3 — NEEDS_REVISION
+
+Real teacher request refusals, supported period/room edit/revert, explicit native manual discard, shared/occurrence authoring entry and saved legacy mismatch refusal/full revert/publication all passed. Complete result records are in manual-record.log, route.log and legacy.log; native confirm separated because CLI returns on modal display. Presentation inspection found manual discard inherited the repair-specific label/confirmation from duplicate message keys. Accepted-inspection regression also found a popover obstructing lens toolbar controls. Correct manual wording and constrain popover below the toolbar; full changed-build repeat required. All artifacts preserved.
