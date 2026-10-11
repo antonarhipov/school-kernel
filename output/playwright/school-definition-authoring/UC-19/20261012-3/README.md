@@ -1,0 +1,17 @@
+# UC-19 walkthrough — PASS
+
+2026-10-12; submission `e90d7a5` (production code of `/tmp/uc19-workspace.jar`). Headed Chrome sessions `authoring-uc19-r1`, `authoring-uc19-sources`; 1440×1000 and 390×844. Standalone18108, disposable `authoring_loop_uc17_inspection`; standalone18110, disposable `authoring_loop_uc19_sources`. Original real MVK source and prior three native edits retained in attempt2 restored values; final repeat opens a fresh copy of the exact same source. Operator data untouched. [Contact sheet](contact-sheet.jpg) and all originals inspected; confirmation/source identities, refusal feedback and narrow wrapping readable, no horizontal overflow.
+
+| Contract | Action / expected | Observed |
+|---|---|---|
+| 1–3 / 3a | Discard confirmation names source/saved changes; cancel preserves saved/unsaved | PASS: unsaved literal `Unsaved <img> Õ` and entire API snapshot exact; [confirmation](01-confirmation.png), [start exact values](start-values.json) |
+| G3 | Resize open confirmation to390; no mutating confirm, cancel preserves values | PASS: confirm disabled, no overflow; desktop values intact; [narrow](02-narrow-confirmation.png) |
+| 4a | Second tab saves name; old tab must refuse discard | PASS412; exact newer v24 and unsaved form intact; [stale](03-stale-refusal.png), explicit working-edit discard then Refresh saved review |
+| 4a | Actual discard-only PostgreSQL trigger failure; no false success | PASS503; whole saved/source/API v24 exact; [refusal](04-storage-refusal.png), [fault values](fault-values.json). Trigger removed |
+| 4–5 / G1–2 | Explicit retry restores entire recorded accepted source, reload | PASS v25; exact source definition/result/manifest/context/metadata/revisions, Current exact; [restored](05-restored-current.png), [complete values](restore-values.json) |
+| 2 / G1 | Create EMPTY-source school, save literal name, discard | PASS v0→draft/save→EMPTYv3; no school definition; [confirmation](EMPTY-confirmation.png), [restored](EMPTY-restored.png), [source values](sources-values.json) |
+| 4–5 / G1–2 | Real import initial-school.json, save name, discard | PASS exact catalog1 initial definition/revision restored/reloaded; [confirmation](INITIAL_DRAFT-confirmation.png), [restored](INITIAL_DRAFT-restored.png), source values above |
+| G1–2 | Real60s catalog1 plan/independent verification/explicit acceptance; confirmed8 authoring upgrade; discard | PASS exact old catalog1 definition/result/manifest/provenance restored v12; [opening](preupgrade-opening.png), [confirmation](preupgrade-discard-confirmation.png), [restored](preupgrade-restored.png), [whole source/draft/restored](preupgrade-restore-values.json), [real plan](preupgrade-plan-values.json) |
+| 1a / 4a | Seeded/wrong-state/access/unconfirmed refusal | PASS in fresh DefinitionDiscardBrowserIT; exact durable nonmutation. Infrastructure and direct security paths are technical evidence, not claimed UI clicks |
+
+Technical PASS `/tmp/uc19-checks-r3.log`:3 discard +7 authoring browser journeys,1 definition unit check; diff check PASS. First/r2 technical logs and two superseded standalone attempts preserved. Attempt1/2 final reload harness encountered expected beforeunload; final repeat explicitly used working-edit discard/refresh and returned full PASS records. Expected console errors correspond only to refused412/503, no uncaught product error. All fault triggers removed. Servers/databases retained for UC-20; no automatic source transfer, no user confirmation gate. Overall PASS; automatically APPROVED.

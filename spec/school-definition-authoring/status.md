@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: UC-19
+- Use case: UC-20
 - Status: IN_PROGRESS
-- Next eligible: UC-20 after UC-19 walkthrough
+- Next eligible: final regression after UC-20 walkthrough
 
 ## Progress
 
@@ -28,8 +28,8 @@
 | UC-16 | APPROVED | UC-1, UC-15 | `56f8cdd` / [checkpoint](checkpoints/UC-16.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-16/20261012-5/README.md) |
 | UC-17 | APPROVED | UC-16 | `88756ab` / [checkpoint](checkpoints/UC-17.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-17/20261012-3/README.md) |
 | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
-| UC-19 | IN_PROGRESS | UC-1 | - | - |
-| UC-20 | NOT_STARTED | none | - | - |
+| UC-19 | APPROVED | UC-1 | `e90d7a5` / [checkpoint](checkpoints/UC-19.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md) |
+| UC-20 | IN_PROGRESS | none | - | - |
 
 ## Technical decision pass
 
@@ -370,3 +370,7 @@ Production `88756ab`, [full PASS ledger](../../output/playwright/school-definiti
 ### 2026-10-12 — UC-18 automatic approval
 
 `99a8fac`, [PASS ledger](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md). Real saved MVK seed with extra teacher unavailability and both placement pin dimensions: cancel/narrow/stale two-tab refusal and actual return-storage refusal preserved whole v14; retry restored exact retained authoring/context/issues/omissions/source v15. Active solve refused return; actual cancel and explicit restoration exact v19. Copied real proposal showed proposal-only-discard-first guidance and refused direct return without mutation. Eight images/contact sheet inspected, compile/diff and immediately preceding unchanged backend technical checks PASS. UC-18 APPROVED; proceed UC-19.
+
+### 2026-10-12 — UC-19 automatic approval
+
+Submission e90d7a5; full standalone repeat3 PASS. All three source states, exact pre-upgrade catalog1 restoration after real solve/accept/upgrade, unsaved cancellation/resize, stale412 and actual storage503/retry/source/Current fidelity/reload.14 original screenshots and contact sheet inspected.3 discard+7 authoring browser checks and1 unit PASS r3; earlier harness label/desktop-filter assumptions corrected without weakening durability assertions. Failed/superseded artifacts retained. [Ledger](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md). UC-19 APPROVED; continue UC-20.
