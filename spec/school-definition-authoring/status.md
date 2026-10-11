@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-14
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-15 after UC-14 walkthrough
 
 ## Progress
@@ -23,7 +23,7 @@
 | UC-11 | APPROVED | UC-1 | `1fc3328` / [checkpoint](checkpoints/UC-11.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-11/20261011-2/README.md) |
 | UC-12 | APPROVED | UC-1 | `dfabfd8` / [checkpoint](checkpoints/UC-12.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-12/20261011-3/README.md) |
 | UC-13 | APPROVED | UC-1 | `caddae3` / [checkpoint](checkpoints/UC-13.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md) |
-| UC-14 | IN_PROGRESS | UC-1 | - | - |
+| UC-14 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-14.md) | Running isolated walkthrough |
 | UC-15 | NOT_STARTED | UC-1 | - | - |
 | UC-16 | NOT_STARTED | UC-1, UC-15 | - | - |
 | UC-17 | NOT_STARTED | UC-16 | - | - |
@@ -312,3 +312,7 @@ All seven removal journeys and 27 unit/architecture checks pass in `/tmp/uc13-mo
 ### UC-13 automatic approval
 
 Recorded complete first standalone attempt PASS, exact v13, 17 inspected screenshots, source/Current fidelity and recovery evidence. [Walkthrough ledger](../../output/playwright/school-definition-authoring/UC-13/20261011-1/README.md). Approved under the authorized autonomous loop; proceeding with UC-14 source restoration.
+
+### UC-14 technical submission
+
+Seven restoration journeys plus 27 unit/architecture checks pass in `/tmp/uc14-context-verify.log`. Seven approved removal regressions pass in retained `/tmp/uc14-revision-verify.log`. Exact grouped/occurrence regression class names corrected and running separately. Individual preference and weekly source context restoration retain unrelated native data and exception intent; no member resurrection. Earlier compile/assertion/build-overlap failures retained.

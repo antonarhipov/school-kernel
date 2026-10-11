@@ -45,6 +45,7 @@ public class WorkspaceController {
     private final DefinitionPreferenceService definitionPreferences;
     private final DefinitionCatalogService definitionCatalog;
     private final DefinitionRemovalService definitionRemoval;
+    private final DefinitionRestorationService definitionRestoration;
     private final ObjectMapper json;
 
     public WorkspaceController(
@@ -65,6 +66,7 @@ public class WorkspaceController {
             DefinitionPreferenceService definitionPreferences,
             DefinitionCatalogService definitionCatalog,
             DefinitionRemovalService definitionRemoval,
+            DefinitionRestorationService definitionRestoration,
             ObjectMapper json) {
         this.repository = repository;
         this.imports = imports;
@@ -83,6 +85,7 @@ public class WorkspaceController {
         this.definitionPreferences = definitionPreferences;
         this.definitionCatalog = definitionCatalog;
         this.definitionRemoval = definitionRemoval;
+        this.definitionRestoration = definitionRestoration;
         this.json = json;
     }
 
@@ -157,6 +160,21 @@ public class WorkspaceController {
         return response(definitionRequirements.save(ifMatch, request));
     }
 
+    @PostMapping("/api/definition-draft/restoration/inspect")
+    @ResponseBody
+    public ResponseEntity<JsonNode> inspectRestoration(@RequestHeader("If-Match") String ifMatch) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionRestoration.inspect(ifMatch));
+    }
+    @PostMapping("/api/definition-draft/restoration/preview")
+    @ResponseBody
+    public ResponseEntity<JsonNode> previewRestoration(@RequestHeader("If-Match") String ifMatch, @RequestBody JsonNode request) {
+        return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(definitionRestoration.preview(ifMatch,request));
+    }
+    @PostMapping("/api/definition-draft/restoration")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveRestoration(@RequestHeader("If-Match") String ifMatch, @RequestBody JsonNode request) {
+        return response(definitionRestoration.save(ifMatch,request));
+    }
     @PostMapping("/api/definition-draft/removal/inspect")
     @ResponseBody
     public ResponseEntity<JsonNode> inspectRemoval(@RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch, @RequestBody JsonNode target) {
