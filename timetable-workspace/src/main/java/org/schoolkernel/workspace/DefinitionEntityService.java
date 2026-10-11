@@ -23,6 +23,7 @@ public class DefinitionEntityService {
             Map.entry("latestStartSlot",6), Map.entry("preferredLatestStartSlot",6), Map.entry("dailyLessonSpreadLimit",7),
             Map.entry("curatorTeacherId",8), Map.entry("homeRoomId",8));
     private static final Map<String,Integer> ROOM_FIELDS = Map.of("id",1,"displayName",1,"capacity",1,"capabilityIds",1,"availablePeriodIds",1);
+    private static final Map<String,Integer> POLICY_FIELDS=Map.of("id",9,"subjectId",9,"teacherId",9,"allowedRoomIds",9,"useHomeRoom",9);
     private final WorkspaceRepository repository;
     private final ObjectMapper json;
     public DefinitionEntityService(WorkspaceRepository repository, ObjectMapper json) { this.repository=repository; this.json=json; }
@@ -46,6 +47,9 @@ public class DefinitionEntityService {
     public WorkspaceAggregate saveRoom(String ifMatch, JsonNode request) {
         return saveEntity(ifMatch, request, "rooms", "Room", ROOM_FIELDS);
     }
+
+    @Transactional
+    public WorkspaceAggregate saveRoomPolicy(String ifMatch,JsonNode request){return saveEntity(ifMatch,request,"roomAssignments","RoomAssignment",POLICY_FIELDS);}
 
     private WorkspaceAggregate saveEntity(String ifMatch, JsonNode request, String collection,
             String type, Map<String,Integer> fields) {
@@ -71,7 +75,7 @@ public class DefinitionEntityService {
         String original = request.path("originalId").stringValue();
         if (!item.path("id").isTextual() || !validId(id))
             throw problem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_ENTITY_ID", type + " identity must be a valid 1–128 character contract identifier. No change was committed.");
-        ArrayNode rows = (ArrayNode) definition.path(collection);
+        ArrayNode rows = definition.has(collection) ? (ArrayNode) definition.path(collection) : definition.putArray(collection);
         int index = -1;
         for (int i = 0; i < rows.size(); i++) if (original.equals(rows.get(i).path("id").asString(""))) index = i;
         if (!original.isEmpty() && (index < 0 || !original.equals(id)))
@@ -101,13 +105,14 @@ public class DefinitionEntityService {
         if (type.equals("Subject")) validateSubject(definition, item, issues);
         else if (type.equals("Teacher")) validateTeacher(definition, item, issues);
         else if (type.equals("Cohort")) validateCohort(definition, item, issues);
+        else if(type.equals("RoomAssignment")) validateRoomPolicy(definition,item,issues);
         else {
             validateRoom(definition, item, issues);
             for (JsonNode cohort : definition.path("cohorts")) validateCohortFeasibility(definition, cohort, issues);
         }
         validateLessons(definition, affected, issues);
         draft.set("issues", ordered(issues));
-        if(draft.path("editingContext").path("requirements").isObject()) refreshTeachingIssues(draft);
+        refreshTeachingIssues(draft);
         draft.put("draftRevision", DefinitionDraftService.revision(definition));
         if (repository.replace(version, WorkspaceState.DEFINITION_DRAFT, WorkspaceState.DEFINITION_DRAFT, document).isEmpty())
             throw problem(HttpStatus.PRECONDITION_FAILED, "STALE_WORKSPACE_VERSION", "The workspace changed. Review the newer saved draft before retrying. No change was committed.");
@@ -317,16 +322,22 @@ public class DefinitionEntityService {
         // The room view also shows all recomputed lesson/class advisories, so no central capability catalog is inferred.
     }
 
+    private void validateRoomPolicy(JsonNode definition,JsonNode policy,ArrayNode issues){
+        String id=policy.path("id").asString("");int start=issues.size();
+        for(String field:List.of("subjectId","teacherId"))if(field.equals("subjectId")||policy.has(field))if(!policy.path(field).isTextual()||!validId(policy.path(field).asString(""))||find(definition.path(field.equals("subjectId")?"subjects":"teachers"),policy.path(field).asString(""))==null)issue(issues,"RoomAssignment",id,field,"Choose an existing "+field+" for this room policy.");
+        boolean rooms=policy.has("allowedRoomIds"),home=policy.has("useHomeRoom");
+        if(rooms==home)issue(issues,"RoomAssignment",id,"target","Choose exactly one target: a nonempty allowed-room set or Use cohort home room.");
+        if(home&&!isTrue(policy.path("useHomeRoom")))issue(issues,"RoomAssignment",id,"useHomeRoom","Use cohort home room must be explicitly true in this target mode.");
+        if(rooms){validateReferences(policy,"allowedRoomIds",true,definition.path("rooms"),"RoomAssignment",issues);if(policy.path("allowedRoomIds").isArray()&&policy.path("allowedRoomIds").isEmpty())issue(issues,"RoomAssignment",id,"allowedRoomIds","Select at least one allowed room; an empty target is invalid.");}
+        for(int i=start;i<issues.size();i++)((ObjectNode)issues.get(i)).put("diagnosticSource","ROOM_POLICY_FIELDS");
+    }
+
     /** Refresh complete teaching consequences after an atomic occurrence operation. */
     void refreshTeachingIssues(ObjectNode draft) {
         JsonNode definition=draft.path("definition");ArrayNode issues=json.createArrayNode();
         Set<String> refreshed=Set.of("ENTITY_LESSON","COHORT_FEASIBILITY","TEACHING_FIELDS","TEACHING_FEASIBILITY","REQUIREMENT_CONTEXT","ROOM_POLICY_FIELDS");
         for(JsonNode issue:draft.path("issues"))if(!refreshed.contains(issue.path("diagnosticSource").asString("")))issues.add(issue);
-        for(JsonNode policy:definition.path("roomAssignments")) {
-            String id=policy.path("id").asString("");int start=issues.size();
-            for(String field:List.of("subjectId","teacherId"))if(field.equals("subjectId")||policy.has(field))if(!policy.path(field).isTextual()||!validId(policy.path(field).asString(""))||find(definition.path(field.equals("subjectId")?"subjects":"teachers"),policy.path(field).asString(""))==null)issue(issues,"RoomAssignment",id,field,"Choose an existing "+field+" for this room policy.");
-            for(int i=start;i<issues.size();i++)((ObjectNode)issues.get(i)).put("diagnosticSource","ROOM_POLICY_FIELDS");
-        }
+        for(JsonNode policy:definition.path("roomAssignments")) validateRoomPolicy(definition,policy,issues);
         Set<String> ids=new HashSet<>();Map<String,JsonNode> series=new HashMap<>();
         for(JsonNode lesson:definition.path("lessons")) {
             String id=lesson.path("id").asString("");ids.add(id);validateLessonFields(definition,lesson,issues);

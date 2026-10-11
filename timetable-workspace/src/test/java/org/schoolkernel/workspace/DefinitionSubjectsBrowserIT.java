@@ -89,7 +89,7 @@ class DefinitionSubjectsBrowserIT extends WorkbenchBrowserSupport {
             definition.put("catalogVersion",9);
             ObjectNode subject=(ObjectNode)definition.path("subjects").get(0);String id=subject.path("id").asString();
             ObjectNode cohort=(ObjectNode)definition.path("cohorts").get(0);cohort.put("curatorTeacherId","teacher-alex").put("homeRoomId","room-102");
-            ((ObjectNode)definition.path("teachers").get(0)).putArray("qualifiedSubjectIds");
+            ((ObjectNode)definition.path("teachers").get(0)).putArray("qualifiedSubjectIds").add("science");
             definition.putArray("roomAssignments").addObject().put("id","subject-room-policy").put("subjectId",id).putArray("allowedRoomIds").add("room-102");
             store("DEFINITION_DRAFT",opened);workbench.reload();subjects();
             JsonNode exactDefinition=definition.deepCopy();mode("curatorLesson","true");save();

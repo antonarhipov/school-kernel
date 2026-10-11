@@ -3,7 +3,7 @@
 ## Current
 
 - Use case: UC-10
-- Status: IN_PROGRESS
+- Status: PENDING_WALKTHROUGH
 - Next eligible: UC-11 after UC-10 walkthrough
 
 ## Progress
@@ -19,7 +19,7 @@
 | UC-7 | APPROVED | UC-1 | `6622f19` / [checkpoint](checkpoints/UC-7.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-7/20261011-1/README.md) |
 | UC-8 | APPROVED | UC-1 | `42f3b53` / [checkpoint](checkpoints/UC-8.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-8/20261011-1/README.md) |
 | UC-9 | APPROVED | UC-1 | `8109b2b` / [checkpoint](checkpoints/UC-9.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md) |
-| UC-10 | IN_PROGRESS | UC-1 | - | - |
+| UC-10 | PENDING_WALKTHROUGH | UC-1 | [checkpoint](checkpoints/UC-10.md) | pending |
 | UC-11 | NOT_STARTED | UC-1 | - | - |
 | UC-12 | NOT_STARTED | UC-1 | - | - |
 | UC-13 | NOT_STARTED | UC-1 | - | - |
@@ -249,3 +249,12 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 ## UC-9 approval
 
 - Automatically APPROVED on 8109b2b after [complete repeat Playwright PASS](../../output/playwright/school-definition-authoring/UC-9/20261011-2/README.md). Exact isolated v18 document/intent/source, fourteen inspected screenshots and complete main/negative/responsive/stale/transport/reload journeys retained. F-1 is closed by explicit retained-context completion, no weakened guarantee. All 21 technical journeys plus 26 unit/architecture pass. No unresolved finding; no operator mutation. UC-5/8 occurrence destination routes now verified; UC-13/14 remain outstanding. Proceeding UC-10.
+
+## UC-10 evidence
+
+- Started from 004bdb7, clean worktree. All five native room-policy fields, explicit hard target/scope, version/state CAS and complete policy/lesson diagnostics implemented. No inferred room/home mandate or native placement changes. [Checkpoint](checkpoints/UC-10.md). Catalog/guided-removal/restoration destination handoffs UC-12/13/14 remain.
+- `/tmp/uc10-compile.log` BUILD SUCCESS; relevant hard-policy and affected entity/requirement/occurrence suite running in `/tmp/uc10-verify.log`. No walkthrough/approval inferred.
+
+- UC-10 first `/tmp/uc10-verify.log` retained: new UI module had an extra closing brace, preventing all workspace entry. Stopped known-failing test JVM after capturing parse failure; corrected module. Revision `/tmp/uc10-revision-verify.log` passes all four room-policy/four room/five teacher/five occurrence journeys so far. Complete diagnostic refresh exposes unrelated Science teaching intentionally left unqualified in an old curator fixture; retain Science qualification explicitly while clearing Math to test curator exception, preserving every assertion. Final policy rendering also guards supported malformed room capacity/capability/availability values; strengthened rendering and stale waits will be verified in the final focused policy/subject run.
+
+- UC-10 final technical checks pass: all 34 relevant journeys across `/tmp/uc10-revision-verify.log` (unchanged room/teacher/occurrence/requirement passes), `/tmp/uc10-final-verify.log` (six subject/four policy passes, BUILD SUCCESS), and `/tmp/uc10-class-verify.log` (all six class journeys, BUILD SUCCESS), plus 26 unit/architecture. Complete teaching diagnostics require four advisories in the zero-class-availability fixture: retain the original three and explicitly assert the additional teacher-load advisory. New malformed-resource effects guard and strengthened stale wait pass. Syntax via module stdin and diff hygiene pass. Ready for standalone walkthrough; failed logs retained.

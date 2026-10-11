@@ -148,6 +148,10 @@ public class WorkspaceController {
         return response(definitionRequirements.save(ifMatch, request));
     }
 
+    @PostMapping("/api/definition-draft/room-policies")
+    @ResponseBody
+    public ResponseEntity<JsonNode> saveDefinitionRoomPolicy(@RequestHeader(value=HttpHeaders.IF_MATCH,required=false)String ifMatch,@RequestBody JsonNode request){return response(definitionEntities.saveRoomPolicy(ifMatch,request));}
+
     @PostMapping("/api/definition-draft/rooms")
     @ResponseBody
     public ResponseEntity<JsonNode> saveDefinitionRoom(

@@ -1,3 +1,4 @@
+import { renderPolicies, policiesBusy, policiesDirty, savePolicy, discardPolicies, resetPolicies } from './definition-room-policies.js';
 import { renderOccurrences, occurrencesBusy, occurrencesDirty, saveOccurrences, discardOccurrences, resetOccurrences, chooseOccurrences } from './definition-occurrences.js';
 import { renderRequirements, requirementsBusy, requirementsDirty, saveRequirement, discardRequirements, resetRequirements } from './definition-requirements.js';
 import { renderRooms, roomsDirty, saveRoom, discardRooms, resetRooms } from './definition-rooms.js';
@@ -29,13 +30,13 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); }
+export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); }
 
 export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); }
+  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); }
   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
   const rerender = () => actions.render(snapshot);
   const save = async () => {
@@ -54,21 +55,22 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
     }
   };
   const leave = next => {
-    if (saving || requirementsBusy() || occurrencesBusy()) return;
+    if (saving || requirementsBusy() || occurrencesBusy() || policiesBusy()) return;
     const leavingGrid = section === 'Grid' && gridDirty();
     const leavingSubject = section === 'Subjects' && subjectsDirty();
     const leavingTeacher = section === 'Teachers' && teachersDirty();
+    const leavingPolicy = section === 'Room policies' && policiesDirty();
     const leavingOccurrence = section === 'Occurrence details' && occurrencesDirty();
     const leavingRequirement = section === 'Weekly requirements' && requirementsDirty();
     const leavingRoom = section === 'Rooms' && roomsDirty();
     const leavingClass = section === 'Classes' && classesDirty();
-    if ((!schoolForm.dirty && !leavingGrid && !leavingSubject && !leavingTeacher && !leavingClass && !leavingRoom && !leavingRequirement && !leavingOccurrence) || narrow) { next(snapshot); return; }
+    if ((!schoolForm.dirty && !leavingGrid && !leavingSubject && !leavingTeacher && !leavingClass && !leavingRoom && !leavingRequirement && !leavingOccurrence && !leavingPolicy) || narrow) { next(snapshot); return; }
     const dialog = el('dialog'); dialog.id = 'school-unsaved-dialog';
-    dialog.append(el('h3', leavingOccurrence ? 'Unsaved occurrence choices' : leavingRequirement ? 'Unsaved weekly requirement' : leavingRoom ? 'Unsaved room' : leavingClass ? 'Unsaved class' : leavingTeacher ? 'Unsaved teacher' : leavingSubject ? 'Unsaved subject' : leavingGrid ? 'Unsaved weekly grid' : 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
+    dialog.append(el('h3', leavingPolicy ? 'Unsaved room policy' : leavingOccurrence ? 'Unsaved occurrence choices' : leavingRequirement ? 'Unsaved weekly requirement' : leavingRoom ? 'Unsaved room' : leavingClass ? 'Unsaved class' : leavingTeacher ? 'Unsaved teacher' : leavingSubject ? 'Unsaved subject' : leavingGrid ? 'Unsaved weekly grid' : 'Unsaved school identity'), el('p', 'Save, discard working edits, or stay in this form. Saved review includes only saved values.'));
     const close = () => { dialog.close(); dialog.remove(); };
     for (const [label, id, handler] of [
-      ['Save and continue', 'school-save-continue', async () => { close(); if (leavingGrid || leavingSubject || leavingTeacher || leavingClass || leavingRoom || leavingRequirement || leavingOccurrence) { const result = leavingOccurrence ? await saveOccurrences(snapshot, actions) : leavingRequirement ? await saveRequirement(snapshot, actions) : leavingRoom ? await saveRoom(snapshot, actions) : leavingClass ? await saveCohort(snapshot, actions) : leavingTeacher ? await saveTeacher(snapshot, actions) : leavingSubject ? await saveSubject(snapshot, actions) : await saveGrid(snapshot, actions); if (result) { snapshot = result; next(snapshot); } } else if (await save()) next(snapshot); }],
-      ['Discard working edits', 'school-discard-working', () => { if (leavingOccurrence) discardOccurrences(snapshot); else if (leavingRequirement) discardRequirements(snapshot); else if (leavingRoom) discardRooms(snapshot); else if (leavingClass) discardClasses(snapshot); else if (leavingTeacher) discardTeachers(snapshot); else if (leavingSubject) discardSubjects(snapshot); else if (leavingGrid) discardGrid(definition); else schoolForm = schoolValues(definition, draft); saveError = null; close(); next(snapshot); }],
+      ['Save and continue', 'school-save-continue', async () => { close(); if (leavingGrid || leavingSubject || leavingTeacher || leavingClass || leavingRoom || leavingRequirement || leavingOccurrence || leavingPolicy) { const result = leavingPolicy ? await savePolicy(snapshot, actions) : leavingOccurrence ? await saveOccurrences(snapshot, actions) : leavingRequirement ? await saveRequirement(snapshot, actions) : leavingRoom ? await saveRoom(snapshot, actions) : leavingClass ? await saveCohort(snapshot, actions) : leavingTeacher ? await saveTeacher(snapshot, actions) : leavingSubject ? await saveSubject(snapshot, actions) : await saveGrid(snapshot, actions); if (result) { snapshot = result; next(snapshot); } } else if (await save()) next(snapshot); }],
+      ['Discard working edits', 'school-discard-working', () => { if (leavingPolicy) discardPolicies(snapshot); else if (leavingOccurrence) discardOccurrences(snapshot); else if (leavingRequirement) discardRequirements(snapshot); else if (leavingRoom) discardRooms(snapshot); else if (leavingClass) discardClasses(snapshot); else if (leavingTeacher) discardTeachers(snapshot); else if (leavingSubject) discardSubjects(snapshot); else if (leavingGrid) discardGrid(definition); else schoolForm = schoolValues(definition, draft); saveError = null; close(); next(snapshot); }],
       ['Stay', 'school-stay', () => { close(); rerender(); }]
     ]) {
       const button = el('button', label); button.id = id; button.addEventListener('click', handler); dialog.append(button);
@@ -106,7 +108,9 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   host.append(nav);
   const content = el('section'); content.id = 'authoring-section'; content.append(el('h3', section));
   const occurrenceActions = { ...actions, openOccurrences: ids => leave(latest => { chooseOccurrences(ids); section = 'Occurrence details'; actions.render(latest); }) };
-  if (section === 'Occurrence details') {
+  if (section === 'Room policies') {
+    renderPolicies(content, snapshot, narrow, actions, status, leave);
+  } else if (section === 'Occurrence details') {
     renderOccurrences(content, snapshot, narrow, actions, status, leave);
   } else if (section === 'Grid') {
     if (gridDirty()) status.textContent = 'Unsaved — Working grid differs from the saved draft.';
