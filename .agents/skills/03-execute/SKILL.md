@@ -9,7 +9,7 @@ Implement the use cases in `<feature-dir>/spec.md` as vertical slices. A use cas
 guarantees, postconditions, relations, and applicable technical rules, is the unit of work. Do not generate or depend on
 `criteria.md`, `review.md`, `plan-review.md`, `tasks.yaml`, phases, or a file-level implementation plan.
 
-Pipeline position: proposal -> spec -> [rules, optional] -> **execute -> converge** -> execute -> converge ...
+Pipeline position: proposal -> spec -> [rules, optional] -> **execute/checkpoint -> converge -> Playwright walkthrough/approval** -> next UC ...
 
 ## Feature Directory
 
@@ -62,8 +62,9 @@ Each use case has exactly one status:
 - `BLOCKED`
 
 Only `converge` may change `READY_FOR_CONVERGENCE` to `NEEDS_REVISION`, `PENDING_WALKTHROUGH`, `APPROVED`, or
-`BLOCKED`. Execute may move `NOT_STARTED` or `NEEDS_REVISION` to `IN_PROGRESS`, and `IN_PROGRESS` to
-`READY_FOR_CONVERGENCE` or `BLOCKED`.
+`BLOCKED`, and finalize `PENDING_WALKTHROUGH` after its walkthrough. For UI slices, `PENDING_WALKTHROUGH` is normally
+a transient verification state, not a request for the user to operate the browser. Execute may move `NOT_STARTED` or
+`NEEDS_REVISION` to `IN_PROGRESS`, and `IN_PROGRESS` to `READY_FOR_CONVERGENCE` or `BLOCKED`.
 
 Status is a delta and evidence ledger. It must not contain prospective subtasks, class designs, anticipated paths, or a
 duplicate of the scenarios in `spec.md`.
@@ -128,7 +129,9 @@ Produce direct evidence for every contract element:
 - Verify relationship behavior: required postconditions are consumed, included UCs use the approved production path,
   and extending UCs preserve the approved base behavior.
 - Run applicable focused tests and the full relevant suite. Confirm tests do not modify tracked runtime data.
-- For UI behavior, perform the automated checks now; leave the human walkthrough to converge.
+- For UI behavior, perform implementation checks now. After checkpoint submission and technical convergence,
+  converge must automatically run the separate real-browser Playwright walkthrough before approval. Existing browser
+  tests support convergence but do not replace this observed journey.
 
 Tests should cite contract elements in names or display text where practical, using forms such as `UC-1 main`,
 `UC-1 ext 2a`, and `UC-1 G1`. Traceability is useful evidence, but naming alone never proves behavior.
@@ -158,19 +161,27 @@ report. The report identifies this immutable submission as `HEAD at convergence`
 Do not include unrelated changes.
 
 Then invoke `converge` for `UC-n` immediately. This is part of execution, not an optional later review. Do not
-implement, investigate, or prepare another UC while convergence is pending.
+implement, investigate, or prepare another UC while convergence or its Playwright walkthrough is pending. A UI
+submission is not complete at a passing test suite: converge owns the immediate walkthrough and final verdict.
 
 If the environment or user has explicitly prohibited commits, record the base commit and exact diff instead, converge
 before any other edit, and ask before proceeding to another UC because an immutable boundary is otherwise missing.
 
 ## Handling the Verdict
 
-- `APPROVED`: select the next eligible UC.
-- `APPROVED WITH NOTES`: record the notes, then select the next eligible UC.
-- `PENDING_WALKTHROUGH`: present the use-case-derived walkthrough and wait for the user's result.
+- `APPROVED`: select the next eligible UC within the user-authorized implementation scope.
+- `APPROVED WITH NOTES`: record the notes, then select the next eligible UC within that scope.
+- `PENDING_WALKTHROUGH`: invoke/resume converge's Playwright walkthrough immediately. Do not stop to ask the user
+  to repeat a journey the agent can exercise. Wait for human confirmation only when explicitly required; preserve
+  that requirement in the ledger. Missing tooling or inaccessible runtime evidence is a technical blocker, not PASS.
 - `REVISE UC-n`: set only that UC to `IN_PROGRESS`, address every cited finding, rerun the whole UC verification,
   replace its checkpoint report, and converge it again.
 - `BLOCKED`: record the blocker and stop.
+
+When the user authorizes multiple UCs or the whole feature, keep this loop running without per-UC confirmation:
+implementation -> committed checkpoint -> technical convergence -> automatic Playwright walkthrough for UI ->
+committed final approval -> next eligible UC. A request to approve one UC or edit skills alone does not authorize
+implementation of later UCs.
 
 Never work around a convergence finding by changing `spec.md` or weakening a scenario. Spec changes require an explicit
 product decision and invalidate affected approved UCs for reconvergence.

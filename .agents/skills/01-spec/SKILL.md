@@ -9,7 +9,7 @@ Create the behavioral contract for a feature as a set of related use cases. The 
 units that `execute` implements and `converge` verifies. Do not create a separate behavior list, acceptance-criteria
 file, task plan, artifact map, or implementation checklist.
 
-Pipeline position: proposal -> **spec** -> [rules, optional] -> execute <-> converge (once per use case)
+Pipeline position: proposal -> **spec** -> [rules, optional] -> execute/checkpoint -> converge -> Playwright walkthrough/approval -> next UC
 
 A complete specification can proceed directly to `execute`. The executor checks technical implications against
 project guidance and existing architecture; a separate rules stage or `rules.md` is needed only when material
@@ -55,8 +55,10 @@ Before writing, explicitly resolve any applicable blind spots:
 - New screens: layout and navigation behavior, per-role visibility, and localization.
 - Data produced then stored or shown: field fidelity and unmappable values.
 - Loaded words such as *full*, *complete*, *coherent*, *all*, or *minimal*: the concrete observable meaning.
-- Verification expectations: isolation from runtime data, the boundary that must be exercised, and any required human
-  walkthrough.
+- Verification expectations: isolation from runtime data, the boundary that must be exercised, and UI walkthrough
+  outcomes. Default to an agent-run real-browser walkthrough after checkpoint and technical convergence, with
+  automatic approval on passing evidence. Record a human confirmation gate only when the user explicitly requires it.
+  Keep the spec declarative; Playwright execution mechanics belong to execute/converge.
 
 A finished spec has no open product or behavioral questions. If a decision genuinely depends on an unavailable
 stakeholder, record it under `External dependencies` with the blocker and the explicit default in force.

@@ -116,8 +116,10 @@ The testing strategy must establish these constraints without generating per-fil
 6. Relationship tests prove included behavior uses the same production path, required postconditions are consumed,
    and extending use cases do not regress the base use case.
 7. Test doubles conform to production contracts: the same exceptions, nullability, option semantics, and field shape.
-8. UI use cases require a human walkthrough after automated verification; the script comes directly from the use
-   case's scenario and extensions.
+8. After the committed checkpoint and passing technical convergence, UI use cases require an agent-run Playwright
+   walkthrough derived from their scenarios, extensions and presentation guarantees. Passing recorded browser and
+   durable-state evidence satisfies the walkthrough gate by default; require human confirmation only when explicitly
+   requested by the user or still required by an applicable contract. Do not introduce a human gate as a routine rule.
 
 A recorded rule may strengthen or specialize these levels for the project. An absent rules file does not weaken
 verification: `execute` and `converge` still enforce their contract, boundary, isolation, and walkthrough requirements.

@@ -30,7 +30,7 @@ The proposal's decisions remain in force. Smaller choices are resolved as follow
 | Earlier repair pins | Expire prior attempt-scoped locks in the working successor when authoring opens, explain the expiry, and preserve exact source provenance. Explicitly authored persistent locks remain policy even if equal to an old pin | UC-1 G1; UC-9 G4; UC-14 G2; UC-17 G3 |
 | Proposal versus draft discard | Discarding a generated proposal retains repair intent; abandoning the seeded repair draft restores authoring and drops that repair intent | UC-17 extension 5b; UC-18 |
 | Imported/unmappable data | Preserve all supported fields and omission distinctions. Refuse unsupported versions or unknown fields rather than silently drop or guess them | UC-1 extension 2b; UC-16 G2 |
-| Verification evidence | Isolated workspace state, real browser, durable reload/restart observations, packaged kernel verification/planning, and explicit administrator walkthrough approval for UI use cases | UC-1 G7; UC-16 G5; UC-17 G6 |
+| Verification evidence | Isolated workspace state, real browser, durable reload/restart observations, packaged kernel verification/planning, and automatic approval after an agent-run UI walkthrough | UC-1 G7; UC-16 G5; UC-17 G6 |
 
 ## Actors and domain terms
 
@@ -209,8 +209,11 @@ preview stale. A stale operation reports the change and requires a new review; i
 - G6. Existing same-machine access applies. Requests outside the permitted local access boundary reveal no school or
   draft data; untrusted change requests are refused without mutation. No accounts or outbound data service is added.
 - G7. Convergence for this UI goal exercises isolated real-browser entry/refusal/reload/restart and durable source
-  fidelity, and requires explicit administrator walkthrough confirmation before approval. The same UI evidence
-  boundary applies to every UC below: successful and refused paths are observed, not inferred from source alone.
+  fidelity. After the committed checkpoint and passing technical convergence, the agent performs the administrator
+  journey through the real browser and records expected/observed results, screenshots and durable-state evidence.
+  Passing walkthrough evidence permits automatic approval without a separate administrator confirmation. The same
+  UI evidence boundary applies to every UC below: successful and refused paths are observed, not inferred from source
+  alone. Missing evidence or a failed walkthrough blocks approval; isolation and behavioral guarantees remain intact.
 
 ### Postconditions
 
@@ -879,7 +882,7 @@ preview stale. A stale operation reports the change and requires a new review; i
   explicitly labelled and never substituted for one another. Desktop/narrow layout and English/literal-text rules
   are UC-1 G4–G5; narrow views remain read-only.
 - G5. Existing accepted bundles remain exact. UI convergence observes issue attribution, source comparison, timing
-  changes without ID moves, narrowed/empty views, and human walkthrough under UC-1 G7.
+  changes without ID moves, narrowed/empty views, and agent-run walkthrough under UC-1 G7.
 
 ### Postconditions
 
@@ -943,7 +946,7 @@ preview stale. A stale operation reports the change and requires a new review; i
   once each in the accepted timetable. No JSON preparation or command invocation is required of the administrator.
 - G6. Validation uses isolated workspace state and does not alter the operator's runtime school. Evidence covers
   initial/accepted sources, invalid and zero-lesson candidates, verification failure, stale confirmation and failed
-  storage, with exact source/Current preservation. UI approval needs the explicit walkthrough in UC-1 G7.
+  storage, with exact source/Current preservation. UI approval needs the passing agent-run walkthrough in UC-1 G7.
 
 ### Postconditions
 
@@ -1021,7 +1024,7 @@ preview stale. A stale operation reports the change and requires a new review; i
 - G6. Convergence exercises the exact MVK acceptance data in an isolated workspace through authoring, seeded-draft
   abandonment/restoration with UC-18, re-finish, real packaged repair/verification, review and explicit acceptance.
   Evidence observes the selected lesson cancellation, same-ID time impacts, and unchanged prior Current until accept.
-  Real-browser wide/narrow observations and explicit administrator walkthrough are required.
+  Real-browser wide/narrow observations and the passing agent-run walkthrough under UC-1 G7 are required.
 - G7. Stable-state reload/restart restores seed, staging, pins, retained authoring and any saved proposal; acceptance
   still requires current eligibility and verification. Failed/unauthorized/stale actions preserve saved work as stated
   above. Narrow screens remain read-only and show authoritative lifecycle/Current labels.
@@ -1522,7 +1525,7 @@ evidence.
 - New kernel models for variable-duration/multi-period adjacency, overlapping/split groups, merged cohorts,
   team teaching, multi-room lessons, or solver-selected teachers.
 - Performance thresholds, custom keyboard-only navigation, or a new participant study; this feature requires the
-  concrete browser/durable/kernel evidence and administrator walkthroughs named in its UC guarantees.
+  concrete browser/durable/kernel evidence and agent-run administrator journeys named in its UC guarantees.
 
 ## External dependencies
 

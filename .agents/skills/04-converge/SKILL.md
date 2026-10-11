@@ -1,6 +1,6 @@
 ---
 name: converge
-description: Independently verify one implemented use case against its feature specification and applicable technical rules, record the verdict, and update its status before execution may continue. Use whenever a UC is ready for convergence or the user asks to validate an implemented use case.
+description: Independently verify one implemented use case, automatically perform its UI walkthrough with Playwright after technical convergence, and record approval or findings before execution may continue. Use whenever a UC is ready for convergence or the user asks to validate an implemented use case.
 ---
 
 # Converge Use Case Skill
@@ -9,7 +9,7 @@ Verify one implemented use case immediately after execution submits it. Grade ev
 verdict in `<feature-dir>/convergence/UC-n.md`, and update `<feature-dir>/status.md`. Do not wait for a phase, batch several use cases,
 or depend on criteria, review, plan, task, or artifact-map files.
 
-Pipeline position: proposal -> spec -> [rules, optional] -> execute -> **converge UC-n** -> execute ...
+Pipeline position: proposal -> spec -> [rules, optional] -> execute/checkpoint -> **converge UC-n -> Playwright walkthrough/approval** -> next UC ...
 
 ## Feature Directory
 
@@ -23,8 +23,10 @@ You are the verifier, not the builder. Do not fix production code, tests, migrat
 from the use-case contract, reproduce the claimed behavior, inspect the assertions, and decide whether the UC is
 actually complete. A green suite is supporting evidence, not a verdict.
 
-Only `APPROVED` or `APPROVED WITH NOTES` lets execute select another UC. A UI use case also needs the user-confirmed
-walkthrough before approval.
+Only `APPROVED` or `APPROVED WITH NOTES` lets execute select another UC. A UI use case also needs a passing
+agent-run Playwright walkthrough after technical convergence. This satisfies the walkthrough gate by default;
+user confirmation is required only when explicitly requested or required by an applicable contract. Preserve such
+existing requirements unless the user authorizes changing them; never claim automated evidence is human confirmation.
 
 ## Inputs
 
@@ -46,7 +48,9 @@ guarantee, success and minimal postcondition, state transition, normative-data d
 
 Run this gate before grading behavior:
 
-1. Exactly one target UC is named and its status is `READY_FOR_CONVERGENCE`.
+1. Exactly one target UC is named and its status is `READY_FOR_CONVERGENCE`. For a resumed
+   `PENDING_WALKTHROUGH`, verify the prior passing technical convergence and unchanged submitted implementation
+   instead; resume its missing walkthrough without resetting or re-running unchanged evidence.
 2. `<feature-dir>/checkpoints/UC-n.md` exists and is committed with the submitted implementation. If commits were explicitly
    prohibited, it instead names the base commit and exact current diff, and no later work has begun.
 3. Every `Requires` and `Includes` dependency is `APPROVED`; the base of an `Extends` relation is `APPROVED`.
@@ -65,8 +69,9 @@ A missing report, batched UCs, unmet relationship dependency, or missing immutab
 1. Record `git status --short` before running anything and identify pre-existing changes from the checkpoint.
 2. Resolve the submitted commit and diff from the checkpoint's base. Inspect every changed file; do not treat the file
    list as a declaration that the change is correct.
-3. Run the focused tests named in the checkpoint and the project's full relevant suite yourself. Record run, failure,
-   error, and skipped counts.
+3. For a new technical audit, run the focused tests named in the checkpoint and the project's full relevant suite
+   yourself. Record run, failure, error, and skipped counts. When only resuming the walkthrough/confirmation for an
+   unchanged passing submission, use its recorded audit evidence; do not repeat the suite without a new reason.
 4. Record `git status --short` afterward. Any new tracked runtime-data or generated-file change is a finding.
 5. Locate every claimed assertion at its cited `file:line` and read enough production code to establish that the test
    drives a real path.
@@ -143,9 +148,45 @@ guarantee is blocking.
 ### 6. Presentation and walkthrough
 
 For UI use cases, verify layout, navigation, role visibility, identity/logout behavior, messages, and localization from
-code and rendered output. Derive the human walkthrough directly from the UC's main scenario and extensions. If all
-automated evidence is strong, set `PENDING_WALKTHROUGH` and ask the user to perform or confirm that script. Do not
-invent extra steps or approve before confirmation.
+code and rendered output. Derive the walkthrough from the UC's main scenario, extensions and presentation guarantees.
+Complete all other applicable verification categories first. Once all technical evidence is STRONG and there are no
+blocking findings, record and commit the technical convergence
+report with `PENDING_WALKTHROUGH`, then run the following workflow immediately in the same task. Do not hand the
+browser work back to the user. The final approval follows the walkthrough; a green suite alone is insufficient.
+
+#### Automatic Playwright walkthrough
+
+1. Read and use the available `playwright` skill. Prefer its CLI workflow in a real browser against the submitted
+   running application. Provision isolated disposable data and use the feature's actual entry/navigation path as its
+   primary actor. Record the submission hash, application/build, URL, browser, data isolation and starting state.
+2. Drive the declared main journey and browser-reachable extensions through rendered controls. Refresh snapshots
+   before using element refs after navigation or rendering changes. Exercise applicable failed saves, unsaved
+   navigation choices, concurrent/stale recovery, and reload through the UI; do not replace clicks with internal
+   service calls or direct database writes. Verify protected access/roles when they are part of the contract.
+3. Assert the response and consequential durable state at each significant action. Use read-only production API or
+   isolated database queries to corroborate exact saved fields, versions, source/Current fidelity and absence of
+   prohibited mutation. Refused operations must retain the required working values and saved state. Existing strong
+   convergence evidence may support failures needing controlled infrastructure faults; explicitly cite that evidence
+   rather than claiming the interactive walkthrough exercised them.
+4. Exercise the specified desktop and narrow viewports, inspect screenshots, and check overflow, visibility, labels
+   and controls. For editable forms, confirm resizing neither saves nor discards edits and widening restores working
+   values where required. Observe saved restoration on reload and restart when the UC requires it; reuse fresh
+   unchanged restart evidence from technical convergence rather than repeating expensive checks without cause.
+5. Save step-by-step expected/observed PASS or FAIL results, assertion outcomes, screenshots, accessible snapshots and
+   durable-state evidence under a UC-specific directory in `output/playwright/`. Link them from the convergence report
+   and status entry. Use unique run paths for revisions; preserve prior evidence. Record expected refusal/network
+   errors separately from unexpected browser failures. Close agent-owned browser sessions; record the disposition of
+   disposable servers/data and keep unrelated operator state untouched.
+6. If every required walkthrough outcome passes, finalize approval automatically and commit the final report, status
+   and referenced evidence. Do not request another confirmation unless an explicit human gate applies. A behavioral
+   defect or missing assertion is a convergence finding: reject and return to execute for a revised checkpoint, then
+   reconverge the changed submission and repeat its walkthrough. Unavailable Playwright/runtime access is BLOCKED
+   with concrete evidence; never silently skip the walkthrough, infer PASS, or relax a required boundary.
+
+For an explicitly retained human gate, perform all available automation first, record its results, then leave
+`PENDING_WALKTHROUGH` with only the exact confirmation still needed. Already received confirmation applies without a
+repeat request. For a resumed unchanged submission, finalize from the recorded evidence/confirmation; repeat checks
+only for changed code, stale evidence, failures or unresolved concerns.
 
 ### 7. Technical rules
 
@@ -175,10 +216,12 @@ Critical, gap, and protocol findings block approval.
 
 ## Verdict and Status Update
 
-- `APPROVE`: zero critical, gap, or protocol findings and no pending walkthrough. Set UC to `APPROVED`.
+- `APPROVE`: zero critical, gap, or protocol findings and a passing recorded Playwright walkthrough for UI UCs
+  (plus explicit human confirmation only when required). Set UC to `APPROVED`.
 - `APPROVE WITH NOTES`: same, with non-blocking drift/cosmetic notes. Set UC to `APPROVED`.
-- `PENDING WALKTHROUGH`: automated gate passes for a UI UC but user confirmation is missing. Set UC to
-  `PENDING_WALKTHROUGH`.
+- `PENDING WALKTHROUGH`: technical convergence passes and the automatic UI walkthrough is next; set
+  `PENDING_WALKTHROUGH` and immediately run it. Leave this as a final verdict only when an explicit human
+  confirmation gate remains unsatisfied; missing runtime/tool access is BLOCKED.
 - `REJECT`: any critical, gap, or protocol finding that implementation can resolve. Set UC to `NEEDS_REVISION` and
   emit `REVISE UC-n: ...`.
 - `BLOCKED`: resolving the finding requires a product decision, conflicting rules, or unavailable authority. Set UC
@@ -187,8 +230,9 @@ Critical, gap, and protocol findings block approval.
 Update only the target row, `Current`, `Next eligible`, and convergence reference in `<feature-dir>/status.md`. Preserve the
 executor's evidence. On rejection, list finding IDs under the UC entry.
 
-After writing the report and status update, commit only those convergence artifacts as
-`UC-n: convergence <verdict>`. If commits were explicitly prohibited, leave them as clearly identified verifier
+After writing the report and status update, commit only those convergence artifacts and their referenced walkthrough
+evidence as `UC-n: convergence <verdict>`. For UI slices, commit the passing technical report before the walkthrough
+and the final verdict/evidence afterward. If commits were explicitly prohibited, leave them as clearly identified verifier
 changes and do not let a later implementation submission absorb them.
 
 ## Specification Changes
@@ -261,7 +305,9 @@ Write or replace `<feature-dir>/convergence/UC-n.md`:
 
 ## Walkthrough
 
-<UC-derived script and user result; omit for non-UI use cases>
+<UC-derived Playwright steps, expected/observed results, assertion outcomes, screenshots/snapshots and durable-state
+evidence links, environment/submission and cleanup; include actual user confirmation only if required/received.
+Omit for non-UI use cases.>
 
 ## Status Update
 
