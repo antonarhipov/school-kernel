@@ -9,7 +9,53 @@ const el = (tag, text, id) => { const n = document.createElement(tag); if (text 
 export function resetGrid() { working = null; identity = null; preview = null; error = null; }
 export function gridDirty() { return !!working?.dirty; }
 export function discardGrid(definition) { working = values(definition); preview = null; error = null; }
-const values = definition => ({ periods: structuredClone(definition.periods), ...(Object.hasOwn(definition, 'reservedPeriodIds') ? { reservedPeriodIds: [...definition.reservedPeriodIds] } : {}), dirty: false });
+const gridValues = definition => ({ periods: structuredClone(definition.periods), ...(Object.hasOwn(definition, 'reservedPeriodIds') ? { reservedPeriodIds: [...definition.reservedPeriodIds] } : {}) });
+const values = (definition, version) => ({ ...gridValues(definition), base: gridValues(definition), baseVersion: version, conflicts: [], dirty: false });
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+function mergeNewer(definition, version) {
+  if (working.baseVersion === undefined || working.baseVersion === version) return;
+  const newest = gridValues(definition), conflicts = [];
+  const baseRows = new Map(working.base.periods.map(row => [row.id, row]));
+  const newRows = new Map(newest.periods.map(row => [row.id, row]));
+  for (const row of working.periods) {
+    const base = baseRows.get(row.id), target = newRows.get(row.id);
+    if (!target) {
+      if (!base) newest.periods.push(structuredClone(row));
+      else if (!same(row, base)) { newest.periods.push(structuredClone(row)); conflicts.push({ id: row.id, field: '$removed', latest: undefined, working: row }); }
+      continue;
+    }
+    for (const field of new Set([...Object.keys(row), ...Object.keys(base || {})])) {
+      if (field === 'id' || same(row[field], base?.[field])) continue;
+      if (!same(target[field], base?.[field]) && !same(target[field], row[field])) conflicts.push({ id: row.id, field, latest: target[field], working: row[field] });
+      if (Object.hasOwn(row, field)) target[field] = structuredClone(row[field]); else delete target[field];
+    }
+  }
+  if (!same(working.reservedPeriodIds, working.base.reservedPeriodIds)) {
+    if (!same(newest.reservedPeriodIds, working.base.reservedPeriodIds) && !same(newest.reservedPeriodIds, working.reservedPeriodIds)) conflicts.push({ id: 'School', field: 'reservedPeriodIds', latest: newest.reservedPeriodIds, working: working.reservedPeriodIds });
+    if (Object.hasOwn(working, 'reservedPeriodIds')) newest.reservedPeriodIds = [...working.reservedPeriodIds]; else delete newest.reservedPeriodIds;
+  }
+  working = { ...newest, base: gridValues(definition), baseVersion: version, conflicts, dirty: true };
+  preview = null; error = null;
+}
+function renderConflicts(host, snapshot, actions) {
+  if (!working.conflicts?.length) return;
+  const block = el('section', undefined, 'grid-conflicts'); block.className = 'notice';
+  block.append(el('h4', 'Newer saved fields conflict with working edits'), el('p', 'Untouched fields use the newer saved values. Resolve these fields explicitly before another preview/save.'));
+  for (const conflict of working.conflicts) block.append(el('p', `${conflict.id} ${conflict.field}: latest ${JSON.stringify(conflict.latest) ?? '(removed/omitted)'}; working ${JSON.stringify(conflict.working) ?? '(omitted)'}`));
+  const keep = el('button', 'Keep my reviewed conflicting values', 'grid-keep-conflicts');
+  keep.disabled = working.conflicts.some(conflict => conflict.field === '$removed');
+  keep.addEventListener('click', () => { working.conflicts = []; edited(); actions.render(snapshot); });
+  const latest = el('button', 'Use newer saved conflicting values', 'grid-use-latest'); latest.className = 'secondary';
+  latest.addEventListener('click', () => {
+    for (const conflict of working.conflicts) {
+      if (conflict.field === '$removed') { working.periods = working.periods.filter(row => row.id !== conflict.id); continue; }
+      const target = conflict.id === 'School' ? working : working.periods.find(row => row.id === conflict.id);
+      if (conflict.latest === undefined) delete target[conflict.field]; else target[conflict.field] = structuredClone(conflict.latest);
+    }
+    working.conflicts = []; edited(); actions.render(snapshot);
+  });
+  block.append(keep, latest); host.append(block);
+}
 const payload = () => ({ periods: working.periods, ...(Object.hasOwn(working, 'reservedPeriodIds') ? { reservedPeriodIds: working.reservedPeriodIds } : {}) });
 const edited = status => { working.dirty = true; preview = null; error = null; if (status) status.textContent = 'Unsaved — Working grid differs from the saved draft.'; document.querySelector('#grid-preview')?.remove(); };
 
@@ -17,10 +63,11 @@ export async function saveGrid(snapshot, actions) {
   if (busy) return false;
   busy = true; error = null; actions.render(snapshot);
   try {
+    if (working.conflicts?.length) throw new Error('Resolve the newer saved field conflicts before saving.');
     // Save and continue also obtains the same authoritative preview; no durable write occurs until explicit save.
     if (!preview || preview.workspaceVersion !== snapshot.version) preview = await actions.grid(payload(), snapshot.version, true);
     const result = await actions.grid(payload(), preview.workspaceVersion);
-    working = values(result.workspace.definitionDraft.definition); preview = null; busy = false;
+    working = values(result.workspace.definitionDraft.definition, result.version); preview = null; busy = false;
     actions.render(result); return result;
   } catch (failure) {
     busy = false; working.dirty = true; error = `No change was committed. ${failure.message} Working rows remain Unsaved.`;
@@ -32,9 +79,11 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
   const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
   const nextIdentity = draft.openedRevision || draft.draftRevision;
   if (identity !== nextIdentity) { identity = nextIdentity; working = null; preview = null; error = null; }
-  if (!working || !working.dirty) working = values(definition);
+  if (!working || !working.dirty) working = values(definition, snapshot.version);
+  else mergeNewer(definition, snapshot.version);
   host.append(el('p', 'Periods are explicit teaching slots. Reservations are separate from resource availability. Existing IDs stay fixed; removal requires guided dependency resolution.'));
   if (narrow) { renderRows(host, values(definition), true, status, definition); return; }
+  renderConflicts(host, snapshot, actions);
   const generate = el('details'); generate.open = definition.periods.length === 0;
   generate.append(el('summary', definition.periods.length ? 'Add generated slots (existing grid is preserved)' : 'Generate weekly grid'));
   const counts = el('div'); counts.className = 'grid-generator-days';
@@ -90,7 +139,7 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
   const review = el('button', 'Review grid operation', 'preview-grid'); review.disabled = busy;
   review.addEventListener('click', async () => {
     busy = true; error = null;
-    try { preview = await actions.grid(payload(), snapshot.version, true); }
+    try { if (working.conflicts?.length) throw new Error('Resolve the newer saved field conflicts before reviewing.'); preview = await actions.grid(payload(), snapshot.version, true); }
     catch (failure) { error = `No change was committed. ${failure.message} Working rows remain available.`; }
     busy = false; actions.render(snapshot);
   });

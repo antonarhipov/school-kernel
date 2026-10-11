@@ -78,3 +78,10 @@ READY FOR WALKTHROUGH: UC-3
 ## Ordering resolution
 
 The user explicitly replaced the procedural gate with a recorded automatic Playwright approval/fix loop. Under the updated execute skill, the cross-UC continuation is verified as the current safe refusal/guidance; destination UC-13 must implement its complete removal flow before feature completion. This is not evidence of UC-13 completion. The earlier ordering finding above is historical and no longer blocks the current grid walkthrough. Existing technical evidence remains valid for unchanged production code.
+
+## F-1 walkthrough revision
+
+- Prior submission add37ea failed [walkthrough attempt 1](../../../output/playwright/school-definition-authoring/UC-3/20261011-1/README.md): three-way stale refresh was missing and unrelated newer period names were overwritten on retry.
+- Fixed in definition-grid.js: working base/version retained; refresh merges only locally edited fields into the latest grid, and requires an explicit choice for same-field conflicts. Unselected rows and optional presence come from the latest saved grid.
+- Added DefinitionGridBrowserIT.uc3F1StaleRefreshPreservesUntouchedNewerRowsAndRequiresConflictChoice. All 25 unchanged integration/browser journeys and 26 unit/architecture checks passed on the corrected code. A new test's premature assertion was synchronized with the actual asynchronous refresh; corrected focused regression passed 1/1 with 26 unit/architecture checks, BUILD SUCCESS. /tmp/uc3-f1-verify.log and /tmp/uc3-f1-focused.log. Syntax/diff checks passed.
+- Revised submission: HEAD at walkthrough. Full UC-3 browser journey will be repeated against the fresh disposable database authoring_loop_r2; no approval yet.

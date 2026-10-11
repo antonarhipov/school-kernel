@@ -181,6 +181,36 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
         unchanged=storedDocument(); assertEquals(409,command("",reserved,null).status()); assertEquals(unchanged,storedDocument());
     }
 
+    @Test
+    void uc3F1StaleRefreshPreservesUntouchedNewerRowsAndRequiresConflictChoice() {
+        create(); workbench.page().locator("#generate-grid").click(); review(); save();
+        var second = newTab(); second.open(); second.page().locator("button[data-section=Grid]").click();
+        field("monday-1", "displayName").fill("My Monday name");
+        second.page().getByRole(com.microsoft.playwright.options.AriaRole.TEXTBOX,
+                new com.microsoft.playwright.Page.GetByRoleOptions().setName("tuesday-1 displayName").setExact(true)).fill("Their Tuesday name");
+        second.page().locator("#preview-grid").click(); second.page().locator("#save-grid").click();
+        second.expect("!document.querySelector('#grid-preview')");
+        String newer = storedDocument(); review(); workbench.awaitText("No change was committed"); assertEquals(newer,storedDocument());
+        workbench.page().locator("#grid-refresh").click();
+        workbench.expect("document.querySelector('[aria-label=\"tuesday-1 displayName\"]')?.value === 'Their Tuesday name'");
+        assertEquals("My Monday name",field("monday-1","displayName").inputValue());
+        assertEquals("Their Tuesday name",field("tuesday-1","displayName").inputValue());
+        review(); save();
+        assertEquals("My Monday name",definition().path("periods").get(0).path("displayName").stringValue());
+        assertEquals("Their Tuesday name",definition().path("periods").get(2).path("displayName").stringValue());
+        // Both tabs change the same field: refresh must keep both values visible and require an explicit choice.
+        second.reload(); second.page().locator("button[data-section=Grid]").click();
+        field("monday-1","displayName").fill("My conflicting Monday");
+        second.page().getByRole(com.microsoft.playwright.options.AriaRole.TEXTBOX,
+                new com.microsoft.playwright.Page.GetByRoleOptions().setName("monday-1 displayName").setExact(true)).fill("Their conflicting Monday");
+        second.page().locator("#preview-grid").click(); second.page().locator("#save-grid").click(); second.expect("!document.querySelector('#grid-preview')");
+        newer=storedDocument(); review(); workbench.awaitText("No change was committed"); workbench.page().locator("#grid-refresh").click();
+        workbench.awaitText("Newer saved fields conflict"); workbench.awaitText("Their conflicting Monday"); workbench.awaitText("My conflicting Monday");
+        review(); workbench.awaitText("Resolve the newer saved field conflicts"); assertEquals(newer,storedDocument());
+        workbench.page().locator("#grid-use-latest").click(); assertEquals("Their conflicting Monday",field("monday-1","displayName").inputValue());
+        review(); save(); assertEquals("Their conflicting Monday",definition().path("periods").get(0).path("displayName").stringValue());
+    }
+
     private void create() { workbench.open(); open(); grid(); }
     private void open() { workbench.page().locator("#open-authoring").click(); workbench.page().locator("#confirm-authoring").click(); workbench.awaitText("Saved school-definition draft"); }
     private void grid() { workbench.page().locator("button[data-section=Grid]").click(); workbench.awaitText("Periods are explicit"); }

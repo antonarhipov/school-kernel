@@ -1,0 +1,14 @@
+### Result
+{"step":"individual adjustment and preview","result":"PASS","version":1}
+### Ran Playwright code
+```js
+await (async (page) => {
+for (const day of ['monday','tuesday','wednesday','thursday','friday']) await page.getByRole('textbox',{name:day+'-2 endTime',exact:true}).fill('10:45');
+const before = await page.evaluate(async () => (await fetch('/api/workspace')).json());
+await page.getByRole('button',{name:'Review grid operation',exact:true}).click();
+await page.locator('#grid-preview').waitFor();
+const after = await page.evaluate(async () => (await fetch('/api/workspace')).json());
+if (JSON.stringify(before)!==JSON.stringify(after)) throw new Error('Preview wrote durable state');
+return {step:'individual adjustment and preview',result:'PASS',version:after.version};
+})(page);
+```

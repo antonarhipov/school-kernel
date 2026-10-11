@@ -4,7 +4,7 @@
 
 - Use case: UC-3
 - Status: PENDING_WALKTHROUGH
-- Next eligible: UC-4 after UC-3 walkthrough
+- Next eligible: UC-4 after UC-3 passes
 
 ## Progress
 
@@ -147,3 +147,11 @@ None. Prior UC-3 procedural blocker resolved by the user-authorized workflow upd
 - User explicitly requested loosening the execute skill, durable Playwright walkthrough ledgers with applicable screenshots, automatic approval on PASS, and production fixes/repeated walkthroughs on FAIL followed by the next UC. Updated repository execute and installed Playwright skills; both pass quick_validate.py. Separate converge reviews are optional; no two-attempt limit or procedural approval pause remains.
 - Cross-UC “continue with” references are destination handoffs, not implicit Requires dependencies. UC-3 checks safe period-removal guidance/refusal now; UC-13 owns its complete guided-removal journey. This pending handoff must be implemented and verified in UC-13 before feature completion. Explicit relationship dependencies, product behavior, isolation, exact fidelity and negative-path evidence remain required. No specification has been weakened and no UC-13 completion is claimed.
 - Resumed UC-3 from the existing preserved implementation and 51 passing relevant checks plus final strengthened assertions. No changed production code requires another technical run. Next is its standalone real-browser walkthrough and recorded automatic approval, then UC-4.
+
+## UC-3 walkthrough attempt 1
+
+- Submission add37ea; [recorded ledger](../../output/playwright/school-definition-authoring/UC-3/20261011-1/README.md): FAIL F-1. Real two-tab stale retry overwrites an unrelated newer period name. Main generation/save, cancellation, invalid-grid correction, responsive retention and unsaved navigation passed; no approval inferred. Execute is fixing three-way refresh/explicit conflict review and will repeat the full journey. All changes remain confined to the disposable loop workspace.
+
+- F-1 revision: refresh now performs a three-way field merge against the working base. Newer untouched rows/fields are retained; conflicting edited fields show both values and block preview/save until an explicit keep/use-newer choice. Added real two-tab browser regression for both cases.
+
+- F-1 technical validation: 26 unit/architecture checks and all 25 existing integration/browser journeys passed on the corrected production code. New two-tab regression initially asserted before async refresh completed; added a wait for its actual resulting input, then it passed (1/1, plus 26 unit/architecture). Logs: /tmp/uc3-f1-verify.log (synchronization failure retained), /tmp/uc3-f1-focused.log (BUILD SUCCESS). All expected value assertions retained. No production change after the full relevant run; no operator or tracked runtime data changed.
