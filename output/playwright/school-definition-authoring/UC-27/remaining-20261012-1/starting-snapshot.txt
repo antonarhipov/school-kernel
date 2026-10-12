@@ -1,0 +1,1588 @@
+### Page
+- Page URL: http://127.0.0.1:18112/workspace/
+- Page Title: School timetable workspace
+### Snapshot
+```yaml
+- generic [active] [ref=f12e1]:
+  - banner [ref=f12e2]:
+    - paragraph [ref=f12e3]: Local school timetable
+    - heading "Operations workspace" [level=1] [ref=f12e4]
+    - paragraph [ref=f12e5]: Accepted timetable · Merivälja Kool
+  - main [ref=f12e6]:
+    - generic [ref=f12e7]:
+      - generic [ref=f12e8]: Saved school-definition draft
+      - heading "Merivälja Kool" [level=2] [ref=f12e9]
+      - status [ref=f12e10]: Saved — Your saved school-definition changes are preserved.
+      - paragraph [ref=f12e11]: "Draft • Source: ACCEPTED_BASELINE • Catalog 9 • Current remains unchanged"
+      - group [ref=f12e12]:
+        - generic "Draft details" [ref=f12e13] [cursor=pointer]
+      - paragraph [ref=f12e14]: 29 subjects • 51 teachers • 23 classes • 42 rooms • 50 periods • 521 occurrences
+      - paragraph [ref=f12e15]: "Incomplete: 0 blocking issues; 0 advisories."
+      - navigation "Definition sections" [ref=f12e16]:
+        - button "School" [ref=f12e17] [cursor=pointer]
+        - button "Grid" [ref=f12e18] [cursor=pointer]
+        - button "Subjects" [ref=f12e19] [cursor=pointer]
+        - button "Teachers" [ref=f12e20] [cursor=pointer]
+        - button "Classes" [ref=f12e21] [cursor=pointer]
+        - button "Rooms" [ref=f12e22] [cursor=pointer]
+        - button "Room policies" [ref=f12e23] [cursor=pointer]
+        - button "Weekly requirements" [ref=f12e24] [cursor=pointer]
+        - button "Preferences" [ref=f12e25] [cursor=pointer]
+        - button "Occurrence details" [ref=f12e26] [cursor=pointer]
+        - button "Review" [ref=f12e27] [cursor=pointer]
+        - button "Inspect Current" [ref=f12e28] [cursor=pointer]
+        - link "Export Current" [ref=f12e29] [cursor=pointer]:
+          - /url: /api/accepted/export
+      - button "Discard authoring" [ref=f12e30] [cursor=pointer]
+      - generic [ref=f12e31]:
+        - heading "Review" [level=3] [ref=f12e32]
+        - button "Finish verified definition" [ref=f12e33] [cursor=pointer]
+        - button "Restore source values" [ref=f12e34] [cursor=pointer]
+        - button "Guided removal" [ref=f12e35] [cursor=pointer]
+        - button "Refresh saved review" [ref=f12e36] [cursor=pointer]
+        - paragraph [ref=f12e37]: Saved review • workspace version 270 • sha256:61a661499f47ef339d6bc447e3aa8e42a651728bb9cac82f96cb6ea4677ae2a0
+        - paragraph [ref=f12e38]: "Source (ACCEPTED_BASELINE): Merivälja Kool • catalog 9 • sha256:1ae595251efc58d4b489851679f45458f2eb0c1d4b29c548bc24b7969a711608"
+        - paragraph [ref=f12e39]: "Authored draft: Merivälja Kool • catalog 9"
+        - paragraph [ref=f12e40]: Definition verification is still required. No blocker does not establish timetable feasibility.
+        - heading "Issues — 0 blocking; 0 advisory" [level=4] [ref=f12e41]
+        - generic [ref=f12e42]:
+          - combobox "Review issue severity" [ref=f12e43]:
+            - option "All issues" [selected]
+            - option "Blocking issues"
+            - option "Advisories"
+          - textbox "Filter review issues by literal text" [ref=f12e44]
+        - paragraph [ref=f12e46]: "0 of 0 saved issues shown • scope: ALL / all literal text"
+        - group [ref=f12e47]:
+          - generic "Complete saved changes — 216" [ref=f12e48]
+          - generic [ref=f12e49]:
+            - 'heading "Added: School merivalja-kool • basedOnRevision" [level=5] [ref=f12e50]'
+            - paragraph [ref=f12e51]: "Source value:"
+            - generic [ref=f12e52]: (omitted / absent)
+            - paragraph [ref=f12e53]: "Saved draft value:"
+            - generic [ref=f12e54]: "\"sha256:1ae595251efc58d4b489851679f45458f2eb0c1d4b29c548bc24b7969a711608\""
+            - 'button "Open change: School merivalja-kool • basedOnRevision" [ref=f12e55] [cursor=pointer]'
+          - generic [ref=f12e56]:
+            - 'heading "Added: Lesson 1a.opiabi.03 • whole item" [level=5] [ref=f12e57]'
+            - paragraph [ref=f12e58]: "Source value:"
+            - generic [ref=f12e59]: (omitted / absent)
+            - paragraph [ref=f12e60]: "Saved draft value:"
+            - generic [ref=f12e61]: "{ \"id\": \"1a.opiabi.03\", \"cohortId\": \"1a\", \"seriesId\": \"1a.opiabi\", \"subjectId\": \"opiabi\", \"teacherId\": \"piret-laanesaar\", \"displayName\": \"1A Õpiabi 3\", \"preferredRoomIds\": [ \"a106\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }"
+            - 'button "Open change: Lesson 1a.opiabi.03 • whole item" [ref=f12e62] [cursor=pointer]'
+          - generic [ref=f12e63]:
+            - 'heading "Added: RoomAssignment ux-policy-01 • whole item" [level=5] [ref=f12e64]'
+            - paragraph [ref=f12e65]: "Source value:"
+            - generic [ref=f12e66]: (omitted / absent)
+            - paragraph [ref=f12e67]: "Saved draft value:"
+            - generic [ref=f12e68]: "{ \"id\": \"ux-policy-01\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-01 • whole item" [ref=f12e69] [cursor=pointer]'
+          - generic [ref=f12e70]:
+            - 'heading "Added: RoomAssignment ux-policy-02 • whole item" [level=5] [ref=f12e71]'
+            - paragraph [ref=f12e72]: "Source value:"
+            - generic [ref=f12e73]: (omitted / absent)
+            - paragraph [ref=f12e74]: "Saved draft value:"
+            - generic [ref=f12e75]: "{ \"id\": \"ux-policy-02\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-02 • whole item" [ref=f12e76] [cursor=pointer]'
+          - generic [ref=f12e77]:
+            - 'heading "Added: RoomAssignment ux-policy-03 • whole item" [level=5] [ref=f12e78]'
+            - paragraph [ref=f12e79]: "Source value:"
+            - generic [ref=f12e80]: (omitted / absent)
+            - paragraph [ref=f12e81]: "Saved draft value:"
+            - generic [ref=f12e82]: "{ \"id\": \"ux-policy-03\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-03 • whole item" [ref=f12e83] [cursor=pointer]'
+          - generic [ref=f12e84]:
+            - 'heading "Added: RoomAssignment ux-policy-04 • whole item" [level=5] [ref=f12e85]'
+            - paragraph [ref=f12e86]: "Source value:"
+            - generic [ref=f12e87]: (omitted / absent)
+            - paragraph [ref=f12e88]: "Saved draft value:"
+            - generic [ref=f12e89]: "{ \"id\": \"ux-policy-04\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-04 • whole item" [ref=f12e90] [cursor=pointer]'
+          - generic [ref=f12e91]:
+            - 'heading "Added: RoomAssignment ux-policy-05 • whole item" [level=5] [ref=f12e92]'
+            - paragraph [ref=f12e93]: "Source value:"
+            - generic [ref=f12e94]: (omitted / absent)
+            - paragraph [ref=f12e95]: "Saved draft value:"
+            - generic [ref=f12e96]: "{ \"id\": \"ux-policy-05\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-05 • whole item" [ref=f12e97] [cursor=pointer]'
+          - generic [ref=f12e98]:
+            - 'heading "Added: RoomAssignment ux-policy-06 • whole item" [level=5] [ref=f12e99]'
+            - paragraph [ref=f12e100]: "Source value:"
+            - generic [ref=f12e101]: (omitted / absent)
+            - paragraph [ref=f12e102]: "Saved draft value:"
+            - generic [ref=f12e103]: "{ \"id\": \"ux-policy-06\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-06 • whole item" [ref=f12e104] [cursor=pointer]'
+          - generic [ref=f12e105]:
+            - 'heading "Added: RoomAssignment ux-policy-07 • whole item" [level=5] [ref=f12e106]'
+            - paragraph [ref=f12e107]: "Source value:"
+            - generic [ref=f12e108]: (omitted / absent)
+            - paragraph [ref=f12e109]: "Saved draft value:"
+            - generic [ref=f12e110]: "{ \"id\": \"ux-policy-07\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-07 • whole item" [ref=f12e111] [cursor=pointer]'
+          - generic [ref=f12e112]:
+            - 'heading "Added: RoomAssignment ux-policy-08 • whole item" [level=5] [ref=f12e113]'
+            - paragraph [ref=f12e114]: "Source value:"
+            - generic [ref=f12e115]: (omitted / absent)
+            - paragraph [ref=f12e116]: "Saved draft value:"
+            - generic [ref=f12e117]: "{ \"id\": \"ux-policy-08\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-08 • whole item" [ref=f12e118] [cursor=pointer]'
+          - generic [ref=f12e119]:
+            - 'heading "Added: RoomAssignment ux-policy-09 • whole item" [level=5] [ref=f12e120]'
+            - paragraph [ref=f12e121]: "Source value:"
+            - generic [ref=f12e122]: (omitted / absent)
+            - paragraph [ref=f12e123]: "Saved draft value:"
+            - generic [ref=f12e124]: "{ \"id\": \"ux-policy-09\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-09 • whole item" [ref=f12e125] [cursor=pointer]'
+          - generic [ref=f12e126]:
+            - 'heading "Added: RoomAssignment ux-policy-10 • whole item" [level=5] [ref=f12e127]'
+            - paragraph [ref=f12e128]: "Source value:"
+            - generic [ref=f12e129]: (omitted / absent)
+            - paragraph [ref=f12e130]: "Saved draft value:"
+            - generic [ref=f12e131]: "{ \"id\": \"ux-policy-10\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-10 • whole item" [ref=f12e132] [cursor=pointer]'
+          - generic [ref=f12e133]:
+            - 'heading "Added: RoomAssignment ux-policy-11 • whole item" [level=5] [ref=f12e134]'
+            - paragraph [ref=f12e135]: "Source value:"
+            - generic [ref=f12e136]: (omitted / absent)
+            - paragraph [ref=f12e137]: "Saved draft value:"
+            - generic [ref=f12e138]: "{ \"id\": \"ux-policy-11\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-11 • whole item" [ref=f12e139] [cursor=pointer]'
+          - generic [ref=f12e140]:
+            - 'heading "Added: RoomAssignment ux-policy-12 • whole item" [level=5] [ref=f12e141]'
+            - paragraph [ref=f12e142]: "Source value:"
+            - generic [ref=f12e143]: (omitted / absent)
+            - paragraph [ref=f12e144]: "Saved draft value:"
+            - generic [ref=f12e145]: "{ \"id\": \"ux-policy-12\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-12 • whole item" [ref=f12e146] [cursor=pointer]'
+          - generic [ref=f12e147]:
+            - 'heading "Added: RoomAssignment ux-policy-13 • whole item" [level=5] [ref=f12e148]'
+            - paragraph [ref=f12e149]: "Source value:"
+            - generic [ref=f12e150]: (omitted / absent)
+            - paragraph [ref=f12e151]: "Saved draft value:"
+            - generic [ref=f12e152]: "{ \"id\": \"ux-policy-13\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-13 • whole item" [ref=f12e153] [cursor=pointer]'
+          - generic [ref=f12e154]:
+            - 'heading "Added: RoomAssignment ux-policy-14 • whole item" [level=5] [ref=f12e155]'
+            - paragraph [ref=f12e156]: "Source value:"
+            - generic [ref=f12e157]: (omitted / absent)
+            - paragraph [ref=f12e158]: "Saved draft value:"
+            - generic [ref=f12e159]: "{ \"id\": \"ux-policy-14\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-14 • whole item" [ref=f12e160] [cursor=pointer]'
+          - generic [ref=f12e161]:
+            - 'heading "Added: RoomAssignment ux-policy-15 • whole item" [level=5] [ref=f12e162]'
+            - paragraph [ref=f12e163]: "Source value:"
+            - generic [ref=f12e164]: (omitted / absent)
+            - paragraph [ref=f12e165]: "Saved draft value:"
+            - generic [ref=f12e166]: "{ \"id\": \"ux-policy-15\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-15 • whole item" [ref=f12e167] [cursor=pointer]'
+          - generic [ref=f12e168]:
+            - 'heading "Added: RoomAssignment ux-policy-16 • whole item" [level=5] [ref=f12e169]'
+            - paragraph [ref=f12e170]: "Source value:"
+            - generic [ref=f12e171]: (omitted / absent)
+            - paragraph [ref=f12e172]: "Saved draft value:"
+            - generic [ref=f12e173]: "{ \"id\": \"ux-policy-16\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-16 • whole item" [ref=f12e174] [cursor=pointer]'
+          - generic [ref=f12e175]:
+            - 'heading "Added: RoomAssignment ux-policy-17 • whole item" [level=5] [ref=f12e176]'
+            - paragraph [ref=f12e177]: "Source value:"
+            - generic [ref=f12e178]: (omitted / absent)
+            - paragraph [ref=f12e179]: "Saved draft value:"
+            - generic [ref=f12e180]: "{ \"id\": \"ux-policy-17\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-17 • whole item" [ref=f12e181] [cursor=pointer]'
+          - generic [ref=f12e182]:
+            - 'heading "Added: RoomAssignment ux-policy-18 • whole item" [level=5] [ref=f12e183]'
+            - paragraph [ref=f12e184]: "Source value:"
+            - generic [ref=f12e185]: (omitted / absent)
+            - paragraph [ref=f12e186]: "Saved draft value:"
+            - generic [ref=f12e187]: "{ \"id\": \"ux-policy-18\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-18 • whole item" [ref=f12e188] [cursor=pointer]'
+          - generic [ref=f12e189]:
+            - 'heading "Added: RoomAssignment ux-policy-19 • whole item" [level=5] [ref=f12e190]'
+            - paragraph [ref=f12e191]: "Source value:"
+            - generic [ref=f12e192]: (omitted / absent)
+            - paragraph [ref=f12e193]: "Saved draft value:"
+            - generic [ref=f12e194]: "{ \"id\": \"ux-policy-19\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-19 • whole item" [ref=f12e195] [cursor=pointer]'
+          - generic [ref=f12e196]:
+            - 'heading "Added: RoomAssignment ux-policy-20 • whole item" [level=5] [ref=f12e197]'
+            - paragraph [ref=f12e198]: "Source value:"
+            - generic [ref=f12e199]: (omitted / absent)
+            - paragraph [ref=f12e200]: "Saved draft value:"
+            - generic [ref=f12e201]: "{ \"id\": \"ux-policy-20\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-20 • whole item" [ref=f12e202] [cursor=pointer]'
+          - generic [ref=f12e203]:
+            - 'heading "Added: RoomAssignment ux-policy-21 • whole item" [level=5] [ref=f12e204]'
+            - paragraph [ref=f12e205]: "Source value:"
+            - generic [ref=f12e206]: (omitted / absent)
+            - paragraph [ref=f12e207]: "Saved draft value:"
+            - generic [ref=f12e208]: "{ \"id\": \"ux-policy-21\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-21 • whole item" [ref=f12e209] [cursor=pointer]'
+          - generic [ref=f12e210]:
+            - 'heading "Added: RoomAssignment ux-policy-22 • whole item" [level=5] [ref=f12e211]'
+            - paragraph [ref=f12e212]: "Source value:"
+            - generic [ref=f12e213]: (omitted / absent)
+            - paragraph [ref=f12e214]: "Saved draft value:"
+            - generic [ref=f12e215]: "{ \"id\": \"ux-policy-22\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-22 • whole item" [ref=f12e216] [cursor=pointer]'
+          - generic [ref=f12e217]:
+            - 'heading "Added: RoomAssignment ux-policy-23 • whole item" [level=5] [ref=f12e218]'
+            - paragraph [ref=f12e219]: "Source value:"
+            - generic [ref=f12e220]: (omitted / absent)
+            - paragraph [ref=f12e221]: "Saved draft value:"
+            - generic [ref=f12e222]: "{ \"id\": \"ux-policy-23\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-23 • whole item" [ref=f12e223] [cursor=pointer]'
+          - generic [ref=f12e224]:
+            - 'heading "Added: RoomAssignment ux-policy-24 • whole item" [level=5] [ref=f12e225]'
+            - paragraph [ref=f12e226]: "Source value:"
+            - generic [ref=f12e227]: (omitted / absent)
+            - paragraph [ref=f12e228]: "Saved draft value:"
+            - generic [ref=f12e229]: "{ \"id\": \"ux-policy-24\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-24 • whole item" [ref=f12e230] [cursor=pointer]'
+          - generic [ref=f12e231]:
+            - 'heading "Added: RoomAssignment ux-policy-25 • whole item" [level=5] [ref=f12e232]'
+            - paragraph [ref=f12e233]: "Source value:"
+            - generic [ref=f12e234]: (omitted / absent)
+            - paragraph [ref=f12e235]: "Saved draft value:"
+            - generic [ref=f12e236]: "{ \"id\": \"ux-policy-25\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-25 • whole item" [ref=f12e237] [cursor=pointer]'
+          - generic [ref=f12e238]:
+            - 'heading "Added: RoomAssignment ux-policy-26 • whole item" [level=5] [ref=f12e239]'
+            - paragraph [ref=f12e240]: "Source value:"
+            - generic [ref=f12e241]: (omitted / absent)
+            - paragraph [ref=f12e242]: "Saved draft value:"
+            - generic [ref=f12e243]: "{ \"id\": \"ux-policy-26\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-26 • whole item" [ref=f12e244] [cursor=pointer]'
+          - generic [ref=f12e245]:
+            - 'heading "Added: RoomAssignment ux-policy-27 • whole item" [level=5] [ref=f12e246]'
+            - paragraph [ref=f12e247]: "Source value:"
+            - generic [ref=f12e248]: (omitted / absent)
+            - paragraph [ref=f12e249]: "Saved draft value:"
+            - generic [ref=f12e250]: "{ \"id\": \"ux-policy-27\", \"subjectId\": \"history-extra-b\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-27 • whole item" [ref=f12e251] [cursor=pointer]'
+          - generic [ref=f12e252]:
+            - 'heading "Added: RoomAssignment ux-policy-28 • whole item" [level=5] [ref=f12e253]'
+            - paragraph [ref=f12e254]: "Source value:"
+            - generic [ref=f12e255]: (omitted / absent)
+            - paragraph [ref=f12e256]: "Saved draft value:"
+            - generic [ref=f12e257]: "{ \"id\": \"ux-policy-28\", \"subjectId\": \"history-extra-b\", \"teacherId\": \"siiri-aiaste\", \"allowedRoomIds\": [ \"a106\" ] }"
+            - 'button "Open change: RoomAssignment ux-policy-28 • whole item" [ref=f12e258] [cursor=pointer]'
+          - generic [ref=f12e259]:
+            - 'heading "Added: Subject history-extra-a • whole item" [level=5] [ref=f12e260]'
+            - paragraph [ref=f12e261]: "Source value:"
+            - generic [ref=f12e262]: (omitted / absent)
+            - paragraph [ref=f12e263]: "Saved draft value:"
+            - generic [ref=f12e264]: "{ \"id\": \"history-extra-a\", \"displayName\": \"Working <literal> Õ\" }"
+            - 'button "Open change: Subject history-extra-a • whole item" [ref=f12e265] [cursor=pointer]'
+          - generic [ref=f12e266]:
+            - 'heading "Added: Subject history-extra-b • whole item" [level=5] [ref=f12e267]'
+            - paragraph [ref=f12e268]: "Source value:"
+            - generic [ref=f12e269]: (omitted / absent)
+            - paragraph [ref=f12e270]: "Saved draft value:"
+            - generic [ref=f12e271]: "{ \"id\": \"history-extra-b\", \"displayName\": \"Ajalugu\" }"
+            - 'button "Open change: Subject history-extra-b • whole item" [ref=f12e272] [cursor=pointer]'
+          - generic [ref=f12e273]:
+            - 'heading "Added: Subject oas-search-proof • whole item" [level=5] [ref=f12e274]'
+            - paragraph [ref=f12e275]: "Source value:"
+            - generic [ref=f12e276]: (omitted / absent)
+            - paragraph [ref=f12e277]: "Saved draft value:"
+            - generic [ref=f12e278]: "{ \"id\": \"oas-search-proof\", \"displayName\": \"Õäš selection proof\" }"
+            - 'button "Open change: Subject oas-search-proof • whole item" [ref=f12e279] [cursor=pointer]'
+          - generic [ref=f12e280]:
+            - 'heading "Added: Lesson 1a.opiabi.03 • editingContext.authoredLocks" [level=5] [ref=f12e281]'
+            - paragraph [ref=f12e282]: "Source value:"
+            - generic [ref=f12e283]: (omitted / absent)
+            - paragraph [ref=f12e284]: "Saved draft value:"
+            - generic [ref=f12e285]: "{}"
+            - 'button "Open change: Lesson 1a.opiabi.03 • editingContext.authoredLocks" [ref=f12e286] [cursor=pointer]'
+          - generic [ref=f12e287]:
+            - 'heading "Added: Requirement 1a.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e288]'
+            - paragraph [ref=f12e289]: "Source value:"
+            - generic [ref=f12e290]: (omitted / absent)
+            - paragraph [ref=f12e291]: "Saved draft value:"
+            - generic [ref=f12e292]: "{ \"count\": 2, \"cohortId\": \"1a\", \"defaults\": { \"teacherId\": \"hektor-talviste\", \"preferredRoomIds\": [ \"kk3\" ], \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"1a.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1a.kehaline-kasvatus • editingContext.requirements" [ref=f12e293] [cursor=pointer]'
+          - generic [ref=f12e294]:
+            - 'heading "Added: Requirement 1a.klassitund • editingContext.requirements" [level=5] [ref=f12e295]'
+            - paragraph [ref=f12e296]: "Source value:"
+            - generic [ref=f12e297]: (omitted / absent)
+            - paragraph [ref=f12e298]: "Saved draft value:"
+            - generic [ref=f12e299]: "{ \"count\": 16, \"cohortId\": \"1a\", \"defaults\": { \"teacherId\": \"piret-laanesaar\", \"preferredRoomIds\": [ \"a106\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"1a.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": { \"1a.klassitund.01\": [] }, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1a.klassitund • editingContext.requirements" [ref=f12e300] [cursor=pointer]'
+          - generic [ref=f12e301]:
+            - 'heading "Added: Requirement 1a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e302]'
+            - paragraph [ref=f12e303]: "Source value:"
+            - generic [ref=f12e304]: (omitted / absent)
+            - paragraph [ref=f12e305]: "Saved draft value:"
+            - generic [ref=f12e306]: "{ \"count\": 2, \"cohortId\": \"1a\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"1a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1a.muusikaopetus • editingContext.requirements" [ref=f12e307] [cursor=pointer]'
+          - generic [ref=f12e308]:
+            - 'heading "Added: Requirement 1a.opiabi • editingContext.requirements" [level=5] [ref=f12e309]'
+            - paragraph [ref=f12e310]: "Source value:"
+            - generic [ref=f12e311]: (omitted / absent)
+            - paragraph [ref=f12e312]: "Saved draft value:"
+            - generic [ref=f12e313]: "{ \"count\": 3, \"cohortId\": \"1a\", \"defaults\": { \"teacherId\": \"piret-laanesaar\", \"preferredRoomIds\": [ \"a106\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"1a.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": { \"1a.opiabi.01\": [] }, \"mixedFields\": [], \"nextSequence\": 4 }"
+            - 'button "Open change: Requirement 1a.opiabi • editingContext.requirements" [ref=f12e314] [cursor=pointer]'
+          - generic [ref=f12e315]:
+            - 'heading "Added: Requirement 1b.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e316]'
+            - paragraph [ref=f12e317]: "Source value:"
+            - generic [ref=f12e318]: (omitted / absent)
+            - paragraph [ref=f12e319]: "Saved draft value:"
+            - generic [ref=f12e320]: "{ \"count\": 2, \"cohortId\": \"1b\", \"defaults\": { \"teacherId\": \"hektor-talviste\", \"preferredRoomIds\": [ \"kk3\" ], \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"1b.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1b.kehaline-kasvatus • editingContext.requirements" [ref=f12e321] [cursor=pointer]'
+          - generic [ref=f12e322]:
+            - 'heading "Added: Requirement 1b.klassitund • editingContext.requirements" [level=5] [ref=f12e323]'
+            - paragraph [ref=f12e324]: "Source value:"
+            - generic [ref=f12e325]: (omitted / absent)
+            - paragraph [ref=f12e326]: "Saved draft value:"
+            - generic [ref=f12e327]: "{ \"count\": 16, \"cohortId\": \"1b\", \"defaults\": { \"teacherId\": \"kairi-meressaar\", \"preferredRoomIds\": [ \"a120\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"1b.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1b.klassitund • editingContext.requirements" [ref=f12e328] [cursor=pointer]'
+          - generic [ref=f12e329]:
+            - 'heading "Added: Requirement 1b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e330]'
+            - paragraph [ref=f12e331]: "Source value:"
+            - generic [ref=f12e332]: (omitted / absent)
+            - paragraph [ref=f12e333]: "Saved draft value:"
+            - generic [ref=f12e334]: "{ \"count\": 2, \"cohortId\": \"1b\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"1b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1b.muusikaopetus • editingContext.requirements" [ref=f12e335] [cursor=pointer]'
+          - generic [ref=f12e336]:
+            - 'heading "Added: Requirement 1b.opiabi • editingContext.requirements" [level=5] [ref=f12e337]'
+            - paragraph [ref=f12e338]: "Source value:"
+            - generic [ref=f12e339]: (omitted / absent)
+            - paragraph [ref=f12e340]: "Saved draft value:"
+            - generic [ref=f12e341]: "{ \"count\": 2, \"cohortId\": \"1b\", \"defaults\": { \"teacherId\": \"kairi-meressaar\", \"preferredRoomIds\": [ \"a120\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"1b.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1b.opiabi • editingContext.requirements" [ref=f12e342] [cursor=pointer]'
+          - generic [ref=f12e343]:
+            - 'heading "Added: Requirement 1c.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e344]'
+            - paragraph [ref=f12e345]: "Source value:"
+            - generic [ref=f12e346]: (omitted / absent)
+            - paragraph [ref=f12e347]: "Saved draft value:"
+            - generic [ref=f12e348]: "{ \"count\": 2, \"cohortId\": \"1c\", \"defaults\": { \"teacherId\": \"katri-plooman\", \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"1c.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": { \"1c.kehaline-kasvatus.01\": [ \"preferredRoomIds\" ], \"1c.kehaline-kasvatus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1c.kehaline-kasvatus • editingContext.requirements" [ref=f12e349] [cursor=pointer]'
+          - generic [ref=f12e350]:
+            - 'heading "Added: Requirement 1c.klassitund • editingContext.requirements" [level=5] [ref=f12e351]'
+            - paragraph [ref=f12e352]: "Source value:"
+            - generic [ref=f12e353]: (omitted / absent)
+            - paragraph [ref=f12e354]: "Saved draft value:"
+            - generic [ref=f12e355]: "{ \"count\": 16, \"cohortId\": \"1c\", \"defaults\": { \"teacherId\": \"helena-kroon\", \"preferredRoomIds\": [ \"a118\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"1c.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1c.klassitund • editingContext.requirements" [ref=f12e356] [cursor=pointer]'
+          - generic [ref=f12e357]:
+            - 'heading "Added: Requirement 1c.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e358]'
+            - paragraph [ref=f12e359]: "Source value:"
+            - generic [ref=f12e360]: (omitted / absent)
+            - paragraph [ref=f12e361]: "Saved draft value:"
+            - generic [ref=f12e362]: "{ \"count\": 2, \"cohortId\": \"1c\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"1c.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1c.muusikaopetus • editingContext.requirements" [ref=f12e363] [cursor=pointer]'
+          - generic [ref=f12e364]:
+            - 'heading "Added: Requirement 1c.opiabi • editingContext.requirements" [level=5] [ref=f12e365]'
+            - paragraph [ref=f12e366]: "Source value:"
+            - generic [ref=f12e367]: (omitted / absent)
+            - paragraph [ref=f12e368]: "Saved draft value:"
+            - generic [ref=f12e369]: "{ \"count\": 2, \"cohortId\": \"1c\", \"defaults\": { \"teacherId\": \"helena-kroon\", \"preferredRoomIds\": [ \"a118\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"1c.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 1c.opiabi • editingContext.requirements" [ref=f12e370] [cursor=pointer]'
+          - generic [ref=f12e371]:
+            - 'heading "Added: Requirement 2a.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e372]'
+            - paragraph [ref=f12e373]: "Source value:"
+            - generic [ref=f12e374]: (omitted / absent)
+            - paragraph [ref=f12e375]: "Saved draft value:"
+            - generic [ref=f12e376]: "{ \"count\": 2, \"cohortId\": \"2a\", \"defaults\": { \"teacherId\": \"hektor-talviste\", \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"2a.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": { \"2a.kehaline-kasvatus.01\": [ \"preferredRoomIds\" ], \"2a.kehaline-kasvatus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2a.kehaline-kasvatus • editingContext.requirements" [ref=f12e377] [cursor=pointer]'
+          - generic [ref=f12e378]:
+            - 'heading "Added: Requirement 2a.klassitund • editingContext.requirements" [level=5] [ref=f12e379]'
+            - paragraph [ref=f12e380]: "Source value:"
+            - generic [ref=f12e381]: (omitted / absent)
+            - paragraph [ref=f12e382]: "Saved draft value:"
+            - generic [ref=f12e383]: "{ \"count\": 16, \"cohortId\": \"2a\", \"defaults\": { \"teacherId\": \"anita-kalmus\", \"preferredRoomIds\": [ \"a109\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"2a.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2a.klassitund • editingContext.requirements" [ref=f12e384] [cursor=pointer]'
+          - generic [ref=f12e385]:
+            - 'heading "Added: Requirement 2a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e386]'
+            - paragraph [ref=f12e387]: "Source value:"
+            - generic [ref=f12e388]: (omitted / absent)
+            - paragraph [ref=f12e389]: "Saved draft value:"
+            - generic [ref=f12e390]: "{ \"count\": 2, \"cohortId\": \"2a\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"2a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2a.muusikaopetus • editingContext.requirements" [ref=f12e391] [cursor=pointer]'
+          - generic [ref=f12e392]:
+            - 'heading "Added: Requirement 2a.opiabi • editingContext.requirements" [level=5] [ref=f12e393]'
+            - paragraph [ref=f12e394]: "Source value:"
+            - generic [ref=f12e395]: (omitted / absent)
+            - paragraph [ref=f12e396]: "Saved draft value:"
+            - generic [ref=f12e397]: "{ \"count\": 2, \"cohortId\": \"2a\", \"defaults\": { \"teacherId\": \"anita-kalmus\", \"preferredRoomIds\": [ \"a109\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"2a.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2a.opiabi • editingContext.requirements" [ref=f12e398] [cursor=pointer]'
+          - generic [ref=f12e399]:
+            - 'heading "Added: Requirement 2b.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e400]'
+            - paragraph [ref=f12e401]: "Source value:"
+            - generic [ref=f12e402]: (omitted / absent)
+            - paragraph [ref=f12e403]: "Saved draft value:"
+            - generic [ref=f12e404]: "{ \"count\": 2, \"cohortId\": \"2b\", \"defaults\": { \"teacherId\": \"hektor-talviste\", \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"2b.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": { \"2b.kehaline-kasvatus.01\": [ \"preferredRoomIds\" ], \"2b.kehaline-kasvatus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2b.kehaline-kasvatus • editingContext.requirements" [ref=f12e405] [cursor=pointer]'
+          - generic [ref=f12e406]:
+            - 'heading "Added: Requirement 2b.klassitund • editingContext.requirements" [level=5] [ref=f12e407]'
+            - paragraph [ref=f12e408]: "Source value:"
+            - generic [ref=f12e409]: (omitted / absent)
+            - paragraph [ref=f12e410]: "Saved draft value:"
+            - generic [ref=f12e411]: "{ \"count\": 16, \"cohortId\": \"2b\", \"defaults\": { \"teacherId\": \"maiki-saaring\", \"preferredRoomIds\": [ \"a117\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"2b.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2b.klassitund • editingContext.requirements" [ref=f12e412] [cursor=pointer]'
+          - generic [ref=f12e413]:
+            - 'heading "Added: Requirement 2b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e414]'
+            - paragraph [ref=f12e415]: "Source value:"
+            - generic [ref=f12e416]: (omitted / absent)
+            - paragraph [ref=f12e417]: "Saved draft value:"
+            - generic [ref=f12e418]: "{ \"count\": 2, \"cohortId\": \"2b\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"2b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2b.muusikaopetus • editingContext.requirements" [ref=f12e419] [cursor=pointer]'
+          - generic [ref=f12e420]:
+            - 'heading "Added: Requirement 2b.opiabi • editingContext.requirements" [level=5] [ref=f12e421]'
+            - paragraph [ref=f12e422]: "Source value:"
+            - generic [ref=f12e423]: (omitted / absent)
+            - paragraph [ref=f12e424]: "Saved draft value:"
+            - generic [ref=f12e425]: "{ \"count\": 2, \"cohortId\": \"2b\", \"defaults\": { \"teacherId\": \"maiki-saaring\", \"preferredRoomIds\": [ \"a117\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"2b.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2b.opiabi • editingContext.requirements" [ref=f12e426] [cursor=pointer]'
+          - generic [ref=f12e427]:
+            - 'heading "Added: Requirement 2c.eripedagoog • editingContext.requirements" [level=5] [ref=f12e428]'
+            - paragraph [ref=f12e429]: "Source value:"
+            - generic [ref=f12e430]: (omitted / absent)
+            - paragraph [ref=f12e431]: "Saved draft value:"
+            - generic [ref=f12e432]: "{ \"count\": 1, \"cohortId\": \"2c\", \"defaults\": { \"teacherId\": \"kirke-kobi\", \"preferredRoomIds\": [ \"a227\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"2c.eripedagoog\", \"subjectId\": \"eripedagoog\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2c.eripedagoog • editingContext.requirements" [ref=f12e433] [cursor=pointer]'
+          - generic [ref=f12e434]:
+            - 'heading "Added: Requirement 2c.klassitund • editingContext.requirements" [level=5] [ref=f12e435]'
+            - paragraph [ref=f12e436]: "Source value:"
+            - generic [ref=f12e437]: (omitted / absent)
+            - paragraph [ref=f12e438]: "Saved draft value:"
+            - generic [ref=f12e439]: "{ \"count\": 18, \"cohortId\": \"2c\", \"defaults\": { \"teacherId\": \"indra-feldman\", \"preferredRoomIds\": [ \"a207\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"2c.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 2c.klassitund • editingContext.requirements" [ref=f12e440] [cursor=pointer]'
+          - generic [ref=f12e441]:
+            - 'heading "Added: Requirement 3a.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e442]'
+            - paragraph [ref=f12e443]: "Source value:"
+            - generic [ref=f12e444]: (omitted / absent)
+            - paragraph [ref=f12e445]: "Saved draft value:"
+            - generic [ref=f12e446]: "{ \"count\": 2, \"cohortId\": \"3a\", \"defaults\": { \"teacherId\": \"karl-kristian-alasi\", \"preferredRoomIds\": [ \"kk1\" ], \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"3a.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3a.kehaline-kasvatus • editingContext.requirements" [ref=f12e447] [cursor=pointer]'
+          - generic [ref=f12e448]:
+            - 'heading "Added: Requirement 3a.klassitund • editingContext.requirements" [level=5] [ref=f12e449]'
+            - paragraph [ref=f12e450]: "Source value:"
+            - generic [ref=f12e451]: (omitted / absent)
+            - paragraph [ref=f12e452]: "Saved draft value:"
+            - generic [ref=f12e453]: "{ \"count\": 17, \"cohortId\": \"3a\", \"defaults\": { \"teacherId\": \"kristin-muul\", \"preferredRoomIds\": [ \"a228\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"3a.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3a.klassitund • editingContext.requirements" [ref=f12e454] [cursor=pointer]'
+          - generic [ref=f12e455]:
+            - 'heading "Added: Requirement 3a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e456]'
+            - paragraph [ref=f12e457]: "Source value:"
+            - generic [ref=f12e458]: (omitted / absent)
+            - paragraph [ref=f12e459]: "Saved draft value:"
+            - generic [ref=f12e460]: "{ \"count\": 2, \"cohortId\": \"3a\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"3a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3a.muusikaopetus • editingContext.requirements" [ref=f12e461] [cursor=pointer]'
+          - generic [ref=f12e462]:
+            - 'heading "Added: Requirement 3a.opiabi • editingContext.requirements" [level=5] [ref=f12e463]'
+            - paragraph [ref=f12e464]: "Source value:"
+            - generic [ref=f12e465]: (omitted / absent)
+            - paragraph [ref=f12e466]: "Saved draft value:"
+            - generic [ref=f12e467]: "{ \"count\": 2, \"cohortId\": \"3a\", \"defaults\": { \"teacherId\": \"kristin-muul\", \"preferredRoomIds\": [ \"a228\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"3a.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3a.opiabi • editingContext.requirements" [ref=f12e468] [cursor=pointer]'
+          - generic [ref=f12e469]:
+            - 'heading "Added: Requirement 3b.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e470]'
+            - paragraph [ref=f12e471]: "Source value:"
+            - generic [ref=f12e472]: (omitted / absent)
+            - paragraph [ref=f12e473]: "Saved draft value:"
+            - generic [ref=f12e474]: "{ \"count\": 2, \"cohortId\": \"3b\", \"defaults\": { \"teacherId\": \"karl-kristian-alasi\", \"preferredRoomIds\": [ \"kk1\" ], \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"3b.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3b.kehaline-kasvatus • editingContext.requirements" [ref=f12e475] [cursor=pointer]'
+          - generic [ref=f12e476]:
+            - 'heading "Added: Requirement 3b.klassitund • editingContext.requirements" [level=5] [ref=f12e477]'
+            - paragraph [ref=f12e478]: "Source value:"
+            - generic [ref=f12e479]: (omitted / absent)
+            - paragraph [ref=f12e480]: "Saved draft value:"
+            - generic [ref=f12e481]: "{ \"count\": 17, \"cohortId\": \"3b\", \"defaults\": { \"teacherId\": \"reena-korp\", \"preferredRoomIds\": [ \"a217\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"3b.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3b.klassitund • editingContext.requirements" [ref=f12e482] [cursor=pointer]'
+          - generic [ref=f12e483]:
+            - 'heading "Added: Requirement 3b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e484]'
+            - paragraph [ref=f12e485]: "Source value:"
+            - generic [ref=f12e486]: (omitted / absent)
+            - paragraph [ref=f12e487]: "Saved draft value:"
+            - generic [ref=f12e488]: "{ \"count\": 2, \"cohortId\": \"3b\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"3b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3b.muusikaopetus • editingContext.requirements" [ref=f12e489] [cursor=pointer]'
+          - generic [ref=f12e490]:
+            - 'heading "Added: Requirement 3b.opiabi • editingContext.requirements" [level=5] [ref=f12e491]'
+            - paragraph [ref=f12e492]: "Source value:"
+            - generic [ref=f12e493]: (omitted / absent)
+            - paragraph [ref=f12e494]: "Saved draft value:"
+            - generic [ref=f12e495]: "{ \"count\": 2, \"cohortId\": \"3b\", \"defaults\": { \"teacherId\": \"reena-korp\", \"preferredRoomIds\": [ \"a217\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"3b.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 3b.opiabi • editingContext.requirements" [ref=f12e496] [cursor=pointer]'
+          - generic [ref=f12e497]:
+            - 'heading "Added: Requirement 4a.kasitoo-ja-tehnoloogiaopetus • editingContext.requirements" [level=5] [ref=f12e498]'
+            - paragraph [ref=f12e499]: "Source value:"
+            - generic [ref=f12e500]: (omitted / absent)
+            - paragraph [ref=f12e501]: "Saved draft value:"
+            - generic [ref=f12e502]: "{ \"count\": 2, \"cohortId\": \"4a\", \"defaults\": { \"teacherId\": \"helena-kroon\", \"preferredRoomIds\": [ \"a118\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"4a.kasitoo-ja-tehnoloogiaopetus\", \"subjectId\": \"kasitoo-ja-tehnoloogiaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4a.kasitoo-ja-tehnoloogiaopetus • editingContext.requirements" [ref=f12e503] [cursor=pointer]'
+          - generic [ref=f12e504]:
+            - 'heading "Added: Requirement 4a.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e505]'
+            - paragraph [ref=f12e506]: "Source value:"
+            - generic [ref=f12e507]: (omitted / absent)
+            - paragraph [ref=f12e508]: "Saved draft value:"
+            - generic [ref=f12e509]: "{ \"count\": 2, \"cohortId\": \"4a\", \"defaults\": { \"teacherId\": \"katri-plooman\", \"preferredRoomIds\": [ \"kk2\" ], \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"4a.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4a.kehaline-kasvatus • editingContext.requirements" [ref=f12e510] [cursor=pointer]'
+          - generic [ref=f12e511]:
+            - 'heading "Added: Requirement 4a.klassitund • editingContext.requirements" [level=5] [ref=f12e512]'
+            - paragraph [ref=f12e513]: "Source value:"
+            - generic [ref=f12e514]: (omitted / absent)
+            - paragraph [ref=f12e515]: "Saved draft value:"
+            - generic [ref=f12e516]: "{ \"count\": 14, \"cohortId\": \"4a\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a218\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"4a.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4a.klassitund • editingContext.requirements" [ref=f12e517] [cursor=pointer]'
+          - generic [ref=f12e518]:
+            - 'heading "Added: Requirement 4a.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e519]'
+            - paragraph [ref=f12e520]: "Source value:"
+            - generic [ref=f12e521]: (omitted / absent)
+            - paragraph [ref=f12e522]: "Saved draft value:"
+            - generic [ref=f12e523]: "{ \"count\": 1, \"cohortId\": \"4a\", \"defaults\": { \"teacherId\": \"helena-kroon\", \"preferredRoomIds\": [ \"a118\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"4a.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4a.kunstiopetus • editingContext.requirements" [ref=f12e524] [cursor=pointer]'
+          - generic [ref=f12e525]:
+            - 'heading "Added: Requirement 4a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e526]'
+            - paragraph [ref=f12e527]: "Source value:"
+            - generic [ref=f12e528]: (omitted / absent)
+            - paragraph [ref=f12e529]: "Saved draft value:"
+            - generic [ref=f12e530]: "{ \"count\": 2, \"cohortId\": \"4a\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"4a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4a.muusikaopetus • editingContext.requirements" [ref=f12e531] [cursor=pointer]'
+          - generic [ref=f12e532]:
+            - 'heading "Added: Requirement 4a.opiabi • editingContext.requirements" [level=5] [ref=f12e533]'
+            - paragraph [ref=f12e534]: "Source value:"
+            - generic [ref=f12e535]: (omitted / absent)
+            - paragraph [ref=f12e536]: "Saved draft value:"
+            - generic [ref=f12e537]: "{ \"count\": 2, \"cohortId\": \"4a\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a218\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"4a.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4a.opiabi • editingContext.requirements" [ref=f12e538] [cursor=pointer]'
+          - generic [ref=f12e539]:
+            - 'heading "Added: Requirement 4b.kehaline-kasvatus • editingContext.requirements" [level=5] [ref=f12e540]'
+            - paragraph [ref=f12e541]: "Source value:"
+            - generic [ref=f12e542]: (omitted / absent)
+            - paragraph [ref=f12e543]: "Saved draft value:"
+            - generic [ref=f12e544]: "{ \"count\": 2, \"cohortId\": \"4b\", \"defaults\": { \"teacherId\": \"katri-plooman\", \"requiredRoomCapabilityIds\": [ \"sports-hall\" ] }, \"seriesId\": \"4b.kehaline-kasvatus\", \"subjectId\": \"kehaline-kasvatus\", \"exceptions\": { \"4b.kehaline-kasvatus.01\": [ \"preferredRoomIds\" ], \"4b.kehaline-kasvatus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4b.kehaline-kasvatus • editingContext.requirements" [ref=f12e545] [cursor=pointer]'
+          - generic [ref=f12e546]:
+            - 'heading "Added: Requirement 4b.klassitund • editingContext.requirements" [level=5] [ref=f12e547]'
+            - paragraph [ref=f12e548]: "Source value:"
+            - generic [ref=f12e549]: (omitted / absent)
+            - paragraph [ref=f12e550]: "Saved draft value:"
+            - generic [ref=f12e551]: "{ \"count\": 17, \"cohortId\": \"4b\", \"defaults\": { \"teacherId\": \"rita-lumiste\", \"preferredRoomIds\": [ \"a119\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"4b.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4b.klassitund • editingContext.requirements" [ref=f12e552] [cursor=pointer]'
+          - generic [ref=f12e553]:
+            - 'heading "Added: Requirement 4b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e554]'
+            - paragraph [ref=f12e555]: "Source value:"
+            - generic [ref=f12e556]: (omitted / absent)
+            - paragraph [ref=f12e557]: "Saved draft value:"
+            - generic [ref=f12e558]: "{ \"count\": 2, \"cohortId\": \"4b\", \"defaults\": { \"teacherId\": \"kaie-kodres\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"4b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4b.muusikaopetus • editingContext.requirements" [ref=f12e559] [cursor=pointer]'
+          - generic [ref=f12e560]:
+            - 'heading "Added: Requirement 4b.opiabi • editingContext.requirements" [level=5] [ref=f12e561]'
+            - paragraph [ref=f12e562]: "Source value:"
+            - generic [ref=f12e563]: (omitted / absent)
+            - paragraph [ref=f12e564]: "Saved draft value:"
+            - generic [ref=f12e565]: "{ \"count\": 2, \"cohortId\": \"4b\", \"defaults\": { \"teacherId\": \"rita-lumiste\", \"preferredRoomIds\": [ \"a119\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"4b.opiabi\", \"subjectId\": \"opiabi\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 4b.opiabi • editingContext.requirements" [ref=f12e566] [cursor=pointer]'
+          - generic [ref=f12e567]:
+            - 'heading "Added: Requirement 5a.ajalugu • editingContext.requirements" [level=5] [ref=f12e568]'
+            - paragraph [ref=f12e569]: "Source value:"
+            - generic [ref=f12e570]: (omitted / absent)
+            - paragraph [ref=f12e571]: "Saved draft value:"
+            - generic [ref=f12e572]: "{ \"count\": 2, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.ajalugu • editingContext.requirements" [ref=f12e573] [cursor=pointer]'
+          - generic [ref=f12e574]:
+            - 'heading "Added: Requirement 5a.eesti-keel • editingContext.requirements" [level=5] [ref=f12e575]'
+            - paragraph [ref=f12e576]: "Source value:"
+            - generic [ref=f12e577]: (omitted / absent)
+            - paragraph [ref=f12e578]: "Saved draft value:"
+            - generic [ref=f12e579]: "{ \"count\": 4, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"5a.eesti-keel.01\": [ \"preferredRoomIds\" ], \"5a.eesti-keel.02\": [ \"preferredRoomIds\" ], \"5a.eesti-keel.03\": [ \"preferredRoomIds\" ], \"5a.eesti-keel.04\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.eesti-keel • editingContext.requirements" [ref=f12e580] [cursor=pointer]'
+          - generic [ref=f12e581]:
+            - 'heading "Added: Requirement 5a.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e582]'
+            - paragraph [ref=f12e583]: "Source value:"
+            - generic [ref=f12e584]: (omitted / absent)
+            - paragraph [ref=f12e585]: "Saved draft value:"
+            - generic [ref=f12e586]: "{ \"count\": 1, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.inimeseopetus • editingContext.requirements" [ref=f12e587] [cursor=pointer]'
+          - generic [ref=f12e588]:
+            - 'heading "Added: Requirement 5a.into • editingContext.requirements" [level=5] [ref=f12e589]'
+            - paragraph [ref=f12e590]: "Source value:"
+            - generic [ref=f12e591]: (omitted / absent)
+            - paragraph [ref=f12e592]: "Saved draft value:"
+            - generic [ref=f12e593]: "{ \"count\": 1, \"cohortId\": \"5a\", \"defaults\": { \"roomLock\": \"a215\", \"teacherId\": \"ene-avson\", \"preferredRoomIds\": [ \"a215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.into • editingContext.requirements" [ref=f12e594] [cursor=pointer]'
+          - generic [ref=f12e595]:
+            - 'heading "Added: Requirement 5a.kirjandus • editingContext.requirements" [level=5] [ref=f12e596]'
+            - paragraph [ref=f12e597]: "Source value:"
+            - generic [ref=f12e598]: (omitted / absent)
+            - paragraph [ref=f12e599]: "Saved draft value:"
+            - generic [ref=f12e600]: "{ \"count\": 2, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"rita-lumiste\", \"preferredRoomIds\": [ \"a119\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.kirjandus • editingContext.requirements" [ref=f12e601] [cursor=pointer]'
+          - generic [ref=f12e602]:
+            - 'heading "Added: Requirement 5a.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e603]'
+            - paragraph [ref=f12e604]: "Source value:"
+            - generic [ref=f12e605]: (omitted / absent)
+            - paragraph [ref=f12e606]: "Saved draft value:"
+            - generic [ref=f12e607]: "{ \"count\": 1, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"5a.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.kunstiopetus • editingContext.requirements" [ref=f12e608] [cursor=pointer]'
+          - generic [ref=f12e609]:
+            - 'heading "Added: Requirement 5a.loodusopetus • editingContext.requirements" [level=5] [ref=f12e610]'
+            - paragraph [ref=f12e611]: "Source value:"
+            - generic [ref=f12e612]: (omitted / absent)
+            - paragraph [ref=f12e613]: "Saved draft value:"
+            - generic [ref=f12e614]: "{ \"count\": 3, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"anita-kalmus\", \"preferredRoomIds\": [ \"a109\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.loodusopetus\", \"subjectId\": \"loodusopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.loodusopetus • editingContext.requirements" [ref=f12e615] [cursor=pointer]'
+          - generic [ref=f12e616]:
+            - 'heading "Added: Requirement 5a.matemaatika • editingContext.requirements" [level=5] [ref=f12e617]'
+            - paragraph [ref=f12e618]: "Source value:"
+            - generic [ref=f12e619]: (omitted / absent)
+            - paragraph [ref=f12e620]: "Saved draft value:"
+            - generic [ref=f12e621]: "{ \"count\": 5, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"vaike-antsov\", \"preferredRoomIds\": [ \"b213\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5a.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.matemaatika • editingContext.requirements" [ref=f12e622] [cursor=pointer]'
+          - generic [ref=f12e623]:
+            - 'heading "Added: Requirement 5a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e624]'
+            - paragraph [ref=f12e625]: "Source value:"
+            - generic [ref=f12e626]: (omitted / absent)
+            - paragraph [ref=f12e627]: "Saved draft value:"
+            - generic [ref=f12e628]: "{ \"count\": 1, \"cohortId\": \"5a\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"5a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5a.muusikaopetus • editingContext.requirements" [ref=f12e629] [cursor=pointer]'
+          - generic [ref=f12e630]:
+            - 'heading "Added: Requirement 5b.ajalugu • editingContext.requirements" [level=5] [ref=f12e631]'
+            - paragraph [ref=f12e632]: "Source value:"
+            - generic [ref=f12e633]: (omitted / absent)
+            - paragraph [ref=f12e634]: "Saved draft value:"
+            - generic [ref=f12e635]: "{ \"count\": 2, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5b.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.ajalugu • editingContext.requirements" [ref=f12e636] [cursor=pointer]'
+          - generic [ref=f12e637]:
+            - 'heading "Added: Requirement 5b.eesti-keel • editingContext.requirements" [level=5] [ref=f12e638]'
+            - paragraph [ref=f12e639]: "Source value:"
+            - generic [ref=f12e640]: (omitted / absent)
+            - paragraph [ref=f12e641]: "Saved draft value:"
+            - generic [ref=f12e642]: "{ \"count\": 4, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"katariin-treial\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5b.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"5b.eesti-keel.01\": [ \"preferredRoomIds\" ], \"5b.eesti-keel.02\": [ \"preferredRoomIds\" ], \"5b.eesti-keel.03\": [ \"preferredRoomIds\" ], \"5b.eesti-keel.04\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.eesti-keel • editingContext.requirements" [ref=f12e643] [cursor=pointer]'
+          - generic [ref=f12e644]:
+            - 'heading "Added: Requirement 5b.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e645]'
+            - paragraph [ref=f12e646]: "Source value:"
+            - generic [ref=f12e647]: (omitted / absent)
+            - paragraph [ref=f12e648]: "Saved draft value:"
+            - generic [ref=f12e649]: "{ \"count\": 1, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"5b.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.inimeseopetus • editingContext.requirements" [ref=f12e650] [cursor=pointer]'
+          - generic [ref=f12e651]:
+            - 'heading "Added: Requirement 5b.into • editingContext.requirements" [level=5] [ref=f12e652]'
+            - paragraph [ref=f12e653]: "Source value:"
+            - generic [ref=f12e654]: (omitted / absent)
+            - paragraph [ref=f12e655]: "Saved draft value:"
+            - generic [ref=f12e656]: "{ \"count\": 1, \"cohortId\": \"5b\", \"defaults\": { \"roomLock\": \"a216\", \"teacherId\": \"katariin-treial\", \"preferredRoomIds\": [ \"a216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5b.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.into • editingContext.requirements" [ref=f12e657] [cursor=pointer]'
+          - generic [ref=f12e658]:
+            - 'heading "Added: Requirement 5b.kirjandus • editingContext.requirements" [level=5] [ref=f12e659]'
+            - paragraph [ref=f12e660]: "Source value:"
+            - generic [ref=f12e661]: (omitted / absent)
+            - paragraph [ref=f12e662]: "Saved draft value:"
+            - generic [ref=f12e663]: "{ \"count\": 2, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"rita-lumiste\", \"preferredRoomIds\": [ \"a119\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5b.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.kirjandus • editingContext.requirements" [ref=f12e664] [cursor=pointer]'
+          - generic [ref=f12e665]:
+            - 'heading "Added: Requirement 5b.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e666]'
+            - paragraph [ref=f12e667]: "Source value:"
+            - generic [ref=f12e668]: (omitted / absent)
+            - paragraph [ref=f12e669]: "Saved draft value:"
+            - generic [ref=f12e670]: "{ \"count\": 1, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"5b.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.kunstiopetus • editingContext.requirements" [ref=f12e671] [cursor=pointer]'
+          - generic [ref=f12e672]:
+            - 'heading "Added: Requirement 5b.loodusopetus • editingContext.requirements" [level=5] [ref=f12e673]'
+            - paragraph [ref=f12e674]: "Source value:"
+            - generic [ref=f12e675]: (omitted / absent)
+            - paragraph [ref=f12e676]: "Saved draft value:"
+            - generic [ref=f12e677]: "{ \"count\": 3, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"maiki-saaring\", \"preferredRoomIds\": [ \"a117\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5b.loodusopetus\", \"subjectId\": \"loodusopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.loodusopetus • editingContext.requirements" [ref=f12e678] [cursor=pointer]'
+          - generic [ref=f12e679]:
+            - 'heading "Added: Requirement 5b.matemaatika • editingContext.requirements" [level=5] [ref=f12e680]'
+            - paragraph [ref=f12e681]: "Source value:"
+            - generic [ref=f12e682]: (omitted / absent)
+            - paragraph [ref=f12e683]: "Saved draft value:"
+            - generic [ref=f12e684]: "{ \"count\": 5, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"vaike-antsov\", \"preferredRoomIds\": [ \"b213\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5b.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.matemaatika • editingContext.requirements" [ref=f12e685] [cursor=pointer]'
+          - generic [ref=f12e686]:
+            - 'heading "Added: Requirement 5b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e687]'
+            - paragraph [ref=f12e688]: "Source value:"
+            - generic [ref=f12e689]: (omitted / absent)
+            - paragraph [ref=f12e690]: "Saved draft value:"
+            - generic [ref=f12e691]: "{ \"count\": 1, \"cohortId\": \"5b\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"5b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5b.muusikaopetus • editingContext.requirements" [ref=f12e692] [cursor=pointer]'
+          - generic [ref=f12e693]:
+            - 'heading "Added: Requirement 5d.eripedagoog • editingContext.requirements" [level=5] [ref=f12e694]'
+            - paragraph [ref=f12e695]: "Source value:"
+            - generic [ref=f12e696]: (omitted / absent)
+            - paragraph [ref=f12e697]: "Saved draft value:"
+            - generic [ref=f12e698]: "{ \"count\": 1, \"cohortId\": \"5d\", \"defaults\": { \"teacherId\": \"helina-silberg\", \"preferredRoomIds\": [ \"a211\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5d.eripedagoog\", \"subjectId\": \"eripedagoog\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5d.eripedagoog • editingContext.requirements" [ref=f12e699] [cursor=pointer]'
+          - generic [ref=f12e700]:
+            - 'heading "Added: Requirement 5d.klassitund • editingContext.requirements" [level=5] [ref=f12e701]'
+            - paragraph [ref=f12e702]: "Source value:"
+            - generic [ref=f12e703]: (omitted / absent)
+            - paragraph [ref=f12e704]: "Saved draft value:"
+            - generic [ref=f12e705]: "{ \"count\": 21, \"cohortId\": \"5d\", \"defaults\": { \"teacherId\": \"liisi-rannik\", \"preferredRoomIds\": [ \"a211\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"5d.klassitund\", \"subjectId\": \"klassitund\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 5d.klassitund • editingContext.requirements" [ref=f12e706] [cursor=pointer]'
+          - generic [ref=f12e707]:
+            - 'heading "Added: Requirement 6a.ajalugu • editingContext.requirements" [level=5] [ref=f12e708]'
+            - paragraph [ref=f12e709]: "Source value:"
+            - generic [ref=f12e710]: (omitted / absent)
+            - paragraph [ref=f12e711]: "Saved draft value:"
+            - generic [ref=f12e712]: "{ \"count\": 2, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.ajalugu • editingContext.requirements" [ref=f12e713] [cursor=pointer]'
+          - generic [ref=f12e714]:
+            - 'heading "Added: Requirement 6a.eesti-keel • editingContext.requirements" [level=5] [ref=f12e715]'
+            - paragraph [ref=f12e716]: "Source value:"
+            - generic [ref=f12e717]: (omitted / absent)
+            - paragraph [ref=f12e718]: "Saved draft value:"
+            - generic [ref=f12e719]: "{ \"count\": 3, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"6a.eesti-keel.01\": [ \"preferredRoomIds\" ], \"6a.eesti-keel.02\": [ \"preferredRoomIds\" ], \"6a.eesti-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.eesti-keel • editingContext.requirements" [ref=f12e720] [cursor=pointer]'
+          - generic [ref=f12e721]:
+            - 'heading "Added: Requirement 6a.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e722]'
+            - paragraph [ref=f12e723]: "Source value:"
+            - generic [ref=f12e724]: (omitted / absent)
+            - paragraph [ref=f12e725]: "Saved draft value:"
+            - generic [ref=f12e726]: "{ \"count\": 1, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.inimeseopetus • editingContext.requirements" [ref=f12e727] [cursor=pointer]'
+          - generic [ref=f12e728]:
+            - 'heading "Added: Requirement 6a.into • editingContext.requirements" [level=5] [ref=f12e729]'
+            - paragraph [ref=f12e730]: "Source value:"
+            - generic [ref=f12e731]: (omitted / absent)
+            - paragraph [ref=f12e732]: "Saved draft value:"
+            - generic [ref=f12e733]: "{ \"count\": 1, \"cohortId\": \"6a\", \"defaults\": { \"roomLock\": \"b213\", \"teacherId\": \"vaike-antsov\", \"preferredRoomIds\": [ \"b213\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.into • editingContext.requirements" [ref=f12e734] [cursor=pointer]'
+          - generic [ref=f12e735]:
+            - 'heading "Added: Requirement 6a.kirjandus • editingContext.requirements" [level=5] [ref=f12e736]'
+            - paragraph [ref=f12e737]: "Source value:"
+            - generic [ref=f12e738]: (omitted / absent)
+            - paragraph [ref=f12e739]: "Saved draft value:"
+            - generic [ref=f12e740]: "{ \"count\": 2, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.kirjandus • editingContext.requirements" [ref=f12e741] [cursor=pointer]'
+          - generic [ref=f12e742]:
+            - 'heading "Added: Requirement 6a.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e743]'
+            - paragraph [ref=f12e744]: "Source value:"
+            - generic [ref=f12e745]: (omitted / absent)
+            - paragraph [ref=f12e746]: "Saved draft value:"
+            - generic [ref=f12e747]: "{ \"count\": 1, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"6a.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.kunstiopetus • editingContext.requirements" [ref=f12e748] [cursor=pointer]'
+          - generic [ref=f12e749]:
+            - 'heading "Added: Requirement 6a.loodusopetus • editingContext.requirements" [level=5] [ref=f12e750]'
+            - paragraph [ref=f12e751]: "Source value:"
+            - generic [ref=f12e752]: (omitted / absent)
+            - paragraph [ref=f12e753]: "Saved draft value:"
+            - generic [ref=f12e754]: "{ \"count\": 2, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\" }, \"seriesId\": \"6a.loodusopetus\", \"subjectId\": \"loodusopetus\", \"exceptions\": { \"6a.loodusopetus.01\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ], \"6a.loodusopetus.02\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ] }, \"mixedFields\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.loodusopetus • editingContext.requirements" [ref=f12e755] [cursor=pointer]'
+          - generic [ref=f12e756]:
+            - 'heading "Added: Requirement 6a.matemaatika • editingContext.requirements" [level=5] [ref=f12e757]'
+            - paragraph [ref=f12e758]: "Source value:"
+            - generic [ref=f12e759]: (omitted / absent)
+            - paragraph [ref=f12e760]: "Saved draft value:"
+            - generic [ref=f12e761]: "{ \"count\": 5, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"vaike-antsov\", \"preferredRoomIds\": [ \"b213\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.matemaatika • editingContext.requirements" [ref=f12e762] [cursor=pointer]'
+          - generic [ref=f12e763]:
+            - 'heading "Added: Requirement 6a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e764]'
+            - paragraph [ref=f12e765]: "Source value:"
+            - generic [ref=f12e766]: (omitted / absent)
+            - paragraph [ref=f12e767]: "Saved draft value:"
+            - generic [ref=f12e768]: "{ \"count\": 1, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"6a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.muusikaopetus • editingContext.requirements" [ref=f12e769] [cursor=pointer]'
+          - generic [ref=f12e770]:
+            - 'heading "Added: Requirement 6a.uhiskonnaopetus • editingContext.requirements" [level=5] [ref=f12e771]'
+            - paragraph [ref=f12e772]: "Source value:"
+            - generic [ref=f12e773]: (omitted / absent)
+            - paragraph [ref=f12e774]: "Saved draft value:"
+            - generic [ref=f12e775]: "{ \"count\": 1, \"cohortId\": \"6a\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a218\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6a.uhiskonnaopetus\", \"subjectId\": \"uhiskonnaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6a.uhiskonnaopetus • editingContext.requirements" [ref=f12e776] [cursor=pointer]'
+          - generic [ref=f12e777]:
+            - 'heading "Added: Requirement 6b.ajalugu • editingContext.requirements" [level=5] [ref=f12e778]'
+            - paragraph [ref=f12e779]: "Source value:"
+            - generic [ref=f12e780]: (omitted / absent)
+            - paragraph [ref=f12e781]: "Saved draft value:"
+            - generic [ref=f12e782]: "{ \"count\": 2, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.ajalugu • editingContext.requirements" [ref=f12e783] [cursor=pointer]'
+          - generic [ref=f12e784]:
+            - 'heading "Added: Requirement 6b.eesti-keel • editingContext.requirements" [level=5] [ref=f12e785]'
+            - paragraph [ref=f12e786]: "Source value:"
+            - generic [ref=f12e787]: (omitted / absent)
+            - paragraph [ref=f12e788]: "Saved draft value:"
+            - generic [ref=f12e789]: "{ \"count\": 3, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"6b.eesti-keel.01\": [ \"preferredRoomIds\" ], \"6b.eesti-keel.02\": [ \"preferredRoomIds\" ], \"6b.eesti-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.eesti-keel • editingContext.requirements" [ref=f12e790] [cursor=pointer]'
+          - generic [ref=f12e791]:
+            - 'heading "Added: Requirement 6b.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e792]'
+            - paragraph [ref=f12e793]: "Source value:"
+            - generic [ref=f12e794]: (omitted / absent)
+            - paragraph [ref=f12e795]: "Saved draft value:"
+            - generic [ref=f12e796]: "{ \"count\": 1, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a120\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.inimeseopetus • editingContext.requirements" [ref=f12e797] [cursor=pointer]'
+          - generic [ref=f12e798]:
+            - 'heading "Added: Requirement 6b.into • editingContext.requirements" [level=5] [ref=f12e799]'
+            - paragraph [ref=f12e800]: "Source value:"
+            - generic [ref=f12e801]: (omitted / absent)
+            - paragraph [ref=f12e802]: "Saved draft value:"
+            - generic [ref=f12e803]: "{ \"count\": 1, \"cohortId\": \"6b\", \"defaults\": { \"roomLock\": \"b214\", \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"b214\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.into • editingContext.requirements" [ref=f12e804] [cursor=pointer]'
+          - generic [ref=f12e805]:
+            - 'heading "Added: Requirement 6b.kirjandus • editingContext.requirements" [level=5] [ref=f12e806]'
+            - paragraph [ref=f12e807]: "Source value:"
+            - generic [ref=f12e808]: (omitted / absent)
+            - paragraph [ref=f12e809]: "Saved draft value:"
+            - generic [ref=f12e810]: "{ \"count\": 2, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.kirjandus • editingContext.requirements" [ref=f12e811] [cursor=pointer]'
+          - generic [ref=f12e812]:
+            - 'heading "Added: Requirement 6b.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e813]'
+            - paragraph [ref=f12e814]: "Source value:"
+            - generic [ref=f12e815]: (omitted / absent)
+            - paragraph [ref=f12e816]: "Saved draft value:"
+            - generic [ref=f12e817]: "{ \"count\": 1, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"6b.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.kunstiopetus • editingContext.requirements" [ref=f12e818] [cursor=pointer]'
+          - generic [ref=f12e819]:
+            - 'heading "Added: Requirement 6b.loodusopetus • editingContext.requirements" [level=5] [ref=f12e820]'
+            - paragraph [ref=f12e821]: "Source value:"
+            - generic [ref=f12e822]: (omitted / absent)
+            - paragraph [ref=f12e823]: "Saved draft value:"
+            - generic [ref=f12e824]: "{ \"count\": 2, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"6b.loodusopetus\", \"subjectId\": \"loodusopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.loodusopetus • editingContext.requirements" [ref=f12e825] [cursor=pointer]'
+          - generic [ref=f12e826]:
+            - 'heading "Added: Requirement 6b.matemaatika • editingContext.requirements" [level=5] [ref=f12e827]'
+            - paragraph [ref=f12e828]: "Source value:"
+            - generic [ref=f12e829]: (omitted / absent)
+            - paragraph [ref=f12e830]: "Saved draft value:"
+            - generic [ref=f12e831]: "{ \"count\": 5, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"vaike-antsov\", \"preferredRoomIds\": [ \"b213\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.matemaatika • editingContext.requirements" [ref=f12e832] [cursor=pointer]'
+          - generic [ref=f12e833]:
+            - 'heading "Added: Requirement 6b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e834]'
+            - paragraph [ref=f12e835]: "Source value:"
+            - generic [ref=f12e836]: (omitted / absent)
+            - paragraph [ref=f12e837]: "Saved draft value:"
+            - generic [ref=f12e838]: "{ \"count\": 1, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"6b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.muusikaopetus • editingContext.requirements" [ref=f12e839] [cursor=pointer]'
+          - generic [ref=f12e840]:
+            - 'heading "Added: Requirement 6b.uhiskonnaopetus • editingContext.requirements" [level=5] [ref=f12e841]'
+            - paragraph [ref=f12e842]: "Source value:"
+            - generic [ref=f12e843]: (omitted / absent)
+            - paragraph [ref=f12e844]: "Saved draft value:"
+            - generic [ref=f12e845]: "{ \"count\": 1, \"cohortId\": \"6b\", \"defaults\": { \"teacherId\": \"anette-maria-rennit\", \"preferredRoomIds\": [ \"a218\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6b.uhiskonnaopetus\", \"subjectId\": \"uhiskonnaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6b.uhiskonnaopetus • editingContext.requirements" [ref=f12e846] [cursor=pointer]'
+          - generic [ref=f12e847]:
+            - 'heading "Added: Requirement 6c.ajalugu • editingContext.requirements" [level=5] [ref=f12e848]'
+            - paragraph [ref=f12e849]: "Source value:"
+            - generic [ref=f12e850]: (omitted / absent)
+            - paragraph [ref=f12e851]: "Saved draft value:"
+            - generic [ref=f12e852]: "{ \"count\": 1, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.ajalugu • editingContext.requirements" [ref=f12e853] [cursor=pointer]'
+          - generic [ref=f12e854]:
+            - 'heading "Added: Requirement 6c.eesti-keel-kirjandus • editingContext.requirements" [level=5] [ref=f12e855]'
+            - paragraph [ref=f12e856]: "Source value:"
+            - generic [ref=f12e857]: (omitted / absent)
+            - paragraph [ref=f12e858]: "Saved draft value:"
+            - generic [ref=f12e859]: "{ \"count\": 4, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"kairi-meressaar\", \"preferredRoomIds\": [ \"a210\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.eesti-keel-kirjandus\", \"subjectId\": \"eesti-keel-kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.eesti-keel-kirjandus • editingContext.requirements" [ref=f12e860] [cursor=pointer]'
+          - generic [ref=f12e861]:
+            - 'heading "Added: Requirement 6c.eripedagoog • editingContext.requirements" [level=5] [ref=f12e862]'
+            - paragraph [ref=f12e863]: "Source value:"
+            - generic [ref=f12e864]: (omitted / absent)
+            - paragraph [ref=f12e865]: "Saved draft value:"
+            - generic [ref=f12e866]: "{ \"count\": 1, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"helina-silberg\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.eripedagoog\", \"subjectId\": \"eripedagoog\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.eripedagoog • editingContext.requirements" [ref=f12e867] [cursor=pointer]'
+          - generic [ref=f12e868]:
+            - 'heading "Added: Requirement 6c.inglise-keel • editingContext.requirements" [level=5] [ref=f12e869]'
+            - paragraph [ref=f12e870]: "Source value:"
+            - generic [ref=f12e871]: (omitted / absent)
+            - paragraph [ref=f12e872]: "Saved draft value:"
+            - generic [ref=f12e873]: "{ \"count\": 3, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"marilin-laanetu\", \"preferredRoomIds\": [ \"a204\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.inglise-keel • editingContext.requirements" [ref=f12e874] [cursor=pointer]'
+          - generic [ref=f12e875]:
+            - 'heading "Added: Requirement 6c.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e876]'
+            - paragraph [ref=f12e877]: "Source value:"
+            - generic [ref=f12e878]: (omitted / absent)
+            - paragraph [ref=f12e879]: "Saved draft value:"
+            - generic [ref=f12e880]: "{ \"count\": 1, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a210\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.inimeseopetus • editingContext.requirements" [ref=f12e881] [cursor=pointer]'
+          - generic [ref=f12e882]:
+            - 'heading "Added: Requirement 6c.into • editingContext.requirements" [level=5] [ref=f12e883]'
+            - paragraph [ref=f12e884]: "Source value:"
+            - generic [ref=f12e885]: (omitted / absent)
+            - paragraph [ref=f12e886]: "Saved draft value:"
+            - generic [ref=f12e887]: "{ \"count\": 1, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.into • editingContext.requirements" [ref=f12e888] [cursor=pointer]'
+          - generic [ref=f12e889]:
+            - 'heading "Added: Requirement 6c.loodusopetus-vr • editingContext.requirements" [level=5] [ref=f12e890]'
+            - paragraph [ref=f12e891]: "Source value:"
+            - generic [ref=f12e892]: (omitted / absent)
+            - paragraph [ref=f12e893]: "Saved draft value:"
+            - generic [ref=f12e894]: "{ \"count\": 2, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.loodusopetus-vr\", \"subjectId\": \"loodusopetus-vr\", \"exceptions\": { \"6c.loodusopetus-vr.01\": [ \"preferredRoomIds\" ], \"6c.loodusopetus-vr.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.loodusopetus-vr • editingContext.requirements" [ref=f12e895] [cursor=pointer]'
+          - generic [ref=f12e896]:
+            - 'heading "Added: Requirement 6c.matemaatika-vr • editingContext.requirements" [level=5] [ref=f12e897]'
+            - paragraph [ref=f12e898]: "Source value:"
+            - generic [ref=f12e899]: (omitted / absent)
+            - paragraph [ref=f12e900]: "Saved draft value:"
+            - generic [ref=f12e901]: "{ \"count\": 4, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"aida-martin\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.matemaatika-vr\", \"subjectId\": \"matemaatika-vr\", \"exceptions\": { \"6c.matemaatika-vr.01\": [ \"preferredRoomIds\" ], \"6c.matemaatika-vr.02\": [ \"preferredRoomIds\" ], \"6c.matemaatika-vr.03\": [ \"preferredRoomIds\" ], \"6c.matemaatika-vr.04\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.matemaatika-vr • editingContext.requirements" [ref=f12e902] [cursor=pointer]'
+          - generic [ref=f12e903]:
+            - 'heading "Added: Requirement 6c.uhiskonnaopetus • editingContext.requirements" [level=5] [ref=f12e904]'
+            - paragraph [ref=f12e905]: "Source value:"
+            - generic [ref=f12e906]: (omitted / absent)
+            - paragraph [ref=f12e907]: "Saved draft value:"
+            - generic [ref=f12e908]: "{ \"count\": 1, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"6c.uhiskonnaopetus\", \"subjectId\": \"uhiskonnaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.uhiskonnaopetus • editingContext.requirements" [ref=f12e909] [cursor=pointer]'
+          - generic [ref=f12e910]:
+            - 'heading "Added: Requirement 6c.vene-keel • editingContext.requirements" [level=5] [ref=f12e911]'
+            - paragraph [ref=f12e912]: "Source value:"
+            - generic [ref=f12e913]: (omitted / absent)
+            - paragraph [ref=f12e914]: "Saved draft value:"
+            - generic [ref=f12e915]: "{ \"count\": 2, \"cohortId\": \"6c\", \"defaults\": { \"teacherId\": \"olga-simonovits\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"6c.vene-keel\", \"subjectId\": \"vene-keel\", \"exceptions\": { \"6c.vene-keel.01\": [ \"preferredRoomIds\" ], \"6c.vene-keel.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 6c.vene-keel • editingContext.requirements" [ref=f12e916] [cursor=pointer]'
+          - generic [ref=f12e917]:
+            - 'heading "Added: Requirement 7a.ajalugu • editingContext.requirements" [level=5] [ref=f12e918]'
+            - paragraph [ref=f12e919]: "Source value:"
+            - generic [ref=f12e920]: (omitted / absent)
+            - paragraph [ref=f12e921]: "Saved draft value:"
+            - generic [ref=f12e922]: "{ \"count\": 2, \"cohortId\": \"7a\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.ajalugu • editingContext.requirements" [ref=f12e923] [cursor=pointer]'
+          - generic [ref=f12e924]:
+            - 'heading "Added: Requirement 7a.bioloogia • editingContext.requirements" [level=5] [ref=f12e925]'
+            - paragraph [ref=f12e926]: "Source value:"
+            - generic [ref=f12e927]: (omitted / absent)
+            - paragraph [ref=f12e928]: "Saved draft value:"
+            - generic [ref=f12e929]: "{ \"count\": 2, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"reeli-valk\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.bioloogia • editingContext.requirements" [ref=f12e930] [cursor=pointer]'
+          - generic [ref=f12e931]:
+            - 'heading "Added: Requirement 7a.eesti-keel • editingContext.requirements" [level=5] [ref=f12e932]'
+            - paragraph [ref=f12e933]: "Source value:"
+            - generic [ref=f12e934]: (omitted / absent)
+            - paragraph [ref=f12e935]: "Saved draft value:"
+            - generic [ref=f12e936]: "{ \"count\": 2, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"aarne-ruben\", \"preferredRoomIds\": [ \"a215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.eesti-keel • editingContext.requirements" [ref=f12e937] [cursor=pointer]'
+          - generic [ref=f12e938]:
+            - 'heading "Added: Requirement 7a.geograafia • editingContext.requirements" [level=5] [ref=f12e939]'
+            - paragraph [ref=f12e940]: "Source value:"
+            - generic [ref=f12e941]: (omitted / absent)
+            - paragraph [ref=f12e942]: "Saved draft value:"
+            - generic [ref=f12e943]: "{ \"count\": 2, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.geograafia • editingContext.requirements" [ref=f12e944] [cursor=pointer]'
+          - generic [ref=f12e945]:
+            - 'heading "Added: Requirement 7a.inglise-keel • editingContext.requirements" [level=5] [ref=f12e946]'
+            - paragraph [ref=f12e947]: "Source value:"
+            - generic [ref=f12e948]: (omitted / absent)
+            - paragraph [ref=f12e949]: "Saved draft value:"
+            - generic [ref=f12e950]: "{ \"count\": 3, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"annika-sirel\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": { \"7a.inglise-keel.01\": [ \"preferredRoomIds\" ], \"7a.inglise-keel.02\": [ \"preferredRoomIds\" ], \"7a.inglise-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.inglise-keel • editingContext.requirements" [ref=f12e951] [cursor=pointer]'
+          - generic [ref=f12e952]:
+            - 'heading "Added: Requirement 7a.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e953]'
+            - paragraph [ref=f12e954]: "Source value:"
+            - generic [ref=f12e955]: (omitted / absent)
+            - paragraph [ref=f12e956]: "Saved draft value:"
+            - generic [ref=f12e957]: "{ \"count\": 1, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"bergit-semre\", \"preferredRoomIds\": [ \"a229\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.inimeseopetus • editingContext.requirements" [ref=f12e958] [cursor=pointer]'
+          - generic [ref=f12e959]:
+            - 'heading "Added: Requirement 7a.into • editingContext.requirements" [level=5] [ref=f12e960]'
+            - paragraph [ref=f12e961]: "Source value:"
+            - generic [ref=f12e962]: (omitted / absent)
+            - paragraph [ref=f12e963]: "Saved draft value:"
+            - generic [ref=f12e964]: "{ \"count\": 1, \"cohortId\": \"7a\", \"defaults\": { \"roomLock\": \"b216\", \"teacherId\": \"saale-maripuu\", \"preferredRoomIds\": [ \"b216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.into • editingContext.requirements" [ref=f12e965] [cursor=pointer]'
+          - generic [ref=f12e966]:
+            - 'heading "Added: Requirement 7a.kirjandus • editingContext.requirements" [level=5] [ref=f12e967]'
+            - paragraph [ref=f12e968]: "Source value:"
+            - generic [ref=f12e969]: (omitted / absent)
+            - paragraph [ref=f12e970]: "Saved draft value:"
+            - generic [ref=f12e971]: "{ \"count\": 2, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.kirjandus • editingContext.requirements" [ref=f12e972] [cursor=pointer]'
+          - generic [ref=f12e973]:
+            - 'heading "Added: Requirement 7a.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e974]'
+            - paragraph [ref=f12e975]: "Source value:"
+            - generic [ref=f12e976]: (omitted / absent)
+            - paragraph [ref=f12e977]: "Saved draft value:"
+            - generic [ref=f12e978]: "{ \"count\": 1, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"7a.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.kunstiopetus • editingContext.requirements" [ref=f12e979] [cursor=pointer]'
+          - generic [ref=f12e980]:
+            - 'heading "Added: Requirement 7a.loodusopetus • editingContext.requirements" [level=5] [ref=f12e981]'
+            - paragraph [ref=f12e982]: "Source value:"
+            - generic [ref=f12e983]: (omitted / absent)
+            - paragraph [ref=f12e984]: "Saved draft value:"
+            - generic [ref=f12e985]: "{ \"count\": 2, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"mari-kamps\", \"preferredRoomIds\": [ \"a228\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.loodusopetus\", \"subjectId\": \"loodusopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.loodusopetus • editingContext.requirements" [ref=f12e986] [cursor=pointer]'
+          - generic [ref=f12e987]:
+            - 'heading "Added: Requirement 7a.matemaatika • editingContext.requirements" [level=5] [ref=f12e988]'
+            - paragraph [ref=f12e989]: "Source value:"
+            - generic [ref=f12e990]: (omitted / absent)
+            - paragraph [ref=f12e991]: "Saved draft value:"
+            - generic [ref=f12e992]: "{ \"count\": 4, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7a.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.matemaatika • editingContext.requirements" [ref=f12e993] [cursor=pointer]'
+          - generic [ref=f12e994]:
+            - 'heading "Added: Requirement 7a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e995]'
+            - paragraph [ref=f12e996]: "Source value:"
+            - generic [ref=f12e997]: (omitted / absent)
+            - paragraph [ref=f12e998]: "Saved draft value:"
+            - generic [ref=f12e999]: "{ \"count\": 1, \"cohortId\": \"7a\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"7a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7a.muusikaopetus • editingContext.requirements" [ref=f12e1000] [cursor=pointer]'
+          - generic [ref=f12e1001]:
+            - 'heading "Added: Requirement 7b.ajalugu • editingContext.requirements" [level=5] [ref=f12e1002]'
+            - paragraph [ref=f12e1003]: "Source value:"
+            - generic [ref=f12e1004]: (omitted / absent)
+            - paragraph [ref=f12e1005]: "Saved draft value:"
+            - generic [ref=f12e1006]: "{ \"count\": 2, \"cohortId\": \"7b\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.ajalugu • editingContext.requirements" [ref=f12e1007] [cursor=pointer]'
+          - generic [ref=f12e1008]:
+            - 'heading "Added: Requirement 7b.bioloogia • editingContext.requirements" [level=5] [ref=f12e1009]'
+            - paragraph [ref=f12e1010]: "Source value:"
+            - generic [ref=f12e1011]: (omitted / absent)
+            - paragraph [ref=f12e1012]: "Saved draft value:"
+            - generic [ref=f12e1013]: "{ \"count\": 2, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"reeli-valk\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": { \"7b.bioloogia.01\": [ \"preferredRoomIds\" ], \"7b.bioloogia.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.bioloogia • editingContext.requirements" [ref=f12e1014] [cursor=pointer]'
+          - generic [ref=f12e1015]:
+            - 'heading "Added: Requirement 7b.eesti-keel • editingContext.requirements" [level=5] [ref=f12e1016]'
+            - paragraph [ref=f12e1017]: "Source value:"
+            - generic [ref=f12e1018]: (omitted / absent)
+            - paragraph [ref=f12e1019]: "Saved draft value:"
+            - generic [ref=f12e1020]: "{ \"count\": 2, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"katrin-jaaksoo\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"7b.eesti-keel.01\": [ \"preferredRoomIds\" ], \"7b.eesti-keel.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.eesti-keel • editingContext.requirements" [ref=f12e1021] [cursor=pointer]'
+          - generic [ref=f12e1022]:
+            - 'heading "Added: Requirement 7b.geograafia • editingContext.requirements" [level=5] [ref=f12e1023]'
+            - paragraph [ref=f12e1024]: "Source value:"
+            - generic [ref=f12e1025]: (omitted / absent)
+            - paragraph [ref=f12e1026]: "Saved draft value:"
+            - generic [ref=f12e1027]: "{ \"count\": 2, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.geograafia • editingContext.requirements" [ref=f12e1028] [cursor=pointer]'
+          - generic [ref=f12e1029]:
+            - 'heading "Added: Requirement 7b.inglise-keel • editingContext.requirements" [level=5] [ref=f12e1030]'
+            - paragraph [ref=f12e1031]: "Source value:"
+            - generic [ref=f12e1032]: (omitted / absent)
+            - paragraph [ref=f12e1033]: "Saved draft value:"
+            - generic [ref=f12e1034]: "{ \"count\": 3, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"annika-sirel\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": { \"7b.inglise-keel.01\": [ \"preferredRoomIds\" ], \"7b.inglise-keel.02\": [ \"preferredRoomIds\" ], \"7b.inglise-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.inglise-keel • editingContext.requirements" [ref=f12e1035] [cursor=pointer]'
+          - generic [ref=f12e1036]:
+            - 'heading "Added: Requirement 7b.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e1037]'
+            - paragraph [ref=f12e1038]: "Source value:"
+            - generic [ref=f12e1039]: (omitted / absent)
+            - paragraph [ref=f12e1040]: "Saved draft value:"
+            - generic [ref=f12e1041]: "{ \"count\": 1, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"bergit-semre\", \"preferredRoomIds\": [ \"b214\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.inimeseopetus • editingContext.requirements" [ref=f12e1042] [cursor=pointer]'
+          - generic [ref=f12e1043]:
+            - 'heading "Added: Requirement 7b.into • editingContext.requirements" [level=5] [ref=f12e1044]'
+            - paragraph [ref=f12e1045]: "Source value:"
+            - generic [ref=f12e1046]: (omitted / absent)
+            - paragraph [ref=f12e1047]: "Saved draft value:"
+            - generic [ref=f12e1048]: "{ \"count\": 1, \"cohortId\": \"7b\", \"defaults\": { \"roomLock\": \"a229\", \"teacherId\": \"bergit-semre\", \"preferredRoomIds\": [ \"a229\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.into • editingContext.requirements" [ref=f12e1049] [cursor=pointer]'
+          - generic [ref=f12e1050]:
+            - 'heading "Added: Requirement 7b.kirjandus • editingContext.requirements" [level=5] [ref=f12e1051]'
+            - paragraph [ref=f12e1052]: "Source value:"
+            - generic [ref=f12e1053]: (omitted / absent)
+            - paragraph [ref=f12e1054]: "Saved draft value:"
+            - generic [ref=f12e1055]: "{ \"count\": 2, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.kirjandus • editingContext.requirements" [ref=f12e1056] [cursor=pointer]'
+          - generic [ref=f12e1057]:
+            - 'heading "Added: Requirement 7b.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e1058]'
+            - paragraph [ref=f12e1059]: "Source value:"
+            - generic [ref=f12e1060]: (omitted / absent)
+            - paragraph [ref=f12e1061]: "Saved draft value:"
+            - generic [ref=f12e1062]: "{ \"count\": 1, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"7b.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.kunstiopetus • editingContext.requirements" [ref=f12e1063] [cursor=pointer]'
+          - generic [ref=f12e1064]:
+            - 'heading "Added: Requirement 7b.loodusopetus • editingContext.requirements" [level=5] [ref=f12e1065]'
+            - paragraph [ref=f12e1066]: "Source value:"
+            - generic [ref=f12e1067]: (omitted / absent)
+            - paragraph [ref=f12e1068]: "Saved draft value:"
+            - generic [ref=f12e1069]: "{ \"count\": 2, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"mari-kamps\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.loodusopetus\", \"subjectId\": \"loodusopetus\", \"exceptions\": { \"7b.loodusopetus.01\": [ \"preferredRoomIds\" ], \"7b.loodusopetus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.loodusopetus • editingContext.requirements" [ref=f12e1070] [cursor=pointer]'
+          - generic [ref=f12e1071]:
+            - 'heading "Added: Requirement 7b.matemaatika • editingContext.requirements" [level=5] [ref=f12e1072]'
+            - paragraph [ref=f12e1073]: "Source value:"
+            - generic [ref=f12e1074]: (omitted / absent)
+            - paragraph [ref=f12e1075]: "Saved draft value:"
+            - generic [ref=f12e1076]: "{ \"count\": 4, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"7b.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.matemaatika • editingContext.requirements" [ref=f12e1077] [cursor=pointer]'
+          - generic [ref=f12e1078]:
+            - 'heading "Added: Requirement 7b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e1079]'
+            - paragraph [ref=f12e1080]: "Source value:"
+            - generic [ref=f12e1081]: (omitted / absent)
+            - paragraph [ref=f12e1082]: "Saved draft value:"
+            - generic [ref=f12e1083]: "{ \"count\": 1, \"cohortId\": \"7b\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"7b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 7b.muusikaopetus • editingContext.requirements" [ref=f12e1084] [cursor=pointer]'
+          - generic [ref=f12e1085]:
+            - 'heading "Added: Requirement 8a.ajalugu • editingContext.requirements" [level=5] [ref=f12e1086]'
+            - paragraph [ref=f12e1087]: "Source value:"
+            - generic [ref=f12e1088]: (omitted / absent)
+            - paragraph [ref=f12e1089]: "Saved draft value:"
+            - generic [ref=f12e1090]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.ajalugu • editingContext.requirements" [ref=f12e1091] [cursor=pointer]'
+          - generic [ref=f12e1092]:
+            - 'heading "Added: Requirement 8a.bioloogia • editingContext.requirements" [level=5] [ref=f12e1093]'
+            - paragraph [ref=f12e1094]: "Source value:"
+            - generic [ref=f12e1095]: (omitted / absent)
+            - paragraph [ref=f12e1096]: "Saved draft value:"
+            - generic [ref=f12e1097]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"reeli-valk\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.bioloogia • editingContext.requirements" [ref=f12e1098] [cursor=pointer]'
+          - generic [ref=f12e1099]:
+            - 'heading "Added: Requirement 8a.eesti-keel • editingContext.requirements" [level=5] [ref=f12e1100]'
+            - paragraph [ref=f12e1101]: "Source value:"
+            - generic [ref=f12e1102]: (omitted / absent)
+            - paragraph [ref=f12e1103]: "Saved draft value:"
+            - generic [ref=f12e1104]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"katariin-treial\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"8a.eesti-keel.01\": [ \"preferredRoomIds\" ], \"8a.eesti-keel.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.eesti-keel • editingContext.requirements" [ref=f12e1105] [cursor=pointer]'
+          - generic [ref=f12e1106]:
+            - 'heading "Added: Requirement 8a.fuusika • editingContext.requirements" [level=5] [ref=f12e1107]'
+            - paragraph [ref=f12e1108]: "Source value:"
+            - generic [ref=f12e1109]: (omitted / absent)
+            - paragraph [ref=f12e1110]: "Saved draft value:"
+            - generic [ref=f12e1111]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"8a.fuusika\", \"subjectId\": \"fuusika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.fuusika • editingContext.requirements" [ref=f12e1112] [cursor=pointer]'
+          - generic [ref=f12e1113]:
+            - 'heading "Added: Requirement 8a.geograafia • editingContext.requirements" [level=5] [ref=f12e1114]'
+            - paragraph [ref=f12e1115]: "Source value:"
+            - generic [ref=f12e1116]: (omitted / absent)
+            - paragraph [ref=f12e1117]: "Saved draft value:"
+            - generic [ref=f12e1118]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.geograafia • editingContext.requirements" [ref=f12e1119] [cursor=pointer]'
+          - generic [ref=f12e1120]:
+            - 'heading "Added: Requirement 8a.inglise-keel • editingContext.requirements" [level=5] [ref=f12e1121]'
+            - paragraph [ref=f12e1122]: "Source value:"
+            - generic [ref=f12e1123]: (omitted / absent)
+            - paragraph [ref=f12e1124]: "Saved draft value:"
+            - generic [ref=f12e1125]: "{ \"count\": 3, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"annika-sirel\", \"preferredRoomIds\": [ \"a215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.inglise-keel • editingContext.requirements" [ref=f12e1126] [cursor=pointer]'
+          - generic [ref=f12e1127]:
+            - 'heading "Added: Requirement 8a.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e1128]'
+            - paragraph [ref=f12e1129]: "Source value:"
+            - generic [ref=f12e1130]: (omitted / absent)
+            - paragraph [ref=f12e1131]: "Saved draft value:"
+            - generic [ref=f12e1132]: "{ \"count\": 1, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.inimeseopetus • editingContext.requirements" [ref=f12e1133] [cursor=pointer]'
+          - generic [ref=f12e1134]:
+            - 'heading "Added: Requirement 8a.into • editingContext.requirements" [level=5] [ref=f12e1135]'
+            - paragraph [ref=f12e1136]: "Source value:"
+            - generic [ref=f12e1137]: (omitted / absent)
+            - paragraph [ref=f12e1138]: "Saved draft value:"
+            - generic [ref=f12e1139]: "{ \"count\": 1, \"cohortId\": \"8a\", \"defaults\": { \"roomLock\": \"b214\", \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"b214\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.into • editingContext.requirements" [ref=f12e1140] [cursor=pointer]'
+          - generic [ref=f12e1141]:
+            - 'heading "Added: Requirement 8a.keemia • editingContext.requirements" [level=5] [ref=f12e1142]'
+            - paragraph [ref=f12e1143]: "Source value:"
+            - generic [ref=f12e1144]: (omitted / absent)
+            - paragraph [ref=f12e1145]: "Saved draft value:"
+            - generic [ref=f12e1146]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a233\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"8a.keemia\", \"subjectId\": \"keemia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.keemia • editingContext.requirements" [ref=f12e1147] [cursor=pointer]'
+          - generic [ref=f12e1148]:
+            - 'heading "Added: Requirement 8a.kirjandus • editingContext.requirements" [level=5] [ref=f12e1149]'
+            - paragraph [ref=f12e1150]: "Source value:"
+            - generic [ref=f12e1151]: (omitted / absent)
+            - paragraph [ref=f12e1152]: "Saved draft value:"
+            - generic [ref=f12e1153]: "{ \"count\": 2, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"katariin-treial\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": { \"8a.kirjandus.01\": [ \"preferredRoomIds\" ], \"8a.kirjandus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.kirjandus • editingContext.requirements" [ref=f12e1154] [cursor=pointer]'
+          - generic [ref=f12e1155]:
+            - 'heading "Added: Requirement 8a.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e1156]'
+            - paragraph [ref=f12e1157]: "Source value:"
+            - generic [ref=f12e1158]: (omitted / absent)
+            - paragraph [ref=f12e1159]: "Saved draft value:"
+            - generic [ref=f12e1160]: "{ \"count\": 1, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"8a.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.kunstiopetus • editingContext.requirements" [ref=f12e1161] [cursor=pointer]'
+          - generic [ref=f12e1162]:
+            - 'heading "Added: Requirement 8a.matemaatika • editingContext.requirements" [level=5] [ref=f12e1163]'
+            - paragraph [ref=f12e1164]: "Source value:"
+            - generic [ref=f12e1165]: (omitted / absent)
+            - paragraph [ref=f12e1166]: "Saved draft value:"
+            - generic [ref=f12e1167]: "{ \"count\": 5, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"mari-kamps\", \"preferredRoomIds\": [ \"b214\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8a.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.matemaatika • editingContext.requirements" [ref=f12e1168] [cursor=pointer]'
+          - generic [ref=f12e1169]:
+            - 'heading "Added: Requirement 8a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e1170]'
+            - paragraph [ref=f12e1171]: "Source value:"
+            - generic [ref=f12e1172]: (omitted / absent)
+            - paragraph [ref=f12e1173]: "Saved draft value:"
+            - generic [ref=f12e1174]: "{ \"count\": 1, \"cohortId\": \"8a\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"8a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8a.muusikaopetus • editingContext.requirements" [ref=f12e1175] [cursor=pointer]'
+          - generic [ref=f12e1176]:
+            - 'heading "Added: Requirement 8b.ajalugu • editingContext.requirements" [level=5] [ref=f12e1177]'
+            - paragraph [ref=f12e1178]: "Source value:"
+            - generic [ref=f12e1179]: (omitted / absent)
+            - paragraph [ref=f12e1180]: "Saved draft value:"
+            - generic [ref=f12e1181]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.ajalugu • editingContext.requirements" [ref=f12e1182] [cursor=pointer]'
+          - generic [ref=f12e1183]:
+            - 'heading "Added: Requirement 8b.bioloogia • editingContext.requirements" [level=5] [ref=f12e1184]'
+            - paragraph [ref=f12e1185]: "Source value:"
+            - generic [ref=f12e1186]: (omitted / absent)
+            - paragraph [ref=f12e1187]: "Saved draft value:"
+            - generic [ref=f12e1188]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"reeli-valk\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.bioloogia • editingContext.requirements" [ref=f12e1189] [cursor=pointer]'
+          - generic [ref=f12e1190]:
+            - 'heading "Added: Requirement 8b.eesti-keel • editingContext.requirements" [level=5] [ref=f12e1191]'
+            - paragraph [ref=f12e1192]: "Source value:"
+            - generic [ref=f12e1193]: (omitted / absent)
+            - paragraph [ref=f12e1194]: "Saved draft value:"
+            - generic [ref=f12e1195]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"katrin-jaaksoo\", \"preferredRoomIds\": [ \"a216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.eesti-keel • editingContext.requirements" [ref=f12e1196] [cursor=pointer]'
+          - generic [ref=f12e1197]:
+            - 'heading "Added: Requirement 8b.fuusika • editingContext.requirements" [level=5] [ref=f12e1198]'
+            - paragraph [ref=f12e1199]: "Source value:"
+            - generic [ref=f12e1200]: (omitted / absent)
+            - paragraph [ref=f12e1201]: "Saved draft value:"
+            - generic [ref=f12e1202]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"8b.fuusika\", \"subjectId\": \"fuusika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.fuusika • editingContext.requirements" [ref=f12e1203] [cursor=pointer]'
+          - generic [ref=f12e1204]:
+            - 'heading "Added: Requirement 8b.geograafia • editingContext.requirements" [level=5] [ref=f12e1205]'
+            - paragraph [ref=f12e1206]: "Source value:"
+            - generic [ref=f12e1207]: (omitted / absent)
+            - paragraph [ref=f12e1208]: "Saved draft value:"
+            - generic [ref=f12e1209]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.geograafia • editingContext.requirements" [ref=f12e1210] [cursor=pointer]'
+          - generic [ref=f12e1211]:
+            - 'heading "Added: Requirement 8b.inglise-keel • editingContext.requirements" [level=5] [ref=f12e1212]'
+            - paragraph [ref=f12e1213]: "Source value:"
+            - generic [ref=f12e1214]: (omitted / absent)
+            - paragraph [ref=f12e1215]: "Saved draft value:"
+            - generic [ref=f12e1216]: "{ \"count\": 3, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"annika-sirel\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": { \"8b.inglise-keel.01\": [ \"preferredRoomIds\" ], \"8b.inglise-keel.02\": [ \"preferredRoomIds\" ], \"8b.inglise-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.inglise-keel • editingContext.requirements" [ref=f12e1217] [cursor=pointer]'
+          - generic [ref=f12e1218]:
+            - 'heading "Added: Requirement 8b.inimeseopetus • editingContext.requirements" [level=5] [ref=f12e1219]'
+            - paragraph [ref=f12e1220]: "Source value:"
+            - generic [ref=f12e1221]: (omitted / absent)
+            - paragraph [ref=f12e1222]: "Saved draft value:"
+            - generic [ref=f12e1223]: "{ \"count\": 1, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"grete-suurvali\", \"preferredRoomIds\": [ \"a218\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.inimeseopetus\", \"subjectId\": \"inimeseopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.inimeseopetus • editingContext.requirements" [ref=f12e1224] [cursor=pointer]'
+          - generic [ref=f12e1225]:
+            - 'heading "Added: Requirement 8b.into • editingContext.requirements" [level=5] [ref=f12e1226]'
+            - paragraph [ref=f12e1227]: "Source value:"
+            - generic [ref=f12e1228]: (omitted / absent)
+            - paragraph [ref=f12e1229]: "Saved draft value:"
+            - generic [ref=f12e1230]: "{ \"count\": 1, \"cohortId\": \"8b\", \"defaults\": { \"roomLock\": \"a230\", \"teacherId\": \"marina-pokintsereda\", \"preferredRoomIds\": [ \"a230\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.into • editingContext.requirements" [ref=f12e1231] [cursor=pointer]'
+          - generic [ref=f12e1232]:
+            - 'heading "Added: Requirement 8b.keemia • editingContext.requirements" [level=5] [ref=f12e1233]'
+            - paragraph [ref=f12e1234]: "Source value:"
+            - generic [ref=f12e1235]: (omitted / absent)
+            - paragraph [ref=f12e1236]: "Saved draft value:"
+            - generic [ref=f12e1237]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a233\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"8b.keemia\", \"subjectId\": \"keemia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.keemia • editingContext.requirements" [ref=f12e1238] [cursor=pointer]'
+          - generic [ref=f12e1239]:
+            - 'heading "Added: Requirement 8b.kirjandus • editingContext.requirements" [level=5] [ref=f12e1240]'
+            - paragraph [ref=f12e1241]: "Source value:"
+            - generic [ref=f12e1242]: (omitted / absent)
+            - paragraph [ref=f12e1243]: "Saved draft value:"
+            - generic [ref=f12e1244]: "{ \"count\": 2, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"katrin-jaaksoo\", \"preferredRoomIds\": [ \"a216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.kirjandus • editingContext.requirements" [ref=f12e1245] [cursor=pointer]'
+          - generic [ref=f12e1246]:
+            - 'heading "Added: Requirement 8b.kunstiopetus • editingContext.requirements" [level=5] [ref=f12e1247]'
+            - paragraph [ref=f12e1248]: "Source value:"
+            - generic [ref=f12e1249]: (omitted / absent)
+            - paragraph [ref=f12e1250]: "Saved draft value:"
+            - generic [ref=f12e1251]: "{ \"count\": 1, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"preferredRoomIds\": [ \"stuudio\" ], \"requiredRoomCapabilityIds\": [ \"art-studio\" ] }, \"seriesId\": \"8b.kunstiopetus\", \"subjectId\": \"kunstiopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.kunstiopetus • editingContext.requirements" [ref=f12e1252] [cursor=pointer]'
+          - generic [ref=f12e1253]:
+            - 'heading "Added: Requirement 8b.matemaatika • editingContext.requirements" [level=5] [ref=f12e1254]'
+            - paragraph [ref=f12e1255]: "Source value:"
+            - generic [ref=f12e1256]: (omitted / absent)
+            - paragraph [ref=f12e1257]: "Saved draft value:"
+            - generic [ref=f12e1258]: "{ \"count\": 5, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"mari-kamps\", \"preferredRoomIds\": [ \"b214\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"8b.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.matemaatika • editingContext.requirements" [ref=f12e1259] [cursor=pointer]'
+          - generic [ref=f12e1260]:
+            - 'heading "Added: Requirement 8b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e1261]'
+            - paragraph [ref=f12e1262]: "Source value:"
+            - generic [ref=f12e1263]: (omitted / absent)
+            - paragraph [ref=f12e1264]: "Saved draft value:"
+            - generic [ref=f12e1265]: "{ \"count\": 1, \"cohortId\": \"8b\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"8b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 8b.muusikaopetus • editingContext.requirements" [ref=f12e1266] [cursor=pointer]'
+          - generic [ref=f12e1267]:
+            - 'heading "Added: Requirement 9a.ajalugu • editingContext.requirements" [level=5] [ref=f12e1268]'
+            - paragraph [ref=f12e1269]: "Source value:"
+            - generic [ref=f12e1270]: (omitted / absent)
+            - paragraph [ref=f12e1271]: "Saved draft value:"
+            - generic [ref=f12e1272]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.ajalugu • editingContext.requirements" [ref=f12e1273] [cursor=pointer]'
+          - generic [ref=f12e1274]:
+            - 'heading "Added: Requirement 9a.bioloogia • editingContext.requirements" [level=5] [ref=f12e1275]'
+            - paragraph [ref=f12e1276]: "Source value:"
+            - generic [ref=f12e1277]: (omitted / absent)
+            - paragraph [ref=f12e1278]: "Saved draft value:"
+            - generic [ref=f12e1279]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"malle-salu\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.bioloogia • editingContext.requirements" [ref=f12e1280] [cursor=pointer]'
+          - generic [ref=f12e1281]:
+            - 'heading "Added: Requirement 9a.eesti-keel • editingContext.requirements" [level=5] [ref=f12e1282]'
+            - paragraph [ref=f12e1283]: "Source value:"
+            - generic [ref=f12e1284]: (omitted / absent)
+            - paragraph [ref=f12e1285]: "Saved draft value:"
+            - generic [ref=f12e1286]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"katrin-jaaksoo\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"9a.eesti-keel.01\": [ \"preferredRoomIds\" ], \"9a.eesti-keel.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.eesti-keel • editingContext.requirements" [ref=f12e1287] [cursor=pointer]'
+          - generic [ref=f12e1288]:
+            - 'heading "Added: Requirement 9a.eksami-ettevalmistus-eesti-keel • editingContext.requirements" [level=5] [ref=f12e1289]'
+            - paragraph [ref=f12e1290]: "Source value:"
+            - generic [ref=f12e1291]: (omitted / absent)
+            - paragraph [ref=f12e1292]: "Saved draft value:"
+            - generic [ref=f12e1293]: "{ \"count\": 1, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"aarne-ruben\", \"preferredRoomIds\": [ \"a229\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.eksami-ettevalmistus-eesti-keel\", \"subjectId\": \"eksami-ettevalmistus-eesti-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.eksami-ettevalmistus-eesti-keel • editingContext.requirements" [ref=f12e1294] [cursor=pointer]'
+          - generic [ref=f12e1295]:
+            - 'heading "Added: Requirement 9a.eksami-ettevalmistus-matemaatika • editingContext.requirements" [level=5] [ref=f12e1296]'
+            - paragraph [ref=f12e1297]: "Source value:"
+            - generic [ref=f12e1298]: (omitted / absent)
+            - paragraph [ref=f12e1299]: "Saved draft value:"
+            - generic [ref=f12e1300]: "{ \"count\": 1, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.eksami-ettevalmistus-matemaatika\", \"subjectId\": \"eksami-ettevalmistus-matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.eksami-ettevalmistus-matemaatika • editingContext.requirements" [ref=f12e1301] [cursor=pointer]'
+          - generic [ref=f12e1302]:
+            - 'heading "Added: Requirement 9a.fuusika • editingContext.requirements" [level=5] [ref=f12e1303]'
+            - paragraph [ref=f12e1304]: "Source value:"
+            - generic [ref=f12e1305]: (omitted / absent)
+            - paragraph [ref=f12e1306]: "Saved draft value:"
+            - generic [ref=f12e1307]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"9a.fuusika\", \"subjectId\": \"fuusika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.fuusika • editingContext.requirements" [ref=f12e1308] [cursor=pointer]'
+          - generic [ref=f12e1309]:
+            - 'heading "Added: Requirement 9a.geograafia • editingContext.requirements" [level=5] [ref=f12e1310]'
+            - paragraph [ref=f12e1311]: "Source value:"
+            - generic [ref=f12e1312]: (omitted / absent)
+            - paragraph [ref=f12e1313]: "Saved draft value:"
+            - generic [ref=f12e1314]: "{ \"count\": 1, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.geograafia • editingContext.requirements" [ref=f12e1315] [cursor=pointer]'
+          - generic [ref=f12e1316]:
+            - 'heading "Added: Requirement 9a.inglise-keel • editingContext.requirements" [level=5] [ref=f12e1317]'
+            - paragraph [ref=f12e1318]: "Source value:"
+            - generic [ref=f12e1319]: (omitted / absent)
+            - paragraph [ref=f12e1320]: "Saved draft value:"
+            - generic [ref=f12e1321]: "{ \"count\": 3, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": { \"9a.inglise-keel.01\": [ \"preferredRoomIds\" ], \"9a.inglise-keel.02\": [ \"preferredRoomIds\" ], \"9a.inglise-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.inglise-keel • editingContext.requirements" [ref=f12e1322] [cursor=pointer]'
+          - generic [ref=f12e1323]:
+            - 'heading "Added: Requirement 9a.into • editingContext.requirements" [level=5] [ref=f12e1324]'
+            - paragraph [ref=f12e1325]: "Source value:"
+            - generic [ref=f12e1326]: (omitted / absent)
+            - paragraph [ref=f12e1327]: "Saved draft value:"
+            - generic [ref=f12e1328]: "{ \"count\": 1, \"cohortId\": \"9a\", \"defaults\": { \"roomLock\": \"a204\", \"teacherId\": \"marilin-laanetu\", \"preferredRoomIds\": [ \"a204\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.into • editingContext.requirements" [ref=f12e1329] [cursor=pointer]'
+          - generic [ref=f12e1330]:
+            - 'heading "Added: Requirement 9a.keemia • editingContext.requirements" [level=5] [ref=f12e1331]'
+            - paragraph [ref=f12e1332]: "Source value:"
+            - generic [ref=f12e1333]: (omitted / absent)
+            - paragraph [ref=f12e1334]: "Saved draft value:"
+            - generic [ref=f12e1335]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a233\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"9a.keemia\", \"subjectId\": \"keemia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.keemia • editingContext.requirements" [ref=f12e1336] [cursor=pointer]'
+          - generic [ref=f12e1337]:
+            - 'heading "Added: Requirement 9a.kirjandus • editingContext.requirements" [level=5] [ref=f12e1338]'
+            - paragraph [ref=f12e1339]: "Source value:"
+            - generic [ref=f12e1340]: (omitted / absent)
+            - paragraph [ref=f12e1341]: "Saved draft value:"
+            - generic [ref=f12e1342]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"katrin-jaaksoo\", \"preferredRoomIds\": [ \"a216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.kirjandus • editingContext.requirements" [ref=f12e1343] [cursor=pointer]'
+          - generic [ref=f12e1344]:
+            - 'heading "Added: Requirement 9a.matemaatika • editingContext.requirements" [level=5] [ref=f12e1345]'
+            - paragraph [ref=f12e1346]: "Source value:"
+            - generic [ref=f12e1347]: (omitted / absent)
+            - paragraph [ref=f12e1348]: "Saved draft value:"
+            - generic [ref=f12e1349]: "{ \"count\": 5, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.matemaatika • editingContext.requirements" [ref=f12e1350] [cursor=pointer]'
+          - generic [ref=f12e1351]:
+            - 'heading "Added: Requirement 9a.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e1352]'
+            - paragraph [ref=f12e1353]: "Source value:"
+            - generic [ref=f12e1354]: (omitted / absent)
+            - paragraph [ref=f12e1355]: "Saved draft value:"
+            - generic [ref=f12e1356]: "{ \"count\": 1, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"9a.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.muusikaopetus • editingContext.requirements" [ref=f12e1357] [cursor=pointer]'
+          - generic [ref=f12e1358]:
+            - 'heading "Added: Requirement 9a.uhiskonnaopetus • editingContext.requirements" [level=5] [ref=f12e1359]'
+            - paragraph [ref=f12e1360]: "Source value:"
+            - generic [ref=f12e1361]: (omitted / absent)
+            - paragraph [ref=f12e1362]: "Saved draft value:"
+            - generic [ref=f12e1363]: "{ \"count\": 2, \"cohortId\": \"9a\", \"defaults\": { \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9a.uhiskonnaopetus\", \"subjectId\": \"uhiskonnaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9a.uhiskonnaopetus • editingContext.requirements" [ref=f12e1364] [cursor=pointer]'
+          - generic [ref=f12e1365]:
+            - 'heading "Added: Requirement 9b.ajalugu • editingContext.requirements" [level=5] [ref=f12e1366]'
+            - paragraph [ref=f12e1367]: "Source value:"
+            - generic [ref=f12e1368]: (omitted / absent)
+            - paragraph [ref=f12e1369]: "Saved draft value:"
+            - generic [ref=f12e1370]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.ajalugu • editingContext.requirements" [ref=f12e1371] [cursor=pointer]'
+          - generic [ref=f12e1372]:
+            - 'heading "Added: Requirement 9b.bioloogia • editingContext.requirements" [level=5] [ref=f12e1373]'
+            - paragraph [ref=f12e1374]: "Source value:"
+            - generic [ref=f12e1375]: (omitted / absent)
+            - paragraph [ref=f12e1376]: "Saved draft value:"
+            - generic [ref=f12e1377]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"malle-salu\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.bioloogia • editingContext.requirements" [ref=f12e1378] [cursor=pointer]'
+          - generic [ref=f12e1379]:
+            - 'heading "Added: Requirement 9b.eesti-keel • editingContext.requirements" [level=5] [ref=f12e1380]'
+            - paragraph [ref=f12e1381]: "Source value:"
+            - generic [ref=f12e1382]: (omitted / absent)
+            - paragraph [ref=f12e1383]: "Saved draft value:"
+            - generic [ref=f12e1384]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"katariin-treial\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"9b.eesti-keel.01\": [ \"preferredRoomIds\" ], \"9b.eesti-keel.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.eesti-keel • editingContext.requirements" [ref=f12e1385] [cursor=pointer]'
+          - generic [ref=f12e1386]:
+            - 'heading "Added: Requirement 9b.eksami-ettevalmistus-eesti-keel • editingContext.requirements" [level=5] [ref=f12e1387]'
+            - paragraph [ref=f12e1388]: "Source value:"
+            - generic [ref=f12e1389]: (omitted / absent)
+            - paragraph [ref=f12e1390]: "Saved draft value:"
+            - generic [ref=f12e1391]: "{ \"count\": 1, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"aarne-ruben\", \"preferredRoomIds\": [ \"b214\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.eksami-ettevalmistus-eesti-keel\", \"subjectId\": \"eksami-ettevalmistus-eesti-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.eksami-ettevalmistus-eesti-keel • editingContext.requirements" [ref=f12e1392] [cursor=pointer]'
+          - generic [ref=f12e1393]:
+            - 'heading "Added: Requirement 9b.eksami-ettevalmistus-matemaatika • editingContext.requirements" [level=5] [ref=f12e1394]'
+            - paragraph [ref=f12e1395]: "Source value:"
+            - generic [ref=f12e1396]: (omitted / absent)
+            - paragraph [ref=f12e1397]: "Saved draft value:"
+            - generic [ref=f12e1398]: "{ \"count\": 1, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.eksami-ettevalmistus-matemaatika\", \"subjectId\": \"eksami-ettevalmistus-matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.eksami-ettevalmistus-matemaatika • editingContext.requirements" [ref=f12e1399] [cursor=pointer]'
+          - generic [ref=f12e1400]:
+            - 'heading "Added: Requirement 9b.fuusika • editingContext.requirements" [level=5] [ref=f12e1401]'
+            - paragraph [ref=f12e1402]: "Source value:"
+            - generic [ref=f12e1403]: (omitted / absent)
+            - paragraph [ref=f12e1404]: "Saved draft value:"
+            - generic [ref=f12e1405]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"9b.fuusika\", \"subjectId\": \"fuusika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.fuusika • editingContext.requirements" [ref=f12e1406] [cursor=pointer]'
+          - generic [ref=f12e1407]:
+            - 'heading "Added: Requirement 9b.geograafia • editingContext.requirements" [level=5] [ref=f12e1408]'
+            - paragraph [ref=f12e1409]: "Source value:"
+            - generic [ref=f12e1410]: (omitted / absent)
+            - paragraph [ref=f12e1411]: "Saved draft value:"
+            - generic [ref=f12e1412]: "{ \"count\": 1, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.geograafia • editingContext.requirements" [ref=f12e1413] [cursor=pointer]'
+          - generic [ref=f12e1414]:
+            - 'heading "Added: Requirement 9b.inglise-keel • editingContext.requirements" [level=5] [ref=f12e1415]'
+            - paragraph [ref=f12e1416]: "Source value:"
+            - generic [ref=f12e1417]: (omitted / absent)
+            - paragraph [ref=f12e1418]: "Saved draft value:"
+            - generic [ref=f12e1419]: "{ \"count\": 3, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"maya-blinder\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": { \"9b.inglise-keel.01\": [ \"preferredRoomIds\" ], \"9b.inglise-keel.02\": [ \"preferredRoomIds\" ], \"9b.inglise-keel.03\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.inglise-keel • editingContext.requirements" [ref=f12e1420] [cursor=pointer]'
+          - generic [ref=f12e1421]:
+            - 'heading "Added: Requirement 9b.into • editingContext.requirements" [level=5] [ref=f12e1422]'
+            - paragraph [ref=f12e1423]: "Source value:"
+            - generic [ref=f12e1424]: (omitted / absent)
+            - paragraph [ref=f12e1425]: "Saved draft value:"
+            - generic [ref=f12e1426]: "{ \"count\": 1, \"cohortId\": \"9b\", \"defaults\": { \"roomLock\": \"b212\", \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.into • editingContext.requirements" [ref=f12e1427] [cursor=pointer]'
+          - generic [ref=f12e1428]:
+            - 'heading "Added: Requirement 9b.keemia • editingContext.requirements" [level=5] [ref=f12e1429]'
+            - paragraph [ref=f12e1430]: "Source value:"
+            - generic [ref=f12e1431]: (omitted / absent)
+            - paragraph [ref=f12e1432]: "Saved draft value:"
+            - generic [ref=f12e1433]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a233\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"9b.keemia\", \"subjectId\": \"keemia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.keemia • editingContext.requirements" [ref=f12e1434] [cursor=pointer]'
+          - generic [ref=f12e1435]:
+            - 'heading "Added: Requirement 9b.kirjandus • editingContext.requirements" [level=5] [ref=f12e1436]'
+            - paragraph [ref=f12e1437]: "Source value:"
+            - generic [ref=f12e1438]: (omitted / absent)
+            - paragraph [ref=f12e1439]: "Saved draft value:"
+            - generic [ref=f12e1440]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"katariin-treial\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": { \"9b.kirjandus.01\": [ \"preferredRoomIds\" ], \"9b.kirjandus.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.kirjandus • editingContext.requirements" [ref=f12e1441] [cursor=pointer]'
+          - generic [ref=f12e1442]:
+            - 'heading "Added: Requirement 9b.matemaatika • editingContext.requirements" [level=5] [ref=f12e1443]'
+            - paragraph [ref=f12e1444]: "Source value:"
+            - generic [ref=f12e1445]: (omitted / absent)
+            - paragraph [ref=f12e1446]: "Saved draft value:"
+            - generic [ref=f12e1447]: "{ \"count\": 5, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.matemaatika • editingContext.requirements" [ref=f12e1448] [cursor=pointer]'
+          - generic [ref=f12e1449]:
+            - 'heading "Added: Requirement 9b.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e1450]'
+            - paragraph [ref=f12e1451]: "Source value:"
+            - generic [ref=f12e1452]: (omitted / absent)
+            - paragraph [ref=f12e1453]: "Saved draft value:"
+            - generic [ref=f12e1454]: "{ \"count\": 1, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"9b.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.muusikaopetus • editingContext.requirements" [ref=f12e1455] [cursor=pointer]'
+          - generic [ref=f12e1456]:
+            - 'heading "Added: Requirement 9b.uhiskonnaopetus • editingContext.requirements" [level=5] [ref=f12e1457]'
+            - paragraph [ref=f12e1458]: "Source value:"
+            - generic [ref=f12e1459]: (omitted / absent)
+            - paragraph [ref=f12e1460]: "Saved draft value:"
+            - generic [ref=f12e1461]: "{ \"count\": 2, \"cohortId\": \"9b\", \"defaults\": { \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9b.uhiskonnaopetus\", \"subjectId\": \"uhiskonnaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9b.uhiskonnaopetus • editingContext.requirements" [ref=f12e1462] [cursor=pointer]'
+          - generic [ref=f12e1463]:
+            - 'heading "Added: Requirement 9c.ajalugu • editingContext.requirements" [level=5] [ref=f12e1464]'
+            - paragraph [ref=f12e1465]: "Source value:"
+            - generic [ref=f12e1466]: (omitted / absent)
+            - paragraph [ref=f12e1467]: "Saved draft value:"
+            - generic [ref=f12e1468]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"roomLock\": \"a231\", \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.ajalugu\", \"subjectId\": \"ajalugu\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.ajalugu • editingContext.requirements" [ref=f12e1469] [cursor=pointer]'
+          - generic [ref=f12e1470]:
+            - 'heading "Added: Requirement 9c.bioloogia • editingContext.requirements" [level=5] [ref=f12e1471]'
+            - paragraph [ref=f12e1472]: "Source value:"
+            - generic [ref=f12e1473]: (omitted / absent)
+            - paragraph [ref=f12e1474]: "Saved draft value:"
+            - generic [ref=f12e1475]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"malle-salu\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.bioloogia\", \"subjectId\": \"bioloogia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.bioloogia • editingContext.requirements" [ref=f12e1476] [cursor=pointer]'
+          - generic [ref=f12e1477]:
+            - 'heading "Added: Requirement 9c.eesti-keel • editingContext.requirements" [level=5] [ref=f12e1478]'
+            - paragraph [ref=f12e1479]: "Source value:"
+            - generic [ref=f12e1480]: (omitted / absent)
+            - paragraph [ref=f12e1481]: "Saved draft value:"
+            - generic [ref=f12e1482]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.eesti-keel\", \"subjectId\": \"eesti-keel\", \"exceptions\": { \"9c.eesti-keel.01\": [ \"preferredRoomIds\" ], \"9c.eesti-keel.02\": [ \"preferredRoomIds\" ] }, \"mixedFields\": [ \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.eesti-keel • editingContext.requirements" [ref=f12e1483] [cursor=pointer]'
+          - generic [ref=f12e1484]:
+            - 'heading "Added: Requirement 9c.eksami-ettevalmistus-eesti-keel • editingContext.requirements" [level=5] [ref=f12e1485]'
+            - paragraph [ref=f12e1486]: "Source value:"
+            - generic [ref=f12e1487]: (omitted / absent)
+            - paragraph [ref=f12e1488]: "Saved draft value:"
+            - generic [ref=f12e1489]: "{ \"count\": 1, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"aarne-ruben\", \"preferredRoomIds\": [ \"a216\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.eksami-ettevalmistus-eesti-keel\", \"subjectId\": \"eksami-ettevalmistus-eesti-keel\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.eksami-ettevalmistus-eesti-keel • editingContext.requirements" [ref=f12e1490] [cursor=pointer]'
+          - generic [ref=f12e1491]:
+            - 'heading "Added: Requirement 9c.eksami-ettevalmistus-matemaatika • editingContext.requirements" [level=5] [ref=f12e1492]'
+            - paragraph [ref=f12e1493]: "Source value:"
+            - generic [ref=f12e1494]: (omitted / absent)
+            - paragraph [ref=f12e1495]: "Saved draft value:"
+            - generic [ref=f12e1496]: "{ \"count\": 1, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.eksami-ettevalmistus-matemaatika\", \"subjectId\": \"eksami-ettevalmistus-matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.eksami-ettevalmistus-matemaatika • editingContext.requirements" [ref=f12e1497] [cursor=pointer]'
+          - generic [ref=f12e1498]:
+            - 'heading "Added: Requirement 9c.fuusika • editingContext.requirements" [level=5] [ref=f12e1499]'
+            - paragraph [ref=f12e1500]: "Source value:"
+            - generic [ref=f12e1501]: (omitted / absent)
+            - paragraph [ref=f12e1502]: "Saved draft value:"
+            - generic [ref=f12e1503]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a223-lab\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"9c.fuusika\", \"subjectId\": \"fuusika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.fuusika • editingContext.requirements" [ref=f12e1504] [cursor=pointer]'
+          - generic [ref=f12e1505]:
+            - 'heading "Added: Requirement 9c.geograafia • editingContext.requirements" [level=5] [ref=f12e1506]'
+            - paragraph [ref=f12e1507]: "Source value:"
+            - generic [ref=f12e1508]: (omitted / absent)
+            - paragraph [ref=f12e1509]: "Saved draft value:"
+            - generic [ref=f12e1510]: "{ \"count\": 1, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"madelen-monika-soiver\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.geograafia\", \"subjectId\": \"geograafia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.geograafia • editingContext.requirements" [ref=f12e1511] [cursor=pointer]'
+          - generic [ref=f12e1512]:
+            - 'heading "Added: Requirement 9c.inglise-keel • editingContext.requirements" [level=5] [ref=f12e1513]'
+            - paragraph [ref=f12e1514]: "Source value:"
+            - generic [ref=f12e1515]: (omitted / absent)
+            - paragraph [ref=f12e1516]: "Saved draft value:"
+            - generic [ref=f12e1517]: "{ \"count\": 3, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"maya-blinder\" }, \"seriesId\": \"9c.inglise-keel\", \"subjectId\": \"inglise-keel\", \"exceptions\": { \"9c.inglise-keel.01\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ], \"9c.inglise-keel.02\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ], \"9c.inglise-keel.03\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ] }, \"mixedFields\": [ \"requiredRoomCapabilityIds\", \"preferredRoomIds\" ], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.inglise-keel • editingContext.requirements" [ref=f12e1518] [cursor=pointer]'
+          - generic [ref=f12e1519]:
+            - 'heading "Added: Requirement 9c.into • editingContext.requirements" [level=5] [ref=f12e1520]'
+            - paragraph [ref=f12e1521]: "Source value:"
+            - generic [ref=f12e1522]: (omitted / absent)
+            - paragraph [ref=f12e1523]: "Saved draft value:"
+            - generic [ref=f12e1524]: "{ \"count\": 1, \"cohortId\": \"9c\", \"defaults\": { \"roomLock\": \"b215\", \"teacherId\": \"helina-silberg\", \"preferredRoomIds\": [ \"b215\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.into\", \"subjectId\": \"into\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.into • editingContext.requirements" [ref=f12e1525] [cursor=pointer]'
+          - generic [ref=f12e1526]:
+            - 'heading "Added: Requirement 9c.keemia • editingContext.requirements" [level=5] [ref=f12e1527]'
+            - paragraph [ref=f12e1528]: "Source value:"
+            - generic [ref=f12e1529]: (omitted / absent)
+            - paragraph [ref=f12e1530]: "Saved draft value:"
+            - generic [ref=f12e1531]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"liivi-kivimae-bondarev\", \"preferredRoomIds\": [ \"a233\" ], \"requiredRoomCapabilityIds\": [ \"science-lab\" ] }, \"seriesId\": \"9c.keemia\", \"subjectId\": \"keemia\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.keemia • editingContext.requirements" [ref=f12e1532] [cursor=pointer]'
+          - generic [ref=f12e1533]:
+            - 'heading "Added: Requirement 9c.kirjandus • editingContext.requirements" [level=5] [ref=f12e1534]'
+            - paragraph [ref=f12e1535]: "Source value:"
+            - generic [ref=f12e1536]: (omitted / absent)
+            - paragraph [ref=f12e1537]: "Saved draft value:"
+            - generic [ref=f12e1538]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"heiki-raudla\", \"preferredRoomIds\": [ \"a209\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.kirjandus\", \"subjectId\": \"kirjandus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.kirjandus • editingContext.requirements" [ref=f12e1539] [cursor=pointer]'
+          - generic [ref=f12e1540]:
+            - 'heading "Added: Requirement 9c.matemaatika • editingContext.requirements" [level=5] [ref=f12e1541]'
+            - paragraph [ref=f12e1542]: "Source value:"
+            - generic [ref=f12e1543]: (omitted / absent)
+            - paragraph [ref=f12e1544]: "Saved draft value:"
+            - generic [ref=f12e1545]: "{ \"count\": 5, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"piret-noor\", \"preferredRoomIds\": [ \"b212\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.matemaatika\", \"subjectId\": \"matemaatika\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.matemaatika • editingContext.requirements" [ref=f12e1546] [cursor=pointer]'
+          - generic [ref=f12e1547]:
+            - 'heading "Added: Requirement 9c.muusikaopetus • editingContext.requirements" [level=5] [ref=f12e1548]'
+            - paragraph [ref=f12e1549]: "Source value:"
+            - generic [ref=f12e1550]: (omitted / absent)
+            - paragraph [ref=f12e1551]: "Saved draft value:"
+            - generic [ref=f12e1552]: "{ \"count\": 1, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"leelo-jaanimagi\", \"preferredRoomIds\": [ \"mu\" ], \"requiredRoomCapabilityIds\": [ \"music-room\" ] }, \"seriesId\": \"9c.muusikaopetus\", \"subjectId\": \"muusikaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.muusikaopetus • editingContext.requirements" [ref=f12e1553] [cursor=pointer]'
+          - generic [ref=f12e1554]:
+            - 'heading "Added: Requirement 9c.uhiskonnaopetus • editingContext.requirements" [level=5] [ref=f12e1555]'
+            - paragraph [ref=f12e1556]: "Source value:"
+            - generic [ref=f12e1557]: (omitted / absent)
+            - paragraph [ref=f12e1558]: "Saved draft value:"
+            - generic [ref=f12e1559]: "{ \"count\": 2, \"cohortId\": \"9c\", \"defaults\": { \"teacherId\": \"siiri-aiaste\", \"preferredRoomIds\": [ \"a231\" ], \"requiredRoomCapabilityIds\": [ \"general-classroom\" ] }, \"seriesId\": \"9c.uhiskonnaopetus\", \"subjectId\": \"uhiskonnaopetus\", \"exceptions\": {}, \"mixedFields\": [], \"nextSequence\": 1 }"
+            - 'button "Open change: Requirement 9c.uhiskonnaopetus • editingContext.requirements" [ref=f12e1560] [cursor=pointer]'
+        - group [ref=f12e1561]:
+          - generic "Opening effective-value adjustments — 0" [ref=f12e1562]
+        - group [ref=f12e1563]:
+          - generic "Explicit catalog upgrades — 0" [ref=f12e1564]
+        - group [ref=f12e1565]:
+          - generic "Expired attempt pins — exact source provenance — 0" [ref=f12e1566]
+        - group [ref=f12e1567]:
+          - generic "Reserved removed identities — 0" [ref=f12e1568]
+        - group [ref=f12e1569]:
+          - generic "Potential timing and placement impacts — 1" [ref=f12e1570]
+          - paragraph [ref=f12e1571]: Potential successor timing at surviving Current placements; a repair proposal is required to determine actual placements. Period-ID/room moves are separate from weekday/order/time changes.
+          - generic [ref=f12e1572]:
+            - heading "1a.opiabi.03 — 1A Õpiabi 3" [level=5] [ref=f12e1573]
+            - paragraph [ref=f12e1574]: Added — no accepted placement
+            - paragraph [ref=f12e1575]: "Period-ID move required: no • Room move required: no"
+            - paragraph [ref=f12e1576]: "Source placement: No accepted placement"
+            - paragraph [ref=f12e1577]: "Old teaching time: No source teaching-time side"
+            - paragraph [ref=f12e1578]: "Potential successor teaching time: No determined successor placement"
+            - 'button "Inspect impacted occurrence: 1a.opiabi.03" [ref=f12e1579] [cursor=pointer]'
+```

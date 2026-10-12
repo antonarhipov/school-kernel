@@ -1,0 +1,1 @@
+UC24 attempt1 interrupted by Playwright VM lacking structuredClone after one explicit isolated time save. Operator unchanged. Before restoration is pinned by UC23 saved253 values. Initial grid regression errors also retained; repeat requires corrected selected-inspector navigation.

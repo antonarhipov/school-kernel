@@ -1,0 +1,212 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/anton/.sdkman/candidates/maven/current/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/anton/.sdkman/candidates/maven/current/lib/guava-33.2.0-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/3]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ kernel-contract ---
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [3/3]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 33 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.459 s -- in org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Running org.schoolkernel.workspace.KernelVerifierTest
+08:18:41.207 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=e3f7a7b7-645c-4c88-ba43-875d1f582183 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=31
+08:18:41.296 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=455e06db-f84f-430b-9319-5cd6910e6525 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=5
+08:18:41.321 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=a5d7dc13-ed3f-4a0c-b91e-e5d0db00fcd7 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=4
+08:18:41.339 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=50e23bde-4bd7-4c6e-812d-b8da7c2c76cc kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=3
+08:18:41.361 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=9515dac5-b749-4706-8b85-0fb2923bc59d kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=2
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.241 s -- in org.schoolkernel.workspace.KernelVerifierTest
+[INFO] Running org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Running org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.090 s -- in org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Running org.schoolkernel.workspace.ArchitectureTest
+08:18:41.506 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.473 s -- in org.schoolkernel.workspace.ArchitectureTest
+[INFO] Running org.schoolkernel.workspace.KernelPlannerTest
+08:18:48.006 [ForkJoinPool.commonPool-worker-1] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=9506b8d7-a665-492a-a7fb-77b2b3e32afe runId=15fb7f3a-f993-4574-90ef-4b9bbc6a41d0 kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2021 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.052 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=8e5cd63b-6eda-4f12-ad53-2ed477c3e4be runId=cab549c1-2ede-438e-a126-f0618f4ffd90 kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=13 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.058 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=99351ebb-caa5-4601-9a0a-c9410ccb8af1 runId=b477b93b-34ef-47b2-8e9c-b9dfb8a8aeae kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+08:18:48.063 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=b06fac43-6815-4538-87da-545ef0a4c936 runId=ed5e697d-5374-4650-b804-93dfd81f833f kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=3 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.067 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=c5e18827-89ab-4849-8926-a73d64ce7d82 runId=4f08a8ba-a3ee-40fe-81fb-b7d7c228148b kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.076 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=1c86a348-7ab5-4e46-aec7-d93981033550 runId=a2e30c04-49b0-455a-9e5b-6669a6004140 kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.084 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=eea904c6-7d4d-472a-b583-f908bf8e7e14 runId=7f72937c-cd65-4fda-997e-0badcdbb36b9 kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.089 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=cd90a55e-7402-4418-86bb-e29f9f29abae runId=17842560-3cb5-4883-a2e3-4986944a01ac kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.096 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=175645b5-1b41-458f-b86f-58751db629cb runId=6ec48aba-c7b4-4a43-8533-7f808f5addaf kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=5 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:18:48.115 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=91f64d94-a6c9-4554-9796-a077675fbd92 runId=8d33114c-6169-47a3-84e0-f0676cf9bc32 kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=8 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+08:18:48.123 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=cf5e6068-67c0-4364-976a-0bd55ce89178 runId=d1c31e38-958d-4848-806f-439a6a4f727f kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+08:18:48.159 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=37b0e41f-3050-4727-9ad8-44cec0bc1040 runId=95a1a322-83a6-4181-9176-0c9a254a29ce kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=25 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+08:18:48.183 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=620b7083-cf64-4862-8dc1-10b70deeb1c8 runId=663e3a19-5b42-422e-8188-4a6aa93880d8 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=18 configuredLimit=PT1M terminationReason=NONE feasible=false
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.223 s -- in org.schoolkernel.workspace.KernelPlannerTest
+[INFO] Running org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Running org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ timetable-workspace ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (default) @ timetable-workspace ---
+[INFO] Replacing main artifact /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DefinitionAuthoringUxBrowserIT
+08:18:51.667 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+08:18:51.711 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+08:18:51.749 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+08:18:52.237 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+08:18:52.930 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=unix:///Users/anton/.docker/run/docker.sock
+08:18:52.935 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+08:18:52.977 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 29.8.0
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7933 MB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/anton/Library/Containers/com.docker.docker/Data/docker-cli.sock
+08:18:53.057 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Creating container for image: testcontainers/ryuk:0.14.0
+08:18:53.155 [main] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+08:18:53.418 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 is starting: 2fdea79206f2a95c9aa1e2e4436a3258add066136e16ceb9a3333ebc8e2b3422
+08:18:53.762 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 started in PT0.704976S
+08:18:53.773 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+08:18:53.773 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+08:18:53.776 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+08:18:53.783 [main] INFO tc.postgres:18.6 -- Creating container for image: postgres:18.6
+08:18:53.820 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 is starting: c9849d4cafb12c75998c52fd05b769dbadecc80b8361c749f454b4576a141752
+08:18:54.725 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 started in PT0.942201S
+08:18:54.732 [main] INFO tc.postgres:18.6 -- Container is started (JDBC URL: jdbc:postgresql://localhost:57850/browser_workspace?loggerLevel=OFF)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T08:19:14.772+03:00  INFO 63808 --- [           main] o.s.w.DefinitionAuthoringUxBrowserIT     : Starting DefinitionAuthoringUxBrowserIT using Java 25.0.1 with PID 63808 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T08:19:14.776+03:00  INFO 63808 --- [           main] o.s.w.DefinitionAuthoringUxBrowserIT     : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T08:19:16.605+03:00  INFO 63808 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T08:19:16.627+03:00  INFO 63808 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T08:19:16.628+03:00  INFO 63808 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T08:19:16.675+03:00  INFO 63808 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1851 ms
+2026-10-12T08:19:16.950+03:00  INFO 63808 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-12T08:19:17.114+03:00  INFO 63808 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@84becbe
+2026-10-12T08:19:17.115+03:00  INFO 63808 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-12T08:19:17.134+03:00  INFO 63808 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:57850/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T08:19:17.202+03:00  INFO 63808 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-12T08:19:17.207+03:00  INFO 63808 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.021s)
+2026-10-12T08:19:17.225+03:00  INFO 63808 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-12T08:19:17.291+03:00  INFO 63808 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-12T08:19:17.306+03:00  INFO 63808 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create workspace aggregate"
+2026-10-12T08:19:17.330+03:00  INFO 63808 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - add manual draft state"
+2026-10-12T08:19:17.342+03:00  INFO 63808 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - add definition draft state"
+2026-10-12T08:19:17.359+03:00  INFO 63808 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 3 migrations to schema "public", now at version v3 (execution time 00:00.019s)
+2026-10-12T08:19:19.255+03:00  INFO 63808 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 57889 (http) with context path '/'
+2026-10-12T08:19:19.289+03:00  INFO 63808 --- [           main] o.s.w.DefinitionAuthoringUxBrowserIT     : Started DefinitionAuthoringUxBrowserIT in 5.397 seconds (process running for 29.954)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/Users/anton/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-12T08:19:21.222+03:00  INFO 63808 --- [o-auto-1-exec-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T08:19:21.225+03:00  INFO 63808 --- [o-auto-1-exec-5] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T08:19:21.232+03:00  INFO 63808 --- [o-auto-1-exec-5] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 56.13 s -- in org.schoolkernel.workspace.DefinitionAuthoringUxBrowserIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default) @ timetable-workspace ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.591 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  1.759 s]
+[INFO] School Timetable Operations Workspace .............. SUCCESS [01:10 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:13 min
+[INFO] Finished at: 2026-10-12T08:19:48+03:00
+[INFO] ------------------------------------------------------------------------

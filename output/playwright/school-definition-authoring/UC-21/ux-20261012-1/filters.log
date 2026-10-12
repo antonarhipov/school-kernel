@@ -1,0 +1,19 @@
+### Result
+{"verdict":"PASS","subject":"ajalugu","teacherIds":["anette-maria-rennit","grete-suurvali","siiri-aiaste"],"roomIds":["a223-lab","a233"],"classes":["1A","1B","1C","2A","2B","2C","3A","3B","4A","4B","5A","5B","5D","6A","6B","6C","7A","7B","8A","8B","9A","9B","9C"],"version":236}
+### Ran Playwright code
+```js
+await (async page => {
+ const check=(v,m)=>{if(!v)throw Error(m)},read=async()=> (await page.request.get('http://127.0.0.1:18112/api/workspace')).json();
+ const before=await read(),d=before.workspace.definitionDraft.definition;
+ await page.setViewportSize({width:1600,height:900}); await page.locator('button[data-section="Teachers"]').click(); await page.locator('#teachers-search').fill('');
+ const subject=d.teachers[0].qualifiedSubjectIds[0]; await page.locator('#teachers-filter-subject').selectOption(subject);
+ const ids=await page.locator('[data-teacher-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.teacherId)); check(ids.length>0&&ids.every(id=>d.teachers.find(t=>t.id===id).qualifiedSubjectIds.includes(subject)),'teacher filter');
+ await page.locator('#teachers-issues-only').check(); check(await page.locator('[data-teacher-id]').count()===0,'issues filter');
+ await page.locator('button[data-section="Rooms"]').click(); await page.locator('#rooms-search').fill(''); await page.locator('#rooms-filter-capability').selectOption('science-lab');
+ const rooms=await page.locator('[data-room-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.roomId)); check(rooms.length>0&&rooms.every(id=>d.rooms.find(r=>r.id===id).capabilityIds.includes('science-lab')),'room filter');
+ await page.locator('button[data-section="Classes"]').click(); await page.locator('#cohorts-search').fill('');
+ const names=await page.locator('.definition-record-name').allTextContents(); const sorted=[...names].sort(new Intl.Collator(undefined,{numeric:true,sensitivity:'base'}).compare);check(JSON.stringify(names)===JSON.stringify(sorted),'natural sort');
+ await page.evaluate(()=>window.scrollTo(0,0)); await page.screenshot({path:'output/playwright/school-definition-authoring/UC-21/ux-20261012-1/classes-sorted.png',fullPage:true});
+ check((await read()).version===before.version,'filter mutated');return{verdict:'PASS',subject,teacherIds:ids,roomIds:rooms,classes:names,version:before.version};
+})(page);
+```

@@ -1,0 +1,15 @@
+{
+  "verdict": "PASS",
+  "version": 235,
+  "rows": {
+    "subjects": 25,
+    "teachers": 25,
+    "cohorts": 23,
+    "rooms": 25,
+    "requirements": 25
+  },
+  "wholeSnapshotExact": true,
+  "errors": [],
+  "wholeDatabaseRowExact": true,
+  "databaseRowSha256": "19b5e4f74d090d6d2a0e5e97d12b99ace405b79c767a6e33f2082a24bb01f7a2"
+}

@@ -57,11 +57,15 @@ class DefinitionRoomsBrowserIT extends WorkbenchBrowserSupport {
     private void create(){workbench.open();open();rooms();}
     private void open(){page().locator("#open-authoring").click();page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
     private void nav(String section){page().locator("button[data-section='"+section+"']").click();}
-    private void rooms(){nav("Rooms");workbench.awaitText("Room name");}
+    private void expandForm() {
+        var groups = workbench.page().locator("#room-form details");
+        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
+    }
+    private void rooms(){nav("Rooms");workbench.awaitText("Room name"); expandForm(); }
     private void name(String value){page().locator("#room-displayName").fill(value);}
     private void capacity(String value){page().locator("#room-capacity").fill(value);}
     private void tokens(String value){page().locator("#room-capabilityIds-extra").fill(value);}
-    private void mode(String value){page().locator("#room-availablePeriodIds-mode").selectOption(value);}
+    private void mode(String value){ expandForm(); page().locator("#room-availablePeriodIds-mode").selectOption(value); expandForm(); }
     private void clickSave(){page().locator("#save-room").click();}
     private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}
     private JsonNode draft(){return storedWorkspaceDocument().path("definitionDraft");}

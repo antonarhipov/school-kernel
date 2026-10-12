@@ -13,7 +13,7 @@ class DefinitionRequirementsBrowserIT extends WorkbenchBrowserSupport {
     @Test
     void browserNewRequirementAllSharedFieldsCountChangesCancelAndRestart() {
         initial(false);open();requirements();JsonNode source=draft().path("sourceDocument").deepCopy(),ungrouped=definition().path("lessons").get(1).deepCopy();
-        page().locator("#add-requirement").click();page().locator("#requirement-cohortId").fill("cohort-7a");page().locator("#requirement-subjectId").fill("science");assertEquals("year-7a-science",page().locator("#requirement-seriesId").inputValue());page().locator("#requirement-seriesId").fill("Series.ID_9");count("2");
+        page().locator("#add-requirement").click();page().locator("#requirement-cohortId-picker").fill("Year 7A");page().locator("#requirement-cohortId-options button").first().click();page().locator("#requirement-subjectId-picker").fill("Science");page().locator("#requirement-subjectId-options button").first().click();assertEquals("year-7a-science",page().locator("#requirement-seriesId").inputValue());page().locator("#requirement-seriesId").fill("Series.ID_9");count("2");
         value("teacherId","teacher-alex");value("requiredRoomCapabilityIds","lab, Extra.Token_9");value("preferredRoomIds","room-101");value("undesirablePeriodIds","mon-3");value("periodLock","mon-1");value("roomLock","room-101");
         String before=storedDocument();preview();workbench.awaitText("Fresh additions");page().locator("#cancel-requirement-review").click();assertEquals(before,storedDocument());assertEquals("2",page().locator("#requirement-count").inputValue());save();
         JsonNode generated=series("Series.ID_9");assertEquals(2,generated.size());for(int i=0;i<2;i++){JsonNode row=generated.get(i);assertEquals("Series.ID_9.0"+(i+1),row.path("id").asString());assertEquals("Year 7A Science "+(i+1),row.path("displayName").asString());assertEquals(11,row.size());assertEquals("teacher-alex",row.path("teacherId").asString());assertEquals("mon-1",row.path("periodLock").asString());assertEquals("room-101",row.path("roomLock").asString());assertEquals(JSON.readTree("[\"lab\",\"Extra.Token_9\"]"),row.path("requiredRoomCapabilityIds"));}
@@ -58,9 +58,13 @@ class DefinitionRequirementsBrowserIT extends WorkbenchBrowserSupport {
     private com.microsoft.playwright.Page page(){return workbench.page();}
     private void open(){page().locator("#open-authoring").click();page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
     private void nav(String section){page().locator("button[data-section='"+section+"']").click();}
-    private void requirements(){nav("Weekly requirements");page().locator("#requirement-form").waitFor();}
+    private void expandForm() {
+        var groups = workbench.page().locator("#requirement-form details");
+        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
+    }
+    private void requirements(){nav("Weekly requirements");page().locator("#requirement-form").waitFor(); expandForm(); }
     private void count(String value){page().locator("#requirement-count").fill(value);}
-    private void value(String field,String value){page().locator("#requirement-"+field+"-mode").selectOption("value");page().locator("#requirement-"+field).fill(value);}
+    private void value(String field,String value){ expandForm(); page().locator("#requirement-"+field+"-mode").selectOption("value");expandForm();page().locator("#requirement-"+field).fill(value);}
     private void preview(){page().locator("#preview-requirement").click();page().locator("#requirement-preview").waitFor();}
     private void save(){long version=storedVersion();preview();page().locator("#save-requirement").click();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(version+1,storedVersion());page().locator("#requirement-form").waitFor();}
     private JsonNode draft(){return storedWorkspaceDocument().path("definitionDraft");}

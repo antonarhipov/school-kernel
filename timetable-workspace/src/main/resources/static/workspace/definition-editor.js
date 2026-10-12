@@ -1,3 +1,5 @@
+import { resetBrowsers } from './definition-browser.js';
+import { beginFormRender, resetFormControls, focusDefinitionField } from './definition-form-controls.js';
 import { renderDiscard, discardBusy } from './definition-discard.js';
 import { renderFinish, finishBusy } from './definition-finish.js';
 import { renderReview, resetReview } from './definition-review.js';
@@ -12,7 +14,7 @@ import { chooseRoom, renderRooms, roomsDirty, saveRoom, discardRooms, resetRooms
 import { chooseClass, renderClasses, classesDirty, saveCohort, discardClasses, resetClasses } from './definition-cohorts.js';
 import { chooseTeacher, renderTeachers, teachersDirty, saveTeacher, discardTeachers, resetTeachers } from './definition-teachers.js';
 import { chooseSubject, renderSubjects, subjectsDirty, saveSubject, discardSubjects, resetSubjects } from './definition-subjects.js';
-import { renderGrid, gridDirty, saveGrid, discardGrid, resetGrid } from './definition-grid.js';
+import { renderGrid, gridDirty, saveGrid, discardGrid, resetGrid, choosePeriod } from './definition-grid.js';
 const sections = {
   School: [['School identity', null], ['Catalog', null], ['Advanced Preferences', 'softConstraintOverrides']],
   Grid: [['Periods', 'periods'], ['Reservations', 'reservedPeriodIds']],
@@ -39,13 +41,16 @@ const el = (tag, text, className) => {
   return node;
 };
 
-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
+export function resetAuthoringSection(value = 'Review') { section = value; resetBrowsers(); resetFormControls(); draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
 
 export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
+  const active = document.activeElement;
+  const focus = host.contains(active) && active.id ? { id: active.id, start: active.selectionStart, end: active.selectionEnd } : null;
+  beginFormRender();
   const draft = snapshot.workspace.definitionDraft;
   const definition = draft.definition;
   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
+  if (draftIdentity !== identity) { resetBrowsers(); resetFormControls(); draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
   const rerender = () => actions.render(snapshot);
   const save = async () => {
@@ -98,9 +103,10 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   if (saveError) { const error = el('p', saveError, 'error'); error.id = 'school-save-error'; error.setAttribute('role', 'alert'); host.append(error); }
   const sourceState = draft.sourceState || (snapshot.acceptedTimetable ? 'ACCEPTED_BASELINE' : 'INITIAL_DRAFT');
   host.append(el('p', `Draft • Source: ${sourceState} • Catalog ${definition.catalogVersion} • ${snapshot.acceptedTimetable ? 'Current remains unchanged' : 'No Current timetable'}`, 'authoring-identity'));
-  host.append(el('p', `Source identity: ${draft.sourceDocument?.school?.displayName || draft.sourceDocument?.initialDefinition?.displayName || draft.sourceDocument?.acceptedBaseline?.definition?.displayName || '(new school)'} • ${draft.sourceDocument?.definitionRevision || '(no source revision)'}`, 'authoring-identity'));
-  if (draft.draftRevision) host.append(el('p', `Saved revision: ${draft.draftRevision}`, 'authoring-revision'));
-  host.append(el('p', 'One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.'));
+  const draftDetails = el('details', undefined, 'authoring-draft-details'); draftDetails.append(el('summary', 'Draft details'));
+  draftDetails.append(el('p', `Source identity: ${draft.sourceDocument?.school?.displayName || draft.sourceDocument?.initialDefinition?.displayName || draft.sourceDocument?.acceptedBaseline?.definition?.displayName || '(new school)'} • ${draft.sourceDocument?.definitionRevision || '(no source revision)'}`, 'authoring-identity'));
+  if (draft.draftRevision) draftDetails.append(el('p', `Saved revision: ${draft.draftRevision}`, 'authoring-revision'));
+  draftDetails.append(el('p', 'One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.')); host.append(draftDetails);
   if (narrow) host.append(el('p', 'Read-only inspection. Editing requires a wider view (more than 700 CSS px).', 'narrow-banner'));
   const issues = snapshot.definitionReview?.issues || draft.issues || [];
   host.append(el('p', `${definition.subjects?.length || 0} subjects • ${definition.teachers?.length || 0} teachers • ${definition.cohorts?.length || 0} classes • ${definition.rooms?.length || 0} rooms • ${definition.periods?.length || 0} periods • ${definition.lessons?.length || 0} occurrences`));
@@ -158,9 +164,10 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
         const destinations={Subject:'Subjects',Teacher:'Teachers',Cohort:'Classes',Room:'Rooms',Period:'Grid',Lesson:'Occurrence details',RoomAssignment:'Room policies',Preference:'Preferences',Requirement:'Weekly requirements',Series:'Weekly requirements',School:'School','Editing context':'Weekly requirements'};
         if(!destinations[type]){reviewNotice=`${type} ${id}: no editable record for this saved change. Review refreshed.`;section='Review';actions.render(latest);return;}
         if(latest.version!==version){reviewNotice=`Saved review changed from version ${version} to ${latest.version}. Review the refreshed item before editing.`;section='Review';actions.render(latest);return;}
-        const choices={Subject:chooseSubject,Teacher:chooseTeacher,Cohort:chooseClass,Room:chooseRoom,RoomAssignment:choosePolicy,Preference:choosePreference};if(choices[type])choices[type](latest,id);else if(type==='Lesson')chooseOccurrences([id]);else if(type==='Requirement'||type==='Series')chooseRequirement(id);
+        const choices={Subject:chooseSubject,Teacher:chooseTeacher,Cohort:chooseClass,Room:chooseRoom,RoomAssignment:choosePolicy,Preference:choosePreference};if(choices[type])choices[type](latest,id);else if(type==='Lesson')chooseOccurrences([id],field);else if(type==='Requirement'||type==='Series')chooseRequirement(id);
+        if(type==='Period')choosePeriod(id);
         reviewNotice=null;section=destinations[type];actions.render(latest);
-        requestAnimationFrame(()=>{if(type==='Period'){const row=[...document.querySelectorAll('.grid-period-row')].find(row=>row.dataset.periodId===id); row?.scrollIntoView({block:'center'}); row?.querySelector(`[data-field="${field}"]`)?.focus();}const prefixes={Subject:'subject',Teacher:'teacher',Cohort:'cohort',Room:'room',RoomAssignment:'policy',Preference:'preference'};document.getElementById(`${prefixes[type]}-${field}`)?.focus();});
+        requestAnimationFrame(()=>{if(type==='Period'){const row=[...document.querySelectorAll('.grid-period-row')].find(row=>row.dataset.periodId===id); row?.scrollIntoView({block:'center'}); row?.querySelector(`[data-field="${field}"]`)?.focus();}const prefixes={Subject:'subject',Teacher:'teacher',Cohort:'class',Room:'room',RoomAssignment:'room-policy',Lesson:'occurrence',Preference:'preference'};focusDefinitionField(prefixes[type],type==='RoomAssignment'&&['target','allowedRoomIds','useHomeRoom'].includes(field)?'target':field);});
       } catch(failure){reviewNotice=`Saved review could not refresh: ${failure.message}. No record was opened.`;section='Review';actions.render(snapshot);}
     }) });
   } else {
@@ -185,6 +192,12 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
   }
   if (!['Review','Source restoration'].includes(section)) { const restore = el('button', 'Restore source values'); restore.type = 'button'; restore.addEventListener('click', () => leave(() => { section = 'Source restoration'; rerender(); })); content.append(restore); }
   host.append(content);
+  if (focus) requestAnimationFrame(() => {
+    const control = document.getElementById(focus.id);
+    if (!control || control.disabled || !control.getClientRects().length || document.querySelector('dialog[open]')) return;
+    control.focus({ preventScroll: true });
+    if (focus.start !== null && ['text', 'search'].includes(control.type)) control.setSelectionRange(focus.start, focus.end);
+  });
 }
 
 const fieldNames = {

@@ -1,0 +1,1 @@
+Attempt interrupted before any durable write: native checkbox reset under Save/Discard/Stay means Playwright uncheck() wrongly expects immediate changed state. Use click() and assert the explicit guard outcome. Original before/after assertions retained in repeat2.

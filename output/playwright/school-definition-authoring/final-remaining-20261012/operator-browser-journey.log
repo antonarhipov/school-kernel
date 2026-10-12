@@ -1,0 +1,6 @@
+### Result
+{"verdict":"PASS","version":238,"state":"ACCEPTED_BASELINE","errors":[]}
+### Ran Playwright code
+```js
+await (async page=>{const errors=[];page.on("pageerror",e=>errors.push(e.message));await page.reload();await page.locator("#open-authoring").waitFor();const saved=await(await page.request.get("http://127.0.0.1:8080/api/workspace")).json();if(saved.version!==238||saved.state!=="ACCEPTED_BASELINE")throw Error("operator state changed");await page.screenshot({path:"output/playwright/school-definition-authoring/final-remaining-20261012/operator-runtime.png"});if(errors.length)throw Error(errors.join(";"));return{verdict:"PASS",version:saved.version,state:saved.state,errors};})(page);
+```

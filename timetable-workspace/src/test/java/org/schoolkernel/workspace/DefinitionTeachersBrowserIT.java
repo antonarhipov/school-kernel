@@ -90,9 +90,13 @@ class DefinitionTeachersBrowserIT extends WorkbenchBrowserSupport {
     private void create(){workbench.open();open();teachers();}
     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
     private void nav(String section){workbench.page().locator("button[data-section='"+section+"']").click();}
-    private void teachers(){nav("Teachers");workbench.awaitText("Teacher name");}
+    private void expandForm() {
+        var groups = workbench.page().locator("#teacher-form details");
+        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
+    }
+    private void teachers(){nav("Teachers");workbench.awaitText("Teacher name"); expandForm(); }
     private void name(String value){workbench.page().locator("#teacher-displayName").fill(value);}
-    private void mode(String field,String value){workbench.page().locator("#teacher-"+field+"-mode").selectOption(value);}
+    private void mode(String field,String value){ expandForm(); workbench.page().locator("#teacher-"+field+"-mode").selectOption(value); expandForm(); }
     private void select(String field,String id,boolean value){workbench.page().locator("#teacher-form input[data-field='"+field+"'][data-reference-id='"+id+"']").setChecked(value);}
     private void clickSave(){workbench.page().locator("#save-teacher").click();}
     private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}

@@ -1,0 +1,358 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/anton/.sdkman/candidates/maven/current/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/anton/.sdkman/candidates/maven/current/lib/guava-33.2.0-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/3]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ kernel-contract ---
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [3/3]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 33 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 46 source files with javac [debug parameters release 25] to target/test-classes
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/test/java/org/schoolkernel/workspace/AcceptedInspectionBrowserIT.java: Some input files use or override a deprecated API.
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/test/java/org/schoolkernel/workspace/AcceptedInspectionBrowserIT.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.430 s -- in org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Running org.schoolkernel.workspace.KernelVerifierTest
+08:54:35.288 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=2d60f1f1-1df6-4ccf-8e0a-1e7d068b5b44 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=31
+08:54:35.329 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=9ca02f3c-d30e-41ba-9229-3c6ccd2c4087 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=2
+08:54:35.355 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=14027304-d457-49bf-803d-4bef625395e3 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=4
+08:54:35.374 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=d4b43816-b535-4ed6-8653-5a582fab263d kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=2
+08:54:35.388 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=df7e44bd-ba1f-4c5b-b3d9-78df874e6b02 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.185 s -- in org.schoolkernel.workspace.KernelVerifierTest
+[INFO] Running org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Running org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.078 s -- in org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Running org.schoolkernel.workspace.ArchitectureTest
+08:54:35.519 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.592 s -- in org.schoolkernel.workspace.ArchitectureTest
+[INFO] Running org.schoolkernel.workspace.KernelPlannerTest
+08:54:41.138 [ForkJoinPool.commonPool-worker-1] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=0d1e2104-e915-445a-be77-0707d19c29a6 runId=2e121dfb-1402-442d-8fcc-585c7adbf5ae kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2024 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.191 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=de164ce7-3f19-42f5-bdc5-242e4dd5b099 runId=88e344d0-6d68-4285-896d-38821998585d kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=10 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.195 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=e5e9d76d-2889-4e45-aa5f-6e0bb250636b runId=b0a33f3d-e06e-4f9b-a5c2-0a1aae155b31 kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=1 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+08:54:41.199 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=300b802b-9369-4c38-b41c-92e869c4695d runId=f11b3d2c-1553-4590-b352-78eba353bcc6 kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.201 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=aebbd827-ab38-492c-b29f-d3dc17e60051 runId=fbb8b55d-8686-4339-8286-b897ffa94f42 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.207 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=e79a7a75-bfa2-4594-b75a-0037a60eab33 runId=491b68bc-339d-434e-8b70-6e56ae1219be kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.214 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=05e32082-bd9c-478f-b403-a7e915801562 runId=5e26354d-5b36-4a05-b758-df0ddb6f87f3 kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.217 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=ca31d63c-936d-4111-8094-b557806eb4af runId=1fba67a7-e4ee-42ee-b75a-b77958ed299a kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.222 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=5787c916-d614-4566-80ae-4e9dea2ca786 runId=ec2f4447-cd76-456d-ad5d-21a7d0ca9444 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=3 configuredLimit=PT1M terminationReason=NONE feasible=false
+08:54:41.235 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=f952b339-eafd-4eb5-ae0c-7844ff8c14b2 runId=34b95862-1a08-4ff4-84c6-bd8607a690fb kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=6 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+08:54:41.239 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=6605e13d-0864-4044-a25f-e114a7593542 runId=f5f61f5a-37ff-4ca8-96b3-29590f0b4c00 kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+08:54:41.265 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=f6fd2b51-25bb-4e37-937c-7276e62524b9 runId=4d4a4990-1bbc-4ad2-8867-13b8f8a15562 kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=19 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+08:54:41.286 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=d1125c3b-a4c4-4598-819d-12674e484e41 runId=d5fd4f31-90a0-4a07-9693-074dc98a38c0 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=16 configuredLimit=PT1M terminationReason=NONE feasible=false
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.192 s -- in org.schoolkernel.workspace.KernelPlannerTest
+[INFO] Running org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 s -- in org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Running org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ timetable-workspace ---
+[INFO] Building jar: /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (default) @ timetable-workspace ---
+[INFO] Replacing main artifact /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DefinitionGridBrowserIT
+08:54:44.921 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+08:54:44.954 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+08:54:44.987 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+08:54:45.434 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+08:54:46.109 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=unix:///Users/anton/.docker/run/docker.sock
+08:54:46.113 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+08:54:46.145 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 29.8.0
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7933 MB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/anton/Library/Containers/com.docker.docker/Data/docker-cli.sock
+08:54:46.209 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Creating container for image: testcontainers/ryuk:0.14.0
+08:54:46.312 [main] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+08:54:46.541 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 is starting: b2c8461fe2f246c69a76029895dbbee24fe242589d289d887c380288b21d3c26
+08:54:46.858 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 started in PT0.649142S
+08:54:46.871 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+08:54:46.872 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+08:54:46.880 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+08:54:46.892 [main] INFO tc.postgres:18.6 -- Creating container for image: postgres:18.6
+08:54:46.927 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 is starting: a693a81450599e104596c71fd01ab093ca9838cc8e171f886d5a2e7e8f3690f3
+08:54:47.711 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 started in PT0.818583S
+08:54:47.716 [main] INFO tc.postgres:18.6 -- Container is started (JDBC URL: jdbc:postgresql://localhost:58734/browser_workspace?loggerLevel=OFF)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T08:55:07.201+03:00  INFO 67383 --- [           main] o.s.workspace.DefinitionGridBrowserIT    : Starting DefinitionGridBrowserIT using Java 25.0.1 with PID 67383 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T08:55:07.205+03:00  INFO 67383 --- [           main] o.s.workspace.DefinitionGridBrowserIT    : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T08:55:08.872+03:00  INFO 67383 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T08:55:08.885+03:00  INFO 67383 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T08:55:08.886+03:00  INFO 67383 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T08:55:08.924+03:00  INFO 67383 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1669 ms
+2026-10-12T08:55:09.149+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-12T08:55:09.293+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5a69b3cf
+2026-10-12T08:55:09.294+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-12T08:55:09.314+03:00  INFO 67383 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:58734/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T08:55:09.370+03:00  INFO 67383 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-12T08:55:09.373+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.015s)
+2026-10-12T08:55:09.384+03:00  INFO 67383 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-12T08:55:09.451+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-12T08:55:09.463+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create workspace aggregate"
+2026-10-12T08:55:09.489+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - add manual draft state"
+2026-10-12T08:55:09.503+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - add definition draft state"
+2026-10-12T08:55:09.514+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 3 migrations to schema "public", now at version v3 (execution time 00:00.016s)
+2026-10-12T08:55:11.371+03:00  INFO 67383 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 58772 (http) with context path '/'
+2026-10-12T08:55:11.415+03:00  INFO 67383 --- [           main] o.s.workspace.DefinitionGridBrowserIT    : Started DefinitionGridBrowserIT in 4.953 seconds (process running for 28.672)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/Users/anton/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-10-12T08:55:13.260+03:00  INFO 67383 --- [o-auto-1-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T08:55:13.261+03:00  INFO 67383 --- [o-auto-1-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T08:55:13.266+03:00  INFO 67383 --- [o-auto-1-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T08:55:36.638+03:00  INFO 67383 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 67383 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T08:55:36.640+03:00  INFO 67383 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T08:55:37.204+03:00  INFO 67383 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T08:55:37.205+03:00  INFO 67383 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T08:55:37.207+03:00  INFO 67383 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T08:55:37.225+03:00  INFO 67383 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 573 ms
+2026-10-12T08:55:37.298+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-12T08:55:37.327+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@440309c5
+2026-10-12T08:55:37.329+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-12T08:55:37.333+03:00  INFO 67383 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:58734/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T08:55:37.384+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.015s)
+2026-10-12T08:55:37.415+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T08:55:37.418+03:00  INFO 67383 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T08:55:37.803+03:00  INFO 67383 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 58823 (http) with context path '/'
+2026-10-12T08:55:37.810+03:00  INFO 67383 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 1.256 seconds (process running for 55.067)
+2026-10-12T08:55:37.833+03:00  INFO 67383 --- [o-auto-2-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T08:55:37.834+03:00  INFO 67383 --- [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T08:55:37.835+03:00  INFO 67383 --- [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-12T08:55:38.896+03:00  INFO 67383 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T08:55:38.900+03:00  INFO 67383 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T08:55:38.910+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-12T08:55:38.916+03:00  INFO 67383 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-10-12T08:55:38.918+03:00  INFO 67383 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T08:55:38.919+03:00  INFO 67383 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2026-10-12T08:56:38.670+03:00  INFO 67383 --- [o-auto-1-exec-7] o.schoolkernel.workspace.KernelVerifier  : correlationId=9f0c27f7-19b9-4b17-8672-fd439448c822 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1397
+[ERROR] Tests run: 7, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 118.8 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionGridBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionGridBrowserIT.uc3F1StaleRefreshPreservesUntouchedNewerRowsAndRequiresConflictChoice -- Time elapsed: 20.29 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 10000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 10000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("tuesday-1 displayName").setExact(true))
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.fill(FrameImpl.java:310)
+	at com.microsoft.playwright.impl.LocatorImpl.fill(LocatorImpl.java:274)
+	at com.microsoft.playwright.Locator.fill(Locator.java:3509)
+	at org.schoolkernel.workspace.DefinitionGridBrowserIT.uc3F1StaleRefreshPreservesUntouchedNewerRowsAndRequiresConflictChoice(DefinitionGridBrowserIT.java:190)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 10000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 10000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("tuesday-1 displayName").setExact(true))
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 6 more
+
+[ERROR] org.schoolkernel.workspace.DefinitionGridBrowserIT.uc3InvalidRowsCompleteDiagnosticsCancellationAndResponsiveUnsavedNavigation -- Time elapsed: 21.61 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 10000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 10000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#grid-form .grid-period-row[data-period-id='monday-1'] [data-field='order']")
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.inputValueImpl(FrameImpl.java:510)
+	at com.microsoft.playwright.impl.FrameImpl.inputValue(FrameImpl.java:501)
+	at com.microsoft.playwright.impl.LocatorImpl.inputValue(LocatorImpl.java:425)
+	at com.microsoft.playwright.Locator.inputValue(Locator.java:4329)
+	at org.schoolkernel.workspace.DefinitionGridBrowserIT.uc3InvalidRowsCompleteDiagnosticsCancellationAndResponsiveUnsavedNavigation(DefinitionGridBrowserIT.java:74)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 10000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 10000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#grid-form .grid-period-row[data-period-id='monday-1'] [data-field='order']")
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 7 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   DefinitionGridBrowserIT.uc3F1StaleRefreshPreservesUntouchedNewerRowsAndRequiresConflictChoice:190 » Timeout Error {
+  message='Timeout 10000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 10000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("tuesday-1 displayName").setExact(true))
+
+[ERROR]   DefinitionGridBrowserIT.uc3InvalidRowsCompleteDiagnosticsCancellationAndResponsiveUnsavedNavigation:74 » Timeout Error {
+  message='Timeout 10000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 10000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-16018877474812101611/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#grid-form .grid-period-row[data-period-id='monday-1'] [data-field='order']")
+
+[INFO] 
+[ERROR] Tests run: 7, Failures: 0, Errors: 2, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default) @ timetable-workspace ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.549 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  1.675 s]
+[INFO] School Timetable Operations Workspace .............. FAILURE [02:19 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:22 min
+[INFO] Finished at: 2026-10-12T08:56:43+03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

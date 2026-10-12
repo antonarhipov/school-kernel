@@ -1,3 +1,5 @@
+import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable, availabilitySummary } from './definition-form-controls.js';
+import { renderEntityBrowser } from './definition-browser.js';
 let working;
 let busy = false;
 let error;
@@ -49,8 +51,12 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
   else mergeNewer(snapshot);
   if (busy) status.textContent = 'Saving… Working room values are not yet durable.';
   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved rooms.' : 'Unsaved — Working room differs from the saved draft.';
+  const browser = renderEntityBrowser(host, snapshot, { collection: 'rooms', ownerType: 'Room', singular: 'Room', plural: 'Rooms', selectedId: working.originalId, narrow, busy,
+    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
+    onAdd: () => leave(latest => { select(latest, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('room-displayName')?.focus()); }) });
+  host = browser.detail;
   if (narrow) {
-    for (const item of definition.rooms) {
+    for (const item of definition.rooms.filter(row => row.id === browser.selectedId)) {
       const block = el('section'); block.append(el('h4', item.displayName || item.id));
       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
       if (!Object.hasOwn(item, 'availablePeriodIds')) block.append(el('p', 'Availability: All declared periods (omitted).'));
@@ -58,13 +64,6 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
     }
     if (!definition.rooms.length) host.append(el('p', 'No saved rooms.')); return;
   }
-  const list = el('div'); list.className = 'actions';
-  for (const item of definition.rooms) {
-    const button = el('button', `Edit room: ${item.displayName || item.id}`); button.type = 'button'; button.disabled = busy; button.dataset.roomId = item.id;
-    button.addEventListener('click', () => leave(latest => { select(latest, item.id); actions.render(latest); })); list.append(button);
-  }
-  const add = el('button', 'Add room', 'add-room'); add.type = 'button'; add.disabled = busy;
-  add.addEventListener('click', () => leave(latest => { select(latest); actions.render(latest); })); list.append(add); host.append(list);
   const form = el('form', undefined, 'room-form'); form.className = 'definition-entity-form'; form.noValidate = true;
   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working room differs from the saved draft.'; document.querySelector('#room-save-error')?.remove(); };
   for (const [field, label] of [['displayName', 'Room name'], ['id', working.originalId ? 'Room identifier (read-only)' : 'Room identifier suggestion / advanced override']]) {
@@ -93,7 +92,11 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
     const values = Array.isArray(working.item[field]) ? working.item[field] : [];
     if (Object.hasOwn(working.item, field) && !Array.isArray(working.item[field])) block.append(el('p', `Saved invalid selection: ${JSON.stringify(working.item[field])}. Retained until you explicitly choose a corrected selection.`));
     if (!rows.length) block.append(el('p', field === 'capabilityIds' ? 'No existing capability tokens. Enter any valid token below.' : 'No declared periods. Configure the weekly grid before choosing periods.'));
-    for (const row of rows) {
+    if (field === 'availablePeriodIds' || field === 'undesirablePeriodIds') appendPeriodGrid(block, definition, field, 'room', label, values, busy || !explicit, (id, checked) => {
+      const old = Array.isArray(working.item[field]) ? working.item[field] : [];
+      working.item[field] = old.filter(value => value !== id); if (checked) working.item[field].push(id); changed();
+    });
+    else for (const row of rows) {
       const wrapper = el('label'), input = el('input'); input.type = 'checkbox'; input.dataset.field = field; input.dataset.referenceId = row.id;
       input.checked = values.includes(row.id); input.disabled = busy || !explicit;
       const title = field === 'capabilityIds' ? `${row.displayName || row.id} (${row.id})` : `${row.displayName || row.id} (${row.id}) • ${row.weekday} ${row.order}${definition.reservedPeriodIds?.includes(row.id) ? ' • Reserved' : ''}`;
@@ -103,7 +106,7 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
     const known = new Set(rows.map(row => row.id)), unresolved = values.filter(value => !known.has(value));
     const wrapper = el('label', field === 'capabilityIds' ? 'Additional capability tokens (comma-separated)' : `Additional or unresolved ${label.toLowerCase()} identifiers (comma-separated)`), extra = el('input', undefined, `room-${field}-extra`);
     extra.value = unresolved.map(value => typeof value === 'string' ? value : JSON.stringify(value)).join(', '); extra.disabled = busy || !explicit;
-    extra.addEventListener('input', () => { const selected = Array.isArray(working.item[field]) ? working.item[field].filter(value => known.has(value)) : []; working.item[field] = [...selected, ...extra.value.split(',').map(value => value.trim()).filter(Boolean)]; changed(); }); wrapper.append(extra); block.append(wrapper); form.append(block);
+    extra.addEventListener('input', () => { const selected = Array.isArray(working.item[field]) ? working.item[field].filter(value => known.has(value)) : []; working.item[field] = [...selected, ...extra.value.split(',').map(value => value.trim()).filter(Boolean)]; changed(); }); wrapper.append(extra); block.append(wrapper); if (field === 'capabilityIds') makeChecklistSearchable(block, label); form.append(block);
   }
   if (working.conflicts.length) {
     const block = el('section', undefined, 'room-conflicts'); block.className = 'notice'; block.append(el('h4', 'Newer saved fields conflict with working edits'), el('p', 'Untouched fields use the newer saved values. Choose explicitly before retrying.'));
@@ -120,6 +123,7 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
   form.addEventListener('submit', event => { event.preventDefault(); saveRoom(snapshot, actions); });
   if (error) { const alert = el('p', error, 'room-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
     const refresh = el('button', 'Review newer saved draft for retry', 'room-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
+  enhanceDefinitionForm(form, { prefix: 'room', ownerType: 'Room', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'availability', title: 'Room availability', fields: ['availablePeriodIds'], describe: availabilitySummary }], referenceFields: [] });
   host.append(form);
   if (working.originalId) {
     const id = working.originalId, effects = el('section', undefined, 'room-effects'); effects.append(el('h4', 'Saved room effects'));

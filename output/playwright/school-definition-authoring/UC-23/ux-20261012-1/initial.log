@@ -1,0 +1,6 @@
+### Result
+{"title":"Editing teacher: Siiri Aiaste","groups":["Availability and undesirable periodsAll periods (including new periods)"],"errors":0}
+### Ran Playwright code
+```js
+await (async page => { await page.locator("button[data-section=Teachers]").click(); await page.locator("#teacher-form").waitFor(); await page.evaluate(()=>window.scrollTo(0,0)); await page.screenshot({path:"output/playwright/school-definition-authoring/UC-23/ux-20261012-1/01-teachers-compact.png",fullPage:true}); return {title:await page.locator(".definition-editor-title").innerText(),groups:await page.locator(".definition-settings-group summary").allTextContents(),errors:await page.locator(".definition-editor-issues").count()}; })(page);
+```

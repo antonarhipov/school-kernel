@@ -1,0 +1,1627 @@
+diff --git a/spec/school-definition-authoring/spec.md b/spec/school-definition-authoring/spec.md
+index e4bd4de..baa1ef6 100644
+--- a/spec/school-definition-authoring/spec.md
++++ b/spec/school-definition-authoring/spec.md
+@@ -79,6 +79,13 @@ The proposal's decisions remain in force. Smaller choices are resolved as follow
+ | UC-18 | Abandon seeded repair and resume authoring | School timetable administrator | Requires UC-16 |
+ | UC-19 | Discard authoring and return to its source | School timetable administrator | Requires UC-1 |
+ | UC-20 | Find the supported route for a teacher change | School timetable administrator | None |
++| UC-21 | Find and select definition records at school scale | School timetable administrator | Requires UC-1 |
++| UC-22 | Find and compare weekly teaching requirements | School timetable administrator | Requires UC-1 |
++| UC-23 | Edit definition settings with concise, readable forms | School timetable administrator | Requires UC-1 |
++| UC-24 | Inspect and refine the weekly grid spatially | School timetable administrator | Requires UC-1 |
++| UC-25 | Find and understand hard room policies | School timetable administrator | Requires UC-1 |
++| UC-26 | Select and customize occurrences at school scale | School timetable administrator | Requires UC-1 |
++| UC-27 | Understand and tune ordinary scheduling preferences | School timetable administrator | Requires UC-1 |
+ 
+ The relationships express available actor outcomes, not a prescribed screen order. An imported valid definition can
+ finish without using every editor. UC-16 is primary because its successful postcondition supplies the verified
+@@ -1533,3 +1540,287 @@ No product decision is deferred to an unavailable stakeholder. Existing local wo
+ available to exercise the declared boundaries. Runtime verification or walkthrough evidence that cannot be obtained
+ is a delivery/convergence limitation, not permission to weaken a use-case guarantee or claim approval. Technical
+ rules and implementation are subsequent stages and must not choose new product behavior.
++
++
++## UC-21 - Find and select definition records at school scale
++
++- Goal: Locate and edit a particular subject, teacher, class, or room without scanning a cloud of action buttons.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator enters Subjects, Teachers, Classes, or Rooms.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator enters a collection and sees a searchable, naturally sorted list beside a single editor, a count,
++   clearly selected record, stable identifiers beneath names, and one collection-specific Add action.
++2. The administrator searches by name or identifier, optionally filters teachers by qualification, rooms by capability,
++   or any collection by issues, and browses bounded pages of results.
++3. The administrator selects a record and sees its name and identifier above its editor, or creates a new record.
++4. The administrator explicitly saves through the existing entity use case. The selected record, search, filters, page,
++   and list scroll position remain when the editor is rendered again or another section is visited and returned to.
++
++### Extensions
++
++- 2a. If no records match, the system explains that filters can be changed and retains the open form; resume at step 2.
++- 3a. If another record or Add is requested with working edits, Save and continue, Discard working edits, and Stay have
++  the existing form-state meanings. Failed save retains working values and the current editor; resume at step 3.
++- 3b. At widths at most 700 CSS px, search, filters, paging and selection inspect saved records only; mutation actions
++  are absent and any desktop working form remains intact when widening; resume at step 2.
++
++### Guarantees
++
++- G1. Browsing never changes saved definition, version, source, Current, identifiers, omissions or exception intent.
++  Filtering never selects another record implicitly or discards working values; an open record outside results is named.
++- G2. Search ignores case and diacritics; sorting handles numeric class names. Duplicate names are distinguished by ID.
++  Subject rows summarize configured constraints; teacher rows show qualifications and weekly load; class rows show size,
++  curator and home room; room rows show capacity and capabilities. Issue badges distinguish blockers and advisories.
++- G3. Keyboard users can reach search, filters, Add, results and editor; arrow keys navigate results and Enter selects.
++  Focus is visible, selection is announced, counts and empty states are readable, and long names do not overflow.
++- G4. The new browsing presentation obeys UC-1 G4–G7 and does not weaken UC-4–UC-7 save, stale-conflict or identity rules.
++
++### Postconditions
++
++- Success: The intended record is selected or a new record is ready for explicit editing.
++- Minimal guarantee: Working edits and durable state remain unchanged by browsing or a cancelled selection.
++
++## UC-22 - Find and compare weekly teaching requirements
++
++- Goal: Locate a requirement by teaching context and compare weekly counts and exceptions.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator enters Weekly requirements.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator sees a bounded, searchable requirements table showing class, subject, teacher, lessons per week,
++   exception count and issues. Human-readable names lead; series IDs distinguish otherwise identical requirements.
++2. The administrator searches or filters by class, subject, teacher or issues, and selects a requirement.
++3. The system presents the selected requirement's editor, retaining the table context.
++4. The administrator previews and explicitly saves through UC-8; selection and browsing context remain available.
++
++### Extensions
++
++- 1a. Mixed or missing teacher settings and invalid counts are shown explicitly without guessing values; resume at step 2.
++- 2a. Empty results retain the open working form and explain how to change filters; resume at step 2.
++- 2b. Unsaved selection or Add uses the existing Save/Discard/Stay guard; failed saves retain the editor; resume at step 2.
++- 3a. Narrow screens use searchable saved inspection, preserve desktop working edits, and expose no mutations; resume at step 2.
++
++### Guarantees
++
++- G1. UC-21 G1 and G3 apply to browsing. Teacher filtering also finds teachers on individual occurrences; exceptions and
++  imported mixed settings are never silently collapsed into a guessed common value.
++- G2. Count changes, cancellations, explicit exception intent, zero-count/incomplete work, stable occurrence identity,
++  ungrouped lessons, previews, source and Current retain every UC-8 guarantee.
++- G3. Wide and narrow results remain readable without page-level horizontal overflow. Selection and search survive save
++  and section round trips; result count reports the filter scope. At most 25 result rows are rendered per page.
++
++### Postconditions
++
++- Success: The intended requirement is open with its class, subject, teacher, count, exceptions and issues identified.
++- Minimal guarantee: Browsing and cancelled edits preserve all saved and working values.
++
++## UC-23 - Edit definition settings with concise, readable forms
++
++- Goal: Understand and change common settings without traversing technical metadata and long period checklists.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator edits a definition entity or weekly requirement.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator sees school name, saved/unsaved state and issue counts prominently; revision/source metadata is
++   available in Draft details. The current editor identifies its record and presents common fields first.
++2. The administrator selects class, subject, teacher or home-room references by searchable names, with stable IDs
++   available and unresolved saved identifiers explicitly retained and marked.
++3. The administrator edits teacher/class/room availability or undesirable periods in a weekday-by-period grid with
++   labelled cells; All periods and Selected periods remain distinct. Existing reservations and times are visible.
++4. The administrator expands scheduling settings or locks as needed. Collapsed sections summarize configured values;
++   sections containing issues open automatically. Field issues are linked from an editor summary.
++5. The administrator uses editor-local save/discard actions and status, available in a sticky action area, and saves
++   through the existing entity or preview operation.
++
++### Extensions
++
++- 2a. An unresolved or unsupported saved value stays visible and editable as explicit incomplete work; resume at step 2.
++- 4a. Validation or transport failure identifies the field or operation, retains working values, and offers correction
++  or retry; resume at step 2. Collapsed groups containing issues open and error navigation reaches the affected control.
++- 5a. On a narrow screen the browser shows saved inspection only; desktop working forms return on widening; end.
++
++### Guarantees
++
++- G1. Name-based controls store the same stable references and preserve unresolved work. Availability grids preserve
++  omission versus explicit empty selection, exact IDs and unsupported/invalid values until deliberately corrected.
++- G2. Common versus advanced grouping changes presentation only. Supported constraints, catalog defaults, limits,
++  reservations, requirement scopes and exceptions remain available with their existing meanings.
++- G3. Save status/actions are near the current editor, keyboard focus is preserved across control changes, and sticky
++  areas do not cover focused inputs. Source/Current and lifecycle locks remain unchanged by presentation.
++- G4. The same real-browser, durable-state and responsive evidence boundary as UC-1 G7 applies.
++
++### Postconditions
++
++- Success: The administrator understands the selected settings and explicitly saves the intended values.
++- Minimal guarantee: Browsing, expanding, cancelled operations and failures never save or discard work implicitly.
++
++
++## UC-24 - Inspect and refine the weekly grid spatially
++
++- Goal: Understand declared slots, reservations and bell times while editing one period at a time.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator inspects or edits the corresponding definition settings.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator enters Grid and sees all declared slots in a weekday-by-order overview, including times, reservation membership and saved issues.
++2. The administrator selects a slot and edits its name, weekday/order, optional times or reservation in one labelled inspector; other working rows remain intact.
++3. The administrator reviews the complete grid operation, including generated additions and timing/availability impacts, and explicitly saves through UC-3.
++
++### Extensions
++
++- 1a. An empty grid offers generation; irregular, duplicate or invalid slots remain represented and inspectable; resume at step 2.
++- 2a. Narrow inspection uses saved values only and preserves desktop working rows; end.
++- 3a. Cancel, invalid work or failed/stale save retains every UC-3 outcome and working value; resume at step 2.
++
++### Guarantees
++
++- G1. An overview selection never saves, discards or reorders values; the grid save remains atomic across all working rows and reservations.
++- G2. Only one editable period inspector is rendered. Generation, review, reservation omission versus explicit membership, invalid/unresolved values and source/Current retain UC-3 fidelity.
++- G3. The overview has labelled keyboard-operable slots, visible selection, linked saved issues and no page-level overflow at wide/narrow widths. Actions/status are local and focused controls remain clear.
++
++### Postconditions
++
++- Success: The administrator understands the selected settings and explicitly saves the intended values.
++- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
++
++
++## UC-25 - Find and understand hard room policies
++
++- Goal: Locate a scoped hard room rule and understand its target and matched population.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator inspects or edits the corresponding definition settings.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator enters Room policies and searches or filters a bounded browser by subject, teacher scope or issues; names lead and IDs distinguish rules.
++2. The administrator selects a policy and sees one editor with searchable subject/teacher references and an explicit target: allowed rooms or matched class home rooms.
++3. The administrator chooses target values, understands that matching policies intersect, and explicitly saves through UC-10; matched effects and saved issues remain available.
++
++### Extensions
++
++- 1a. Empty results retain working edits; an unavailable catalog offers the existing upgrade route; end.
++- 2a. Unresolved or invalid targets/references remain visible until explicitly corrected; resume at step 3.
++- 2b. Unsaved selection/Add invokes Save/Discard/Stay; failures retain the editor; resume at step 2.
++- 2c. Narrow saved inspection preserves desktop working edits and exposes no mutation; end.
++
++### Guarantees
++
++- G1. At most25 policy rows are rendered per page. Filters, selection and scroll survive saves and section round trips.
++- G2. Allowed-room selection is searchable and bounded; filtering never changes selected IDs. Exact target optional presence, invalid values, source/Current and UC-10 hard-intersection semantics remain intact.
++- G3. Field issues are linked, common fields use names, saved effects are expandable/bounded, and local sticky actions never obscure focused controls.
++
++### Postconditions
++
++- Success: The administrator understands the selected settings and explicitly saves the intended values.
++- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
++
++
++## UC-26 - Select and customize occurrences at school scale
++
++- Goal: Find an exact selected lesson population and customize it with explicit scope.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator inspects or edits the corresponding definition settings.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator searches and filters a bounded occurrence table by class, subject, teacher, series state or issues; rows show named context and exception counts.
++2. The administrator explicitly selects or deselects occurrences and sees the total selected population, including selections outside the filter/page; browsing alone never changes that selection.
++3. The administrator sees concise saved details and one selected-population form, with name pickers for references and expandable scheduling, locks, membership and rule transfers.
++4. The administrator previews exact before/after changes and explicitly saves through UC-9.
++
++### Extensions
++
++- 1a. Empty results preserve the selected population and working choices; resume at step 2.
++- 2a. Changing selection with unsaved choices invokes Save/Discard/Stay; failed saves retain choices; resume at step 2.
++- 3a. Narrow saved inspection has separate browsing selection and preserves all desktop choices; end.
++- 4a. Invalid/unsupported/grouping/conflict/failed/cancelled operations retain every UC-9 refusal and minimal guarantee; resume at step 3.
++
++### Guarantees
++
++- G1. At most25 occurrence rows are rendered per page. Named filters/IDs/exception indicators and selected-scope counts are readable and keyboard-operable.
++- G2. No select-all-across-hidden-results operation is introduced; only explicitly named occurrences are mutated. Exact exception intent, mixed fields, grouping, teaching/rule transfers and source/Current retain UC-9 semantics.
++- G3. Long saved details and teacher/rule information are bounded/expandable; supported fields remain reachable; no page overflow; local actions and field focus remain accessible.
++
++### Postconditions
++
++- Success: The administrator understands the selected settings and explicitly saves the intended values.
++- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
++
++
++## UC-27 - Understand and tune ordinary scheduling preferences
++
++- Goal: Understand the effect and limits of each ordinary quality preference before choosing its weight.
++- Primary actor: School timetable administrator
++- Supporting actors: Local durable workspace
++- Trigger: The administrator inspects or edits the corresponding definition settings.
++- Preconditions: A definition draft is open.
++- Relations:
++  - Requires: UC-1 supplies the draft
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The administrator sees readable preference names grouped by scheduling goal, saved default/override/disabled/invalid state and catalog availability.
++2. The administrator selects a preference and reads its effect, a concrete scheduling example, how penalty units are counted, and where relevant class or occurrence settings come from.
++3. The administrator compares a proposed default or explicit weight with the saved choice and sees an illustrative weighted-penalty calculation; the explanation states that higher weights trade off ordinary penalties and do not guarantee outcomes.
++4. The administrator explicitly saves through UC-11 and sees effective weight and validation beside the editor.
++
++### Extensions
++
++- 1a. Unsupported saved overrides or duplicate/invalid weights stay visible as issues; a newer catalog setting offers the existing upgrade route; end.
++- 3a. Invalid proposed work has a correction message without an invented effective weight and remains saveable as supported incomplete work; resume at step 3.
++- 3b. Narrow saved inspection preserves desktop working choices, with no save controls; end.
++- 4a. Unsaved navigation, stale conflicts and failed writes retain all UC-11 guarantees and working values; resume at step 3.
++
++### Guarantees
++
++- G1. Exactly the supported ordinary preferences remain configurable. Default omission, explicit zero, explicit one and invalid entered work remain distinct; source/Current/hard feasibility/stability ordering are unchanged.
++- G2. Explanations match actual gap blocks, same-day series count, additive undesirability, preferred-room fallback, class daily-spread target and preferred start-slot behavior. Examples are labelled illustrative, not a solver forecast.
++- G3. Human names lead, technical IDs are secondary, related authoring settings are named, issues link to controls, and keyboard/responsive/local-save behavior follows UC-23.
++
++### Postconditions
++
++- Success: The administrator understands the selected settings and explicitly saves the intended values.
++- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
+diff --git a/spec/school-definition-authoring/status.md b/spec/school-definition-authoring/status.md
+index 0ddc40c..77ac962 100644
+--- a/spec/school-definition-authoring/status.md
++++ b/spec/school-definition-authoring/status.md
+@@ -2,10 +2,10 @@
+ 
+ ## Current
+ 
+-- Use case: none (all 20 complete)
+-- Status: APPROVED
+-- Feature: IMPLEMENTED (20/20 approved, legacy discard correction verified)
+-- Next eligible: none
++- Use case: UC-25
++- Status: IN_PROGRESS
++- Feature: Remaining-editor UI refinements; UC-1–UC-23 approved
++- Next eligible: UC-26
+ 
+ ## Progress
+ 
+@@ -31,6 +31,9 @@
+ | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
+ | UC-19 | APPROVED | UC-1 | `e90d7a5` + correction `726774d` / [checkpoint](checkpoints/UC-19.md) | [original PASS](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md), [legacy correction PASS](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-4/README.md) |
+ | UC-20 | APPROVED | none | `1090151` / [checkpoint](checkpoints/UC-20.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md) |
++| UC-21 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-21.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-21/ux-20261012-1/README.md) |
++| UC-22 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-22.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-22/ux-20261012-1/README.md) |
++| UC-23 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-23.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-23/ux-20261012-5/README.md) |
+ 
+ ## Technical decision pass
+ 
+@@ -411,3 +414,38 @@ User-reported `definition-discard.js:12` uncaught school access reproduced on an
+ ### 2026-10-12 — UC-19 legacy correction automatic approval
+ 
+ Submission `726774d`, [complete repeat4 PASS ledger](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-4/README.md).33 unit/architecture +8 discard/persistence cases PASS. Exact actual MVK legacy source restored/reloaded in isolated copy v233→234; modern accepted, initial,EMPTY and explicit null-source refusal PASS;8 inspected screenshots, zero uncaught errors. Actual8080 confirmation/cancel preserves entire operator v233; corrected local runtime retained, user's original browser/working values untouched. Source revision is independently kernel-verified, not authoring JSON hash; initial/canonical-order and refusal regressions strengthened. Failed/interrupted attempts immutable. All20 approved, no outstanding handoff/blocker; original final regression coverage remains applicable and new affected checks PASS.
++
++
++### 2026-10-12 — authorized UI refinements
++
++User accepted the review recommendations and requested implementation. Added UC-21–UC-23 to the existing specification; UC-1–UC-20 approvals/evidence remain intact. Base `b1fd27daad4b7866a6e50ba9f18273b7ea1d5bc2`; pre-existing untracked `.agents/skills/antfu-web-design-guidelines/` is unrelated and preserved. UC-21 IN_PROGRESS; UC-22/23 NOT_STARTED. Requires UC-1 is satisfied. Narrow inspection remains read-only; no lifecycle/data-model change or arbitrary bulk editing.
++
++UC-21 PENDING_WALKTHROUGH: production-boundary administrator journey and filter supplement PASS in isolated18112; immutable source235 and exact saved236 recorded. Technical four-entity regression still running; approval waits for final result.
++
++### 2026-10-12 — UC-21 APPROVED; UC-22 started
++
++33 workspace unit/architecture +21 entity browser cases PASS. [Real copied-school journey/filter supplement and exact diff](../../output/playwright/school-definition-authoring/UC-21/ux-20261012-1/README.md): duplicate names/diacritics, bounded pages, qualification/capability/issues filters, natural class sorting, keyboard, Save/Stay, hidden open record, section round trips,390 read-only and working-value retention, full saved/source/Current comparison PASS. [Checkpoint](checkpoints/UC-21.md). Operator untouched. UC-22 IN_PROGRESS; UC-23 NOT_STARTED.
++
++### 2026-10-12 — UC-22 APPROVED; UC-23 started
++
++[182-requirement real-browser PASS and exact diff](../../output/playwright/school-definition-authoring/UC-22/ux-20261012-1/README.md);4 requirement browser cases +1 unit PASS. Scoped filtering, explicit preview/count save, canceled/aborted writes, original occurrence/source/Current fidelity, reload and1600/1280/700/390 no-overflow/read-only outcomes recorded. [Checkpoint](checkpoints/UC-22.md). UC-23 IN_PROGRESS.
++
++
++### 2026-10-12 — UC-23 final verification
++
++33 unit/architecture and22 affected browser cases PASS in final-repeat; corrected-focus repeat33+2 PASS. Preserved earlier case-sensitive reservation/test-hidden-ID failures and native-dialog setup interruption. Real attempt3 exposed queued-details expansion/focus race; synchronous expansion capture and detached-event guard added. Attempt4 behavioral PASS (237→245, source/Current exact), but visual inspection prompted concise class-reference help and bounded issue summary. Final changed-build complete walkthrough and focused regression running; approval awaits both.
++
++
++### 2026-10-12 — UI refinements complete, UC-23 APPROVED
++
++Final full repeat5 PASS: stable responsive/screenshots across all five tabs, keyboard picker and mode focus, exact invalid/unresolved field navigation/correction,50-slot grids, explicit saves245→253, complete definition restoration and source/Current/reload exact.33 unit/architecture +42 distinct browser regressions PASS across unaffected/corrected focused runs; final production-polish33+2 PASS. [Complete evidence/patch/runtime ledger](../../output/playwright/school-definition-authoring/UC-23/ux-20261012-5/README.md). Local8080 started with exact verified final package; complete operator saved235 unchanged, all five tabs checked in owned read-only browser, original user's browser untouched. No backend/schema changes. All23 approved, no handoff/blocker. Failed/superseded evidence retained; automatic approval only.
++
++
++### 2026-10-12 — remaining-editor refinements authorized
++
++User requested rework of Grid, Room policies, Occurrence details and preference explanations/UI. Added UC24–27 with existing explicit-save and fidelity boundaries; prior23 approvals and all current work preserved. Base b1fd27d plus immutable UC23 submission patch. Unrelated untracked design-guidelines skill preserved. Preference explanations grounded in actual kernel penalty functions. UC24 IN_PROGRESS;25–27 NOT_STARTED.
++
++
++### 2026-10-12 — UC24 APPROVED; UC25 started
++
++33 unit/architecture+7 grid+5 review cases PASS; full real copied50-slot grid journey2 PASS255→257, exact source/Current/restoration/reload, one inspector, complete atomic preview/generation/negative regression and responsive working retention. [Ledger/patch](../../output/playwright/school-definition-authoring/UC-24/remaining-20261012-2/README.md). Initial helper/VM interruptions retained and corrected without weakening values. UC25 IN_PROGRESS.
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-cohorts.js b/timetable-workspace/src/main/resources/static/workspace/definition-cohorts.js
+index 93fe65f..295d255 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-cohorts.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-cohorts.js
+@@ -1,3 +1,5 @@
++import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable, availabilitySummary } from './definition-form-controls.js';
++import { renderEntityBrowser } from './definition-browser.js';
+ const parse = raw => /^-?\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? Number(raw) : raw;
+ const scalarDefaults = [['maxDailyLessonSpread', 'Preferred daily lesson spread', 4, '1'], ['maxDailyGaps', 'Maximum daily gaps', 5, '0'], ['latestStartSlot', 'Latest start slot', 6, 'unrestricted'], ['preferredLatestStartSlot', 'Preferred latest start slot', 6, '3'], ['dailyLessonSpreadLimit', 'Hard daily lesson spread', 7, 'unrestricted'], ['curatorTeacherId', 'Curator teacher', 8, 'none'], ['homeRoomId', 'Home room', 8, 'none']];
+ let working;
+@@ -53,8 +55,12 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
+   else mergeNewer(snapshot);
+   if (busy) status.textContent = 'Saving… Working class values are not yet durable.';
+   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved classes.' : 'Unsaved — Working class differs from the saved draft.';
++  const browser = renderEntityBrowser(host, snapshot, { collection: 'cohorts', ownerType: 'Cohort', singular: 'Class', plural: 'Classes', selectedId: working.originalId, narrow, busy,
++    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
++    onAdd: () => leave(latest => { select(latest, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('class-displayName')?.focus()); }) });
++  host = browser.detail;
+   if (narrow) {
+-    for (const item of definition.cohorts) {
++    for (const item of definition.cohorts.filter(row => row.id === browser.selectedId)) {
+       const block = el('section'); block.append(el('h4', item.displayName || item.id));
+       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
+       if (!Object.hasOwn(item, 'availablePeriodIds')) block.append(el('p', 'Availability: All declared periods (omitted).'));
+@@ -64,13 +70,6 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
+     }
+     if (!definition.cohorts.length) host.append(el('p', 'No saved classes.')); return;
+   }
+-  const list = el('div'); list.className = 'actions';
+-  for (const item of definition.cohorts) {
+-    const button = el('button', `Edit class: ${item.displayName || item.id}`); button.type = 'button'; button.disabled = busy; button.dataset.classId = item.id;
+-    button.addEventListener('click', () => leave(latest => { select(latest, item.id); actions.render(latest); })); list.append(button);
+-  }
+-  const add = el('button', 'Add class', 'add-class'); add.type = 'button'; add.disabled = busy;
+-  add.addEventListener('click', () => leave(latest => { select(latest); actions.render(latest); })); list.append(add); host.append(list);
+   const form = el('form', undefined, 'class-form'); form.className = 'definition-entity-form'; form.noValidate = true;
+   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working class differs from the saved draft.'; document.querySelector('#class-save-error')?.remove(); };
+   for (const [field, label] of [['displayName', 'Class name'], ['id', working.originalId ? 'Class identifier (read-only)' : 'Class identifier suggestion / advanced override']]) {
+@@ -110,7 +109,7 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
+     const choices = el('datalist', undefined, `class-${field}-choices`); input.setAttribute('list', choices.id);
+     for (const row of rows) { const option = el('option', row.displayName); option.value = row.id; choices.append(option); }
+     mode.addEventListener('change', () => { if (mode.value === 'default') delete working.item[field]; else working.item[field] = input.value; input.disabled = mode.value === 'default'; changed(); });
+-    input.addEventListener('input', () => { working.item[field] = input.value; changed(); }); wrapper.append(mode, input, choices, el('span', `Available links: ${rows.map(row => `${row.displayName} (${row.id})`).join(', ') || '(none configured)'}. Unresolved work can be saved with blockers.`));
++    input.addEventListener('input', () => { working.item[field] = input.value; changed(); }); wrapper.append(mode, input, choices, el('span', 'Search by name or identifier. Unresolved identifiers remain editable and can be saved with blockers.'));
+     if (definition.catalogVersion < 8) wrapper.append(el('span', 'Requires catalog 8. Enable a newer scheduling catalog in School (UC-12).'));
+     form.append(wrapper);
+   }
+@@ -129,13 +128,10 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
+     const values = Array.isArray(working.item[field]) ? working.item[field] : [];
+     if (Object.hasOwn(working.item, field) && !Array.isArray(working.item[field])) block.append(el('p', `Saved invalid selection: ${JSON.stringify(working.item[field])}. Retained until you explicitly choose a corrected selection.`));
+     if (!rows.length) block.append(el('p',  'No declared periods. Configure the weekly grid before choosing periods.'));
+-    for (const row of rows) {
+-      const wrapper = el('label'), input = el('input'); input.type = 'checkbox'; input.dataset.field = field; input.dataset.referenceId = row.id;
+-      input.checked = values.includes(row.id); input.disabled = busy || !explicit;
+-      const title = `${row.displayName || row.id} (${row.id}) • ${row.weekday} ${row.order}${definition.reservedPeriodIds?.includes(row.id) ? ' • Reserved' : ''}`;
+-      input.setAttribute('aria-label', `${label}: ${title}`); wrapper.append(input, document.createTextNode(title));
+-      input.addEventListener('change', () => { const old = Array.isArray(working.item[field]) ? working.item[field] : []; working.item[field] = old.filter(value => value !== row.id); if (input.checked) working.item[field].push(row.id); changed(); }); block.append(wrapper);
+-    }
++    appendPeriodGrid(block, definition, field, 'class', label, values, busy || !explicit, (id, checked) => {
++      const old = Array.isArray(working.item[field]) ? working.item[field] : [];
++      working.item[field] = old.filter(value => value !== id); if (checked) working.item[field].push(id); changed();
++    });
+     const known = new Set(rows.map(row => row.id)), unresolved = values.filter(value => !known.has(value));
+     const wrapper = el('label', `Additional or unresolved ${label.toLowerCase()} identifiers (comma-separated)`), extra = el('input', undefined, `class-${field}-extra`);
+     extra.value = unresolved.map(value => typeof value === 'string' ? value : JSON.stringify(value)).join(', '); extra.disabled = busy || !explicit;
+@@ -156,6 +152,7 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
+   form.addEventListener('submit', event => { event.preventDefault(); saveCohort(snapshot, actions); });
+   if (error) { const alert = el('p', error, 'class-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
+     const refresh = el('button', 'Review newer saved draft for retry', 'class-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
++  enhanceDefinitionForm(form, { prefix: 'class', ownerType: 'Cohort', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'scheduling', title: 'Scheduling constraints', fields: scalarDefaults.slice(0,5).map(row => row[0]), labels: Object.fromEntries(scalarDefaults.map(row => [row[0], row[1]])) }, { key: 'availability', title: 'Availability and undesirable periods', fields: ['availablePeriodIds', 'undesirablePeriodIds'], describe: availabilitySummary }], referenceFields: [['curatorTeacherId', 'teachers', 'Curator teacher'], ['homeRoomId', 'rooms', 'Home room']] });
+   host.append(form);
+   if (working.originalId) {
+     const id = working.originalId, effects = el('section', undefined, 'class-effects'); effects.append(el('h4', 'Saved class effects'));
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-editor.js b/timetable-workspace/src/main/resources/static/workspace/definition-editor.js
+index 14919aa..762fa02 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-editor.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-editor.js
+@@ -1,3 +1,5 @@
++import { resetBrowsers } from './definition-browser.js';
++import { beginFormRender, resetFormControls, focusDefinitionField } from './definition-form-controls.js';
+ import { renderDiscard, discardBusy } from './definition-discard.js';
+ import { renderFinish, finishBusy } from './definition-finish.js';
+ import { renderReview, resetReview } from './definition-review.js';
+@@ -12,7 +14,7 @@ import { chooseRoom, renderRooms, roomsDirty, saveRoom, discardRooms, resetRooms
+ import { chooseClass, renderClasses, classesDirty, saveCohort, discardClasses, resetClasses } from './definition-cohorts.js';
+ import { chooseTeacher, renderTeachers, teachersDirty, saveTeacher, discardTeachers, resetTeachers } from './definition-teachers.js';
+ import { chooseSubject, renderSubjects, subjectsDirty, saveSubject, discardSubjects, resetSubjects } from './definition-subjects.js';
+-import { renderGrid, gridDirty, saveGrid, discardGrid, resetGrid } from './definition-grid.js';
++import { renderGrid, gridDirty, saveGrid, discardGrid, resetGrid, choosePeriod } from './definition-grid.js';
+ const sections = {
+   School: [['School identity', null], ['Catalog', null], ['Advanced Preferences', 'softConstraintOverrides']],
+   Grid: [['Periods', 'periods'], ['Reservations', 'reservedPeriodIds']],
+@@ -39,13 +41,16 @@ const el = (tag, text, className) => {
+   return node;
+ };
+ 
+-export function resetAuthoringSection(value = 'Review') { section = value; draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
++export function resetAuthoringSection(value = 'Review') { section = value; resetBrowsers(); resetFormControls(); draftIdentity = null; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
+ 
+ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, actions) {
++  const active = document.activeElement;
++  const focus = host.contains(active) && active.id ? { id: active.id, start: active.selectionStart, end: active.selectionEnd } : null;
++  beginFormRender();
+   const draft = snapshot.workspace.definitionDraft;
+   const definition = draft.definition;
+   const identity = draft.openedRevision || draft.draftRevision || JSON.stringify(definition);
+-  if (draftIdentity !== identity) { draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
++  if (draftIdentity !== identity) { resetBrowsers(); resetFormControls(); draftIdentity = identity; schoolForm = null; saveError = null; resetGrid(); resetSubjects(); resetTeachers(); resetClasses(); resetRooms(); resetRequirements(); resetOccurrences(); resetPolicies(); resetPreferences(); resetCatalog(); resetRemoval(); resetRestoration(); resetReview(); reviewNotice = null; }
+   if (!schoolForm || !schoolForm.dirty) schoolForm = schoolValues(definition, draft);
+   const rerender = () => actions.render(snapshot);
+   const save = async () => {
+@@ -98,9 +103,10 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
+   if (saveError) { const error = el('p', saveError, 'error'); error.id = 'school-save-error'; error.setAttribute('role', 'alert'); host.append(error); }
+   const sourceState = draft.sourceState || (snapshot.acceptedTimetable ? 'ACCEPTED_BASELINE' : 'INITIAL_DRAFT');
+   host.append(el('p', `Draft • Source: ${sourceState} • Catalog ${definition.catalogVersion} • ${snapshot.acceptedTimetable ? 'Current remains unchanged' : 'No Current timetable'}`, 'authoring-identity'));
+-  host.append(el('p', `Source identity: ${draft.sourceDocument?.school?.displayName || draft.sourceDocument?.initialDefinition?.displayName || draft.sourceDocument?.acceptedBaseline?.definition?.displayName || '(new school)'} • ${draft.sourceDocument?.definitionRevision || '(no source revision)'}`, 'authoring-identity'));
+-  if (draft.draftRevision) host.append(el('p', `Saved revision: ${draft.draftRevision}`, 'authoring-revision'));
+-  host.append(el('p', 'One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.'));
++  const draftDetails = el('details', undefined, 'authoring-draft-details'); draftDetails.append(el('summary', 'Draft details'));
++  draftDetails.append(el('p', `Source identity: ${draft.sourceDocument?.school?.displayName || draft.sourceDocument?.initialDefinition?.displayName || draft.sourceDocument?.acceptedBaseline?.definition?.displayName || '(new school)'} • ${draft.sourceDocument?.definitionRevision || '(no source revision)'}`, 'authoring-identity'));
++  if (draft.draftRevision) draftDetails.append(el('p', `Saved revision: ${draft.draftRevision}`, 'authoring-revision'));
++  draftDetails.append(el('p', 'One definition draft is open. Planning, repair, manual editing, import, replacement, and clearing are locked until authoring is finished or discarded.')); host.append(draftDetails);
+   if (narrow) host.append(el('p', 'Read-only inspection. Editing requires a wider view (more than 700 CSS px).', 'narrow-banner'));
+   const issues = snapshot.definitionReview?.issues || draft.issues || [];
+   host.append(el('p', `${definition.subjects?.length || 0} subjects • ${definition.teachers?.length || 0} teachers • ${definition.cohorts?.length || 0} classes • ${definition.rooms?.length || 0} rooms • ${definition.periods?.length || 0} periods • ${definition.lessons?.length || 0} occurrences`));
+@@ -159,8 +165,9 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
+         if(!destinations[type]){reviewNotice=`${type} ${id}: no editable record for this saved change. Review refreshed.`;section='Review';actions.render(latest);return;}
+         if(latest.version!==version){reviewNotice=`Saved review changed from version ${version} to ${latest.version}. Review the refreshed item before editing.`;section='Review';actions.render(latest);return;}
+         const choices={Subject:chooseSubject,Teacher:chooseTeacher,Cohort:chooseClass,Room:chooseRoom,RoomAssignment:choosePolicy,Preference:choosePreference};if(choices[type])choices[type](latest,id);else if(type==='Lesson')chooseOccurrences([id]);else if(type==='Requirement'||type==='Series')chooseRequirement(id);
++        if(type==='Period')choosePeriod(id);
+         reviewNotice=null;section=destinations[type];actions.render(latest);
+-        requestAnimationFrame(()=>{if(type==='Period'){const row=[...document.querySelectorAll('.grid-period-row')].find(row=>row.dataset.periodId===id); row?.scrollIntoView({block:'center'}); row?.querySelector(`[data-field="${field}"]`)?.focus();}const prefixes={Subject:'subject',Teacher:'teacher',Cohort:'cohort',Room:'room',RoomAssignment:'policy',Preference:'preference'};document.getElementById(`${prefixes[type]}-${field}`)?.focus();});
++        requestAnimationFrame(()=>{if(type==='Period'){const row=[...document.querySelectorAll('.grid-period-row')].find(row=>row.dataset.periodId===id); row?.scrollIntoView({block:'center'}); row?.querySelector(`[data-field="${field}"]`)?.focus();}const prefixes={Subject:'subject',Teacher:'teacher',Cohort:'class',Room:'room',RoomAssignment:'policy',Preference:'preference'};focusDefinitionField(prefixes[type],field);});
+       } catch(failure){reviewNotice=`Saved review could not refresh: ${failure.message}. No record was opened.`;section='Review';actions.render(snapshot);}
+     }) });
+   } else {
+@@ -185,6 +192,12 @@ export function renderDefinitionEditor(host, snapshot, narrow, inspectCurrent, a
+   }
+   if (!['Review','Source restoration'].includes(section)) { const restore = el('button', 'Restore source values'); restore.type = 'button'; restore.addEventListener('click', () => leave(() => { section = 'Source restoration'; rerender(); })); content.append(restore); }
+   host.append(content);
++  if (focus) requestAnimationFrame(() => {
++    const control = document.getElementById(focus.id);
++    if (!control || control.disabled || !control.getClientRects().length || document.querySelector('dialog[open]')) return;
++    control.focus({ preventScroll: true });
++    if (focus.start !== null && ['text', 'search'].includes(control.type)) control.setSelectionRange(focus.start, focus.end);
++  });
+ }
+ 
+ const fieldNames = {
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-grid.js b/timetable-workspace/src/main/resources/static/workspace/definition-grid.js
+index 9328177..b5e0ab3 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-grid.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-grid.js
+@@ -1,13 +1,17 @@
++import { enhanceDefinitionForm } from './definition-form-controls.js';
+ const weekdays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+-const title = day => day[0] + day.slice(1).toLowerCase();
++const title = day => { const value = String(day ?? 'Unspecified'); return value.charAt(0) + value.slice(1).toLowerCase(); };
+ let working;
++let selectedPeriodId;
++let inspectedPeriodId;
+ let identity;
+ let preview;
+ let busy = false;
+ let error;
+ const el = (tag, text, id) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (id) n.id = id; return n; };
+-export function resetGrid() { working = null; identity = null; preview = null; error = null; }
++export function resetGrid() { working = null; identity = null; preview = null; error = null; selectedPeriodId = inspectedPeriodId = null; }
+ export function gridDirty() { return !!working?.dirty; }
++export function choosePeriod(id) { selectedPeriodId = id; }
+ export function discardGrid(definition) { working = values(definition); preview = null; error = null; }
+ const gridValues = definition => ({ periods: structuredClone(definition.periods), ...(Object.hasOwn(definition, 'reservedPeriodIds') ? { reservedPeriodIds: [...definition.reservedPeriodIds] } : {}) });
+ const values = (definition, version) => ({ ...gridValues(definition), base: gridValues(definition), baseVersion: version, conflicts: [], dirty: false });
+@@ -83,8 +87,11 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
+   if (identity !== nextIdentity) { identity = nextIdentity; working = null; preview = null; error = null; }
+   if (!working || !working.dirty) working = values(definition, snapshot.version);
+   else mergeNewer(definition, snapshot.version);
+-  host.append(el('p', 'Periods are explicit teaching slots. Reservations are separate from resource availability. Existing IDs stay fixed; removal requires guided dependency resolution.'));
+-  if (narrow) { renderRows(host, values(definition), true, status, definition); return; }
++  host.append(el('p', 'Periods are explicit teaching slots. Reservations are separate from teacher, class and room availability. Existing IDs stay fixed; removal requires guided dependency resolution.'));
++  if (narrow) { const grid = values(definition); renderGridOverview(host, grid, true, snapshot, actions, draft); renderRows(host, grid, true, status, definition, inspectedPeriodId); return; }
++  if (working.dirty) status.textContent = 'Unsaved — Working grid differs from the saved draft.';
++  if (busy) status.textContent = 'Reviewing or saving… Working grid is not yet durable.';
++  const form = el('form', undefined, 'grid-form'); form.className = 'definition-grid-form'; form.noValidate = true; form.addEventListener('submit', event => event.preventDefault()); host.append(form); host = form;
+   renderConflicts(host, snapshot, actions);
+   const generate = el('details'); generate.open = definition.periods.length === 0;
+   generate.append(el('summary', definition.periods.length ? 'Add generated slots (existing grid is preserved)' : 'Generate weekly grid'));
+@@ -131,21 +138,23 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
+     });
+     edited(status); actions.render(snapshot);
+   }); generate.append(add); host.append(generate);
+-  renderRows(host, working, false, status, definition);
++  renderGridOverview(host, working, false, snapshot, actions, draft);
++  renderRows(host, working, false, status, definition, selectedPeriodId);
+   const reservation = el('label', 'Reservation representation'), mode = el('select', undefined, 'grid-reservation-mode');
+   for (const [value, label] of [['default', 'No reservations (omitted)'], ['explicit', 'Explicit reservation membership']]) { const option = el('option', label); option.value = value; mode.append(option); }
+   mode.value = Object.hasOwn(working, 'reservedPeriodIds') ? 'explicit' : 'default'; mode.disabled = busy;
+   mode.addEventListener('change', () => { if (mode.value === 'default') delete working.reservedPeriodIds; else working.reservedPeriodIds = []; edited(status); actions.render(snapshot); });
+-  reservation.append(mode); host.append(reservation);
++  reservation.append(mode); const reservations = el('details', undefined, 'grid-reservation-details'); reservations.append(el('summary', `Reservation representation — ${Object.hasOwn(working, 'reservedPeriodIds') ? `${working.reservedPeriodIds.length} explicit memberships` : 'No reservations (omitted)'}`), reservation); host.append(reservations);
++  if (working.reservedPeriodIds?.some(id => !working.periods.some(row => row.id === id))) reservations.append(el('p', `Unresolved reservation IDs retained: ${working.reservedPeriodIds.filter(id => !working.periods.some(row => row.id === id)).join(', ')}.`));
+   const controls = el('div'); controls.className = 'actions';
+-  const review = el('button', 'Review grid operation', 'preview-grid'); review.disabled = busy;
++  const review = el('button', 'Review grid operation', 'preview-grid'); review.type = 'button'; review.disabled = busy;
+   review.addEventListener('click', async () => {
+     busy = true; error = null;
+     try { if (working.conflicts?.length) throw new Error('Resolve the newer saved field conflicts before reviewing.'); preview = await actions.grid(payload(), snapshot.version, true); }
+     catch (failure) { error = `No change was committed. ${failure.message} Working rows remain available.`; }
+     busy = false; actions.render(snapshot);
+   });
+-  const cancel = el('button', 'Cancel working grid edits', 'cancel-grid'); cancel.className = 'secondary'; cancel.disabled = busy;
++  const cancel = el('button', 'Cancel working grid edits', 'cancel-grid'); cancel.type = 'button'; cancel.className = 'secondary'; cancel.disabled = busy;
+   cancel.addEventListener('click', () => { discardGrid(definition); actions.render(snapshot); });
+   controls.append(review, cancel); host.append(controls);
+   if (error) { const alert = el('p', error, 'grid-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); host.append(alert);
+@@ -157,29 +166,58 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
+     for (const effect of preview.availabilityEffects) block.append(el('p', `${effect.displayName} (${effect.ownerId}): ${effect.periodId} — ${effect.effect}`));
+     renderImpacts(block, preview.timingImpacts);
+     for (const issue of preview.issues) block.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId} • ${issue.field}: ${issue.message}`));
+-    const save = el('button', 'Save reviewed grid', 'save-grid'); save.disabled = busy; save.addEventListener('click', () => saveGrid(snapshot, actions)); block.append(save); host.append(block);
++    const save = el('button', 'Save reviewed grid', 'save-grid'); save.type = 'button'; save.disabled = busy; save.addEventListener('click', () => saveGrid(snapshot, actions)); block.append(save); host.append(block);
+   }
+   renderImpacts(host, draft.gridTimingImpacts);
+-  for (const issue of draft.issues || []) if (issue.ownerType === 'Period' || issue.field === 'reservedPeriodIds') host.append(el('p', `Saved blocker: ${issue.ownerId} ${issue.field} — ${issue.message}`));
++  const issues = el('details'); issues.append(el('summary', 'Saved grid issues')); for (const issue of draft.issues || []) if (issue.ownerType === 'Period' || issue.field === 'reservedPeriodIds') { const link = el('button', `${issue.ownerId} ${issue.field} — ${issue.message}`); link.type = 'button'; link.addEventListener('click', () => { selectedPeriodId = issue.ownerId; actions.render(snapshot); requestAnimationFrame(() => document.querySelector(`.grid-period-row [data-field="${issue.field}"]`)?.focus()); }); issues.append(link); } if (issues.childNodes.length > 1) host.append(issues);
++  enhanceDefinitionForm(form, { prefix: 'grid', ownerType: 'School', item: working, draft: { ...draft, issues: [] }, status });
+ }
+-function renderRows(host, grid, readonly, status, definition) {
++function renderGridOverview(host, grid, narrow, snapshot, actions, draft) {
++  const picked = narrow ? inspectedPeriodId : selectedPeriodId;
++  const selected = grid.periods.find(row => row.id === picked)?.id || grid.periods[0]?.id;
++  if (narrow) inspectedPeriodId = selected; else selectedPeriodId = selected;
++  const wrap = el('section', undefined, 'grid-overview'); wrap.className = 'definition-grid-overview';
++  wrap.append(el('h4', 'Weekly teaching slots'), el('p', `${grid.periods.length} declared slots · ${(grid.reservedPeriodIds || []).length} reserved memberships. Select a slot to ${narrow ? 'inspect saved values' : 'edit it; all working rows save together'}.`));
++  const scroll = el('div'); scroll.className = 'definition-week-grid-wrap'; const table = el('table'); table.className = 'definition-slot-table';
++  const days = [...new Set(grid.periods.map(row => String(row.weekday ?? 'Unspecified')))].sort((a,b) => weekdays.indexOf(a) - weekdays.indexOf(b));
++  const orders = [...new Set(grid.periods.map(row => row.order))].sort((a,b) => new Intl.Collator(undefined,{numeric:true}).compare(String(a),String(b)));
++  const head = el('thead'), hr = el('tr'), corner = el('th','Slot');corner.scope='col';hr.append(corner);
++  for (const day of days) { const th = el('th', title(day)); th.scope='col';hr.append(th); }head.append(hr);table.append(head);
++  const body = el('tbody');
++  for (const order of orders) { const tr = el('tr'), slot=el('th',String(order));slot.scope='row';tr.append(slot);
++    for (const day of days) { const td=el('td');for (const row of grid.periods.filter(row=>String(row.weekday??'Unspecified')===day&&row.order===order)) {
++      const reserved=(grid.reservedPeriodIds||[]).includes(row.id), issues=(draft.issues||[]).filter(issue=>issue.ownerType==='Period'&&issue.ownerId===row.id);
++      const button=el('button');button.type='button';button.dataset.gridPeriodId=row.id;button.disabled=busy;button.setAttribute('aria-pressed',String(row.id===selected));button.setAttribute('aria-label',`${narrow?'Inspect':'Edit'} slot: ${row.displayName||row.id} (${row.id})`);
++      button.append(el('span',row.displayName||row.id),el('small',`${row.startTime??'No time'}${row.endTime?'–'+row.endTime:''}${reserved?' · Reserved':''}${issues.length?' · '+issues.length+' issues':''}`));
++      button.addEventListener('click',()=>{if(narrow)inspectedPeriodId=row.id;else selectedPeriodId=row.id;actions.render(snapshot);requestAnimationFrame(()=>document.querySelector('.grid-period-row legend')?.focus());});td.append(button);
++    }if(!td.childNodes.length)td.textContent='—';tr.append(td);}body.append(tr);
++  }
++  table.append(body);scroll.append(table);wrap.append(scroll);if(!grid.periods.length)wrap.append(el('p','No slots yet. Generate a grid above.'));host.append(wrap);
++}
++function renderRows(host, grid, readonly, status, definition, picked) {
+   const container = el('div'); container.className = 'grid-period-rows';
++  // Reviews show a compact complete table; authoring and narrow inspection show one period.
++  if (readonly && picked === undefined) {
++    const scroll=el('div');scroll.className='definition-week-grid-wrap';const table=el('table');table.className='definition-record-table';const head=el('thead'),tr=el('tr');for(const text of ['Slot / ID','Day','Order','Start','End','Reserved']){const th=el('th',text);th.scope='col';tr.append(th);}head.append(tr);table.append(head);const body=el('tbody');
++    for(const row of grid.periods){const line=el('tr');for(const value of [`${row.displayName||'(incomplete)'} · ${row.id}`,row.weekday,row.order,row.startTime??'(omitted)',row.endTime??'(omitted)',(grid.reservedPeriodIds||[]).includes(row.id)?'Yes':'No'])line.append(el('td',String(value)));body.append(line);}table.append(body);scroll.append(table);container.append(scroll);host.append(container);return;
++  }
+   const existing = new Set(definition.periods.map(p => p.id));
+   grid.periods.forEach((row, index) => {
++    if (row.id !== picked) return;
+     const card = el('fieldset'); card.className = 'grid-period-row'; card.dataset.periodId = row.id;
+-    card.append(el('legend', `${row.displayName || '(incomplete period)'} • ${row.id}`));
++    const legend=el('legend', `${readonly?'Inspecting':'Editing'} ${row.displayName || '(incomplete period)'} • ${row.id}`);legend.tabIndex=-1;card.append(legend);
+     for (const field of ['id', 'displayName', 'weekday', 'order', 'startTime', 'endTime']) {
+       const label = el('label', ({ id: 'Identifier', displayName: 'Name', weekday: 'Weekday', order: 'Order', startTime: 'Start time (optional)', endTime: 'End time (optional)' })[field]);
+       if (readonly) { label.append(el('span', String(row[field] ?? '(omitted)'))); card.append(label); continue; }
+-      const input = el(field === 'weekday' ? 'select' : 'input'); input.dataset.field = field; input.setAttribute('aria-label', `${row.id} ${field}`); input.disabled = busy;
+-      if (field === 'weekday') { for (const day of [...new Set([row.weekday || '', ...weekdays])]) { const option = el('option', title(day) || 'Choose weekday'); option.value = day; input.append(option); } }
++      const input = el(field === 'weekday' ? 'select' : 'input', undefined, `grid-period-${index}-${field}`); input.dataset.field = field; input.name=input.id;input.autocomplete='off';input.setAttribute('aria-label', `${row.id} ${field}`); input.disabled = busy;
++      if (field === 'weekday') { for (const day of [...new Set([row.weekday || '', ...weekdays])]) { const option = el('option', day ? title(day) : 'Choose weekday'); option.value = day; input.append(option); } }
+       input.value = row[field] ?? ''; if (field === 'id') input.readOnly = existing.has(row.id);
+-      input.addEventListener('input', () => { if ((field === 'startTime' || field === 'endTime') && input.value === '') delete row[field]; else if (field === 'order') row[field] = /^\d+$/.test(input.value) && Number.isSafeInteger(Number(input.value)) ? Number(input.value) : input.value; else row[field] = input.value; edited(status); });
++      input.addEventListener('input', () => { if ((field === 'startTime' || field === 'endTime') && input.value === '') delete row[field]; else if (field === 'order') row[field] = /^\d+$/.test(input.value) && Number.isSafeInteger(Number(input.value)) ? Number(input.value) : input.value; else row[field] = input.value; if(field==='id')selectedPeriodId=row.id;edited(status); });
+       label.append(input); card.append(label);
+     }
+     const label = el('label', 'Reserved period');
+     if (readonly) label.append(el('span', (grid.reservedPeriodIds || []).includes(row.id) ? 'Yes (explicit membership)' : 'No'));
+-    else { const input = el('input'); input.type = 'checkbox'; input.dataset.field = 'reserved'; input.checked = (grid.reservedPeriodIds || []).includes(row.id); input.disabled = busy;
++    else { const input = el('input',undefined,`grid-period-${index}-reserved`); input.type = 'checkbox'; input.dataset.field = 'reserved'; input.name=input.id;input.checked = (grid.reservedPeriodIds || []).includes(row.id); input.disabled = busy;
+       input.addEventListener('change', () => { grid.reservedPeriodIds = (grid.reservedPeriodIds || []).filter(id => id !== row.id); if (input.checked) grid.reservedPeriodIds.push(row.id); edited(status); }); label.append(input); }
+     card.append(label); container.append(card);
+   });
+@@ -188,8 +226,8 @@ function renderRows(host, grid, readonly, status, definition) {
+ }
+ function renderImpacts(host, impacts = []) {
+   if (!impacts?.length) return;
+-  host.append(el('h4', 'Teaching-time impacts (distinct from period-ID moves)'));
+-  for (const impact of impacts) host.append(el('p', `${impact.lessonName} (${impact.lessonId}) • ${impact.periodId}: ${format(impact.before)} → ${format(impact.after)}`));
++  const group=el('details');group.append(el('summary', `Teaching-time impacts (distinct from period-ID moves) — ${impacts.length} occurrences`));host.append(group);
++  for (const impact of impacts) group.append(el('p', `${impact.lessonName} (${impact.lessonId}) • ${impact.periodId}: ${format(impact.before)} → ${format(impact.after)}`));
+ }
+ const format = p => `${p.weekday} order ${p.order}, ${p.startTime ?? '(no start time)'}–${p.endTime ?? '(no end time)'}`;
+ window.addEventListener('beforeunload', event => { if (gridDirty()) { event.preventDefault(); event.returnValue = ''; } });
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-requirements.js b/timetable-workspace/src/main/resources/static/workspace/definition-requirements.js
+index 16a4a69..778e269 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-requirements.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-requirements.js
+@@ -1,3 +1,5 @@
++import { enhanceDefinitionForm } from './definition-form-controls.js';
++import { renderRequirementBrowser } from './definition-requirement-browser.js';
+ let requestedId = null;
+ const fields = [['teacherId', 'Common teacher', 'teachers'], ['requiredRoomCapabilityIds', 'Required room capabilities', 'tokens'], ['preferredRoomIds', 'Preferred rooms', 'rooms'], ['undesirablePeriodIds', 'Undesirable periods', 'periods'], ['periodLock', 'Persistent period lock', 'periods'], ['roomLock', 'Persistent room lock', 'rooms']];
+ const arrayFields = new Set(['requiredRoomCapabilityIds', 'preferredRoomIds', 'undesirablePeriodIds']);
+@@ -42,14 +44,15 @@ export function renderRequirements(host, snapshot, narrow, actions, status, leav
+   if (!working) { select(snapshot, requestedId || model.requirements[0]?.seriesId || ''); requestedId = null; }
+   if (busy) status.textContent = 'Reviewing… Working requirement choices are not yet durable.';
+   else if (working.dirty) status.textContent = narrow ? 'Unsaved working choices retained; read-only view shows saved requirements.' : 'Unsaved — Working requirement differs from the saved draft.';
++  const browser = renderRequirementBrowser(host, snapshot, model, { selectedId: working.originalId, narrow, busy,
++    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
++    onAdd: () => leave(latest => { select(latest); actions.render(latest); requestAnimationFrame(() => document.getElementById('requirement-cohortId')?.focus()); }) });
++  host = browser.detail;
+   if (narrow) {
+-    for (const row of model.requirements) { const block = el('section'); block.append(el('h4', `Requirement ${row.seriesId}`), el('p', `Class ${row.cohortId}; subject ${row.subjectId}; saved count ${JSON.stringify(row.count)}.`)); for (const lesson of row.occurrences) block.append(el('p', describe(lesson, row))); host.append(block); }
++    for (const row of model.requirements.filter(row => row.seriesId === browser.selectedId)) { const block = el('section'); block.append(el('h4', `Requirement ${row.seriesId}`), el('p', `Class ${row.cohortId}; subject ${row.subjectId}; saved count ${JSON.stringify(row.count)}.`)); for (const lesson of row.occurrences) block.append(el('p', describe(lesson, row))); host.append(block); }
+     if (!model.requirements.length) host.append(el('p', 'No saved weekly requirements.')); for (const lesson of model.ungrouped) host.append(el('p', `Ungrouped: ${lesson.displayName} (${lesson.id}). Edit individually in occurrence details (UC-9).`)); return;
+   }
+   const changed = () => { working.dirty = true; working.preview = null; error = null; status.textContent = 'Unsaved — Working requirement differs from the saved draft.'; host.querySelector('#requirement-error')?.remove(); };
+-  const list = el('div'); list.className = 'actions';
+-  for (const row of model.requirements) { const button = el('button', `Edit requirement: ${row.seriesId}`); button.disabled = busy; button.addEventListener('click', () => leave(latest => { select(latest, row.seriesId); actions.render(latest); })); list.append(button); }
+-  const add = el('button', 'Add weekly requirement', 'add-requirement'); add.disabled = busy; add.addEventListener('click', () => leave(latest => { select(latest); actions.render(latest); })); list.append(add); host.append(list);
+   const form = el('form', undefined, 'requirement-form'); form.className = 'definition-entity-form'; form.noValidate = true;
+   for (const [field, label, collection] of [['seriesId', working.originalId ? 'Series identifier (read-only)' : 'Series identifier suggestion / advanced override', null], ['cohortId', 'Requirement class identifier', 'cohorts'], ['subjectId', 'Requirement subject identifier', 'subjects'], ['count', 'Weekly lesson count', null]]) {
+     const wrapper = el('label', label), input = el('input', undefined, `requirement-${field}`); input.value = working.request[field] ?? ''; input.disabled = busy; input.readOnly = field === 'seriesId' && !!working.originalId;
+@@ -76,12 +79,18 @@ export function renderRequirements(host, snapshot, narrow, actions, status, leav
+   }
+   if (working.row.occurrences.length) { const edit = el('button', 'Customize / reassign these occurrences', 'customize-requirement-occurrences'); edit.type = 'button'; edit.disabled = busy; edit.addEventListener('click', () => actions.openOccurrences(working.row.occurrences.map(row => row.id))); form.append(edit); }
+   const occurrences = el('fieldset'); occurrences.append(el('legend', 'Existing occurrences and cancellation choices'));
+-  for (const lesson of working.row.occurrences) { const wrapper = el('label'), checkbox = el('input'); checkbox.type = 'checkbox'; checkbox.disabled = busy; checkbox.checked = working.request.removeIds.includes(lesson.id); checkbox.setAttribute('aria-label', `Cancel occurrence: ${lesson.displayName} (${lesson.id})`); checkbox.addEventListener('change', () => { working.request.removeIds = working.request.removeIds.filter(value => value !== lesson.id); if (checkbox.checked) working.request.removeIds.push(lesson.id); changed(); }); wrapper.append(checkbox, document.createTextNode(describe(lesson, working.row))); occurrences.append(wrapper);
++  for (const lesson of working.row.occurrences) { const wrapper = el('label'), checkbox = el('input'); checkbox.type = 'checkbox'; checkbox.disabled = busy; checkbox.checked = working.request.removeIds.includes(lesson.id); checkbox.setAttribute('aria-label', `Cancel occurrence: ${lesson.displayName} (${lesson.id})`); checkbox.addEventListener('change', () => { working.request.removeIds = working.request.removeIds.filter(value => value !== lesson.id); if (checkbox.checked) working.request.removeIds.push(lesson.id); changed(); }); wrapper.append(checkbox, document.createTextNode(`${lesson.displayName || '(Unnamed)'} (${lesson.id}) · ${(working.row.exceptions?.[lesson.id] || []).length} exceptions`)); occurrences.append(wrapper); const details = el('details'); details.append(el('summary', 'Occurrence scheduling details'), el('p', describe(lesson, working.row))); occurrences.append(details);
+     const placement = working.row.sourcePlacements.find(row => row.lessonId === lesson.id); if (placement) occurrences.append(el('p', `Current source placement: ${placement.periodId}, room ${placement.roomId}. Current will remain unchanged.`)); }
+   if (!working.row.occurrences.length) occurrences.append(el('p', 'No saved occurrences in this requirement.')); form.append(occurrences);
+   const controls = el('div'); controls.className = 'actions'; const preview = el('button', 'Preview requirement changes', 'preview-requirement'); preview.type = 'submit'; preview.disabled = busy;
+   const cancel = el('button', 'Discard working requirement choices', 'cancel-requirement'); cancel.type = 'button'; cancel.disabled = busy; cancel.addEventListener('click', () => { discardRequirements(snapshot); actions.render(snapshot); }); controls.append(preview, cancel); form.append(controls);
+-  form.addEventListener('submit', event => { event.preventDefault(); saveRequirement(snapshot, actions); }); host.append(form);
++  form.addEventListener('submit', event => { event.preventDefault(); saveRequirement(snapshot, actions); });
++  enhanceDefinitionForm(form, { prefix: 'requirement', ownerType: 'Requirement', id: working.originalId, item: working.row.defaults, draft: snapshot.workspace.definitionDraft, status,
++    relatedLessonIds: working.row.occurrences.map(row => row.id),
++    referenceFields: [['cohortId', 'cohorts', 'Class'], ['subjectId', 'subjects', 'Subject'], ['teacherId', 'teachers', 'Common teacher'], ['periodLock', 'periods', 'Persistent period lock'], ['roomLock', 'rooms', 'Persistent room lock']],
++    groups: [{ key: 'scheduling', title: 'Room settings and scheduling preferences', fields: ['requiredRoomCapabilityIds', 'preferredRoomIds', 'undesirablePeriodIds'], labels: Object.fromEntries(fields.map(row => [row[0], row[1]])), open: working.row.mixedFields.some(field => ['requiredRoomCapabilityIds', 'preferredRoomIds', 'undesirablePeriodIds'].includes(field)) },
++      { key: 'locks', title: 'Persistent locks', fields: ['periodLock', 'roomLock'], labels: { periodLock: 'Period', roomLock: 'Room' }, describe: item => ['periodLock', 'roomLock'].filter(field => Object.hasOwn(item, field)).map(field => `${field === 'periodLock' ? 'Period' : 'Room'}: ${item[field]}`).join(' · ') || 'No persistent locks' }] });
++  host.append(form);
+   if (error) { const message = el('p', error, 'requirement-error'); message.className = 'error'; message.setAttribute('role', 'alert'); host.append(message); const refresh = el('button', 'Review newer saved draft for retry', 'requirement-refresh'); refresh.addEventListener('click', actions.refresh); host.append(refresh); }
+   if (model.ungrouped.length) { const edit = el('button', 'Customize / group ungrouped occurrences', 'customize-ungrouped-occurrences'); edit.disabled = busy; edit.addEventListener('click', () => actions.openOccurrences(model.ungrouped.map(row => row.id))); host.append(edit); }
+   for (const lesson of model.ungrouped) host.append(el('p', `Ungrouped occurrence ${lesson.displayName} (${lesson.id}) stays separate. Customize or group explicitly in occurrence details (UC-9).`));
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-rooms.js b/timetable-workspace/src/main/resources/static/workspace/definition-rooms.js
+index 64841ec..418be1a 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-rooms.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-rooms.js
+@@ -1,3 +1,5 @@
++import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable, availabilitySummary } from './definition-form-controls.js';
++import { renderEntityBrowser } from './definition-browser.js';
+ let working;
+ let busy = false;
+ let error;
+@@ -49,8 +51,12 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
+   else mergeNewer(snapshot);
+   if (busy) status.textContent = 'Saving… Working room values are not yet durable.';
+   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved rooms.' : 'Unsaved — Working room differs from the saved draft.';
++  const browser = renderEntityBrowser(host, snapshot, { collection: 'rooms', ownerType: 'Room', singular: 'Room', plural: 'Rooms', selectedId: working.originalId, narrow, busy,
++    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
++    onAdd: () => leave(latest => { select(latest, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('room-displayName')?.focus()); }) });
++  host = browser.detail;
+   if (narrow) {
+-    for (const item of definition.rooms) {
++    for (const item of definition.rooms.filter(row => row.id === browser.selectedId)) {
+       const block = el('section'); block.append(el('h4', item.displayName || item.id));
+       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
+       if (!Object.hasOwn(item, 'availablePeriodIds')) block.append(el('p', 'Availability: All declared periods (omitted).'));
+@@ -58,13 +64,6 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
+     }
+     if (!definition.rooms.length) host.append(el('p', 'No saved rooms.')); return;
+   }
+-  const list = el('div'); list.className = 'actions';
+-  for (const item of definition.rooms) {
+-    const button = el('button', `Edit room: ${item.displayName || item.id}`); button.type = 'button'; button.disabled = busy; button.dataset.roomId = item.id;
+-    button.addEventListener('click', () => leave(latest => { select(latest, item.id); actions.render(latest); })); list.append(button);
+-  }
+-  const add = el('button', 'Add room', 'add-room'); add.type = 'button'; add.disabled = busy;
+-  add.addEventListener('click', () => leave(latest => { select(latest); actions.render(latest); })); list.append(add); host.append(list);
+   const form = el('form', undefined, 'room-form'); form.className = 'definition-entity-form'; form.noValidate = true;
+   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working room differs from the saved draft.'; document.querySelector('#room-save-error')?.remove(); };
+   for (const [field, label] of [['displayName', 'Room name'], ['id', working.originalId ? 'Room identifier (read-only)' : 'Room identifier suggestion / advanced override']]) {
+@@ -93,7 +92,11 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
+     const values = Array.isArray(working.item[field]) ? working.item[field] : [];
+     if (Object.hasOwn(working.item, field) && !Array.isArray(working.item[field])) block.append(el('p', `Saved invalid selection: ${JSON.stringify(working.item[field])}. Retained until you explicitly choose a corrected selection.`));
+     if (!rows.length) block.append(el('p', field === 'capabilityIds' ? 'No existing capability tokens. Enter any valid token below.' : 'No declared periods. Configure the weekly grid before choosing periods.'));
+-    for (const row of rows) {
++    if (field === 'availablePeriodIds' || field === 'undesirablePeriodIds') appendPeriodGrid(block, definition, field, 'room', label, values, busy || !explicit, (id, checked) => {
++      const old = Array.isArray(working.item[field]) ? working.item[field] : [];
++      working.item[field] = old.filter(value => value !== id); if (checked) working.item[field].push(id); changed();
++    });
++    else for (const row of rows) {
+       const wrapper = el('label'), input = el('input'); input.type = 'checkbox'; input.dataset.field = field; input.dataset.referenceId = row.id;
+       input.checked = values.includes(row.id); input.disabled = busy || !explicit;
+       const title = field === 'capabilityIds' ? `${row.displayName || row.id} (${row.id})` : `${row.displayName || row.id} (${row.id}) • ${row.weekday} ${row.order}${definition.reservedPeriodIds?.includes(row.id) ? ' • Reserved' : ''}`;
+@@ -103,7 +106,7 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
+     const known = new Set(rows.map(row => row.id)), unresolved = values.filter(value => !known.has(value));
+     const wrapper = el('label', field === 'capabilityIds' ? 'Additional capability tokens (comma-separated)' : `Additional or unresolved ${label.toLowerCase()} identifiers (comma-separated)`), extra = el('input', undefined, `room-${field}-extra`);
+     extra.value = unresolved.map(value => typeof value === 'string' ? value : JSON.stringify(value)).join(', '); extra.disabled = busy || !explicit;
+-    extra.addEventListener('input', () => { const selected = Array.isArray(working.item[field]) ? working.item[field].filter(value => known.has(value)) : []; working.item[field] = [...selected, ...extra.value.split(',').map(value => value.trim()).filter(Boolean)]; changed(); }); wrapper.append(extra); block.append(wrapper); form.append(block);
++    extra.addEventListener('input', () => { const selected = Array.isArray(working.item[field]) ? working.item[field].filter(value => known.has(value)) : []; working.item[field] = [...selected, ...extra.value.split(',').map(value => value.trim()).filter(Boolean)]; changed(); }); wrapper.append(extra); block.append(wrapper); if (field === 'capabilityIds') makeChecklistSearchable(block, label); form.append(block);
+   }
+   if (working.conflicts.length) {
+     const block = el('section', undefined, 'room-conflicts'); block.className = 'notice'; block.append(el('h4', 'Newer saved fields conflict with working edits'), el('p', 'Untouched fields use the newer saved values. Choose explicitly before retrying.'));
+@@ -120,6 +123,7 @@ export function renderRooms(host, snapshot, narrow, actions, status, leave) {
+   form.addEventListener('submit', event => { event.preventDefault(); saveRoom(snapshot, actions); });
+   if (error) { const alert = el('p', error, 'room-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
+     const refresh = el('button', 'Review newer saved draft for retry', 'room-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
++  enhanceDefinitionForm(form, { prefix: 'room', ownerType: 'Room', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'availability', title: 'Room availability', fields: ['availablePeriodIds'], describe: availabilitySummary }], referenceFields: [] });
+   host.append(form);
+   if (working.originalId) {
+     const id = working.originalId, effects = el('section', undefined, 'room-effects'); effects.append(el('h4', 'Saved room effects'));
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-subjects.js b/timetable-workspace/src/main/resources/static/workspace/definition-subjects.js
+index ef64527..9b8a58b 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-subjects.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-subjects.js
+@@ -1,3 +1,5 @@
++import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable } from './definition-form-controls.js';
++import { renderEntityBrowser } from './definition-browser.js';
+ let working;
+ let busy = false;
+ let error;
+@@ -63,8 +65,12 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
+   else mergeNewer(snapshot);
+   if (busy) status.textContent = 'Saving… Working subject values are not yet durable.';
+   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved subjects.' : 'Unsaved — Working subject differs from the saved draft.';
++  const browser = renderEntityBrowser(host, snapshot, { collection: 'subjects', ownerType: 'Subject', singular: 'Subject', plural: 'Subjects', selectedId: working.originalId, narrow, busy,
++    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest.workspace.definitionDraft, latest.version, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
++    onAdd: () => leave(latest => { select(latest.workspace.definitionDraft, latest.version, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('subject-displayName')?.focus()); }) });
++  host = browser.detail;
+   if (narrow) {
+-    for (const item of definition.subjects) {
++    for (const item of definition.subjects.filter(row => row.id === browser.selectedId)) {
+       const block = el('section'); block.append(el('h4', item.displayName || item.id));
+       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
+       for (const [field, label, since, , help] of fields) if (!Object.hasOwn(item, field)) block.append(el('p', `${label}: ${definition.catalogVersion < since ? `Unavailable until catalog ${since}` : 'Use catalog default (omitted)'}. ${help}`));
+@@ -73,13 +79,6 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
+     if (!definition.subjects.length) host.append(el('p', 'No saved subjects.'));
+     return;
+   }
+-  const list = el('div'); list.className = 'actions';
+-  for (const item of definition.subjects) {
+-    const button = el('button', `Edit subject: ${item.displayName || item.id}`); button.type = 'button'; button.dataset.subjectId = item.id; button.disabled = busy;
+-    button.addEventListener('click', () => leave(latest => { select(latest.workspace.definitionDraft, latest.version, item.id); actions.render(latest); })); list.append(button);
+-  }
+-  const add = el('button', 'Add subject', 'add-subject'); add.type = 'button'; add.disabled = busy;
+-  add.addEventListener('click', () => leave(latest => { select(latest.workspace.definitionDraft, latest.version); actions.render(latest); })); list.append(add); host.append(list);
+   const form = el('form', undefined, 'subject-form'); form.className = 'definition-entity-form'; form.noValidate = true;
+   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working subject differs from the saved draft.'; document.querySelector('#subject-save-error')?.remove(); };
+   const textField = (field, label, readonly = false) => {
+@@ -125,6 +124,7 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
+   form.addEventListener('submit', event => { event.preventDefault(); saveSubject(snapshot, actions); });
+   if (error) { const alert = el('p', error, 'subject-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
+     const refresh = el('button', 'Review newer saved draft for retry', 'subject-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
++  enhanceDefinitionForm(form, { prefix: 'subject', ownerType: 'Subject', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'scheduling', title: 'Scheduling constraints', fields: fields.map(row => row[0]), labels: Object.fromEntries(fields.map(row => [row[0], row[1]])) }], referenceFields: [] });
+   host.append(form);
+   const id = working.originalId;
+   if (id) {
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-teachers.js b/timetable-workspace/src/main/resources/static/workspace/definition-teachers.js
+index a85d918..a18ec01 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/definition-teachers.js
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-teachers.js
+@@ -1,3 +1,5 @@
++import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable, availabilitySummary } from './definition-form-controls.js';
++import { renderEntityBrowser } from './definition-browser.js';
+ let working;
+ let busy = false;
+ let error;
+@@ -49,8 +51,12 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
+   else mergeNewer(snapshot);
+   if (busy) status.textContent = 'Saving… Working teacher values are not yet durable.';
+   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved teachers.' : 'Unsaved — Working teacher differs from the saved draft.';
++  const browser = renderEntityBrowser(host, snapshot, { collection: 'teachers', ownerType: 'Teacher', singular: 'Teacher', plural: 'Teachers', selectedId: working.originalId, narrow, busy,
++    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
++    onAdd: () => leave(latest => { select(latest, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('teacher-displayName')?.focus()); }) });
++  host = browser.detail;
+   if (narrow) {
+-    for (const item of definition.teachers) {
++    for (const item of definition.teachers.filter(row => row.id === browser.selectedId)) {
+       const block = el('section'); block.append(el('h4', item.displayName || item.id));
+       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
+       if (!Object.hasOwn(item, 'availablePeriodIds')) block.append(el('p', 'Availability: All declared periods (omitted).'));
+@@ -59,13 +65,6 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
+     }
+     if (!definition.teachers.length) host.append(el('p', 'No saved teachers.')); return;
+   }
+-  const list = el('div'); list.className = 'actions';
+-  for (const item of definition.teachers) {
+-    const button = el('button', `Edit teacher: ${item.displayName || item.id}`); button.type = 'button'; button.disabled = busy; button.dataset.teacherId = item.id;
+-    button.addEventListener('click', () => leave(latest => { select(latest, item.id); actions.render(latest); })); list.append(button);
+-  }
+-  const add = el('button', 'Add teacher', 'add-teacher'); add.type = 'button'; add.disabled = busy;
+-  add.addEventListener('click', () => leave(latest => { select(latest); actions.render(latest); })); list.append(add); host.append(list);
+   const form = el('form', undefined, 'teacher-form'); form.className = 'definition-entity-form'; form.noValidate = true;
+   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working teacher differs from the saved draft.'; document.querySelector('#teacher-save-error')?.remove(); };
+   for (const [field, label] of [['displayName', 'Teacher name'], ['id', working.originalId ? 'Teacher identifier (read-only)' : 'Teacher identifier suggestion / advanced override']]) {
+@@ -91,7 +90,11 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
+     const values = Array.isArray(working.item[field]) ? working.item[field] : [];
+     if (Object.hasOwn(working.item, field) && !Array.isArray(working.item[field])) block.append(el('p', `Saved invalid selection: ${JSON.stringify(working.item[field])}. Retained until you explicitly choose a corrected selection.`));
+     if (!rows.length) block.append(el('p', field === 'qualifiedSubjectIds' ? 'No subjects configured. Add subjects before choosing qualifications.' : 'No declared periods. Configure the weekly grid before choosing periods.'));
+-    for (const row of rows) {
++    if (field === 'availablePeriodIds' || field === 'undesirablePeriodIds') appendPeriodGrid(block, definition, field, 'teacher', label, values, busy || !explicit, (id, checked) => {
++      const old = Array.isArray(working.item[field]) ? working.item[field] : [];
++      working.item[field] = old.filter(value => value !== id); if (checked) working.item[field].push(id); changed();
++    });
++    else for (const row of rows) {
+       const wrapper = el('label'), input = el('input'); input.type = 'checkbox'; input.dataset.field = field; input.dataset.referenceId = row.id;
+       input.checked = values.includes(row.id); input.disabled = busy || !explicit;
+       const title = field === 'qualifiedSubjectIds' ? `${row.displayName || row.id} (${row.id})` : `${row.displayName || row.id} (${row.id}) • ${row.weekday} ${row.order}${definition.reservedPeriodIds?.includes(row.id) ? ' • Reserved' : ''}`;
+@@ -101,7 +104,7 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
+     const known = new Set(rows.map(row => row.id)), unresolved = values.filter(value => !known.has(value));
+     const wrapper = el('label', `Additional or unresolved ${label.toLowerCase()} identifiers (comma-separated)`), extra = el('input', undefined, `teacher-${field}-extra`);
+     extra.value = unresolved.map(value => typeof value === 'string' ? value : JSON.stringify(value)).join(', '); extra.disabled = busy || !explicit;
+-    extra.addEventListener('input', () => { const selected = Array.isArray(working.item[field]) ? working.item[field].filter(value => known.has(value)) : []; working.item[field] = [...selected, ...extra.value.split(',').map(value => value.trim()).filter(Boolean)]; changed(); }); wrapper.append(extra); block.append(wrapper); form.append(block);
++    extra.addEventListener('input', () => { const selected = Array.isArray(working.item[field]) ? working.item[field].filter(value => known.has(value)) : []; working.item[field] = [...selected, ...extra.value.split(',').map(value => value.trim()).filter(Boolean)]; changed(); }); wrapper.append(extra); block.append(wrapper); if (field === 'qualifiedSubjectIds') makeChecklistSearchable(block, label); form.append(block);
+   }
+   if (working.conflicts.length) {
+     const block = el('section', undefined, 'teacher-conflicts'); block.className = 'notice'; block.append(el('h4', 'Newer saved fields conflict with working edits'), el('p', 'Untouched fields use the newer saved values. Choose explicitly before retrying.'));
+@@ -118,6 +121,7 @@ export function renderTeachers(host, snapshot, narrow, actions, status, leave) {
+   form.addEventListener('submit', event => { event.preventDefault(); saveTeacher(snapshot, actions); });
+   if (error) { const alert = el('p', error, 'teacher-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
+     const refresh = el('button', 'Review newer saved draft for retry', 'teacher-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
++  enhanceDefinitionForm(form, { prefix: 'teacher', ownerType: 'Teacher', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'availability', title: 'Availability and undesirable periods', fields: ['availablePeriodIds', 'undesirablePeriodIds'], describe: availabilitySummary }], referenceFields: [] });
+   host.append(form);
+   if (working.originalId) {
+     const id = working.originalId, effects = el('section', undefined, 'teacher-effects'); effects.append(el('h4', 'Saved teacher effects'));
+diff --git a/timetable-workspace/src/main/resources/static/workspace/styles.css b/timetable-workspace/src/main/resources/static/workspace/styles.css
+index 33d886b..3bccb41 100644
+--- a/timetable-workspace/src/main/resources/static/workspace/styles.css
++++ b/timetable-workspace/src/main/resources/static/workspace/styles.css
+@@ -825,6 +825,79 @@ body.authoring .current-label { margin: 8px 0; }
+ .definition-entity-form fieldset legend { overflow-wrap: anywhere; }
+ .definition-entity-form fieldset label { margin-bottom: 8px; overflow-wrap: anywhere; }
+ .definition-entity-form input[type=checkbox] { width: auto; align-self: flex-start; }
++.definition-browser-layout { display: grid; grid-template-columns: minmax(15rem, 22rem) minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 12px; }
++.definition-browser, .definition-browser-detail { min-width: 0; }
++.definition-browser { position: sticky; top: 12px; border: 1px solid #c2cdc4; border-radius: 6px; padding: 12px; background: #fbfaf6; }
++.definition-browser-toolbar { display: grid; gap: 8px; }
++.definition-browser-toolbar label { margin: 0; font-size: .9rem; }
++.definition-browser-toolbar input[type=search], .definition-browser-toolbar select { box-sizing: border-box; width: 100%; min-width: 0; padding: 8px; font: inherit; border: 1px solid #b8c5bc; border-radius: 3px; background: #fdfcf9; color: #203329; }
++.definition-browser-toolbar .definition-inline-check { display: flex; align-items: center; gap: 8px; }
++.definition-browser-results { max-height: min(48vh, 32rem); overflow: auto; overscroll-behavior: contain; }
++.definition-record-list { list-style: none; padding: 0; margin: 0; }
++.definition-record-list li { border-top: 1px solid #d5ded7; }
++.definition-record-choice { display: flex; flex-direction: column; gap: 4px; width: 100%; text-align: left; padding: 10px; border: 0; border-radius: 0; box-shadow: none; background: transparent; color: #203329; font-weight: 400; overflow-wrap: anywhere; }
++.definition-record-choice:hover:not([disabled]) { background: #e3eae4; }
++.selected > .definition-record-choice, .selected .definition-record-choice { background: #dcebe0; box-shadow: inset 4px 0 #1b593b; }
++.definition-record-name { font-weight: 700; }
++.definition-record-id { font-size: .78rem; color: #4b5f53; overflow-wrap: anywhere; }
++.definition-record-summary { font-size: .84rem; }
++.definition-issue-badge { font-size: .78rem; color: #852f1f; }
++.definition-browser-pager { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 12px; font-size: .8rem; }
++.definition-browser-pager button { padding: 6px 8px; }
++.definition-editor-title { margin: 0 0 6px; font-size: 1.1rem; overflow-wrap: anywhere; scroll-margin-top: 16px; }
++.definition-browser-detail > .definition-record-id { margin-bottom: 16px; }
++.definition-record-table { border-collapse: collapse; width: 100%; font-size: .85rem; }
++.definition-record-table th, .definition-record-table td { text-align: left; padding: 8px; border-bottom: 1px solid #c2cdc4; overflow-wrap: anywhere; }
++.definition-record-table th { position: sticky; top: 0; background: #e3eae4; }
++.definition-record-table td:first-child { padding: 0; }
++.definition-entity-form input:not([type=checkbox]), .definition-entity-form select { padding: 8px; font: inherit; border: 1px solid #b8c5bc; border-radius: 3px; background: #fdfcf9; color: #203329; box-sizing: border-box; }
++.definition-entity-form input[readonly] { background: #ebf0ec; color: #43594e; font-size: .85rem; }
++.definition-entity-form input, .definition-entity-form select, .definition-entity-form summary { scroll-margin-block: 7rem; }
++.definition-settings-group { grid-column: 1 / -1; min-width: 0; border: 1px solid #c2cdc4; border-radius: 6px; margin: 4px 0; }
++.definition-settings-group > summary { cursor: pointer; padding: 10px 12px; font-weight: 700; overflow-wrap: anywhere; }
++.definition-settings-summary { display: block; font-size: .83rem; font-weight: 400; margin-top: 4px; }
++.definition-settings-content { padding: 4px 12px 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
++.definition-settings-content > fieldset { grid-column: 1 / -1; margin: 4px 0; }
++.definition-reference-field { min-width: 0; }
++.definition-reference-picker { position: relative; min-width: 0; }
++.definition-reference-picker > label { margin-top: 0; }
++.definition-reference-options { max-height: 15rem; overflow: auto; border: 1px solid #b8c5bc; background: #fdfcf9; padding: 6px; margin-bottom: 8px; }
++.definition-reference-options button { display: block; width: 100%; text-align: left; padding: 8px; margin-bottom: 4px; font-size: .9rem; overflow-wrap: anywhere; }
++.definition-reference-id { padding: 4px 0; font-size: .83rem; }
++.definition-control-help { font-size: .8rem; font-weight: 400; }
++.definition-week-grid-wrap { overflow: auto; max-width: 100%; }
++.definition-week-grid { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: .8rem; }
++.definition-week-grid caption { text-align: left; padding-bottom: 8px; }
++.definition-week-grid th, .definition-week-grid td { border: 1px solid #c2cdc4; padding: 4px; text-align: center; overflow-wrap: anywhere; }
++.definition-week-grid th { background: #e3eae4; }
++.definition-week-grid th:first-child { width: 2rem; }
++.definition-week-grid .definition-period-cell { display: flex; flex-wrap: wrap; flex-direction: row; align-items: center; justify-content: center; gap: 4px; margin: 0; cursor: pointer; font-weight: 400; }
++.definition-week-grid input[type=checkbox] { align-self: center; }
++.definition-period-time { font-size: .72rem; }
++.definition-reserved-marker { font-size: .7rem; color: #805317; font-weight: 700; }
++.definition-checklist { max-height: 12rem; overflow: auto; }
++.definition-checklist label { flex-direction: row; align-items: center; gap: 8px; margin: 4px 0; font-weight: 400; font-size: .9rem; }
++.definition-checklist input[type=checkbox] { align-self: center; }
++.definition-checklist label[hidden], .definition-reference-options[hidden] { display: none; }
++.definition-editor-actions { position: sticky; bottom: 0; z-index: 2; background: #fdfcf9; padding: 12px 0; border-top: 1px solid #c2cdc4; box-shadow: 0 -4px 8px #fdfcf9; margin: 8px 0 0; }
++.definition-editor-status { flex-basis: 100%; font-size: .85rem; margin: 0; overflow-wrap: anywhere; }
++.definition-editor-issues { grid-column: 1 / -1; background: #fff6e9; border-left: 3px solid #b87a14; padding: 10px; overflow-wrap: anywhere; max-height: 14rem; overflow: auto; }
++.definition-editor-issues h5 { margin: 0 0 8px; }
++.definition-editor-issues a { display: block; margin-bottom: 8px; }
++.definition-field-issue { font-size: .83rem; font-weight: 400; }
++.definition-browser-table-layout .definition-settings-content { grid-template-columns: minmax(0, 1fr); }
++.authoring-draft-details { font-size: .83rem; }
++.authoring-draft-details summary { cursor: pointer; }
++@media (max-width: 1050px) {
++  .definition-browser-layout { grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr); gap: 16px; }
++  .definition-browser-detail .definition-entity-form { grid-template-columns: minmax(0, 1fr); }
++  .definition-settings-content { grid-template-columns: minmax(0, 1fr); }
++}
++@media (max-width: 700px) {
++  .definition-browser-layout { grid-template-columns: minmax(0, 1fr); }
++  .definition-browser { position: static; }
++  .definition-browser-results { max-height: 20rem; }
++}
+ #teacher-effects { margin-top: 16px; }
+ 
+ #requirement-form > fieldset:last-of-type { grid-column: 1 / -1; }
+@@ -875,3 +948,33 @@ body.authoring .current-label { margin: 8px 0; }
+ }
+ .review-mode #workbench-inspector, .solving-mode #workbench-inspector { position: static; width: 100%; margin-top: 8px; }
+ @media (min-width: 1280px) { .review-mode #workbench-inspector, .solving-mode #workbench-inspector { margin-top: 0; } }
++
++.definition-browser-table-layout { grid-template-columns: minmax(34rem, 1fr) minmax(0, 1.05fr); }
++.definition-browser-table-layout .definition-browser-toolbar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
++.definition-browser-table-layout .definition-browser-toolbar > label:first-child { grid-column: 1 / -1; }
++.definition-browser-table-layout .definition-browser-toolbar > button { grid-column: 2 / -1; }
++.definition-browser-table-layout .definition-entity-form { grid-template-columns: minmax(0, 1fr); }
++.definition-record-table td:nth-child(4), .definition-record-table td:nth-child(5) { font-variant-numeric: tabular-nums; }
++@media (max-width: 1279px) {
++  .definition-browser-table-layout { grid-template-columns: minmax(0, 1fr); }
++  .definition-browser-table-layout .definition-browser { position: static; }
++  .definition-browser-table-layout .definition-entity-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++}
++
++.definition-browser-detail > section[id$='-effects'] { max-height: 18rem; overflow: auto; border: 1px solid #c2cdc4; border-radius: 6px; padding: 12px; margin-top: 16px; }
++
++/* Remaining authoring editors */
++.definition-slot-table { width:100%; border-collapse:collapse; table-layout:fixed; font-size:.85rem; }
++.definition-slot-table th, .definition-slot-table td { border:1px solid #c2cdc4; padding:4px; overflow-wrap:anywhere; }
++.definition-slot-table th { background:#e3eae4; }
++.definition-slot-table th:first-child { width:2.5rem; }
++.definition-slot-table button { width:100%; background:transparent; color:#203329; border:0; text-align:left; padding:8px; font-weight:400; }
++.definition-slot-table button span, .definition-slot-table button small { display:block; }
++.definition-slot-table button[aria-pressed=true] { background:#dcebe0; box-shadow:inset 3px 0 #1b593b; }
++.definition-slot-table button:hover { background:#e3eae4; }
++.definition-grid-form .grid-period-rows { margin-block:16px; }
++.definition-grid-form > details { margin-block:12px; }
++.definition-grid-form .definition-editor-actions { margin-top:16px; }
++.definition-grid-form input, .definition-grid-form select { scroll-margin-block:7rem; }
++#grid-preview { max-height:32rem; overflow:auto; padding:12px; border:1px solid #c2cdc4; margin-block:12px; }
++@media(max-width:700px) { .definition-slot-table { min-width:38rem; } }
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionCohortsBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionCohortsBrowserIT.java
+index 932d944..4feb35f 100644
+--- a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionCohortsBrowserIT.java
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionCohortsBrowserIT.java
+@@ -92,9 +92,13 @@ class DefinitionCohortsBrowserIT extends WorkbenchBrowserSupport {
+     private void create(){workbench.open();open();classes();}
+     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
+     private void nav(String section){workbench.page().locator("button[data-section='"+section+"']").click();}
+-    private void classes(){nav("Classes");workbench.awaitText("Class name");}
++    private void expandForm() {
++        var groups = workbench.page().locator("#class-form details");
++        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
++    }
++    private void classes(){nav("Classes");workbench.awaitText("Class name"); expandForm(); }
+     private void name(String value){workbench.page().locator("#class-displayName").fill(value);}
+-    private void mode(String field,String value){workbench.page().locator("#class-"+field+"-mode").selectOption(value);}
++    private void mode(String field,String value){ expandForm(); workbench.page().locator("#class-"+field+"-mode").selectOption(value); expandForm(); }
+     private void number(String field,String value){if(!field.equals("size"))mode(field,"value");workbench.page().locator("#class-"+field).fill(value);}
+     private void link(String field,String value){mode(field,"value");workbench.page().locator("#class-"+field).fill(value);}
+     private void clickSave(){workbench.page().locator("#save-class").click();}
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionGridBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionGridBrowserIT.java
+index 5e0c16f..2c0d7ab 100644
+--- a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionGridBrowserIT.java
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionGridBrowserIT.java
+@@ -31,7 +31,7 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
+         assertEquals(2, draft().path("issues").size(), "only school identity remains incomplete");
+         // Reservation is explicit and unrelated to name, order or time.
+         field("monday-1", "displayName").fill("Õppetund <b>Reserved-looking name</b>");
+-        workbench.page().locator(".grid-period-row[data-period-id='monday-2'] input[data-field=reserved]").check(); review(); save();
++        field("monday-2", "reserved").check(); review(); save();
+         assertEquals(JSON.readTree("[\"monday-2\"]"), definition().path("reservedPeriodIds"));
+         assertEquals(0, workbench.page().locator(".grid-period-row b").count());
+         String durable = storedDocument(); workbench.reload(); grid(); assertEquals(durable, storedDocument());
+@@ -116,7 +116,7 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
+     @Test
+     void uc3StorageStaleTransportAndAccessFailuresRetainRows() throws Exception {
+         create(); workbench.page().locator("#generate-grid").click(); review(); String saved = storedDocument();
+-        withRejectedWorkspaceUpdates("NEW.lifecycle_state = 'DEFINITION_DRAFT'", () -> { clickSave(); workbench.awaitText("No change was committed"); assertEquals(saved, storedDocument()); assertEquals(10, workbench.page().locator("#authoring-section > .grid-period-rows .grid-period-row").count()); });
++        withRejectedWorkspaceUpdates("NEW.lifecycle_state = 'DEFINITION_DRAFT'", () -> { clickSave(); workbench.awaitText("No change was committed"); assertEquals(saved, storedDocument()); assertEquals(10, workbench.page().locator("[data-grid-period-id]").count()); });
+         // Real concurrent tab advances the saved revision, leaving this tab's reviewed rows stale.
+         assertEquals(200, command("", JSON.createObjectNode().set("periods", JSON.createArrayNode()), null).status()); String newer = storedDocument();
+         review(); workbench.awaitText("No change was committed"); assertEquals(newer, storedDocument());
+@@ -186,13 +186,14 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
+         create(); workbench.page().locator("#generate-grid").click(); review(); save();
+         var second = newTab(); second.open(); second.page().locator("button[data-section=Grid]").click();
+         field("monday-1", "displayName").fill("My Monday name");
++        second.page().locator("[data-grid-period-id='tuesday-1']").click();
+         second.page().getByRole(com.microsoft.playwright.options.AriaRole.TEXTBOX,
+                 new com.microsoft.playwright.Page.GetByRoleOptions().setName("tuesday-1 displayName").setExact(true)).fill("Their Tuesday name");
+         second.page().locator("#preview-grid").click(); second.page().locator("#save-grid").click();
+         second.expect("!document.querySelector('#grid-preview')");
+         String newer = storedDocument(); review(); workbench.awaitText("No change was committed"); assertEquals(newer,storedDocument());
+         workbench.page().locator("#grid-refresh").click();
+-        workbench.expect("document.querySelector('[aria-label=\"tuesday-1 displayName\"]')?.value === 'Their Tuesday name'");
++        assertEquals("Their Tuesday name",field("tuesday-1","displayName").inputValue());
+         assertEquals("My Monday name",field("monday-1","displayName").inputValue());
+         assertEquals("Their Tuesday name",field("tuesday-1","displayName").inputValue());
+         review(); save();
+@@ -214,7 +215,7 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
+     private void create() { workbench.open(); open(); grid(); }
+     private void open() { workbench.page().locator("#open-authoring").click(); workbench.page().locator("#confirm-authoring").click(); workbench.awaitText("Saved school-definition draft"); }
+     private void grid() { workbench.page().locator("button[data-section=Grid]").click(); workbench.awaitText("Periods are explicit"); }
+-    private com.microsoft.playwright.Locator field(String id,String field) { return workbench.page().locator("#authoring-section > .grid-period-rows .grid-period-row[data-period-id='"+id+"'] [data-field='"+field+"']"); }
++    private com.microsoft.playwright.Locator field(String id,String field) { workbench.page().locator("#grid-form").waitFor(); if (workbench.page().locator("#grid-form .grid-period-row[data-period-id='"+id+"']").count() == 0) workbench.page().locator("[data-grid-period-id='"+id+"']").click(); return workbench.page().locator("#grid-form .grid-period-row[data-period-id='"+id+"'] [data-field='"+field+"']"); }
+     private void review() { workbench.page().locator("#preview-grid").click(); workbench.expect("document.querySelector('#grid-preview') || document.querySelector('#grid-save-error')"); }
+     private void clickSave() { workbench.page().locator("#save-grid").click(); }
+     private void save() { clickSave(); workbench.expect("!document.querySelector('#grid-preview') && !document.querySelector('#grid-save-error')"); }
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRequirementsBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRequirementsBrowserIT.java
+index ff3a9ee..4a112af 100644
+--- a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRequirementsBrowserIT.java
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRequirementsBrowserIT.java
+@@ -13,7 +13,7 @@ class DefinitionRequirementsBrowserIT extends WorkbenchBrowserSupport {
+     @Test
+     void browserNewRequirementAllSharedFieldsCountChangesCancelAndRestart() {
+         initial(false);open();requirements();JsonNode source=draft().path("sourceDocument").deepCopy(),ungrouped=definition().path("lessons").get(1).deepCopy();
+-        page().locator("#add-requirement").click();page().locator("#requirement-cohortId").fill("cohort-7a");page().locator("#requirement-subjectId").fill("science");assertEquals("year-7a-science",page().locator("#requirement-seriesId").inputValue());page().locator("#requirement-seriesId").fill("Series.ID_9");count("2");
++        page().locator("#add-requirement").click();page().locator("#requirement-cohortId-picker").fill("Year 7A");page().locator("#requirement-cohortId-options button").first().click();page().locator("#requirement-subjectId-picker").fill("Science");page().locator("#requirement-subjectId-options button").first().click();assertEquals("year-7a-science",page().locator("#requirement-seriesId").inputValue());page().locator("#requirement-seriesId").fill("Series.ID_9");count("2");
+         value("teacherId","teacher-alex");value("requiredRoomCapabilityIds","lab, Extra.Token_9");value("preferredRoomIds","room-101");value("undesirablePeriodIds","mon-3");value("periodLock","mon-1");value("roomLock","room-101");
+         String before=storedDocument();preview();workbench.awaitText("Fresh additions");page().locator("#cancel-requirement-review").click();assertEquals(before,storedDocument());assertEquals("2",page().locator("#requirement-count").inputValue());save();
+         JsonNode generated=series("Series.ID_9");assertEquals(2,generated.size());for(int i=0;i<2;i++){JsonNode row=generated.get(i);assertEquals("Series.ID_9.0"+(i+1),row.path("id").asString());assertEquals("Year 7A Science "+(i+1),row.path("displayName").asString());assertEquals(11,row.size());assertEquals("teacher-alex",row.path("teacherId").asString());assertEquals("mon-1",row.path("periodLock").asString());assertEquals("room-101",row.path("roomLock").asString());assertEquals(JSON.readTree("[\"lab\",\"Extra.Token_9\"]"),row.path("requiredRoomCapabilityIds"));}
+@@ -58,9 +58,13 @@ class DefinitionRequirementsBrowserIT extends WorkbenchBrowserSupport {
+     private com.microsoft.playwright.Page page(){return workbench.page();}
+     private void open(){page().locator("#open-authoring").click();page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
+     private void nav(String section){page().locator("button[data-section='"+section+"']").click();}
+-    private void requirements(){nav("Weekly requirements");page().locator("#requirement-form").waitFor();}
++    private void expandForm() {
++        var groups = workbench.page().locator("#requirement-form details");
++        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
++    }
++    private void requirements(){nav("Weekly requirements");page().locator("#requirement-form").waitFor(); expandForm(); }
+     private void count(String value){page().locator("#requirement-count").fill(value);}
+-    private void value(String field,String value){page().locator("#requirement-"+field+"-mode").selectOption("value");page().locator("#requirement-"+field).fill(value);}
++    private void value(String field,String value){ expandForm(); page().locator("#requirement-"+field+"-mode").selectOption("value");expandForm();page().locator("#requirement-"+field).fill(value);}
+     private void preview(){page().locator("#preview-requirement").click();page().locator("#requirement-preview").waitFor();}
+     private void save(){long version=storedVersion();preview();page().locator("#save-requirement").click();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(version+1,storedVersion());page().locator("#requirement-form").waitFor();}
+     private JsonNode draft(){return storedWorkspaceDocument().path("definitionDraft");}
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRoomsBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRoomsBrowserIT.java
+index 6b730ad..b62e1dc 100644
+--- a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRoomsBrowserIT.java
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionRoomsBrowserIT.java
+@@ -57,11 +57,15 @@ class DefinitionRoomsBrowserIT extends WorkbenchBrowserSupport {
+     private void create(){workbench.open();open();rooms();}
+     private void open(){page().locator("#open-authoring").click();page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
+     private void nav(String section){page().locator("button[data-section='"+section+"']").click();}
+-    private void rooms(){nav("Rooms");workbench.awaitText("Room name");}
++    private void expandForm() {
++        var groups = workbench.page().locator("#room-form details");
++        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
++    }
++    private void rooms(){nav("Rooms");workbench.awaitText("Room name"); expandForm(); }
+     private void name(String value){page().locator("#room-displayName").fill(value);}
+     private void capacity(String value){page().locator("#room-capacity").fill(value);}
+     private void tokens(String value){page().locator("#room-capabilityIds-extra").fill(value);}
+-    private void mode(String value){page().locator("#room-availablePeriodIds-mode").selectOption(value);}
++    private void mode(String value){ expandForm(); page().locator("#room-availablePeriodIds-mode").selectOption(value); expandForm(); }
+     private void clickSave(){page().locator("#save-room").click();}
+     private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}
+     private JsonNode draft(){return storedWorkspaceDocument().path("definitionDraft");}
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionSubjectsBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionSubjectsBrowserIT.java
+index 78fd08b..ef047f7 100644
+--- a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionSubjectsBrowserIT.java
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionSubjectsBrowserIT.java
+@@ -124,9 +124,13 @@ class DefinitionSubjectsBrowserIT extends WorkbenchBrowserSupport {
+     private void create(){workbench.open();open();subjects();}
+     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
+     private void nav(String section){workbench.page().locator("button[data-section='"+section+"']").click();}
+-    private void subjects(){nav("Subjects");workbench.awaitText("Subject name");}
++    private void expandForm() {
++        var groups = workbench.page().locator("#subject-form details");
++        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
++    }
++    private void subjects(){nav("Subjects");workbench.awaitText("Subject name"); expandForm(); }
+     private void name(String value){workbench.page().locator("#subject-displayName").fill(value);}
+-    private void mode(String field,String value){workbench.page().locator("#subject-"+field+"-mode").selectOption(value);}
++    private void mode(String field,String value){ expandForm(); workbench.page().locator("#subject-"+field+"-mode").selectOption(value); expandForm(); }
+     private void number(String field,String value){mode(field,"value");workbench.page().locator("#subject-"+field).fill(value);}
+     private void clickSave(){workbench.page().locator("#save-subject").click();}
+     private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionTeachersBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionTeachersBrowserIT.java
+index b0031b8..c485f63 100644
+--- a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionTeachersBrowserIT.java
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionTeachersBrowserIT.java
+@@ -90,9 +90,13 @@ class DefinitionTeachersBrowserIT extends WorkbenchBrowserSupport {
+     private void create(){workbench.open();open();teachers();}
+     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
+     private void nav(String section){workbench.page().locator("button[data-section='"+section+"']").click();}
+-    private void teachers(){nav("Teachers");workbench.awaitText("Teacher name");}
++    private void expandForm() {
++        var groups = workbench.page().locator("#teacher-form details");
++        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
++    }
++    private void teachers(){nav("Teachers");workbench.awaitText("Teacher name"); expandForm(); }
+     private void name(String value){workbench.page().locator("#teacher-displayName").fill(value);}
+-    private void mode(String field,String value){workbench.page().locator("#teacher-"+field+"-mode").selectOption(value);}
++    private void mode(String field,String value){ expandForm(); workbench.page().locator("#teacher-"+field+"-mode").selectOption(value); expandForm(); }
+     private void select(String field,String id,boolean value){workbench.page().locator("#teacher-form input[data-field='"+field+"'][data-reference-id='"+id+"']").setChecked(value);}
+     private void clickSave(){workbench.page().locator("#save-teacher").click();}
+     private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}
+diff --git a/spec/school-definition-authoring/checkpoints/UC-21.md b/spec/school-definition-authoring/checkpoints/UC-21.md
+new file mode 100644
+index 0000000..d31dbaa
+--- /dev/null
++++ b/spec/school-definition-authoring/checkpoints/UC-21.md
+@@ -0,0 +1,3 @@
++# UC-21 checkpoint
++
++Base `b1fd27daad4b7866a6e50ba9f18273b7ea1d5bc2`; [exact diff and actor evidence](../../../output/playwright/school-definition-authoring/UC-21/ux-20261012-1/README.md). Shared browser and four entity renderers, editor reset ownership, CSS and authorized spec/status additions. Search/filter updates isolated from working form; existing leave/save guards preserved. No backend/schema change. Maven33 unit/architecture +21 entity browser cases PASS; real copied-school walkthrough and filter supplement PASS. Source and accepted timetable exact; duplicate names/diacritics, keyboard, paging, unsaved prompts and responsive read-only retention verified. UC-21 APPROVED; no outstanding destination handoff.
+diff --git a/spec/school-definition-authoring/checkpoints/UC-22.md b/spec/school-definition-authoring/checkpoints/UC-22.md
+new file mode 100644
+index 0000000..2728f3b
+--- /dev/null
++++ b/spec/school-definition-authoring/checkpoints/UC-22.md
+@@ -0,0 +1,3 @@
++# UC-22 checkpoint
++
++[Exact diff, technical log and real182-requirement journey](../../../output/playwright/school-definition-authoring/UC-22/ux-20261012-1/README.md). Base b1fd27d. New requirement browser plus preserved UC-8 editor: names-first table,25/page, class/subject/occurrence-teacher/issues predicates, explicit mixed/missing/invalid state, narrow list. Four existing requirement browser cases and one unit PASS; real copied-school preview/cancel/save/failure/reload/resize/state assertions PASS. Source/Current and original occurrences exact. UC-22 APPROVED, no handoff.
+diff --git a/spec/school-definition-authoring/checkpoints/UC-23.md b/spec/school-definition-authoring/checkpoints/UC-23.md
+new file mode 100644
+index 0000000..6e03b4e
+--- /dev/null
++++ b/spec/school-definition-authoring/checkpoints/UC-23.md
+@@ -0,0 +1,11 @@
++# UC-23 checkpoint
++
++Base `b1fd27daad4b7866a6e50ba9f18273b7ea1d5bc2`; [exact cumulative diff, contract ledger, logs and saved snapshots](../../../output/playwright/school-definition-authoring/UC-23/ux-20261012-5/README.md). Final package SHA256 `f1fb20d2dadef9e1ae247c078a8f43223d1bc0ad5f569b85aa108c7cd69bedcc`. No new commit; immutable patch includes intended production/spec/test/checkpoint changes and excludes unrelated skill files.
++
++Shared form controls add exact-ID week grids, bounded searchable name pickers with unresolved raw-ID fallback, configured advanced summaries, auto-open saved issue groups and field links, local sticky actions/status, and preserved keyboard focus/expansion. Compact metadata in Draft details; bounded qualifications/capabilities, issue summary and dependent effects. Saved semantics/lifecycle/source/Current untouched.
++
++UC-23 main1–5, extensions2a/4a/5a, G1–G4 and both postconditions PASS in the full final real-browser journey, isolated245→253, complete definition restored/source/Current exact/reload exact. Focused final33+2 PASS; broader corrected33+22 PASS; unaffected20 earlier browser cases PASS (42 distinct total). Exact commands are in linked logs/ledger. Preserved failed attempts and actual expansion/focus fix; no weakened durable assertions.
++
++Changed production: new definition-form-controls.js plus UC21/22 browser modules; definition-editor/subjects/teachers/cohorts/rooms/requirements.js and styles.css. Tests: new DefinitionAuthoringUxBrowserIT and details/picker adaptations in five existing editor BrowserIT classes. Spec/status/checkpoints updated. No Java backend, schema or data-model production changes.
++
++Requires UC-1 approved. No destination handoff. UC-23 automatically APPROVED after technical+Playwright PASS. Local8080 serves verified package; entire operator saved235 preserved, original browser untouched. Narrow inspection remains read-only by existing contract.
+diff --git a/spec/school-definition-authoring/checkpoints/UC-24.md b/spec/school-definition-authoring/checkpoints/UC-24.md
+new file mode 100644
+index 0000000..f5b03d1
+--- /dev/null
++++ b/spec/school-definition-authoring/checkpoints/UC-24.md
+@@ -0,0 +1,7 @@
++# UC-24 checkpoint
++
++Base b1fd27d plus prior approved UC23 exact patch. Weekly grid matrix with one inspector; complete atomic preview, generation/additions, identity/optional-value/reservations fidelity unchanged. Separate narrow saved selection retains all desktop working rows. Review links select the intended inspector. Local actions/status, complete compact preview table and expandable timing impacts.
++
++Real isolated copied-school journey2 PASS255→257:50 slots, one inspector, two working rows retained, exact preview/cancel, explicit time change and exact restoration,1600/1280/700/390 no page overflow/read-only/working retention, source/Current/reload exact. Screenshots inspected. Initial journey clone helper interruption and stale all-row test navigation retained; fixed helpers preserve every durability/failure assertion. 33 unit/architecture +7 grid +5 review cases PASS, zero failures/errors/skips. UC24 APPROVED.
++
++[Walkthrough](../../../output/playwright/school-definition-authoring/UC-24/remaining-20261012-2/README.md). No backend/schema changes. Requires UC1 satisfied; no handoff.
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-browser.js b/timetable-workspace/src/main/resources/static/workspace/definition-browser.js
+new file mode 100644
+index 0000000..a007d8d
+--- /dev/null
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-browser.js
+@@ -0,0 +1,114 @@
++const states = new Map();
++const pageSize = 25;
++const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
++const normalize = value => String(value ?? '').normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
++const el = (tag, text, className) => {
++  const node = document.createElement(tag);
++  if (text !== undefined) node.textContent = text;
++  if (className) node.className = className;
++  return node;
++};
++export function resetBrowsers() { states.clear(); }
++export const referenceName = (definition, collection, id) => definition[collection]?.find(row => row.id === id)?.displayName || id || 'Not set';
++
++function entityRows(draft, collection, ownerType) {
++  const definition = draft.definition;
++  const name = (kind, id) => referenceName(definition, kind, id);
++  return (definition[collection] || []).map(item => {
++    let summary = '', filterValues = [];
++    if (collection === 'subjects') {
++      const count = Object.keys(item).filter(key => !['id', 'displayName'].includes(key)).length;
++      summary = count ? `${count} configured constraints` : 'Catalog defaults';
++    } else if (collection === 'teachers') {
++      filterValues = Array.isArray(item.qualifiedSubjectIds) ? item.qualifiedSubjectIds : [];
++      summary = `${filterValues.map(id => name('subjects', id)).join(', ') || 'No qualified subjects'} · ${definition.lessons.filter(row => row.teacherId === item.id).length} lessons/week`;
++    } else if (collection === 'cohorts') {
++      summary = `${item.size ?? 'Unknown'} students · Curator: ${name('teachers', item.curatorTeacherId)} · Home room: ${name('rooms', item.homeRoomId)}`;
++    } else if (collection === 'rooms') {
++      filterValues = Array.isArray(item.capabilityIds) ? item.capabilityIds.filter(value => typeof value === 'string') : [];
++      summary = `Capacity: ${item.capacity ?? 'Not set'} · ${filterValues.join(', ') || 'No capabilities'}`;
++    }
++    const issues = (draft.issues || []).filter(issue => (issue.ownerType === ownerType && issue.ownerId === item.id) || issue.relatedIds?.includes(item.id));
++    return { id: item.id, name: item.displayName || '(Unnamed)', summary, filterValues, issues };
++  });
++}
++
++/** Browsing updates only its own DOM, never the working form or durable workspace. */
++export function renderEntityBrowser(host, snapshot, options) {
++  const { collection, ownerType, singular, plural, selectedId, narrow, busy, onSelect, onAdd } = options;
++  const draft = snapshot.workspace.definitionDraft;
++  const rows = entityRows(draft, collection, ownerType);
++  const filters = collection === 'teachers' ? [{ key: 'subject', label: 'Qualified subject', choices: draft.definition.subjects.map(row => [row.id, row.displayName || row.id]), matches: (row, value) => row.filterValues.includes(value) }]
++    : collection === 'rooms' ? [{ key: 'capability', label: 'Capability', choices: [...new Set(rows.flatMap(row => row.filterValues))].sort(collator.compare).map(value => [value, value]), matches: (row, value) => row.filterValues.includes(value) }] : [];
++  return renderBrowser(host, { key: collection, rows, singular, plural, selectedId, narrow, busy, filters, onSelect, onAdd });
++}
++
++export function renderBrowser(host, options) {
++  const { key, rows, singular, plural, selectedId, narrow, busy, filters = [], onSelect, onAdd, columns, addLabel } = options;
++  const state = states.get(key) || { query: '', issuesOnly: false, filters: {}, page: 0, scroll: 0, inspectionId: null };
++  states.set(key, state);
++  const inspectionId = rows.some(row => row.id === state.inspectionId) ? state.inspectionId : selectedId || rows[0]?.id;
++  const currentId = narrow ? inspectionId : selectedId;
++  const layout = el('div', undefined, `definition-browser-layout${columns ? ' definition-browser-table-layout' : ''}`);
++  const browser = el('section', undefined, 'definition-browser'); browser.setAttribute('aria-label', `${plural} browser`);
++  const toolbar = el('div', undefined, 'definition-browser-toolbar');
++  const searchLabel = el('label', `Search ${plural.toLowerCase()}`);
++  const search = el('input'); search.type = 'search'; search.id = `${key}-search`; search.name = search.id; search.autocomplete = 'off'; search.value = state.query; search.placeholder = 'Name or identifier…'; searchLabel.append(search); toolbar.append(searchLabel);
++  for (const filter of filters) {
++    const label = el('label', filter.label), select = el('select'); select.id = `${key}-filter-${filter.key}`; select.name = select.id;
++    for (const [value, text] of [['', 'All'], ...filter.choices]) { const option = el('option', text); option.value = value; select.append(option); }
++    select.value = state.filters[filter.key] || '';
++    select.addEventListener('change', () => { state.filters[filter.key] = select.value; state.page = 0; state.scroll = 0; update(); }); label.append(select); toolbar.append(label);
++  }
++  const issueLabel = el('label', undefined, 'definition-inline-check'), issueCheckbox = el('input'); issueCheckbox.type = 'checkbox'; issueCheckbox.checked = state.issuesOnly; issueCheckbox.id = `${key}-issues-only`;
++  issueLabel.append(issueCheckbox, document.createTextNode('With issues')); toolbar.append(issueLabel);
++  issueCheckbox.addEventListener('change', () => { state.issuesOnly = issueCheckbox.checked; state.page = 0; state.scroll = 0; update(); });
++  if (!narrow && onAdd) { const add = el('button', addLabel || `Add ${singular.toLowerCase()}`); add.id = `add-${key === 'cohorts' ? 'class' : key === 'requirements' ? 'requirement' : singular.toLowerCase()}`; add.type = 'button'; add.disabled = busy; add.addEventListener('click', onAdd); toolbar.append(add); }
++  const count = el('p', undefined, 'definition-browser-count'); count.setAttribute('role', 'status');
++  const results = el('div', undefined, 'definition-browser-results'); results.addEventListener('scroll', () => { state.scroll = results.scrollTop; });
++  const pager = el('div', undefined, 'definition-browser-pager');
++  browser.append(toolbar, count, results, pager);
++  const detail = el('section', undefined, 'definition-browser-detail'); detail.setAttribute('aria-label', `${singular} editor`);
++  const selected = rows.find(row => row.id === currentId);
++  const heading = el('h4', selected ? `${narrow ? 'Inspecting' : 'Editing'} ${singular.toLowerCase()}: ${selected.title || selected.name}` : narrow ? `No saved ${plural.toLowerCase()}` : `New ${singular.toLowerCase()}`);
++  heading.tabIndex = -1; heading.className = 'definition-editor-title'; detail.append(heading);
++  if (selected) detail.append(el('p', selected.id, 'definition-record-id'));
++  layout.append(browser, detail); host.append(layout);
++  function update() {
++    const query = normalize(state.query.trim());
++    const filtered = rows.filter(row => (!query || normalize([row.name, row.id, row.summary].join(' ')).includes(query)) && (!state.issuesOnly || row.issues.length) && filters.every(filter => !state.filters[filter.key] || filter.matches(row, state.filters[filter.key]))).sort((a, b) => collator.compare(a.name, b.name) || collator.compare(a.id, b.id));
++    const pages = Math.max(1, Math.ceil(filtered.length / pageSize)); state.page = Math.min(state.page, pages - 1);
++    const visible = filtered.slice(state.page * pageSize, (state.page + 1) * pageSize);
++    count.textContent = `${filtered.length} of ${rows.length} ${plural.toLowerCase()}${selected && !filtered.some(row => row.id === currentId) ? ' · Open record is outside these results' : ''}`;
++    results.replaceChildren(); pager.replaceChildren();
++    if (!visible.length) results.append(el('p', rows.length ? 'No matches. Change the search or filters.' : `No saved ${plural.toLowerCase()}.`));
++    const list = columns ? el('table', undefined, 'definition-record-table') : el('ul', undefined, 'definition-record-list');
++    let body = list;
++    if (columns) { const head = el('thead'), row = el('tr'); for (const column of columns) { const cell = el('th', column.label); cell.scope = 'col'; row.append(cell); } head.append(row); body = el('tbody'); list.append(head, body); }
++    const buttons = [];
++    for (const [index, row] of visible.entries()) {
++      const container = el(columns ? 'tr' : 'li'); if (row.id === currentId) container.className = 'selected';
++      const button = el('button', undefined, 'definition-record-choice'); button.type = 'button'; button.disabled = busy;
++      button.dataset[`${key === 'cohorts' ? 'class' : singular.toLowerCase()}Id`] = row.id;
++      button.setAttribute('aria-label', `Edit ${singular.toLowerCase()}: ${row.name} (${row.id})`); button.setAttribute('aria-pressed', String(row.id === currentId));
++      button.tabIndex = row.id === currentId || (!visible.some(item => item.id === currentId) && index === 0) ? 0 : -1;
++      button.append(el('span', row.name, 'definition-record-name'), el('span', row.id, 'definition-record-id'));
++      button.addEventListener('click', () => { if (row.id === currentId) return; if (narrow) state.inspectionId = row.id; onSelect(row.id); });
++      button.addEventListener('keydown', event => {
++        const next = event.key === 'ArrowDown' ? Math.min(index + 1, buttons.length - 1) : event.key === 'ArrowUp' ? Math.max(index - 1, 0) : event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 : -1;
++        if (next >= 0) { event.preventDefault(); for (const choice of buttons) choice.tabIndex = -1; buttons[next].tabIndex = 0; buttons[next].focus(); }
++      }); buttons.push(button);
++      if (columns) { for (const column of columns) { const cell = el('td'); if (column.key === 'name') cell.append(button); else cell.textContent = column.value(row); container.append(cell); } }
++      else { button.append(el('span', row.summary, 'definition-record-summary')); if (row.issues.length) button.append(el('span', `${row.issues.filter(issue => issue.severity === 'BLOCKING').length} blocking · ${row.issues.filter(issue => issue.severity !== 'BLOCKING').length} advisories`, 'definition-issue-badge')); container.append(button); }
++      body.append(container);
++    }
++    if (visible.length) results.append(list);
++    for (const [label, delta] of [['Previous', -1], ['Next', 1]]) { const button = el('button', label, 'secondary'); button.type = 'button'; button.disabled = delta < 0 ? state.page === 0 : state.page === pages - 1; button.addEventListener('click', () => { state.page += delta; state.scroll = 0; update(); results.querySelector('button')?.focus(); }); pager.append(button); }
++    pager.insertBefore(el('span', `Page ${state.page + 1} of ${pages}`), pager.lastChild);
++    results.scrollTop = state.scroll;
++  }
++  search.addEventListener('input', () => { state.query = search.value; state.page = 0; state.scroll = 0; update(); });
++  search.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { event.preventDefault(); results.querySelector('button')?.focus(); } });
++  update();
++  return { detail, selectedId: currentId };
++}
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-form-controls.js b/timetable-workspace/src/main/resources/static/workspace/definition-form-controls.js
+new file mode 100644
+index 0000000..a640913
+--- /dev/null
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-form-controls.js
+@@ -0,0 +1,146 @@
++import { referenceName } from './definition-browser.js';
++
++const expansion = new Map();
++const observers = [];
++const normalize = value => String(value ?? '').normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase();
++const el = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
++export function beginFormRender() {
++  // The native toggle event is queued; capture the actual state before replacing the form.
++  for (const details of document.querySelectorAll('.definition-settings-group[data-expansion-key]')) expansion.set(details.dataset.expansionKey, details.open);
++  for (const observer of observers) observer.disconnect(); observers.length = 0;
++}
++export function resetFormControls() { beginFormRender(); expansion.clear(); }
++export function availabilitySummary(item) {
++  const count = field => !Object.hasOwn(item, field) ? field === 'availablePeriodIds' ? 'All periods (including new periods)' : 'No undesirable periods' : Array.isArray(item[field]) ? `${item[field].length} ${field === 'availablePeriodIds' ? 'available' : 'undesirable'} periods (explicit selection)` : `Invalid saved ${field} selection`;
++  return count('availablePeriodIds') + (Object.hasOwn(item, 'undesirablePeriodIds') ? ` · ${count('undesirablePeriodIds')}` : '');
++}
++
++export function appendPeriodGrid(block, definition, field, prefix, label, values, disabled, onChange) {
++  const weekdays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
++  const periods = definition.periods || [];
++  const days = [...new Set(periods.map(row => String(row.weekday ?? 'Unspecified')))].sort((a,b) => weekdays.indexOf(a) - weekdays.indexOf(b));
++  const orders = [...new Set(periods.map(row => row.order))].sort((a,b) => Number(a) - Number(b));
++  if (!periods.length) return;
++  const wrap = el('div', undefined, 'definition-week-grid-wrap'), table = el('table', undefined, 'definition-week-grid');
++  const caption = el('caption', `${label} — select individual teaching slots`); table.append(caption);
++  const head = el('thead'), header = el('tr'); const orderHeader = el('th', 'Slot'); orderHeader.scope = 'col'; header.append(orderHeader);
++  for (const day of days) { const cell = el('th', day.slice(0,3)); cell.scope = 'col'; cell.title = day; header.append(cell); } head.append(header); table.append(head);
++  const body = el('tbody');
++  for (const order of orders) {
++    const line = el('tr'), slot = el('th', String(order)); slot.scope = 'row'; line.append(slot);
++    for (const day of days) {
++      const cell = el('td');
++      for (const row of periods.filter(item => String(item.weekday ?? 'Unspecified') === day && item.order === order)) {
++        const reserved = definition.reservedPeriodIds?.includes(row.id), wrapper = el('label', undefined, 'definition-period-cell'), input = el('input');
++        input.type = 'checkbox'; input.id = `${prefix}-${field}-period-${row.id}`; input.dataset.field = field; input.dataset.referenceId = row.id; input.checked = values.includes(row.id); input.disabled = disabled;
++        const title = `${row.displayName || row.id} (${row.id}) · ${row.weekday} ${row.order}${row.startTime ? ` · ${row.startTime}–${row.endTime || '?'}` : ''}${reserved ? ' · Reserved' : ''}`;
++        input.setAttribute('aria-label', `${label}: ${title}`); wrapper.title = title;
++        input.addEventListener('change', () => onChange(row.id, input.checked));
++        wrapper.append(input, el('span', row.startTime ? String(row.startTime).slice(0,5) : String(order), 'definition-period-time'));
++        if (reserved) wrapper.append(el('span', 'R', 'definition-reserved-marker'));
++        cell.append(wrapper);
++      }
++      if (!cell.childNodes.length) cell.append(document.createTextNode('—'));
++      line.append(cell);
++    }
++    body.append(line);
++  }
++  table.append(body); wrap.append(table); block.append(wrap, el('p', 'R = Reserved period. Availability does not grant permission to use reservations.', 'definition-control-help'));
++}
++
++/** A name search chooses a stable reference; the original ID input remains available for unresolved work. */
++export function addReferencePicker(input, rows, label) {
++  input.removeAttribute('list');
++  let originalParent = input.parentElement;
++  if (originalParent.tagName === 'LABEL') {
++    const container = el('div', undefined, 'definition-reference-field');
++    for (const child of [...originalParent.childNodes]) if (child.nodeType !== Node.TEXT_NODE) container.append(child);
++    originalParent.replaceWith(container); originalParent = container;
++  }
++  const picker = el('div', undefined, 'definition-reference-picker'), wrapper = el('label', label), search = el('input');
++  search.type = 'search'; search.id = `${input.id}-picker`; search.name = search.id; search.autocomplete = 'off'; search.placeholder = 'Search by name or identifier…'; search.setAttribute('role', 'combobox'); search.setAttribute('aria-autocomplete', 'list'); search.setAttribute('aria-expanded', 'false');
++  const list = el('div', undefined, 'definition-reference-options'); list.id = `${input.id}-options`; list.setAttribute('role', 'listbox'); list.setAttribute('aria-label', `${label} matches`); list.hidden = true; search.setAttribute('aria-controls', list.id);
++  const sync = () => { const row = rows.find(item => item.id === input.value); search.value = row ? row.displayName || row.id : input.value ? `Unresolved: ${input.value}` : ''; search.disabled = input.disabled; };
++  const close = () => { list.hidden = true; search.setAttribute('aria-expanded', 'false'); };
++  const update = () => {
++    const query = normalize(search.value); const matches = rows.filter(row => normalize(`${row.displayName || ''} ${row.id}`).includes(query));
++    list.replaceChildren();
++    for (const row of matches.slice(0,20)) {
++      const button = el('button', `${row.displayName || '(Unnamed)'} · ${row.id}`, 'secondary'); button.type = 'button'; button.setAttribute('role', 'option'); button.setAttribute('aria-selected', String(row.id === input.value));
++      button.addEventListener('click', () => { input.value = row.id; input.dispatchEvent(new Event('input', { bubbles: true })); sync(); close(); search.focus(); });
++      button.addEventListener('keydown', event => { const buttons = [...list.querySelectorAll('button')], index = buttons.indexOf(button); if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); buttons[Math.max(0, Math.min(buttons.length - 1, index + (event.key === 'ArrowDown' ? 1 : -1)))]?.focus(); } if (event.key === 'Escape') { close(); search.focus(); } });
++      list.append(button);
++    }
++    list.append(el('p', matches.length ? `${Math.min(matches.length,20)} of ${matches.length} matches. Refine the search if needed.` : 'No matches. Use the identifier field for unresolved work.', 'definition-control-help'));
++    list.hidden = false; search.setAttribute('aria-expanded', 'true');
++  };
++  search.addEventListener('input', update);
++  search.addEventListener('keydown', event => { if (event.key === 'ArrowDown') { event.preventDefault(); if (list.hidden) { search.value = ''; update(); } list.querySelector('button')?.focus(); } if (event.key === 'Escape') { close(); sync(); } if (event.key === 'Enter') { event.preventDefault(); if (!list.hidden && list.querySelectorAll('button').length === 1) list.querySelector('button').click(); } });
++  picker.addEventListener('focusout', event => { if (!picker.contains(event.relatedTarget)) { close(); sync(); } });
++  input.addEventListener('input', sync);
++  wrapper.append(search); picker.append(wrapper, list); originalParent.insertBefore(picker, input);
++  const advanced = el('details', undefined, 'definition-reference-id'); advanced.append(el('summary', 'Identifier or unresolved value')); originalParent.insertBefore(advanced, input); advanced.append(input);
++  input.setAttribute('aria-label', `${label} identifier`); input.name = input.id; input.autocomplete = 'off';
++  const mode = originalParent.querySelector('select'); mode?.addEventListener('change', sync);
++  sync(); return picker;
++}
++
++function topChild(form, control) { let node = control; while (node && node.parentElement !== form) node = node.parentElement; return node; }
++function reveal(control) { for (let parent = control.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true; control.scrollIntoView({ block: 'center' }); control.focus(); }
++export function focusDefinitionField(prefix, field) { const control = document.getElementById(`${prefix}-${field}`) || document.getElementById(`${prefix}-${field}-mode`); if (control) reveal(control); }
++
++export function enhanceDefinitionForm(form, options) {
++  const { prefix, ownerType, id, item, draft, status, groups = [], referenceFields = [], relatedLessonIds = [] } = options;
++  for (const [field, collection, label] of referenceFields) { const input = form.querySelector(`#${prefix}-${field}`); if (input) addReferencePicker(input, draft.definition[collection] || [], label); }
++  for (const input of form.querySelectorAll('input, select')) { input.name ||= input.id || `${prefix}-${input.dataset.field || 'choice'}-${input.dataset.referenceId || 'search'}`; if (input.tagName === 'INPUT') input.autocomplete = 'off'; }
++  const issues = (draft.issues || []).filter(issue => (issue.ownerType === ownerType && issue.ownerId === id) || issue.relatedIds?.includes(id) || (issue.ownerType === 'Lesson' && relatedLessonIds.includes(issue.ownerId)));
++  for (const group of groups) {
++    const nodes = [...new Set(group.fields.flatMap(field => { const control = form.querySelector(`#${prefix}-${field}`) || form.querySelector(`#${prefix}-${field}-mode`); return control ? [topChild(form, control)] : []; }))];
++    if (!nodes.length) continue;
++    const details = el('details', undefined, 'definition-settings-group'); details.id = `${prefix}-${group.key}`;
++    const summary = el('summary'), title = el('span', group.title), description = el('span', undefined, 'definition-settings-summary'); summary.append(title, description); details.append(summary);
++    const content = el('div', undefined, 'definition-settings-content'); details.append(content);
++    const key = `${prefix}:${id || 'new'}:${group.key}`;
++    details.dataset.expansionKey = key;
++    const containsIssue = issues.some(issue => group.fields.includes(issue.field?.split(/[.\[]/)[0]));
++    details.open = containsIssue || !!group.open || !!expansion.get(key);
++    const describe = () => { description.textContent = group.describe ? group.describe(item) : group.fields.filter(field => Object.hasOwn(item, field)).map(field => `${group.labels?.[field] || field}: ${Array.isArray(item[field]) ? `${item[field].length} selected` : JSON.stringify(item[field])}`).join(' · ') || 'Catalog defaults'; };
++    describe(); details.addEventListener('toggle', () => { if (details.isConnected) expansion.set(key, details.open); describe(); }); form.addEventListener('input', describe); form.addEventListener('change', describe);
++    form.insertBefore(details, nodes[0]); for (const node of nodes) content.append(node);
++  }
++  if (issues.length) {
++    const summary = el('section', undefined, 'definition-editor-issues'); summary.setAttribute('aria-label', 'Saved issues for this record'); summary.append(el('h5', 'Saved issues for this record'));
++    for (const [index, issue] of issues.entries()) {
++      const field = issue.field?.split(/[.\[]/)[0], control = form.querySelector(`#${prefix}-${field}`) || form.querySelector(`#${prefix}-${field}-mode`);
++      const text = `${issue.severity}: ${issue.ownerType} ${issue.ownerId} · ${issue.field}: ${issue.message}`;
++      if (control) {
++        const link = el('a', text); link.href = `#${control.id}`; link.addEventListener('click', event => { event.preventDefault(); reveal(control); }); summary.append(link);
++        const message = el('p', `Saved issue: ${issue.message}`, issue.severity === 'BLOCKING' ? 'error definition-field-issue' : 'notice definition-field-issue'); message.id = `${prefix}-field-issue-${index}`;
++        control.setAttribute('aria-describedby', [control.getAttribute('aria-describedby'), message.id].filter(Boolean).join(' ')); if (issue.severity === 'BLOCKING') control.setAttribute('aria-invalid', 'true');
++        control.parentElement.append(message); for (let parent = control.parentElement; parent && parent !== form; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
++      } else summary.append(el('p', text));
++    }
++    form.prepend(summary);
++  }
++  const actions = form.querySelector(':scope > .actions');
++  if (actions) {
++    actions.classList.add('definition-editor-actions'); const localStatus = el('p', status.textContent, 'definition-editor-status'); localStatus.id = `${prefix}-local-status`; localStatus.setAttribute('aria-live', 'off'); actions.prepend(localStatus);
++    const observer = new MutationObserver(() => { localStatus.textContent = status.textContent; }); observer.observe(status, { childList: true, characterData: true, subtree: true }); observers.push(observer); form.append(actions);
++    form.addEventListener('focusin', event => requestAnimationFrame(() => {
++      if (!event.target.isConnected || actions.contains(event.target) || !event.target.getBoundingClientRect) return;
++      const target = event.target.getBoundingClientRect(), footer = actions.getBoundingClientRect();
++      if (target.bottom > footer.top && target.top < footer.bottom) event.target.scrollIntoView({ block: 'center' });
++    }));
++  }
++}
++
++export function makeChecklistSearchable(block, label) {
++  const choices = [...block.querySelectorAll(':scope > label')].filter(node => node.querySelector('input[type=checkbox]'));
++  if (!choices.length) return;
++  const wrapper = el('label', `Search ${label.toLowerCase()}`), search = el('input'); search.type = 'search'; search.autocomplete = 'off'; search.placeholder = 'Name or identifier…'; wrapper.append(search);
++  const list = el('div', undefined, 'definition-checklist'); for (const choice of choices) list.append(choice);
++  block.insertBefore(wrapper, block.children[1] || null); wrapper.after(list);
++  const status = el('p', undefined, 'definition-control-help'); status.setAttribute('role', 'status'); list.after(status);
++  const update = () => { const query = normalize(search.value); for (const choice of choices) choice.hidden = !normalize(choice.textContent).includes(query); status.textContent = `${choices.filter(node => !node.hidden).length} of ${choices.length} choices. Selected values stay selected when filtered.`; };
++  search.addEventListener('input', update); update();
++}
+diff --git a/timetable-workspace/src/main/resources/static/workspace/definition-requirement-browser.js b/timetable-workspace/src/main/resources/static/workspace/definition-requirement-browser.js
+new file mode 100644
+index 0000000..332a1ed
+--- /dev/null
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-requirement-browser.js
+@@ -0,0 +1,20 @@
++import { renderBrowser, referenceName } from './definition-browser.js';
++
++export function renderRequirementBrowser(host, snapshot, model, options) {
++  const draft = snapshot.workspace.definitionDraft, definition = draft.definition;
++  const name = (collection, id) => referenceName(definition, collection, id);
++  const rows = model.requirements.map(item => {
++    const className = name('cohorts', item.cohortId), subject = name('subjects', item.subjectId);
++    const teacher = item.mixedFields?.includes('teacherId') ? 'Mixed' : name('teachers', item.defaults?.teacherId);
++    const count = Number.isInteger(item.count) && item.count >= 0 ? String(item.count) : `Incomplete: ${JSON.stringify(item.count)}`;
++    const exceptions = Object.values(item.exceptions || {}).filter(fields => fields?.length).length;
++    const teacherIds = [...new Set([item.defaults?.teacherId, ...item.occurrences.map(row => row.teacherId)].filter(Boolean))];
++    const lessonIds = new Set(item.occurrences.map(row => row.id));
++    const issues = (draft.issues || []).filter(issue => (['Requirement', 'Series'].includes(issue.ownerType) && issue.ownerId === item.seriesId) || (issue.ownerType === 'Lesson' && lessonIds.has(issue.ownerId)) || issue.relatedIds?.includes(item.seriesId));
++    return { id: item.seriesId, name: className, title: `${className} · ${subject}`, subject, teacher, count, exceptions, issues, cohortId: item.cohortId, subjectId: item.subjectId, teacherIds,
++      summary: `${subject} · ${teacher} · ${count} lessons/week · ${exceptions} exceptions · ${teacherIds.map(id => name('teachers', id)).join(', ')}` };
++  });
++  const filters = [['class', 'Class', 'cohorts', (row, value) => row.cohortId === value], ['subject', 'Subject', 'subjects', (row, value) => row.subjectId === value], ['teacher', 'Teacher', 'teachers', (row, value) => row.teacherIds.includes(value)]].map(([key, label, collection, matches]) => ({ key, label, choices: definition[collection].map(row => [row.id, row.displayName || row.id]), matches }));
++  const columns = [{ key: 'name', label: 'Class' }, { key: 'subject', label: 'Subject', value: row => row.subject }, { key: 'teacher', label: 'Teacher', value: row => row.teacher }, { key: 'count', label: 'Lessons/week', value: row => row.count }, { key: 'exceptions', label: 'Exceptions', value: row => String(row.exceptions) }, { key: 'issues', label: 'Issues', value: row => row.issues.length ? `${row.issues.filter(issue => issue.severity === 'BLOCKING').length} blocking · ${row.issues.filter(issue => issue.severity !== 'BLOCKING').length} advisories` : 'None' }];
++  return renderBrowser(host, { ...options, key: 'requirements', rows, singular: 'Requirement', plural: 'Weekly requirements', addLabel: 'Add weekly requirement', filters, columns: options.narrow ? undefined : columns });
++}
+diff --git a/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionAuthoringUxBrowserIT.java b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionAuthoringUxBrowserIT.java
+new file mode 100644
+index 0000000..8363340
+--- /dev/null
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionAuthoringUxBrowserIT.java
+@@ -0,0 +1,99 @@
++package org.schoolkernel.workspace;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++import java.util.List;
++import com.microsoft.playwright.Page;
++import org.junit.jupiter.api.Test;
++import tools.jackson.databind.JsonNode;
++import tools.jackson.databind.node.ObjectNode;
++
++/** Presentation regressions exercise real forms and compare the durable source and workspace by value. */
++class DefinitionAuthoringUxBrowserIT extends WorkbenchBrowserSupport {
++    @Test
++    void searchesPagesAndDuplicateNamesPreserveWorkingFormsAndExplicitSelection() {
++        ObjectNode source = fixtures.validAcceptedDocument();
++        var subjects = ((ObjectNode) source.path("acceptedBaseline").path("definition")).withArray("subjects");
++        subjects.addObject().put("id", "history-a").put("displayName", "Ajalugu");
++        subjects.addObject().put("id", "history-b").put("displayName", "Ajalugu");
++        subjects.addObject().put("id", "oas-proof").put("displayName", "Õäš proof");
++        for (int i = 1; i <= 35; i++) subjects.addObject().put("id", "subject-" + i).put("displayName", "Subject " + i);
++        storeAccepted(source); open(); nav("Subjects");
++        assertEquals(25, page().locator(".definition-record-choice").count());
++        page().locator("#subjects-search").fill("AJALUGU");
++        assertEquals(2, page().locator(".definition-record-choice").count());
++        page().locator("[data-subject-id='history-a']").click();
++        assertEquals("true", page().locator("[data-subject-id='history-a']").getAttribute("aria-pressed"));
++        String saved = storedDocument();
++        page().locator("#subject-displayName").fill("Retained <literal> Õ");
++        page().locator("#subjects-search").fill("no matches");
++        assertEquals("Retained <literal> Õ", page().locator("#subject-displayName").inputValue());
++        assertTrue(page().locator(".definition-browser-count").innerText().contains("outside"));
++        assertEquals(saved, storedDocument());
++        page().locator("#subjects-search").fill("history-");
++        page().locator("[data-subject-id='history-b']").click(); page().locator("#school-stay").click();
++        assertEquals("history-a", page().locator("#subject-id").inputValue());
++        page().locator("[data-subject-id='history-b']").click(); page().locator("#school-save-continue").click();
++        workbench.expect("document.querySelector('#subject-id')?.value === 'history-b'");
++        assertEquals("history-", page().locator("#subjects-search").inputValue());
++        assertEquals("Retained <literal> Õ", subject("history-a").path("displayName").asString());
++        assertEquals(source.path("acceptedBaseline"), storedWorkspaceDocument().path("acceptedBaseline"));
++        page().locator("#subjects-search").fill("OAS"); page().locator("#subjects-search").press("ArrowDown"); page().keyboard().press("Enter");
++        assertEquals("oas-proof", page().locator("#subject-id").inputValue());
++        page().locator("#subjects-search").fill(""); page().locator(".definition-browser-pager button").last().click();
++        nav("Teachers"); nav("Subjects"); assertTrue(page().locator(".definition-browser-pager").innerText().contains("Page 2"));
++        page().locator("#subject-displayName").fill("Unsaved across inspection"); saved = storedDocument();
++        for (int width : List.of(700, 390, 1280, 1600)) {
++            workbench.viewport(width, 844); workbench.expect("document.documentElement.scrollWidth <= innerWidth");
++            if (width <= 700) assertEquals(0, page().locator("#subject-form").count());
++            else assertEquals("Unsaved across inspection", page().locator("#subject-displayName").inputValue());
++            assertEquals(saved, storedDocument());
++        }
++    }
++
++    @Test
++    void namePickersGridsAndFieldIssuesPreserveIdsAndOptionalPresence() {
++        ObjectNode source = fixtures.validAcceptedDocument(); storeAccepted(source); open(); nav("Classes");
++        page().locator("#class-curatorTeacherId-mode").selectOption("value");
++        page().locator("#class-curatorTeacherId-picker").fill("Alex");
++        page().locator("#class-curatorTeacherId-options button").first().click();
++        assertEquals("teacher-alex", page().locator("#class-curatorTeacherId").inputValue());
++        assertEquals("Alex", page().locator("#class-curatorTeacherId-picker").inputValue());
++        page().locator("#class-homeRoomId-mode").selectOption("value"); page().locator("#class-homeRoomId-picker").fill("101");
++        page().locator("#class-homeRoomId-options button").first().click();
++        assertEquals("room-101", page().locator("#class-homeRoomId").inputValue());
++        page().locator("#class-size").fill("invalid count"); page().locator("#save-class").click();
++        workbench.expect("document.querySelector('#class-size')?.getAttribute('aria-invalid') === 'true'");
++        assertEquals("invalid count", draft().path("definition").path("cohorts").get(0).path("size").asString());
++        assertEquals("teacher-alex", draft().path("definition").path("cohorts").get(0).path("curatorTeacherId").asString());
++        page().locator(".definition-editor-issues a[href='#class-size']").first().click();
++        assertEquals("class-size", page().evaluate("document.activeElement.id"));
++        page().locator("#class-size").fill("25"); page().locator("#save-class").click(); workbench.expect("!document.querySelector('#class-size')?.hasAttribute('aria-invalid')");
++        nav("Rooms"); assertNull(page().locator("#room-availability").getAttribute("open"));
++        page().locator("#room-availability > summary").click(); assertTrue(page().locator(".definition-week-grid").count() > 0);
++        page().locator("#room-availablePeriodIds-mode").focus();
++        page().locator("#room-availablePeriodIds-mode").selectOption("explicit");
++        workbench.expect("document.activeElement.id === 'room-availablePeriodIds-mode'");
++        assertNotNull(page().locator("#room-availability").getAttribute("open"));
++        page().locator("input[data-field='availablePeriodIds'][data-reference-id='mon-1']").check(); page().locator("#save-room").click();
++        workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");
++        assertEquals(JSON.readTree("[\"mon-1\"]"), draft().path("definition").path("rooms").get(0).path("availablePeriodIds"));
++        page().locator("#room-availablePeriodIds-mode").selectOption("default"); page().locator("#save-room").click();
++        workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");
++        assertFalse(draft().path("definition").path("rooms").get(0).has("availablePeriodIds"));
++        assertEquals(source.path("acceptedBaseline"), storedWorkspaceDocument().path("acceptedBaseline"));
++        assertEquals(source, draft().path("sourceDocument"));
++        assertEquals("sticky", page().locator(".definition-editor-actions").evaluate("node => getComputedStyle(node).position"));
++        nav("Weekly requirements"); page().locator("#requirement-form").waitFor();
++        assertEquals(6, page().locator(".definition-record-table th").count());
++        assertEquals("Year 7A", page().locator("#requirement-cohortId-picker").inputValue());
++        assertEquals("cohort-7a", page().locator("#requirement-cohortId").inputValue());
++        assertNull(page().locator(".authoring-draft-details").getAttribute("open"));
++    }
++
++    private Page page() { return workbench.page(); }
++    private void open() { workbench.open(); page().locator("#open-authoring").click(); page().locator("#confirm-authoring").click(); page().locator("#discard-authoring").waitFor(); }
++    private void nav(String section) { page().locator("button[data-section='" + section + "']").click(); }
++    private JsonNode draft() { return storedWorkspaceDocument().path("definitionDraft"); }
++    private JsonNode subject(String id) { for (JsonNode row : draft().path("definition").path("subjects")) if (row.path("id").asString().equals(id)) return row; fail("Missing subject"); return null; }
++}

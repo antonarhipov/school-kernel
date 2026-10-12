@@ -1,3 +1,5 @@
+import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable, availabilitySummary } from './definition-form-controls.js';
+import { renderEntityBrowser } from './definition-browser.js';
 const parse = raw => /^-?\d+$/.test(raw) && Number.isSafeInteger(Number(raw)) ? Number(raw) : raw;
 const scalarDefaults = [['maxDailyLessonSpread', 'Preferred daily lesson spread', 4, '1'], ['maxDailyGaps', 'Maximum daily gaps', 5, '0'], ['latestStartSlot', 'Latest start slot', 6, 'unrestricted'], ['preferredLatestStartSlot', 'Preferred latest start slot', 6, '3'], ['dailyLessonSpreadLimit', 'Hard daily lesson spread', 7, 'unrestricted'], ['curatorTeacherId', 'Curator teacher', 8, 'none'], ['homeRoomId', 'Home room', 8, 'none']];
 let working;
@@ -53,8 +55,12 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
   else mergeNewer(snapshot);
   if (busy) status.textContent = 'Saving… Working class values are not yet durable.';
   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved classes.' : 'Unsaved — Working class differs from the saved draft.';
+  const browser = renderEntityBrowser(host, snapshot, { collection: 'cohorts', ownerType: 'Cohort', singular: 'Class', plural: 'Classes', selectedId: working.originalId, narrow, busy,
+    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
+    onAdd: () => leave(latest => { select(latest, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('class-displayName')?.focus()); }) });
+  host = browser.detail;
   if (narrow) {
-    for (const item of definition.cohorts) {
+    for (const item of definition.cohorts.filter(row => row.id === browser.selectedId)) {
       const block = el('section'); block.append(el('h4', item.displayName || item.id));
       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
       if (!Object.hasOwn(item, 'availablePeriodIds')) block.append(el('p', 'Availability: All declared periods (omitted).'));
@@ -64,13 +70,6 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
     }
     if (!definition.cohorts.length) host.append(el('p', 'No saved classes.')); return;
   }
-  const list = el('div'); list.className = 'actions';
-  for (const item of definition.cohorts) {
-    const button = el('button', `Edit class: ${item.displayName || item.id}`); button.type = 'button'; button.disabled = busy; button.dataset.classId = item.id;
-    button.addEventListener('click', () => leave(latest => { select(latest, item.id); actions.render(latest); })); list.append(button);
-  }
-  const add = el('button', 'Add class', 'add-class'); add.type = 'button'; add.disabled = busy;
-  add.addEventListener('click', () => leave(latest => { select(latest); actions.render(latest); })); list.append(add); host.append(list);
   const form = el('form', undefined, 'class-form'); form.className = 'definition-entity-form'; form.noValidate = true;
   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working class differs from the saved draft.'; document.querySelector('#class-save-error')?.remove(); };
   for (const [field, label] of [['displayName', 'Class name'], ['id', working.originalId ? 'Class identifier (read-only)' : 'Class identifier suggestion / advanced override']]) {
@@ -110,7 +109,7 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
     const choices = el('datalist', undefined, `class-${field}-choices`); input.setAttribute('list', choices.id);
     for (const row of rows) { const option = el('option', row.displayName); option.value = row.id; choices.append(option); }
     mode.addEventListener('change', () => { if (mode.value === 'default') delete working.item[field]; else working.item[field] = input.value; input.disabled = mode.value === 'default'; changed(); });
-    input.addEventListener('input', () => { working.item[field] = input.value; changed(); }); wrapper.append(mode, input, choices, el('span', `Available links: ${rows.map(row => `${row.displayName} (${row.id})`).join(', ') || '(none configured)'}. Unresolved work can be saved with blockers.`));
+    input.addEventListener('input', () => { working.item[field] = input.value; changed(); }); wrapper.append(mode, input, choices, el('span', 'Search by name or identifier. Unresolved identifiers remain editable and can be saved with blockers.'));
     if (definition.catalogVersion < 8) wrapper.append(el('span', 'Requires catalog 8. Enable a newer scheduling catalog in School (UC-12).'));
     form.append(wrapper);
   }
@@ -129,13 +128,10 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
     const values = Array.isArray(working.item[field]) ? working.item[field] : [];
     if (Object.hasOwn(working.item, field) && !Array.isArray(working.item[field])) block.append(el('p', `Saved invalid selection: ${JSON.stringify(working.item[field])}. Retained until you explicitly choose a corrected selection.`));
     if (!rows.length) block.append(el('p',  'No declared periods. Configure the weekly grid before choosing periods.'));
-    for (const row of rows) {
-      const wrapper = el('label'), input = el('input'); input.type = 'checkbox'; input.dataset.field = field; input.dataset.referenceId = row.id;
-      input.checked = values.includes(row.id); input.disabled = busy || !explicit;
-      const title = `${row.displayName || row.id} (${row.id}) • ${row.weekday} ${row.order}${definition.reservedPeriodIds?.includes(row.id) ? ' • Reserved' : ''}`;
-      input.setAttribute('aria-label', `${label}: ${title}`); wrapper.append(input, document.createTextNode(title));
-      input.addEventListener('change', () => { const old = Array.isArray(working.item[field]) ? working.item[field] : []; working.item[field] = old.filter(value => value !== row.id); if (input.checked) working.item[field].push(row.id); changed(); }); block.append(wrapper);
-    }
+    appendPeriodGrid(block, definition, field, 'class', label, values, busy || !explicit, (id, checked) => {
+      const old = Array.isArray(working.item[field]) ? working.item[field] : [];
+      working.item[field] = old.filter(value => value !== id); if (checked) working.item[field].push(id); changed();
+    });
     const known = new Set(rows.map(row => row.id)), unresolved = values.filter(value => !known.has(value));
     const wrapper = el('label', `Additional or unresolved ${label.toLowerCase()} identifiers (comma-separated)`), extra = el('input', undefined, `class-${field}-extra`);
     extra.value = unresolved.map(value => typeof value === 'string' ? value : JSON.stringify(value)).join(', '); extra.disabled = busy || !explicit;
@@ -156,6 +152,7 @@ export function renderClasses(host, snapshot, narrow, actions, status, leave) {
   form.addEventListener('submit', event => { event.preventDefault(); saveCohort(snapshot, actions); });
   if (error) { const alert = el('p', error, 'class-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
     const refresh = el('button', 'Review newer saved draft for retry', 'class-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
+  enhanceDefinitionForm(form, { prefix: 'class', ownerType: 'Cohort', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'scheduling', title: 'Scheduling constraints', fields: scalarDefaults.slice(0,5).map(row => row[0]), labels: Object.fromEntries(scalarDefaults.map(row => [row[0], row[1]])) }, { key: 'availability', title: 'Availability and undesirable periods', fields: ['availablePeriodIds', 'undesirablePeriodIds'], describe: availabilitySummary }], referenceFields: [['curatorTeacherId', 'teachers', 'Curator teacher'], ['homeRoomId', 'rooms', 'Home room']] });
   host.append(form);
   if (working.originalId) {
     const id = working.originalId, effects = el('section', undefined, 'class-effects'); effects.append(el('h4', 'Saved class effects'));

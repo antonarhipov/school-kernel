@@ -124,9 +124,13 @@ class DefinitionSubjectsBrowserIT extends WorkbenchBrowserSupport {
     private void create(){workbench.open();open();subjects();}
     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
     private void nav(String section){workbench.page().locator("button[data-section='"+section+"']").click();}
-    private void subjects(){nav("Subjects");workbench.awaitText("Subject name");}
+    private void expandForm() {
+        var groups = workbench.page().locator("#subject-form details");
+        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
+    }
+    private void subjects(){nav("Subjects");workbench.awaitText("Subject name"); expandForm(); }
     private void name(String value){workbench.page().locator("#subject-displayName").fill(value);}
-    private void mode(String field,String value){workbench.page().locator("#subject-"+field+"-mode").selectOption(value);}
+    private void mode(String field,String value){ expandForm(); workbench.page().locator("#subject-"+field+"-mode").selectOption(value); expandForm(); }
     private void number(String field,String value){mode(field,"value");workbench.page().locator("#subject-"+field).fill(value);}
     private void clickSave(){workbench.page().locator("#save-subject").click();}
     private void save(){long before=storedVersion();clickSave();workbench.expect("document.querySelector('#school-save-status')?.textContent.startsWith('Saved —')");assertEquals(before+1,storedVersion());}

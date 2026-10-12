@@ -1,3 +1,5 @@
+import { appendPeriodGrid, enhanceDefinitionForm, makeChecklistSearchable } from './definition-form-controls.js';
+import { renderEntityBrowser } from './definition-browser.js';
 let working;
 let busy = false;
 let error;
@@ -63,8 +65,12 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
   else mergeNewer(snapshot);
   if (busy) status.textContent = 'Saving… Working subject values are not yet durable.';
   else if (working.dirty) status.textContent = narrow ? 'Unsaved working edits retained; read-only view shows saved subjects.' : 'Unsaved — Working subject differs from the saved draft.';
+  const browser = renderEntityBrowser(host, snapshot, { collection: 'subjects', ownerType: 'Subject', singular: 'Subject', plural: 'Subjects', selectedId: working.originalId, narrow, busy,
+    onSelect: id => { if (narrow) { actions.render(snapshot); return; } leave(latest => { select(latest.workspace.definitionDraft, latest.version, id); actions.render(latest); requestAnimationFrame(() => document.querySelector('.definition-editor-title')?.focus()); }); },
+    onAdd: () => leave(latest => { select(latest.workspace.definitionDraft, latest.version, ''); actions.render(latest); requestAnimationFrame(() => document.getElementById('subject-displayName')?.focus()); }) });
+  host = browser.detail;
   if (narrow) {
-    for (const item of definition.subjects) {
+    for (const item of definition.subjects.filter(row => row.id === browser.selectedId)) {
       const block = el('section'); block.append(el('h4', item.displayName || item.id));
       for (const [field, value] of Object.entries(item)) block.append(el('p', `${field}: ${JSON.stringify(value)}`));
       for (const [field, label, since, , help] of fields) if (!Object.hasOwn(item, field)) block.append(el('p', `${label}: ${definition.catalogVersion < since ? `Unavailable until catalog ${since}` : 'Use catalog default (omitted)'}. ${help}`));
@@ -73,13 +79,6 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
     if (!definition.subjects.length) host.append(el('p', 'No saved subjects.'));
     return;
   }
-  const list = el('div'); list.className = 'actions';
-  for (const item of definition.subjects) {
-    const button = el('button', `Edit subject: ${item.displayName || item.id}`); button.type = 'button'; button.dataset.subjectId = item.id; button.disabled = busy;
-    button.addEventListener('click', () => leave(latest => { select(latest.workspace.definitionDraft, latest.version, item.id); actions.render(latest); })); list.append(button);
-  }
-  const add = el('button', 'Add subject', 'add-subject'); add.type = 'button'; add.disabled = busy;
-  add.addEventListener('click', () => leave(latest => { select(latest.workspace.definitionDraft, latest.version); actions.render(latest); })); list.append(add); host.append(list);
   const form = el('form', undefined, 'subject-form'); form.className = 'definition-entity-form'; form.noValidate = true;
   const changed = () => { working.dirty = true; error = null; status.textContent = 'Unsaved — Working subject differs from the saved draft.'; document.querySelector('#subject-save-error')?.remove(); };
   const textField = (field, label, readonly = false) => {
@@ -125,6 +124,7 @@ export function renderSubjects(host, snapshot, narrow, actions, status, leave) {
   form.addEventListener('submit', event => { event.preventDefault(); saveSubject(snapshot, actions); });
   if (error) { const alert = el('p', error, 'subject-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); form.append(alert);
     const refresh = el('button', 'Review newer saved draft for retry', 'subject-refresh'); refresh.type = 'button'; refresh.addEventListener('click', actions.refresh); form.append(refresh); }
+  enhanceDefinitionForm(form, { prefix: 'subject', ownerType: 'Subject', id: working.originalId, item: working.item, draft, status, groups: [{ key: 'scheduling', title: 'Scheduling constraints', fields: fields.map(row => row[0]), labels: Object.fromEntries(fields.map(row => [row[0], row[1]])) }], referenceFields: [] });
   host.append(form);
   const id = working.originalId;
   if (id) {

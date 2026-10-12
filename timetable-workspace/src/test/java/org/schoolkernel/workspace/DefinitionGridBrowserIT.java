@@ -31,7 +31,7 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
         assertEquals(2, draft().path("issues").size(), "only school identity remains incomplete");
         // Reservation is explicit and unrelated to name, order or time.
         field("monday-1", "displayName").fill("Õppetund <b>Reserved-looking name</b>");
-        workbench.page().locator(".grid-period-row[data-period-id='monday-2'] input[data-field=reserved]").check(); review(); save();
+        field("monday-2", "reserved").check(); review(); save();
         assertEquals(JSON.readTree("[\"monday-2\"]"), definition().path("reservedPeriodIds"));
         assertEquals(0, workbench.page().locator(".grid-period-row b").count());
         String durable = storedDocument(); workbench.reload(); grid(); assertEquals(durable, storedDocument());
@@ -116,7 +116,7 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
     @Test
     void uc3StorageStaleTransportAndAccessFailuresRetainRows() throws Exception {
         create(); workbench.page().locator("#generate-grid").click(); review(); String saved = storedDocument();
-        withRejectedWorkspaceUpdates("NEW.lifecycle_state = 'DEFINITION_DRAFT'", () -> { clickSave(); workbench.awaitText("No change was committed"); assertEquals(saved, storedDocument()); assertEquals(10, workbench.page().locator("#authoring-section > .grid-period-rows .grid-period-row").count()); });
+        withRejectedWorkspaceUpdates("NEW.lifecycle_state = 'DEFINITION_DRAFT'", () -> { clickSave(); workbench.awaitText("No change was committed"); assertEquals(saved, storedDocument()); assertEquals(10, workbench.page().locator("[data-grid-period-id]").count()); });
         // Real concurrent tab advances the saved revision, leaving this tab's reviewed rows stale.
         assertEquals(200, command("", JSON.createObjectNode().set("periods", JSON.createArrayNode()), null).status()); String newer = storedDocument();
         review(); workbench.awaitText("No change was committed"); assertEquals(newer, storedDocument());
@@ -186,13 +186,14 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
         create(); workbench.page().locator("#generate-grid").click(); review(); save();
         var second = newTab(); second.open(); second.page().locator("button[data-section=Grid]").click();
         field("monday-1", "displayName").fill("My Monday name");
+        second.page().locator("[data-grid-period-id='tuesday-1']").click();
         second.page().getByRole(com.microsoft.playwright.options.AriaRole.TEXTBOX,
                 new com.microsoft.playwright.Page.GetByRoleOptions().setName("tuesday-1 displayName").setExact(true)).fill("Their Tuesday name");
         second.page().locator("#preview-grid").click(); second.page().locator("#save-grid").click();
         second.expect("!document.querySelector('#grid-preview')");
         String newer = storedDocument(); review(); workbench.awaitText("No change was committed"); assertEquals(newer,storedDocument());
         workbench.page().locator("#grid-refresh").click();
-        workbench.expect("document.querySelector('[aria-label=\"tuesday-1 displayName\"]')?.value === 'Their Tuesday name'");
+        assertEquals("Their Tuesday name",field("tuesday-1","displayName").inputValue());
         assertEquals("My Monday name",field("monday-1","displayName").inputValue());
         assertEquals("Their Tuesday name",field("tuesday-1","displayName").inputValue());
         review(); save();
@@ -214,7 +215,7 @@ class DefinitionGridBrowserIT extends WorkbenchBrowserSupport {
     private void create() { workbench.open(); open(); grid(); }
     private void open() { workbench.page().locator("#open-authoring").click(); workbench.page().locator("#confirm-authoring").click(); workbench.awaitText("Saved school-definition draft"); }
     private void grid() { workbench.page().locator("button[data-section=Grid]").click(); workbench.awaitText("Periods are explicit"); }
-    private com.microsoft.playwright.Locator field(String id,String field) { return workbench.page().locator("#authoring-section > .grid-period-rows .grid-period-row[data-period-id='"+id+"'] [data-field='"+field+"']"); }
+    private com.microsoft.playwright.Locator field(String id,String field) { workbench.page().locator("#grid-form").waitFor(); if (workbench.page().locator("#grid-form .grid-period-row[data-period-id='"+id+"']").count() == 0) workbench.page().locator("[data-grid-period-id='"+id+"']").click(); return workbench.page().locator("#grid-form .grid-period-row[data-period-id='"+id+"'] [data-field='"+field+"']"); }
     private void review() { workbench.page().locator("#preview-grid").click(); workbench.expect("document.querySelector('#grid-preview') || document.querySelector('#grid-save-error')"); }
     private void clickSave() { workbench.page().locator("#save-grid").click(); }
     private void save() { clickSave(); workbench.expect("!document.querySelector('#grid-preview') && !document.querySelector('#grid-save-error')"); }

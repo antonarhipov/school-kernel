@@ -1,0 +1,354 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/anton/.sdkman/candidates/maven/current/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/anton/.sdkman/candidates/maven/current/lib/guava-33.2.0-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/3]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ kernel-contract ---
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [3/3]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 31 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.480 s -- in org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Running org.schoolkernel.workspace.KernelVerifierTest
+07:52:05.266 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=e7163775-e823-45c6-ba35-ab2574c52c8a kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=47
+07:52:05.313 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=ab429dc2-9b29-449c-bb78-0fa7689b42b4 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=3
+07:52:05.345 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=69a1d9e5-411d-4d7c-bc60-9decf732bca7 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=5
+07:52:05.364 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=56d364a9-8036-4289-8451-74901f93db38 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=3
+07:52:05.383 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=f22d53f1-d0cc-4e49-8234-0b816bdee159 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.227 s -- in org.schoolkernel.workspace.KernelVerifierTest
+[INFO] Running org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Running org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.103 s -- in org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Running org.schoolkernel.workspace.ArchitectureTest
+07:52:05.543 [main] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 25.0.1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.203 s -- in org.schoolkernel.workspace.ArchitectureTest
+[INFO] Running org.schoolkernel.workspace.KernelPlannerTest
+07:52:11.767 [ForkJoinPool.commonPool-worker-1] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=6acdb0e3-ce25-4f52-8b5b-16a6be260fdb runId=99b6be9d-d530-4d42-bdf0-21e619d2501f kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2019 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.818 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=f75c9df0-54a1-43b6-8b41-896ca6f408a7 runId=103c6b34-5fef-4b6a-a131-d399c9314b4e kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=12 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.825 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=7ffd2256-d355-4214-894c-f7b3e4f2a6fd runId=fe8f097e-e70c-4459-9e8e-b3fd6cd67886 kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+07:52:11.828 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=3a4fec11-744d-4896-a749-1b14e850c7d6 runId=9ae7a394-f65b-47cb-8d3c-e8c71e72f443 kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.832 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=50ead67d-abf7-4af9-9401-9c017c12aab4 runId=724526e1-e57f-47ae-b284-51bb56938397 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.843 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=5fae3b1f-2761-49a8-8ddf-b06e5a0aa358 runId=870ce605-ce29-4f1a-909c-14f16900d4ad kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.854 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=af876a60-af96-4b4b-9699-dfa2fbb7f639 runId=c39bffe8-681e-4567-8e86-3fa8737551de kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.859 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=869bee39-3381-45c9-ac14-d12544b55346 runId=28e8975a-e9f4-4a75-a5c8-1ccbb5d46fb3 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.865 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=ce86d208-be3f-406b-87bd-b4d88846c258 runId=2beead64-8e98-4560-b865-0fc56ef5998d kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=4 configuredLimit=PT1M terminationReason=NONE feasible=false
+07:52:11.879 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=a1e06fa7-8259-4cdc-8aec-323692064d97 runId=579e905a-5c0d-4e4d-9d00-bd3e4347bb5b kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=7 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+07:52:11.883 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=0573f825-f74d-4c6c-aa66-c4818eeae62f runId=c1a4aaaf-fa58-4605-95ab-691b800f30e3 kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+07:52:11.915 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=3f0668aa-b46a-47d3-acbc-a197f63bd7ef runId=0bed4020-cd43-4dcb-a27b-893ad50a144d kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=24 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+07:52:11.940 [main] INFO org.schoolkernel.workspace.KernelPlanner -- correlationId=8a052c7a-5aa2-4127-bc71-9d029971cf2a runId=10663f17-90a8-4c3f-8629-2e01a242ce8f kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=19 configuredLimit=PT1M terminationReason=NONE feasible=false
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.210 s -- in org.schoolkernel.workspace.KernelPlannerTest
+[INFO] Running org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.017 s -- in org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Running org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ timetable-workspace ---
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (default) @ timetable-workspace ---
+[INFO] Replacing main artifact /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DefinitionRoomsBrowserIT
+07:52:15.431 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+07:52:15.467 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+07:52:15.500 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+07:52:15.957 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+07:52:16.650 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with Environment variables, system properties and defaults. Resolved dockerHost=unix:///Users/anton/.docker/run/docker.sock
+07:52:16.654 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+07:52:16.687 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 29.8.0
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7933 MB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/anton/Library/Containers/com.docker.docker/Data/docker-cli.sock
+07:52:16.764 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Creating container for image: testcontainers/ryuk:0.14.0
+07:52:16.859 [main] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+07:52:17.162 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 is starting: 31327b6e7aab3bf9a636b164e0f77f21b6013a2033ef704aa76947356154be09
+07:52:17.504 [main] INFO tc.testcontainers/ryuk:0.14.0 -- Container testcontainers/ryuk:0.14.0 started in PT0.740224S
+07:52:17.513 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+07:52:17.514 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+07:52:17.519 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+07:52:17.524 [main] INFO tc.postgres:18.6 -- Creating container for image: postgres:18.6
+07:52:17.558 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 is starting: bd67f603549362ef00927d9b7472ca2d9d67bf9bfb713a8ec9f9eb0d69cb3fb4
+07:52:18.395 [main] INFO tc.postgres:18.6 -- Container postgres:18.6 started in PT0.871073S
+07:52:18.400 [main] INFO tc.postgres:18.6 -- Container is started (JDBC URL: jdbc:postgresql://localhost:55612/browser_workspace?loggerLevel=OFF)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T07:52:38.436+03:00  INFO 60074 --- [           main] o.s.workspace.DefinitionRoomsBrowserIT   : Starting DefinitionRoomsBrowserIT using Java 25.0.1 with PID 60074 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T07:52:38.440+03:00  INFO 60074 --- [           main] o.s.workspace.DefinitionRoomsBrowserIT   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T07:52:40.219+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T07:52:40.233+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T07:52:40.234+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T07:52:40.288+03:00  INFO 60074 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1798 ms
+2026-10-12T07:52:40.507+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-12T07:52:40.661+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@43a8bd35
+2026-10-12T07:52:40.663+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-12T07:52:40.681+03:00  INFO 60074 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:55612/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T07:52:40.743+03:00  INFO 60074 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-12T07:52:40.747+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.019s)
+2026-10-12T07:52:40.763+03:00  INFO 60074 --- [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-12T07:52:40.830+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-12T07:52:40.844+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create workspace aggregate"
+2026-10-12T07:52:40.870+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - add manual draft state"
+2026-10-12T07:52:40.884+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - add definition draft state"
+2026-10-12T07:52:40.899+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 3 migrations to schema "public", now at version v3 (execution time 00:00.017s)
+2026-10-12T07:52:42.666+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 55658 (http) with context path '/'
+2026-10-12T07:52:42.694+03:00  INFO 60074 --- [           main] o.s.workspace.DefinitionRoomsBrowserIT   : Started DefinitionRoomsBrowserIT in 5.128 seconds (process running for 29.57)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/Users/anton/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-12T07:52:44.518+03:00  INFO 60074 --- [o-auto-1-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T07:52:44.520+03:00  INFO 60074 --- [o-auto-1-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T07:52:44.523+03:00  INFO 60074 --- [o-auto-1-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T07:53:08.837+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 60074 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T07:53:08.839+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T07:53:09.382+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T07:53:09.384+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T07:53:09.385+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T07:53:09.411+03:00  INFO 60074 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 561 ms
+2026-10-12T07:53:09.481+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-12T07:53:09.518+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@11c68269
+2026-10-12T07:53:09.519+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-12T07:53:09.524+03:00  INFO 60074 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:55612/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T07:53:09.568+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.016s)
+2026-10-12T07:53:09.597+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T07:53:09.600+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T07:53:09.930+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 55721 (http) with context path '/'
+2026-10-12T07:53:09.935+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 1.18 seconds (process running for 56.811)
+2026-10-12T07:53:09.967+03:00  INFO 60074 --- [o-auto-2-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T07:53:09.967+03:00  INFO 60074 --- [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T07:53:09.968+03:00  INFO 60074 --- [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-10-12T07:53:10.497+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T07:53:10.500+03:00  INFO 60074 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T07:53:10.512+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-12T07:53:10.517+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2026-10-12T07:53:10.520+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T07:53:10.521+03:00  INFO 60074 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 67.34 s -- in org.schoolkernel.workspace.DefinitionRoomsBrowserIT
+[INFO] Running org.schoolkernel.workspace.DefinitionTeachersBrowserIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T07:53:38.338+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 60074 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T07:53:38.339+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T07:53:38.685+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T07:53:38.687+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T07:53:38.687+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T07:53:38.707+03:00  INFO 60074 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 360 ms
+2026-10-12T07:53:38.748+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-10-12T07:53:38.769+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@64df3f4b
+2026-10-12T07:53:38.770+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-10-12T07:53:38.774+03:00  INFO 60074 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:55612/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T07:53:38.795+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.007s)
+2026-10-12T07:53:38.823+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T07:53:38.824+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T07:53:39.104+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 55776 (http) with context path '/'
+2026-10-12T07:53:39.110+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 0.824 seconds (process running for 85.985)
+2026-10-12T07:53:39.129+03:00  INFO 60074 --- [o-auto-3-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T07:53:39.129+03:00  INFO 60074 --- [o-auto-3-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T07:53:39.131+03:00  INFO 60074 --- [o-auto-3-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-10-12T07:53:39.395+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T07:53:39.398+03:00  INFO 60074 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T07:53:39.403+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-10-12T07:53:39.406+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+2026-10-12T07:53:39.410+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T07:53:39.411+03:00  INFO 60074 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 43.95 s -- in org.schoolkernel.workspace.DefinitionTeachersBrowserIT
+[INFO] Running org.schoolkernel.workspace.DefinitionSubjectsBrowserIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T07:54:56.167+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 60074 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T07:54:56.169+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T07:54:56.530+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T07:54:56.532+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T07:54:56.533+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T07:54:56.559+03:00  INFO 60074 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 386 ms
+2026-10-12T07:54:56.611+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-10-12T07:54:56.634+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@169f4152
+2026-10-12T07:54:56.635+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-10-12T07:54:56.639+03:00  INFO 60074 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:55612/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T07:54:56.668+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.009s)
+2026-10-12T07:54:56.692+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T07:54:56.695+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T07:54:56.948+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 55940 (http) with context path '/'
+2026-10-12T07:54:56.956+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 0.843 seconds (process running for 163.831)
+2026-10-12T07:54:56.977+03:00  INFO 60074 --- [o-auto-4-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T07:54:56.979+03:00  INFO 60074 --- [o-auto-4-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T07:54:56.980+03:00  INFO 60074 --- [o-auto-4-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-12T07:54:57.250+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T07:54:57.255+03:00  INFO 60074 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T07:54:57.261+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-10-12T07:54:57.265+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+2026-10-12T07:54:57.268+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T07:54:57.269+03:00  INFO 60074 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 51.20 s -- in org.schoolkernel.workspace.DefinitionSubjectsBrowserIT
+[INFO] Running org.schoolkernel.workspace.DefinitionCohortsBrowserIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-12T07:55:28.070+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Starting ForkedBooter v3.6.0 using Java 25.0.1 with PID 60074 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-12T07:55:28.071+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : No active profile set, falling back to 1 default profile: "default"
+2026-10-12T07:55:28.302+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 0 (http)
+2026-10-12T07:55:28.304+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-12T07:55:28.304+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-12T07:55:28.319+03:00  INFO 60074 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 241 ms
+2026-10-12T07:55:28.779+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-10-12T07:55:28.888+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@11736ebc
+2026-10-12T07:55:28.892+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-10-12T07:55:28.904+03:00  INFO 60074 --- [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:55612/browser_workspace?loggerLevel=OFF (PostgreSQL 18.6)
+2026-10-12T07:55:28.970+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.021s)
+2026-10-12T07:55:29.000+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 3
+2026-10-12T07:55:29.005+03:00  INFO 60074 --- [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-10-12T07:55:29.417+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 56018 (http) with context path '/'
+2026-10-12T07:55:29.427+03:00  INFO 60074 --- [           main] o.a.maven.surefire.booter.ForkedBooter   : Started ForkedBooter in 1.395 seconds (process running for 196.302)
+2026-10-12T07:55:29.500+03:00  INFO 60074 --- [o-auto-5-exec-4] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-12T07:55:29.502+03:00  INFO 60074 --- [o-auto-5-exec-4] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-12T07:55:29.504+03:00  INFO 60074 --- [o-auto-5-exec-4] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-12T07:55:29.940+03:00  INFO 60074 --- [           main] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-12T07:55:29.944+03:00  INFO 60074 --- [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-12T07:55:29.954+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-10-12T07:55:29.956+03:00  INFO 60074 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+2026-10-12T07:55:29.956+03:00  INFO 60074 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-12T07:55:29.957+03:00  INFO 60074 --- [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Destroying Spring FrameworkServlet 'dispatcherServlet'
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 54.80 s -- in org.schoolkernel.workspace.DefinitionCohortsBrowserIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 21, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default) @ timetable-workspace ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.611 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  1.577 s]
+[INFO] School Timetable Operations Workspace .............. SUCCESS [03:51 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:54 min
+[INFO] Finished at: 2026-10-12T07:55:53+03:00
+[INFO] ------------------------------------------------------------------------

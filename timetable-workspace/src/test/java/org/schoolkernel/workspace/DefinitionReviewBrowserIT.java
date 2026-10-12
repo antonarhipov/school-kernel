@@ -27,6 +27,16 @@ class DefinitionReviewBrowserIT extends WorkbenchBrowserSupport {
     @Test void emptyAndUnsavedReviewHasNoInventedPlacementOrUnsavedMutation(){
         workbench.open();open();page().locator("button[data-section='Review']").click();JsonNode review=review();assertEquals(0,review.path("timingImpacts").size());workbench.awaitText("No lessons configured; planning will produce an empty timetable");String before=storedDocument();page().locator("button[data-section='School']").click();page().locator("#school-display-name").fill("Unsaved school title");page().locator("button[data-section='Review']").click();page().locator("#school-stay").click();assertEquals("Unsaved school title",page().locator("#school-display-name").inputValue());assertEquals(before,storedDocument());page().locator("button[data-section='Review']").click();page().locator("#school-discard-working").click();assertFalse(page().locator("#review-changes").textContent().contains("Unsaved school title"));assertEquals(before,storedDocument());
     }
+    @Test void policyTargetAndColdOccurrenceIssueLinksFocusExactControlsWithoutMutation(){
+        initial();open();ObjectNode doc=((ObjectNode)storedWorkspaceDocument()).deepCopy(),def=doc.withObject("definitionDraft").withObject("definition");
+        ((ObjectNode)def.path("lessons").get(0)).put("teacherId","missing-teacher");
+        def.putArray("roomAssignments").addObject().put("id","unfinished-policy").put("subjectId","math");
+        doc.withObject("definitionDraft").put("draftRevision",DefinitionDraftService.revision(def));store("DEFINITION_DRAFT",doc);workbench.reload();String before=storedDocument();
+        page().getByText("Open issue: Lesson lesson-math-1 • teacherId",new com.microsoft.playwright.Page.GetByTextOptions().setExact(true)).first().click();
+        page().locator("#occurrence-form").waitFor();workbench.expect("document.activeElement?.id === 'occurrence-teacherId-mode'");assertEquals(before,storedDocument());
+        page().locator("button[data-section='Review']").click();page().getByText("Open issue: RoomAssignment unfinished-policy • target",new com.microsoft.playwright.Page.GetByTextOptions().setExact(true)).first().click();
+        page().locator("#room-policy-form").waitFor();workbench.expect("document.activeElement?.id === 'room-policy-target-mode'");assertEquals("unfinished-policy",page().locator("#room-policy-id").inputValue());assertEquals(before,storedDocument());
+    }
     private void initial(){ObjectNode def=((ObjectNode)fixtures.validAcceptedDocument().path("acceptedBaseline").path("definition")).deepCopy().put("catalogVersion",9);ObjectNode doc=JSON.createObjectNode();doc.set("initialDefinition",def);store("INITIAL_DRAFT",doc);workbench.open();}
     private void open(){page().locator("#open-authoring").click();page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
     private com.microsoft.playwright.Page page(){return workbench.page();}

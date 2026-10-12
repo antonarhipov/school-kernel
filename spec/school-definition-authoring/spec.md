@@ -79,6 +79,13 @@ The proposal's decisions remain in force. Smaller choices are resolved as follow
 | UC-18 | Abandon seeded repair and resume authoring | School timetable administrator | Requires UC-16 |
 | UC-19 | Discard authoring and return to its source | School timetable administrator | Requires UC-1 |
 | UC-20 | Find the supported route for a teacher change | School timetable administrator | None |
+| UC-21 | Find and select definition records at school scale | School timetable administrator | Requires UC-1 |
+| UC-22 | Find and compare weekly teaching requirements | School timetable administrator | Requires UC-1 |
+| UC-23 | Edit definition settings with concise, readable forms | School timetable administrator | Requires UC-1 |
+| UC-24 | Inspect and refine the weekly grid spatially | School timetable administrator | Requires UC-1 |
+| UC-25 | Find and understand hard room policies | School timetable administrator | Requires UC-1 |
+| UC-26 | Select and customize occurrences at school scale | School timetable administrator | Requires UC-1 |
+| UC-27 | Understand and tune ordinary scheduling preferences | School timetable administrator | Requires UC-1 |
 
 The relationships express available actor outcomes, not a prescribed screen order. An imported valid definition can
 finish without using every editor. UC-16 is primary because its successful postcondition supplies the verified
@@ -1533,3 +1540,287 @@ No product decision is deferred to an unavailable stakeholder. Existing local wo
 available to exercise the declared boundaries. Runtime verification or walkthrough evidence that cannot be obtained
 is a delivery/convergence limitation, not permission to weaken a use-case guarantee or claim approval. Technical
 rules and implementation are subsequent stages and must not choose new product behavior.
+
+
+## UC-21 - Find and select definition records at school scale
+
+- Goal: Locate and edit a particular subject, teacher, class, or room without scanning a cloud of action buttons.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator enters Subjects, Teachers, Classes, or Rooms.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator enters a collection and sees a searchable, naturally sorted list beside a single editor, a count,
+   clearly selected record, stable identifiers beneath names, and one collection-specific Add action.
+2. The administrator searches by name or identifier, optionally filters teachers by qualification, rooms by capability,
+   or any collection by issues, and browses bounded pages of results.
+3. The administrator selects a record and sees its name and identifier above its editor, or creates a new record.
+4. The administrator explicitly saves through the existing entity use case. The selected record, search, filters, page,
+   and list scroll position remain when the editor is rendered again or another section is visited and returned to.
+
+### Extensions
+
+- 2a. If no records match, the system explains that filters can be changed and retains the open form; resume at step 2.
+- 3a. If another record or Add is requested with working edits, Save and continue, Discard working edits, and Stay have
+  the existing form-state meanings. Failed save retains working values and the current editor; resume at step 3.
+- 3b. At widths at most 700 CSS px, search, filters, paging and selection inspect saved records only; mutation actions
+  are absent and any desktop working form remains intact when widening; resume at step 2.
+
+### Guarantees
+
+- G1. Browsing never changes saved definition, version, source, Current, identifiers, omissions or exception intent.
+  Filtering never selects another record implicitly or discards working values; an open record outside results is named.
+- G2. Search ignores case and diacritics; sorting handles numeric class names. Duplicate names are distinguished by ID.
+  Subject rows summarize configured constraints; teacher rows show qualifications and weekly load; class rows show size,
+  curator and home room; room rows show capacity and capabilities. Issue badges distinguish blockers and advisories.
+- G3. Keyboard users can reach search, filters, Add, results and editor; arrow keys navigate results and Enter selects.
+  Focus is visible, selection is announced, counts and empty states are readable, and long names do not overflow.
+- G4. The new browsing presentation obeys UC-1 G4–G7 and does not weaken UC-4–UC-7 save, stale-conflict or identity rules.
+
+### Postconditions
+
+- Success: The intended record is selected or a new record is ready for explicit editing.
+- Minimal guarantee: Working edits and durable state remain unchanged by browsing or a cancelled selection.
+
+## UC-22 - Find and compare weekly teaching requirements
+
+- Goal: Locate a requirement by teaching context and compare weekly counts and exceptions.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator enters Weekly requirements.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator sees a bounded, searchable requirements table showing class, subject, teacher, lessons per week,
+   exception count and issues. Human-readable names lead; series IDs distinguish otherwise identical requirements.
+2. The administrator searches or filters by class, subject, teacher or issues, and selects a requirement.
+3. The system presents the selected requirement's editor, retaining the table context.
+4. The administrator previews and explicitly saves through UC-8; selection and browsing context remain available.
+
+### Extensions
+
+- 1a. Mixed or missing teacher settings and invalid counts are shown explicitly without guessing values; resume at step 2.
+- 2a. Empty results retain the open working form and explain how to change filters; resume at step 2.
+- 2b. Unsaved selection or Add uses the existing Save/Discard/Stay guard; failed saves retain the editor; resume at step 2.
+- 3a. Narrow screens use searchable saved inspection, preserve desktop working edits, and expose no mutations; resume at step 2.
+
+### Guarantees
+
+- G1. UC-21 G1 and G3 apply to browsing. Teacher filtering also finds teachers on individual occurrences; exceptions and
+  imported mixed settings are never silently collapsed into a guessed common value.
+- G2. Count changes, cancellations, explicit exception intent, zero-count/incomplete work, stable occurrence identity,
+  ungrouped lessons, previews, source and Current retain every UC-8 guarantee.
+- G3. Wide and narrow results remain readable without page-level horizontal overflow. Selection and search survive save
+  and section round trips; result count reports the filter scope. At most 25 result rows are rendered per page.
+
+### Postconditions
+
+- Success: The intended requirement is open with its class, subject, teacher, count, exceptions and issues identified.
+- Minimal guarantee: Browsing and cancelled edits preserve all saved and working values.
+
+## UC-23 - Edit definition settings with concise, readable forms
+
+- Goal: Understand and change common settings without traversing technical metadata and long period checklists.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator edits a definition entity or weekly requirement.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator sees school name, saved/unsaved state and issue counts prominently; revision/source metadata is
+   available in Draft details. The current editor identifies its record and presents common fields first.
+2. The administrator selects class, subject, teacher or home-room references by searchable names, with stable IDs
+   available and unresolved saved identifiers explicitly retained and marked.
+3. The administrator edits teacher/class/room availability or undesirable periods in a weekday-by-period grid with
+   labelled cells; All periods and Selected periods remain distinct. Existing reservations and times are visible.
+4. The administrator expands scheduling settings or locks as needed. Collapsed sections summarize configured values;
+   sections containing issues open automatically. Field issues are linked from an editor summary.
+5. The administrator uses editor-local save/discard actions and status, available in a sticky action area, and saves
+   through the existing entity or preview operation.
+
+### Extensions
+
+- 2a. An unresolved or unsupported saved value stays visible and editable as explicit incomplete work; resume at step 2.
+- 4a. Validation or transport failure identifies the field or operation, retains working values, and offers correction
+  or retry; resume at step 2. Collapsed groups containing issues open and error navigation reaches the affected control.
+- 5a. On a narrow screen the browser shows saved inspection only; desktop working forms return on widening; end.
+
+### Guarantees
+
+- G1. Name-based controls store the same stable references and preserve unresolved work. Availability grids preserve
+  omission versus explicit empty selection, exact IDs and unsupported/invalid values until deliberately corrected.
+- G2. Common versus advanced grouping changes presentation only. Supported constraints, catalog defaults, limits,
+  reservations, requirement scopes and exceptions remain available with their existing meanings.
+- G3. Save status/actions are near the current editor, keyboard focus is preserved across control changes, and sticky
+  areas do not cover focused inputs. Source/Current and lifecycle locks remain unchanged by presentation.
+- G4. The same real-browser, durable-state and responsive evidence boundary as UC-1 G7 applies.
+
+### Postconditions
+
+- Success: The administrator understands the selected settings and explicitly saves the intended values.
+- Minimal guarantee: Browsing, expanding, cancelled operations and failures never save or discard work implicitly.
+
+
+## UC-24 - Inspect and refine the weekly grid spatially
+
+- Goal: Understand declared slots, reservations and bell times while editing one period at a time.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator inspects or edits the corresponding definition settings.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator enters Grid and sees all declared slots in a weekday-by-order overview, including times, reservation membership and saved issues.
+2. The administrator selects a slot and edits its name, weekday/order, optional times or reservation in one labelled inspector; other working rows remain intact.
+3. The administrator reviews the complete grid operation, including generated additions and timing/availability impacts, and explicitly saves through UC-3.
+
+### Extensions
+
+- 1a. An empty grid offers generation; irregular, duplicate or invalid slots remain represented and inspectable; resume at step 2.
+- 2a. Narrow inspection uses saved values only and preserves desktop working rows; end.
+- 3a. Cancel, invalid work or failed/stale save retains every UC-3 outcome and working value; resume at step 2.
+
+### Guarantees
+
+- G1. An overview selection never saves, discards or reorders values; the grid save remains atomic across all working rows and reservations.
+- G2. Only one editable period inspector is rendered. Generation, review, reservation omission versus explicit membership, invalid/unresolved values and source/Current retain UC-3 fidelity.
+- G3. The overview has labelled keyboard-operable slots, visible selection, linked saved issues and no page-level overflow at wide/narrow widths. Actions/status are local and focused controls remain clear.
+
+### Postconditions
+
+- Success: The administrator understands the selected settings and explicitly saves the intended values.
+- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
+
+
+## UC-25 - Find and understand hard room policies
+
+- Goal: Locate a scoped hard room rule and understand its target and matched population.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator inspects or edits the corresponding definition settings.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator enters Room policies and searches or filters a bounded browser by subject, teacher scope or issues; names lead and IDs distinguish rules.
+2. The administrator selects a policy and sees one editor with searchable subject/teacher references and an explicit target: allowed rooms or matched class home rooms.
+3. The administrator chooses target values, understands that matching policies intersect, and explicitly saves through UC-10; matched effects and saved issues remain available.
+
+### Extensions
+
+- 1a. Empty results retain working edits; an unavailable catalog offers the existing upgrade route; end.
+- 2a. Unresolved or invalid targets/references remain visible until explicitly corrected; resume at step 3.
+- 2b. Unsaved selection/Add invokes Save/Discard/Stay; failures retain the editor; resume at step 2.
+- 2c. Narrow saved inspection preserves desktop working edits and exposes no mutation; end.
+
+### Guarantees
+
+- G1. At most25 policy rows are rendered per page. Filters, selection and scroll survive saves and section round trips.
+- G2. Allowed-room selection is searchable and bounded; filtering never changes selected IDs. Exact target optional presence, invalid values, source/Current and UC-10 hard-intersection semantics remain intact.
+- G3. Field issues are linked, common fields use names, saved effects are expandable/bounded, and local sticky actions never obscure focused controls.
+
+### Postconditions
+
+- Success: The administrator understands the selected settings and explicitly saves the intended values.
+- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
+
+
+## UC-26 - Select and customize occurrences at school scale
+
+- Goal: Find an exact selected lesson population and customize it with explicit scope.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator inspects or edits the corresponding definition settings.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator searches and filters a bounded occurrence table by class, subject, teacher, series state or issues; rows show named context and exception counts.
+2. The administrator explicitly selects or deselects occurrences and sees the total selected population, including selections outside the filter/page; browsing alone never changes that selection.
+3. The administrator sees concise saved details and one selected-population form, with name pickers for references and expandable scheduling, locks, membership and rule transfers.
+4. The administrator previews exact before/after changes and explicitly saves through UC-9.
+
+### Extensions
+
+- 1a. Empty results preserve the selected population and working choices; resume at step 2.
+- 2a. Changing selection with unsaved choices invokes Save/Discard/Stay; failed saves retain choices; resume at step 2.
+- 3a. Narrow saved inspection has separate browsing selection and preserves all desktop choices; end.
+- 4a. Invalid/unsupported/grouping/conflict/failed/cancelled operations retain every UC-9 refusal and minimal guarantee; resume at step 3.
+
+### Guarantees
+
+- G1. At most25 occurrence rows are rendered per page. Named filters/IDs/exception indicators and selected-scope counts are readable and keyboard-operable.
+- G2. No select-all-across-hidden-results operation is introduced; only explicitly named occurrences are mutated. Exact exception intent, mixed fields, grouping, teaching/rule transfers and source/Current retain UC-9 semantics.
+- G3. Long saved details and teacher/rule information are bounded/expandable; supported fields remain reachable; no page overflow; local actions and field focus remain accessible.
+
+### Postconditions
+
+- Success: The administrator understands the selected settings and explicitly saves the intended values.
+- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.
+
+
+## UC-27 - Understand and tune ordinary scheduling preferences
+
+- Goal: Understand the effect and limits of each ordinary quality preference before choosing its weight.
+- Primary actor: School timetable administrator
+- Supporting actors: Local durable workspace
+- Trigger: The administrator inspects or edits the corresponding definition settings.
+- Preconditions: A definition draft is open.
+- Relations:
+  - Requires: UC-1 supplies the draft
+  - Includes: none
+  - Extends: none
+
+### Main success scenario
+
+1. The administrator sees readable preference names grouped by scheduling goal, saved default/override/disabled/invalid state and catalog availability.
+2. The administrator selects a preference and reads its effect, a concrete scheduling example, how penalty units are counted, and where relevant class or occurrence settings come from.
+3. The administrator compares a proposed default or explicit weight with the saved choice and sees an illustrative weighted-penalty calculation; the explanation states that higher weights trade off ordinary penalties and do not guarantee outcomes.
+4. The administrator explicitly saves through UC-11 and sees effective weight and validation beside the editor.
+
+### Extensions
+
+- 1a. Unsupported saved overrides or duplicate/invalid weights stay visible as issues; a newer catalog setting offers the existing upgrade route; end.
+- 3a. Invalid proposed work has a correction message without an invented effective weight and remains saveable as supported incomplete work; resume at step 3.
+- 3b. Narrow saved inspection preserves desktop working choices, with no save controls; end.
+- 4a. Unsaved navigation, stale conflicts and failed writes retain all UC-11 guarantees and working values; resume at step 3.
+
+### Guarantees
+
+- G1. Exactly the supported ordinary preferences remain configurable. Default omission, explicit zero, explicit one and invalid entered work remain distinct; source/Current/hard feasibility/stability ordering are unchanged.
+- G2. Explanations match actual gap blocks, same-day series count, additive undesirability, preferred-room fallback, class daily-spread target and preferred start-slot behavior. Examples are labelled illustrative, not a solver forecast.
+- G3. Human names lead, technical IDs are secondary, related authoring settings are named, issues link to controls, and keyboard/responsive/local-save behavior follows UC-23.
+
+### Postconditions
+
+- Success: The administrator understands the selected settings and explicitly saves the intended values.
+- Minimal guarantee: Browsing, filtering, expanding and cancellation never implicitly save or discard any work.

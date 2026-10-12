@@ -2,9 +2,9 @@
 
 ## Current
 
-- Use case: none (all 20 complete)
+- Use case: UC-27
 - Status: APPROVED
-- Feature: IMPLEMENTED (20/20 approved, legacy discard correction verified)
+- Feature: IMPLEMENTED — all27 use cases approved
 - Next eligible: none
 
 ## Progress
@@ -31,6 +31,14 @@
 | UC-18 | APPROVED | UC-16 | `99a8fac` / [checkpoint](checkpoints/UC-18.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-18/20261012-1/README.md) |
 | UC-19 | APPROVED | UC-1 | `e90d7a5` + correction `726774d` / [checkpoint](checkpoints/UC-19.md) | [original PASS](../../output/playwright/school-definition-authoring/UC-19/20261012-3/README.md), [legacy correction PASS](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-4/README.md) |
 | UC-20 | APPROVED | none | `1090151` / [checkpoint](checkpoints/UC-20.md) | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-20/20261012-7/README.md) |
+| UC-21 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-21.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-21/ux-20261012-1/README.md) |
+| UC-22 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-22.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-22/ux-20261012-1/README.md) |
+| UC-23 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-23.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-23/ux-20261012-5/README.md) |
+
+| UC-24 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-24.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-24/remaining-20261012-2/README.md) |
+| UC-25 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-25.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-25/remaining-20261012-3/README.md) |
+| UC-26 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-26.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-26/remaining-20261012-4/README.md) |
+| UC-27 | APPROVED | UC-1 | [checkpoint](checkpoints/UC-27.md) / exact patch | [PASS walkthrough](../../output/playwright/school-definition-authoring/UC-27/remaining-20261012-2/README.md) |
 
 ## Technical decision pass
 
@@ -411,3 +419,62 @@ User-reported `definition-discard.js:12` uncaught school access reproduced on an
 ### 2026-10-12 — UC-19 legacy correction automatic approval
 
 Submission `726774d`, [complete repeat4 PASS ledger](../../output/playwright/school-definition-authoring/UC-19/discard-legacy-20261012-4/README.md).33 unit/architecture +8 discard/persistence cases PASS. Exact actual MVK legacy source restored/reloaded in isolated copy v233→234; modern accepted, initial,EMPTY and explicit null-source refusal PASS;8 inspected screenshots, zero uncaught errors. Actual8080 confirmation/cancel preserves entire operator v233; corrected local runtime retained, user's original browser/working values untouched. Source revision is independently kernel-verified, not authoring JSON hash; initial/canonical-order and refusal regressions strengthened. Failed/interrupted attempts immutable. All20 approved, no outstanding handoff/blocker; original final regression coverage remains applicable and new affected checks PASS.
+
+
+### 2026-10-12 — authorized UI refinements
+
+User accepted the review recommendations and requested implementation. Added UC-21–UC-23 to the existing specification; UC-1–UC-20 approvals/evidence remain intact. Base `b1fd27daad4b7866a6e50ba9f18273b7ea1d5bc2`; pre-existing untracked `.agents/skills/antfu-web-design-guidelines/` is unrelated and preserved. UC-21 IN_PROGRESS; UC-22/23 NOT_STARTED. Requires UC-1 is satisfied. Narrow inspection remains read-only; no lifecycle/data-model change or arbitrary bulk editing.
+
+UC-21 PENDING_WALKTHROUGH: production-boundary administrator journey and filter supplement PASS in isolated18112; immutable source235 and exact saved236 recorded. Technical four-entity regression still running; approval waits for final result.
+
+### 2026-10-12 — UC-21 APPROVED; UC-22 started
+
+33 workspace unit/architecture +21 entity browser cases PASS. [Real copied-school journey/filter supplement and exact diff](../../output/playwright/school-definition-authoring/UC-21/ux-20261012-1/README.md): duplicate names/diacritics, bounded pages, qualification/capability/issues filters, natural class sorting, keyboard, Save/Stay, hidden open record, section round trips,390 read-only and working-value retention, full saved/source/Current comparison PASS. [Checkpoint](checkpoints/UC-21.md). Operator untouched. UC-22 IN_PROGRESS; UC-23 NOT_STARTED.
+
+### 2026-10-12 — UC-22 APPROVED; UC-23 started
+
+[182-requirement real-browser PASS and exact diff](../../output/playwright/school-definition-authoring/UC-22/ux-20261012-1/README.md);4 requirement browser cases +1 unit PASS. Scoped filtering, explicit preview/count save, canceled/aborted writes, original occurrence/source/Current fidelity, reload and1600/1280/700/390 no-overflow/read-only outcomes recorded. [Checkpoint](checkpoints/UC-22.md). UC-23 IN_PROGRESS.
+
+
+### 2026-10-12 — UC-23 final verification
+
+33 unit/architecture and22 affected browser cases PASS in final-repeat; corrected-focus repeat33+2 PASS. Preserved earlier case-sensitive reservation/test-hidden-ID failures and native-dialog setup interruption. Real attempt3 exposed queued-details expansion/focus race; synchronous expansion capture and detached-event guard added. Attempt4 behavioral PASS (237→245, source/Current exact), but visual inspection prompted concise class-reference help and bounded issue summary. Final changed-build complete walkthrough and focused regression running; approval awaits both.
+
+
+### 2026-10-12 — UI refinements complete, UC-23 APPROVED
+
+Final full repeat5 PASS: stable responsive/screenshots across all five tabs, keyboard picker and mode focus, exact invalid/unresolved field navigation/correction,50-slot grids, explicit saves245→253, complete definition restoration and source/Current/reload exact.33 unit/architecture +42 distinct browser regressions PASS across unaffected/corrected focused runs; final production-polish33+2 PASS. [Complete evidence/patch/runtime ledger](../../output/playwright/school-definition-authoring/UC-23/ux-20261012-5/README.md). Local8080 started with exact verified final package; complete operator saved235 unchanged, all five tabs checked in owned read-only browser, original user's browser untouched. No backend/schema changes. All23 approved, no handoff/blocker. Failed/superseded evidence retained; automatic approval only.
+
+
+### 2026-10-12 — remaining-editor refinements authorized
+
+User requested rework of Grid, Room policies, Occurrence details and preference explanations/UI. Added UC24–27 with existing explicit-save and fidelity boundaries; prior23 approvals and all current work preserved. Base b1fd27d plus immutable UC23 submission patch. Unrelated untracked design-guidelines skill preserved. Preference explanations grounded in actual kernel penalty functions. UC24 IN_PROGRESS;25–27 NOT_STARTED.
+
+
+### 2026-10-12 — UC24 APPROVED; UC25 started
+
+33 unit/architecture+7 grid+5 review cases PASS; full real copied50-slot grid journey2 PASS255→257, exact source/Current/restoration/reload, one inspector, complete atomic preview/generation/negative regression and responsive working retention. [Ledger/patch](../../output/playwright/school-definition-authoring/UC-24/remaining-20261012-2/README.md). Initial helper/VM interruptions retained and corrected without weakening values. UC25 IN_PROGRESS.
+
+### 2026-10-12 — UC25 APPROVED; UC26 started
+
+35-policy full repeat2 PASS261→264; exact restoration/source/Current/reload, filtered-room preservation, invalid target focus/correction and responsive working retention.33 unit/architecture+4 policies+2 shared UX cases PASS. [Ledger/patch](../../output/playwright/school-definition-authoring/UC-25/remaining-20261012-2/README.md). Earlier harness/layout findings retained. UC26 IN_PROGRESS.
+
+### 2026-10-12 — UC26 APPROVED; UC27 started
+
+Final full real521-occurrence repeat3 PASS267→270, explicit2-population across filters, incompatible grouping refusal, exact selected-only edit/full restoration/source/Current/reload, mixed-value display and responsive retention.33 unit/architecture+5 occurrences+2 shared UX cases PASS. [Ledger/patch](../../output/playwright/school-definition-authoring/UC-26/remaining-20261012-3/README.md). Earlier native-checkbox helper/resize race and superseded visual evidence retained. UC27 IN_PROGRESS.
+
+### 2026-10-12 — UC27 technical and walkthrough PASS; final regressions
+
+33 unit/architecture+3 preferences+2 shared UX cases PASS. Full copied-school preference journey1 PASS270→274: all7 grounded explanations/3 goal groups, exact default/explicit0/invalid1.5/explicit1/restoration, live2×5=10 calculation, linked correction focus, Stay/filter/narrow retention/source/Current/reload. Images inspected. Final affected-editor regressions add UI assertions for unavailable/duplicate/unsupported saved choices before approval.
+
+Preference explanation polish explicitly identifies the home-room fallback capacity/capability conditions from PlanningMapper. Behavior unchanged; final walkthrough repeat2 will pin this complete copy.
+
+### 2026-10-12 — complete affected-editor regression PASS
+
+33 unit/architecture+51 browser cases across all11 affected editor classes PASS, zero failures/errors/skips. Unavailable/duplicate/unsupported preference UI assertions also pass. Review focus correction added after this run’s packaged snapshot; targeted6 Review+5 occurrence+2 shared UX repeat and full affected standalone repeats remain before final delivery. [Regression log/results](../../output/playwright/school-definition-authoring/final-remaining-20261012/README.md).
+
+### 2026-10-12 — remaining refinements IMPLEMENTED; all27 APPROVED
+
+Final exact-build policy35/occurrence521/preference7 full repeats PASS274→284. Cold Review link/target focus supplement PASS284→288, full definition restoration and source/Current/reload exact; inspected responsive/contact-sheet/focused-control images.33 unit/architecture+51 affected editor cases PASS; changed-focus suite retained12 passing cases and one new harness strict-selector ambiguity, corrected same owner/field diagnostic selector then all6 Review+33 repeat PASS.52 distinct affected browser cases pass, no remaining failure/skip. Original negative/durable assertions retained. [Final ledger/exact patch/runtime evidence](../../output/playwright/school-definition-authoring/final-remaining-20261012/README.md).
+
+Final package on8080; full operator row/API exactly preserved at238 ACCEPTED_BASELINE,10 served assets exact, owned read-only browser PASS. Existing connection config derived internally; initial disposable-role assumption corrected without DB writes. Original user's browser untouched. Owned18112 server/two verification browsers closed, disposable evidence/data retained. No backend/schema change, no handoff/blocker, automatic approval. All intended changes uncommitted with immutable exact patch; unrelated skill preserved.

@@ -1,0 +1,208 @@
+{
+  "baseVersion": 257,
+  "addedPolicies": [
+    {
+      "id": "ux-policy-01",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-02",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-03",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-04",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    },
+    {
+      "id": "ux-policy-05",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-06",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-07",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-08",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    },
+    {
+      "id": "ux-policy-09",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-10",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-11",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-12",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    },
+    {
+      "id": "ux-policy-13",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-14",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-15",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-16",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    },
+    {
+      "id": "ux-policy-17",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-18",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-19",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-20",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    },
+    {
+      "id": "ux-policy-21",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-22",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-23",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-24",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    },
+    {
+      "id": "ux-policy-25",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-26",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-27",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ]
+    },
+    {
+      "id": "ux-policy-28",
+      "subjectId": "history-extra-b",
+      "allowedRoomIds": [
+        "a106"
+      ],
+      "teacherId": "siiri-aiaste"
+    }
+  ]
+}

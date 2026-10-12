@@ -92,9 +92,13 @@ class DefinitionCohortsBrowserIT extends WorkbenchBrowserSupport {
     private void create(){workbench.open();open();classes();}
     private void open(){workbench.page().locator("#open-authoring").click();workbench.page().locator("#confirm-authoring").click();workbench.awaitText("Saved school-definition draft");}
     private void nav(String section){workbench.page().locator("button[data-section='"+section+"']").click();}
-    private void classes(){nav("Classes");workbench.awaitText("Class name");}
+    private void expandForm() {
+        var groups = workbench.page().locator("#class-form details");
+        for (int i = 0; i < groups.count(); i++) if (groups.nth(i).getAttribute("open") == null) groups.nth(i).locator(":scope > summary").click();
+    }
+    private void classes(){nav("Classes");workbench.awaitText("Class name"); expandForm(); }
     private void name(String value){workbench.page().locator("#class-displayName").fill(value);}
-    private void mode(String field,String value){workbench.page().locator("#class-"+field+"-mode").selectOption(value);}
+    private void mode(String field,String value){ expandForm(); workbench.page().locator("#class-"+field+"-mode").selectOption(value); expandForm(); }
     private void number(String field,String value){if(!field.equals("size"))mode(field,"value");workbench.page().locator("#class-"+field).fill(value);}
     private void link(String field,String value){mode(field,"value");workbench.page().locator("#class-"+field).fill(value);}
     private void clickSave(){workbench.page().locator("#save-class").click();}

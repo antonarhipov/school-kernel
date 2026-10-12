@@ -1,13 +1,17 @@
+import { enhanceDefinitionForm } from './definition-form-controls.js';
 const weekdays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
-const title = day => day[0] + day.slice(1).toLowerCase();
+const title = day => { const value = String(day ?? 'Unspecified'); return value.charAt(0) + value.slice(1).toLowerCase(); };
 let working;
+let selectedPeriodId;
+let inspectedPeriodId;
 let identity;
 let preview;
 let busy = false;
 let error;
 const el = (tag, text, id) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (id) n.id = id; return n; };
-export function resetGrid() { working = null; identity = null; preview = null; error = null; }
+export function resetGrid() { working = null; identity = null; preview = null; error = null; selectedPeriodId = inspectedPeriodId = null; }
 export function gridDirty() { return !!working?.dirty; }
+export function choosePeriod(id) { selectedPeriodId = id; }
 export function discardGrid(definition) { working = values(definition); preview = null; error = null; }
 const gridValues = definition => ({ periods: structuredClone(definition.periods), ...(Object.hasOwn(definition, 'reservedPeriodIds') ? { reservedPeriodIds: [...definition.reservedPeriodIds] } : {}) });
 const values = (definition, version) => ({ ...gridValues(definition), base: gridValues(definition), baseVersion: version, conflicts: [], dirty: false });
@@ -83,8 +87,11 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
   if (identity !== nextIdentity) { identity = nextIdentity; working = null; preview = null; error = null; }
   if (!working || !working.dirty) working = values(definition, snapshot.version);
   else mergeNewer(definition, snapshot.version);
-  host.append(el('p', 'Periods are explicit teaching slots. Reservations are separate from resource availability. Existing IDs stay fixed; removal requires guided dependency resolution.'));
-  if (narrow) { renderRows(host, values(definition), true, status, definition); return; }
+  host.append(el('p', 'Periods are explicit teaching slots. Reservations are separate from teacher, class and room availability. Existing IDs stay fixed; removal requires guided dependency resolution.'));
+  if (narrow) { const grid = values(definition); renderGridOverview(host, grid, true, snapshot, actions, draft); renderRows(host, grid, true, status, definition, inspectedPeriodId); return; }
+  if (working.dirty) status.textContent = 'Unsaved — Working grid differs from the saved draft.';
+  if (busy) status.textContent = 'Reviewing or saving… Working grid is not yet durable.';
+  const form = el('form', undefined, 'grid-form'); form.className = 'definition-grid-form'; form.noValidate = true; form.addEventListener('submit', event => event.preventDefault()); host.append(form); host = form;
   renderConflicts(host, snapshot, actions);
   const generate = el('details'); generate.open = definition.periods.length === 0;
   generate.append(el('summary', definition.periods.length ? 'Add generated slots (existing grid is preserved)' : 'Generate weekly grid'));
@@ -131,21 +138,23 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
     });
     edited(status); actions.render(snapshot);
   }); generate.append(add); host.append(generate);
-  renderRows(host, working, false, status, definition);
+  renderGridOverview(host, working, false, snapshot, actions, draft);
+  renderRows(host, working, false, status, definition, selectedPeriodId);
   const reservation = el('label', 'Reservation representation'), mode = el('select', undefined, 'grid-reservation-mode');
   for (const [value, label] of [['default', 'No reservations (omitted)'], ['explicit', 'Explicit reservation membership']]) { const option = el('option', label); option.value = value; mode.append(option); }
   mode.value = Object.hasOwn(working, 'reservedPeriodIds') ? 'explicit' : 'default'; mode.disabled = busy;
   mode.addEventListener('change', () => { if (mode.value === 'default') delete working.reservedPeriodIds; else working.reservedPeriodIds = []; edited(status); actions.render(snapshot); });
-  reservation.append(mode); host.append(reservation);
+  reservation.append(mode); const reservations = el('details', undefined, 'grid-reservation-details'); reservations.append(el('summary', `Reservation representation — ${Object.hasOwn(working, 'reservedPeriodIds') ? `${working.reservedPeriodIds.length} explicit memberships` : 'No reservations (omitted)'}`), reservation); host.append(reservations);
+  if (working.reservedPeriodIds?.some(id => !working.periods.some(row => row.id === id))) reservations.append(el('p', `Unresolved reservation IDs retained: ${working.reservedPeriodIds.filter(id => !working.periods.some(row => row.id === id)).join(', ')}.`));
   const controls = el('div'); controls.className = 'actions';
-  const review = el('button', 'Review grid operation', 'preview-grid'); review.disabled = busy;
+  const review = el('button', 'Review grid operation', 'preview-grid'); review.type = 'button'; review.disabled = busy;
   review.addEventListener('click', async () => {
     busy = true; error = null;
     try { if (working.conflicts?.length) throw new Error('Resolve the newer saved field conflicts before reviewing.'); preview = await actions.grid(payload(), snapshot.version, true); }
     catch (failure) { error = `No change was committed. ${failure.message} Working rows remain available.`; }
     busy = false; actions.render(snapshot);
   });
-  const cancel = el('button', 'Cancel working grid edits', 'cancel-grid'); cancel.className = 'secondary'; cancel.disabled = busy;
+  const cancel = el('button', 'Cancel working grid edits', 'cancel-grid'); cancel.type = 'button'; cancel.className = 'secondary'; cancel.disabled = busy;
   cancel.addEventListener('click', () => { discardGrid(definition); actions.render(snapshot); });
   controls.append(review, cancel); host.append(controls);
   if (error) { const alert = el('p', error, 'grid-save-error'); alert.className = 'error'; alert.setAttribute('role', 'alert'); host.append(alert);
@@ -157,29 +166,58 @@ export function renderGrid(host, snapshot, narrow, actions, status) {
     for (const effect of preview.availabilityEffects) block.append(el('p', `${effect.displayName} (${effect.ownerId}): ${effect.periodId} — ${effect.effect}`));
     renderImpacts(block, preview.timingImpacts);
     for (const issue of preview.issues) block.append(el('p', `${issue.severity}: ${issue.ownerType} ${issue.ownerId} • ${issue.field}: ${issue.message}`));
-    const save = el('button', 'Save reviewed grid', 'save-grid'); save.disabled = busy; save.addEventListener('click', () => saveGrid(snapshot, actions)); block.append(save); host.append(block);
+    const save = el('button', 'Save reviewed grid', 'save-grid'); save.type = 'button'; save.disabled = busy; save.addEventListener('click', () => saveGrid(snapshot, actions)); block.append(save); host.append(block);
   }
   renderImpacts(host, draft.gridTimingImpacts);
-  for (const issue of draft.issues || []) if (issue.ownerType === 'Period' || issue.field === 'reservedPeriodIds') host.append(el('p', `Saved blocker: ${issue.ownerId} ${issue.field} — ${issue.message}`));
+  const issues = el('details'); issues.append(el('summary', 'Saved grid issues')); for (const issue of draft.issues || []) if (issue.ownerType === 'Period' || issue.field === 'reservedPeriodIds') { const link = el('button', `${issue.ownerId} ${issue.field} — ${issue.message}`); link.type = 'button'; link.addEventListener('click', () => { selectedPeriodId = issue.ownerId; actions.render(snapshot); requestAnimationFrame(() => document.querySelector(`.grid-period-row [data-field="${issue.field}"]`)?.focus()); }); issues.append(link); } if (issues.childNodes.length > 1) host.append(issues);
+  enhanceDefinitionForm(form, { prefix: 'grid', ownerType: 'School', item: working, draft: { ...draft, issues: [] }, status });
 }
-function renderRows(host, grid, readonly, status, definition) {
+function renderGridOverview(host, grid, narrow, snapshot, actions, draft) {
+  const picked = narrow ? inspectedPeriodId : selectedPeriodId;
+  const selected = grid.periods.find(row => row.id === picked)?.id || grid.periods[0]?.id;
+  if (narrow) inspectedPeriodId = selected; else selectedPeriodId = selected;
+  const wrap = el('section', undefined, 'grid-overview'); wrap.className = 'definition-grid-overview';
+  wrap.append(el('h4', 'Weekly teaching slots'), el('p', `${grid.periods.length} declared slots · ${(grid.reservedPeriodIds || []).length} reserved memberships. Select a slot to ${narrow ? 'inspect saved values' : 'edit it; all working rows save together'}.`));
+  const scroll = el('div'); scroll.className = 'definition-week-grid-wrap'; const table = el('table'); table.className = 'definition-slot-table';
+  const days = [...new Set(grid.periods.map(row => String(row.weekday ?? 'Unspecified')))].sort((a,b) => weekdays.indexOf(a) - weekdays.indexOf(b));
+  const orders = [...new Set(grid.periods.map(row => row.order))].sort((a,b) => new Intl.Collator(undefined,{numeric:true}).compare(String(a),String(b)));
+  const head = el('thead'), hr = el('tr'), corner = el('th','Slot');corner.scope='col';hr.append(corner);
+  for (const day of days) { const th = el('th', title(day)); th.scope='col';hr.append(th); }head.append(hr);table.append(head);
+  const body = el('tbody');
+  for (const order of orders) { const tr = el('tr'), slot=el('th',String(order));slot.scope='row';tr.append(slot);
+    for (const day of days) { const td=el('td');for (const row of grid.periods.filter(row=>String(row.weekday??'Unspecified')===day&&row.order===order)) {
+      const reserved=(grid.reservedPeriodIds||[]).includes(row.id), issues=(draft.issues||[]).filter(issue=>issue.ownerType==='Period'&&issue.ownerId===row.id);
+      const button=el('button');button.type='button';button.dataset.gridPeriodId=row.id;button.disabled=busy;button.setAttribute('aria-pressed',String(row.id===selected));button.setAttribute('aria-label',`${narrow?'Inspect':'Edit'} slot: ${row.displayName||row.id} (${row.id})`);
+      button.append(el('span',row.displayName||row.id),el('small',`${row.startTime??'No time'}${row.endTime?'–'+row.endTime:''}${reserved?' · Reserved':''}${issues.length?' · '+issues.length+' issues':''}`));
+      button.addEventListener('click',()=>{if(narrow)inspectedPeriodId=row.id;else selectedPeriodId=row.id;actions.render(snapshot);requestAnimationFrame(()=>document.querySelector('.grid-period-row legend')?.focus());});td.append(button);
+    }if(!td.childNodes.length)td.textContent='—';tr.append(td);}body.append(tr);
+  }
+  table.append(body);scroll.append(table);wrap.append(scroll);if(!grid.periods.length)wrap.append(el('p','No slots yet. Generate a grid above.'));host.append(wrap);
+}
+function renderRows(host, grid, readonly, status, definition, picked) {
   const container = el('div'); container.className = 'grid-period-rows';
+  // Reviews show a compact complete table; authoring and narrow inspection show one period.
+  if (readonly && picked === undefined) {
+    const scroll=el('div');scroll.className='definition-week-grid-wrap';const table=el('table');table.className='definition-record-table';const head=el('thead'),tr=el('tr');for(const text of ['Slot / ID','Day','Order','Start','End','Reserved']){const th=el('th',text);th.scope='col';tr.append(th);}head.append(tr);table.append(head);const body=el('tbody');
+    for(const row of grid.periods){const line=el('tr');for(const value of [`${row.displayName||'(incomplete)'} · ${row.id}`,row.weekday,row.order,row.startTime??'(omitted)',row.endTime??'(omitted)',(grid.reservedPeriodIds||[]).includes(row.id)?'Yes':'No'])line.append(el('td',String(value)));body.append(line);}table.append(body);scroll.append(table);container.append(scroll);host.append(container);return;
+  }
   const existing = new Set(definition.periods.map(p => p.id));
   grid.periods.forEach((row, index) => {
+    if (row.id !== picked) return;
     const card = el('fieldset'); card.className = 'grid-period-row'; card.dataset.periodId = row.id;
-    card.append(el('legend', `${row.displayName || '(incomplete period)'} • ${row.id}`));
+    const legend=el('legend', `${readonly?'Inspecting':'Editing'} ${row.displayName || '(incomplete period)'} • ${row.id}`);legend.tabIndex=-1;card.append(legend);
     for (const field of ['id', 'displayName', 'weekday', 'order', 'startTime', 'endTime']) {
       const label = el('label', ({ id: 'Identifier', displayName: 'Name', weekday: 'Weekday', order: 'Order', startTime: 'Start time (optional)', endTime: 'End time (optional)' })[field]);
       if (readonly) { label.append(el('span', String(row[field] ?? '(omitted)'))); card.append(label); continue; }
-      const input = el(field === 'weekday' ? 'select' : 'input'); input.dataset.field = field; input.setAttribute('aria-label', `${row.id} ${field}`); input.disabled = busy;
-      if (field === 'weekday') { for (const day of [...new Set([row.weekday || '', ...weekdays])]) { const option = el('option', title(day) || 'Choose weekday'); option.value = day; input.append(option); } }
+      const input = el(field === 'weekday' ? 'select' : 'input', undefined, `grid-period-${index}-${field}`); input.dataset.field = field; input.name=input.id;input.autocomplete='off';input.setAttribute('aria-label', `${row.id} ${field}`); input.disabled = busy;
+      if (field === 'weekday') { for (const day of [...new Set([row.weekday || '', ...weekdays])]) { const option = el('option', day ? title(day) : 'Choose weekday'); option.value = day; input.append(option); } }
       input.value = row[field] ?? ''; if (field === 'id') input.readOnly = existing.has(row.id);
-      input.addEventListener('input', () => { if ((field === 'startTime' || field === 'endTime') && input.value === '') delete row[field]; else if (field === 'order') row[field] = /^\d+$/.test(input.value) && Number.isSafeInteger(Number(input.value)) ? Number(input.value) : input.value; else row[field] = input.value; edited(status); });
+      input.addEventListener('input', () => { if ((field === 'startTime' || field === 'endTime') && input.value === '') delete row[field]; else if (field === 'order') row[field] = /^\d+$/.test(input.value) && Number.isSafeInteger(Number(input.value)) ? Number(input.value) : input.value; else row[field] = input.value; if(field==='id')selectedPeriodId=row.id;edited(status); });
       label.append(input); card.append(label);
     }
     const label = el('label', 'Reserved period');
     if (readonly) label.append(el('span', (grid.reservedPeriodIds || []).includes(row.id) ? 'Yes (explicit membership)' : 'No'));
-    else { const input = el('input'); input.type = 'checkbox'; input.dataset.field = 'reserved'; input.checked = (grid.reservedPeriodIds || []).includes(row.id); input.disabled = busy;
+    else { const input = el('input',undefined,`grid-period-${index}-reserved`); input.type = 'checkbox'; input.dataset.field = 'reserved'; input.name=input.id;input.checked = (grid.reservedPeriodIds || []).includes(row.id); input.disabled = busy;
       input.addEventListener('change', () => { grid.reservedPeriodIds = (grid.reservedPeriodIds || []).filter(id => id !== row.id); if (input.checked) grid.reservedPeriodIds.push(row.id); edited(status); }); label.append(input); }
     card.append(label); container.append(card);
   });
@@ -188,8 +226,8 @@ function renderRows(host, grid, readonly, status, definition) {
 }
 function renderImpacts(host, impacts = []) {
   if (!impacts?.length) return;
-  host.append(el('h4', 'Teaching-time impacts (distinct from period-ID moves)'));
-  for (const impact of impacts) host.append(el('p', `${impact.lessonName} (${impact.lessonId}) • ${impact.periodId}: ${format(impact.before)} → ${format(impact.after)}`));
+  const group=el('details');group.append(el('summary', `Teaching-time impacts (distinct from period-ID moves) — ${impacts.length} occurrences`));host.append(group);
+  for (const impact of impacts) group.append(el('p', `${impact.lessonName} (${impact.lessonId}) • ${impact.periodId}: ${format(impact.before)} → ${format(impact.after)}`));
 }
 const format = p => `${p.weekday} order ${p.order}, ${p.startTime ?? '(no start time)'}–${p.endTime ?? '(no end time)'}`;
 window.addEventListener('beforeunload', event => { if (gridDirty()) { event.preventDefault(); event.returnValue = ''; } });

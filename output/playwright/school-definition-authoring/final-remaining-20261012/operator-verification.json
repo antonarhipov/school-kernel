@@ -1,0 +1,18 @@
+{
+  "verdict": "PASS",
+  "version": 238,
+  "completeDatabaseRowExact": true,
+  "completeApiExact": true,
+  "assets": {
+    "definition-grid.js": "fc640f4b768db37075bd1591ddccda9977031df3b9dd0c60e193d33668bd71a8",
+    "definition-room-policies.js": "59287940cf7f1fe0f6f01c0cde14042a7f945b1e9042935dd60ce87ae166d9b9",
+    "definition-occurrences.js": "cfa99c2f38cea8570bfed9cc363bd9b36ab8d5e26d5f4796d93b239d5b2c825d",
+    "definition-preferences.js": "21f17196e9c7320ff4888198d954e778db1fb74a15a7db3df97de7c943d70442",
+    "definition-preference-guide.js": "5d39a3456b0cdc644638909dba6f5457153dbeb193e7f2348e1b5e8d0b0d5fff",
+    "definition-browser.js": "f969776a87367b1ac6c67d0add3f200987c478d4725caa1a38677d010ba447fe",
+    "definition-form-controls.js": "76094c614f5f6f88d900e40ef7333aa3be2d837b36162a669d9eb9a74bcd1166",
+    "definition-occurrence-browser.js": "bcbab17e62695128d1a46a400ae890d4e032c8872746ff0b740f9356639cb66b",
+    "definition-editor.js": "1561e5e9789963112f9a4129336259b0e446f8f4c42197cb2b633494890c4f78",
+    "styles.css": "1803723cd51380f8f97e57de41f4a93617039d2044e2cea115b8865e19b6b3c8"
+  }
+}
