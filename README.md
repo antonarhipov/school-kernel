@@ -1,7 +1,20 @@
 # School Kernel
 
-School Kernel is a Java 25 Maven reactor containing the versioned public contract, the stateless planning CLI, and a
-local school timetable operations workspace.
+School Kernel creates, inspects, and maintains school timetables. Its local browser workspace supports school-definition
+authoring, initial planning, repair, and manual period/room editing, backed by a stateless planning CLI and a versioned
+JSON contract.
+
+The Java 25 Maven reactor has three modules: `kernel-contract` (schemas), `kernel-cli` (verification and scheduling),
+and `timetable-workspace` (Spring Boot and PostgreSQL). A separate static viewer opens timetable result files.
+
+## Requirements
+
+- JDK 25. The Maven wrapper supplies Maven; an installed Maven must be version 3.9.x.
+- Docker with Compose for the local workspace and PostgreSQL integration tests.
+- Chrome for browser integration tests.
+
+For a browser walkthrough, follow [Operations workspace](#operations-workspace). For command-line scheduling, build
+the project and use the launcher below.
 
 ## Build
 
@@ -158,13 +171,83 @@ java -jar timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar
 
 Spring Boot automatically runs `docker compose up` for the repository's PostgreSQL 18.6 service, waits for its health
 check, applies Flyway, and stops the service when the application exits. Its named volume preserves the walkthrough
-workspace across ordinary restarts. Open <http://localhost:8080/workspace/>. An empty workspace accepts either an
-initial definition, a matching verified definition/result pair, or an accepted-bundle ZIP. Import verification runs
-through the packaged kernel; the browser does not require JSON editing or command-line use.
+workspace across ordinary restarts. Open <http://localhost:8080/workspace/>.
 
-Saved school-definition drafts from newer local builds also load without changing their stored data. This version
-can inspect and export their accepted timetable; continuing the saved definition edits requires a build that
-includes school-definition editing.
+### Create or import a school
+
+In an empty workspace, choose **Create school** to author a new catalog 9 definition through forms. Alternatively,
+import an initial definition, a matching definition/result pair, or an accepted-bundle ZIP. Import verification runs
+through the packaged kernel. Try [`examples/initial-school.json`](examples/initial-school.json) for a small school or
+[`examples/mvk.json`](examples/mvk.json) for the larger MVK example.
+
+Use **Author definition** from an initial definition or accepted timetable to edit the existing school. Saved drafts
+resume after reload or application restart. Authoring requires a viewport wider than 700 CSS pixels; narrower screens
+show saved values for read-only inspection.
+
+### Author and review a definition
+
+The editor provides dedicated **School**, **Grid**, **Subjects**, **Teachers**, **Classes**, **Rooms**, **Room policies**,
+**Weekly requirements**, **Occurrence details**, **Preferences**, and **Review** tabs:
+
+- Configure school identity, scheduling catalog, weekly periods, reservations, subjects, teacher qualifications and
+  availability, class rules, rooms, and room capabilities.
+- Set weekly teaching counts and shared defaults; generated occurrences retain stable lesson identities. Customize
+  individual occurrences, teaching responsibility, availability, and persistent period/room locks.
+- Browse and filter records, requirements, room policies, and occurrences. Inspect the weekly grid spatially and use
+  named references and linked issue controls to find the setting that needs correction.
+- Define hard room policies and tune ordinary preferences with explanations and illustrative penalty calculations.
+- Review saved changes, blocking issues, feasibility advisories, and timetable impact. Remove items with dependency
+  guidance or restore source values and deleted source items.
+
+Edits become durable only after explicit save; working form values are distinct from the saved draft. Leaving an
+edited form offers **Save and continue**, **Discard working edits**, or **Stay**. One definition draft is active at a
+time and locks competing planning, repair, manual-editing, import, replacement, and clearing actions until finished
+or discarded. The accepted timetable (**Current**) remains available for inspection and export.
+
+### Finish, plan, and accept
+
+Choose **Finish verified definition** after reviewing saved changes. The packaged kernel verifies the complete
+definition without solving a timetable. Blocking issues prevent finishing; feasibility advisories remain visible
+but do not block it.
+
+```mermaid
+flowchart TD
+    A[Create school or author existing definition] --> B[Save and review definition draft]
+    B --> C[Finish verified definition]
+    C -->|Empty or initial source| D[Initial planning]
+    C -->|Accepted source| E[Authoring-seeded repair]
+    D --> F[Verify and review feasible proposal]
+    E --> F
+    F --> G[Explicitly accept timetable]
+    G --> H[Current accepted baseline]
+    H --> A
+```
+
+Finishing a new or initial school supplies an initial planning draft. Finishing from an accepted baseline supplies a
+repair draft seeded with the authored successor definition. Generate a proposal, inspect its timetable and changes,
+then explicitly accept it to advance Current. Workspace planning and repair use a one-minute search limit.
+
+An unsuccessful or cancelled search retains the draft. Discarding a generated repair proposal retains repair intent;
+abandoning an authoring-seeded repair returns to the saved authored definition. Discarding the whole authoring draft
+restores its recorded source. Saving or finishing authoring never accepts a timetable automatically.
+
+### Inspect and maintain Current
+
+Inspect the accepted timetable in Week or Day views, with class, teacher, and room lenses. Stage teacher/room
+unavailability and placement pins for repair, compare a verified proposal with Current, and explicitly accept changes.
+Manual editing supports durable period and room changes, conflict explanations, and verified publication.
+
+Change a lesson's teacher through definition authoring, using **Weekly requirements** or **Occurrence details**, then
+finish, repair, review, and accept. Saved legacy manual teacher changes must be explicitly reverted or the manual
+draft discarded before publication. Export Current as a ZIP containing `school-definition.json`,
+`timetable-result.json`, and `workspace-manifest.json`; the bundle can be imported into an empty workspace.
+
+All **27 school-definition authoring use cases are approved**, including the school-scale editor refinements. See the
+[authoring status and evidence](spec/school-definition-authoring/status.md),
+[latest editor regression and walkthrough evidence](output/playwright/school-definition-authoring/final-remaining-20261012/README.md),
+and [feature specification index](spec/README.md) for detailed contracts and feature-specific approval status.
+
+### Database configuration
 
 To deliberately erase the local walkthrough database and start over:
 
@@ -179,14 +262,16 @@ The Compose credential is a well-known local-development value, not a production
 ## Timetable viewer
 
 The dependency-free web viewer renders a result JSON by class, teacher, or room. Start a static server from the
-repository root, then open <http://localhost:8080/ui/>:
+repository root, then open <http://localhost:8081/ui/>:
 
 ```bash
-python3 -m http.server 8080
+python3 -m http.server 8081 --bind 127.0.0.1
 ```
 
 [`examples/timetable.json`](examples/timetable.json) loads automatically. Use **Open JSON** or drag another result
 file onto the page to inspect it. On mobile screens, the weekly grid becomes a touch-friendly daily agenda.
+
+## Performance measurement
 
 The target-scale performance measurement is deliberately separate from correctness gates:
 
