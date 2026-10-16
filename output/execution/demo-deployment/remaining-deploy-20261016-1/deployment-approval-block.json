@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-10-16T17:44:04.285521+00:00",
+  "action": "Railway CLI up: upload exact production-only stage and deploy existing service",
+  "executed": false,
+  "uploaded": false,
+  "destination": {
+    "project": "school-kernel-free-smoke",
+    "projectId": "13d509af-1436-4024-bb64-f9f78fa439fc",
+    "environmentId": "a41a9c0e-ec3f-4ef4-9e08-996d998d1815",
+    "service": "demo-smoke",
+    "serviceId": "672cabae-b54e-4965-bbb2-5236bec81c33",
+    "domain": "demo-smoke-production.up.railway.app"
+  },
+  "payload": {
+    "files": 162,
+    "archive": "../remaining-20261016-1/production-source-2.tar.gz",
+    "manifest": "../remaining-20261016-1/production-manifest-2.json",
+    "sha256": "d292a016f6edb85874eb98597643e555159829e2ec3f10a73cc082d46f054dd7"
+  },
+  "requestedChanges": "Replace only the existing demo deployment; provider/resource/plan/spending settings unchanged",
+  "reviewRejection": "This uploads private production source to an external Railway service and mutates its deployment; although deployment was authorized in general, the user did not explicitly authorize this exact payload and destination, so sensitive egress is not sufficiently authorized. Do not bypass this rejection through a workaround or indirect execution."
+}

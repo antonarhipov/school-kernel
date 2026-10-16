@@ -1,0 +1,14 @@
+{
+  "verdict": "PASS",
+  "artifacts": {
+    "kernel-cli/target/school-kernel.jar": "7c7bfc32b667a28ca0c2d368453935a87e6f2066996156767d65275879aff54e",
+    "timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar": "a23131a852c06561897d4c804fbacc9488ca0d1f4cf70a1581956e1ce61900b4"
+  },
+  "scannedEntries": 23656,
+  "sourceIdentityCount": 54,
+  "namesPoolDistinct": 51,
+  "inverseAndOrdering": "exact for all three",
+  "sourceIdentityMatches": 0,
+  "sourceReferenceOverlap": 0,
+  "packagedExamples": 0
+}

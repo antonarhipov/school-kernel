@@ -1,0 +1,34 @@
+-------------------------------------------------------------------------------
+Test set: org.schoolkernel.workspace.DemoRemoteExpiryIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 71.59 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoRemoteExpiryIT
+org.schoolkernel.workspace.DemoRemoteExpiryIT.publicIdleExpiryAndAbsoluteExpiryDespiteRunPolling -- Time elapsed: 71.36 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-13244150299541911655/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-13244150299541911655/package/lib/coreBundle.js:19135:44)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.waitForFunction(FrameImpl.java:819)
+	at com.microsoft.playwright.impl.PageImpl.waitForFunction(PageImpl.java:1469)
+	at com.microsoft.playwright.Page.waitForFunction(Page.java:8097)
+	at com.microsoft.playwright.Page.waitForFunction(Page.java:8135)
+	at org.schoolkernel.workspace.DemoRemoteExpiryIT.publicIdleExpiryAndAbsoluteExpiryDespiteRunPolling(DemoRemoteExpiryIT.java:56)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-13244150299541911655/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-13244150299541911655/package/lib/coreBundle.js:19135:44)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 7 more
+

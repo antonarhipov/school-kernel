@@ -1,0 +1,107 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+17:34:05.094 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=c870ff8b-b729-4c0a-823e-192a9f5cce80 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=36
+17:34:05.138 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=45be4c61-cc80-4ecb-9a18-23e05c04ef84 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=3
+17:34:05.160 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=74c0deed-984c-4404-ba62-a3726291a35a kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=4
+17:34:05.173 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=cc826e24-0467-4552-b427-a5019eab03be kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=3
+17:34:05.183 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=31c26360-1926-4d92-bbea-e5083e4fe1a7 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=1
+17:34:05.367 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:34:05.819 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+17:34:06.109 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:34:06.140 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T17:34:06.715+03:00  INFO 70373 --- [           main] o.s.workspace.DemoSessionTest            : Starting DemoSessionTest using Java 25.0.1 with PID 70373 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T17:34:06.721+03:00  INFO 70373 --- [           main] o.s.workspace.DemoSessionTest            : The following 1 profile is active: "demo"
+2026-10-16T17:34:10.764+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=296653a9-df21-442a-813b-88d60eb84a5b kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1384
+2026-10-16T17:34:12.303+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=d9524a3c-a234-42f0-9a0f-4916f6dd91e1 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1494
+2026-10-16T17:34:14.342+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=4d2f883a-b5d4-4275-b9a0-29798c6c56a3 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1993
+2026-10-16T17:34:15.149+03:00  INFO 70373 --- [           main] o.s.workspace.DemoSessionTest            : Started DemoSessionTest in 8.91 seconds (process running for 12.357)
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/Users/anton/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-10-16T17:34:15.954+03:00  INFO 70373 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T17:34:15.955+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T17:34:15.957+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-16T17:34:16.073+03:00  INFO 70373 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T17:34:16.074+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T17:34:16.076+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-16T17:34:16.138+03:00  INFO 70373 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T17:34:16.138+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T17:34:16.140+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-16T17:34:16.156+03:00  INFO 70373 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T17:34:16.157+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T17:34:16.158+03:00  INFO 70373 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-16T17:34:16.317+03:00  INFO 70373 --- [           main] com.tngtech.archunit.core.PluginLoader   : Detected Java version 25.0.1
+2026-10-16T17:34:21.510+03:00  INFO 70373 --- [onPool-worker-1] o.schoolkernel.workspace.KernelPlanner   : correlationId=ef014fbf-2179-4b15-bc92-26b3d65f4b1d runId=405d2189-f24c-447a-8fad-314ce3b2240d kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2007 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.529+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=1c5fb545-e3a5-4cb8-8a39-542c14d53ed2 runId=cc89180d-ea53-44da-b75d-885965d74a93 kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=6 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.534+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=f33a918b-b1a7-4e0c-985d-0cf0c3bc6d60 runId=7dbbfd0f-6cf4-4a5a-ba38-c5653dae694c kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+2026-10-16T17:34:21.537+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=fc1447e8-bfb4-452e-a026-5eb393c7c708 runId=db9a7c99-c616-473c-ae19-5512494d42b7 kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.542+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=1eeeecdf-1dbb-4ade-a6c8-1bbf9fe7fda7 runId=fc05217e-6553-46f3-97d1-fb3392306253 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.549+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=af97504e-fc80-4242-839f-569e766c1f39 runId=69c6b972-ecce-43a4-82db-bbe788bb6fbf kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.557+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=0d7ca930-c188-4993-a153-c27e261c78fd runId=4e6070fb-3311-4031-9db3-eded7d841f01 kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.559+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=972cd20a-fa1c-4464-80fb-4338ddcc2adc runId=4aba09e2-709e-4908-ba2e-94861e329b0c kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.562+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=6374e87c-49d8-4f74-8469-6431322abd18 runId=16a683a8-2ca6-4876-b81a-943e63dc62a4 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:21.574+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=eb4475a3-0a53-47ea-b9b4-a4b7deecad6e runId=ea1aec25-c13b-4299-afbf-20a73f2859cf kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=8 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-16T17:34:21.578+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=5fc96268-363e-4b80-aacc-e01a3e4d7249 runId=fb36dff4-f893-4597-91f6-735e2965e8ba kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=1 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-16T17:34:21.607+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=a20c4e30-d23b-4a25-896a-9cbb34857639 runId=724bc54a-248a-4453-b189-7428cea98145 kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=25 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+2026-10-16T17:34:21.632+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=fd4295e7-0121-4892-adea-56b65237e243 runId=f37f3f1e-3ca3-44d1-90b7-7959a3ec5b39 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=20 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T17:34:22.305+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T17:34:22.331+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.362+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.380+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.394+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.409+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.419+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.567+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T17:34:22.574+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"two-class"}
+2026-10-16T17:34:22.577+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:22.618+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T17:34:22.907+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T17:34:22.910+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T17:34:23.009+03:00  INFO 70373 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"two-class"}
+2026-10-16T17:34:23.565+03:00  INFO 70373 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=9320b8e5-2c92-47a4-afa0-d03d567afc9a kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=115
+UC4 STEP 01-exact-save: main 1-5/G1/G2: exact CRLF/Unicode file saved in a five-field file-origin envelope; unfinished object makes no server change; second tab list refreshes
+UC4 STEP 02-reload-download: main 6/G3/G4: reload and selection preserve exact CRLF bytes; browser-local download matches the original file
+UC4 STEP 03-declines: 1b/4b/6a: declined selection, file opening, revert and named replacement preserve exact open and saved text
+UC4 STEP 04-replace: main 4-6/G2: confirmed named replacement stores exact edited text, saved-source derivation and explicit save time
+UC4 STEP 05-validation: 4a/G1/G4: first syntax line/column, reserved/invalid labels and non-object roots refused; malformed text still downloads exactly
+UC4 STEP 06-storage-failure: 5a/minimal: injected browser quota and SecurityError preserve overwritten entry and open text; exact Download remains available
+UC4 STEP 07-file-failures: 1c/4a: oversized UTF-8 file/editor and injected unreadable file refused; prior storage and text retained
+UC4 STEP 08-corrupt: 1a/G2/G3: corrupt, unsupported and reserved-key entries stay unreadable, cannot execute and can only be explicitly deleted; samples remain immutable
+UC4 STEP 09-cross-tab: main 5/G7: cross-tab replacement refreshes newest-first list without overwriting open text; declined reload retains it, explicit reload adopts exact stored text
+UC4 STEP 10-deletions: main 6/6a/G3/minimal: declined, failed and confirmed single/all deletion preserve workspace, unrelated preferences and unsaved text; other tab retains removed version text
+UC4 STEP 11-in-use-narrow: G5/G6: actual loaded sample remains marked across selection/reload; 390px read-only editor has no page overflow
+UC4 STEP 12-no-server-work: G1/G6/G7: all local edits/saves/files/downloads send zero documents or labels and start zero visitor processes; saved copy is not falsely marked In use
+UC4 STEP 13-accepted-repair-tracking: G6: real packaged Small repair leaves sample In use during proposal, then explicit acceptance changes definition and clears every dropdown mark
+UC4 STEP 14-import-origin: G6: real same-definition accepted-bundle import shows its own origin, never a sample/saved mark; browser versions and second visitor remain intact
+UC3 STEP 01-preview-full: main 1/G4/G6: Full preview in EMPTY, exact catalog/default effort, public ETag 304 and visitor no-store
+UC3 STEP 02-unsaved-decline: 1a/2a: unsaved text disables use; declined selection retains exact text, selection and EMPTY
+UC3 STEP 03-preview-race: G4: delayed older preview cannot replace the latest selection/text or Current
+UC3 STEP 04-open-small: main 2-5/G1: explicit small opens the exact complete accepted pair, no solve, other owner EMPTY
+UC3 STEP 04-open-two-class: main 2-5/G1: explicit two-class opens the exact complete accepted pair, no solve, other owner EMPTY
+UC3 STEP 04-open-full: main 2-5/G1: explicit full opens the exact complete accepted pair, no solve, other owner EMPTY
+UC3 STEP 05-full-week-details: G5: Full whole-school Week renders 520 lessons with fictional names and faithful lesson details
+UC3 STEP 06-full-day-teacher: G5: Full Day and teacher lens retain names, availability and context
+UC3 STEP 07-full-room-lens: G5: room lens replaces teacher lens and remains private read-only inspection
+UC3 STEP 08-narrow: G5: 390px narrow Day inspection is read-only with no page overflow
+UC3 STEP 09-private-repair: main 5/G4/G5: Full repair entry stages private intent; complete Current and second visitor stay exact
+UC3 STEP 09b-exact-export: main 5: Full export entry downloads exact accepted definition/result/manifest and excludes unfinished repair
+UC3 STEP 10-replacement-decline: main 3/3a: replacement names Full Current and repair draft, offers export, decline preserves everything
+UC3 STEP 11-stale-reload: 4a/4b: unknown 404, missing confirmation 428, stale browser 412; reload preserves selection and newer complete work
+UC3 STEP 12-failure-preserves: minimal guarantee: simulated HTTP failure preserves complete server work and selected JSON; reload/retry offered
+UC3 STEP 13-manual-entry: main 5/G4: Full manual entry opens a private draft, cancelled replacement preserves Current/draft
+UC3 STEP 14-second-owner-preserved: G1/G4/G6/G7: source ETags/documents and second owner unchanged; no solve/accept request, no visitor kernel launches

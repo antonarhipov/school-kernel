@@ -1,0 +1,190 @@
+{
+  "demo" : true,
+  "state" : "ACCEPTED_BASELINE",
+  "version" : 7,
+  "acceptedTimetable" : true,
+  "workspace" : {
+    "school" : {
+      "id" : "demo-school-001",
+      "displayName" : "Small school"
+    },
+    "importMode" : "ACCEPTED_BASELINE",
+    "definitionRevision" : "sha256:ce3c23410831017ff5aea1f1fd1f44911850024a96310ccdde22a2dd9721922b",
+    "timetableRevision" : "sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38",
+    "acceptedBaseline" : {
+      "definition" : {
+        "catalogVersion" : 9,
+        "cohorts" : [ {
+          "displayName" : "Cohort 01",
+          "id" : "demo-cohort-001",
+          "size" : 24
+        } ],
+        "displayName" : "Small school",
+        "lessons" : [ {
+          "cohortId" : "demo-cohort-001",
+          "displayName" : "Lesson 01",
+          "id" : "demo-lesson-001",
+          "preferredRoomIds" : [ "demo-room-002" ],
+          "seriesId" : "demo-series-001",
+          "subjectId" : "demo-subject-001",
+          "teacherId" : "demo-teacher-001"
+        }, {
+          "cohortId" : "demo-cohort-001",
+          "displayName" : "Lesson 02",
+          "id" : "demo-lesson-002",
+          "preferredRoomIds" : [ "demo-room-001" ],
+          "requiredRoomCapabilityIds" : [ "demo-capability-001" ],
+          "subjectId" : "demo-subject-002",
+          "teacherId" : "demo-teacher-001"
+        } ],
+        "periods" : [ {
+          "displayName" : "Monday 1",
+          "id" : "demo-period-001",
+          "order" : 1,
+          "weekday" : "MONDAY"
+        }, {
+          "displayName" : "Monday 2",
+          "id" : "demo-period-002",
+          "order" : 2,
+          "weekday" : "MONDAY"
+        }, {
+          "displayName" : "Monday 3",
+          "id" : "demo-period-003",
+          "order" : 3,
+          "weekday" : "MONDAY"
+        } ],
+        "rooms" : [ {
+          "capabilityIds" : [ "demo-capability-001" ],
+          "capacity" : 30,
+          "displayName" : "Room 01",
+          "id" : "demo-room-001"
+        }, {
+          "capabilityIds" : [ ],
+          "capacity" : 30,
+          "displayName" : "Room 02",
+          "id" : "demo-room-002"
+        } ],
+        "schemaVersion" : 1,
+        "schoolId" : "demo-school-001",
+        "softConstraintOverrides" : [ {
+          "constraintId" : "soft.teacher-gap",
+          "weight" : 2
+        } ],
+        "subjects" : [ {
+          "displayName" : "Subject 01",
+          "id" : "demo-subject-001"
+        }, {
+          "displayName" : "Subject 02",
+          "id" : "demo-subject-002"
+        } ],
+        "teachers" : [ {
+          "displayName" : "John Doe",
+          "id" : "demo-teacher-001",
+          "qualifiedSubjectIds" : [ "demo-subject-001", "demo-subject-002" ],
+          "undesirablePeriodIds" : [ "demo-period-003" ]
+        } ]
+      },
+      "result" : {
+        "catalogVersion" : 9,
+        "correlationId" : "29d7a0d0-8f32-4fa5-8f7a-aebc0f4c0432",
+        "effectiveSoftWeights" : {
+          "soft.cohort-gap" : 1,
+          "soft.cohort-late-start" : 1,
+          "soft.cohort-week-balance" : 1,
+          "soft.non-preferred-room" : 1,
+          "soft.series-same-day" : 1,
+          "soft.teacher-gap" : 2,
+          "soft.undesirable-period" : 1
+        },
+        "elapsedTimeMs" : 6284,
+        "inputRevision" : "sha256:ce3c23410831017ff5aea1f1fd1f44911850024a96310ccdde22a2dd9721922b",
+        "kernelVersion" : "1.0.0-SNAPSHOT",
+        "limit" : {
+          "duration" : "PT5S",
+          "type" : "TIME"
+        },
+        "schemaVersion" : 1,
+        "schoolId" : "demo-school-001",
+        "score" : {
+          "constraintBreakdown" : [ {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.teacher-gap",
+            "effectiveWeight" : 2,
+            "matchCount" : 0
+          }, {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.cohort-gap",
+            "effectiveWeight" : 1,
+            "matchCount" : 0
+          }, {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.cohort-late-start",
+            "effectiveWeight" : 1,
+            "matchCount" : 0
+          }, {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.cohort-week-balance",
+            "effectiveWeight" : 1,
+            "matchCount" : 0
+          }, {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.series-same-day",
+            "effectiveWeight" : 1,
+            "matchCount" : 0
+          }, {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.undesirable-period",
+            "effectiveWeight" : 1,
+            "matchCount" : 0
+          }, {
+            "aggregatePenalty" : 0,
+            "category" : "ORDINARY_PREFERENCE",
+            "constraintId" : "soft.non-preferred-room",
+            "effectiveWeight" : 1,
+            "matchCount" : 0
+          } ],
+          "ordinaryPreferencePenalty" : 0,
+          "periodMoves" : 0,
+          "roomOnlyMoves" : 0
+        },
+        "seed" : 0,
+        "status" : "FEASIBLE",
+        "terminationReason" : "TIME_LIMIT",
+        "timetable" : {
+          "assignments" : [ {
+            "cohortId" : "demo-cohort-001",
+            "lessonId" : "demo-lesson-001",
+            "periodId" : "demo-period-001",
+            "roomId" : "demo-room-002",
+            "subjectId" : "demo-subject-001",
+            "teacherId" : "demo-teacher-001"
+          }, {
+            "cohortId" : "demo-cohort-001",
+            "lessonId" : "demo-lesson-002",
+            "periodId" : "demo-period-002",
+            "roomId" : "demo-room-001",
+            "subjectId" : "demo-subject-002",
+            "teacherId" : "demo-teacher-001"
+          } ]
+        },
+        "timetableRevision" : "sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38"
+      },
+      "manifest" : {
+        "catalogVersion" : 9,
+        "definitionSchemaVersion" : 1,
+        "inputRevision" : "sha256:ce3c23410831017ff5aea1f1fd1f44911850024a96310ccdde22a2dd9721922b",
+        "locks" : [ ],
+        "manifestVersion" : 1,
+        "resultSchemaVersion" : 1,
+        "schoolId" : "demo-school-001",
+        "timetableRevision" : "sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38"
+      }
+    }
+  }
+}

@@ -57,7 +57,7 @@ public final class SchoolKernelMain {
             name = "school-kernel",
             mixinStandardHelpOptions = true,
             description = "Stateless school timetable planning kernel.",
-            subcommands = {PlanCommand.class, ReplanCommand.class, VerifyCommand.class})
+            subcommands = {PlanCommand.class, ReplanCommand.class, VerifyCommand.class, ReviewCommand.class})
     static final class RootCommand implements Callable<Integer> {
         @Spec
         private CommandSpec spec;
@@ -305,6 +305,25 @@ public final class SchoolKernelMain {
             return mapOutcome(
                     handler.handle(new VerifyRequest(definition, result, output, correlationId, force, debug, successor)),
                     files, output, force, debug, errorWriter);
+        }
+    }
+
+    @Command(name = "review", mixinStandardHelpOptions = true, description = "Evaluate explicit complete assignments without solving or moving lessons.")
+    static final class ReviewCommand implements Callable<Integer> {
+        @Option(names = "--definition", required = true) private Path definition;
+        @Option(names = "--assignments", required = true) private Path assignments;
+        @Option(names = "--output", required = true) private Path output;
+        @Option(names = "--correlation-id") private String correlationId;
+        @Option(names = "--force") private boolean force;
+        @Spec private CommandSpec spec;
+        @Override public Integer call() {
+            var files = new FileBoundary(); var writer = spec.commandLine().getErr();
+            if (correlationId != null && (correlationId.isBlank() || correlationId.length() > 128)) return 64;
+            Integer refused = prepare(files, writer, output, force, definition, assignments);
+            if (refused != null) return refused;
+            var loader = new DefinitionLoader(files, new DefinitionSchemaValidator(), new DefinitionValidator(), new RevisionService());
+            return mapOutcome(new org.schoolkernel.application.ReviewService(loader, files).handle(definition, assignments, correlationId),
+                    files, output, force, false, writer);
         }
     }
 

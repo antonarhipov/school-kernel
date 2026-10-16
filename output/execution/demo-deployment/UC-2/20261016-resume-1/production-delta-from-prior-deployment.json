@@ -1,0 +1,10 @@
+{
+  "priorManifest": "../../UC-12/railway-free-20261016-3/upload-context-manifest.json",
+  "changedProductionFiles": [
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoConfiguration.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSettings.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/HostOriginFilter.java",
+    "timetable-workspace/src/main/resources/application-demo.yml"
+  ],
+  "unchangedProductionFiles": 145
+}

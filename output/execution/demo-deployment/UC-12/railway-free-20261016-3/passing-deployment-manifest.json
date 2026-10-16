@@ -1,0 +1,64 @@
+{
+  "id": "43fe1c2b-5046-427c-ae9d-1902b7678e1b",
+  "status": "SUCCESS",
+  "createdAt": "2026-10-16T11:41:28.189Z",
+  "meta": {
+    "buildOnly": false,
+    "cliAgentSessionId": "01a143cc-399c-74c1-95e1-582a6d914261",
+    "cliCaller": "codex",
+    "cliMessage": "Require trusted matching forwarded host; preserve native authority and scheme checks",
+    "fileServiceManifest": {},
+    "ignoreWatchPatterns": true,
+    "imageDigest": "sha256:b9539fbb4af77705fd440357d8881a0e84d3b8a531651b0e4a907dea7da59e9c",
+    "logsV2": true,
+    "nixpacksProviders": [],
+    "propertyFileMapping": {},
+    "reason": "redeploy",
+    "rootDirectory": null,
+    "runtime": "V2",
+    "serviceManifest": {
+      "build": {
+        "buildCommand": null,
+        "buildEnvironment": "V3",
+        "builder": "DOCKERFILE",
+        "dockerfilePath": "deploy/demo/Dockerfile",
+        "nixpacksConfigPath": null,
+        "nixpacksPlan": null,
+        "watchPatterns": []
+      },
+      "deploy": {
+        "cronSchedule": null,
+        "drainingSeconds": 30,
+        "healthcheckPath": "/healthz",
+        "healthcheckTimeout": 180,
+        "ipv6EgressEnabled": false,
+        "limitOverride": {
+          "containers": {
+            "cpu": 1,
+            "memoryBytes": 500000000
+          }
+        },
+        "multiRegionConfig": {
+          "europe-west4-drams3a": {
+            "numReplicas": 1
+          }
+        },
+        "numReplicas": 1,
+        "overlapSeconds": 0,
+        "preDeployCommand": null,
+        "preDeployTimeoutSeconds": null,
+        "region": null,
+        "registryCredentials": null,
+        "requiredMountPath": null,
+        "restartPolicyMaxRetries": 1,
+        "restartPolicyType": "ON_FAILURE",
+        "runtime": "V2",
+        "sleepApplication": true,
+        "startCommand": null,
+        "useLegacyStacker": false
+      }
+    },
+    "skipBuildCache": true,
+    "volumeMounts": []
+  }
+}

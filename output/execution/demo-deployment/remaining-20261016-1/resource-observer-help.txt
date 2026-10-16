@@ -1,0 +1,17 @@
+usage: observe_resources.py [-h] [--container CONTAINER] [--cgroup CGROUP]
+                            [--seconds SECONDS] [--interval INTERVAL]
+                            --output OUTPUT
+
+Read Linux cgroup v2 usage (directly or through docker exec). Never starts or
+changes a workload. Run concurrently with explicit qualification traffic.
+Provider service graphs/spend remain separate evidence.
+
+options:
+  -h, --help            show this help message and exit
+  --container CONTAINER
+                        Existing disposable local Docker container; performs
+                        read-only exec cat
+  --cgroup CGROUP
+  --seconds SECONDS
+  --interval INTERVAL
+  --output OUTPUT

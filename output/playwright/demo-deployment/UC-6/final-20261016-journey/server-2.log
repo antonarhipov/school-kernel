@@ -1,0 +1,28 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T20:10:59.836+03:00  INFO 90615 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 90615 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-8797302131908349322/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T20:10:59.851+03:00  INFO 90615 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T20:11:03.198+03:00  INFO 90615 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 63599 (https)
+2026-10-16T20:11:03.219+03:00  INFO 90615 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T20:11:03.220+03:00  INFO 90615 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T20:11:03.248+03:00  INFO 90615 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3226 ms
+2026-10-16T20:11:03.526+03:00  INFO 90615 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T20:11:06.381+03:00  INFO 90615 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=9e007f4c-72e2-4ac8-be72-0657a1c9b81e kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1578
+2026-10-16T20:11:08.174+03:00  INFO 90615 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=8f348198-5124-4718-ae29-de1dc999e4d2 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1755
+2026-10-16T20:11:10.381+03:00  INFO 90615 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=906f71ac-8c61-4e62-9c0a-288ccfe944c4 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2150
+2026-10-16T20:11:12.202+03:00  INFO 90615 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 63599 (https) with context path '/'
+2026-10-16T20:11:12.247+03:00  INFO 90615 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 13.789 seconds (process running for 14.961)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T17:11:12.270068Z","kernelBuild":"e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"4h","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"serviceArtifactSha256":"828f6506bb5c4be5204c922189f3ef06f1d8840e3926956d13885a8f0c99e44b","solveSlots":1,"standaloneVerificationSlots":2,"counterReset":"e19a1858-7681-437f-9bdb-71987cf23295","utcAllowanceDay":"2026-10-16","sampleVerification":{"small":"VERIFIED","two-class":"VERIFIED","full":"VERIFIED"}}
+2026-10-16T20:11:12.796+03:00  INFO 90615 --- [timetable-workspace] [.1-63599-exec-9] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T20:11:12.800+03:00  INFO 90615 --- [timetable-workspace] [.1-63599-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T20:11:12.828+03:00  INFO 90615 --- [timetable-workspace] [.1-63599-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 27 ms
+2026-10-16T20:11:16.305+03:00  INFO 90615 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T20:11:16.312+03:00  INFO 90615 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete

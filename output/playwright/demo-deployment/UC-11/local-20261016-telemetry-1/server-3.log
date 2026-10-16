@@ -1,0 +1,35 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T19:50:00.798+03:00  INFO 88424 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 88424 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-10012045055107314942/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T19:50:00.803+03:00  INFO 88424 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T19:50:03.935+03:00  INFO 88424 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 59987 (https)
+2026-10-16T19:50:03.951+03:00  INFO 88424 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T19:50:03.952+03:00  INFO 88424 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T19:50:03.982+03:00  INFO 88424 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2928 ms
+2026-10-16T19:50:04.248+03:00  INFO 88424 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T19:50:06.736+03:00  INFO 88424 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=e0f6f63e-1f9a-48fc-b85e-66832eabb991 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1348
+2026-10-16T19:50:08.272+03:00  INFO 88424 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=0014395f-dc53-41ec-8dd5-36fd41432556 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1503
+2026-10-16T19:50:10.212+03:00  INFO 88424 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=93a1f6a3-c325-4455-9318-52eb7a9efada kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1889
+2026-10-16T19:50:11.814+03:00  INFO 88424 --- [timetable-workspace] [           main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-127.0.0.1-59987], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-10-16T19:50:11.840+03:00  INFO 88424 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 59987 (https) with context path '/'
+2026-10-16T19:50:11.879+03:00  INFO 88424 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 12.307 seconds (process running for 13.407)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T16:50:11.896700Z","kernelBuild":"e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"1s","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"solveSlots":1,"standaloneVerificationSlots":2,"counterReset":"f83cb8eb-13bb-44d8-9d8b-5c2fe83deed3","utcAllowanceDay":"2026-10-16","sampleVerification":{"small":"VERIFIED","two-class":"VERIFIED","full":"VERIFIED"}}
+2026-10-16T19:50:12.436+03:00  INFO 88424 --- [timetable-workspace] [.1-59987-exec-9] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T19:50:12.439+03:00  INFO 88424 --- [timetable-workspace] [.1-59987-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T19:50:12.464+03:00  INFO 88424 --- [timetable-workspace] [.1-59987-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 24 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T16:50:13.970946Z","count":1,"reason":"CREATED"}
+{"family":"definition","event":"SAMPLE_OPEN","timestamp":"2026-10-16T16:50:14.648037Z","sample":"small","lessons":2,"placementWork":12,"complexityBucket":"SMALL","verification":"VERIFIED"}
+{"family":"reuse","event":"MISS","timestamp":"2026-10-16T16:50:16.373255Z","operation":"VERIFICATION","physicalProcessStarted":false}
+{"family":"work","event":"refused","timestamp":"2026-10-16T16:50:16.391293Z","reason":"DAILY_KERNEL_LIMIT"}
+{"family":"decision","event":"EXPORT","timestamp":"2026-10-16T16:50:16.443974Z"}
+2026-10-16T19:50:17.501+03:00  INFO 88424 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T19:50:17.515+03:00  INFO 88424 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+{"family":"session","event":"ended","timestamp":"2026-10-16T16:50:17.532631Z","count":1,"reason":"SHUTDOWN"}

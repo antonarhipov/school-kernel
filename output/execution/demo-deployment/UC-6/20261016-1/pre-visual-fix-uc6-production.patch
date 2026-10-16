@@ -1,0 +1,1071 @@
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoArtifactCache.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoArtifactCache.java
+@@ -0,0 +1,48 @@
++package org.schoolkernel.workspace;
++
++import java.time.Duration;
++import java.util.LinkedHashMap;
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.context.annotation.Profile;
++import org.springframework.stereotype.Component;
++
++/** One resident-byte ceiling and fixed completion TTL for visitor results and verification evidence. */
++@Component
++@Profile("demo")
++class DemoArtifactCache {
++    private final boolean enabled;
++    private final long maximum, ttl;
++    private long bytes;
++    private final LinkedHashMap<String, Entry> entries = new LinkedHashMap<>();
++    private final java.util.concurrent.ScheduledExecutorService reaper = java.util.concurrent.Executors.newSingleThreadScheduledExecutor(
++            Thread.ofVirtual().name("demo-artifact-expiry").factory());
++
++    DemoArtifactCache(@Value("${demo.reuse.enabled:true}") boolean enabled,
++            @Value("${demo.reuse.max-bytes:67108864}") long maximum,
++            @Value("${demo.reuse.ttl:1h}") Duration ttl) {
++        if (maximum < 0 || ttl.isNegative() || ttl.isZero() || ttl.compareTo(Duration.ofHours(1)) > 0)
++            throw new IllegalArgumentException("Invalid visitor cache bounds");
++        this.enabled = enabled; this.maximum = maximum; this.ttl = ttl.toNanos();
++        reaper.scheduleWithFixedDelay(this::expire, 1, 1, java.util.concurrent.TimeUnit.SECONDS);
++    }
++    boolean enabled() { return enabled; }
++    synchronized Object get(String key) { expire(); var entry = enabled ? entries.get(key) : null; return entry == null ? null : entry.value; }
++    synchronized void put(String key, Object value, long payloadBytes) {
++        if (!enabled) return;
++        expire();
++        long size = 2L * key.length() + payloadBytes + 512;
++        if (size > maximum) return;
++        var old = entries.remove(key); if (old != null) bytes -= old.bytes;
++        while (bytes + size > maximum && !entries.isEmpty()) {
++            var iterator = entries.values().iterator(); bytes -= iterator.next().bytes; iterator.remove();
++        }
++        entries.put(key, new Entry(value, System.nanoTime(), size)); bytes += size;
++    }
++    synchronized long residentBytes() { expire(); return bytes; }
++    private synchronized void expire() {
++        long now = System.nanoTime();
++        entries.values().removeIf(entry -> { if (now - entry.completed < ttl) return false; bytes -= entry.bytes; return true; });
++    }
++    @jakarta.annotation.PreDestroy synchronized void close() { reaper.shutdownNow(); entries.clear(); bytes = 0; }
++    private record Entry(Object value, long completed, long bytes) {}
++}
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java
+@@ -53,7 +53,9 @@
+         return definition;
+     }
+ 
+-    void check(JsonNode definition) {
++    void check(JsonNode definition) { check(definition, true); }
++
++    void check(JsonNode definition, boolean initial) {
+         if (definition == null || !definition.isObject()) throw invalid("/", "Expected a definition object.");
+         for (String field : List.of("subjects", "teachers", "cohorts", "rooms", "periods", "lessons")) {
+             if (!definition.path(field).isArray()) throw invalid("/" + field, "Expected an array.");
+@@ -72,7 +74,8 @@
+                     "/lessons, /periods, /rooms: This definition exceeds the demo complexity limit (at most "
+                     + lessonMax + " lessons and placement work " + workMax + "). It was not used.");
+         }
+-        if (definition.has("basedOnRevision")) throw invalid("/basedOnRevision",
++        if (CanonicalJson.bytes(definition).length > DOCUMENT_BYTES) throw new WorkspaceProblem(HttpStatus.PAYLOAD_TOO_LARGE, "DEFINITION_TOO_LARGE", "The definition must be at most 2 MiB UTF-8.");
++        if (initial && definition.has("basedOnRevision")) throw invalid("/basedOnRevision",
+                 "An initial definition must omit repair ancestry. Use a complete accepted bundle to retain a repaired timetable.");
+         var errors = schema.validate(definition);
+         if (!errors.isEmpty()) {
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelAllowance.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelAllowance.java
+@@ -37,7 +37,7 @@
+         Snapshot now = snapshot();
+         long amount = maximum.toNanos();
+         if (amount <= 0 || amount > now.remainingNanos()) throw new WorkspaceProblem(HttpStatus.TOO_MANY_REQUESTS,
+-                "DAILY_KERNEL_LIMIT", "The daily kernel allowance cannot cover verification. The definition was not used. Try later.");
++                "DAILY_KERNEL_LIMIT", "The daily kernel allowance cannot cover this kernel operation. No work was started. Try later.");
+         Reservation reservation = new Reservation(amount);
+         reservations.add(reservation);
+         return reservation;
+@@ -69,6 +69,9 @@
+         void started(Instant beforeStart) {
+             synchronized (DemoKernelAllowance.this) { accruedAt = beforeStart; }
+         }
++        void stopped() {
++            synchronized (DemoKernelAllowance.this) { snapshot(); accruedAt = null; }
++        }
+         @Override public void close() {
+             synchronized (DemoKernelAllowance.this) {
+                 snapshot();
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelRunner.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelRunner.java
+@@ -0,0 +1,136 @@
++package org.schoolkernel.workspace;
++
++import java.io.IOException;
++import java.nio.file.*;
++import java.nio.file.attribute.PosixFilePermissions;
++import java.time.*;
++import java.util.*;
++import java.util.concurrent.TimeUnit;
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.context.annotation.Profile;
++import org.springframework.stereotype.Component;
++import tools.jackson.databind.*;
++import tools.jackson.databind.json.JsonMapper;
++
++/** The physical demo boundary. It never receives workspace authority or mutable subscriber state. */
++@Component
++@Profile("demo")
++class DemoKernelRunner {
++    private static final JsonMapper JSON = JsonMapper.builder().enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
++            .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).build();
++    private final String executable;
++    private final KernelProcessLauncher launcher;
++    private final DemoVerificationService verification;
++    private final DemoSearchSettings settings;
++    DemoKernelRunner(@Value("${workspace.kernel-executable}") String executable, KernelProcessLauncher launcher,
++            DemoVerificationService verification, DemoSearchSettings settings) {
++        this.executable = KernelVerifier.resolveExecutable(executable); this.launcher = launcher;
++        this.verification = verification; this.settings = settings;
++    }
++    record Input(String operation, JsonNode definition, JsonNode baselineDefinition, JsonNode baselineResult, Duration effort) {}
++    record Artifact(JsonNode result, KernelVerifier.Verification verification, long solveProcessMs, long verificationProcessMs, String computationId) {}
++    record Outcome(Artifact artifact, String status, String code, String message, JsonNode evidence) {}
++
++    Outcome run(String computationId, Input input, DemoKernelAllowance.Reservation reservation, Runnable checking) {
++        Path directory = null; Process process = null;
++        long solveMs = 0, verifyMs = 0;
++        try {
++            directory = Files.createTempDirectory("school-demo-solve-", PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));
++            Path definition = write(directory, "definition.json", input.definition());
++            Path output = directory.resolve("result.json");
++            String correlation = UUID.randomUUID().toString();
++            List<String> args = new ArrayList<>(List.of(executable, "INITIAL".equals(input.operation()) ? "plan" : "replan",
++                    "--definition", definition.toString(), "--output", output.toString(), "--time-limit", input.effort().toString(),
++                    "--seed", "0", "--correlation-id", correlation));
++            if ("REPAIR".equals(input.operation())) {
++                args.addAll(List.of("--current-definition", write(directory, "current-definition.json", input.baselineDefinition()).toString(),
++                        "--current", write(directory, "current-result.json", input.baselineResult()).toString()));
++            }
++            if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
++            Instant before = Instant.now(); long start = System.nanoTime();
++            process = launcher.start(List.copyOf(args)); reservation.started(before);
++            Process launched = process;
++            Thread stdout = Thread.ofVirtual().start(() -> drain(launched.getInputStream()));
++            Thread stderr = Thread.ofVirtual().start(() -> drain(launched.getErrorStream()));
++            if (!process.waitFor(input.effort().plus(settings.processOverhead()).toMillis(), TimeUnit.MILLISECONDS))
++                return failure("KERNEL_TIMEOUT", "The search did not finish within its bounded process time.");
++            reservation.stopped(); solveMs = Duration.ofNanos(System.nanoTime() - start).toMillis();
++            stdout.join(1000); stderr.join(1000);
++            if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
++            if (!Files.isRegularFile(output) || Files.size(output) > DemoDefinitionLimits.DOCUMENT_BYTES)
++                return failure("REJECTED_OUTPUT", "School Kernel returned no complete bounded result.");
++            JsonNode result = JSON.readTree(Files.readAllBytes(output));
++            String status = result.path("status").asString(""); int exit = process.exitValue();
++            if (exit == 3 && "NO_FEASIBLE_SOLUTION_FOUND".equals(status))
++                return new Outcome(null, "NOT_FOUND", status,
++                        result.path("safeMessage").asString("").equals("The search budget ended before all lessons were placed. A later search may find a feasible timetable.")
++                                ? "The search budget ended before all lessons were placed. A later search may find a feasible timetable."
++                                : "No feasible timetable was found within this search budget. More time may help but guarantees nothing.", safeEvidence(result));
++            if (exit == 2 && "INVALID_INPUT".equals(status))
++                return new Outcome(null, "INVALID_INPUT", status, "School Kernel rejected the input. Review the located validation errors.", safeEvidence(result));
++            if (exit != 0 || !"FEASIBLE".equals(status)) return failure("KERNEL_FAILED", "School Kernel could not complete this search.");
++            if (result.path("schemaVersion").asInt() != 1
++                    || result.path("catalogVersion").asInt() != input.definition().path("catalogVersion").asInt()
++                    || !correlation.equals(result.path("correlationId").asString(""))
++                    || !input.definition().path("schoolId").equals(result.path("schoolId"))
++                    || !result.path("seed").isIntegralNumber() || result.path("seed").asLong() != 0
++                    || !"TIME".equals(result.path("limit").path("type").asString(""))
++                    || !input.effort().toString().equals(result.path("limit").path("duration").asString(""))
++                    || !"TIME_LIMIT".equals(result.path("terminationReason").asString(""))
++                    || !result.path("elapsedTimeMs").isIntegralNumber() || result.path("elapsedTimeMs").asLong() < 0
++                    || !result.path("timetable").path("assignments").isArray()
++                    || "REPAIR".equals(input.operation()) && (!completeChanges(result.path("changeReport"))
++                        || !input.baselineResult().path("inputRevision").equals(input.definition().path("basedOnRevision"))))
++                return failure("REJECTED_OUTPUT", "School Kernel returned mismatched solve evidence.");
++            checking.run();
++            if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
++            long startVerify = System.nanoTime();
++            var verified = verification.verifyReserved(new ImportDocuments(input.definition(), result, null,
++                    ImportDocuments.ImportMode.ACCEPTED_BASELINE), reservation);
++            verifyMs = Duration.ofNanos(System.nanoTime() - startVerify).toMillis();
++            return new Outcome(new Artifact(result.deepCopy(), verified, solveMs, verifyMs, computationId), "FEASIBLE", null, null, null);
++        } catch (InterruptedException interrupted) {
++            Thread.currentThread().interrupt(); return failure("CANCELLED", "The computation was stopped.");
++        } catch (WorkspaceProblem rejected) {
++            return failure("REJECTED_OUTPUT", "The complete result could not be verified. No proposal was published.");
++        } catch (IOException | tools.jackson.core.JacksonException failure) {
++            return failure("KERNEL_UNAVAILABLE", "School Kernel could not start or return a usable result.");
++        } finally {
++            if (process != null) terminate(process);
++            reservation.stopped();
++            if (directory != null) {
++                try (var paths = Files.walk(directory)) { paths.sorted(Comparator.reverseOrder()).forEach(path -> {
++                    try { Files.deleteIfExists(path); } catch (IOException ignored) {}
++                }); } catch (IOException ignored) {}
++            }
++        }
++    }
++    private static JsonNode safeEvidence(JsonNode result) {
++        var evidence = JSON.createObjectNode();
++        for (String field : List.of("terminationReason", "searchDiagnostics", "validationReport"))
++            if (result.has(field)) evidence.set(field, result.path(field).deepCopy());
++        return evidence;
++    }
++    private static boolean completeChanges(JsonNode report) {
++        var fields = Set.of("additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves");
++        return report.isObject() && report.size() == fields.size() && fields.stream().allMatch(field -> report.path(field).isArray());
++    }
++    private static Outcome failure(String code, String message) { return new Outcome(null, "FAILED", code, message, null); }
++    private static Path write(Path directory, String name, JsonNode node) throws IOException {
++        Path path = directory.resolve(name); Files.write(path, CanonicalJson.bytes(node));
++        Files.setPosixFilePermissions(path, PosixFilePermissions.fromString("rw-------")); return path;
++    }
++    private static void drain(java.io.InputStream input) { try (input) { input.transferTo(java.io.OutputStream.nullOutputStream()); } catch (IOException ignored) {} }
++    private static void terminate(Process process) {
++        boolean interrupted = Thread.interrupted();
++        try {
++            if (process.isAlive()) {
++                process.descendants().forEach(ProcessHandle::destroy); process.destroy();
++                if (!process.waitFor(2, TimeUnit.SECONDS)) {
++                    process.descendants().forEach(ProcessHandle::destroyForcibly); process.destroyForcibly(); process.waitFor();
++                }
++            }
++        } catch (InterruptedException again) { interrupted = true; process.destroyForcibly(); process.onExit().join(); }
++        finally { if (interrupted) Thread.currentThread().interrupt(); }
++    }
++}
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoPlanningService.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoPlanningService.java
+@@ -0,0 +1,314 @@
++package org.schoolkernel.workspace;
++
++import java.nio.charset.StandardCharsets;
++import java.time.*;
++import java.util.*;
++import java.util.concurrent.*;
++import org.slf4j.LoggerFactory;
++import org.springframework.context.annotation.Profile;
++import org.springframework.http.HttpStatus;
++import org.springframework.stereotype.Service;
++import tools.jackson.databind.*;
++import tools.jackson.databind.node.ObjectNode;
++
++/** One physical FIFO, private logical runs, and immutable exact-request artifacts. No owner IDs enter cache or logs. */
++@Service
++@Profile("demo")
++class DemoPlanningService {
++    private final WorkspaceStore store;
++    private final WorkspaceMutation mutation;
++    private final DemoWorkspaces owners;
++    private final RepairDraftService drafts;
++    private final ProposalReviewService reviews;
++    private final DemoDefinitionLimits limits;
++    private final DemoSearchSettings settings;
++    private final DemoVerificationService verification;
++    private final DemoKernelAllowance allowance;
++    private final DemoArtifactCache cache;
++    private final DemoKernelRunner runner;
++    private final ObjectMapper json;
++    private final Map<UUID, Subscriber> active = new HashMap<>();
++    private final ArrayDeque<Job> waiting = new ArrayDeque<>();
++    private final Map<String, Job> matching = new HashMap<>();
++    private final ScheduledExecutorService reaper = Executors.newSingleThreadScheduledExecutor(Thread.ofVirtual().name("demo-run-expiry").factory());
++    private Job running;
++    private boolean closed;
++    private double observedOverheadMs = 10000;
++
++    DemoPlanningService(WorkspaceStore store, WorkspaceMutation mutation, DemoWorkspaces owners, RepairDraftService drafts,
++            ProposalReviewService reviews, DemoDefinitionLimits limits, DemoSearchSettings settings,
++            DemoVerificationService verification, DemoKernelAllowance allowance, DemoArtifactCache cache,
++            DemoKernelRunner runner, ObjectMapper json) {
++        this.store = store; this.mutation = mutation; this.owners = owners; this.drafts = drafts; this.reviews = reviews;
++        this.limits = limits; this.settings = settings; this.verification = verification; this.allowance = allowance;
++        this.cache = cache; this.runner = runner; this.json = json;
++        owners.runCancellation(ignored -> {}); // The reaper detaches logical subscribers; legacy run IDs cannot cancel shared work.
++        reaper.scheduleWithFixedDelay(this::expireSafely, 1, 1, TimeUnit.SECONDS);
++    }
++
++    synchronized WorkspaceAggregate start(String ifMatch, JsonNode request) {
++        if (closed) throw new WorkspaceProblem(HttpStatus.SERVICE_UNAVAILABLE, "DEMO_STOPPING", "The demo is stopping. No run started.");
++        WorkspaceAggregate current = store.load();
++        long sourceVersion = ImportService.requireMatchingVersion(ifMatch, current);
++        boolean repair = current.state() == WorkspaceState.REPAIR_DRAFT;
++        if (!repair && current.state() != WorkspaceState.INITIAL_DRAFT) throw transition("Start a run only from a ready initial or repair draft.");
++        ObjectNode document = (ObjectNode) current.document().deepCopy();
++        JsonNode definition, baselineDefinition = null, baselineResult = null;
++        if (repair) {
++            if (RepairDraftService.seeded(document) || drafts.hasUnsavedBrowserState(sourceVersion)) throw transition("Resolve the ordinary repair draft before requesting a proposal.");
++            drafts.refreshSavedDraft(document);
++            JsonNode draft = document.path("repairDraft");
++            if (!draft.path("readyToSolve").asBoolean() || !draft.path("conflicts").isEmpty()) throw transition("Resolve every repair conflict before requesting a proposal.");
++            definition = drafts.compiledDefinition(document);
++            baselineDefinition = document.path("acceptedBaseline").path("definition").deepCopy();
++            baselineResult = document.path("acceptedBaseline").path("result").deepCopy();
++            if (!baselineResult.path("inputRevision").equals(definition.path("basedOnRevision"))) throw transition("The compiled repair no longer matches Current.");
++        } else definition = document.path("initialDefinition").deepCopy();
++        limits.check(definition, !repair);
++        if (baselineResult != null && (CanonicalJson.bytes(baselineResult).length > DemoDefinitionLimits.DOCUMENT_BYTES
++                || CanonicalJson.bytes(baselineDefinition).length > DemoDefinitionLimits.DOCUMENT_BYTES)) throw transition("Current exceeds the demo document limit.");
++        String preset = preset(request, definition.path("lessons").size());
++        var input = new DemoKernelRunner.Input(repair ? "REPAIR" : "INITIAL", definition, baselineDefinition, baselineResult, settings.effort(preset));
++        String key = identity(input);
++        var artifact = (DemoKernelRunner.Artifact) cache.get(key);
++        Job job = artifact == null && cache.enabled() ? matching.get(key) : null;
++        boolean fresh = artifact == null && job == null;
++        DemoKernelAllowance.Reservation reservation = null;
++        if (fresh) {
++            if (running != null && waiting.size() >= settings.maxWaiting() || estimatedStartMs() > settings.estimatedStartLimit().toMillis()) {
++                event("refused", null, input.operation(), preset, "DEMO_BUSY");
++                throw new WorkspaceProblem(HttpStatus.TOO_MANY_REQUESTS, "DEMO_BUSY", "The demo is busy. Try again shortly; no run was created.");
++            }
++            reservation = allowance.reserve(input.effort().plus(settings.processOverhead()).plusSeconds(4).plus(verification.timeout()).plusSeconds(4));
++            job = new Job(key, input, reservation);
++        }
++        UUID id = UUID.randomUUID();
++        Subscriber subscriber = new Subscriber(id, owners.current(), sourceVersion, document.deepCopy(), input, preset);
++        document.remove("proposal");
++        ObjectNode run = document.putObject("run");
++        run.put("id", id.toString()); run.put("kind", input.operation()); run.put("status", artifact != null ? "FEASIBLE" : fresh ? running == null ? "RUNNING" : "QUEUED" : job.phase);
++        run.put("queuePosition", fresh && running != null ? waiting.size() + 1 : 0);
++        run.put("estimatedStartMs", estimatedStartMs()); run.put("approximate", true);
++        run.put("sourceWorkspaceVersion", sourceVersion); run.put("limit", input.effort().toString()); run.put("effort", preset);
++        run.put("acceptedTimetableRevision", repair ? baselineResult.path("timetableRevision").asString() : "NO_BASELINE");
++        run.put("acceptedInputRevision", repair ? baselineResult.path("inputRevision").asString() : document.path("definitionRevision").asString());
++        run.put("intentRevision", repair ? document.path("repairDraft").path("intentRevision").asString() : "NO_INTENT");
++        WorkspaceAggregate started;
++        try {
++            started = repair ? mutation.startRepairRun(sourceVersion, id, document) : mutation.startInitialRun(sourceVersion, id, document);
++        } catch (RuntimeException refusal) { if (fresh) reservation.close(); throw refusal; }
++        subscriber.runningVersion = started.version();
++        active.put(id, subscriber);
++        if (artifact != null) {
++            event("reused", artifact.computationId(), input.operation(), preset, "FEASIBLE");
++            complete(subscriber, new DemoKernelRunner.Outcome(artifact, "FEASIBLE", null, null, null), true);
++            active.remove(id);
++            return store.load();
++        }
++        subscriber.job = job; job.subscribers.add(subscriber);
++        event(fresh ? "admitted" : "coalesced", job.id, input.operation(), preset, job.phase);
++        if (fresh) { if (cache.enabled()) matching.put(key, job); waiting.add(job); dispatch(); }
++        return started;
++    }
++
++    synchronized JsonNode run(UUID id) {
++        WorkspaceAggregate current = store.load();
++        Subscriber subscriber = active.get(id);
++        if (subscriber != null && subscriber.owner == owners.current() && id.equals(current.activeRunId())) {
++            subscriber.lastPoll = System.nanoTime(); return status(subscriber);
++        }
++        JsonNode last = current.document().path("lastRun");
++        if (id.toString().equals(last.path("id").asString(""))) return last.deepCopy();
++        throw new WorkspaceProblem(HttpStatus.NOT_FOUND, "RUN_NOT_FOUND", "The planning run does not exist.");
++    }
++
++    synchronized WorkspaceAggregate cancel(String ifMatch, UUID id) {
++        WorkspaceAggregate current = store.load(); long version = ImportService.requireMatchingVersion(ifMatch, current);
++        Subscriber subscriber = active.get(id);
++        if (subscriber == null || subscriber.owner != owners.current() || !id.equals(current.activeRunId())) throw transition("Only this workspace's active run can be cancelled.");
++        finishWithoutProposal(subscriber, current, version, "CANCELLED", "Planning was cancelled. The draft is retained.");
++        detach(subscriber); return store.load();
++    }
++
++    private String preset(JsonNode request, int lessons) {
++        if (request == null || request.isNull() || request.isObject() && request.isEmpty()) return lessons > settings.lessonThreshold() ? "THOROUGH" : "QUICK";
++        if (!request.isObject() || request.size() != 1 || !Set.of("QUICK", "THOROUGH").contains(request.path("effort").asString("")))
++            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_SEARCH_EFFORT", "Choose Quick search or Thorough search. Arbitrary limits and retries are unavailable.");
++        return request.path("effort").asString();
++    }
++    private String identity(DemoKernelRunner.Input input) {
++        ObjectNode value = json.createObjectNode();
++        value.put("operation", input.operation()); value.put("duration", input.effort().toString()); value.put("seed", 0);
++        value.put("solverConfiguration", "packaged-timefold-default"); value.put("kernelBuild", verification.build());
++        value.set("definition", input.definition());
++        if (input.baselineDefinition() != null) { value.set("baselineDefinition", input.baselineDefinition()); value.set("baselineResult", input.baselineResult()); }
++        return "solve:" + new String(CanonicalJson.bytes(value), StandardCharsets.UTF_8);
++    }
++    private long estimatedStartMs() {
++        double overhead = observedOverheadMs;
++        double estimate = running == null ? 0 : Math.max(0, running.input.effort().toMillis() + overhead - elapsed(running.started));
++        for (Job job : waiting) estimate += job.input.effort().toMillis() + overhead;
++        return (long)Math.ceil(estimate);
++    }
++    private ObjectNode status(Subscriber subscriber) {
++        Job job = subscriber.job;
++        ObjectNode response = json.createObjectNode();
++        response.put("id", subscriber.id.toString()); response.put("kind", subscriber.input.operation()); response.put("status", job.phase);
++        response.put("limit", subscriber.input.effort().toString()); response.put("effort", subscriber.preset);
++        response.put("waitMs", elapsed(subscriber.created)); response.put("reused", false);
++        response.put("elapsedTimeMs", job.started == 0 ? 0 : elapsed(job.started));
++        response.put("approximate", true);
++        int position = 0; double estimate = 0;
++        if (running != null && running != job) estimate = Math.max(0, running.input.effort().toMillis() + observedOverheadMs - elapsed(running.started));
++        for (Job queued : waiting) { position++; if (queued == job) break; estimate += queued.input.effort().toMillis() + observedOverheadMs; }
++        response.put("queuePosition", "QUEUED".equals(job.phase) ? position : 0);
++        response.put("estimatedStartMs", "QUEUED".equals(job.phase) ? (long)Math.ceil(estimate) : 0);
++        return response;
++    }
++    private void dispatch() {
++        if (closed || running != null || waiting.isEmpty()) return;
++        Job job = waiting.removeFirst(); running = job; job.phase = "RUNNING"; job.started = System.nanoTime();
++        job.thread = Thread.ofVirtual().name("demo-computation-" + job.id).unstarted(() -> execute(job)); job.thread.start();
++    }
++    private void execute(Job job) {
++        DemoKernelRunner.Outcome outcome;
++        try { outcome = runner.run(job.id, job.input, job.reservation, () -> checking(job)); }
++        catch (RuntimeException failure) { outcome = new DemoKernelRunner.Outcome(null, "FAILED", "KERNEL_FAILED", "The computation could not complete safely.", null); }
++        finally { job.reservation.close(); }
++        Thread.interrupted();
++        synchronized (this) {
++            if (outcome.artifact() != null && !job.subscribers.isEmpty() && !closed) {
++                // Verification and artifact are retained together as a single eligible unit.
++                cache.put(job.key, outcome.artifact(), 8L * CanonicalJson.bytes(outcome.artifact().result()).length + 2048);
++                observedOverheadMs = .75 * observedOverheadMs + .25 * Math.max(0, elapsed(job.started) - job.input.effort().toMillis());
++            }
++            for (Subscriber subscriber : List.copyOf(job.subscribers)) {
++                DemoKernelRunner.Outcome result = outcome;
++                try { owners.bound(subscriber.owner, () -> complete(subscriber, result, false)); }
++                catch (RuntimeException invalidProposal) {
++                    owners.bound(subscriber.owner, () -> complete(subscriber, new DemoKernelRunner.Outcome(null,
++                            "FAILED", "REJECTED_OUTPUT", "The result could not form a complete proposal. The draft is retained.", null), false));
++                } finally { active.remove(subscriber.id); }
++            }
++            matching.remove(job.key, job); job.subscribers.clear(); running = null;
++            event("finished", job.id, job.input.operation(), null, outcome.status()); dispatch();
++        }
++    }
++    private synchronized void checking(Job job) { job.phase = "CHECKING_RESULT"; }
++
++    private void complete(Subscriber subscriber, DemoKernelRunner.Outcome outcome, boolean reused) {
++        try {
++            if (closed || active.get(subscriber.id) != subscriber) return;
++            WorkspaceAggregate current = store.load();
++            if (current.version() != subscriber.runningVersion || !subscriber.id.equals(current.activeRunId())
++                    || !eligible(subscriber, current.document())) return;
++            ObjectNode document = (ObjectNode) current.document().deepCopy(); document.remove("run"); document.remove("proposal");
++            ObjectNode last = document.putObject("lastRun");
++            last.put("id", subscriber.id.toString()); last.put("kind", subscriber.input.operation()); last.put("status", outcome.status());
++            last.put("limit", subscriber.input.effort().toString()); last.put("effort", subscriber.preset); last.put("reused", reused);
++            last.put("waitMs", elapsed(subscriber.created));
++            last.put("intentRevision", subscriber.source.path("repairDraft").path("intentRevision").asString("NO_INTENT"));
++            if (outcome.artifact() == null) {
++                last.put("feasible", false); last.put("code", outcome.code()); last.put("message", outcome.message());
++                if (outcome.evidence() != null) last.setAll((ObjectNode)outcome.evidence().deepCopy());
++                finish(subscriber, current.version(), false, document); return;
++            }
++            var artifact = outcome.artifact(); JsonNode result = artifact.result();
++            last.put("feasible", true); last.put("terminationReason", result.path("terminationReason").asString());
++            last.put("elapsedTimeMs", result.path("elapsedTimeMs").asLong());
++            last.put("originalSolveProcessMs", artifact.solveProcessMs()); last.put("originalVerificationProcessMs", artifact.verificationProcessMs());
++            ObjectNode proposal = document.putObject("proposal");
++            proposal.setAll(last.deepCopy()); proposal.remove("id"); proposal.put("runId", subscriber.id.toString());
++            proposal.put("id", UUID.randomUUID().toString()); proposal.put("sourceWorkspaceVersion", subscriber.sourceVersion);
++            proposal.put("acceptedTimetableRevision", subscriber.input.baselineResult() == null ? "NO_BASELINE" : subscriber.input.baselineResult().path("timetableRevision").asString());
++            proposal.put("successorDefinitionRevision", artifact.verification().definitionRevision());
++            proposal.put("proposedTimetableRevision", artifact.verification().timetableRevision());
++            proposal.set("definition", subscriber.input.definition().deepCopy()); proposal.set("result", result.deepCopy());
++            ObjectNode provenance = proposal.putObject("solveProvenance"); provenance.put("computationId", artifact.computationId());
++            provenance.put("kernelBuild", verification.build()); provenance.put("operation", subscriber.input.operation());
++            provenance.put("duration", subscriber.input.effort().toString()); provenance.put("seed", 0); provenance.put("solverConfiguration", "packaged-timefold-default");
++            ObjectNode counts = proposal.putObject("changeCounts");
++            if ("REPAIR".equals(subscriber.input.operation())) {
++                for (String field : List.of("additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves")) counts.put(field, result.path("changeReport").path(field).size());
++                proposal.set("review", reviews.create(document.path("acceptedBaseline"), document.path("repairDraft"), subscriber.input.definition(), result));
++            } else counts.put("lessonCount", result.path("timetable").path("assignments").size());
++            finish(subscriber, current.version(), true, document);
++        } catch (WorkspaceProblem endedOrStale) { /* Owner, version, or cancellation won. No late write. */ }
++    }
++    private boolean eligible(Subscriber subscriber, JsonNode document) {
++        if ("INITIAL".equals(subscriber.input.operation())) return subscriber.input.definition().equals(document.path("initialDefinition"));
++        ObjectNode checked = (ObjectNode) document.deepCopy(); drafts.refreshSavedDraft(checked);
++        return subscriber.source.path("acceptedBaseline").equals(document.path("acceptedBaseline"))
++                && subscriber.source.path("repairDraft").path("intentRevision").equals(checked.path("repairDraft").path("intentRevision"))
++                && subscriber.input.definition().equals(drafts.compiledDefinition(checked));
++    }
++    private void finish(Subscriber subscriber, long version, boolean feasible, ObjectNode document) {
++        if ("REPAIR".equals(subscriber.input.operation())) mutation.finishRepairRun(version, subscriber.id,
++                feasible ? WorkspaceState.REPAIR_PROPOSAL : WorkspaceState.REPAIR_DRAFT, document);
++        else mutation.finishInitialRun(version, subscriber.id, feasible ? WorkspaceState.INITIAL_PROPOSAL : WorkspaceState.INITIAL_DRAFT, document);
++    }
++    private void finishWithoutProposal(Subscriber subscriber, WorkspaceAggregate current, long version, String status, String message) {
++        ObjectNode document = (ObjectNode) current.document().deepCopy(); document.remove("run"); document.remove("proposal");
++        ObjectNode last = document.putObject("lastRun"); last.put("id", subscriber.id.toString()); last.put("kind", subscriber.input.operation());
++        last.put("status", status); last.put("limit", subscriber.input.effort().toString()); last.put("effort", subscriber.preset);
++        last.put("message", message); last.put("feasible", false); finish(subscriber, version, false, document);
++    }
++    private void detach(Subscriber subscriber) {
++        active.remove(subscriber.id); Job job = subscriber.job;
++        job.subscribers.remove(subscriber);
++        event("detached", job.id, subscriber.input.operation(), subscriber.preset, "CANCELLED_OR_EXPIRED");
++        if (!job.subscribers.isEmpty()) return;
++        matching.remove(job.key, job);
++        if (waiting.remove(job)) job.reservation.close();
++        else if (job.thread != null) job.thread.interrupt(); // Hold the slot/reservation until the physical boundary settles.
++    }
++    private synchronized void expireSafely() {
++        try {
++            for (Subscriber subscriber : List.copyOf(active.values())) {
++                boolean expired = subscriber.owner.ended || "QUEUED".equals(subscriber.job.phase)
++                        && System.nanoTime() - subscriber.lastPoll >= settings.abandonment().toNanos();
++                if (!expired) continue;
++                owners.bound(subscriber.owner, () -> {
++                    try {
++                        var current = store.load();
++                        if (subscriber.id.equals(current.activeRunId())) finishWithoutProposal(subscriber, current, current.version(), "EXPIRED", "The queued run expired without polling. The draft is retained.");
++                    } catch (WorkspaceProblem ended) {}
++                });
++                detach(subscriber);
++            }
++        } catch (RuntimeException failure) { event("expiry-check", null, null, null, "FAILED"); }
++    }
++    private static long elapsed(long start) { return TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start); }
++    private void event(String event, String computation, String operation, String preset, String outcome) {
++        ObjectNode line = json.createObjectNode(); line.put("family", "work"); line.put("event", event);
++        if (computation != null) line.put("computationId", computation);
++        if (operation != null) line.put("operation", operation); if (preset != null) line.put("preset", preset);
++        line.put("outcome", outcome); LoggerFactory.getLogger(DemoPlanningService.class).info("{}", line);
++    }
++    private static WorkspaceProblem transition(String message) { return new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION", message); }
++    @jakarta.annotation.PreDestroy void close() {
++        List<Thread> threads;
++        synchronized (this) {
++            closed = true; reaper.shutdownNow();
++            for (Job job : waiting) job.reservation.close(); waiting.clear(); matching.clear(); active.clear();
++            threads = running == null || running.thread == null ? List.of() : List.of(running.thread);
++            threads.forEach(Thread::interrupt);
++        }
++        for (Thread thread : threads) { try { thread.join(10000); } catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); } }
++    }
++    private static final class Job {
++        final String id = UUID.randomUUID().toString(), key;
++        final DemoKernelRunner.Input input; final DemoKernelAllowance.Reservation reservation;
++        final Set<Subscriber> subscribers = new LinkedHashSet<>();
++        String phase = "QUEUED"; long started; Thread thread;
++        Job(String key, DemoKernelRunner.Input input, DemoKernelAllowance.Reservation reservation) { this.key = key; this.input = input; this.reservation = reservation; }
++    }
++    private static final class Subscriber {
++        final UUID id; final DemoWorkspaces.Entry owner; final long sourceVersion, created = System.nanoTime();
++        final ObjectNode source; final DemoKernelRunner.Input input; final String preset;
++        long runningVersion, lastPoll = System.nanoTime(); Job job;
++        Subscriber(UUID id, DemoWorkspaces.Entry owner, long version, ObjectNode source, DemoKernelRunner.Input input, String preset) {
++            this.id = id; this.owner = owner; this.sourceVersion = version; this.source = source; this.input = input; this.preset = preset;
++        }
++    }
++}
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSearchSettings.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSearchSettings.java
+@@ -0,0 +1,28 @@
++package org.schoolkernel.workspace;
++
++import java.time.Duration;
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.context.annotation.Profile;
++import org.springframework.stereotype.Component;
++
++@Component
++@Profile("demo")
++record DemoSearchSettings(int quickSeconds, int thoroughSeconds, int lessonThreshold,
++        int maxWaiting, Duration estimatedStartLimit, Duration abandonment, Duration processOverhead) {
++    DemoSearchSettings(@Value("${demo.search.quick-seconds:5}") int quickSeconds,
++            @Value("${demo.search.thorough-seconds:60}") int thoroughSeconds,
++            @Value("${demo.search.lesson-threshold:200}") int lessonThreshold,
++            @Value("${demo.queue.max-waiting:8}") int maxWaiting,
++            @Value("${demo.queue.estimated-start-limit:2m}") Duration estimatedStartLimit,
++            @Value("${demo.queue.abandonment:2m}") Duration abandonment,
++            @Value("${demo.kernel.solve-overhead:10s}") Duration processOverhead) {
++        if (quickSeconds < 1 || quickSeconds > thoroughSeconds || thoroughSeconds > 120 || lessonThreshold < 0
++                || maxWaiting < 0 || maxWaiting > 8 || estimatedStartLimit.isNegative() || estimatedStartLimit.isZero()
++                || abandonment.isNegative() || abandonment.isZero() || processOverhead.compareTo(Duration.ofSeconds(1)) < 0)
++            throw new IllegalArgumentException("Invalid demo search bounds");
++        this.quickSeconds = quickSeconds; this.thoroughSeconds = thoroughSeconds; this.lessonThreshold = lessonThreshold;
++        this.maxWaiting = maxWaiting; this.estimatedStartLimit = estimatedStartLimit; this.abandonment = abandonment;
++        this.processOverhead = processOverhead;
++    }
++    Duration effort(String preset) { return Duration.ofSeconds("THOROUGH".equals(preset) ? thoroughSeconds : quickSeconds); }
++}
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoVerificationService.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoVerificationService.java
+@@ -2,7 +2,6 @@
+ 
+ import java.nio.file.Path;
+ import java.time.Duration;
+-import java.util.LinkedHashMap;
+ import java.util.concurrent.Semaphore;
+ import java.util.concurrent.TimeUnit;
+ import org.springframework.beans.factory.annotation.Value;
+@@ -10,44 +9,44 @@
+ import org.springframework.http.HttpStatus;
+ import org.springframework.stereotype.Service;
+ 
+-/** Exact successful verification evidence, bounded independently from immutable packaged samples. */
++/** Exact successful verification evidence; standalone slots are separate from the solver's reserved verification. */
+ @Service
+ @Profile("demo")
+ class DemoVerificationService {
+     private final KernelVerifier verifier;
+     private final DemoKernelAllowance allowance;
+     private final Semaphore slots = new Semaphore(2, true);
+-    private final boolean reuse;
+-    private final long maxBytes, ttlNanos, waitMillis;
++    private final DemoArtifactCache cache;
++    private final long waitMillis;
+     private final Duration timeout;
+     private final String build;
+-    private long residentBytes;
+-    private final LinkedHashMap<String, Evidence> cache = new LinkedHashMap<>();
+-    private final java.util.concurrent.ScheduledExecutorService expiry = java.util.concurrent.Executors.newSingleThreadScheduledExecutor(
+-            Thread.ofVirtual().name("demo-verification-expiry").factory());
+-    private java.util.concurrent.ScheduledFuture<?> nextExpiry;
++    private final boolean ownsCache;
+ 
+-    DemoVerificationService(KernelVerifier verifier, DemoKernelAllowance allowance,
+-            @Value("${demo.reuse.enabled:true}") boolean reuse,
+-            @Value("${demo.reuse.max-bytes:67108864}") long maxBytes,
+-            @Value("${demo.reuse.ttl:1h}") Duration ttl,
++    @org.springframework.beans.factory.annotation.Autowired
++    DemoVerificationService(KernelVerifier verifier, DemoKernelAllowance allowance, DemoArtifactCache cache,
+             @Value("${demo.kernel.verification-wait:10s}") Duration wait,
+             @Value("${demo.kernel.verification-timeout:30s}") Duration timeout,
+             @Value("${demo.kernel-artifact:kernel-cli/target/school-kernel.jar}") String artifact) throws Exception {
+-        if (maxBytes < 0 || ttl.isNegative() || ttl.isZero() || ttl.compareTo(Duration.ofHours(1)) > 0
+-                || wait.isNegative() || wait.compareTo(Duration.ofSeconds(10)) > 0
+-                || timeout.isNegative() || timeout.isZero() || timeout.compareTo(Duration.ofSeconds(30)) > 0)
+-            throw new IllegalArgumentException("Invalid demo verification/cache bounds");
+-        this.verifier = verifier; this.allowance = allowance; this.reuse = reuse; this.maxBytes = maxBytes;
+-        this.ttlNanos = ttl.toNanos(); this.waitMillis = wait.toMillis(); this.timeout = timeout;
++        this(verifier, allowance, cache, wait, timeout, artifact, false);
++    }
++    DemoVerificationService(KernelVerifier verifier, DemoKernelAllowance allowance, boolean reuse, long maxBytes,
++            Duration ttl, Duration wait, Duration timeout, String artifact) throws Exception {
++        this(verifier, allowance, new DemoArtifactCache(reuse, maxBytes, ttl), wait, timeout, artifact, true);
++    }
++    private DemoVerificationService(KernelVerifier verifier, DemoKernelAllowance allowance, DemoArtifactCache cache,
++            Duration wait, Duration timeout, String artifact, boolean ownsCache) throws Exception {
++        if (wait.isNegative() || wait.compareTo(Duration.ofSeconds(10)) > 0 || timeout.isNegative()
++                || timeout.isZero() || timeout.compareTo(Duration.ofSeconds(30)) > 0)
++            throw new IllegalArgumentException("Invalid demo verification bounds");
++        this.verifier = verifier; this.allowance = allowance; this.cache = cache; this.ownsCache = ownsCache;
++        this.waitMillis = wait.toMillis(); this.timeout = timeout;
+         this.build = DemoSamples.kernelBuild(Path.of(KernelVerifier.resolveExecutable(artifact)));
+     }
+-
++    String build() { return build; }
++    Duration timeout() { return timeout; }
+     KernelVerifier.Verification verify(ImportDocuments documents) {
+-        // Retain the complete canonical key, not an array-sorting revision or a client hash.
+-        String key = build + ":" + documents.mode() + ":" + new String(CanonicalJson.bytes(documents.definition()), java.nio.charset.StandardCharsets.UTF_8)
+-                + ":" + (documents.result() == null ? "absent" : new String(CanonicalJson.bytes(documents.result()), java.nio.charset.StandardCharsets.UTF_8));
+-        var hit = hit(key);
++        String key = key(documents);
++        var hit = (KernelVerifier.Verification) cache.get(key);
+         if (hit != null) return hit;
+         try (var reservation = allowance.reserve(timeout.plusSeconds(4))) {
+             boolean acquired;
+@@ -59,51 +58,21 @@
+             if (!acquired) throw new WorkspaceProblem(HttpStatus.SERVICE_UNAVAILABLE, "VERIFICATION_BUSY",
+                     "Verification is busy. The definition was not used. Try again shortly.");
+             try {
+-                hit = hit(key);
++                hit = (KernelVerifier.Verification) cache.get(key);
+                 if (hit != null) return hit;
+-                var verified = verifier.verify(documents, timeout, reservation::started);
+-                remember(key, verified);
++                var verified = verifier.verify(documents, timeout, reservation::started, reservation::stopped);
++                cache.put(key, verified, 1024);
+                 return verified;
+             } finally { slots.release(); }
+         }
+     }
+-
+-    private synchronized KernelVerifier.Verification hit(String key) {
+-        evictExpired();
+-        Evidence evidence = reuse ? cache.get(key) : null;
+-        return evidence == null ? null : evidence.verification();
++    // Required checking stays inside the single solver slot and uses its already-held allowance.
++    KernelVerifier.Verification verifyReserved(ImportDocuments documents, DemoKernelAllowance.Reservation reservation) {
++        return verifier.verify(documents, timeout, reservation::started, reservation::stopped);
+     }
+-    private synchronized void remember(String key, KernelVerifier.Verification verification) {
+-        if (!reuse) return;
+-        evictExpired();
+-        long bytes = 2L * key.length() + 2L * (verification.schoolId().length() + verification.definitionRevision().length()
+-                + (verification.timetableRevision() == null ? 0 : verification.timetableRevision().length())) + 512;
+-        if (bytes > maxBytes) return;
+-        Evidence old = cache.remove(key);
+-        if (old != null) residentBytes -= old.bytes();
+-        while (residentBytes + bytes > maxBytes && !cache.isEmpty()) {
+-            var first = cache.entrySet().iterator(); residentBytes -= first.next().getValue().bytes(); first.remove();
+-        }
+-        cache.put(key, new Evidence(verification, System.nanoTime(), bytes)); residentBytes += bytes;
+-        scheduleExpiry();
++    private String key(ImportDocuments documents) {
++        return build + ":" + documents.mode() + ":" + new String(CanonicalJson.bytes(documents.definition()), java.nio.charset.StandardCharsets.UTF_8)
++                + ":" + (documents.result() == null ? "absent" : new String(CanonicalJson.bytes(documents.result()), java.nio.charset.StandardCharsets.UTF_8));
+     }
+-    private void evictExpired() {
+-        long now = System.nanoTime();
+-        cache.values().removeIf(evidence -> {
+-            if (now - evidence.completed() < ttlNanos) return false;
+-            residentBytes -= evidence.bytes(); return true;
+-        });
+-    }
+-    private synchronized void scheduleExpiry() {
+-        if (nextExpiry != null) nextExpiry.cancel(false);
+-        if (cache.isEmpty()) { nextExpiry = null; return; }
+-        long first = cache.values().iterator().next().completed();
+-        nextExpiry = expiry.schedule(() -> {
+-            synchronized (this) { evictExpired(); scheduleExpiry(); }
+-        }, Math.max(1, ttlNanos - (System.nanoTime() - first)), TimeUnit.NANOSECONDS);
+-    }
+-    @jakarta.annotation.PreDestroy synchronized void close() {
+-        expiry.shutdownNow(); cache.clear(); residentBytes = 0;
+-    }
+-    private record Evidence(KernelVerifier.Verification verification, long completed, long bytes) {}
++    @jakarta.annotation.PreDestroy void close() { if (ownsCache) cache.close(); }
+ }
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoWorkspaces.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoWorkspaces.java
+@@ -27,6 +27,8 @@
+     private final ObjectMapper json;
+     private final ObjectProvider<KernelPlanner> planner;
+     private final Clock clock;
++    private java.util.function.Consumer<UUID> runCancellation;
++    void runCancellation(java.util.function.Consumer<UUID> cancellation) { this.runCancellation = cancellation; }
+     private final ScheduledExecutorService reaper = Executors.newSingleThreadScheduledExecutor(
+             Thread.ofVirtual().name("demo-expiry").factory());
+ 
+@@ -39,6 +41,7 @@
+         this.settings = settings;
+         this.json = json;
+         this.planner = planner;
++        this.runCancellation = id -> planner.getObject().cancel(id);
+         this.clock = clock;
+         reaper.scheduleWithFixedDelay(this::expire, 1, 1, TimeUnit.SECONDS);
+     }
+@@ -97,7 +100,7 @@
+             try {
+                 entry.ended = true;
+                 UUID run = entry.aggregate.activeRunId();
+-                if (run != null) planner.getObject().cancel(run);
++                if (run != null) runCancellation.accept(run);
+                 entry.aggregate = new WorkspaceAggregate(WorkspaceState.EMPTY, 0, null, json.createObjectNode());
+                 iterator.remove();
+             } finally { entry.lock.unlock(); }
+@@ -120,7 +123,7 @@
+         synchronized (this) {
+             active.values().forEach(entry -> {
+                 entry.ended = true;
+-                if (entry.aggregate.activeRunId() != null) planner.getObject().cancel(entry.aggregate.activeRunId());
++                if (entry.aggregate.activeRunId() != null) runCancellation.accept(entry.aggregate.activeRunId());
+                 entry.aggregate = new WorkspaceAggregate(WorkspaceState.EMPTY, 0, null, json.createObjectNode());
+             });
+             active.clear();
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelVerifier.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelVerifier.java
+@@ -70,6 +70,10 @@
+     }
+ 
+     Verification verify(ImportDocuments documents, Duration timeout, java.util.function.Consumer<java.time.Instant> onStart) {
++        return verify(documents, timeout, onStart, () -> {});
++    }
++
++    Verification verify(ImportDocuments documents, Duration timeout, java.util.function.Consumer<java.time.Instant> onStart, Runnable onStop) {
+         String correlationId = UUID.randomUUID().toString();
+         long started = System.nanoTime();
+         Path directory = null;
+@@ -104,6 +108,7 @@
+             if (!completed) {
+                 throw unavailable("Kernel verification did not finish in time.");
+             }
++            onStop.run();
+             stdout.join(1000);
+             stderr.join(1000);
+             int exit = process.exitValue();
+@@ -159,6 +164,7 @@
+                 try { process.getInputStream().close(); process.getErrorStream().close(); } catch (IOException ignored) {}
+                 if (interrupted) Thread.currentThread().interrupt();
+             }
++            onStop.run();
+             deleteTree(directory);
+         }
+     }
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java
+@@ -30,6 +30,7 @@
+         ResponseEntity.BodyBuilder response = ResponseEntity.status(status)
+                 .cacheControl(CacheControl.noStore())
+                 .header("X-Content-Type-Options", "nosniff");
++        if ("DEMO_BUSY".equals(code)) response.header("Retry-After", "5");
+         if (snapshot.etag() != null) {
+             response.header(HttpHeaders.ETAG, snapshot.etag());
+         }
+@@ -42,6 +43,7 @@
+         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-store");
++        if ("DEMO_BUSY".equals(code)) response.setHeader("Retry-After", "5");
+         response.setHeader("X-Content-Type-Options", "nosniff");
+         if (snapshot.etag() != null) {
+             response.setHeader(HttpHeaders.ETAG, snapshot.etag());
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java
+@@ -28,6 +28,8 @@
+ 
+ @Controller
+ public class WorkspaceController {
++    @org.springframework.beans.factory.annotation.Autowired(required = false)
++    private DemoPlanningService demoPlanning;
+     private final WorkspaceStore repository;
+     private final ImportService imports;
+     private final InitialPlanningService planning;
+@@ -440,7 +442,7 @@
+             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+             @RequestBody(required = false) JsonNode request) {
+         WorkspaceAggregate current = repository.load();
+-        WorkspaceAggregate started = current.state() == WorkspaceState.REPAIR_DRAFT
++        WorkspaceAggregate started = demoPlanning != null ? demoPlanning.start(ifMatch, request) : current.state() == WorkspaceState.REPAIR_DRAFT
+                 ? repairPlanning.start(ifMatch, request)
+                 : planning.start(ifMatch);
+         return ResponseEntity.accepted()
+@@ -458,7 +460,7 @@
+                 .eTag(current.etag())
+                 .cacheControl(CacheControl.noStore())
+                 .header("X-Content-Type-Options", "nosniff")
+-                .body(isRepairRun(current, runId) ? repairPlanning.run(runId) : planning.run(runId));
++                .body(demoPlanning != null ? demoPlanning.run(runId) : isRepairRun(current, runId) ? repairPlanning.run(runId) : planning.run(runId));
+     }
+ 
+     @DeleteMapping("/api/runs/{runId}")
+@@ -467,7 +469,7 @@
+             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+             @PathVariable UUID runId) {
+         WorkspaceAggregate current = repository.load();
+-        return response(current.state() == WorkspaceState.SOLVING_REPAIR
++        return response(demoPlanning != null ? demoPlanning.cancel(ifMatch, runId) : current.state() == WorkspaceState.SOLVING_REPAIR
+                 ? repairPlanning.cancel(ifMatch, runId)
+                 : planning.cancel(ifMatch, runId));
+     }
+--- a/timetable-workspace/src/main/resources/application-demo.yml
++++ b/timetable-workspace/src/main/resources/application-demo.yml
+@@ -46,7 +46,12 @@
+   complexity:
+     work-max: 11000000
+     lesson-max: 2500
++  queue:
++    max-waiting: 8
++    estimated-start-limit: 2m
++    abandonment: 2m
+   kernel:
++    solve-overhead: 10s
+     daily-allowance: 4h
+     verification-timeout: 30s
+     verification-wait: 10s
+--- a/timetable-workspace/src/main/resources/static/workspace/app.js
++++ b/timetable-workspace/src/main/resources/static/workspace/app.js
+@@ -1,4 +1,5 @@
+ import { M } from './messages.js';
++import { effortControls, bindEffort, runStatus, proposalProvenance } from './demo-runs.js';
+ import { renderDefinitionEditor, resetAuthoringSection } from './definition-editor.js';
+ import { makeAcceptedModel } from './accepted-model.js';
+ import { createProposalComparison } from './proposal-comparison.js';
+@@ -32,6 +33,7 @@
+ let detachedLessonId = null;
+ let demo = false;
+ let demoMounted = false;
++let demoConfig;
+ 
+ const view = {
+   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
+@@ -65,10 +67,14 @@
+   }
+   demo = snapshot.demo === true;
+   if (demo) await ensureDemoPanel();
++  if (demo && snapshot.state.startsWith('SOLVING_')) {
++    const statusResponse = await fetch(`/api/runs/${encodeURIComponent(snapshot.workspace.run.id)}`);
++    if (statusResponse.ok) snapshot.workspace.run = await statusResponse.json();
++  }
+   const unchangedRun = currentSnapshot?.state === 'SOLVING_REPAIR' && snapshot.state === 'SOLVING_REPAIR'
+     && currentSnapshot.workspace.run.id === snapshot.workspace.run.id && etag === workspaceResponse.headers.get('ETag');
+   etag = workspaceResponse.headers.get('ETag');
+-  if (unchangedRun && !force) { pollTimer = setTimeout(load, 300); return; }
++  if (unchangedRun && !force) { pollTimer = demo ? setTimeout(() => pollDemoRun(currentSnapshot.workspace.run.id), 1000) : setTimeout(load, 300); return; }
+   render(snapshot);
+   return snapshot;
+ }
+@@ -77,6 +83,7 @@
+   if (!demoMounted) {
+     document.querySelector('#eyebrow').textContent = 'Public school timetable demo';
+     const config = await (await fetch('/api/demo/config')).json();
++    demoConfig = config;
+     await mountDemoPanel({ reload: () => load(true), lessonThreshold: config.lessonThreshold, quickSeconds: config.quickSeconds, thoroughSeconds: config.thoroughSeconds, useSample: async (id, confirmed) => {
+       const response = await fetchWithCsrf(`/api/samples/${encodeURIComponent(id)}/use`, {
+         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ confirmed })
+@@ -202,20 +209,21 @@
+     stateCard.innerHTML = `
+       <div class="accepted-heading"><div class="school-identity"><span class="state">${M.initialDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div><p>${demo ? 'The definition is verified in this temporary workspace. Review the summary before requesting the first timetable.' : M.draftDetail}</p>
+       ${summary(definition)}
+-      ${lastRun?.message ? `<p class="notice" role="status"><strong>${escapeHtml(lastRun.message)}</strong> ${M.noAcceptedAfterFailure}</p>` : ''}
++      ${lastRun?.message ? (demo ? repairRunFeedback(lastRun) : `<p class="notice" role="status"><strong>${escapeHtml(lastRun.message)}</strong> ${M.noAcceptedAfterFailure}</p>`) : ''}
+       <p class="muted">${M.definitionRevision} <code>${escapeHtml(snapshot.workspace.definitionRevision)}</code></p>
+       ${demo ? `<p id="demo-default-effort">${snapshot.workspace.defaultEffort === 'THOROUGH' ? 'Thorough search' : 'Quick search'} (${Number(snapshot.workspace.defaultEffortSeconds || 5)} seconds) is the default effort for this school. More time guarantees no result.</p>` : ''}
+-      <div class="actions"><button id="start-plan">${demo ? 'Create proposal' : M.createProposal}</button></div>
++      ${demo ? effortControls(definition, demoConfig) : ''}<div class="actions"><button id="start-plan">${demo ? 'Create proposal' : M.createProposal}</button></div>
+       ${demo ? '' : `<form id="replace-definition" class="replace-form"><label>${M.replaceDefinition} <input name="definition" type="file" accept="application/json,.json" required></label><button type="submit" class="secondary">${M.validateReplace}</button></form>`}`;
++    if (demo) bindEffort(definition, demoConfig);
+     bindInitialActions();
+     bindUtilities();
+   } else if (snapshot.state === 'SOLVING_INITIAL') {
+     currentLabel.textContent = M.noAccepted;
+     const run = snapshot.workspace.run;
+     stateCard.className = 'card';
+-    stateCard.innerHTML = `<span class="state running">${M.planning}</span><h2>${escapeHtml(schoolName)}</h2><p>${M.planningDetail}</p><dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div>`;
++    stateCard.innerHTML = `<span class="state running">${M.planning}</span><h2>${escapeHtml(schoolName)}</h2><p>${demo ? 'Your private run uses shared demo capacity. You may cancel while queued, running or checking.' : M.planningDetail}</p>${demo ? `<p id="demo-run-status" role="status">${runStatus(run)}</p>` : ''}<dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div>`;
+     document.querySelector('#cancel-run').addEventListener('click', () => cancelRun(run.id));
+-    pollTimer = setTimeout(load, 300);
++    pollTimer = demo ? setTimeout(() => pollDemoRun(currentSnapshot.workspace.run.id), 1000) : setTimeout(load, 300);
+   } else if (snapshot.state === 'INITIAL_PROPOSAL') {
+     currentLabel.textContent = M.noAccepted;
+     const proposal = snapshot.workspace.proposal;
+@@ -264,7 +272,7 @@
+     initializeInspectionState(snapshot.workspace.school?.id);
+     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
+     renderSolving(snapshot, schoolName);
+-    pollTimer = setTimeout(load, 300);
++    pollTimer = demo ? setTimeout(() => pollDemoRun(currentSnapshot.workspace.run.id), 1000) : setTimeout(load, 300);
+   } else if (snapshot.state === 'REPAIR_PROPOSAL') {
+     currentLabel.textContent = M.acceptedTimetable(schoolName);
+     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
+@@ -408,7 +416,7 @@
+         <h3>${M.initialProposal}</h3>
+         <button id="collapse-proposal-task" type="button" class="secondary">${M.collapseProposalTask}</button>
+       </div>
+-      <dl class="proposal-facts">
++      ${demo ? proposalProvenance(proposal) : ''}<dl class="proposal-facts">
+         <div><dt>${M.lessons}</dt><dd>${result.timetable.assignments.length}</dd></div>
+         <div><dt>${M.terminationReason}</dt><dd>${escapeHtml(result.terminationReason)}</dd></div>
+         <div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div>
+@@ -519,7 +527,7 @@
+   const categories = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
+   const unchanged = acceptedModel.assignments.filter(item => !comparison.entries.get(item.lessonId)?.change);
+   return `<section id="proposal-context" aria-label="${M.proposalImpact}"><h3>${M.proposalImpact}</h3><p class="notice">${M.repairPriority}</p><div id="review-selection">${reviewSelection()}</div>
+-    <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
++    ${demo ? proposalProvenance(proposal) : ''}<dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
+     <details class="review-groups"><summary>${M.protectedAssignments} · ${protectedIds.length}</summary>${protectedIds.length ? `<ul>${protectedIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button> · ${escapeHtml(comparisonProtection(id))}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>
+     <div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div><p>${M.overlappingTotals}</p>
+     ${nativeChangesHtml(review.definitionChanges)}${review.timingImpactLessonIds ? `<details class="timing-impact"><summary>Actual timing impacts · ${review.timingImpactCount} (separate from period-ID moves)</summary><ul>${review.timingImpactLessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul></details>` : ''}
+@@ -941,7 +949,7 @@
+   const run = currentSnapshot.workspace.run;
+   const mode = inspectionState.current().mode;
+   const open = inspectionState.current().taskAreaOpen[mode];
+-  return `<section id="workbench-task-area" class="task-area solving-task-area" aria-label="${M.repairRunning}"><div class="run-status-bar"><div><strong class="state running">${M.repairRunning}</strong><span>${M.executionLimit}: ${escapeHtml(run.limit)}</span><span>${M.status}: ${M.running}</span><span>${M.acceptedStillCurrent}</span></div><div class="actions"><button id="toggle-run-detail" type="button" class="secondary" aria-expanded="${open}" aria-controls="run-secondary">${open ? M.collapseRunDetail : M.reopenRunDetail}</button><button id="cancel-run" type="button" class="danger">${M.cancelRun}</button></div></div><div id="run-secondary"${open ? '' : ' hidden'}><p>${M.repairRunningDetail}</p>${draftContext(true)}</div></section>`;
++  return `<section id="workbench-task-area" class="task-area solving-task-area" aria-label="${M.repairRunning}"><div class="run-status-bar"><div><strong class="state running">${M.repairRunning}</strong><span>${M.executionLimit}: ${escapeHtml(run.limit)}</span><span>${M.status}: ${M.running}</span>${demo ? `<span id="demo-run-status" role="status">${runStatus(run)}</span>` : ''}<span>${M.acceptedStillCurrent}</span></div><div class="actions"><button id="toggle-run-detail" type="button" class="secondary" aria-expanded="${open}" aria-controls="run-secondary">${open ? M.collapseRunDetail : M.reopenRunDetail}</button><button id="cancel-run" type="button" class="danger">${M.cancelRun}</button></div></div><div id="run-secondary"${open ? '' : ' hidden'}><p>${M.repairRunningDetail}</p>${draftContext(true)}</div></section>`;
+ }
+ 
+ function bindRunTaskArea() {
+@@ -959,7 +967,7 @@
+ function draftContext(frozen = false) {
+   const draft = currentSnapshot.workspace.repairDraft;
+   const lastRun = currentSnapshot.workspace.lastRun;
+-  const retryAvailable = lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
++  const retryAvailable = !demo && lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
+   const changes = draft.intent.changes.map(change => repairChange(change)).join('');
+   const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h4>${M.blockingConflicts}</h4>${draft.conflicts.map(item => `<p><button type="button" class="link-button" data-draft-conflict="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))} · ${escapeHtml(item.lessonId)}</button> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
+   if (frozen) return `<section class="draft-context frozen-draft-context" aria-label="${M.frozenDraft}"><h3>${M.frozenDraft}</h3><p>${M.frozenDraftDetail}</p>${changes || `<p>${M.noWeeklyChanges}</p>`}<dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd>${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd>${draft.conflicts.length}</dd></div></dl>${draft.intent.pins.length ? `<ul>${draft.intent.pins.map(pin => `<li>${escapeHtml(entityName(acceptedModel.maps.lessons.get(pin.lessonId), pin.lessonId))} · ${escapeHtml(pin.lessonId)} · ${[pin.periodSources?.length ? M.acceptedPeriod : null, pin.roomSources?.length ? M.acceptedRoom : null].filter(Boolean).join(', ')}</li>`).join('')}</ul>` : ''}</section>`;
+@@ -970,7 +978,7 @@
+     <section class="draft-task-section"><h4>${M.protectAcceptedAssignment}</h4><div id="draft-selected-protection">${draftSelectedProtection()}</div>${draftProtectionSummary(draft)}</section>
+     <section class="draft-task-section"><details class="repair-controls"${bulkPreview ? ' open' : ''}><summary>${M.bulkPin}</summary><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></details>
+       <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)} · ${escapeHtml(action.id)} · ${action.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div></section>
+-    </div><div class="draft-task-decisions">${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
++    </div><div class="draft-task-decisions">${demo ? effortControls(successorDefinition(), demoConfig) : ''}${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
+     ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${draft.seedDefinition ? "Remove repair staging and pins; keep authored changes and return to authoring." : M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${draft.seedDefinition ? "Discard repair draft and return to authoring" : M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></div></section>`;
+ }
+ 
+@@ -1053,7 +1061,8 @@
+   const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
+   confirmation.addEventListener('change', () => { discard.disabled = !confirmation.checked; });
+   discard.addEventListener('click', () => mutateJson(currentSnapshot.workspace.repairDraft.seedDefinition ? '/api/repair-draft/return-to-authoring' : '/api/repair-draft', currentSnapshot.workspace.repairDraft.seedDefinition ? 'POST' : 'DELETE', { confirmed: true }));
+-  document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT1M' }));
++  if (demo) bindEffort(successorDefinition(), demoConfig);
++  document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', demo ? { effort: document.querySelector('#demo-effort').value } : { limit: 'PT1M' }));
+   document.querySelector('#retry-repair')?.addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT2M' }));
+   document.querySelectorAll('[data-draft-conflict], [data-draft-effect], [data-draft-protection]').forEach(button => button.addEventListener('click', () => selectDraftLesson(button.dataset.draftConflict || button.dataset.draftEffect || button.dataset.draftProtection)));
+   bindPinActions();
+@@ -1081,9 +1090,9 @@
+ function repairRunFeedback(run) {
+   if (!run) return '';
+   const diagnostics = run.searchDiagnostics?.constraints || [];
+-  const rows = diagnostics.map(item => `<li><strong>${escapeHtml(item.constraintId)}</strong> · ${M.diagnosticMatches(item.matchCount)} ${item.examples.flat().map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
++  const rows = diagnostics.map(item => `<li><strong>${escapeHtml(item.constraintId)}</strong> · ${M.diagnosticMatches(item.matchCount)} ${(item.examples || []).flat().map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
+   const validation = run.validationReport?.errors || [];
+-  const validationRows = validation.map(item => `<li>${escapeHtml(item.message || item.code || M.actionFailed)} ${(item.entityIds || []).map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
++  const validationRows = validation.map(item => `<li>${demo && item.location ? `${escapeHtml(item.location)}: ` : ''}${escapeHtml(item.message || item.code || M.actionFailed)} ${(item.entityIds || []).map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
+   return `<section class="conflict-list" role="status"><h3>${M.runDiagnostics}</h3><p><strong>${escapeHtml(run.code === 'INTERRUPTED' ? M.repairInterrupted : run.message || M.actionFailed)}</strong></p>${rows || validationRows ? `<ul>${rows}${validationRows}</ul>` : ''}<p>${M.diagnosticsCaution}</p></section>`;
+ }
+ 
+@@ -2357,8 +2366,27 @@
+ function summary(definition) { return `<dl><div><dt>${M.lessons}</dt><dd>${definition.lessons.length}</dd></div><div><dt>${M.teachers}</dt><dd>${definition.teachers.length}</dd></div><div><dt>${M.classes}</dt><dd>${definition.cohorts.length}</dd></div><div><dt>${M.rooms}</dt><dd>${definition.rooms.length}</dd></div><div><dt>${M.weeklyPeriods}</dt><dd>${definition.periods.length}</dd></div></dl>`; }
+ 
+ function bindInitialActions() {
+-  document.querySelector('#start-plan').addEventListener('click', () => mutate('/api/runs', 'POST'));
++  document.querySelector('#start-plan').addEventListener('click', () => demo ? mutateJson('/api/runs', 'POST', { effort: document.querySelector('#demo-effort').value }) : mutate('/api/runs', 'POST'));
+   document.querySelector('#replace-definition')?.addEventListener('submit', async event => { event.preventDefault(); await mutate('/api/initial-draft/replace', 'POST', new FormData(event.currentTarget)); });
++}
++async function pollDemoRun(id) {
++  try {
++    const response = await fetch(`/api/runs/${encodeURIComponent(id)}`);
++    const run = await response.json();
++    if (!response.ok) {
++      if (run.code === 'SESSION_ENDED') { showDemoUnavailable(run); return; }
++      await load(true); return;
++    }
++    etag = response.headers.get('ETag') || etag;
++    if (!['QUEUED', 'RUNNING', 'CHECKING_RESULT'].includes(run.status)) { await load(true); return; }
++    if (currentSnapshot?.workspace.run?.id !== id) return;
++    currentSnapshot.workspace.run = run;
++    const status = document.querySelector('#demo-run-status');
++    if (status) status.textContent = runStatus(run);
++    pollTimer = setTimeout(() => pollDemoRun(id), run.status === 'QUEUED' ? 2500 : 1000);
++  } catch (_) {
++    pollTimer = setTimeout(() => pollDemoRun(id), 3000);
++  }
+ }
+ async function cancelRun(id) { await mutate(`/api/runs/${encodeURIComponent(id)}`, 'DELETE'); }
+ async function startManualDraft() { await mutate('/api/manual-draft', 'POST'); }
+--- a/timetable-workspace/src/main/resources/static/workspace/demo-runs.js
++++ b/timetable-workspace/src/main/resources/static/workspace/demo-runs.js
+@@ -0,0 +1,27 @@
++export function effortControls(definition, config) {
++  const large = definition.lessons.length > config.lessonThreshold;
++  return `<section class="demo-effort"><label for="demo-effort">Search effort</label><select id="demo-effort">
++    <option value="QUICK"${large ? '' : ' selected'}>Quick search (${config.quickSeconds} seconds)</option>
++    <option value="THOROUGH"${large ? ' selected' : ''}>Thorough search (${config.thoroughSeconds} seconds)</option>
++    </select><p class="muted">Budgets cover construction and search. Queueing, process startup and result checking take additional time. More time often helps but guarantees nothing.</p>
++    <p id="demo-quick-warning" class="notice"${large ? '' : ' hidden'}>${large ? 'Quick search is usually too short for this school size.' : ''}</p></section>`;
++}
++export function bindEffort(definition, config) {
++  const select = document.querySelector('#demo-effort');
++  if (!select) return;
++  const refresh = () => { document.querySelector('#demo-quick-warning').hidden = select.value !== 'QUICK' || definition.lessons.length <= config.lessonThreshold; };
++  select.addEventListener('change', refresh); refresh();
++}
++export function runStatus(run) {
++  const seconds = ms => Math.ceil(Math.max(0, Number(ms || 0)) / 1000);
++  if (run.status === 'QUEUED') return `Queued · position ${run.queuePosition}. Approximate start in ${seconds(run.estimatedStartMs)} seconds; this is an estimate, not a promised start or finish time.`;
++  if (run.status === 'CHECKING_RESULT') return 'Checking result · verifying the complete timetable before it becomes a proposal. Current is unchanged.';
++  return `Running · ${seconds(run.elapsedTimeMs)} seconds since process dispatch. Search budget: ${run.limit}. Startup and checking are additional; Current is unchanged.`;
++}
++export function proposalProvenance(proposal) {
++  if (!proposal.solveProvenance) return '';
++  const seconds = ms => (Number(ms || 0) / 1000).toFixed(1);
++  return `<p class="notice demo-provenance">${proposal.reused ? 'Result reused · no new computation or allowance reservation.' : 'Result computed and independently verified.'}
++    Original solve process: ${seconds(proposal.originalSolveProcessMs)} seconds; original checking: ${seconds(proposal.originalVerificationProcessMs)} seconds.
++    This request waited ${seconds(proposal.waitMs)} seconds. Search budget: ${proposal.limit}. This proposal is private; Current changes only after explicit acceptance.</p>`;
++}
+--- a/timetable-workspace/src/main/resources/static/workspace/styles.css
++++ b/timetable-workspace/src/main/resources/static/workspace/styles.css
+@@ -999,3 +999,8 @@
+ .definition-preference-explanation p, .definition-preference-example p { margin:6px 0 12px; line-height:1.45; }
+ .definition-preference-comparison { grid-column:1 / -1; padding:12px; border:1px solid #c2cdc4; border-radius:6px; }
+ .definition-preference-example { background:#edf2ec; border-radius:4px; padding:12px; font-variant-numeric:tabular-nums; }
++
++.demo-effort { max-width: 42rem; margin: 1rem 0; }
++.demo-effort label { display: block; font-weight: 600; margin-bottom: .4rem; }
++.demo-effort select { max-width: 100%; }
++#demo-run-status, .demo-provenance { overflow-wrap: anywhere; }

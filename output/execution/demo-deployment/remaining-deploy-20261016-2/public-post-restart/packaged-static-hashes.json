@@ -1,0 +1,142 @@
+[
+  {
+    "path": "static/workspace/definition-grid.js",
+    "sha256": "fc640f4b768db37075bd1591ddccda9977031df3b9dd0c60e193d33668bd71a8"
+  },
+  {
+    "path": "static/workspace/day-renderer.js",
+    "sha256": "42871ac8c66ac574f2e0ec197e22e7989f439c80cdfb34a5902504ad9caf5708"
+  },
+  {
+    "path": "static/workspace/definition-rooms.js",
+    "sha256": "9a7b2d74e917abb01e7d2f939c259299a65e819dce346815e2ee04d3559ecb10"
+  },
+  {
+    "path": "static/workspace/demo-panel.js",
+    "sha256": "f7a746bb0a9fcfb73e0aab902ea5e893d1ebf1f8636cd645a9805f1f67c6eaf3"
+  },
+  {
+    "path": "static/workspace/definition-occurrence-browser.js",
+    "sha256": "bcbab17e62695128d1a46a400ae890d4e032c8872746ff0b740f9356639cb66b"
+  },
+  {
+    "path": "static/workspace/index.html",
+    "sha256": "6c36e9a1fc34b7673cdac98bde31df9f677c5e78aae29df7953ddf48d929e464"
+  },
+  {
+    "path": "static/workspace/definition-occurrences.js",
+    "sha256": "cfa99c2f38cea8570bfed9cc363bd9b36ab8d5e26d5f4796d93b239d5b2c825d"
+  },
+  {
+    "path": "static/workspace/styles.css",
+    "sha256": "1af267bc9feb89378742c3fcb10a209cd2b848e179faffd369cbd2ef507cfdd9"
+  },
+  {
+    "path": "static/workspace/definition-restoration.js",
+    "sha256": "2cbaf5024cb30f39ad9e12c983140e4cca577d031991fc88478ceec2b975e591"
+  },
+  {
+    "path": "static/workspace/definition-removal.js",
+    "sha256": "3feab6b926685d0af54e7181f6f937183a2653b1a9a2b67ccf301557252ef458"
+  },
+  {
+    "path": "static/workspace/inspection-state.js",
+    "sha256": "f0c181929064c2e370eba40d6ffe34e4ef1eb32d9b5771435e267a79679d9d10"
+  },
+  {
+    "path": "static/workspace/definition-review.js",
+    "sha256": "b4f2b4680196835075bbaca56b556d0d65bbbcd7e48bdf739b730548af6d8cd0"
+  },
+  {
+    "path": "static/workspace/week-renderer.js",
+    "sha256": "9e09e36544caab000bdb1792adfcc27a40db4f16838195fc1e112a83b23385ab"
+  },
+  {
+    "path": "static/workspace/definition-requirement-browser.js",
+    "sha256": "6b04fb1ddf63802fd823fff4717a1edd5b2ed5ba4cad2c980e4044ed69543cbc"
+  },
+  {
+    "path": "static/workspace/definition-form-controls.js",
+    "sha256": "76094c614f5f6f88d900e40ef7333aa3be2d837b36162a669d9eb9a74bcd1166"
+  },
+  {
+    "path": "static/workspace/demo-definitions.js",
+    "sha256": "0dff9459fe67d30184da9181480b6ecfba368ef4e29e53ac73b8eac39197ecd3"
+  },
+  {
+    "path": "static/workspace/definition-teachers.js",
+    "sha256": "18c5287e838bd0f177027ca75b1e269a505529e321dd6df2fb1de1f852e19baa"
+  },
+  {
+    "path": "static/workspace/definition-cohorts.js",
+    "sha256": "8a5f11041f5b0f4312f635176d9a7375d814f561879e6d06655ebdd254b11d17"
+  },
+  {
+    "path": "static/workspace/definition-catalog.js",
+    "sha256": "9019db7e241c10023a0efd91ee3567c290fcfdca283fbcca0291c39b2bb4891f"
+  },
+  {
+    "path": "static/workspace/definition-requirements.js",
+    "sha256": "86f802645f4df56934ad6fb891fed965f525fdaceabefb54765a06264cde6cda"
+  },
+  {
+    "path": "static/workspace/definition-room-policies.js",
+    "sha256": "59287940cf7f1fe0f6f01c0cde14042a7f945b1e9042935dd60ce87ae166d9b9"
+  },
+  {
+    "path": "static/workspace/definition-subjects.js",
+    "sha256": "9bbce7b84edc96c9aadbb2bc8fb7a11c07512366cc892d1247a606f3f78eb287"
+  },
+  {
+    "path": "static/workspace/demo-runs.js",
+    "sha256": "85e81831cc47a33bcf26e5138b327cd1b65a602d79ea66bb7b98157b071d71b9"
+  },
+  {
+    "path": "static/workspace/demo-import.js",
+    "sha256": "8c48909f12942ef04e5f80a7414a5ec89dfc23d2297fb1034df186bc3a53cf34"
+  },
+  {
+    "path": "static/workspace/definition-preference-guide.js",
+    "sha256": "5d39a3456b0cdc644638909dba6f5457153dbeb193e7f2348e1b5e8d0b0d5fff"
+  },
+  {
+    "path": "static/workspace/definition-preferences.js",
+    "sha256": "21f17196e9c7320ff4888198d954e778db1fb74a15a7db3df97de7c943d70442"
+  },
+  {
+    "path": "static/workspace/accepted-model.js",
+    "sha256": "d7de994664438d3cff73c72c6e8ff17098a7ec316743be3e52eacbdb7356c99d"
+  },
+  {
+    "path": "static/workspace/definition-finish.js",
+    "sha256": "ebad90a828fee97efad87a95c18d954b5f19fd50e14380713e4c7a0f5edebc26"
+  },
+  {
+    "path": "static/workspace/definition-editor.js",
+    "sha256": "1561e5e9789963112f9a4129336259b0e446f8f4c42197cb2b633494890c4f78"
+  },
+  {
+    "path": "static/workspace/messages.js",
+    "sha256": "3edbaec7a02fb4c64ef0e1d5e9a413e7b0a546265271d14ce5e959eaa7dd35c2"
+  },
+  {
+    "path": "static/workspace/app.js",
+    "sha256": "7a90e932a41e58ced34ae54879cd298acaf0b58f08c9a30267300347e561704a"
+  },
+  {
+    "path": "static/workspace/favicon.svg",
+    "sha256": "2caf8c11a20033b0f30c78116a88eb83febf6772234b6c5e238c547f51db04d6"
+  },
+  {
+    "path": "static/workspace/definition-discard.js",
+    "sha256": "8e0865c354a10f9da68015434744ab09e018a49882e1e49909396b37ec29c2b9"
+  },
+  {
+    "path": "static/workspace/definition-browser.js",
+    "sha256": "f969776a87367b1ac6c67d0add3f200987c478d4725caa1a38677d010ba447fe"
+  },
+  {
+    "path": "static/workspace/proposal-comparison.js",
+    "sha256": "6d3212ce43e48987cdd0cc3396cb4ae7973eca6709561ff10350eb122cefa21d"
+  }
+]

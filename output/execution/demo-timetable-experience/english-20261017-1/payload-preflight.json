@@ -1,0 +1,16 @@
+{
+  "files": 174,
+  "stage": "/private/tmp/school-demo-english-production-20261017-1",
+  "archiveSha256": "1e1b9b74139909c0d7ace934062d45aebcba760bf4d569ca7988137ff2b65b0c",
+  "productionDelta": [
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionController.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoEvents.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSamples.java",
+    "timetable-workspace/src/main/resources/demo/timetables/english-a-result.json",
+    "timetable-workspace/src/main/resources/demo/timetables/english-b-result.json",
+    "timetable-workspace/src/main/resources/demo/timetables/english-definition.json",
+    "timetable-workspace/src/main/resources/demo/timetables/scoring-evidence.json"
+  ],
+  "kernelBuild": "441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881",
+  "verdict": "PASS"
+}

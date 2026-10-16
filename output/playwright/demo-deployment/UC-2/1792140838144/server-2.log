@@ -1,0 +1,28 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T11:55:10.792+03:00  INFO 86547 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 86547 (/Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T11:55:10.800+03:00  INFO 86547 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T11:55:14.097+03:00  INFO 86547 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 61599 (https)
+2026-10-16T11:55:14.124+03:00  INFO 86547 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T11:55:14.125+03:00  INFO 86547 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T11:55:14.155+03:00  INFO 86547 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3138 ms
+2026-10-16T11:55:14.467+03:00  INFO 86547 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T11:55:16.477+03:00  INFO 86547 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=101a9a16-de1a-440f-8080-a55a86cc37c1 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1435
+2026-10-16T11:55:18.201+03:00  INFO 86547 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=2bff626b-4442-43d8-b3bc-28fa10a95d5a kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1685
+2026-10-16T11:55:20.505+03:00  INFO 86547 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=bbf7a0d9-b93d-40db-9da6-28667eb9d686 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2244
+2026-10-16T11:55:22.276+03:00  INFO 86547 --- [timetable-workspace] [           main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-127.0.0.1-61599], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-10-16T11:55:22.294+03:00  INFO 86547 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 61599 (https) with context path '/'
+2026-10-16T11:55:22.342+03:00  INFO 86547 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 12.706 seconds (process running for 13.823)
+2026-10-16T11:55:22.493+03:00  INFO 86547 --- [timetable-workspace] [.1-61599-exec-6] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T11:55:22.494+03:00  INFO 86547 --- [timetable-workspace] [.1-61599-exec-6] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T11:55:22.496+03:00  INFO 86547 --- [timetable-workspace] [.1-61599-exec-6] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-16T11:55:26.492+03:00  INFO 86547 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T11:55:26.497+03:00  INFO 86547 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete

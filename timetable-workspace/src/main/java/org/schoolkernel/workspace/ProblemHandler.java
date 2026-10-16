@@ -13,6 +13,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 
 @RestControllerAdvice
 public class ProblemHandler {
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ProblemHandler.class);
     private final ProblemResponder responder;
 
     public ProblemHandler(ProblemResponder responder) {
@@ -71,10 +72,14 @@ public class ProblemHandler {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<ProblemResponse> generalException(Exception ex) {
-        return response(
+        var result = response(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "INTERNAL_ERROR",
-                ex.getMessage() != null ? ex.getMessage() : "An unexpected server error occurred.");
+                "An unexpected server error occurred. Retry shortly or report the correlation ID.");
+        // Exception messages/stacks can contain submitted documents, SQL or credentials.
+        LOG.error("Unexpected request failure correlationId={} exceptionType={}",
+                result.getBody().correlationId(), ex.getClass().getName());
+        return result;
     }
 
     private ResponseEntity<ProblemResponse> response(HttpStatus status, String code, String message) {

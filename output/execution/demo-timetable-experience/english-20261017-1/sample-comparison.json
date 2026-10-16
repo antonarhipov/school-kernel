@@ -1,0 +1,221 @@
+{
+  "verdict": "PASS",
+  "school": "Meadowbrook Community School",
+  "dimensions": {
+    "cohorts": 22,
+    "teachers": 41,
+    "rooms": 35,
+    "lessons": 614,
+    "periods": 30
+  },
+  "kasevaljaDimensions": {
+    "cohorts": 23,
+    "teachers": 51,
+    "rooms": 42,
+    "lessons": 520,
+    "periods": 50
+  },
+  "subjects": [
+    "English",
+    "Mathematics",
+    "Science",
+    "History",
+    "Geography",
+    "French",
+    "Spanish",
+    "Physical Education",
+    "Art and Design",
+    "Music",
+    "Computing",
+    "Design and Technology",
+    "Personal, Social and Health Education"
+  ],
+  "yearWeeklyLessonCounts": {
+    "1": 25,
+    "2": 25,
+    "3": 25,
+    "4": 25,
+    "5": 27,
+    "6": 30,
+    "7": 30,
+    "8": 30,
+    "9": 30
+  },
+  "variantMovedLessons": 32,
+  "changedWeekdays": [
+    "FRIDAY",
+    "MONDAY",
+    "THURSDAY",
+    "TUESDAY",
+    "WEDNESDAY"
+  ],
+  "courseTeacherConsistent": true,
+  "maxSubjectPerDay": 2,
+  "placementWork": 644700,
+  "preservedOriginalResourcesAndUI": {
+    "timetable-workspace/src/main/resources/demo/timetables/full-a-result.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/full-b-result.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/full-definition.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/star-wars-a-result.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/star-wars-b-result.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/star-wars-definition.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/two-class-a-result.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/two-class-b-result.json": true,
+    "timetable-workspace/src/main/resources/demo/timetables/two-class-definition.json": true,
+    "timetable-workspace/src/main/resources/static/workspace/accepted-model.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/app.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/day-renderer.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-browser.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-catalog.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-cohorts.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-discard.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-editor.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-finish.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-form-controls.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-grid.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-occurrence-browser.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-occurrences.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-preference-guide.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-preferences.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-removal.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-requirement-browser.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-requirements.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-restoration.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-review.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-room-policies.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-rooms.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-subjects.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/definition-teachers.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-definitions.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-feedback.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-import.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-panel.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-runs.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-transport.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-workbench.css": true,
+    "timetable-workspace/src/main/resources/static/workspace/demo-workbench.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/favicon.svg": true,
+    "timetable-workspace/src/main/resources/static/workspace/index.html": true,
+    "timetable-workspace/src/main/resources/static/workspace/inspection-state.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/messages.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/proposal-comparison.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/styles.css": true,
+    "timetable-workspace/src/main/resources/static/workspace/timetable-storage.js": true,
+    "timetable-workspace/src/main/resources/static/workspace/week-renderer.js": true
+  },
+  "scores": {
+    "a": {
+      "periodMoves": 0,
+      "roomOnlyMoves": 0,
+      "ordinaryPreferencePenalty": 238,
+      "constraintBreakdown": [
+        {
+          "constraintId": "soft.teacher-gap",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 215,
+          "aggregatePenalty": 215
+        },
+        {
+          "constraintId": "soft.cohort-gap",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.cohort-late-start",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.cohort-week-balance",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.series-same-day",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 23,
+          "aggregatePenalty": 23
+        },
+        {
+          "constraintId": "soft.undesirable-period",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.non-preferred-room",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        }
+      ]
+    },
+    "b": {
+      "periodMoves": 0,
+      "roomOnlyMoves": 0,
+      "ordinaryPreferencePenalty": 230,
+      "constraintBreakdown": [
+        {
+          "constraintId": "soft.teacher-gap",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 209,
+          "aggregatePenalty": 209
+        },
+        {
+          "constraintId": "soft.cohort-gap",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.cohort-late-start",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.cohort-week-balance",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.series-same-day",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 21,
+          "aggregatePenalty": 21
+        },
+        {
+          "constraintId": "soft.undesirable-period",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        },
+        {
+          "constraintId": "soft.non-preferred-room",
+          "category": "ORDINARY_PREFERENCE",
+          "effectiveWeight": 1,
+          "matchCount": 0,
+          "aggregatePenalty": 0
+        }
+      ]
+    }
+  },
+  "authoritativeEvaluation": "BuildTimetableVariants.java evaluates complete candidates; VerifySampleScores.java independently re-evaluates every stored pair; startup physically verifies all eight pairs"
+}

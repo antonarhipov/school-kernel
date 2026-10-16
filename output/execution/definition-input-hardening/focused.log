@@ -1,0 +1,400 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/anton/.sdkman/candidates/maven/current/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/anton/.sdkman/candidates/maven/current/lib/guava-33.2.0-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/3]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [3/3]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 60 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 64 source files with javac [debug parameters release 25] to target/classes
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBaselineExportService.java: Some input files use or override a deprecated API.
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBaselineExportService.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 10 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 78 source files with javac [debug parameters release 25] to target/test-classes
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/test/java/org/schoolkernel/workspace/AcceptedInspectionBrowserIT.java: Some input files use or override a deprecated API.
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/test/java/org/schoolkernel/workspace/AcceptedInspectionBrowserIT.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DemoImportLimitsTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.420 s -- in org.schoolkernel.workspace.DemoImportLimitsTest
+[INFO] Running org.schoolkernel.workspace.DemoSessionTest
+01:08:13.482 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+01:08:14.097 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+01:08:14.220 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+01:08:14.229 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-17T01:08:15.422+03:00  INFO 21138 --- [           main] o.s.workspace.DemoSessionTest            : Starting DemoSessionTest using Java 25.0.1 with PID 21138 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-17T01:08:15.430+03:00  INFO 21138 --- [           main] o.s.workspace.DemoSessionTest            : The following 1 profile is active: "demo"
+2026-10-17T01:08:20.855+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=b0a2a857-b2e0-48b5-8530-aefc3c01651d kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1890
+2026-10-17T01:08:22.752+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=58ae8dd8-2952-438b-8139-6a59c02b8233 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1860
+2026-10-17T01:08:25.201+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=1aa4b8be-ae86-4abf-afd1-ee112d6ced62 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2391
+2026-10-17T01:08:27.533+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=c7bf5baf-a54e-485d-a796-240dfb3aa3b3 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2290
+2026-10-17T01:08:29.814+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=44347d55-0381-44a3-8951-22e422c95df0 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2245
+2026-10-17T01:08:32.186+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=adca324b-8bd6-4e24-a314-ecc1b4cb754c kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2352
+2026-10-17T01:08:34.480+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=0aeeb365-09b0-4b0e-a69d-f173dd484acc kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2273
+2026-10-17T01:08:36.714+03:00  INFO 21138 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=ccc20037-05ba-4d49-82c8-cd051673b0db kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2208
+2026-10-17T01:08:37.688+03:00  INFO 21138 --- [           main] o.s.workspace.DemoSessionTest            : Started DemoSessionTest in 23.357 seconds (process running for 26.738)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T22:08:37.707156Z","kernelBuild":"441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"4h","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"solveSlots":1,"standaloneVerificationSlots":2,"processBounds":{"solveMaximum":"preset + solve-overhead","solveReservationExtraSeconds":8,"standaloneVerificationReservationExtraSeconds":4,"verificationShutdownWaitSeconds":10,"terminationSoftWaitSeconds":2,"reservationRelease":"AFTER_REAP"},"counterReset":"320bca9a-938f-4473-ad65-539ca59d9f7d","utcAllowanceDay":"2026-10-16","sampleVerification":{"two-class":"VERIFIED","full":"VERIFIED","star-wars":"VERIFIED","english":"VERIFIED"}}
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+2026-10-17T01:08:59.674+03:00  INFO 21138 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:08:59.676+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:08:59.680+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T22:08:59.762192Z","count":1,"reason":"CREATED"}
+2026-10-17T01:08:59.858+03:00  INFO 21138 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:08:59.859+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:08:59.863+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T22:08:59.927484Z","count":1,"reason":"CREATED"}
+2026-10-17T01:08:59.962+03:00  INFO 21138 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:08:59.965+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:08:59.968+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-17T01:08:59.985+03:00  INFO 21138 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:08:59.986+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:08:59.987+03:00  INFO 21138 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T22:08:59.989319Z","count":1,"reason":"CREATED"}
+{"family":"session","event":"created","timestamp":"2026-10-16T22:08:59.993406Z","count":1,"reason":"CREATED"}
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 46.76 s -- in org.schoolkernel.workspace.DemoSessionTest
+[INFO] Running org.schoolkernel.workspace.DemoOriginBoundaryTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.051 s -- in org.schoolkernel.workspace.DemoOriginBoundaryTest
+[INFO] Running org.schoolkernel.workspace.DemoCustomDefinitionTest
+[ERROR] Tests run: 6, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 0.320 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoCustomDefinitionTest
+[ERROR] org.schoolkernel.workspace.DemoCustomDefinitionTest.evidenceUsesCompleteDocumentsModeAndBuildWithFixedTtlAndCeiling -- Time elapsed: 0.021 s <<< ERROR!
+java.lang.IllegalStateException: Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+	at org.mockito.internal.configuration.plugins.PluginLoader$1.invoke(PluginLoader.java:85)
+	at jdk.proxy2/jdk.proxy2.$Proxy107.isTypeMockable(Unknown Source)
+	at org.mockito.internal.util.MockUtil.typeMockabilityOf(MockUtil.java:78)
+	at org.mockito.internal.util.MockCreationValidator.validateType(MockCreationValidator.java:22)
+	at org.mockito.internal.creation.MockSettingsImpl.validatedSettings(MockSettingsImpl.java:275)
+	at org.mockito.internal.creation.MockSettingsImpl.build(MockSettingsImpl.java:236)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:78)
+	at org.mockito.Mockito.mock(Mockito.java:2235)
+	at org.mockito.Mockito.mock(Mockito.java:2150)
+	at org.schoolkernel.workspace.DemoCustomDefinitionTest.evidenceUsesCompleteDocumentsModeAndBuildWithFixedTtlAndCeiling(DemoCustomDefinitionTest.java:70)
+Caused by: java.lang.IllegalStateException: Internal problem occurred, please report it. Mockito is unable to load the default implementation of class that is a part of Mockito distribution. Failed to load interface org.mockito.plugins.MockMaker
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:105)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.getDefaultPlugin(DefaultMockitoPlugins.java:79)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:75)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:49)
+	at org.mockito.internal.configuration.plugins.PluginRegistry.<init>(PluginRegistry.java:29)
+	at org.mockito.internal.configuration.plugins.Plugins.<clinit>(Plugins.java:26)
+	at org.mockito.internal.MockitoCore.<clinit>(MockitoCore.java:74)
+	at org.mockito.Mockito.<clinit>(Mockito.java:1810)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.isEnabled(MockitoResetTestExecutionListener.java:174)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.beforeTestMethod(MockitoResetTestExecutionListener.java:95)
+	at org.springframework.test.context.TestContextManager.beforeTestMethod(TestContextManager.java:320)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.beforeEach(SpringExtension.java:319)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:103)
+	... 13 more
+Caused by: org.mockito.exceptions.base.MockitoInitializationException: 
+Could not initialize inline Byte Buddy mock maker.
+
+It appears as if your JDK does not supply a working agent attachment mechanism.
+Java               : 25
+JVM vendor name    : Amazon.com Inc.
+JVM vendor version : 25.0.1+8-LTS
+JVM name           : OpenJDK 64-Bit Server VM
+JVM version        : 25.0.1+8-LTS
+JVM info           : mixed mode, sharing
+OS name            : Mac OS X
+OS version         : 26.5.2
+
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<init>(InlineDelegateByteBuddyMockMaker.java:279)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.<init>(InlineByteBuddyMockMaker.java:23)
+	... 16 more
+Caused by: java.lang.IllegalStateException: Could not self-attach to current VM using external process - set a property net.bytebuddy.agent.attacher.dump to dump the process output to a file at the specified location
+	at net.bytebuddy.agent.ByteBuddyAgent.installExternal(ByteBuddyAgent.java:710)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:615)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:595)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:547)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:524)
+	at org.mockito.internal.PremainAttachAccess.getInstrumentation(PremainAttachAccess.java:80)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<clinit>(InlineDelegateByteBuddyMockMaker.java:139)
+	... 17 more
+
+[ERROR] org.schoolkernel.workspace.DemoCustomDefinitionTest.everyLifecycleRefusalStaleCompletionAndSessionEndPreserveCompleteWorkspace -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.IllegalStateException: Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+	at org.mockito.internal.configuration.plugins.PluginLoader$1.invoke(PluginLoader.java:85)
+	at jdk.proxy2/jdk.proxy2.$Proxy107.isTypeMockable(Unknown Source)
+	at org.mockito.internal.util.MockUtil.typeMockabilityOf(MockUtil.java:78)
+	at org.mockito.internal.util.MockCreationValidator.validateType(MockCreationValidator.java:22)
+	at org.mockito.internal.creation.MockSettingsImpl.validatedSettings(MockSettingsImpl.java:275)
+	at org.mockito.internal.creation.MockSettingsImpl.build(MockSettingsImpl.java:236)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:78)
+	at org.mockito.Mockito.mock(Mockito.java:2235)
+	at org.mockito.Mockito.mock(Mockito.java:2150)
+	at org.schoolkernel.workspace.DemoCustomDefinitionTest.everyLifecycleRefusalStaleCompletionAndSessionEndPreserveCompleteWorkspace(DemoCustomDefinitionTest.java:132)
+Caused by: java.lang.IllegalStateException: Internal problem occurred, please report it. Mockito is unable to load the default implementation of class that is a part of Mockito distribution. Failed to load interface org.mockito.plugins.MockMaker
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:105)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.getDefaultPlugin(DefaultMockitoPlugins.java:79)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:75)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:49)
+	at org.mockito.internal.configuration.plugins.PluginRegistry.<init>(PluginRegistry.java:29)
+	at org.mockito.internal.configuration.plugins.Plugins.<clinit>(Plugins.java:26)
+	at org.mockito.internal.MockitoCore.<clinit>(MockitoCore.java:74)
+	at org.mockito.Mockito.<clinit>(Mockito.java:1810)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.isEnabled(MockitoResetTestExecutionListener.java:174)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.beforeTestMethod(MockitoResetTestExecutionListener.java:95)
+	at org.springframework.test.context.TestContextManager.beforeTestMethod(TestContextManager.java:320)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.beforeEach(SpringExtension.java:319)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:103)
+	... 13 more
+Caused by: org.mockito.exceptions.base.MockitoInitializationException: 
+Could not initialize inline Byte Buddy mock maker.
+
+It appears as if your JDK does not supply a working agent attachment mechanism.
+Java               : 25
+JVM vendor name    : Amazon.com Inc.
+JVM vendor version : 25.0.1+8-LTS
+JVM name           : OpenJDK 64-Bit Server VM
+JVM version        : 25.0.1+8-LTS
+JVM info           : mixed mode, sharing
+OS name            : Mac OS X
+OS version         : 26.5.2
+
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<init>(InlineDelegateByteBuddyMockMaker.java:279)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.<init>(InlineByteBuddyMockMaker.java:23)
+	... 16 more
+Caused by: java.lang.IllegalStateException: Could not self-attach to current VM using external process - set a property net.bytebuddy.agent.attacher.dump to dump the process output to a file at the specified location
+	at net.bytebuddy.agent.ByteBuddyAgent.installExternal(ByteBuddyAgent.java:710)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:615)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:595)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:547)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:524)
+	at org.mockito.internal.PremainAttachAccess.getInstrumentation(PremainAttachAccess.java:80)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<clinit>(InlineDelegateByteBuddyMockMaker.java:139)
+	... 17 more
+
+[ERROR] org.schoolkernel.workspace.DemoCustomDefinitionTest.busyAndExhaustedVerificationStartNoThirdProcessAndReleaseReservations -- Time elapsed: 0.006 s <<< ERROR!
+java.lang.IllegalStateException: Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+	at org.mockito.internal.configuration.plugins.PluginLoader$1.invoke(PluginLoader.java:85)
+	at jdk.proxy2/jdk.proxy2.$Proxy107.isTypeMockable(Unknown Source)
+	at org.mockito.internal.util.MockUtil.typeMockabilityOf(MockUtil.java:78)
+	at org.mockito.internal.util.MockCreationValidator.validateType(MockCreationValidator.java:22)
+	at org.mockito.internal.creation.MockSettingsImpl.validatedSettings(MockSettingsImpl.java:275)
+	at org.mockito.internal.creation.MockSettingsImpl.build(MockSettingsImpl.java:236)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:78)
+	at org.mockito.Mockito.mock(Mockito.java:2235)
+	at org.mockito.Mockito.mock(Mockito.java:2150)
+	at org.schoolkernel.workspace.DemoCustomDefinitionTest.busyAndExhaustedVerificationStartNoThirdProcessAndReleaseReservations(DemoCustomDefinitionTest.java:113)
+Caused by: java.lang.IllegalStateException: Internal problem occurred, please report it. Mockito is unable to load the default implementation of class that is a part of Mockito distribution. Failed to load interface org.mockito.plugins.MockMaker
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:105)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.getDefaultPlugin(DefaultMockitoPlugins.java:79)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:75)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:49)
+	at org.mockito.internal.configuration.plugins.PluginRegistry.<init>(PluginRegistry.java:29)
+	at org.mockito.internal.configuration.plugins.Plugins.<clinit>(Plugins.java:26)
+	at org.mockito.internal.MockitoCore.<clinit>(MockitoCore.java:74)
+	at org.mockito.Mockito.<clinit>(Mockito.java:1810)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.isEnabled(MockitoResetTestExecutionListener.java:174)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.beforeTestMethod(MockitoResetTestExecutionListener.java:95)
+	at org.springframework.test.context.TestContextManager.beforeTestMethod(TestContextManager.java:320)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.beforeEach(SpringExtension.java:319)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:103)
+	... 13 more
+Caused by: org.mockito.exceptions.base.MockitoInitializationException: 
+Could not initialize inline Byte Buddy mock maker.
+
+It appears as if your JDK does not supply a working agent attachment mechanism.
+Java               : 25
+JVM vendor name    : Amazon.com Inc.
+JVM vendor version : 25.0.1+8-LTS
+JVM name           : OpenJDK 64-Bit Server VM
+JVM version        : 25.0.1+8-LTS
+JVM info           : mixed mode, sharing
+OS name            : Mac OS X
+OS version         : 26.5.2
+
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<init>(InlineDelegateByteBuddyMockMaker.java:279)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.<init>(InlineByteBuddyMockMaker.java:23)
+	... 16 more
+Caused by: java.lang.IllegalStateException: Could not self-attach to current VM using external process - set a property net.bytebuddy.agent.attacher.dump to dump the process output to a file at the specified location
+	at net.bytebuddy.agent.ByteBuddyAgent.installExternal(ByteBuddyAgent.java:710)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:615)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:595)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:547)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:524)
+	at org.mockito.internal.PremainAttachAccess.getInstrumentation(PremainAttachAccess.java:80)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<clinit>(InlineDelegateByteBuddyMockMaker.java:139)
+	... 17 more
+
+[ERROR] org.schoolkernel.workspace.DemoCustomDefinitionTest.successfulHitStillWorksAtExhaustionAndPhysicalFailureSettlesActualTime -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.IllegalStateException: Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+	at org.mockito.internal.configuration.plugins.PluginLoader$1.invoke(PluginLoader.java:85)
+	at jdk.proxy2/jdk.proxy2.$Proxy107.isTypeMockable(Unknown Source)
+	at org.mockito.internal.util.MockUtil.typeMockabilityOf(MockUtil.java:78)
+	at org.mockito.internal.util.MockCreationValidator.validateType(MockCreationValidator.java:22)
+	at org.mockito.internal.creation.MockSettingsImpl.validatedSettings(MockSettingsImpl.java:275)
+	at org.mockito.internal.creation.MockSettingsImpl.build(MockSettingsImpl.java:236)
+	at org.mockito.internal.MockitoCore.mock(MockitoCore.java:78)
+	at org.mockito.Mockito.mock(Mockito.java:2235)
+	at org.mockito.Mockito.mock(Mockito.java:2150)
+	at org.schoolkernel.workspace.DemoCustomDefinitionTest.successfulHitStillWorksAtExhaustionAndPhysicalFailureSettlesActualTime(DemoCustomDefinitionTest.java:92)
+Caused by: java.lang.IllegalStateException: Internal problem occurred, please report it. Mockito is unable to load the default implementation of class that is a part of Mockito distribution. Failed to load interface org.mockito.plugins.MockMaker
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:105)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.getDefaultPlugin(DefaultMockitoPlugins.java:79)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:75)
+	at org.mockito.internal.configuration.plugins.PluginLoader.loadPlugin(PluginLoader.java:49)
+	at org.mockito.internal.configuration.plugins.PluginRegistry.<init>(PluginRegistry.java:29)
+	at org.mockito.internal.configuration.plugins.Plugins.<clinit>(Plugins.java:26)
+	at org.mockito.internal.MockitoCore.<clinit>(MockitoCore.java:74)
+	at org.mockito.Mockito.<clinit>(Mockito.java:1810)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.isEnabled(MockitoResetTestExecutionListener.java:174)
+	at org.springframework.test.context.bean.override.mockito.MockitoResetTestExecutionListener.beforeTestMethod(MockitoResetTestExecutionListener.java:95)
+	at org.springframework.test.context.TestContextManager.beforeTestMethod(TestContextManager.java:320)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.beforeEach(SpringExtension.java:319)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.reflect.InvocationTargetException
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
+	at org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.create(DefaultMockitoPlugins.java:103)
+	... 13 more
+Caused by: org.mockito.exceptions.base.MockitoInitializationException: 
+Could not initialize inline Byte Buddy mock maker.
+
+It appears as if your JDK does not supply a working agent attachment mechanism.
+Java               : 25
+JVM vendor name    : Amazon.com Inc.
+JVM vendor version : 25.0.1+8-LTS
+JVM name           : OpenJDK 64-Bit Server VM
+JVM version        : 25.0.1+8-LTS
+JVM info           : mixed mode, sharing
+OS name            : Mac OS X
+OS version         : 26.5.2
+
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<init>(InlineDelegateByteBuddyMockMaker.java:279)
+	at org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.<init>(InlineByteBuddyMockMaker.java:23)
+	... 16 more
+Caused by: java.lang.IllegalStateException: Could not self-attach to current VM using external process - set a property net.bytebuddy.agent.attacher.dump to dump the process output to a file at the specified location
+	at net.bytebuddy.agent.ByteBuddyAgent.installExternal(ByteBuddyAgent.java:710)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:615)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:595)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:547)
+	at net.bytebuddy.agent.ByteBuddyAgent.install(ByteBuddyAgent.java:524)
+	at org.mockito.internal.PremainAttachAccess.getInstrumentation(PremainAttachAccess.java:80)
+	at org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker.<clinit>(InlineDelegateByteBuddyMockMaker.java:139)
+	... 17 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   DemoCustomDefinitionTest.busyAndExhaustedVerificationStartNoThirdProcessAndReleaseReservations:113 » IllegalState Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+[ERROR]   DemoCustomDefinitionTest.everyLifecycleRefusalStaleCompletionAndSessionEndPreserveCompleteWorkspace:132 » IllegalState Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+[ERROR]   DemoCustomDefinitionTest.evidenceUsesCompleteDocumentsModeAndBuildWithFixedTtlAndCeiling:70 » IllegalState Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+[ERROR]   DemoCustomDefinitionTest.successfulHitStillWorksAtExhaustionAndPhysicalFailureSettlesActualTime:92 » IllegalState Could not initialize plugin: interface org.mockito.plugins.MockMaker (alternate: null)
+[INFO] 
+[ERROR] Tests run: 15, Failures: 0, Errors: 4, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.673 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  0.865 s]
+[INFO] School Timetable Operations Workspace .............. FAILURE [01:05 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:07 min
+[INFO] Finished at: 2026-10-17T01:09:00+03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.6.0:test (default-test) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/surefire-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

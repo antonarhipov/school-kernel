@@ -1,0 +1,23 @@
+{
+  "PASS": true,
+  "parsed": {
+    "memory.current": 12345,
+    "memory.peak": 23456,
+    "memory.max": 3000000000,
+    "memory.events": {
+      "low": 0,
+      "high": 2,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0
+    },
+    "cpu.stat": {
+      "usage_usec": 150,
+      "user_usec": 100,
+      "system_usec": 50,
+      "nr_throttled": 2
+    },
+    "cpu.max": "200000 100000",
+    "pids.current": 9
+  }
+}

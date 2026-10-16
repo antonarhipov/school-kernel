@@ -1,0 +1,590 @@
+{
+  "date": "2026-10-16T13:12:00.156247+00:00",
+  "probes": [
+    {
+      "name": "normal",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-http-scheme",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-foreign-forwarded-host",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "duplicate-client-scheme",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-forwarded-ip",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "forwarded-rejected",
+      "status": 403,
+      "contentType": "application/json;charset=UTF-8",
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"ca1bd580-f31c-4137-ac8b-81470adb95b3\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "foreign-origin-rejected",
+      "status": 403,
+      "contentType": "application/json;charset=UTF-8",
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"f27cca1c-df5d-4427-b592-3a37d480525b\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "missing-origin-csrf-rejected",
+      "status": 403,
+      "contentType": "application/json;charset=UTF-8",
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"e8fad719-b851-4473-af0e-181c8082fdcc\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "public-http-redirect",
+      "status": 301,
+      "contentType": null,
+      "body": "",
+      "setsCookie": false,
+      "location": "https://demo-smoke-production.up.railway.app/healthz"
+    },
+    {
+      "name": "concurrent-0",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-1",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-2",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-3",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-4",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-5",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-6",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-7",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-8",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-9",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-10",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-11",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-12",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-13",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-14",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-15",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-16",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-17",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-18",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-19",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-20",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-21",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-22",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-23",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-24",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-25",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-26",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-27",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-28",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-29",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-30",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-31",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-32",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-33",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-34",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-35",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-36",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-37",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-38",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-39",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-40",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-41",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-42",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-43",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-44",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-45",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-46",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-47",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-48",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-49",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-50",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-51",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-52",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-53",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-54",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-55",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-56",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-57",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-58",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-59",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-60",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-61",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-62",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "concurrent-63",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    }
+  ],
+  "verdict": "PASS"
+}

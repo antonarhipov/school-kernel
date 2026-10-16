@@ -16,19 +16,22 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class InitialPlanningService {
+    @org.springframework.beans.factory.annotation.Autowired(required = false) private DemoEvents events;
     private static final String LIMIT = "PT1M";
 
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final WorkspaceMutation mutation;
     private final KernelPlanner planner;
     private final KernelVerifier verifier;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private DemoVerificationService demoVerification;
     private final ManifestService manifests;
     private final ObjectMapper json;
     private final ExecutorService executor = Executors.newSingleThreadExecutor(
             Thread.ofVirtual().name("initial-planning-", 0).factory());
 
     public InitialPlanningService(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             WorkspaceMutation mutation,
             KernelPlanner planner,
             KernelVerifier verifier,
@@ -59,7 +62,7 @@ public class InitialPlanningService {
         document.remove("proposal");
         WorkspaceAggregate started = mutation.startInitialRun(expectedVersion, runId, document);
         JsonNode definition = document.path("initialDefinition").deepCopy();
-        executor.submit(() -> finish(runId, started.version(), expectedVersion, definition));
+        executor.submit(repository.contextual(() -> finish(runId, started.version(), expectedVersion, definition)));
         return started;
     }
 
@@ -133,10 +136,10 @@ public class InitialPlanningService {
         }
         KernelVerifier.Verification verified;
         try {
-            verified = verifier.verify(new ImportDocuments(
+            verified = verify(new ImportDocuments(
                     definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
         } catch (WorkspaceProblem problem) {
-            if ("KERNEL_VERIFICATION_FAILED".equals(problem.code())) {
+            if (demoVerification == null && "KERNEL_VERIFICATION_FAILED".equals(problem.code())) {
                 invalidate(current);
                 throw staleProposal();
             }
@@ -159,7 +162,10 @@ public class InitialPlanningService {
         accepted.set("manifest", manifests.validatedOrGenerated(new ImportDocuments(
                 definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE)));
         acceptedDocument.set("lastRun", current.document().path("lastRun").deepCopy());
-        return mutation.acceptInitial(expectedVersion, acceptedDocument);
+        if (demoVerification != null) acceptedDocument.set("solveProvenance", proposal.path("solveProvenance").deepCopy());
+        var installed = mutation.acceptInitial(expectedVersion, acceptedDocument);
+        if (events != null) events.product(DemoEvents.Product.ACCEPT_INITIAL);
+        return installed;
     }
 
     private void finish(UUID runId, long runningVersion, long sourceVersion, JsonNode definition) {
@@ -267,15 +273,29 @@ public class InitialPlanningService {
                 && proposal.path("runId").isTextual()
                 && text(proposal.path("runId"))
                         .equals(text(current.document().path("lastRun").path("id")))
-                && LIMIT.equals(text(proposal.path("limit")))
+                && (demoVerification == null ? LIMIT.equals(text(proposal.path("limit"))) : demoIdentity(current, proposal, result))
                 && "TIME".equals(text(result.path("limit").path("type")))
-                && LIMIT.equals(text(result.path("limit").path("duration")))
+                && proposal.path("limit").equals(result.path("limit").path("duration"))
                 && text(proposal.path("terminationReason")) != null
                 && text(proposal.path("terminationReason"))
                         .equals(text(result.path("terminationReason")))
                 && proposal.path("elapsedTimeMs").longValue() == result.path("elapsedTimeMs").longValue()
                 && proposal.path("changeCounts").path("lessonCount").intValue()
                         == result.path("timetable").path("assignments").size();
+    }
+
+    private boolean demoIdentity(WorkspaceAggregate current, JsonNode proposal, JsonNode result) {
+        JsonNode last = current.document().path("lastRun"), provenance = proposal.path("solveProvenance");
+        return proposal.path("definition").equals(current.document().path("initialDefinition"))
+                && "FEASIBLE".equals(last.path("status").asString())
+                && proposal.path("limit").equals(last.path("limit"))
+                && proposal.path("limit").equals(provenance.path("duration"))
+                && demoVerification.build().equals(provenance.path("kernelBuild").asString())
+                && "INITIAL".equals(provenance.path("operation").asString());
+    }
+
+    private KernelVerifier.Verification verify(ImportDocuments documents) {
+        return demoVerification == null ? verifier.verify(documents) : demoVerification.verify(documents);
     }
 
     private void invalidate(WorkspaceAggregate current) {

@@ -1,0 +1,161 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default-cli) @ school-kernel-reactor ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default-cli) @ school-kernel-reactor ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/3]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /Users/anton/IdeaProjects/school-kernel/school-kernel/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default-cli) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default-cli) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [3/3]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 49 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 75 source files with javac [debug parameters release 25] to target/test-classes
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/test/java/org/schoolkernel/workspace/AcceptedInspectionBrowserIT.java: Some input files use or override a deprecated API.
+[INFO] /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/src/test/java/org/schoolkernel/workspace/AcceptedInspectionBrowserIT.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default-cli) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DemoRemainingRemoteIT
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 31.43 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoRemainingRemoteIT
+[ERROR] org.schoolkernel.workspace.DemoRemainingRemoteIT.inspectNarrowPublishedImport -- Time elapsed: 31.40 s <<< ERROR!
+com.microsoft.playwright.PlaywrightException: 
+Error {
+  message='Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3OL4qThJpxEOLIz37hJmfPMSp6Et00sI+wUBseTgBo0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+  name='Error
+  stack='Error: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3OL4qThJpxEOLIz37hJmfPMSp6Et00sI+wUBseTgBo0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+    at _Frame._raceWithCSPError (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:23984:17)
+    at async _Frame.addStyleTag (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:23925:16)
+    at async _FrameDispatcher.addStyleTag (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:54769:62)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:58)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.addStyleTagImpl(FrameImpl.java:211)
+	at com.microsoft.playwright.impl.PageImpl.addStyleTag(PageImpl.java:720)
+	at org.schoolkernel.workspace.DemoRemainingRemoteIT.inspectNarrowPublishedImport(DemoRemainingRemoteIT.java:32)
+Caused by: com.microsoft.playwright.impl.DriverException: Error {
+  message='Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3OL4qThJpxEOLIz37hJmfPMSp6Et00sI+wUBseTgBo0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+  name='Error
+  stack='Error: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3OL4qThJpxEOLIz37hJmfPMSp6Et00sI+wUBseTgBo0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+    at _Frame._raceWithCSPError (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:23984:17)
+    at async _Frame.addStyleTag (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:23925:16)
+    at async _FrameDispatcher.addStyleTag (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:54769:62)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:278)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 5 more
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Errors: 
+[ERROR]   DemoRemainingRemoteIT.inspectNarrowPublishedImport:32 » Playwright Error {
+  message='Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3OL4qThJpxEOLIz37hJmfPMSp6Et00sI+wUBseTgBo0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+  name='Error
+  stack='Error: Applying inline style violates the following Content Security Policy directive 'style-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-3OL4qThJpxEOLIz37hJmfPMSp6Et00sI+wUBseTgBo0='), or a nonce ('nonce-...') is required to enable inline execution. The action has been blocked.
+    at _Frame._raceWithCSPError (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:23984:17)
+    at async _Frame.addStyleTag (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:23925:16)
+    at async _FrameDispatcher.addStyleTag (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:54769:62)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-10326551039632836123/package/lib/coreBundle.js:19135:27)
+}
+[INFO] 
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default-cli) @ timetable-workspace ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.730 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  0.515 s]
+[INFO] School Timetable Operations Workspace .............. FAILURE [ 43.722 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  46.677 s
+[INFO] Finished at: 2026-10-16T21:31:40+03:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default-cli) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

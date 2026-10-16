@@ -1,0 +1,127 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school
+Full school
+
+Fictional school and people for trying timetable planning. 2 lessons · 1 classes · 1 teachers · 2 rooms · 3 periods. Quick search (5 seconds) is the default for a later solve. Selection only previews.
+
+Current origin: accepted repair.
+
+Definition JSON
+
+Unchanged
+
+Use this sample
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+Current is accepted. Export the accepted timetable to keep it.
+
+Open an accepted timetable
+Small schoolManual draft open0 conflicts
+
+Accepted revision: sha256:822c4e8df4243b78c86d5f5e1a3507b9cff636fac3999cd1c9ea6c594ffad308
+
+Manual editing session is active. Select any lesson to adjust its assignment.
+
+Utilities
+Export accepted baseline
+
+Download the exact accepted definition, feasible result, and lock provenance as one locally verified ZIP archive. Only Current is included. Unfinished repair/manual drafts and unaccepted proposals are excluded.
+
+School
+Small school
+Definition revision
+sha256:307dac392fab88c2e78ce8b1e5409d7db27eed56a09950424b815c084a0abe11
+Timetable revision
+sha256:822c4e8df4243b78c86d5f5e1a3507b9cff636fac3999cd1c9ea6c594ffad308
+Download verified accepted bundle
+
+Clear workspace data
+
+Reset all stored data and start over with an empty workspace.
+
+Clear data
+
+To start a new timetable, edit or open JSON in the School definition panel, save a browser version, then use it. Existing work is kept until confirmed successful replacement.
+
+Current
+Draft
+Discard manual draft
+Publish draft
+Time range
+Week
+Day
+Weekday
+Monday
+Search lessons
+Subject investigation
+No subject selected
+Subject 01
+Subject 02
+Teacher investigation
+No teacher selected
+John Doe
+Filters
+Complete school population
+Complete recurring Week
+Showing 1 of 1 classes
+Represented lessons: 2
+Active filters:
+No active filters
+Reset view
+Subject matches: 0
+Teacher matches: 0
+Dual matches: 0
+Class	Period	Monday
+Cohort 01	1	
+Empty
+
+2	
+Subject 02
+Room 01
+
+3	
+Subject 01
+Room 01
+MODIFIED FROM ACCEPTED BASELINE
+SELECTED
+INSPECTOR
+×
+Modified from accepted baseline
+Lesson 01
+
+Cohort 01 · Subject 01
+
+Teacher: John Doe Show week
+Room: Room 01 Show week
+Class: Cohort 01 Show week
+
+Teaching responsibility belongs to the school definition. Manual editing supports period and room changes.
+
+See teacher-change JSON route
+PERIOD
+Monday 1
+Monday 2
+Monday 3
+ROOM
+Room 01
+Room 02
+Revert to baseline
+TECHNICAL DETAILS
+Change a lesson’s teacher

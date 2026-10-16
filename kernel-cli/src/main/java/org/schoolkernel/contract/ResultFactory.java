@@ -83,6 +83,19 @@ public final class ResultFactory {
         return result;
     }
 
+    public ObjectNode incompleteConstruction(
+            String correlationId,
+            long elapsedMillis,
+            SchoolDefinition definition,
+            String inputRevision,
+            ExecutionControls controls) {
+        ObjectNode result = noFeasibleSolution(
+                correlationId, elapsedMillis, definition, inputRevision, controls, "TIME_LIMIT", List.of());
+        result.put("safeMessage", "The search budget ended before all lessons were placed. "
+                + "A later search may find a feasible timetable.");
+        return result;
+    }
+
     public ObjectNode feasible(
             String correlationId,
             long elapsedMillis,

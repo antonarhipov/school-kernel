@@ -13,9 +13,9 @@ import tools.jackson.databind.node.ObjectNode;
 @Service
 public class DefinitionPreferenceService {
     static final Map<String,Integer> SINCE=Map.of("soft.teacher-gap",1,"soft.series-same-day",1,"soft.undesirable-period",1,"soft.non-preferred-room",1,"soft.cohort-gap",2,"soft.cohort-week-balance",2,"soft.cohort-late-start",3);
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
-    public DefinitionPreferenceService(WorkspaceRepository repository,ObjectMapper json){this.repository=repository;this.json=json;}
+    public DefinitionPreferenceService(WorkspaceStore repository,ObjectMapper json){this.repository=repository;this.json=json;}
     @Transactional
     public WorkspaceAggregate save(String ifMatch,JsonNode request){
         WorkspaceAggregate current=repository.load();long version=ImportService.requireMatchingVersion(ifMatch,current);

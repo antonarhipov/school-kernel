@@ -1,0 +1,41 @@
+{
+  "cache": {
+    "entries": 0,
+    "residentBytes": 0
+  },
+  "message": "",
+  "family": "aggregate",
+  "event": "interval",
+  "productUse": {},
+  "workspaces": {
+    "active": 0
+  },
+  "level": "info",
+  "context": {
+    "build": "441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881",
+    "config": "ceb36717fd8d71c57b7a11bab37b496408ba095c87cc539301319c199521f7a9",
+    "counterReset": "d39bf2e4-98b3-45d5-b360-1677ecaef710",
+    "intervalMs": 60001,
+    "timestamp": "2026-10-16T22:57:37.801504596Z",
+    "utcAllowanceDay": "2026-10-16"
+  },
+  "processes": {
+    "runningSolve": 0,
+    "runningVerification": 0
+  },
+  "queue": {
+    "distinctWaiting": 0,
+    "waitBinMs": 10,
+    "waitP50UpperMs": 0,
+    "waitP90UpperMs": 0
+  },
+  "timestamp": "2026-10-16T22:57:37.801457765Z",
+  "allowance": {
+    "consumedMs": 0,
+    "releasedReservationMs": 0,
+    "remainingMs": 14400000,
+    "reservedMs": 0,
+    "settlements": 0,
+    "utcResets": 0
+  }
+}

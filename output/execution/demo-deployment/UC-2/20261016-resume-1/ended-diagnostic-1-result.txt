@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: org.schoolkernel.workspace.DemoRemoteEndedSessionIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 146.7 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoRemoteEndedSessionIT
+org.schoolkernel.workspace.DemoRemoteEndedSessionIT.explicitStartFromAnInvalidCookieStaysUsableInBrowserAndApiContext -- Time elapsed: 146.6 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <200> but was: <410>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:152)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:147)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:558)
+	at org.schoolkernel.workspace.DemoRemoteEndedSessionIT.explicitStartFromAnInvalidCookieStaysUsableInBrowserAndApiContext(DemoRemoteEndedSessionIT.java:32)
+

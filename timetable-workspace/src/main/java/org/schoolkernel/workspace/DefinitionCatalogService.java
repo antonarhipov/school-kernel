@@ -13,10 +13,10 @@ import tools.jackson.databind.node.ObjectNode;
 /** Preview-bound, behavior-preserving catalog transition; source and Current are never upgraded here. */
 @Service
 public class DefinitionCatalogService {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
     private final DefinitionEntityService entities;
-    public DefinitionCatalogService(WorkspaceRepository repository,ObjectMapper json,DefinitionEntityService entities){this.repository=repository;this.json=json;this.entities=entities;}
+    public DefinitionCatalogService(WorkspaceStore repository,ObjectMapper json,DefinitionEntityService entities){this.repository=repository;this.json=json;this.entities=entities;}
     public ObjectNode preview(String ifMatch,JsonNode request){
         WorkspaceAggregate current=checked(ifMatch);validate(request);ObjectNode definition=((ObjectNode)current.document().path("definitionDraft").path("definition")).deepCopy();int source=definition.path("catalogVersion").intValue();
         ObjectNode result=json.createObjectNode().put("workspaceVersion",current.version()).put("sourceCatalog",source).put("targetCatalog",9).put("available",source<9).put("token",token(current,request));

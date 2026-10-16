@@ -1,0 +1,68 @@
+[
+  {
+    "sample": "small",
+    "sourceSha256": "c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14",
+    "inverseSha256": "c2b046643fc71e3c8d8a4c274496a47dc5ccddab5d97f2f89d77b47dcea26d14",
+    "inverseExact": true,
+    "identifierOrderPreserved": true,
+    "arrayOrderPreserved": true,
+    "sourceCatalog": 1,
+    "packagedCatalog": 9,
+    "mappedIdentifierCounts": {
+      "capability": 1,
+      "cohort": 1,
+      "lesson": 2,
+      "period": 3,
+      "policy": 0,
+      "room": 2,
+      "school": 1,
+      "series": 1,
+      "subject": 2,
+      "teacher": 1
+    }
+  },
+  {
+    "sample": "two-class",
+    "sourceSha256": "1f705c41debfa5a1991f29acdea61391a0bbdcec3de4ace15e4c4cb033afe1ca",
+    "inverseSha256": "1f705c41debfa5a1991f29acdea61391a0bbdcec3de4ace15e4c4cb033afe1ca",
+    "inverseExact": true,
+    "identifierOrderPreserved": true,
+    "arrayOrderPreserved": true,
+    "sourceCatalog": 2,
+    "packagedCatalog": 9,
+    "mappedIdentifierCounts": {
+      "capability": 3,
+      "cohort": 2,
+      "lesson": 42,
+      "period": 35,
+      "policy": 0,
+      "room": 13,
+      "school": 1,
+      "series": 19,
+      "subject": 10,
+      "teacher": 12
+    }
+  },
+  {
+    "sample": "full",
+    "sourceSha256": "b690202ebb499eb2f176a5bef919d6ca069a81996a06541fa67e5cf35265ba93",
+    "inverseSha256": "b690202ebb499eb2f176a5bef919d6ca069a81996a06541fa67e5cf35265ba93",
+    "inverseExact": true,
+    "identifierOrderPreserved": true,
+    "arrayOrderPreserved": true,
+    "sourceCatalog": 9,
+    "packagedCatalog": 9,
+    "mappedIdentifierCounts": {
+      "capability": 8,
+      "cohort": 23,
+      "lesson": 520,
+      "period": 50,
+      "policy": 7,
+      "room": 42,
+      "school": 1,
+      "series": 182,
+      "subject": 26,
+      "teacher": 51
+    }
+  }
+]

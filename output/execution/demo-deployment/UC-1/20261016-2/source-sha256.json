@@ -1,0 +1,9 @@
+{
+  "kernel-cli/src/main/java/org/schoolkernel/application/PlanService.java": "14c92e8e2c78e4d28644fed92b12e624de9b3cf007e3f381950bb2454a8ab956",
+  "kernel-cli/src/main/java/org/schoolkernel/application/ReplanService.java": "045e774acf9f8960cf16d37c4d8fbc67717f326647b452814c61ecad6e9fd83e",
+  "kernel-cli/src/main/java/org/schoolkernel/contract/ResultFactory.java": "1dc0a8414214c4bc0dc6410f91bc93be7933e27aff8e8d6283729ea89219cb25",
+  "kernel-contract/src/main/resources/schema/result-v1.schema.json": "a836fc2514bfae3661aa4cd96570b26e83aee75932dbad57eee1b849957b995d",
+  "kernel-cli/src/test/java/org/schoolkernel/application/PlanServiceTest.java": "ca4956f9b49949089a3ede78fc9f8d62e0083695ea3d42314732ba64cbf5b5f5",
+  "kernel-cli/src/test/java/org/schoolkernel/application/ReplanServiceTest.java": "4f266aeb708fce8e254b63aadb111cf5dba374688b8a885dd7768c716a689b59",
+  "kernel-cli/src/test/java/org/schoolkernel/cli/IncompleteConstructionCliIT.java": "40e9d02c9398929afd96b5aba8ef00b0d2b1a4d3eda24e8f2b3d79abc794fd36"
+}

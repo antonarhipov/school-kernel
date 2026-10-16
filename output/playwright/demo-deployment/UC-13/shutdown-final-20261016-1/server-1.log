@@ -1,0 +1,24 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T20:35:59.143+03:00  INFO 93512 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 93512 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-3723250593446250978/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T20:35:59.148+03:00  INFO 93512 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T20:36:02.339+03:00  INFO 93512 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 52559 (https)
+2026-10-16T20:36:02.354+03:00  INFO 93512 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T20:36:02.355+03:00  INFO 93512 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T20:36:02.383+03:00  INFO 93512 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2933 ms
+2026-10-16T20:36:02.665+03:00  INFO 93512 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T20:36:05.585+03:00  INFO 93512 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=198033e1-d42a-4487-9ad4-95e81fb0b540 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1730
+2026-10-16T20:36:07.212+03:00  INFO 93512 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=a42bd03e-fff4-457b-b4d0-bd2f23753f44 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1588
+2026-10-16T20:36:09.393+03:00  INFO 93512 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=d38f5349-4d61-4c5b-9ce2-67404c45ea92 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2116
+2026-10-16T20:36:11.237+03:00  INFO 93512 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 52559 (https) with context path '/'
+2026-10-16T20:36:11.274+03:00  INFO 93512 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 13.406 seconds (process running for 14.561)
+2026-10-16T20:36:11.380+03:00  INFO 93512 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T20:36:11.387+03:00  INFO 93512 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete

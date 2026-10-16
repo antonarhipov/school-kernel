@@ -1,0 +1,377 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+19:57:30.063 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=706e674b-b779-400a-a8f0-00ac37d9d346 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=42
+19:57:30.116 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=be4d957f-e4b9-4a4d-b037-e4c5bc5f3481 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=3
+19:57:30.146 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=53b7eb23-a5a7-4837-9c5a-92c02ab82c64 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=8
+19:57:30.160 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=5fb53eaa-b902-4b20-978c-9fc5da02d627 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=3
+19:57:30.174 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=110a02d3-2211-44b8-9364-f9d1cdaddfd3 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=2
+19:57:30.358 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:57:30.912 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+19:57:31.259 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:57:31.300 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T19:57:32.020+03:00  INFO 89481 --- [           main] o.s.workspace.DemoSessionTest            : Starting DemoSessionTest using Java 25.0.1 with PID 89481 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T19:57:32.022+03:00  INFO 89481 --- [           main] o.s.workspace.DemoSessionTest            : The following 1 profile is active: "demo"
+2026-10-16T19:57:36.517+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=53a8f81c-954e-491f-afee-25062a9ee6a4 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1574
+2026-10-16T19:57:38.216+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=a587d607-2140-472c-9a44-4077f6f1dd58 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1653
+2026-10-16T19:57:40.452+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=7e9e94f4-3e9e-4460-af8f-476488a48b4d kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2179
+2026-10-16T19:57:41.239+03:00  INFO 89481 --- [           main] o.s.workspace.DemoSessionTest            : Started DemoSessionTest in 9.816 seconds (process running for 13.845)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T16:57:41.251776Z","kernelBuild":"e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"4h","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"solveSlots":1,"standaloneVerificationSlots":2,"counterReset":"5d421fc7-9542-4e04-9853-4f06687d5ce3","utcAllowanceDay":"2026-10-16","sampleVerification":{"small":"VERIFIED","two-class":"VERIFIED","full":"VERIFIED"}}
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-16T19:57:41.677+03:00  INFO 89481 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T19:57:41.681+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T19:57:41.684+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T16:57:41.746446Z","count":1,"reason":"CREATED"}
+2026-10-16T19:57:41.844+03:00  INFO 89481 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T19:57:41.846+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T19:57:41.856+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 10 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T16:57:41.894934Z","count":1,"reason":"CREATED"}
+2026-10-16T19:57:41.934+03:00  INFO 89481 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T19:57:41.935+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T19:57:41.935+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-16T19:57:41.948+03:00  INFO 89481 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T19:57:41.949+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T19:57:41.950+03:00  INFO 89481 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T16:57:41.952753Z","count":1,"reason":"CREATED"}
+{"family":"session","event":"created","timestamp":"2026-10-16T16:57:41.956933Z","count":1,"reason":"CREATED"}
+2026-10-16T19:57:43.748+03:00  INFO 89481 --- [           main] com.tngtech.archunit.core.PluginLoader   : Detected Java version 25.0.1
+2026-10-16T19:57:49.914+03:00  INFO 89481 --- [onPool-worker-1] o.schoolkernel.workspace.KernelPlanner   : correlationId=b04aea7b-2d80-4900-af02-0c5f7e43328c runId=80c3156e-3c9a-456e-892b-2ad57f8c4d8d kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2021 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:49.974+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=2c297a92-9e2e-4400-96fa-abae2d3f1e61 runId=3e0c97ad-62b2-4185-9215-79e8755335ec kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=26 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:49.983+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=aedd572e-a381-4ed7-a265-3973ab5459ba runId=1c0361fb-54b7-4146-b3c5-8134dde52744 kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=3 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+2026-10-16T19:57:49.986+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=65988617-393d-4e88-ba77-fc4ffe5d8029 runId=df707c52-6c61-43ff-a524-86b5171928e2 kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:49.988+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=7d41efe4-a1fd-4036-9427-d723ff7d6d52 runId=ee1fca13-b47a-481d-84f3-d2cb1ceb5650 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:49.993+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=a983162f-a10c-436a-942d-d79af1ed2288 runId=32fc6509-cd9a-4e11-bbe3-00f2ebf8f441 kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:49.998+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=14452bdd-ab2a-4dd5-b7cd-98b8d49c1335 runId=d77acd9c-c892-42fc-a441-e57a75b36892 kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:50.008+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=34f4f880-8cec-427f-9401-b1f5df03d186 runId=b7278493-7a6f-4d13-a5fc-11cb2b87fc1a kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=9 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:50.015+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=9132cf79-81f1-4473-bf72-7e42c0dd195f runId=e9121b04-8678-488a-b390-1d78175d75c9 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=3 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:50.030+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=b4e5306e-8377-4f7e-ba69-5d2bda41336e runId=fd7ad713-6a71-4ec8-a4c6-0455590f8137 kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=11 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-16T19:57:50.033+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=a1c882b0-cd9a-46a0-8be9-d2c250ca086e runId=38d9b969-bcc6-4bd0-a3e3-f3760243d2f0 kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=1 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-16T19:57:50.063+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=19a47246-5010-46f5-ac13-368d305f9efa runId=1494aa2c-1df4-400b-bd43-c4ea38d4b974 kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=26 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+2026-10-16T19:57:50.085+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=4d17d52c-aa14-4d04-a089-d1f436334a16 runId=7f0448cb-bfaa-49e7-a352-7ce6670dab56 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=18 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T19:57:51.853+03:00  INFO 89481 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=f28d8a60-63ab-423d-b7c3-9f5fa74edab8 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=130
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 77.26 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoObservabilityBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoObservabilityBrowserIT.safeSummariesReconcileQueueCoalescingCancellationReuseDecisionsAndActualProcesses -- Time elapsed: 77.22 s <<< ERROR!
+com.microsoft.playwright.PlaywrightException: 
+Error {
+  message='TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:47)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:47)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19519:12)
+    at async /private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:24434:20
+    at async _Frame.retryWithProgressAndTimeouts (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:24011:29)
+    at async _FrameDispatcher.waitForFunction (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:54870:24)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:58)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.waitForFunction(FrameImpl.java:819)
+	at com.microsoft.playwright.impl.PageImpl.waitForFunction(PageImpl.java:1469)
+	at com.microsoft.playwright.Page.waitForFunction(Page.java:8097)
+	at com.microsoft.playwright.Page.waitForFunction(Page.java:8135)
+	at org.schoolkernel.workspace.DemoObservabilityBrowserIT.safeSummariesReconcileQueueCoalescingCancellationReuseDecisionsAndActualProcesses(DemoObservabilityBrowserIT.java:30)
+Caused by: com.microsoft.playwright.impl.DriverException: Error {
+  message='TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:47)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:47)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19519:12)
+    at async /private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:24434:20
+    at async _Frame.retryWithProgressAndTimeouts (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:24011:29)
+    at async _FrameDispatcher.waitForFunction (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:54870:24)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:278)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 7 more
+
+UC4 STEP 01-exact-save: main 1-5/G1/G2: exact CRLF/Unicode file saved in a five-field file-origin envelope; unfinished object makes no server change; second tab list refreshes
+UC4 STEP 02-reload-download: main 6/G3/G4: reload and selection preserve exact CRLF bytes; browser-local download matches the original file
+UC4 STEP 03-declines: 1b/4b/6a: declined selection, file opening, revert and named replacement preserve exact open and saved text
+UC4 STEP 04-replace: main 4-6/G2: confirmed named replacement stores exact edited text, saved-source derivation and explicit save time
+UC4 STEP 05-validation: 4a/G1/G4: first syntax line/column, reserved/invalid labels and non-object roots refused; malformed text still downloads exactly
+UC4 STEP 06-storage-failure: 5a/minimal: injected browser quota and SecurityError preserve overwritten entry and open text; exact Download remains available
+UC4 STEP 07-file-failures: 1c/4a: oversized UTF-8 file/editor and injected unreadable file refused; prior storage and text retained
+UC4 STEP 08-corrupt: 1a/G2/G3: corrupt, unsupported and reserved-key entries stay unreadable, cannot execute and can only be explicitly deleted; samples remain immutable
+UC4 STEP 09-cross-tab: main 5/G7: cross-tab replacement refreshes newest-first list without overwriting open text; declined reload retains it, explicit reload adopts exact stored text
+UC4 STEP 10-deletions: main 6/6a/G3/minimal: declined, failed and confirmed single/all deletion preserve workspace, unrelated preferences and unsaved text; other tab retains removed version text
+UC4 STEP 11-in-use-narrow: G5/G6: actual loaded sample remains marked across selection/reload; 390px read-only editor has no page overflow
+UC4 STEP 12-no-server-work: G1/G6/G7: all local edits/saves/files/downloads send zero documents or labels and start zero visitor processes; saved copy is not falsely marked In use
+UC4 STEP 13-accepted-repair-tracking: G6: real packaged Small repair leaves sample In use during proposal, then explicit acceptance changes definition and clears every dropdown mark
+UC4 STEP failure: FAIL: com.microsoft.playwright.TimeoutError: Error {
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 125.6 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoDefinitionsBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney -- Time elapsed: 125.6 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#archive-submit")
+-     - locator resolved to <button type="submit" id="archive-submit">Import accepted bundle</button>
+-   - attempting click action
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-       - waiting 100ms
+-     58 × waiting for element to be visible, enabled and stable
+-        - element is not visible
+-      - retrying click action
+-        - waiting 500ms
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.clickImpl(FrameImpl.java:244)
+	at com.microsoft.playwright.impl.LocatorImpl.click(LocatorImpl.java:173)
+	at com.microsoft.playwright.Locator.click(Locator.java:2840)
+	at org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney(DemoDefinitionsBrowserIT.java:169)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#archive-submit")
+-     - locator resolved to <button type="submit" id="archive-submit">Import accepted bundle</button>
+-   - attempting click action
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-       - waiting 100ms
+-     58 × waiting for element to be visible, enabled and stable
+-        - element is not visible
+-      - retrying click action
+-        - waiting 500ms
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 6 more
+
+UC3 STEP 01-preview-full: main 1/G4/G6: Full preview in EMPTY, exact catalog/default effort, public ETag 304 and visitor no-store
+UC3 STEP 02-unsaved-decline: 1a/2a: unsaved text disables use; declined selection retains exact text, selection and EMPTY
+UC3 STEP 03-preview-race: G4: delayed older preview cannot replace the latest selection/text or Current
+UC3 STEP 04-open-small: main 2-5/G1: explicit small opens the exact complete accepted pair, no solve, other owner EMPTY
+UC3 STEP 04-open-two-class: main 2-5/G1: explicit two-class opens the exact complete accepted pair, no solve, other owner EMPTY
+UC3 STEP 04-open-full: main 2-5/G1: explicit full opens the exact complete accepted pair, no solve, other owner EMPTY
+UC3 STEP 05-full-week-details: G5: Full whole-school Week renders 520 lessons with fictional names and faithful lesson details
+UC3 STEP 06-full-day-teacher: G5: Full Day and teacher lens retain names, availability and context
+UC3 STEP 07-full-room-lens: G5: room lens replaces teacher lens and remains private read-only inspection
+UC3 STEP 08-narrow: G5: 390px narrow Day inspection is read-only with no page overflow
+UC3 STEP 09-private-repair: main 5/G4/G5: Full repair entry stages private intent; complete Current and second visitor stay exact
+UC3 STEP 09b-exact-export: main 5: Full export entry downloads exact accepted definition/result/manifest and excludes unfinished repair
+UC3 STEP 10-replacement-decline: main 3/3a: replacement names Full Current and repair draft, offers export, decline preserves everything
+UC3 STEP 11-stale-reload: 4a/4b: unknown 404, missing confirmation 428, stale browser 412; reload preserves selection and newer complete work
+UC3 STEP 12-failure-preserves: minimal guarantee: simulated HTTP failure preserves complete server work and selected JSON; reload/retry offered
+UC3 STEP 13-manual-entry: main 5/G4: Full manual entry opens a private draft, cancelled replacement preserves Current/draft
+UC3 STEP 14-second-owner-preserved: G1/G4/G6/G7: source ETags/documents and second owner unchanged; no solve/accept request, no visitor kernel launches
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 83.59 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoSessionBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoSessionBrowserIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart -- Time elapsed: 83.58 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#archive-submit")
+-     - locator resolved to <button type="submit" id="archive-submit">Import accepted bundle</button>
+-   - attempting click action
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-       - waiting 100ms
+-     57 × waiting for element to be visible, enabled and stable
+-        - element is not visible
+-      - retrying click action
+-        - waiting 500ms
+
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.clickImpl(FrameImpl.java:244)
+	at com.microsoft.playwright.impl.LocatorImpl.click(LocatorImpl.java:173)
+	at com.microsoft.playwright.Locator.click(Locator.java:2840)
+	at org.schoolkernel.workspace.DemoSessionBrowserIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart(DemoSessionBrowserIT.java:107)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#archive-submit")
+-     - locator resolved to <button type="submit" id="archive-submit">Import accepted bundle</button>
+-   - attempting click action
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-       - waiting 100ms
+-     57 × waiting for element to be visible, enabled and stable
+-        - element is not visible
+-      - retrying click action
+-        - waiting 500ms
+
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 6 more
+
+[ERROR] Errors: 
+[ERROR]   DemoDefinitionsBrowserIT.completeBrowserVersionJourney:169 » Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#archive-submit")
+-     - locator resolved to <button type="submit" id="archive-submit">Import accepted bundle</button>
+-   - attempting click action
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-       - waiting 100ms
+-     58 × waiting for element to be visible, enabled and stable
+-        - element is not visible
+-      - retrying click action
+-        - waiting 500ms
+
+[ERROR]   DemoObservabilityBrowserIT.safeSummariesReconcileQueueCoalescingCancellationReuseDecisionsAndActualProcesses:30 » Playwright Error {
+  message='TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:47)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:47)
+    at predicate (eval at evaluate (:311:30), <anonymous>:13:29)
+    at next (eval at evaluate (:311:30), <anonymous>:29:33)
+    at eval (eval at evaluate (:311:30), <anonymous>:42:13)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19519:12)
+    at async /private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:24434:20
+    at async _Frame.retryWithProgressAndTimeouts (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:24011:29)
+    at async _FrameDispatcher.waitForFunction (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:54870:24)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:27)
+}
+[ERROR]   DemoSessionBrowserIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart:107 » Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-2036835589293914830/package/lib/coreBundle.js:19135:44)
+}
+Call log:
+-   - waiting for locator("#archive-submit")
+-     - locator resolved to <button type="submit" id="archive-submit">Import accepted bundle</button>
+-   - attempting click action
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-     - waiting 20ms
+-     2 × waiting for element to be visible, enabled and stable
+-       - element is not visible
+-     - retrying click action
+-       - waiting 100ms
+-     57 × waiting for element to be visible, enabled and stable
+-        - element is not visible
+-      - retrying click action
+-        - waiting 500ms
+
+[ERROR] Tests run: 13, Failures: 0, Errors: 3, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

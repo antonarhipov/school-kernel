@@ -10,9 +10,9 @@ import java.util.UUID;
 
 @Component
 public class WorkspaceMutation {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
 
-    public WorkspaceMutation(WorkspaceRepository repository) {
+    public WorkspaceMutation(WorkspaceStore repository) {
         this.repository = repository;
     }
 

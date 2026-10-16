@@ -19,7 +19,7 @@
     "effectiveSoftWeights": { "$ref": "#/$defs/effectiveSoftWeights" },
     "seed": { "type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807 },
     "limit": { "$ref": "#/$defs/limit" },
-    "terminationReason": { "enum": ["TIME_LIMIT", "STEP_LIMIT", "SEARCH_EXHAUSTED", "EMPTY_PROBLEM"] },
+    "terminationReason": { "enum": ["TIME_LIMIT", "STEP_LIMIT", "SEARCH_EXHAUSTED", "EMPTY_PROBLEM", "MANUAL_REVIEW"] },
     "timetable": { "$ref": "#/$defs/timetable" },
     "timetableRevision": { "$ref": "#/$defs/revision" },
     "score": { "$ref": "#/$defs/score" },
@@ -134,6 +134,10 @@
     "limit": {
       "oneOf": [
         {
+          "type": "object", "additionalProperties": false, "required": ["type"],
+          "properties": { "type": { "const": "NONE" } }
+        },
+        {
           "type": "object",
           "additionalProperties": false,
           "required": ["type", "duration"],
@@ -227,7 +231,7 @@
       "additionalProperties": false,
       "required": ["totalMatches", "truncated", "constraints"],
       "properties": {
-        "totalMatches": { "type": "integer", "minimum": 1 },
+        "totalMatches": { "type": "integer", "minimum": 0 },
         "truncated": { "type": "boolean" },
         "constraints": { "type": "array", "items": { "$ref": "#/$defs/constraintDiagnostic" } }
       }

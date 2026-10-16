@@ -1,0 +1,639 @@
+import { M } from './messages.js';
+import { makeAcceptedModel } from './accepted-model.js';
+import { renderWeekMatrix } from './week-renderer.js';
+import { renderDayMatrix } from './day-renderer.js';
+import { createTimetableStorage, deleteLocalTimetableData, draftKey, isTimetable, isSchoolDefinition } from './timetable-storage.js';
+import { demoRequest } from './demo-transport.js';
+import { conflictItems, warningItems } from './demo-feedback.js';
+import { validateText, savedRows } from './demo-definitions.js';
+import { createDefinitionAutosave } from './definition-autosave.js';
+
+const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const clone = value => structuredClone(value);
+const blankFilters = () => ({ cohortId: '', teacherId: '', roomId: '', subjectId: '', periodId: '', search: '', range: 'WEEK', day: '' });
+let mounted = false, repository, browserStorage, deletingLocalData = false, build, schools = new Map(), selectedSchool, selectedTimetable, model, selectedLesson = null;
+let filters = blankFilters(), notice = '', editorText = '', editorSource = '', editorDirty = false;
+const reviews = new Map(), timers = new Map();
+const fields = ['teacherId', 'roomId', 'periodId'];
+let editorMessage = '', savingSchool = false, activeGeneration = null, config = { lessonThreshold: 200, quickSeconds: 5, thoroughSeconds: 60 };
+let editorAutosave;
+const oversizedEditorMessage = 'Use at most 2 MiB UTF-8. This text is only in the open editor; the previous saved editor copy is unchanged.';
+const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
+  ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
+
+export async function mountTimetableDemo() {
+  if (mounted) return;
+  mounted = true;
+  document.title = 'School timetables';
+  document.body.classList.add('timetable-demo');
+  document.body.innerHTML = `<header class="demo-header">
+    <div class="demo-brand"><span class="eyebrow">School Kernel</span><span class="demo-tag">Interactive demo</span></div>
+    <div class="demo-heading-row"><div class="demo-selectors">
+      <label>School<select id="school-selector" aria-label="School"><option>Loading schools…</option></select></label>
+      <label>Timetable<select id="timetable-selector" aria-label="Timetable" disabled><option>Loading timetables…</option></select></label>
+    </div><details id="demo-utilities" class="demo-utilities"><summary>Utilities</summary>
+      <section aria-labelledby="utilities-title"><div class="demo-editor-heading"><h2 id="utilities-title">Utilities</h2>
+        <button type="button" id="close-editor" class="secondary">Close Utilities</button></div>
+        <h3 id="definition-editor-title">School definition editor</h3>
+        <p>Edit a copy of this school. Existing schools and timetables stay intact.</p>
+        <p id="editor-source" class="muted"></p>
+        <label for="school-definition-json">School definition JSON</label><textarea id="school-definition-json" spellcheck="false"></textarea>
+        <div class="demo-editor-actions"><label>New school name<input id="school-copy-name" maxlength="120" placeholder="Name your school copy"></label>
+        <button id="save-school-copy" type="button">Save school copy</button></div>
+        <div id="generation-controls"><label>Search effort<select id="generation-effort"><option value="QUICK">Quick</option><option value="THOROUGH">Thorough</option></select></label>
+          <button id="generate-timetable" type="button">Generate timetable</button><button id="cancel-generation" class="secondary" type="button" hidden>Cancel generation</button></div>
+        <p id="editor-status" role="status"></p><p id="generation-status" role="status"></p>
+        <div class="demo-local-data" aria-labelledby="local-data-title">
+          <h3 id="local-data-title">Locally stored data</h3>
+          <p id="local-data-description">Deletes only school definitions, timetables and unfinished edits saved in this browser on this device. Bundled examples remain available. This cannot be undone.</p>
+          <button id="delete-local-data" type="button" class="secondary" aria-describedby="local-data-description">Delete local schools and timetables…</button>
+        </div>
+      </section></details></div>
+  </header>
+  <main class="demo-main">
+    <p id="demo-notice" class="notice" role="status" hidden></p>
+    <p id="generation-indicator" class="notice" role="status" hidden></p>
+    <section class="demo-timetable current-mode compact-density" aria-label="Timetable">
+      <div class="demo-view-heading"><div><h1 id="timetable-title">Timetable</h1><p id="timetable-description" class="muted">Loading verified examples…</p></div></div>
+      <div id="timetable-filters" class="demo-filters"></div>
+      <div id="draft-feedback" hidden></div>
+      <div id="timetable-matrix" aria-busy="true"></div>
+    </section>
+    <footer class="demo-footer">Fictional staff and schools · Your saved timetables and drafts stay in this browser on this device.
+      <details><summary>About storage</summary><p>Browser data survives demo restarts and deployments. Clearing this site’s browser data removes saved schools, timetables and drafts. Generation and validation use a temporary private server session. Server sessions and temporary files expire; complete identical inputs and checked results may remain in a bounded shared memory cache for up to an hour. No account or cross-device recovery is provided.</p></details>
+    </footer>
+  </main>
+  <dialog id="lesson-inspector" class="demo-inspector" aria-labelledby="inspector-title"></dialog>
+  <dialog id="delete-local-data-dialog" class="demo-delete-dialog" aria-labelledby="delete-local-data-title" aria-describedby="delete-local-data-description">
+    <h2 id="delete-local-data-title">Delete local schools and timetables?</h2>
+    <p id="delete-local-data-description">This deletes only school definitions, timetables and unfinished edits saved in this browser on this device. Bundled examples remain available. This cannot be undone.</p>
+    <p id="delete-local-data-error" class="demo-error" role="alert" hidden></p>
+    <div class="demo-editor-actions"><button id="cancel-delete-local-data" class="secondary" type="button" autofocus>Cancel</button>
+      <button id="confirm-delete-local-data" class="danger" type="button">Delete local data</button></div>
+  </dialog>
+  <section id="timetable-save-bar" class="demo-save-bar" aria-label="Save timetable changes" hidden></section>`;
+  let storage;
+  try { storage = window.localStorage; } catch { storage = { getItem() { throw new Error(); } }; }
+  browserStorage = storage;
+  repository = createTimetableStorage(storage);
+  notice = repository.notices.join(' ');
+  try {
+    const response = await fetch('/api/demo/timetables');
+    if (!response.ok) throw new Error('The example timetables could not be loaded. Reload to try again.');
+    const bundle = await response.json(); build = bundle.build;
+    for (const sample of bundle.schools) {
+      const timetables = new Map(sample.timetables.map(t => [t.id, { ...t, definition: sample.definition, bundled: true }]));
+      schools.set(sample.identifier, { id: sample.identifier, name: sample.title, definition: sample.definition, bundled: true, timetables });
+    }
+    const saved = repository.state();
+    for (const [id, school] of Object.entries(saved.schools)) {
+      if (!isSchoolDefinition(school?.definition) || typeof school.name !== 'string' || schools.has(id)) { unreadable('school'); continue; }
+      schools.set(id, { ...school, id, timetables: new Map() });
+    }
+    for (const [schoolId, versions] of Object.entries(saved.timetables)) {
+      const school = schools.get(schoolId);
+      if (!school || !versions || typeof versions !== 'object') { unreadable('timetable'); continue; }
+      for (const [id, timetable] of Object.entries(versions)) {
+        if (!isTimetable(timetable) || timetable.id !== id || school.timetables.has(id)) { unreadable('timetable'); continue; }
+        school.timetables.set(id, timetable);
+      }
+    }
+    // Earlier demo versions saved definitions under individual keys. Read them without deleting/mutating those keys.
+    try {
+      for (const row of savedRows(storage)) {
+        if (!row.value) { unreadable('definition'); continue; }
+        const id = 'legacy-' + row.id, definition = JSON.parse(row.value.documentText);
+        if (!isSchoolDefinition(definition)) { unreadable('definition'); continue; }
+        if (!schools.has(id)) schools.set(id, { id, name: definition.displayName + ' (' + row.id + ')', definition,
+          legacy: row.value, timetables: new Map() });
+      }
+    } catch { /* The persistent storage notice already explains inaccessible browser data. */ }
+    for (const [key, draft] of Object.entries(saved.drafts)) {
+      if (!draft?.generated || !isTimetable(draft.source)) continue;
+      const schoolId = key.slice(0, key.lastIndexOf('/')), school = schools.get(schoolId);
+      if (school && key === draftKey(schoolId, draft.source.id) && !school.timetables.has(draft.source.id)) school.timetables.set(draft.source.id, draft.source);
+    }
+    selectedSchool = schools.has(saved.selected?.schoolId) ? saved.selected.schoolId : 'full';
+    const last = saved.selected?.schoolId === selectedSchool ? saved.selected.timetableId : saved.lastTimetable[selectedSchool];
+    selectedTimetable = schools.get(selectedSchool).timetables.has(last) ? last : schools.get(selectedSchool).timetables.keys().next().value;
+    bindShell(); render();
+    demoRequest('/api/demo/config').then(({ value }) => { config = value; renderGeneration(); }).catch(() => {});
+    const interrupted = [...schools.values()].find(s => s.generation?.runId && ['QUEUED', 'RUNNING', 'CHECKING_RESULT'].includes(s.generation.status));
+    if (interrupted) { activeGeneration = { schoolId: interrupted.id, runId: interrupted.generation.runId }; pollGeneration(activeGeneration); }
+  } catch (error) {
+    notice = error.message; renderNotice();
+    document.querySelector('#timetable-matrix').setAttribute('aria-busy', 'false');
+  }
+}
+
+function unreadable(kind) { notice = `Some saved ${kind} data could not be displayed and has been retained in browser storage. Other schools remain available.`; }
+function persist(change, atomic = false) {
+  if (deletingLocalData) return false;
+  try { repository.write(change, { atomic }); return true; }
+  catch (error) { notice = error.message; renderNotice(); return false; }
+}
+function currentSchool() { return schools.get(selectedSchool); }
+function currentTimetable() { return currentSchool()?.timetables.get(selectedTimetable); }
+function currentDraft() {
+  const draft = repository.state().drafts[draftKey(selectedSchool, selectedTimetable)];
+  if (!draft) return null;
+  const source = draft.source || currentTimetable();
+  if (!isTimetable(source) || !draft.changes || typeof draft.changes !== 'object' || Array.isArray(draft.changes)
+      || Object.entries(draft.changes).some(([id, patch]) => !source.definition.lessons.some(l => l.id === id)
+        || !patch || typeof patch !== 'object' || Object.entries(patch).some(([field, value]) =>
+          !['teacherId', 'roomId', 'periodId'].includes(field) || typeof value !== 'string'
+          || !source.definition[{ teacherId: 'teachers', roomId: 'rooms', periodId: 'periods' }[field]].some(e => e.id === value)))) {
+    unreadable('draft'); renderNotice(); return null;
+  }
+  return draft;
+}
+function candidate(timetable = currentTimetable(), draft = currentDraft()) {
+  if (!timetable) return null;
+  const source = draft?.source || timetable;
+  const baseline = { definition: clone(source.definition), result: clone(source.result) };
+  if (!draft?.changes || typeof draft.changes !== 'object') return baseline;
+  for (const assignment of baseline.result.timetable.assignments) {
+    const change = draft.changes[assignment.lessonId];
+    if (!change) continue;
+    for (const field of ['teacherId', 'roomId', 'periodId']) if (typeof change[field] === 'string') assignment[field] = change[field];
+    const lesson = baseline.definition.lessons.find(l => l.id === assignment.lessonId);
+    if (lesson) lesson.teacherId = assignment.teacherId;
+  }
+  return baseline;
+}
+
+function bindShell() {
+  let autosaveFailureNotice;
+  editorAutosave = createDefinitionAutosave(value => {
+    const saved = persist(state => { state.editor = value; });
+    if (saved && notice === autosaveFailureNotice) { notice = ''; renderNotice(); }
+    autosaveFailureNotice = saved ? undefined : notice;
+    return saved;
+  }, tooLarge => {
+    if (tooLarge) editorMessage = oversizedEditorMessage;
+    else if (editorMessage === oversizedEditorMessage) editorMessage = '';
+    document.querySelector('#editor-status').textContent = editorMessage;
+  });
+  const scheduleEditorSave = () => editorAutosave.schedule({ text: editorText, source: editorSource,
+    name: document.querySelector('#school-copy-name').value });
+  window.addEventListener('pagehide', () => editorAutosave.flush());
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') editorAutosave.flush(); });
+  document.querySelector('#demo-utilities').addEventListener('toggle', event => { if (!event.target.open) editorAutosave.flush(); });
+  document.querySelector('#school-selector').addEventListener('change', event => {
+    editorAutosave.flush();
+    closeInspector(); selectedSchool = event.target.value; filters = blankFilters();
+    const school = currentSchool(), last = repository.state().lastTimetable[selectedSchool];
+    selectedTimetable = school.timetables.has(last) ? last : school.timetables.keys().next().value;
+    rememberSelection(); render();
+  });
+  document.querySelector('#timetable-selector').addEventListener('change', event => {
+    editorAutosave.flush();
+    closeInspector(); selectedTimetable = event.target.value; rememberSelection(); render();
+  });
+  document.querySelector('#close-editor').addEventListener('click', () => { editorAutosave.flush(); document.querySelector('#demo-utilities').open = false; });
+  document.querySelector('#delete-local-data').addEventListener('click', () => {
+    document.querySelector('#delete-local-data-error').hidden = true;
+    document.querySelector('#delete-local-data-dialog').showModal();
+  });
+  document.querySelector('#cancel-delete-local-data').addEventListener('click', () => document.querySelector('#delete-local-data-dialog').close());
+  document.querySelector('#confirm-delete-local-data').addEventListener('click', () => {
+    if (deletingLocalData) return;
+    try {
+      deleteLocalTimetableData(browserStorage);
+      // Pending responses must not restore deleted artifacts while the clean page is loading.
+      deletingLocalData = true;
+      editorAutosave.cancel();
+      for (const timer of timers.values()) clearTimeout(timer);
+      timers.clear(); reviews.clear(); activeGeneration = null;
+      window.location.reload();
+    } catch (error) {
+      const message = document.querySelector('#delete-local-data-error');
+      message.textContent = error.message; message.hidden = false;
+    }
+  });
+  document.querySelector('#school-definition-json').addEventListener('input', event => {
+    editorText = event.target.value; editorDirty = true;
+    scheduleEditorSave();
+  });
+  document.querySelector('#school-copy-name').addEventListener('input', () => {
+    scheduleEditorSave();
+  });
+  document.querySelector('#save-school-copy').addEventListener('click', saveSchoolCopy);
+  document.querySelector('#generate-timetable').addEventListener('click', generateTimetable);
+  document.querySelector('#cancel-generation').addEventListener('click', cancelGeneration);
+  document.querySelector('#generation-indicator').addEventListener('click', event => {
+    if (event.target.closest('[data-show-generation]')) document.querySelector('#demo-utilities').open = true;
+    const view = event.target.closest('[data-view-generated]');
+    if (view) {
+      closeInspector(); selectedSchool = view.dataset.viewGenerated; filters = blankFilters();
+      selectedTimetable = repository.state().lastTimetable[selectedSchool]; rememberSelection(); render();
+    }
+  });
+  document.querySelector('#generation-effort').addEventListener('change', () => { currentSchool().effort = document.querySelector('#generation-effort').value; renderGeneration(); });
+  document.querySelector('#timetable-matrix').addEventListener('click', event => {
+    const cell = event.target.closest('[data-lesson-id]');
+    if (cell) openInspector(cell.dataset.lessonId);
+  });
+  document.querySelector('#lesson-inspector').addEventListener('click', event => {
+    if (event.target.closest('[data-close-inspector]')) closeInspector();
+  });
+  document.querySelector('#draft-feedback').addEventListener('click', event => {
+    const button = event.target.closest('[data-conflict-lesson]');
+    if (button) {
+      filters = blankFilters(); renderFilters(); renderMatrix(); openInspector(button.dataset.conflictLesson);
+      [...document.querySelectorAll('.demo-lesson')].find(e => e.dataset.lessonId === selectedLesson)?.scrollIntoView({ block: 'center', inline: 'nearest' });
+      positionInspector();
+    }
+    if (event.target.closest('[data-retry-review]')) queueReview(true);
+  });
+  document.querySelector('#timetable-save-bar').addEventListener('input', event => {
+    if (event.target.id === 'new-timetable-name') {
+      const key = draftKey(selectedSchool, selectedTimetable);
+      persist(state => { if (state.drafts[key]) state.drafts[key].name = event.target.value; });
+      const error = document.querySelector('#timetable-name-error'); if (error) error.textContent = '';
+    }
+  });
+  document.querySelector('#timetable-save-bar').addEventListener('click', event => {
+    if (event.target.closest('#discard-timetable-changes')) {
+      const key = draftKey(selectedSchool, selectedTimetable);
+      const draft = currentDraft(), school = currentSchool();
+      if (persist(state => {
+        delete state.drafts[key];
+        if (draft?.generated && state.schools[selectedSchool]) state.schools[selectedSchool].generation = { status: 'DISCARDED', message: 'Generated candidate discarded. You can generate another timetable.' };
+      }, true)) {
+        if (draft?.generated) { school.timetables.delete(selectedTimetable); school.generation = { status: 'DISCARDED', message: 'Generated candidate discarded. You can generate another timetable.' }; selectedTimetable = school.timetables.keys().next().value; }
+        reviews.delete(key); closeInspector(); render();
+      }
+    }
+    if (event.target.closest('#save-new-timetable')) saveTimetable();
+    if (event.target.closest('[data-retry-review]')) queueReview(true);
+  });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') closeInspector(); });
+  window.addEventListener('resize', positionInspector);
+  new ResizeObserver(() => {
+    const bar = document.querySelector('#timetable-save-bar');
+    document.body.style.setProperty('--save-bar-height', `${bar.hidden ? 0 : bar.getBoundingClientRect().height + 35}px`);
+    positionInspector();
+  }).observe(document.querySelector('#timetable-save-bar'));
+}
+
+function rememberSelection() {
+  persist(state => {
+    state.selected = { schoolId: selectedSchool, timetableId: selectedTimetable || null };
+    if (selectedTimetable) state.lastTimetable[selectedSchool] = selectedTimetable;
+  });
+}
+function renderNotice() {
+  const element = document.querySelector('#demo-notice'); element.hidden = !notice; element.textContent = notice;
+}
+function option(id, label, selected) { return `<option value="${html(id)}"${id === selected ? ' selected' : ''}>${html(label)}</option>`; }
+function render() {
+  const school = currentSchool(), timetable = currentTimetable();
+  renderNotice();
+  document.querySelector('#school-selector').innerHTML = [...schools.values()].map(s => option(s.id, s.name, selectedSchool)).join('');
+  const drafts = repository.state().drafts;
+  document.querySelector('#timetable-selector').innerHTML = school.timetables.size ? [...school.timetables.values()]
+    .map(t => option(t.id, t.name + (drafts[draftKey(school.id, t.id)] ? ' · unsaved changes' : ''), selectedTimetable)).join('') : option('', 'No timetable yet', '');
+  document.querySelector('#timetable-selector').disabled = !school.timetables.size;
+  document.querySelector('#timetable-title').textContent = timetable?.name || school.name;
+  const baseline = candidate();
+  model = baseline ? makeAcceptedModel(baseline) : null;
+  document.querySelector('#timetable-description').textContent = model
+    ? `${school.name} · ${model.definition.cohorts.length} classes · ${model.assignments.length} lessons per week`
+    : 'This school has no timetable yet. Open the school definition editor in Utilities to generate one.';
+  renderFilters(); renderMatrix(); renderEditor(); renderDraft(); queueReview();
+  document.querySelector('#timetable-matrix').setAttribute('aria-busy', 'false');
+}
+
+function renderEditor() {
+  const savedEditor = repository.state().editor;
+  if (!editorText) {
+    if (savedEditor?.text) { editorText = savedEditor.text; editorSource = savedEditor.source; editorDirty = true; }
+    else { editorSource = selectedSchool; editorText = JSON.stringify(currentSchool().definition, null, 2); }
+  } else if (!editorDirty && editorSource !== selectedSchool) {
+    editorSource = selectedSchool; editorText = JSON.stringify(currentSchool().definition, null, 2);
+  }
+  document.querySelector('#school-definition-json').value = editorText;
+  if (savedEditor?.name && !document.querySelector('#school-copy-name').value) document.querySelector('#school-copy-name').value = savedEditor.name;
+  document.querySelector('#editor-source').textContent = `Editing a copy of ${schools.get(editorSource)?.name || 'a previously saved school'}.`;
+  document.querySelector('#editor-status').textContent = editorMessage;
+  document.querySelector('#save-school-copy').disabled = savingSchool;
+  renderGeneration();
+}
+
+function renderFilters() {
+  const parent = document.querySelector('#timetable-filters');
+  if (!model) { parent.innerHTML = ''; return; }
+  const select = (id, title, collection, key) => `<label>${title}<select id="${id}" data-filter="${key}">${option('', `All ${title.toLowerCase()}`, filters[key])}${collection.map(e => option(e.id, e.displayName || e.id, filters[key])).join('')}</select></label>`;
+  parent.innerHTML = `<div class="demo-range" role="group" aria-label="Timetable range"><button type="button" data-range="WEEK" aria-pressed="${filters.range === 'WEEK'}">Week</button><button type="button" data-range="DAY" aria-pressed="${filters.range === 'DAY'}">Day</button></div>
+    <label>Day<select id="day-filter" data-filter="day">${option('', 'Whole week', filters.day)}${model.weekdays.map(day => option(day, M.days[day] || day, filters.day)).join('')}</select></label>
+    ${select('cohort-filter', 'Classes', model.definition.cohorts, 'cohortId')}
+    ${select('teacher-filter', 'Teachers', model.definition.teachers, 'teacherId')}
+    ${select('room-filter', 'Rooms', model.definition.rooms, 'roomId')}
+    ${select('subject-filter', 'Subjects', model.definition.subjects, 'subjectId')}
+    ${select('period-filter', 'Time slots', model.definition.periods.map(p => ({ ...p, displayName: periodLabel(p) })), 'periodId')}
+    <label class="demo-search">Highlight lessons<input id="lesson-search" type="search" placeholder="Subject, teacher or class" value="${html(filters.search)}"></label>
+    <button id="clear-timetable-filters" class="secondary" type="button">Clear filters</button>`;
+  parent.querySelectorAll('[data-filter]').forEach(select => select.addEventListener('change', event => {
+    const key = select.dataset.filter; filters[key] = event.target.value;
+    if (key === 'day') filters.range = filters.day ? 'DAY' : 'WEEK';
+    if (key === 'teacherId' && filters.teacherId) filters.roomId = '';
+    if (key === 'roomId' && filters.roomId) filters.teacherId = '';
+    if (key === 'periodId' && filters.periodId) { filters.range = 'DAY'; filters.day = model.maps.periods.get(filters.periodId)?.weekday || model.weekdays[0]; }
+    closeInspector(); renderFilters(); renderMatrix();
+  }));
+  parent.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
+    filters.range = button.dataset.range; filters.day = filters.range === 'DAY' ? filters.day || model.weekdays[0] : '';
+    closeInspector(); renderFilters(); renderMatrix();
+  }));
+  parent.querySelector('#lesson-search').addEventListener('input', event => { filters.search = event.target.value; renderMatrix(); });
+  parent.querySelector('#clear-timetable-filters').addEventListener('click', () => { filters = blankFilters(); closeInspector(); renderFilters(); renderMatrix(); });
+}
+
+function periodLabel(period) {
+  return `${M.days[period.weekday] || period.weekday} · ${period.order}. ${period.startTime ? period.startTime.slice(0, 5) + '–' + period.endTime.slice(0, 5) : period.displayName || ''}`;
+}
+function matches(item) {
+  return (!filters.cohortId || item.cohortId === filters.cohortId) && (!filters.teacherId || item.teacherId === filters.teacherId)
+    && (!filters.roomId || item.roomId === filters.roomId) && (!filters.subjectId || item.subjectId === filters.subjectId)
+    && (!filters.periodId || item.periodId === filters.periodId);
+}
+function renderMatrix() {
+  const parent = document.querySelector('#timetable-matrix');
+  if (!model) { parent.innerHTML = '<p class="demo-empty">No timetable yet. Use Utilities → School definition editor → Generate timetable.</p>'; return; }
+  const existing = parent.querySelector('.matrix-wrap'), scroll = { left: existing?.scrollLeft || 0, top: existing?.scrollTop || 0 };
+  const teachers = model.maps.teachers, rooms = model.maps.rooms;
+  const rows = filters.teacherId ? [{ kind: 'TEACHER', id: filters.teacherId, label: teachers.get(filters.teacherId)?.displayName || filters.teacherId }]
+    : filters.roomId ? [{ kind: 'ROOM', id: filters.roomId, label: rooms.get(filters.roomId)?.displayName || filters.roomId }]
+    : model.definition.cohorts.filter(c => !filters.cohortId || c.id === filters.cohortId).map(c => ({ kind: 'CLASS', id: c.id, label: c.displayName || c.id }));
+  const items = model.assignments.filter(matches);
+  const byPeriod = new Map();
+  for (const item of items) {
+    const key = `${filters.teacherId || filters.roomId ? '' : item.cohortId}/${item.periodId}`;
+    if (!byPeriod.has(key)) byPeriod.set(key, []); byPeriod.get(key).push(item);
+  }
+  const cellItems = (row, period) => byPeriod.get(`${row.kind === 'CLASS' ? row.id : ''}/${period.id}`) || [];
+  const periodsForDay = day => model.definition.periods.filter(p => p.weekday === day).sort((a, b) => a.order - b.order);
+  const props = { rows, rowHeading: filters.teacherId ? 'Teacher' : filters.roomId ? 'Room' : 'Class', weekdays: model.weekdays,
+    cellItems, emptyMarkup: () => '<span class="empty-cell">—</span>', periodsForDay, labels: M,
+    periodLabel, lessonMarkup, escapeHtml: html, escapeAttribute: html };
+  parent.innerHTML = filters.range === 'DAY'
+    ? renderDayMatrix({ ...props, periods: periodsForDay(filters.day || model.weekdays[0]), periodId: filters.periodId })
+    : renderWeekMatrix(props);
+  const matrix = parent.querySelector('.matrix-wrap'); matrix.tabIndex = 0; matrix.scrollLeft = scroll.left; matrix.scrollTop = scroll.top;
+}
+function lessonMarkup(item) {
+  const text = [item.subject?.displayName, item.teacher?.displayName, item.cohort?.displayName, item.room?.displayName].join(' · ');
+  const highlighted = filters.search && text.toLocaleLowerCase().includes(filters.search.toLocaleLowerCase());
+  const color = model.definition.subjects.findIndex(s => s.id === item.subjectId) % 24;
+  const week = filters.range === 'WEEK';
+  const teacher = `<span class="demo-tile-teacher${week ? ' week-meta' : ''}" title="${html(item.teacher?.displayName || item.teacherId)}">${html(item.teacher?.displayName || item.teacherId)}</span>`;
+  const room = `<span class="demo-tile-room${week ? ' week-room' : ''}" title="${html(item.room?.displayName || item.roomId)}">${html(item.room?.displayName || item.roomId)}</span>`;
+  const cohort = `<span class="demo-tile-class${week ? ' week-meta' : ''}" title="${html(item.cohort?.displayName || item.cohortId)}">${html(item.cohort?.displayName || item.cohortId)}</span>`;
+  const details = filters.teacherId ? room + cohort : filters.roomId ? teacher + cohort : week ? room : teacher + room;
+  const conflicts = conflictItems(reviews.get(draftKey(selectedSchool, selectedTimetable))?.evidence, model);
+  const invalid = conflicts.some(c => c.lessonIds.includes(item.lessonId));
+  return `<button type="button" class="lesson-cell demo-lesson subject-color-${color}${week ? ' week-lesson' : ''}${highlighted ? ' match' : ''}${invalid ? ' has-conflict' : ''}" data-lesson-id="${html(item.lessonId)}" aria-label="${html((invalid ? 'Must fix · ' : '') + text + ' · ' + periodLabel(item.period))}">${invalid ? '<span class="demo-conflict-mark">Must fix</span>' : ''}<strong title="${html(item.subject?.displayName || item.subjectId)}">${html(item.subject?.displayName || item.subjectId)}</strong>${details}</button>`;
+}
+
+function openInspector(lessonId) {
+  const item = model?.assignmentMap.get(lessonId); if (!item) return;
+  selectedLesson = lessonId;
+  const inspector = document.querySelector('#lesson-inspector');
+  inspector.innerHTML = `<div class="demo-inspector-heading"><div><p class="eyebrow">${html(item.cohort?.displayName)}</p><h2 id="inspector-title" tabindex="-1">${html(item.subject?.displayName)}</h2></div><button type="button" class="secondary" data-close-inspector aria-label="Close lesson inspector">✕</button></div>
+    <label>Teacher<select id="inspector-teacher">${model.definition.teachers.map(t => option(t.id, (t.displayName || t.id) + (eligible(t, item) ? '' : ' · not eligible for this lesson'), item.teacherId)).join('')}</select></label>
+    <p class="muted">Only eligible teachers can be saved. Busy teachers remain selectable so you can swap lessons.</p>
+    <label>Room<select id="inspector-room">${model.definition.rooms.map(r => option(r.id, `${r.displayName || r.id} · ${r.capacity} seats${r.capacity < item.cohort.size ? ' · too small' : !(item.lesson.requiredRoomCapabilityIds || []).every(id => r.capabilityIds?.includes(id)) ? ' · missing required equipment' : ''}`, item.roomId)).join('')}</select></label>
+    <label>Time slot<select id="inspector-period">${model.definition.periods.map(p => option(p.id, periodLabel(p) + (item.lesson.periodLock && item.lesson.periodLock !== p.id ? ' · outside fixed time' : item.teacher.availablePeriodIds && !item.teacher.availablePeriodIds.includes(p.id) ? ' · teacher unavailable' : item.cohort.availablePeriodIds && !item.cohort.availablePeriodIds.includes(p.id) ? ' · class unavailable' : ''), item.periodId)).join('')}</select></label>
+    <div id="inspector-feedback"></div>`;
+  for (const [field, id] of [['teacherId', 'inspector-teacher'], ['roomId', 'inspector-room'], ['periodId', 'inspector-period']]) {
+    inspector.querySelector('#' + id).addEventListener('change', event => editLesson(lessonId, field, event.target.value));
+  }
+  const problems = conflictItems(reviews.get(draftKey(selectedSchool, selectedTimetable))?.evidence, model).filter(c => c.lessonIds.includes(lessonId));
+  inspector.querySelector('#inspector-feedback').innerHTML = problems.map(c => `<p class="demo-error"><strong>Must fix: ${html(c.title)}</strong><br>${html(c.message)}</p>`).join('');
+  if (!inspector.open) inspector.show();
+  positionInspector(); inspector.querySelector('#inspector-title').focus({ preventScroll: true });
+}
+function eligible(teacher, item) {
+  return item.subject?.curatorLesson ? item.cohort?.curatorTeacherId === teacher.id : teacher.qualifiedSubjectIds?.includes(item.subjectId);
+}
+
+function editLesson(lessonId, field, value) {
+  const key = draftKey(selectedSchool, selectedTimetable), existing = currentDraft();
+  if (repository.state().drafts[key] && !existing) { notice = 'This retained draft cannot be edited safely. Select another timetable to continue.'; renderNotice(); return; }
+  const source = existing?.source || clone(currentTimetable());
+  const original = source.result.timetable.assignments.find(a => a.lessonId === lessonId);
+  const draft = existing || { source, changes: {}, name: '', createdAt: new Date().toISOString() };
+  draft.changes[lessonId] ||= {};
+  if (value === original[field]) delete draft.changes[lessonId][field]; else draft.changes[lessonId][field] = value;
+  if (!Object.keys(draft.changes[lessonId]).length) delete draft.changes[lessonId];
+  persist(state => {
+    if (Object.keys(draft.changes).length || draft.generated) state.drafts[key] = draft;
+    else delete state.drafts[key];
+  });
+  reviews.delete(key); render(); openInspector(lessonId);
+}
+function signature(value) { return JSON.stringify([build, value?.definition, value?.result?.timetable?.assignments]); }
+function queueReview(force = false) {
+  const draft = currentDraft(); if (!draft) return;
+  const key = draftKey(selectedSchool, selectedTimetable), input = candidate(), exact = signature(input);
+  if (!force && reviews.get(key)?.signature === exact) return;
+  clearTimeout(timers.get(key));
+  const review = { signature: exact, status: 'PENDING' }; reviews.set(key, review); renderDraft();
+  timers.set(key, setTimeout(async () => {
+    try {
+      const { value } = await demoRequest('/api/demo/timetable/review', { method: 'POST', body: input });
+      if (reviews.get(key) !== review) return;
+      if (value.build !== build || !['REVIEWED', 'INVALID_INPUT'].includes(value.status)
+          || value.status === 'REVIEWED' && (typeof value.valid !== 'boolean' || !Array.isArray(value.conflicts)
+              || value.valid && (!value.result || value.result.status !== 'FEASIBLE' || value.conflicts.length)))
+        throw new Error('Validation returned incomplete or incompatible evidence. Retry the check.');
+      review.evidence = value; review.status = value.valid === true ? 'VALID' : 'INVALID';
+    } catch (error) { if (reviews.get(key) !== review) return; review.status = 'FAILED'; review.error = error.message; }
+    if (draftKey(selectedSchool, selectedTimetable) === key) {
+      renderDraft(); renderMatrix(); if (selectedLesson) openInspector(selectedLesson);
+    }
+  }, 300));
+}
+function lessonContext(id) {
+  const item = model?.assignmentMap.get(id);
+  return item ? `${item.cohort.displayName} · ${item.subject.displayName} · ${item.teacher.displayName} · ${item.room.displayName} · ${periodLabel(item.period)}` : id;
+}
+function renderDraft() {
+  const draft = currentDraft(), bar = document.querySelector('#timetable-save-bar'), feedback = document.querySelector('#draft-feedback');
+  bar.hidden = !draft; feedback.hidden = !draft;
+  if (!draft) { bar.innerHTML = ''; feedback.innerHTML = ''; document.body.style.setProperty('--save-bar-height', '0px'); return; }
+  const review = reviews.get(draftKey(selectedSchool, selectedTimetable)), status = review?.status || 'PENDING';
+  const conflicts = conflictItems(review?.evidence, model), warnings = warningItems(review?.evidence, draft.source?.result || currentTimetable().result);
+  const text = status === 'VALID' ? 'Ready to save' : status === 'INVALID' ? `Must fix · ${conflicts.length} rule${conflicts.length === 1 ? '' : 's'}` : status === 'FAILED' ? 'Validation failed' : 'Checking all rules…';
+  feedback.innerHTML = status === 'FAILED' ? `<p class="demo-error">${html(review.error)} <button type="button" data-retry-review>Retry validation</button></p>`
+    : conflicts.length ? `<div class="demo-errors"><h2>Must fix</h2><p>Save is blocked until these mandatory rules pass.</p>${conflicts.map(c => `<details open data-rule="${html(c.rule)}"><summary>${html(c.title)}</summary><p>${html(c.message)}</p><ul>${c.lessonIds.map(id => `<li><button type="button" class="demo-conflict-link" data-conflict-lesson="${html(id)}">${html(lessonContext(id))}</button></li>`).join('')}</ul></details>`).join('')}${review.evidence?.truncated || review.evidence?.validationReport?.truncated ? '<p>Diagnostic examples are limited. The entire draft remains invalid; all potentially affected lessons are marked.</p>' : ''}</div>` : '';
+  if (warnings.length) feedback.innerHTML += `<details class="demo-warnings"><summary>Could be improved · ${warnings.length} preferences</summary><p>Advisory only. Counts cover the whole timetable; the change from the source is shown separately.</p><ul>${warnings.map(w => `<li><strong>${html(w.title)}</strong>: ${html(w.message)} ${w.count} total; ${w.delta > 0 ? '+' : ''}${w.delta} from source.</li>`).join('')}</ul></details>`;
+  bar.innerHTML = `<div class="demo-save-status" role="status"><strong>${html(text)}</strong><span>${draft.generated ? 'Generated timetable' : Object.keys(draft.changes).length + ' changed lesson' + (Object.keys(draft.changes).length === 1 ? '' : 's')}</span></div>
+    <label>New timetable name<input id="new-timetable-name" maxlength="120" value="${html(draft.name || '')}" placeholder="Name this alternative"></label>
+    <button id="save-new-timetable" type="button"${status !== 'VALID' ? ' disabled' : ''}>Save as new timetable</button>
+    <button id="discard-timetable-changes" type="button" class="secondary">Discard changes</button><p id="timetable-name-error" class="demo-error" role="alert"></p>`;
+  document.body.style.setProperty('--save-bar-height', `${bar.getBoundingClientRect().height + 35}px`);
+  positionInspector();
+}
+function saveTimetable() {
+  const draft = currentDraft(), key = draftKey(selectedSchool, selectedTimetable), review = reviews.get(key), input = candidate();
+  if (!draft || review?.status !== 'VALID' || review.signature !== signature(input)) return;
+  const name = (draft.name || '').trim(), school = currentSchool();
+  if (!name || [...school.timetables.values()].some(t => t.name.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+    document.querySelector('#timetable-name-error').textContent = name ? 'This school already has a timetable with that name.' : 'Enter a name for the new timetable.'; return;
+  }
+  const id = crypto.randomUUID(), timetable = { id, name, definition: input.definition,
+    result: draft.generated && !Object.keys(draft.changes).length ? draft.source.result : review.evidence.result,
+    provenance: { sourceSchoolId: selectedSchool, sourceTimetableId: selectedTimetable, source: draft.source, build, savedAt: new Date().toISOString(), review: review.evidence } };
+  if (!persist(state => {
+    state.timetables[selectedSchool] ||= {}; state.timetables[selectedSchool][id] = timetable;
+    delete state.drafts[key]; state.lastTimetable[selectedSchool] = id; state.selected = { schoolId: selectedSchool, timetableId: id };
+    if (draft.generated && state.schools[selectedSchool]) state.schools[selectedSchool].generation = { status: 'SAVED', message: `Saved timetable: ${name}.` };
+  }, true)) return;
+  if (draft.generated) { school.timetables.delete(selectedTimetable); school.generation = { status: 'SAVED', message: `Saved timetable: ${name}.` }; }
+  school.timetables.set(id, timetable); reviews.delete(key); selectedTimetable = id; notice = ''; closeInspector(); render();
+}
+
+async function saveSchoolCopy() {
+  if (savingSchool) return;
+  editorAutosave.flush();
+  const text = editorText, name = document.querySelector('#school-copy-name').value.trim(), source = editorSource;
+  try {
+    if (!name) throw new Error('Enter a name for the school copy.');
+    if ([...schools.values()].some(s => s.name.toLocaleLowerCase() === name.toLocaleLowerCase())) throw new Error('A school with this name already exists. Choose another name.');
+    validateText(text); savingSchool = true; editorMessage = 'Checking the complete school definition…'; renderEditor();
+    const { value } = await demoRequest('/api/demo/definition/check', { method: 'POST', body: text, headers: { 'Content-Type': 'text/plain' } });
+    if (editorText !== text || document.querySelector('#school-copy-name').value.trim() !== name) throw new Error('The editor changed during checking. Save again to check the latest document.');
+    if (value.build !== build || !/^sha256:[a-f0-9]{64}$/.test(value.definitionRevision)) throw new Error('The definition check returned incompatible evidence. Reload and retry; the editor text is retained.');
+    const id = crypto.randomUUID(), school = { id, name, definition: JSON.parse(text), definitionRevision: value.definitionRevision,
+      build, sourceSchoolId: source, savedAt: new Date().toISOString() };
+    if (!persist(state => { state.schools[id] = school; state.selected = { schoolId: id, timetableId: null }; state.editor = null; }, true)) return;
+    editorAutosave.cancel();
+    schools.set(id, { ...school, timetables: new Map() }); selectedSchool = id; selectedTimetable = undefined;
+    filters = blankFilters(); closeInspector(); editorDirty = false; editorSource = id; editorText = JSON.stringify(school.definition, null, 2);
+    document.querySelector('#school-copy-name').value = ''; editorMessage = `School copy “${name}” saved in this browser. Generate a timetable when ready.`;
+    notice = ''; render();
+  } catch (error) { editorMessage = error.message; }
+  finally { savingSchool = false; renderEditor(); }
+}
+
+function renderGeneration() {
+  if (!currentSchool()) return;
+  const school = currentSchool(), large = school.definition.lessons.length > config.lessonThreshold;
+  const effort = school.effort || (large ? 'THOROUGH' : 'QUICK');
+  const select = document.querySelector('#generation-effort');
+  select.innerHTML = option('QUICK', `Quick (${config.quickSeconds}s)`, effort) + option('THOROUGH', `Thorough (${config.thoroughSeconds}s)`, effort);
+  select.disabled = !!activeGeneration;
+  const candidateWaiting = [...school.timetables.keys()].some(id => repository.state().drafts[draftKey(school.id, id)]?.generated);
+  document.querySelector('#generate-timetable').disabled = !!activeGeneration || !!school.bundled || candidateWaiting;
+  document.querySelector('#cancel-generation').hidden = !activeGeneration?.runId;
+  let text = activeGeneration ? `Generating for ${schools.get(activeGeneration.schoolId)?.name}. ${schools.get(activeGeneration.schoolId)?.generation?.message || 'Preparing…'}`
+    : school.generation?.message || (school.bundled ? 'Save a school copy before generating a timetable.' : `Generate for ${school.name} using its saved definition. Save a new school copy to use editor changes.`);
+  if (candidateWaiting) text += ' A generated candidate awaits naming in the timetable view. Close the editor to save or discard it.';
+  if (large && effort === 'QUICK') text += ' Quick is usually too short for this school size.';
+  text += ' Search budgets cover construction and search; queueing, startup and checking take additional time. More time may help but guarantees nothing.';
+  document.querySelector('#generation-status').textContent = text;
+  const indicator = document.querySelector('#generation-indicator');
+  const pending = [...schools.values()].find(s => s.id !== selectedSchool && s.generation?.status === 'CANDIDATE');
+  indicator.hidden = !activeGeneration && !pending;
+  indicator.innerHTML = activeGeneration ? `${html(text.split(' Search budgets')[0])} <button type="button" class="secondary" data-show-generation>View generation in Utilities</button>`
+    : pending ? `A generated timetable for ${html(pending.name)} awaits naming. <button type="button" class="secondary" data-view-generated="${html(pending.id)}">View generated timetable</button>` : '';
+}
+function generationState(schoolId, value, durable = false) {
+  const school = schools.get(schoolId); if (!school) return;
+  school.generation = value;
+  if (durable) persist(state => {
+    // Legacy browser definitions remain untouched; promote their complete content only when generation is explicit.
+    state.schools[schoolId] ||= { id: school.id, name: school.name, definition: school.definition, legacy: school.legacy };
+    state.schools[schoolId].generation = value;
+  });
+  renderGeneration();
+}
+async function generateTimetable() {
+  const school = currentSchool();
+  if (activeGeneration || school.bundled) return;
+  const token = { schoolId: school.id, runId: null }; activeGeneration = token;
+  generationState(school.id, { status: 'PREPARING', message: 'Preparing the saved school definition…' });
+  try {
+    const workspace = await demoRequest('/api/workspace');
+    if (activeGeneration !== token) return;
+    if (workspace.value.workspace.run) throw new Error('Another generation is active in this temporary session. Wait for it or reload to recover its controls.');
+    const installed = await demoRequest('/api/demo/definition', { method: 'POST', body: JSON.stringify(school.definition),
+      headers: { 'Content-Type': 'text/plain', 'If-Match': workspace.etag, 'X-Demo-Confirmed': 'true' } });
+    if (activeGeneration !== token) return;
+    const started = await demoRequest('/api/runs', { method: 'POST', body: { effort: school.effort || (school.definition.lessons.length > config.lessonThreshold ? 'THOROUGH' : 'QUICK') }, headers: { 'If-Match': installed.etag } });
+    if (activeGeneration !== token) return;
+    token.runId = started.value.workspace.run?.id || started.value.workspace.lastRun?.id;
+    if (!token.runId) throw new Error('Generation returned no run identity. The school is retained. Retry shortly.');
+    generationState(school.id, { runId: token.runId, status: started.value.workspace.run?.status || 'CHECKING_RESULT', message: 'Generation started.' }, true);
+    pollGeneration(token);
+  } catch (error) {
+    if (activeGeneration !== token) return;
+    activeGeneration = null; generationState(school.id, { status: 'FAILED', message: error.message }, true);
+  }
+}
+async function pollGeneration(token) {
+  if (activeGeneration !== token) return;
+  try {
+    const { value: run } = await demoRequest(`/api/runs/${encodeURIComponent(token.runId)}`);
+    if (activeGeneration !== token || token.cancelling) return;
+    if (['QUEUED', 'RUNNING', 'CHECKING_RESULT'].includes(run.status)) {
+      const message = run.status === 'QUEUED' ? `Queued · position ${run.queuePosition}. Approximate start in ${Math.ceil((run.estimatedStartMs || 0) / 1000)} seconds.`
+        : run.status === 'CHECKING_RESULT' ? 'Checking the complete result…' : `Running · ${Math.floor((run.elapsedTimeMs || 0) / 1000)} seconds. Search budget ${run.limit}.`;
+      generationState(token.schoolId, { runId: token.runId, status: run.status, message });
+      setTimeout(() => pollGeneration(token), 1000); return;
+    }
+    if (run.status !== 'FEASIBLE') {
+      activeGeneration = null;
+      const errors = run.validationReport?.errors?.map(e => `${e.location || '/'}: ${e.message}`).join(' ');
+      generationState(token.schoolId, { status: run.status, message: (run.message || 'Generation did not produce a complete timetable. The school is retained.') + (errors ? ' ' + errors : '') }, true); return;
+    }
+    const { value: proposal } = await demoRequest('/api/proposal');
+    if (activeGeneration !== token) return;
+    const school = schools.get(token.schoolId), { definition, result, ...provenance } = proposal;
+    const source = { id: 'generated-' + crypto.randomUUID(), name: 'Generated timetable', definition, result, provenance };
+    if (proposal.runId !== token.runId || proposal.solveProvenance?.kernelBuild !== build || !isTimetable(source)
+        || JSON.stringify(canonical(definition)) !== JSON.stringify(canonical(school.definition)) || result.status !== 'FEASIBLE')
+      throw new Error('The generated result could not be completely mapped to its school. It has not been saved. Try generation again.');
+    const key = draftKey(school.id, source.id), draft = { source, generated: true, changes: {}, name: '', createdAt: new Date().toISOString() };
+    persist(state => {
+      state.drafts[key] = draft; state.lastTimetable[school.id] = source.id;
+      if (state.schools[school.id]) state.schools[school.id].generation = { status: 'CANDIDATE', message: 'Generated timetable is ready for naming. Close the editor to save it.' };
+      if (selectedSchool === school.id) state.selected = { schoolId: school.id, timetableId: source.id };
+    });
+    school.timetables.set(source.id, source); school.generation = { status: 'CANDIDATE', message: `${proposal.reused ? 'Result reused from a checked identical search.' : 'Result computed and checked.'} Close the editor to name and save the timetable.` };
+    activeGeneration = null;
+    if (selectedSchool === school.id) { selectedTimetable = source.id; document.querySelector('#demo-utilities').open = false; render(); }
+    else renderGeneration();
+  } catch (error) {
+    if (activeGeneration !== token) return;
+    activeGeneration = null;
+    generationState(token.schoolId, { status: 'INTERRUPTED', message: `Generation could not be recovered: ${error.message} The saved school is retained; generate again when available.` }, true);
+  }
+}
+async function cancelGeneration() {
+  const token = activeGeneration; if (!token?.runId) return;
+  token.cancelling = true;
+  try {
+    const workspace = await demoRequest('/api/workspace');
+    await demoRequest(`/api/runs/${encodeURIComponent(token.runId)}`, { method: 'DELETE', headers: { 'If-Match': workspace.etag } });
+    if (activeGeneration !== token) return;
+    activeGeneration = null; generationState(token.schoolId, { status: 'CANCELLED', message: 'Generation cancelled. The saved school and all timetables are retained.' }, true);
+  } catch (error) { token.cancelling = false; editorMessage = error.message; renderEditor(); pollGeneration(token); }
+}
+function positionInspector() {
+  const inspector = document.querySelector('#lesson-inspector'); if (!inspector?.open) return;
+  const anchor = [...document.querySelectorAll('.demo-lesson')].find(element => element.dataset.lessonId === selectedLesson);
+  if (!anchor) return;
+  const rect = anchor.getBoundingClientRect(), width = Math.min(390, window.innerWidth - 24);
+  inspector.style.left = `${Math.max(12, Math.min(rect.right + 10, window.innerWidth - width - 12))}px`;
+  const bar = document.querySelector('#timetable-save-bar'), bottom = bar.hidden ? 20 : window.innerHeight - bar.getBoundingClientRect().top + 12;
+  inspector.style.top = `${Math.max(12, Math.min(rect.top, window.innerHeight - Math.min(inspector.scrollHeight, window.innerHeight - bottom - 24) - bottom))}px`;
+}
+function closeInspector() {
+  const inspector = document.querySelector('#lesson-inspector'); if (!inspector?.open) { selectedLesson = null; return; }
+  inspector.close();
+  const previous = selectedLesson; selectedLesson = null;
+  [...document.querySelectorAll('.demo-lesson')].find(e => e.dataset.lessonId === previous)?.focus({ preventScroll: true });
+}

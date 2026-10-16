@@ -1,0 +1,27 @@
+{
+  "stage": "/private/tmp/definition-hardening-production-20261017-1",
+  "fileCount": 177,
+  "archiveSha256": "8be4e1bc7ab45fd25730d0351670c60f4a95dce8ce3bbe48401fbac0fb31921d",
+  "baselineDeployment": "8891ef46-d92d-4e51-8efc-66690e81e6de",
+  "productionDelta": [
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoEvents.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoInputAdmissionFilter.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoInputJson.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoTimetableController.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemHandler.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/SecurityConfiguration.java",
+    "timetable-workspace/src/main/resources/static/workspace/definition-autosave.js",
+    "timetable-workspace/src/main/resources/static/workspace/demo-definitions.js",
+    "timetable-workspace/src/main/resources/static/workspace/demo-workbench.js"
+  ],
+  "destination": {
+    "project": "13d509af-1436-4024-bb64-f9f78fa439fc",
+    "environment": "a41a9c0e-ec3f-4ef4-9e08-996d998d1815",
+    "service": "672cabae-b54e-4965-bbb2-5236bec81c33",
+    "domain": "demo-smoke-production.up.railway.app"
+  },
+  "scope": "User authorized deployment of recommendations 1-5 and 8 to existing Free plan; provider settings unchanged."
+}

@@ -56,6 +56,11 @@ Current feature directories:
   [status and final regression evidence](school-definition-authoring/status.md).
 - [`timetable-matrix-lenses`](timetable-matrix-lenses/) proposes turning the Teacher and Room filters into lenses that
   pivot the whole-school Week/Day matrix to one teacher or room, superseding the separate focused schedule surface.
+- [`demo-deployment`](demo-deployment/) proposes a public, no-login demo profile of the workspace on Railway, with
+  in-memory per-visitor workspaces and an asynchronous, bounded solve queue offering Quick and Thorough budgets.
+  Instead of structured authoring, visitors pick a pseudonymized sample school from a dropdown and can edit its JSON;
+  edited versions are saved under an identifier in the browser's local storage and join the dropdown. Persistence,
+  accounts, and a hosted Timefold solver remain later, demand-driven steps.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.

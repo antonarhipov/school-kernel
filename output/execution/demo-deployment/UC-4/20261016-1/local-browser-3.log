@@ -1,0 +1,90 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+UC4 STEP 01-exact-save: main 1-5/G1/G2: exact CRLF/Unicode file saved in a five-field file-origin envelope; unfinished object makes no server change; second tab list refreshes
+UC4 STEP 02-reload-download: main 6/G3/G4: reload and selection preserve exact CRLF bytes; browser-local download matches the original file
+UC4 STEP 03-declines: 1b/4b/6a: declined selection, file opening, revert and named replacement preserve exact open and saved text
+UC4 STEP 04-replace: main 4-6/G2: confirmed named replacement stores exact edited text, saved-source derivation and explicit save time
+UC4 STEP 05-validation: 4a/G1/G4: first syntax line/column, reserved/invalid labels and non-object roots refused; malformed text still downloads exactly
+UC4 STEP failure: FAIL: com.microsoft.playwright.PlaywrightException: Error {
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 65.61 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoDefinitionsBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney -- Time elapsed: 65.42 s <<< ERROR!
+com.microsoft.playwright.PlaywrightException: 
+Error {
+  message='TypeError: Illegal invocation
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Illegal invocation
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:19519:12)
+    at async _Frame._evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:23705:24)
+    at async _Frame.evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:23701:16)
+    at async _FrameDispatcher.evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:54732:41)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:58)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.evaluate(FrameImpl.java:287)
+	at com.microsoft.playwright.impl.PageImpl.evaluate(PageImpl.java:773)
+	at com.microsoft.playwright.Page.evaluate(Page.java:4694)
+	at org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney(DemoDefinitionsBrowserIT.java:96)
+Caused by: com.microsoft.playwright.impl.DriverException: Error {
+  message='TypeError: Illegal invocation
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Illegal invocation
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:19519:12)
+    at async _Frame._evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:23705:24)
+    at async _Frame.evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:23701:16)
+    at async _FrameDispatcher.evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:54732:41)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:19135:27)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:278)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 6 more
+
+[ERROR] Errors: 
+[ERROR]   DemoDefinitionsBrowserIT.completeBrowserVersionJourney:96 » Playwright Error {
+  message='TypeError: Illegal invocation
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+  name='Error
+  stack='Error: TypeError: Illegal invocation
+    at UtilityScript.evaluate (<anonymous>:318:18)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at CRExecutionContext.evaluateWithArguments (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:35610:17)
+    at async LongStandingScope._race (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:3487:18)
+    at async evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:19519:12)
+    at async _Frame._evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:23705:24)
+    at async _Frame.evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:23701:16)
+    at async _FrameDispatcher.evaluateExpression (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:54732:41)
+    at async _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:12374:27)
+    at async DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-1488993611445715425/package/lib/coreBundle.js:19135:27)
+}
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default-cli) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

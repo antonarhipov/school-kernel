@@ -1,0 +1,158 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school · In use
+Two-class school
+Full school
+shared-initial · 2026-10-16T15:51:09.572Z
+
+Fictional school and people for trying timetable planning. 2 lessons · 1 classes · 1 teachers · 2 rooms · 3 periods. Quick search (5 seconds) is the default for a later solve. Selection only previews.
+
+Small school · In use as Current
+
+Definition JSON
+
+Unchanged
+
+Use this sample
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+The accepted sample is in use. No search was started.
+
+Small school✓ Current · acceptedRepair proposal · feasible
+
+Accepted revision: sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38
+
+Proposal · not current. Accepted baseline remains current
+
+Utilities
+Current
+Draft
+Proposal
+Time range
+Week
+Day
+Weekday
+Monday
+Search lessons
+Subject investigation
+No subject selected
+Subject 01
+Subject 02
+Teacher investigation
+No teacher selected
+John Doe
+Filters
+Complete school population
+Complete recurring Week
+Showing 1 of 1 classes
+Represented lessons: 2
+Active filters:
+No active filters
+Reset view
+Subject matches: 0
+Teacher matches: 0
+Dual matches: 0
+Class	Period	Monday
+Cohort 01	1	
+Subject 01
+Room 02
+Origin
+DIRECT
+
+2	
+Subject 02
+Room 01
+
+3	
+Subject 01
+Room 02
+Destination
+DIRECT
+Repair proposal · feasible
+Collapse Proposal task area
+Proposal impact review
+
+Kernel priority: period stability, then room-only stability, then ordinary preferences.
+
+Select a lesson in a change category or on the canvas to see its exact before and after values.
+
+Result computed and independently verified. Original solve process: 7.5 seconds; original checking: 1.4 seconds. This request waited 8.9 seconds. Search budget: PT5S. This proposal is private; Current changes only after explicit acceptance.
+
+Unique changed lessons
+1
+Protected accepted assignments
+0
+Termination reason
+TIME_LIMIT
+Execution limit
+PT5S
+Elapsed time
+6297 ms
+Protected accepted assignments · 0
+Direct effects of your intent: 1
+Solver ripple effects: 0
+
+Categories may overlap; changed lessons are counted once in the unique total.
+
+No native definition differences.
+
+Kernel change categories
+Additions
+0
+
+No lessons in this category.
+
+Cancellations
+0
+
+No lessons in this category.
+
+Teacher changes
+0
+
+No lessons in this category.
+
+Forced moves
+0
+
+No lessons in this category.
+
+Period moves
+1
+Lesson 01 · Accepted origin · current Lesson 01 · Proposed destination · not current
+Room-only moves
+0
+
+No lessons in this category.
+
+Impact groupings
+By class · 1
+By teacher · 1
+By room · 1
+By day · 1
+Inspect an unchanged accepted lesson
+Lesson 02
+Show accepted lesson
+
+Acceptance will replace the current baseline with this complete feasible proposal.
+
+I have accounted for the proposal impact and confirm it should become the current accepted timetable.
+Accept repair as current
+Revise intent
+Discard proposal
+Change a lesson’s teacher

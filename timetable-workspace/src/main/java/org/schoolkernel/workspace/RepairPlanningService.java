@@ -21,7 +21,7 @@ public class RepairPlanningService {
     private static final Set<String> CHANGE_CATEGORIES = Set.of(
             "additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves");
 
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final WorkspaceMutation mutation;
     private final RepairDraftService drafts;
     private final KernelPlanner planner;
@@ -32,7 +32,7 @@ public class RepairPlanningService {
             Thread.ofVirtual().name("repair-planning-", 0).factory());
 
     public RepairPlanningService(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             WorkspaceMutation mutation,
             RepairDraftService drafts,
             KernelPlanner planner,
@@ -114,7 +114,7 @@ public class RepairPlanningService {
         run.put("acceptedInputRevision", acceptedInputRevision);
         run.put("intentRevision", intentRevision);
         WorkspaceAggregate started = mutation.startRepairRun(sourceVersion, runId, document);
-        executor.submit(() -> finish(
+        executor.submit(repository.contextual(() -> finish(
                 runId,
                 started.version(),
                 sourceVersion,
@@ -123,7 +123,7 @@ public class RepairPlanningService {
                 intentRevision,
                 currentDefinition,
                 currentResult,
-                successorDefinition));
+                successorDefinition)));
         return started;
     }
 

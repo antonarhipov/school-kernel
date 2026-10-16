@@ -9,15 +9,20 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class ImportService {
-    private final WorkspaceRepository repository;
+    @org.springframework.beans.factory.annotation.Autowired(required = false) private DemoEvents events;
+    private final WorkspaceStore repository;
     private final SafeImportReader reader;
     private final KernelVerifier verifier;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private DemoVerificationService demoVerification;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private DemoDefinitionLimits demoLimits;
     private final ManifestService manifests;
     private final WorkspaceMutation mutation;
     private final ObjectMapper json;
 
     public ImportService(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             SafeImportReader reader,
             KernelVerifier verifier,
             ManifestService manifests,
@@ -45,8 +50,11 @@ public class ImportService {
                     "INVALID_WORKSPACE_TRANSITION",
                     "School data can be imported only into an empty workspace.");
         }
+        if (repository.ephemeral() && current.activeRunId() != null) throw new WorkspaceProblem(HttpStatus.CONFLICT,
+                "INVALID_WORKSPACE_TRANSITION", "Wait for or cancel the active run before importing. Existing work is unchanged.");
         ImportDocuments documents = reader.read(definition, result, archive);
-        KernelVerifier.Verification verification = verifier.verify(documents);
+        requireDemoBundle(documents);
+        KernelVerifier.Verification verification = verify(documents);
         var manifest = manifests.validatedOrGenerated(documents);
         ObjectNode workspace = json.createObjectNode();
         ObjectNode school = workspace.putObject("school");
@@ -66,7 +74,9 @@ public class ImportService {
             accepted.set("result", documents.result());
             accepted.set("manifest", manifest);
         }
-        return mutation.importVerified(expectedVersion, nextState, workspace);
+        var installed = mutation.importVerified(expectedVersion, nextState, workspace);
+        if (events != null) events.product(DemoEvents.Product.IMPORT);
+        return installed;
     }
 
     public WorkspaceAggregate clearWorkspace(String ifMatch) {
@@ -84,8 +94,11 @@ public class ImportService {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = requireMatchingVersion(ifMatch, current);
         DefinitionDraftService.requireNotAuthoring(current);
+        if (repository.ephemeral() && current.activeRunId() != null) throw new WorkspaceProblem(HttpStatus.CONFLICT,
+                "INVALID_WORKSPACE_TRANSITION", "Wait for or cancel the active run before importing. Existing work is unchanged.");
         ImportDocuments documents = reader.read(definition, result, archive);
-        KernelVerifier.Verification verification = verifier.verify(documents);
+        requireDemoBundle(documents);
+        KernelVerifier.Verification verification = verify(documents);
         var manifest = manifests.validatedOrGenerated(documents);
         ObjectNode workspace = json.createObjectNode();
         ObjectNode school = workspace.putObject("school");
@@ -105,7 +118,9 @@ public class ImportService {
             accepted.set("result", documents.result());
             accepted.set("manifest", manifest);
         }
-        return mutation.resetAndImport(expectedVersion, nextState, workspace);
+        var installed = mutation.resetAndImport(expectedVersion, nextState, workspace);
+        if (events != null) events.product(DemoEvents.Product.IMPORT);
+        return installed;
     }
 
     public WorkspaceAggregate replaceInitial(String ifMatch, MultipartFile definition) {
@@ -119,7 +134,8 @@ public class ImportService {
                     "The initial definition can be replaced only before planning.");
         }
         ImportDocuments documents = reader.read(definition, null, null);
-        KernelVerifier.Verification verification = verifier.verify(documents);
+        requireDemoBundle(documents);
+        KernelVerifier.Verification verification = verify(documents);
         ObjectNode workspace = json.createObjectNode();
         ObjectNode school = workspace.putObject("school");
         school.put("id", verification.schoolId());
@@ -129,6 +145,22 @@ public class ImportService {
         workspace.set("initialDefinition", documents.definition());
         return mutation.replaceInitial(
                 expectedVersion, WorkspaceState.INITIAL_DRAFT, workspace);
+    }
+
+    private KernelVerifier.Verification verify(ImportDocuments documents) {
+        if (demoVerification == null) return verifier.verify(documents);
+        demoLimits.check(documents.definition(), false);
+        if (documents.result() == null || !"FEASIBLE".equals(documents.result().path("status").asString()))
+            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "ACCEPTED_BUNDLE_REQUIRED", "A complete matching feasible result is required. Nothing was imported.");
+        manifests.validatedOrGenerated(documents); // Metadata is independently checked even on an exact verification hit.
+        return demoVerification.verify(documents);
+    }
+
+    private void requireDemoBundle(ImportDocuments documents) {
+        if (repository.ephemeral() && documents.mode() == ImportDocuments.ImportMode.INITIAL_DEFINITION) {
+            throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "SAVED_DEFINITION_REQUIRED",
+                    "Save a browser version in the School definition panel, then choose Use this definition. Definition-only import is unavailable in the demo.");
+        }
     }
 
     static long requireMatchingVersion(String ifMatch, WorkspaceAggregate current) {

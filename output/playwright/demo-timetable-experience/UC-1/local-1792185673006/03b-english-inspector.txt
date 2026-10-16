@@ -1,0 +1,387 @@
+SCHOOL KERNEL
+Interactive demo
+School
+Ranniku õppehoone
+Kasevälja Põhikool
+Coruscant Academy
+Meadowbrook Community School
+Timetable
+Variant A
+Variant B
+Utilities
+Variant B
+
+Meadowbrook Community School · 22 classes · 614 lessons per week
+
+Week
+Day
+Day
+Whole week
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Classes
+All classes
+Year 1A
+Year 1B
+Year 2A
+Year 2B
+Year 3A
+Year 3B
+Year 4A
+Year 4B
+Year 5A
+Year 5B
+Year 6A
+Year 6B
+Year 6C
+Year 7A
+Year 7B
+Year 7C
+Year 8A
+Year 8B
+Year 8C
+Year 9A
+Year 9B
+Year 9C
+Teachers
+All teachers
+Alice Whitcombe
+Oliver Fenwick
+Amelia Hartwell
+George Ashcroft
+Isla Brookfield
+Harry Westcott
+Grace Ellerton
+Jack Wrenford
+Sophie Alderwick
+Thomas Fairbourne
+Freya Henshaw
+William Oakley
+Lily Bracken
+James Merrivale
+Florence Wycliffe
+Henry Calder
+Evie Northwood
+Arthur Bellamy
+Charlotte Winslow
+Oscar Redfern
+Matilda Fallow
+Leo Penrose
+Emily Thorne
+Archie Ashwell
+Poppy Langford
+Samuel Briar
+Imogen Marchwood
+Daniel Ridley
+Rosie Whitford
+Edward Beckett
+Lucy Hartley
+Joseph Waverley
+Eleanor Foxley
+Benjamin Cresswell
+Daisy Rowan
+Frederick Dale
+Hannah Elmhurst
+Alexander Hawthorne
+Clara Woodleigh
+Nathan Everley
+Martha Greenwell
+Rooms
+All rooms
+Classroom 111
+Classroom 112
+Classroom 121
+Classroom 122
+Classroom 131
+Classroom 132
+Classroom 141
+Classroom 142
+Classroom 151
+Classroom 152
+Classroom 161
+Classroom 162
+Classroom 163
+Classroom 171
+Classroom 172
+Classroom 173
+Classroom 181
+Classroom 182
+Classroom 183
+Classroom 191
+Classroom 192
+Classroom 193
+Science Laboratory 1
+Science Laboratory 2
+Science Laboratory 3
+Sports Hall 1
+Sports Hall 2
+Art Studio 1
+Art Studio 2
+Music Room 1
+Music Room 2
+Computer Suite 1
+Computer Suite 2
+Design Workshop 1
+Design Workshop 2
+Subjects
+All subjects
+English
+Mathematics
+Science
+History
+Geography
+French
+Spanish
+Physical Education
+Art and Design
+Music
+Computing
+Design and Technology
+Personal, Social and Health Education
+Time slots
+All time slots
+Monday · 1. 08:45–09:35
+Monday · 2. 09:40–10:30
+Monday · 3. 10:50–11:40
+Monday · 4. 11:45–12:35
+Monday · 5. 13:20–14:10
+Monday · 6. 14:15–15:05
+Tuesday · 1. 08:45–09:35
+Tuesday · 2. 09:40–10:30
+Tuesday · 3. 10:50–11:40
+Tuesday · 4. 11:45–12:35
+Tuesday · 5. 13:20–14:10
+Tuesday · 6. 14:15–15:05
+Wednesday · 1. 08:45–09:35
+Wednesday · 2. 09:40–10:30
+Wednesday · 3. 10:50–11:40
+Wednesday · 4. 11:45–12:35
+Wednesday · 5. 13:20–14:10
+Wednesday · 6. 14:15–15:05
+Thursday · 1. 08:45–09:35
+Thursday · 2. 09:40–10:30
+Thursday · 3. 10:50–11:40
+Thursday · 4. 11:45–12:35
+Thursday · 5. 13:20–14:10
+Thursday · 6. 14:15–15:05
+Friday · 1. 08:45–09:35
+Friday · 2. 09:40–10:30
+Friday · 3. 10:50–11:40
+Friday · 4. 11:45–12:35
+Friday · 5. 13:20–14:10
+Friday · 6. 14:15–15:05
+Highlight lessons
+Clear filters
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+Year 1A	108:45–09:35	
+Mathematics
+Classroom 111
+	
+English
+Classroom 111
+	
+Design and Technology
+Design Workshop 1
+	
+Personal, Social and Health Education
+Classroom 111
+	
+English
+Classroom 111
+
+209:40–10:30	
+English
+Classroom 111
+	
+Mathematics
+Classroom 111
+	
+Physical Education
+Sports Hall 1
+	
+History
+Classroom 111
+	
+English
+Classroom 111
+
+310:50–11:40	
+Mathematics
+Classroom 111
+	
+Physical Education
+Sports Hall 1
+	
+Music
+Music Room 1
+	
+English
+Classroom 111
+	
+English
+Classroom 111
+
+411:45–12:35	
+Geography
+Classroom 111
+	
+Mathematics
+Classroom 111
+	
+Science
+Classroom 111
+	
+Art and Design
+Art Studio 1
+	
+Personal, Social and Health Education
+Classroom 111
+
+513:20–14:10	
+English
+Classroom 111
+	
+Computing
+Computer Suite 1
+	
+Science
+Classroom 111
+	
+Art and Design
+Art Studio 1
+	
+Mathematics
+Classroom 111
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+Fictional staff and schools · Your saved timetables and drafts stay in this browser on this device.
+About storage
+
+YEAR 1A
+
+Mathematics
+✕
+Teacher
+Alice Whitcombe
+Oliver Fenwick
+Amelia Hartwell
+George Ashcroft
+Isla Brookfield
+Harry Westcott
+Grace Ellerton
+Jack Wrenford
+Sophie Alderwick · not eligible for this lesson
+Thomas Fairbourne · not eligible for this lesson
+Freya Henshaw · not eligible for this lesson
+William Oakley · not eligible for this lesson
+Lily Bracken
+James Merrivale
+Florence Wycliffe
+Henry Calder
+Evie Northwood · not eligible for this lesson
+Arthur Bellamy · not eligible for this lesson
+Charlotte Winslow · not eligible for this lesson
+Oscar Redfern · not eligible for this lesson
+Matilda Fallow · not eligible for this lesson
+Leo Penrose · not eligible for this lesson
+Emily Thorne · not eligible for this lesson
+Archie Ashwell · not eligible for this lesson
+Poppy Langford · not eligible for this lesson
+Samuel Briar · not eligible for this lesson
+Imogen Marchwood · not eligible for this lesson
+Daniel Ridley · not eligible for this lesson
+Rosie Whitford · not eligible for this lesson
+Edward Beckett · not eligible for this lesson
+Lucy Hartley · not eligible for this lesson
+Joseph Waverley · not eligible for this lesson
+Eleanor Foxley · not eligible for this lesson
+Benjamin Cresswell · not eligible for this lesson
+Daisy Rowan · not eligible for this lesson
+Frederick Dale · not eligible for this lesson
+Hannah Elmhurst · not eligible for this lesson
+Alexander Hawthorne · not eligible for this lesson
+Clara Woodleigh · not eligible for this lesson
+Nathan Everley · not eligible for this lesson
+Martha Greenwell · not eligible for this lesson
+
+Only eligible teachers can be saved. Busy teachers remain selectable so you can swap lessons.
+
+Room
+Classroom 111 · 30 seats
+Classroom 112 · 30 seats
+Classroom 121 · 30 seats
+Classroom 122 · 30 seats
+Classroom 131 · 30 seats
+Classroom 132 · 30 seats
+Classroom 141 · 30 seats
+Classroom 142 · 30 seats
+Classroom 151 · 30 seats
+Classroom 152 · 30 seats
+Classroom 161 · 30 seats
+Classroom 162 · 30 seats
+Classroom 163 · 30 seats
+Classroom 171 · 30 seats
+Classroom 172 · 30 seats
+Classroom 173 · 30 seats
+Classroom 181 · 30 seats
+Classroom 182 · 30 seats
+Classroom 183 · 30 seats
+Classroom 191 · 30 seats
+Classroom 192 · 30 seats
+Classroom 193 · 30 seats
+Science Laboratory 1 · 32 seats · missing required equipment
+Science Laboratory 2 · 32 seats · missing required equipment
+Science Laboratory 3 · 32 seats · missing required equipment
+Sports Hall 1 · 32 seats · missing required equipment
+Sports Hall 2 · 32 seats · missing required equipment
+Art Studio 1 · 32 seats · missing required equipment
+Art Studio 2 · 32 seats · missing required equipment
+Music Room 1 · 32 seats · missing required equipment
+Music Room 2 · 32 seats · missing required equipment
+Computer Suite 1 · 32 seats · missing required equipment
+Computer Suite 2 · 32 seats · missing required equipment
+Design Workshop 1 · 32 seats · missing required equipment
+Design Workshop 2 · 32 seats · missing required equipment
+Time slot
+Monday · 1. 08:45–09:35
+Monday · 2. 09:40–10:30
+Monday · 3. 10:50–11:40
+Monday · 4. 11:45–12:35
+Monday · 5. 13:20–14:10
+Monday · 6. 14:15–15:05
+Tuesday · 1. 08:45–09:35
+Tuesday · 2. 09:40–10:30
+Tuesday · 3. 10:50–11:40
+Tuesday · 4. 11:45–12:35
+Tuesday · 5. 13:20–14:10
+Tuesday · 6. 14:15–15:05
+Wednesday · 1. 08:45–09:35
+Wednesday · 2. 09:40–10:30
+Wednesday · 3. 10:50–11:40
+Wednesday · 4. 11:45–12:35
+Wednesday · 5. 13:20–14:10
+Wednesday · 6. 14:15–15:05
+Thursday · 1. 08:45–09:35
+Thursday · 2. 09:40–10:30
+Thursday · 3. 10:50–11:40
+Thursday · 4. 11:45–12:35
+Thursday · 5. 13:20–14:10
+Thursday · 6. 14:15–15:05
+Friday · 1. 08:45–09:35
+Friday · 2. 09:40–10:30
+Friday · 3. 10:50–11:40
+Friday · 4. 11:45–12:35
+Friday · 5. 13:20–14:10
+Friday · 6. 14:15–15:05

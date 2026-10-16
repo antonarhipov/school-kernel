@@ -1,0 +1,148 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+18:21:51.248 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=c4e80ae5-0084-4df1-8570-cb4a3b123685 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=30
+18:21:51.290 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=7922f1ec-442f-4da9-b2f3-f290eac7a713 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=4
+18:21:51.332 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=1b53a427-0cb1-4022-8495-c9de23a04da5 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2
+18:21:51.348 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=5a62a2f3-83ed-447f-8d9c-d5c8e069afdf kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=3
+18:21:51.366 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=9443581a-1a19-4770-b35a-8aa7a3e37beb kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=1
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+18:21:54.066 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=5c4c48e2-830f-43f0-8e29-bff7a8fd38b9 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=131
+18:21:54.327 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"a2af5495-7410-4468-b6b5-5d803ef8c8be","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:54.332 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"detached","computationId":"a2af5495-7410-4468-b6b5-5d803ef8c8be","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+18:21:54.337 [demo-computation-a2af5495-7410-4468-b6b5-5d803ef8c8be] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"a2af5495-7410-4468-b6b5-5d803ef8c8be","operation":"INITIAL","outcome":"FAILED"}
+18:21:54.353 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"422c47b0-9a7e-42ef-8e19-721de61ebe2d","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:54.363 [demo-computation-422c47b0-9a7e-42ef-8e19-721de61ebe2d] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"422c47b0-9a7e-42ef-8e19-721de61ebe2d","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:54.508 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"eb30dfff-40cf-46ad-8a2e-dab057f0336a","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:54.511 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"acb39c8d-bd62-4e5c-b8b1-0b9d8ec7070d","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:54.518 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"coalesced","computationId":"acb39c8d-bd62-4e5c-b8b1-0b9d8ec7070d","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:55.500 [demo-run-expiry] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"detached","computationId":"acb39c8d-bd62-4e5c-b8b1-0b9d8ec7070d","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+18:21:55.505 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"detached","computationId":"acb39c8d-bd62-4e5c-b8b1-0b9d8ec7070d","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+18:21:55.510 [demo-computation-eb30dfff-40cf-46ad-8a2e-dab057f0336a] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"eb30dfff-40cf-46ad-8a2e-dab057f0336a","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:55.828 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"4a3535ba-d194-4b36-bd78-3e200f9d2878","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:55.835 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"3c15e2ed-09ea-4bd2-93ec-be3ee5fbdef7","operation":"INITIAL","preset":"THOROUGH","outcome":"QUEUED"}
+18:21:55.841 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"refused","operation":"INITIAL","preset":"QUICK","outcome":"DEMO_BUSY"}
+18:21:55.845 [demo-computation-4a3535ba-d194-4b36-bd78-3e200f9d2878] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"4a3535ba-d194-4b36-bd78-3e200f9d2878","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:55.854 [demo-computation-3c15e2ed-09ea-4bd2-93ec-be3ee5fbdef7] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"3c15e2ed-09ea-4bd2-93ec-be3ee5fbdef7","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:55.883 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"67965b0f-bbb9-4911-b4c6-ec1d646ea547","operation":"INITIAL","preset":"THOROUGH","outcome":"QUEUED"}
+18:21:55.889 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"refused","operation":"INITIAL","preset":"QUICK","outcome":"DEMO_BUSY"}
+18:21:55.893 [demo-computation-67965b0f-bbb9-4911-b4c6-ec1d646ea547] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"67965b0f-bbb9-4911-b4c6-ec1d646ea547","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:55.917 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"efcf759e-e18c-4724-91eb-52f4b142ee68","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:55.919 [demo-computation-efcf759e-e18c-4724-91eb-52f4b142ee68] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"efcf759e-e18c-4724-91eb-52f4b142ee68","operation":"INITIAL","outcome":"NOT_FOUND"}
+18:21:55.935 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"d9d887cb-1816-4c99-ae22-3242fc3c7956","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:55.937 [demo-computation-d9d887cb-1816-4c99-ae22-3242fc3c7956] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"d9d887cb-1816-4c99-ae22-3242fc3c7956","operation":"INITIAL","outcome":"NOT_FOUND"}
+18:21:55.969 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"36620171-6636-43bb-bd04-bc460cc18b4b","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:55.973 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"coalesced","computationId":"36620171-6636-43bb-bd04-bc460cc18b4b","operation":"INITIAL","preset":"QUICK","outcome":"RUNNING"}
+18:21:56.965 [demo-run-expiry] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"detached","computationId":"36620171-6636-43bb-bd04-bc460cc18b4b","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+18:21:57.189 [demo-computation-36620171-6636-43bb-bd04-bc460cc18b4b] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"36620171-6636-43bb-bd04-bc460cc18b4b","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.229 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"5778b866-1627-4c95-971e-1477c8b7d9b0","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.235 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"coalesced","computationId":"5778b866-1627-4c95-971e-1477c8b7d9b0","operation":"INITIAL","preset":"QUICK","outcome":"RUNNING"}
+18:21:57.238 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"detached","computationId":"5778b866-1627-4c95-971e-1477c8b7d9b0","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+18:21:57.240 [demo-computation-5778b866-1627-4c95-971e-1477c8b7d9b0] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"5778b866-1627-4c95-971e-1477c8b7d9b0","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.260 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"reused","computationId":"5778b866-1627-4c95-971e-1477c8b7d9b0","operation":"INITIAL","preset":"QUICK","outcome":"FEASIBLE"}
+18:21:57.264 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"reused","computationId":"5778b866-1627-4c95-971e-1477c8b7d9b0","operation":"INITIAL","preset":"QUICK","outcome":"FEASIBLE"}
+18:21:57.292 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"e8e018ef-b04c-450a-8531-b283607d7bb4","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.298 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"0752ddd6-4107-4253-9e84-76adb3dbdaa9","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.299 [demo-computation-e8e018ef-b04c-450a-8531-b283607d7bb4] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"e8e018ef-b04c-450a-8531-b283607d7bb4","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.301 [demo-computation-0752ddd6-4107-4253-9e84-76adb3dbdaa9] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"0752ddd6-4107-4253-9e84-76adb3dbdaa9","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.317 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"e5393b33-19b4-4a9e-b3f8-e234aa7e743d","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.319 [demo-computation-e5393b33-19b4-4a9e-b3f8-e234aa7e743d] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"e5393b33-19b4-4a9e-b3f8-e234aa7e743d","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.330 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"7ac9e885-cb27-47c6-8ea3-259128e91123","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.333 [demo-computation-7ac9e885-cb27-47c6-8ea3-259128e91123] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"7ac9e885-cb27-47c6-8ea3-259128e91123","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.349 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"a783b83e-389d-42f1-b09b-3dfb852e06c6","operation":"INITIAL","preset":"THOROUGH","outcome":"QUEUED"}
+18:21:57.352 [demo-computation-a783b83e-389d-42f1-b09b-3dfb852e06c6] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"a783b83e-389d-42f1-b09b-3dfb852e06c6","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.364 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"1fd8b72e-d888-44df-b3af-ffc18f201558","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.365 [demo-computation-1fd8b72e-d888-44df-b3af-ffc18f201558] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"1fd8b72e-d888-44df-b3af-ffc18f201558","operation":"INITIAL","outcome":"FEASIBLE"}
+18:21:57.386 [main] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"admitted","computationId":"f551ee5a-722e-4305-9fe8-6dc0bd5bc09d","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+18:21:57.387 [demo-computation-f551ee5a-722e-4305-9fe8-6dc0bd5bc09d] INFO org.schoolkernel.workspace.DemoPlanningService -- {"family":"work","event":"finished","computationId":"f551ee5a-722e-4305-9fe8-6dc0bd5bc09d","operation":"INITIAL","outcome":"FEASIBLE"}
+[ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 333.6 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoPlanningBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoPlanningBrowserIT.realRefusalsFailuresDisabledReuseAndForcedCancellation -- Time elapsed: 107.8 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:19135:44)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.waitForFunction(FrameImpl.java:819)
+	at com.microsoft.playwright.impl.PageImpl.waitForFunction(PageImpl.java:1469)
+	at com.microsoft.playwright.Page.waitForFunction(Page.java:8097)
+	at com.microsoft.playwright.Page.waitForFunction(Page.java:8135)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.realRefusalsFailuresDisabledReuseAndForcedCancellation(DemoPlanningBrowserIT.java:112)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:19135:44)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 7 more
+
+[ERROR] org.schoolkernel.workspace.DemoPlanningBrowserIT.realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart -- Time elapsed: 225.6 s <<< ERROR!
+com.microsoft.playwright.TimeoutError: 
+Error {
+  message='Timeout 100000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 100000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:19135:44)
+}
+	at com.microsoft.playwright.impl.WaitableResult.get(WaitableResult.java:52)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:147)
+	at com.microsoft.playwright.impl.Connection.sendMessage(Connection.java:136)
+	at com.microsoft.playwright.impl.ChannelOwner.sendMessage(ChannelOwner.java:133)
+	at com.microsoft.playwright.impl.FrameImpl.waitForFunction(FrameImpl.java:819)
+	at com.microsoft.playwright.impl.PageImpl.waitForFunction(PageImpl.java:1469)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.proposal(DemoPlanningBrowserIT.java:152)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart(DemoPlanningBrowserIT.java:72)
+Caused by: com.microsoft.playwright.TimeoutError: Error {
+  message='Timeout 100000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 100000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:19135:44)
+}
+	at com.microsoft.playwright.impl.Connection.dispatch(Connection.java:274)
+	at com.microsoft.playwright.impl.Connection.processOneMessage(Connection.java:230)
+	at com.microsoft.playwright.impl.ChannelOwner.runUntil(ChannelOwner.java:145)
+	... 6 more
+
+[ERROR] Errors: 
+[ERROR]   DemoPlanningBrowserIT.realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart:72->proposal:152 » Timeout Error {
+  message='Timeout 100000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 100000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:19135:44)
+}
+[ERROR]   DemoPlanningBrowserIT.realRefusalsFailuresDisabledReuseAndForcedCancellation:112 » Timeout Error {
+  message='Timeout 30000ms exceeded.
+  name='TimeoutError
+  stack='TimeoutError: Timeout 30000ms exceeded.
+    at _ProgressController.run (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:12360:32)
+    at DispatcherConnection.dispatch (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/playwright-java-4155973321231841075/package/lib/coreBundle.js:19135:44)
+}
+[ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

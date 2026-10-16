@@ -1,0 +1,1113 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 9,
+  "schoolId": "demo-school-001",
+  "displayName": "Two-class school",
+  "subjects": [
+    {
+      "id": "demo-subject-006",
+      "displayName": "Subject 06"
+    },
+    {
+      "id": "demo-subject-003",
+      "displayName": "Subject 03"
+    },
+    {
+      "id": "demo-subject-007",
+      "displayName": "Subject 07"
+    },
+    {
+      "id": "demo-subject-008",
+      "displayName": "Subject 08"
+    },
+    {
+      "id": "demo-subject-010",
+      "displayName": "Subject 10"
+    },
+    {
+      "id": "demo-subject-004",
+      "displayName": "Subject 04"
+    },
+    {
+      "id": "demo-subject-001",
+      "displayName": "Subject 01"
+    },
+    {
+      "id": "demo-subject-009",
+      "displayName": "Subject 09"
+    },
+    {
+      "id": "demo-subject-002",
+      "displayName": "Subject 02"
+    },
+    {
+      "id": "demo-subject-005",
+      "displayName": "Subject 05"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "demo-teacher-003",
+      "displayName": "Alice Smith",
+      "qualifiedSubjectIds": [
+        "demo-subject-006"
+      ]
+    },
+    {
+      "id": "demo-teacher-005",
+      "displayName": "Charlie Brown",
+      "qualifiedSubjectIds": [
+        "demo-subject-003"
+      ]
+    },
+    {
+      "id": "demo-teacher-011",
+      "displayName": "Ian Black",
+      "qualifiedSubjectIds": [
+        "demo-subject-007"
+      ]
+    },
+    {
+      "id": "demo-teacher-012",
+      "displayName": "Julia Black",
+      "qualifiedSubjectIds": [
+        "demo-subject-008"
+      ]
+    },
+    {
+      "id": "demo-teacher-002",
+      "displayName": "Jane Doe",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ]
+    },
+    {
+      "id": "demo-teacher-001",
+      "displayName": "John Doe",
+      "qualifiedSubjectIds": [
+        "demo-subject-004"
+      ]
+    },
+    {
+      "id": "demo-teacher-009",
+      "displayName": "George White",
+      "qualifiedSubjectIds": [
+        "demo-subject-001"
+      ]
+    },
+    {
+      "id": "demo-teacher-007",
+      "displayName": "Edward Green",
+      "qualifiedSubjectIds": [
+        "demo-subject-009"
+      ]
+    },
+    {
+      "id": "demo-teacher-010",
+      "displayName": "Helen White",
+      "qualifiedSubjectIds": [
+        "demo-subject-002"
+      ]
+    },
+    {
+      "id": "demo-teacher-004",
+      "displayName": "Bob Smith",
+      "qualifiedSubjectIds": [
+        "demo-subject-005"
+      ]
+    },
+    {
+      "id": "demo-teacher-006",
+      "displayName": "Diana Prince",
+      "qualifiedSubjectIds": [
+        "demo-subject-006",
+        "demo-subject-003"
+      ]
+    },
+    {
+      "id": "demo-teacher-008",
+      "displayName": "Fiona Green",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ]
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "demo-cohort-001",
+      "displayName": "Cohort 01",
+      "size": 24
+    },
+    {
+      "id": "demo-cohort-002",
+      "displayName": "Cohort 02",
+      "size": 24
+    }
+  ],
+  "rooms": [
+    {
+      "id": "demo-room-001",
+      "displayName": "Room 01",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-002",
+      "displayName": "Room 02",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-003",
+      "displayName": "Room 03",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-004",
+      "displayName": "Room 04",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-005",
+      "displayName": "Room 05",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-006",
+      "displayName": "Room 06",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-007",
+      "displayName": "Room 07",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-008",
+      "displayName": "Room 08",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-009",
+      "displayName": "Room 09",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-010",
+      "displayName": "Room 10",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-011",
+      "displayName": "Room 11",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-room-012",
+      "displayName": "Room 12",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-003"
+      ]
+    },
+    {
+      "id": "demo-room-013",
+      "displayName": "Room 13",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-001"
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "id": "demo-period-008",
+      "displayName": "Monday 1",
+      "weekday": "MONDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "demo-period-009",
+      "displayName": "Monday 2",
+      "weekday": "MONDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "demo-period-010",
+      "displayName": "Monday 3",
+      "weekday": "MONDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "demo-period-011",
+      "displayName": "Monday 4",
+      "weekday": "MONDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "demo-period-012",
+      "displayName": "Monday 5",
+      "weekday": "MONDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "demo-period-013",
+      "displayName": "Monday 6",
+      "weekday": "MONDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "demo-period-014",
+      "displayName": "Monday 7",
+      "weekday": "MONDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "demo-period-022",
+      "displayName": "Tuesday 1",
+      "weekday": "TUESDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "demo-period-023",
+      "displayName": "Tuesday 2",
+      "weekday": "TUESDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "demo-period-024",
+      "displayName": "Tuesday 3",
+      "weekday": "TUESDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "demo-period-025",
+      "displayName": "Tuesday 4",
+      "weekday": "TUESDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "demo-period-026",
+      "displayName": "Tuesday 5",
+      "weekday": "TUESDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "demo-period-027",
+      "displayName": "Tuesday 6",
+      "weekday": "TUESDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "demo-period-028",
+      "displayName": "Tuesday 7",
+      "weekday": "TUESDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "demo-period-029",
+      "displayName": "Wednesday 1",
+      "weekday": "WEDNESDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "demo-period-030",
+      "displayName": "Wednesday 2",
+      "weekday": "WEDNESDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "demo-period-031",
+      "displayName": "Wednesday 3",
+      "weekday": "WEDNESDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "demo-period-032",
+      "displayName": "Wednesday 4",
+      "weekday": "WEDNESDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "demo-period-033",
+      "displayName": "Wednesday 5",
+      "weekday": "WEDNESDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "demo-period-034",
+      "displayName": "Wednesday 6",
+      "weekday": "WEDNESDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "demo-period-035",
+      "displayName": "Wednesday 7",
+      "weekday": "WEDNESDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "demo-period-015",
+      "displayName": "Thursday 1",
+      "weekday": "THURSDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "demo-period-016",
+      "displayName": "Thursday 2",
+      "weekday": "THURSDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "demo-period-017",
+      "displayName": "Thursday 3",
+      "weekday": "THURSDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "demo-period-018",
+      "displayName": "Thursday 4",
+      "weekday": "THURSDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "demo-period-019",
+      "displayName": "Thursday 5",
+      "weekday": "THURSDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "demo-period-020",
+      "displayName": "Thursday 6",
+      "weekday": "THURSDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "demo-period-021",
+      "displayName": "Thursday 7",
+      "weekday": "THURSDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    },
+    {
+      "id": "demo-period-001",
+      "displayName": "Friday 1",
+      "weekday": "FRIDAY",
+      "order": 1,
+      "startTime": "08:00:00",
+      "endTime": "08:40:00"
+    },
+    {
+      "id": "demo-period-002",
+      "displayName": "Friday 2",
+      "weekday": "FRIDAY",
+      "order": 2,
+      "startTime": "08:45:00",
+      "endTime": "09:30:00"
+    },
+    {
+      "id": "demo-period-003",
+      "displayName": "Friday 3",
+      "weekday": "FRIDAY",
+      "order": 3,
+      "startTime": "09:40:00",
+      "endTime": "10:25:00"
+    },
+    {
+      "id": "demo-period-004",
+      "displayName": "Friday 4",
+      "weekday": "FRIDAY",
+      "order": 4,
+      "startTime": "10:45:00",
+      "endTime": "11:30:00"
+    },
+    {
+      "id": "demo-period-005",
+      "displayName": "Friday 5",
+      "weekday": "FRIDAY",
+      "order": 5,
+      "startTime": "11:50:00",
+      "endTime": "12:35:00"
+    },
+    {
+      "id": "demo-period-006",
+      "displayName": "Friday 6",
+      "weekday": "FRIDAY",
+      "order": 6,
+      "startTime": "12:55:00",
+      "endTime": "13:40:00"
+    },
+    {
+      "id": "demo-period-007",
+      "displayName": "Friday 7",
+      "weekday": "FRIDAY",
+      "order": 7,
+      "startTime": "13:50:00",
+      "endTime": "14:35:00"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "demo-lesson-011",
+      "displayName": "Lesson 11",
+      "subjectId": "demo-subject-006",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-003",
+      "seriesId": "demo-series-006",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-011"
+      ]
+    },
+    {
+      "id": "demo-lesson-004",
+      "displayName": "Lesson 04",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-005",
+      "seriesId": "demo-series-003",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-006"
+      ]
+    },
+    {
+      "id": "demo-lesson-005",
+      "displayName": "Lesson 05",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-005",
+      "seriesId": "demo-series-003",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "demo-lesson-006",
+      "displayName": "Lesson 06",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-005",
+      "seriesId": "demo-series-003",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-006"
+      ]
+    },
+    {
+      "id": "demo-lesson-007",
+      "displayName": "Lesson 07",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-005",
+      "seriesId": "demo-series-003",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-004"
+      ]
+    },
+    {
+      "id": "demo-lesson-012",
+      "displayName": "Lesson 12",
+      "subjectId": "demo-subject-007",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-011",
+      "seriesId": "demo-series-007",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-003"
+      ]
+    },
+    {
+      "id": "demo-lesson-013",
+      "displayName": "Lesson 13",
+      "subjectId": "demo-subject-007",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-011",
+      "seriesId": "demo-series-007",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-003"
+      ]
+    },
+    {
+      "id": "demo-lesson-014",
+      "displayName": "Lesson 14",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-008",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-015",
+      "displayName": "Lesson 15",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-008",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-016",
+      "displayName": "Lesson 16",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-008",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-017",
+      "displayName": "Lesson 17",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-008",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-018",
+      "displayName": "Lesson 18",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-008",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-020",
+      "displayName": "Lesson 20",
+      "subjectId": "demo-subject-010",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-002",
+      "seriesId": "demo-series-010",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-001"
+      ]
+    },
+    {
+      "id": "demo-lesson-021",
+      "displayName": "Lesson 21",
+      "subjectId": "demo-subject-010",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-002",
+      "seriesId": "demo-series-010",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-001"
+      ]
+    },
+    {
+      "id": "demo-lesson-022",
+      "displayName": "Lesson 22",
+      "subjectId": "demo-subject-010",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-002",
+      "seriesId": "demo-series-010",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-001"
+      ]
+    },
+    {
+      "id": "demo-lesson-008",
+      "displayName": "Lesson 08",
+      "subjectId": "demo-subject-004",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-001",
+      "seriesId": "demo-series-004",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-005"
+      ]
+    },
+    {
+      "id": "demo-lesson-009",
+      "displayName": "Lesson 09",
+      "subjectId": "demo-subject-004",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-001",
+      "seriesId": "demo-series-004",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-005"
+      ]
+    },
+    {
+      "id": "demo-lesson-001",
+      "displayName": "Lesson 01",
+      "subjectId": "demo-subject-001",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-009",
+      "seriesId": "demo-series-001",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "demo-lesson-002",
+      "displayName": "Lesson 02",
+      "subjectId": "demo-subject-001",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-009",
+      "seriesId": "demo-series-001",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "demo-lesson-019",
+      "displayName": "Lesson 19",
+      "subjectId": "demo-subject-009",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-007",
+      "seriesId": "demo-series-009",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-003"
+      ],
+      "preferredRoomIds": [
+        "demo-room-012"
+      ]
+    },
+    {
+      "id": "demo-lesson-003",
+      "displayName": "Lesson 03",
+      "subjectId": "demo-subject-002",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-010",
+      "seriesId": "demo-series-002",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-001"
+      ],
+      "preferredRoomIds": [
+        "demo-room-013"
+      ]
+    },
+    {
+      "id": "demo-lesson-010",
+      "displayName": "Lesson 10",
+      "subjectId": "demo-subject-005",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-004",
+      "seriesId": "demo-series-005",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-010"
+      ]
+    },
+    {
+      "id": "demo-lesson-028",
+      "displayName": "Lesson 28",
+      "subjectId": "demo-subject-004",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-001",
+      "seriesId": "demo-series-013",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-005"
+      ]
+    },
+    {
+      "id": "demo-lesson-029",
+      "displayName": "Lesson 29",
+      "subjectId": "demo-subject-004",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-001",
+      "seriesId": "demo-series-013",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-005"
+      ]
+    },
+    {
+      "id": "demo-lesson-023",
+      "displayName": "Lesson 23",
+      "subjectId": "demo-subject-002",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-010",
+      "seriesId": "demo-series-011",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-001"
+      ],
+      "preferredRoomIds": [
+        "demo-room-013"
+      ]
+    },
+    {
+      "id": "demo-lesson-024",
+      "displayName": "Lesson 24",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-006",
+      "seriesId": "demo-series-012",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "demo-lesson-025",
+      "displayName": "Lesson 25",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-006",
+      "seriesId": "demo-series-012",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "demo-lesson-026",
+      "displayName": "Lesson 26",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-006",
+      "seriesId": "demo-series-012",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-008"
+      ]
+    },
+    {
+      "id": "demo-lesson-027",
+      "displayName": "Lesson 27",
+      "subjectId": "demo-subject-003",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-006",
+      "seriesId": "demo-series-012",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": []
+    },
+    {
+      "id": "demo-lesson-034",
+      "displayName": "Lesson 34",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-017",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-035",
+      "displayName": "Lesson 35",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-017",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-036",
+      "displayName": "Lesson 36",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-017",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-037",
+      "displayName": "Lesson 37",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-017",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-038",
+      "displayName": "Lesson 38",
+      "subjectId": "demo-subject-008",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-012",
+      "seriesId": "demo-series-017",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-009"
+      ]
+    },
+    {
+      "id": "demo-lesson-040",
+      "displayName": "Lesson 40",
+      "subjectId": "demo-subject-010",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-008",
+      "seriesId": "demo-series-019",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-002"
+      ]
+    },
+    {
+      "id": "demo-lesson-041",
+      "displayName": "Lesson 41",
+      "subjectId": "demo-subject-010",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-008",
+      "seriesId": "demo-series-019",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-002"
+      ]
+    },
+    {
+      "id": "demo-lesson-042",
+      "displayName": "Lesson 42",
+      "subjectId": "demo-subject-010",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-008",
+      "seriesId": "demo-series-019",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-002"
+      ]
+    },
+    {
+      "id": "demo-lesson-032",
+      "displayName": "Lesson 32",
+      "subjectId": "demo-subject-007",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-011",
+      "seriesId": "demo-series-016",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-003"
+      ]
+    },
+    {
+      "id": "demo-lesson-033",
+      "displayName": "Lesson 33",
+      "subjectId": "demo-subject-007",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-011",
+      "seriesId": "demo-series-016",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-003"
+      ]
+    },
+    {
+      "id": "demo-lesson-030",
+      "displayName": "Lesson 30",
+      "subjectId": "demo-subject-005",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-004",
+      "seriesId": "demo-series-014",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-007"
+      ]
+    },
+    {
+      "id": "demo-lesson-039",
+      "displayName": "Lesson 39",
+      "subjectId": "demo-subject-009",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-007",
+      "seriesId": "demo-series-018",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-003"
+      ],
+      "preferredRoomIds": [
+        "demo-room-012"
+      ]
+    },
+    {
+      "id": "demo-lesson-031",
+      "displayName": "Lesson 31",
+      "subjectId": "demo-subject-006",
+      "cohortId": "demo-cohort-002",
+      "teacherId": "demo-teacher-006",
+      "seriesId": "demo-series-015",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ],
+      "preferredRoomIds": [
+        "demo-room-008"
+      ]
+    }
+  ]
+}

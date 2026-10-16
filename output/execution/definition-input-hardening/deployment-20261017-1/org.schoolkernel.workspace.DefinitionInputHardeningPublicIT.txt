@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.schoolkernel.workspace.DefinitionInputHardeningPublicIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 55.78 s -- in org.schoolkernel.workspace.DefinitionInputHardeningPublicIT

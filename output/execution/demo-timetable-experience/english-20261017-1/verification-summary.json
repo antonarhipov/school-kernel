@@ -1,0 +1,31 @@
+{
+  "verdict": "PASS",
+  "school": "Meadowbrook Community School",
+  "dimensions": {
+    "classes": 22,
+    "lessons": 614,
+    "teachers": 41,
+    "rooms": 35,
+    "periods": 30
+  },
+  "bundledSchools": 4,
+  "bundledTimetables": 8,
+  "changedLessonsBetweenVariants": 32,
+  "publicURL": "https://demo-smoke-production.up.railway.app/workspace/",
+  "deployment": "dc3b9ac9-909b-4d18-a60d-b87a5f4cf7e0",
+  "imageDigest": "sha256:67c8d7a05bb70d7a6b556d41c7492ea7d1d3a84ad3657a67dddd6c02306ec595",
+  "plan": "FREE",
+  "productionFiles": 174,
+  "originalSamplesAndStylesUnchanged": true,
+  "unitTests": {
+    "DemoSamplesTest": 7,
+    "DemoEventsTest": 4
+  },
+  "finalUC1Browser": "output/playwright/demo-timetable-experience/UC-1/local-1792185961440/ledger.md",
+  "publicBrowser": "output/playwright/demo-timetable-experience/public/english-20261017-1/ledger.md",
+  "restartBrowser": "output/playwright/demo-timetable-experience/public/english-restart-20261017-2/ledger.md",
+  "readinessChecks": 5,
+  "activeWorkspaces": 0,
+  "temporaryBrowserStateRemoved": true,
+  "initialRestartHarnessFailure": "relative saved-evidence path, corrected to absolute path; first attempt retained; no product change needed"
+}

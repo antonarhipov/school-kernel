@@ -1,0 +1,37 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T19:25:09.476+03:00  INFO 84844 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 84844 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-18180725227986632497/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T19:25:09.482+03:00  INFO 84844 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T19:25:12.567+03:00  INFO 84844 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 58238 (https)
+2026-10-16T19:25:12.594+03:00  INFO 84844 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T19:25:12.594+03:00  INFO 84844 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T19:25:12.619+03:00  INFO 84844 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2934 ms
+2026-10-16T19:25:12.905+03:00  INFO 84844 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T19:25:15.848+03:00  INFO 84844 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=9693e202-2a62-4d47-9b79-a81193316564 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1828
+2026-10-16T19:25:17.339+03:00  INFO 84844 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=476c753e-7c13-4b23-bbe8-1cea3d21bad3 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1454
+2026-10-16T19:25:19.275+03:00  INFO 84844 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=3d27ce01-628c-4c33-a5ab-b47c374d1d7c kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1892
+2026-10-16T19:25:20.449+03:00  INFO 84844 --- [timetable-workspace] [           main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-127.0.0.1-58238], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-10-16T19:25:20.465+03:00  INFO 84844 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 58238 (https) with context path '/'
+2026-10-16T19:25:20.503+03:00  INFO 84844 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 12.114 seconds (process running for 13.207)
+2026-10-16T19:25:41.448+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-9] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T19:25:41.449+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T19:25:41.452+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-10-16T19:25:51.969+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-8] o.schoolkernel.workspace.KernelVerifier  : correlationId=5658e221-2c7d-4d70-ad19-0c592e67ca47 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1323
+2026-10-16T19:25:53.645+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-7] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"5a0d1413-cdbf-42b5-9667-16f164f13a34","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+2026-10-16T19:26:02.128+03:00  INFO 84844 --- [timetable-workspace] [67-16f164f13a34] o.schoolkernel.workspace.KernelVerifier  : correlationId=f5edfc33-3d5b-4fac-a577-64a3766199fe kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1381
+2026-10-16T19:26:02.145+03:00  INFO 84844 --- [timetable-workspace] [67-16f164f13a34] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"5a0d1413-cdbf-42b5-9667-16f164f13a34","operation":"INITIAL","outcome":"FEASIBLE"}
+2026-10-16T19:26:05.113+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-5] o.s.workspace.DemoPlanningService        : {"family":"work","event":"reused","computationId":"5a0d1413-cdbf-42b5-9667-16f164f13a34","operation":"INITIAL","preset":"QUICK","outcome":"FEASIBLE"}
+2026-10-16T19:26:07.623+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-1] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"9d5f52ad-80fd-479a-be95-9d01499e1b7a","operation":"REPAIR","preset":"QUICK","outcome":"QUEUED"}
+2026-10-16T19:26:16.519+03:00  INFO 84844 --- [timetable-workspace] [95-9d01499e1b7a] o.schoolkernel.workspace.KernelVerifier  : correlationId=a5a7b114-6b15-4978-8566-e3d26e939ad2 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1490
+2026-10-16T19:26:16.543+03:00  INFO 84844 --- [timetable-workspace] [95-9d01499e1b7a] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"9d5f52ad-80fd-479a-be95-9d01499e1b7a","operation":"REPAIR","outcome":"FEASIBLE"}
+2026-10-16T19:26:20.419+03:00  INFO 84844 --- [timetable-workspace] [.1-58238-exec-2] o.s.workspace.DemoPlanningService        : {"family":"work","event":"reused","computationId":"9d5f52ad-80fd-479a-be95-9d01499e1b7a","operation":"REPAIR","preset":"QUICK","outcome":"FEASIBLE"}
+2026-10-16T19:26:23.033+03:00  INFO 84844 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T19:26:23.042+03:00  INFO 84844 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete

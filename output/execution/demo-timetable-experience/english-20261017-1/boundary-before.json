@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-16T21:21:34.582268+00:00",
+  "project": "13d509af-1436-4024-bb64-f9f78fa439fc",
+  "environment": "a41a9c0e-ec3f-4ef4-9e08-996d998d1815",
+  "service": "672cabae-b54e-4965-bbb2-5236bec81c33",
+  "domain": "demo-smoke-production.up.railway.app",
+  "projectServiceCount": 1,
+  "environmentServiceCount": 1,
+  "replicas": 1,
+  "tcpProxies": [],
+  "deployment": "7af6ff33-8d8a-41ae-9022-4daf4d112d5c",
+  "status": "SLEEPING",
+  "imageDigest": "sha256:a154c471df74d8ed1521cc5201c3e3d3dc1152689cb3d5e6019aa1b434537bb6",
+  "verdict": "PASS: isolated project/environment, one service/replica, generated domain, no TCP proxy"
+}

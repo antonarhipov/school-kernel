@@ -1,0 +1,286 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school · In use
+Full school
+
+Fictional school and people for trying timetable planning. 42 lessons · 2 classes · 12 teachers · 13 rooms · 35 periods. Quick search (5 seconds) is the default for a later solve. Selection only previews.
+
+Two-class school · In use as Current
+
+Definition JSON
+
+Unchanged
+
+Use this sample
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+The accepted sample is in use. No search was started.
+
+Two-class school✓ Current · acceptedAccepted baseline · current timetable
+
+Accepted revision: sha256:d8c185117b5b4e27d0c40bafcbff1e7be09f3357e8880d6b4203b7a00cae4116
+
+Utilities
+Current
+Timetable details
+Time range
+Week
+Day
+Weekday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Search lessons
+Subject investigation
+No subject selected
+Subject 06
+Subject 03
+Subject 07
+Subject 08
+Subject 10
+Subject 04
+Subject 01
+Subject 09
+Subject 02
+Subject 05
+Teacher investigation
+No teacher selected
+Alice Smith
+Charlie Brown
+Ian Black
+Julia Black
+Jane Doe
+John Doe
+George White
+Edward Green
+Helen White
+Bob Smith
+Diana Prince
+Fiona Green
+Filters
+Complete school population
+Complete recurring Week
+Showing 2 of 2 classes
+Represented lessons: 42
+Active filters:
+No active filters
+Reset view
+Subject matches: 0
+Teacher matches: 0
+Dual matches: 0
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+Cohort 01	108:00–08:40	
+Subject 06
+Room 11
+	
+Subject 03
+Room 07
+	
+Empty
+	
+Subject 03
+Room 06
+	
+Empty
+
+208:45–09:30	
+Subject 07
+Room 03
+	
+Subject 07
+Room 03
+	
+Subject 08
+Room 09
+	
+Subject 08
+Room 09
+	
+Subject 08
+Room 09
+
+309:40–10:25	
+Subject 08
+Room 09
+	
+Subject 08
+Room 09
+	
+Subject 10
+Room 01
+	
+Subject 10
+Room 01
+	
+Subject 10
+Room 01
+
+410:45–11:30	
+Subject 04
+Room 05
+	
+Subject 04
+Room 05
+	
+Subject 01
+Room 01
+	
+Subject 01
+Room 04
+	
+Subject 09
+Room 12
+
+511:50–12:35	
+Subject 02
+Room 13
+	
+Subject 05
+Room 10
+	
+Subject 03
+Room 06
+	
+Empty
+	
+Subject 03
+Room 04
+
+612:55–13:40	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+
+713:50–14:35	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+
+Cohort 02	108:00–08:40	
+Empty
+	
+Empty
+	
+Empty
+	
+Subject 07
+Room 03
+	
+Subject 03
+Room 03
+
+208:45–09:30	
+Empty
+	
+Subject 03
+Room 05
+	
+Subject 10
+Room 02
+	
+Subject 03
+Room 06
+	
+Subject 10
+Room 02
+
+309:40–10:25	
+Subject 04
+Room 05
+	
+Subject 04
+Room 05
+	
+Subject 07
+Room 03
+	
+Subject 06
+Room 11
+	
+Subject 05
+Room 07
+
+410:45–11:30	
+Subject 08
+Room 09
+	
+Subject 08
+Room 09
+	
+Subject 09
+Room 12
+	
+Subject 10
+Room 02
+	
+Subject 02
+Room 13
+
+511:50–12:35	
+Subject 08
+Room 09
+	
+Subject 08
+Room 09
+	
+Subject 03
+Room 08
+	
+Empty
+	
+Empty
+
+612:55–13:40	
+Subject 08
+Room 09
+	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+
+713:50–14:35	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+	
+Empty
+Start a protected repair
+Change a lesson’s teacher

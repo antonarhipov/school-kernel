@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.schoolkernel.application.ReplanServiceTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.497 s -- in org.schoolkernel.application.ReplanServiceTest

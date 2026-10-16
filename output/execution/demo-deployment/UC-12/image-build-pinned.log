@@ -1,0 +1,73 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.26kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/eclipse-temurin:25-jre@sha256:fd4b1c02c64eef378212e23656fc0b0caa41a357876fa0b60e51ceda94a3db64
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-25@sha256:407c4423cec0cf2981055bc2c6c0dc211d9605b6669279b95997f2d1c7e91e2c
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 670B done
+#4 DONE 0.0s
+
+#5 [build  1/10] FROM docker.io/library/maven:3.9.11-eclipse-temurin-25@sha256:407c4423cec0cf2981055bc2c6c0dc211d9605b6669279b95997f2d1c7e91e2c
+#5 DONE 0.0s
+
+#6 [stage-1 1/6] FROM docker.io/library/eclipse-temurin:25-jre@sha256:fd4b1c02c64eef378212e23656fc0b0caa41a357876fa0b60e51ceda94a3db64
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 15.77kB 0.0s done
+#7 DONE 0.0s
+
+#8 [build  5/10] COPY kernel-cli/pom.xml kernel-cli/pom.xml
+#8 CACHED
+
+#9 [stage-1 5/6] COPY --from=build /build/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar /opt/demo/workspace.jar
+#9 CACHED
+
+#10 [build  3/10] COPY pom.xml ./
+#10 CACHED
+
+#11 [stage-1 4/6] COPY --from=build /build/kernel-cli/target/school-kernel.jar /opt/demo/kernel.jar
+#11 CACHED
+
+#12 [build  2/10] WORKDIR /build
+#12 CACHED
+
+#13 [build  6/10] COPY timetable-workspace/pom.xml timetable-workspace/pom.xml
+#13 CACHED
+
+#14 [build  8/10] COPY kernel-cli/src/main kernel-cli/src/main
+#14 CACHED
+
+#15 [build  4/10] COPY kernel-contract/pom.xml kernel-contract/pom.xml
+#15 CACHED
+
+#16 [build  9/10] COPY timetable-workspace/src/main timetable-workspace/src/main
+#16 CACHED
+
+#17 [build 10/10] RUN mvn --batch-mode --no-transfer-progress -Dmaven.test.skip=true package
+#17 CACHED
+
+#18 [stage-1 3/6] RUN groupadd --gid 10001 demo && useradd --uid 10001 --gid demo --no-create-home demo
+#18 CACHED
+
+#19 [build  7/10] COPY kernel-contract/src/main kernel-contract/src/main
+#19 CACHED
+
+#20 [stage-1 2/6] WORKDIR /opt/demo
+#20 CACHED
+
+#21 [stage-1 6/6] COPY --chmod=0555 deploy/demo/start deploy/demo/kernel /opt/demo/
+#21 CACHED
+
+#22 exporting to image
+#22 exporting layers done
+#22 writing image sha256:6e5dc68824ac3a6f8f58b65cde70e86fedd144724a43e94636b8116fe13e5816 done
+#22 naming to docker.io/library/school-kernel-demo:local done
+#22 DONE 0.0s

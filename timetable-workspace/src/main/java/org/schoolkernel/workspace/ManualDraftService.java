@@ -23,14 +23,17 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class ManualDraftService {
-    private final WorkspaceRepository repository;
+    @org.springframework.beans.factory.annotation.Autowired(required = false) private DemoEvents events;
+    private final WorkspaceStore repository;
     private final WorkspaceMutation mutation;
     private final KernelVerifier verifier;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private DemoVerificationService demoVerification;
     private final ManifestService manifests;
     private final ObjectMapper json;
 
     public ManualDraftService(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             WorkspaceMutation mutation,
             KernelVerifier verifier,
             ManifestService manifests,
@@ -91,7 +94,7 @@ public class ManualDraftService {
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
         boolean isBaseline = current.state() == WorkspaceState.ACCEPTED_BASELINE;
         if (payload.has("teacherId")) {
-            String route = switch (current.state()) {
+            String route = repository.ephemeral() ? "Edit definition JSON and save a browser version. Using it starts new initial planning. Pending repair or manual work is not transferred or discarded automatically." : switch (current.state()) {
                 case ACCEPTED_BASELINE -> "Open Author definition from Current.";
                 case MANUAL_DRAFT -> "MANUAL_DRAFT is active: explicitly publish supported period/room edits or discard it first. Legacy teacher differences block publication; revert each affected lesson to its full accepted assignment or discard the draft.";
                 case DEFINITION_DRAFT -> "DEFINITION_DRAFT is active: resume authoring through Weekly requirements or Occurrence details, then Review and Finish.";
@@ -105,7 +108,7 @@ public class ManualDraftService {
             };
             throw new WorkspaceProblem(isBaseline || current.state() == WorkspaceState.MANUAL_DRAFT
                     ? HttpStatus.UNPROCESSABLE_ENTITY : HttpStatus.CONFLICT, "TEACHER_CHANGE_REQUIRES_AUTHORING",
-                    "Teaching responsibility belongs to the school definition. Use definition authoring, then repair and explicit acceptance. "
+                    "Teaching responsibility belongs to the school definition. "
                     + route + " No changes were transferred.");
         }
         if (!isBaseline) {
@@ -593,7 +596,8 @@ public class ManualDraftService {
 
         // Construct candidate timetable result
         ObjectNode candidateResult = (ObjectNode) originalResult.deepCopy();
-        candidateResult.put("correlationId", UUID.randomUUID().toString());
+        candidateResult.put("correlationId", repository.ephemeral()
+                ? UUID.nameUUIDFromBytes(CanonicalJson.bytes(manualDraft)).toString() : UUID.randomUUID().toString());
         ArrayNode candidateAssignments = (ArrayNode) manualDraft.path("assignments").deepCopy();
         ObjectNode timetable = (ObjectNode) candidateResult.path("timetable");
         timetable.set("assignments", candidateAssignments);
@@ -607,8 +611,8 @@ public class ManualDraftService {
         // Kernel verification
         KernelVerifier.Verification verified;
         try {
-            verified = verifier.verify(new ImportDocuments(
-                    definition, candidateResult, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+            var documents = new ImportDocuments(definition, candidateResult, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE);
+            verified = demoVerification == null ? verifier.verify(documents) : demoVerification.verify(documents);
         } catch (WorkspaceProblem problem) {
             if ("KERNEL_VERIFICATION_FAILED".equals(problem.code())) {
                 throw new WorkspaceProblem(
@@ -620,8 +624,12 @@ public class ManualDraftService {
         }
 
         // Generate updated manifest
+        // Manual publication changes assignments, never the definition's policy/attempt lock provenance.
+        ObjectNode retainedManifest = acceptedBaseline.path("manifest").isObject()
+                ? (ObjectNode) acceptedBaseline.path("manifest").deepCopy() : null;
+        if (retainedManifest != null) retainedManifest.put("timetableRevision", verified.timetableRevision());
         JsonNode newManifest = manifests.validatedOrGenerated(new ImportDocuments(
-                definition, candidateResult, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+                definition, candidateResult, retainedManifest, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
 
         ObjectNode updatedDocument = json.createObjectNode();
         updatedDocument.set("school", current.document().path("school").deepCopy());
@@ -641,11 +649,10 @@ public class ManualDraftService {
             updatedDocument.set("lastRun", current.document().path("lastRun").deepCopy());
         }
 
-        return mutation.replaceManualDraft(
-                expectedVersion,
-                WorkspaceState.MANUAL_DRAFT,
-                WorkspaceState.ACCEPTED_BASELINE,
-                updatedDocument);
+        var installed = mutation.replaceManualDraft(
+                expectedVersion, WorkspaceState.MANUAL_DRAFT, WorkspaceState.ACCEPTED_BASELINE, updatedDocument);
+        if (events != null) events.product(DemoEvents.Product.MANUAL_PUBLISH);
+        return installed;
     }
 
     public static String calculateTimetableRevision(String schoolId, String inputRevision, ArrayNode assignments) {

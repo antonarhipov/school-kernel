@@ -1,0 +1,1177 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+18:21:19.339 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+18:21:19.382 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+18:21:19.419 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+18:21:19.893 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+18:21:19.936 [main] WARN org.testcontainers.dockerclient.DockerClientProviderStrategy -- DOCKER_HOST unix:///Users/anton/.docker/run/docker.sock is not listening
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.UnixDomainSockets.connect0(Native Method)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:126)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:122)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:950)
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:281)
+	at com.github.dockerjava.transport.UnixSocket.<init>(UnixSocket.java:45)
+	at com.github.dockerjava.transport.UnixSocket.get(UnixSocket.java:27)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$test$2(DockerClientProviderStrategy.java:194)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.test(DockerClientProviderStrategy.java:208)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.tryOutStrategy(DockerClientProviderStrategy.java:284)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$5(DockerClientProviderStrategy.java:263)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:196)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1693)
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:147)
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:588)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:574)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560)
+	at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265)
+	at java.base/java.util.stream.ReferencePipeline.findFirst(ReferencePipeline.java:683)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:264)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:341)
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newMethodAccessor(MethodHandleAccessorFactory.java:72)
+	at java.base/jdk.internal.reflect.ReflectionFactory.newMethodAccessor(ReflectionFactory.java:119)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:701)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:502)
+	at org.junit.jupiter.engine.support.MethodReflectionUtils.invoke(MethodReflectionUtils.java:45)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:61)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:124)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:163)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeAllMethod(TimeoutExtension.java:70)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:123)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:105)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:99)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:66)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:47)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:39)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:104)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:98)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invokeVoid(InterceptingExecutableInvoker.java:71)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeBeforeAllMethods$0(ClassBasedTestDescriptor.java:448)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeBeforeAllMethods(ClassBasedTestDescriptor.java:446)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:251)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:88)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:173)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:42)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:180)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:36)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:52)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:246)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:218)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:179)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:66)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:157)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:65)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:125)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$2(InterceptingLauncher.java:57)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:56)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.apache.maven.surefire.api.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:125)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.executeWithCancellationToken(LauncherAdapter.java:68)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.execute(LauncherAdapter.java:54)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:283)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:253)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:221)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:394)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:181)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:530)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:518)
+18:21:19.949 [main] WARN org.testcontainers.dockerclient.DockerClientProviderStrategy -- DOCKER_HOST unix:///var/run/docker.sock is not listening
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.UnixDomainSockets.connect0(Native Method)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:126)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:122)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:950)
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:281)
+	at com.github.dockerjava.transport.UnixSocket.<init>(UnixSocket.java:45)
+	at com.github.dockerjava.transport.UnixSocket.get(UnixSocket.java:27)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$test$2(DockerClientProviderStrategy.java:194)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.test(DockerClientProviderStrategy.java:208)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.tryOutStrategy(DockerClientProviderStrategy.java:284)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$5(DockerClientProviderStrategy.java:263)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:196)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1693)
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:147)
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:588)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:574)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560)
+	at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265)
+	at java.base/java.util.stream.ReferencePipeline.findFirst(ReferencePipeline.java:683)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:264)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:341)
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newMethodAccessor(MethodHandleAccessorFactory.java:72)
+	at java.base/jdk.internal.reflect.ReflectionFactory.newMethodAccessor(ReflectionFactory.java:119)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:701)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:502)
+	at org.junit.jupiter.engine.support.MethodReflectionUtils.invoke(MethodReflectionUtils.java:45)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:61)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:124)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:163)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeAllMethod(TimeoutExtension.java:70)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:123)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:105)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:99)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:66)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:47)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:39)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:104)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:98)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invokeVoid(InterceptingExecutableInvoker.java:71)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeBeforeAllMethods$0(ClassBasedTestDescriptor.java:448)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeBeforeAllMethods(ClassBasedTestDescriptor.java:446)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:251)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:88)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:173)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:42)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:180)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:36)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:52)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:246)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:218)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:179)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:66)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:157)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:65)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:125)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$2(InterceptingLauncher.java:57)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:56)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.apache.maven.surefire.api.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:125)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.executeWithCancellationToken(LauncherAdapter.java:68)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.execute(LauncherAdapter.java:54)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:283)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:253)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:221)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:394)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:181)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:530)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:518)
+18:21:19.953 [main] WARN org.testcontainers.dockerclient.DockerClientProviderStrategy -- DOCKER_HOST unix:///Users/anton/.docker/run/docker.sock is not listening
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.UnixDomainSockets.connect0(Native Method)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:126)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:122)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:950)
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:281)
+	at com.github.dockerjava.transport.UnixSocket.<init>(UnixSocket.java:45)
+	at com.github.dockerjava.transport.UnixSocket.get(UnixSocket.java:27)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$test$2(DockerClientProviderStrategy.java:194)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.test(DockerClientProviderStrategy.java:208)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.tryOutStrategy(DockerClientProviderStrategy.java:284)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$5(DockerClientProviderStrategy.java:263)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:196)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.tryAdvance(ArrayList.java:1693)
+	at java.base/java.util.stream.ReferencePipeline.forEachWithCancel(ReferencePipeline.java:147)
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:588)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:574)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:560)
+	at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:265)
+	at java.base/java.util.stream.ReferencePipeline.findFirst(ReferencePipeline.java:683)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:264)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.ensureClassInitialized(MethodHandleAccessorFactory.java:341)
+	at java.base/jdk.internal.reflect.MethodHandleAccessorFactory.newMethodAccessor(MethodHandleAccessorFactory.java:72)
+	at java.base/jdk.internal.reflect.ReflectionFactory.newMethodAccessor(ReflectionFactory.java:119)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:701)
+	at org.junit.platform.commons.support.ReflectionSupport.invokeMethod(ReflectionSupport.java:502)
+	at org.junit.jupiter.engine.support.MethodReflectionUtils.invoke(MethodReflectionUtils.java:45)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:61)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:124)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:163)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeAllMethod(TimeoutExtension.java:70)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:123)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:105)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:99)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:66)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:47)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:39)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:104)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:98)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invokeVoid(InterceptingExecutableInvoker.java:71)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeBeforeAllMethods$0(ClassBasedTestDescriptor.java:448)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeBeforeAllMethods(ClassBasedTestDescriptor.java:446)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:251)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:88)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:173)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:42)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$2(NodeTestTask.java:180)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$1(NodeTestTask.java:166)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$0(NodeTestTask.java:164)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:74)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:163)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:116)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:36)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:52)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.executeEngine(EngineExecutionOrchestrator.java:246)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.failOrExecuteEngine(EngineExecutionOrchestrator.java:218)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:179)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:108)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:66)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:157)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:65)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:125)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)
+	at org.junit.platform.launcher.core.InterceptingLauncher.lambda$execute$2(InterceptingLauncher.java:57)
+	at org.junit.platform.launcher.core.ClasspathAlignmentCheckingLauncherInterceptor.intercept(ClasspathAlignmentCheckingLauncherInterceptor.java:25)
+	at org.junit.platform.launcher.core.InterceptingLauncher.execute(InterceptingLauncher.java:56)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:58)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.apache.maven.surefire.api.util.ReflectionUtils.invokeMethodWithArray(ReflectionUtils.java:125)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.executeWithCancellationToken(LauncherAdapter.java:68)
+	at org.apache.maven.surefire.junitplatform.LauncherAdapter.execute(LauncherAdapter.java:54)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:283)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:253)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:221)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:394)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:181)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:530)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:518)
+18:21:19.963 [main] INFO org.testcontainers.dockerclient.DockerMachineClientProviderStrategy -- docker-machine executable was not found on PATH ([/Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/codex-acp/2.2.2/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/codex-path, /Users/anton/.antigravity-ide/antigravity-ide/bin, /Users/anton/.opencode/bin, /Users/anton/.antigravity-ide/antigravity-ide/bin, /Users/anton/.local/bin, /Users/anton/.bun/bin, /Users/anton/.antigravity/antigravity/bin, /Users/anton/.local/bin, /Users/anton/.codeium/windsurf/bin, /usr/local/opt/ruby/bin, /Users/anton/.local/bin, /usr/local/bin, /usr/local/sbin, /System/Cryptexes/App/usr/bin, /usr/bin, /bin, /usr/sbin, /sbin, /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin, /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin, /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin, /pkg/env/global/bin, /Library/Apple/usr/bin, /usr/local/go/bin, /Users/anton/.codex/tmp/arg0/codex-arg0ep3o5S, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/codex-acp/2.2.2/node_modules/@openai/codex-darwin-arm64/vendor/aarch64-apple-darwin/codex-path, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/codex-acp/2.2.2/node_modules/.bin, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/codex-acp/node_modules/.bin, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/node_modules/.bin, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/node_modules/.bin, /Users/anton/Library/Caches/JetBrains/node_modules/.bin, /Users/anton/Library/Caches/node_modules/.bin, /Users/anton/Library/node_modules/.bin, /Users/anton/node_modules/.bin, /Users/node_modules/.bin, /node_modules/.bin, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/.runtimes/node/24.19.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin, /Users/anton/Library/Caches/JetBrains/IntelliJIdea2026.3/acp-agents/.runtimes/node/24.19.0/bin, /Users/anton/.antigravity-ide/antigravity-ide/bin, /Users/anton/.opencode/bin, /Users/anton/.local/bin, /Users/anton/.bun/bin, /Users/anton/.antigravity/antigravity/bin, /Users/anton/.codeium/windsurf/bin, /usr/local/opt/ruby/bin, /Users/anton/.sdkman/candidates/sbt/current/bin, /Users/anton/.sdkman/candidates/maven/current/bin, /Users/anton/.sdkman/candidates/kotlin/current/bin, /Users/anton/.sdkman/candidates/jbang/current/bin, /Users/anton/.sdkman/candidates/java/current/bin, /Users/anton/.sdkman/candidates/gradle/current/bin, /Users/anton/.cargo/bin, /Users/anton/Library/Application Support/JetBrains/Toolbox/scripts, /Users/anton/istio-1.23.3/bin, /Users/anton/.bin, /Users/anton/.lmstudio/bin, /Users/anton/Library/Android/sdk/platform-tools, /Users/anton/istio-1.23.3/bin, /Users/anton/.bin, /Users/anton/.lmstudio/bin, /Users/anton/Library/Android/sdk/platform-tools])
+18:21:19.966 [main] ERROR org.testcontainers.dockerclient.DockerClientProviderStrategy -- Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
+As no valid configuration was found, execution cannot continue.
+See https://java.testcontainers.org/on_failure.html for more details.
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.273 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionRoomsBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionRoomsBrowserIT.initializationError -- Time elapsed: 1.273 s <<< ERROR!
+java.lang.ExceptionInInitializerError
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.040 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionRestorationBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionRestorationBrowserIT.initializationError -- Time elapsed: 0.040 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.020 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionRemovalBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionRemovalBrowserIT.initializationError -- Time elapsed: 0.020 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.077 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT.customSavedDefinitionJourney -- Time elapsed: 0.050 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT.initialize(DemoCustomDefinitionBrowserIT.java:147)
+	at org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT.customSavedDefinitionJourney(DemoCustomDefinitionBrowserIT.java:30)
+
+[ERROR] org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT.realBusyFailureDailyAndStaleDuringVerification -- Time elapsed: 0.004 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT.initialize(DemoCustomDefinitionBrowserIT.java:147)
+	at org.schoolkernel.workspace.DemoCustomDefinitionBrowserIT.realBusyFailureDailyAndStaleDuringVerification(DemoCustomDefinitionBrowserIT.java:105)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.019 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionDiscardBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionDiscardBrowserIT.initializationError -- Time elapsed: 0.019 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+18:21:20.233 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.026 s <<< FAILURE! -- in org.schoolkernel.workspace.FlywayFailureIT
+[ERROR] org.schoolkernel.workspace.FlywayFailureIT.initializationError -- Time elapsed: 0.026 s <<< ERROR!
+java.lang.IllegalStateException: Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:229)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.start(TestcontainersExtension.java:276)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.access$200(TestcontainersExtension.java:263)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$4(TestcontainersExtension.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$5(TestcontainersExtension.java:83)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.startContainers(TestcontainersExtension.java:83)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.beforeAll(TestcontainersExtension.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.020 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionTeachersBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionTeachersBrowserIT.initializationError -- Time elapsed: 0.020 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.019 s <<< FAILURE! -- in org.schoolkernel.workspace.ImportAndInitialPlanningBrowserIT
+[ERROR] org.schoolkernel.workspace.ImportAndInitialPlanningBrowserIT.initializationError -- Time elapsed: 0.019 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.015 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionFinishBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionFinishBrowserIT.initializationError -- Time elapsed: 0.015 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.016 s <<< FAILURE! -- in org.schoolkernel.workspace.MatrixLensBrowserIT
+[ERROR] org.schoolkernel.workspace.MatrixLensBrowserIT.initializationError -- Time elapsed: 0.016 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.014 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionSubjectsBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionSubjectsBrowserIT.initializationError -- Time elapsed: 0.014 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+18:21:20.356 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.026 s <<< FAILURE! -- in org.schoolkernel.workspace.WorkspaceRepairDraftIT
+[ERROR] org.schoolkernel.workspace.WorkspaceRepairDraftIT.initializationError -- Time elapsed: 0.026 s <<< ERROR!
+java.lang.IllegalStateException: Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:229)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.start(TestcontainersExtension.java:276)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.access$200(TestcontainersExtension.java:263)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$4(TestcontainersExtension.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$5(TestcontainersExtension.java:83)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.startContainers(TestcontainersExtension.java:83)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.beforeAll(TestcontainersExtension.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.008 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoDefinitionsBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney -- Time elapsed: 0.005 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney(DemoDefinitionsBrowserIT.java:34)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.014 s <<< FAILURE! -- in org.schoolkernel.workspace.SeededRepairBrowserIT
+[ERROR] org.schoolkernel.workspace.SeededRepairBrowserIT.initializationError -- Time elapsed: 0.014 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.009 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoPlanningBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoPlanningBrowserIT.realRefusalsFailuresDisabledReuseAndForcedCancellation -- Time elapsed: 0.004 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.initialize(DemoPlanningBrowserIT.java:130)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.realRefusalsFailuresDisabledReuseAndForcedCancellation(DemoPlanningBrowserIT.java:97)
+
+[ERROR] org.schoolkernel.workspace.DemoPlanningBrowserIT.realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart -- Time elapsed: 0.003 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.initialize(DemoPlanningBrowserIT.java:130)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart(DemoPlanningBrowserIT.java:25)
+
+18:21:20.436 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.024 s <<< FAILURE! -- in org.schoolkernel.workspace.WorkspaceImportIT
+[ERROR] org.schoolkernel.workspace.WorkspaceImportIT.initializationError -- Time elapsed: 0.024 s <<< ERROR!
+java.lang.IllegalStateException: Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:229)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.start(TestcontainersExtension.java:276)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.access$200(TestcontainersExtension.java:263)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$4(TestcontainersExtension.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$5(TestcontainersExtension.java:83)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.startContainers(TestcontainersExtension.java:83)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.beforeAll(TestcontainersExtension.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.005 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoSamplesBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoSamplesBrowserIT.completeSampleJourney -- Time elapsed: 0.003 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoSamplesBrowserIT.completeSampleJourney(DemoSamplesBrowserIT.java:34)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.014 s <<< FAILURE! -- in org.schoolkernel.workspace.RepairRunBrowserIT
+[ERROR] org.schoolkernel.workspace.RepairRunBrowserIT.initializationError -- Time elapsed: 0.014 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.011 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionGridBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionGridBrowserIT.initializationError -- Time elapsed: 0.011 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.010 s <<< FAILURE! -- in org.schoolkernel.workspace.SchoolIdentityBrowserIT
+[ERROR] org.schoolkernel.workspace.SchoolIdentityBrowserIT.initializationError -- Time elapsed: 0.010 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.010 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionAuthoringBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionAuthoringBrowserIT.initializationError -- Time elapsed: 0.010 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.011 s <<< FAILURE! -- in org.schoolkernel.workspace.SavedDefinitionDraftBrowserIT
+[ERROR] org.schoolkernel.workspace.SavedDefinitionDraftBrowserIT.initializationError -- Time elapsed: 0.011 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.005 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionAuthoringUxBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionAuthoringUxBrowserIT.initializationError -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.010 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionRoomPoliciesBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionRoomPoliciesBrowserIT.initializationError -- Time elapsed: 0.010 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.009 s <<< FAILURE! -- in org.schoolkernel.workspace.RepairCompletionBrowserIT
+[ERROR] org.schoolkernel.workspace.RepairCompletionBrowserIT.initializationError -- Time elapsed: 0.009 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+18:21:20.562 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.024 s <<< FAILURE! -- in org.schoolkernel.workspace.WorkspaceRepairPlanningIT
+[ERROR] org.schoolkernel.workspace.WorkspaceRepairPlanningIT.initializationError -- Time elapsed: 0.024 s <<< ERROR!
+java.lang.IllegalStateException: Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:229)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.start(TestcontainersExtension.java:276)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.access$200(TestcontainersExtension.java:263)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$4(TestcontainersExtension.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$5(TestcontainersExtension.java:83)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.startContainers(TestcontainersExtension.java:83)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.beforeAll(TestcontainersExtension.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.014 s <<< FAILURE! -- in org.schoolkernel.workspace.ScaleTimingBrowserIT
+[ERROR] org.schoolkernel.workspace.ScaleTimingBrowserIT.initializationError -- Time elapsed: 0.014 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+18:21:20.604 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.019 s <<< FAILURE! -- in org.schoolkernel.workspace.WorkspaceInitialPlanningIT
+[ERROR] org.schoolkernel.workspace.WorkspaceInitialPlanningIT.initializationError -- Time elapsed: 0.019 s <<< ERROR!
+java.lang.IllegalStateException: Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:229)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.start(TestcontainersExtension.java:276)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.access$200(TestcontainersExtension.java:263)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$4(TestcontainersExtension.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$5(TestcontainersExtension.java:83)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.startContainers(TestcontainersExtension.java:83)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.beforeAll(TestcontainersExtension.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.007 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionOccurrencesBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionOccurrencesBrowserIT.initializationError -- Time elapsed: 0.007 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.003 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionPreferencesBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionPreferencesBrowserIT.initializationError -- Time elapsed: 0.003 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.008 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionReviewBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionReviewBrowserIT.initializationError -- Time elapsed: 0.008 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.011 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionRequirementsBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionRequirementsBrowserIT.initializationError -- Time elapsed: 0.011 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.007 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionCohortsBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionCohortsBrowserIT.initializationError -- Time elapsed: 0.007 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.005 s <<< FAILURE! -- in org.schoolkernel.workspace.ProposalReviewBrowserIT
+[ERROR] org.schoolkernel.workspace.ProposalReviewBrowserIT.initializationError -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+18:21:20.676 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 2.0.5
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.015 s <<< FAILURE! -- in org.schoolkernel.workspace.WorkspaceManualDraftIT
+[ERROR] org.schoolkernel.workspace.WorkspaceManualDraftIT.initializationError -- Time elapsed: 0.015 s <<< ERROR!
+java.lang.IllegalStateException: Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:229)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.start(TestcontainersExtension.java:276)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter.access$200(TestcontainersExtension.java:263)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$4(TestcontainersExtension.java:83)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.lambda$startContainers$5(TestcontainersExtension.java:83)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.startContainers(TestcontainersExtension.java:83)
+	at org.testcontainers.junit.jupiter.TestcontainersExtension.beforeAll(TestcontainersExtension.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.007 s <<< FAILURE! -- in org.schoolkernel.workspace.DefinitionCatalogBrowserIT
+[ERROR] org.schoolkernel.workspace.DefinitionCatalogBrowserIT.initializationError -- Time elapsed: 0.007 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.004 s <<< FAILURE! -- in org.schoolkernel.workspace.RepairDraftBrowserIT
+[ERROR] org.schoolkernel.workspace.RepairDraftBrowserIT.initializationError -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.005 s <<< FAILURE! -- in org.schoolkernel.workspace.AcceptedInspectionBrowserIT
+[ERROR] org.schoolkernel.workspace.AcceptedInspectionBrowserIT.initializationError -- Time elapsed: 0.005 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.006 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoSessionBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoSessionBrowserIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart -- Time elapsed: 0.004 s <<< ERROR!
+java.net.SocketException: Operation not permitted
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:522)
+	at java.base/sun.nio.ch.Net.bind(Net.java:511)
+	at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:641)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:138)
+	at org.schoolkernel.workspace.DemoSessionBrowserIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart(DemoSessionBrowserIT.java:34)
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.004 s <<< FAILURE! -- in org.schoolkernel.workspace.TeacherChangeRouteBrowserIT
+[ERROR] org.schoolkernel.workspace.TeacherChangeRouteBrowserIT.initializationError -- Time elapsed: 0.004 s <<< ERROR!
+java.lang.NoClassDefFoundError: Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1169)
+	at java.base/java.lang.reflect.Method.acquireMethodAccessor(Method.java:711)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:562)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.IllegalStateException: Could not find a valid Docker environment. Please see logs and check configuration [in thread "main"]
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.lambda$getFirstValidStrategy$7(DockerClientProviderStrategy.java:274)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at org.testcontainers.dockerclient.DockerClientProviderStrategy.getFirstValidStrategy(DockerClientProviderStrategy.java:265)
+	at org.testcontainers.DockerClientFactory.getOrInitializeStrategy(DockerClientFactory.java:154)
+	at org.testcontainers.DockerClientFactory.client(DockerClientFactory.java:196)
+	at org.testcontainers.DockerClientFactory$1.getDockerClient(DockerClientFactory.java:108)
+	at com.github.dockerjava.api.DockerClientDelegate.authConfig(DockerClientDelegate.java:111)
+	at org.testcontainers.containers.GenericContainer.start(GenericContainer.java:316)
+	at org.schoolkernel.workspace.WorkbenchBrowserSupport.<clinit>(WorkbenchBrowserSupport.java:62)
+	... 5 more
+
+[ERROR] Errors: 
+[ERROR]   AcceptedInspectionBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionAuthoringBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionAuthoringUxBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionCatalogBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionCohortsBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionDiscardBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionFinishBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionGridBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionOccurrencesBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionPreferencesBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionRemovalBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionRequirementsBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionRestorationBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionReviewBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionRoomPoliciesBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionRoomsBrowserIT.initializationError » ExceptionInInitializer
+[ERROR]   DefinitionSubjectsBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DefinitionTeachersBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   DemoCustomDefinitionBrowserIT.customSavedDefinitionJourney:30->initialize:147 » Socket Operation not permitted
+[ERROR]   DemoCustomDefinitionBrowserIT.realBusyFailureDailyAndStaleDuringVerification:105->initialize:147 » Socket Operation not permitted
+[ERROR]   DemoDefinitionsBrowserIT.completeBrowserVersionJourney:34 » Socket Operation not permitted
+[ERROR]   DemoPlanningBrowserIT.realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart:25->initialize:130 » Socket Operation not permitted
+[ERROR]   DemoPlanningBrowserIT.realRefusalsFailuresDisabledReuseAndForcedCancellation:97->initialize:130 » Socket Operation not permitted
+[ERROR]   DemoSamplesBrowserIT.completeSampleJourney:34 » Socket Operation not permitted
+[ERROR]   DemoSessionBrowserIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart:34 » Socket Operation not permitted
+[ERROR]   FlywayFailureIT.initializationError » IllegalState Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+[ERROR]   ImportAndInitialPlanningBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   MatrixLensBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   ProposalReviewBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   RepairCompletionBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   RepairDraftBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   RepairRunBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   SavedDefinitionDraftBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   ScaleTimingBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   SchoolIdentityBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   SeededRepairBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   TeacherChangeRouteBrowserIT.initializationError » NoClassDefFound Could not initialize class org.schoolkernel.workspace.WorkbenchBrowserSupport
+[ERROR]   WorkspaceImportIT.initializationError » IllegalState Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+[ERROR]   WorkspaceInitialPlanningIT.initializationError » IllegalState Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+[ERROR]   WorkspaceManualDraftIT.initializationError » IllegalState Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+[ERROR]   WorkspaceRepairDraftIT.initializationError » IllegalState Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+[ERROR]   WorkspaceRepairPlanningIT.initializationError » IllegalState Previous attempts to find a Docker environment failed. Will not retry. Please see logs and check configuration
+[ERROR] Tests run: 46, Failures: 0, Errors: 42, Skipped: 4
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

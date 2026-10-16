@@ -1,0 +1,1 @@
+PASS: 40 consecutive health/static reads, 9 edge/spoof probes, all pinned static hashes and six exact timetable pairs; no cookies

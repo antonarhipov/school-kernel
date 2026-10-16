@@ -1,0 +1,26 @@
+.   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T09:00:46.597Z  INFO 1 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.4.1 with PID 1 (/opt/demo/workspace.jar started by demo in /opt/demo)
+2026-10-16T09:00:46.598Z  INFO 1 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T09:00:47.355Z  INFO 1 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-10-16T09:00:47.377Z  INFO 1 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T09:00:47.377Z  INFO 1 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T09:00:47.390Z  INFO 1 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 710 ms
+2026-10-16T09:00:47.540Z  INFO 1 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T09:00:48.336Z  INFO 1 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=7c54036a-04de-410b-967c-40bfaf6d2e98 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=535
+2026-10-16T09:00:48.714Z  INFO 1 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=cacad3b3-84aa-4369-bc05-d67956fd2fc7 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=371
+2026-10-16T09:00:49.256Z  INFO 1 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=bd6731e3-8569-4dfd-8117-8658368c401c kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=529
+2026-10-16T09:00:49.553Z  INFO 1 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-10-16T09:00:49.558Z  INFO 1 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 3.24 seconds (process running for 3.523)
+2026-10-16T09:00:49.726Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T09:00:49.727Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T09:00:49.727Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-10-16T09:00:50.012Z  INFO 1 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T09:00:50.014Z  INFO 1 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete

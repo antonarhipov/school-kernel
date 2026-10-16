@@ -1,0 +1,9 @@
+{
+  "time": "2026-10-16T11:44:23.868025+00:00",
+  "registeredKeyId": "06a64fc3-cd61-40fa-acda-96a2ecf8da7e",
+  "revocation": "Official railway ssh keys remove returned exit 0 and removed successfully",
+  "localPrivateKeyRemoved": true,
+  "localPublicKeyRemoved": true,
+  "registrationInputRemoved": true,
+  "trustedGateway": "ssh.railway.com; exact fingerprint explicitly approved by operator"
+}

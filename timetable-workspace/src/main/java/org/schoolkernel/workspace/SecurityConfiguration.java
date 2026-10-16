@@ -15,14 +15,24 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(
-            HttpSecurity http, HostOriginFilter hostOriginFilter, ProblemResponder problems, WorkspaceRepository repository) throws Exception {
-        return http
+            HttpSecurity http, HostOriginFilter hostOriginFilter, ProblemResponder problems, WorkspaceStore repository,
+            org.springframework.beans.factory.ObjectProvider<DemoWorkspaces> demoWorkspaces) throws Exception {
+        DemoWorkspaces demo = demoWorkspaces.getIfAvailable();
+        http
                 .cors(cors -> cors.disable())
                 .httpBasic(basic -> basic.disable())
                 .formLogin(login -> login.disable())
                 .logout(logout -> logout.disable())
                 .requestCache(cache -> cache.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(request -> demo != null && "GET".equals(request.getMethod())
+                                && java.util.Set.of("/healthz", "/api/demo/config", "/api/demo/timetables").contains(request.getRequestURI())).permitAll()
+                        .requestMatchers(request -> demo != null && "POST".equals(request.getMethod())
+                                && java.util.Set.of("/api/demo/session", "/api/demo/definition", "/api/demo/timetable/review", "/api/demo/definition/check").contains(request.getRequestURI())).permitAll()
+                        .requestMatchers(request -> demo != null && "GET".equals(request.getMethod())
+                                && (request.getRequestURI().equals("/api/samples") || request.getRequestURI().matches("/api/samples/[^/]+"))).permitAll()
+                        .requestMatchers(request -> demo != null && "POST".equals(request.getMethod())
+                                && request.getRequestURI().matches("/api/samples/[^/]+/use")).permitAll()
                         .requestMatchers(HttpMethod.GET, "/", "/workspace/**", "/api/csrf", "/api/workspace",
                                 "/api/runs/*", "/api/proposal", "/api/accepted/export", "/api/definition-draft/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/import", "/api/initial-draft/replace",
@@ -49,10 +59,20 @@ public class SecurityConfiguration {
                                 org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN))
                         .contentSecurityPolicy(csp -> csp.policyDirectives(
                                 "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")))
-                .addFilterBefore(hostOriginFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(hostOriginFilter, org.springframework.security.web.csrf.CsrfFilter.class)
                 .addFilterAfter(new DefinitionDraftAccess(repository, problems),
-                        org.springframework.security.web.access.intercept.AuthorizationFilter.class)
-                .build();
+                        org.springframework.security.web.access.intercept.AuthorizationFilter.class);
+        if (demo != null) {
+            http.addFilterAfter(new DemoSessionFilter(demo, problems), HostOriginFilter.class);
+            http.addFilterAfter(new DemoInputAdmissionFilter(problems), DefinitionDraftAccess.class);
+        }
+        return http.build();
+    }
+
+    @Bean org.springframework.boot.web.servlet.FilterRegistrationBean<HostOriginFilter> hostFilterRegistration(HostOriginFilter filter) {
+        var registration = new org.springframework.boot.web.servlet.FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
     }
 
     private static AccessDeniedHandler accessDeniedHandler(ProblemResponder problems) {

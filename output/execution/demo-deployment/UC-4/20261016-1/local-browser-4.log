@@ -1,0 +1,37 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+UC4 STEP 01-exact-save: main 1-5/G1/G2: exact CRLF/Unicode file saved in a five-field file-origin envelope; unfinished object makes no server change; second tab list refreshes
+UC4 STEP 02-reload-download: main 6/G3/G4: reload and selection preserve exact CRLF bytes; browser-local download matches the original file
+UC4 STEP 03-declines: 1b/4b/6a: declined selection, file opening, revert and named replacement preserve exact open and saved text
+UC4 STEP 04-replace: main 4-6/G2: confirmed named replacement stores exact edited text, saved-source derivation and explicit save time
+UC4 STEP 05-validation: 4a/G1/G4: first syntax line/column, reserved/invalid labels and non-object roots refused; malformed text still downloads exactly
+UC4 STEP 06-storage-failure: 5a/minimal: injected browser quota and SecurityError preserve overwritten entry and open text; exact Download remains available
+UC4 STEP 07-file-failures: 1c/4a: oversized UTF-8 file/editor and injected unreadable file refused; prior storage and text retained
+UC4 STEP failure: FAIL: org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 71.93 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoDefinitionsBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney -- Time elapsed: 71.74 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+	at org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:195)
+	at org.schoolkernel.workspace.DemoDefinitionsBrowserIT.completeBrowserVersionJourney(DemoDefinitionsBrowserIT.java:115)
+
+[ERROR] Failures: 
+[ERROR]   DemoDefinitionsBrowserIT.completeBrowserVersionJourney:115 expected: <true> but was: <false>
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default-cli) on project timetable-workspace: There are test failures.
+[ERROR] 
+[ERROR] See /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

@@ -1,0 +1,4375 @@
+{
+  "schemaVersion" : 1,
+  "status" : "FEASIBLE",
+  "kernelVersion" : "1.0.0-SNAPSHOT",
+  "correlationId" : "bundled-english-a",
+  "elapsedTimeMs" : 0,
+  "schoolId" : "demo-meadowbrook-school",
+  "catalogVersion" : 9,
+  "inputRevision" : "sha256:c16d0be2ae1c1770dc846fe6e8e4f8ae4733738506c056ea0b5fd95d7ac2cefe",
+  "effectiveSoftWeights" : {
+    "soft.teacher-gap" : 1,
+    "soft.cohort-gap" : 1,
+    "soft.cohort-late-start" : 1,
+    "soft.cohort-week-balance" : 1,
+    "soft.series-same-day" : 1,
+    "soft.undesirable-period" : 1,
+    "soft.non-preferred-room" : 1
+  },
+  "seed" : 0,
+  "limit" : {
+    "type" : "STEP",
+    "steps" : 1
+  },
+  "terminationReason" : "STEP_LIMIT",
+  "timetable" : {
+    "assignments" : [ {
+      "lessonId" : "meadowbrook-lesson-1A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-primary-1",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-1A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-1A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-primary-2",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-1B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-1B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-1B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-primary-3",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-2A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-2A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-primary-4",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-2B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-2B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-2B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-primary-5",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-3A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-3A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-computing-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-primary-6",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-3B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-3B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-3B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-music-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-primary-7",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-4A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-4A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-art-2",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-english-7",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-pshe-2",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-primary-8",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-4B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-4B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-4B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-music-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-5A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-5A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-english-6",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-spanish-1",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-spanish-2",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-5B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-5B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-5B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-6A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6A-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-6A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-computing-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-spanish-1",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-spanish-2",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-spanish-3",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-6B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6B-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-6B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-6C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-6C-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-6C",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-computing-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-7A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7A-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-7A",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-computing-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-spanish-1",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-spanish-2",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-spanish-3",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-7B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7B-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-7B",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-music-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-7C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-7C-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-7C",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-music-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-8A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8A-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-8A",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-science-5",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-spanish-1",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-spanish-2",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-spanish-3",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-8B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8B-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-8B",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-english-1",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-languages-3",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-maths-3",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-pe-3",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-8C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-science-1",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-8C-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-8C",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-english-2",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-languages-4",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-maths-4",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-pe-4",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-pe-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-9A"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-science-2",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9A-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-9A",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-art-1",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-art-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-computing-1",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-english-3",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-humanities-2",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-maths-1",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-music-1",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-music-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-pe-1",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-science-3",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-spanish-1",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-spanish-2",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-spanish-3",
+      "subjectId" : "meadowbrook-subject-spanish",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-languages-1",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-9B"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9B-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-9B",
+      "teacherId" : "meadowbrook-teacher-technology-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-technology-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-art-1",
+      "subjectId" : "meadowbrook-subject-art",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-art-2",
+      "periodId" : "meadowbrook-period-2-6",
+      "roomId" : "meadowbrook-room-art-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-computing-1",
+      "subjectId" : "meadowbrook-subject-computing",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-computing-2",
+      "periodId" : "meadowbrook-period-2-1",
+      "roomId" : "meadowbrook-room-computing-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-english-1",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-1-1",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-english-2",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-2-4",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-english-3",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-3-1",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-english-4",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-4-3",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-english-5",
+      "subjectId" : "meadowbrook-subject-english",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-english-4",
+      "periodId" : "meadowbrook-period-5-2",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-french-1",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-1-4",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-french-2",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-2-2",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-french-3",
+      "subjectId" : "meadowbrook-subject-french",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-languages-2",
+      "periodId" : "meadowbrook-period-4-4",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-geography-1",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-1-3",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-geography-2",
+      "subjectId" : "meadowbrook-subject-geography",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-humanities-3",
+      "periodId" : "meadowbrook-period-3-2",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-history-1",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-3-5",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-history-2",
+      "subjectId" : "meadowbrook-subject-history",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-humanities-1",
+      "periodId" : "meadowbrook-period-4-5",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-maths-1",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-1-5",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-maths-2",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-2-3",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-maths-3",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-3-3",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-maths-4",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-4-6",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-maths-5",
+      "subjectId" : "meadowbrook-subject-maths",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-maths-2",
+      "periodId" : "meadowbrook-period-5-5",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-music-1",
+      "subjectId" : "meadowbrook-subject-music",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-music-2",
+      "periodId" : "meadowbrook-period-4-1",
+      "roomId" : "meadowbrook-room-music-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-pe-1",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-1-2",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-pe-2",
+      "subjectId" : "meadowbrook-subject-pe",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-pe-2",
+      "periodId" : "meadowbrook-period-5-3",
+      "roomId" : "meadowbrook-room-pe-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-pshe-1",
+      "subjectId" : "meadowbrook-subject-pshe",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-humanities-4",
+      "periodId" : "meadowbrook-period-5-6",
+      "roomId" : "meadowbrook-room-9C"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-science-1",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-1-6",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-science-2",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-2-5",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-science-3",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-3-4",
+      "roomId" : "meadowbrook-room-science-3"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-science-4",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-4-2",
+      "roomId" : "meadowbrook-room-science-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-science-5",
+      "subjectId" : "meadowbrook-subject-science",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-science-4",
+      "periodId" : "meadowbrook-period-5-1",
+      "roomId" : "meadowbrook-room-science-2"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-technology-1",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-3-6",
+      "roomId" : "meadowbrook-room-technology-1"
+    }, {
+      "lessonId" : "meadowbrook-lesson-9C-technology-2",
+      "subjectId" : "meadowbrook-subject-technology",
+      "cohortId" : "meadowbrook-cohort-9C",
+      "teacherId" : "meadowbrook-teacher-technology-2",
+      "periodId" : "meadowbrook-period-5-4",
+      "roomId" : "meadowbrook-room-technology-2"
+    } ]
+  },
+  "timetableRevision" : "sha256:e1a858a0a702d668b88472f800853689b84276dcb2e5fc5f15bd3c69830d1874",
+  "score" : {
+    "periodMoves" : 0,
+    "roomOnlyMoves" : 0,
+    "ordinaryPreferencePenalty" : 238,
+    "constraintBreakdown" : [ {
+      "constraintId" : "soft.teacher-gap",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 215,
+      "aggregatePenalty" : 215
+    }, {
+      "constraintId" : "soft.cohort-gap",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.cohort-late-start",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.cohort-week-balance",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.series-same-day",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 23,
+      "aggregatePenalty" : 23
+    }, {
+      "constraintId" : "soft.undesirable-period",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.non-preferred-room",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    } ]
+  }
+}

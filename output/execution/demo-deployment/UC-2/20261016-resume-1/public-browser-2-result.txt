@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Test set: org.schoolkernel.workspace.DemoRemoteSessionIT
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 137.2 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoRemoteSessionIT
+org.schoolkernel.workspace.DemoRemoteSessionIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart -- Time elapsed: 137.0 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <200> but was: <410>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:201)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:152)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:147)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:558)
+	at org.schoolkernel.workspace.DemoRemoteSessionIT.snapshot(DemoRemoteSessionIT.java:211)
+	at org.schoolkernel.workspace.DemoRemoteSessionIT.privateSamplesDraftsRunsExportsStaleTabsAndRestart(DemoRemoteSessionIT.java:172)
+

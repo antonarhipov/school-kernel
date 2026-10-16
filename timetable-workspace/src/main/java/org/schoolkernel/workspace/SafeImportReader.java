@@ -35,6 +35,18 @@ public class SafeImportReader {
             .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS)
             .build();
 
+    private final long jsonLimit, archiveLimit, expandedLimit;
+    private final boolean demo;
+    public SafeImportReader() { this(false); }
+    @org.springframework.beans.factory.annotation.Autowired
+    public SafeImportReader(org.springframework.core.env.Environment environment) { this(environment.matchesProfiles("demo")); }
+    SafeImportReader(boolean demo) {
+        this.demo = demo;
+        jsonLimit = demo ? 2L * 1024 * 1024 : JSON_LIMIT;
+        archiveLimit = demo ? 5L * 1024 * 1024 : ARCHIVE_LIMIT;
+        expandedLimit = demo ? 5L * 1024 * 1024 : UNCOMPRESSED_LIMIT;
+    }
+
     public ImportDocuments read(MultipartFile definition, MultipartFile result, MultipartFile archive) {
         boolean hasDefinition = present(definition);
         boolean hasResult = present(result);
@@ -51,26 +63,26 @@ public class SafeImportReader {
         if (!hasDefinition) {
             throw invalid("IMPORT_CONTENT_REQUIRED", "Choose a school definition or accepted-bundle archive.");
         }
-        JsonNode definitionNode = parse(readBounded(definition, JSON_LIMIT, "definition"), "definition");
+        JsonNode definitionNode = parse(readBounded(definition, jsonLimit, "definition"), "definition");
         if (!hasResult) {
             return new ImportDocuments(
                     definitionNode, null, null, ImportDocuments.ImportMode.INITIAL_DEFINITION);
         }
-        JsonNode resultNode = parse(readBounded(result, JSON_LIMIT, "result"), "result");
+        JsonNode resultNode = parse(readBounded(result, jsonLimit, "result"), "result");
         return new ImportDocuments(
                 definitionNode, resultNode, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE);
     }
 
     private ImportDocuments readArchive(MultipartFile archive) {
-        if (archive.getSize() > ARCHIVE_LIMIT) {
-            throw tooLarge("Accepted-bundle archive exceeds 25 MiB.");
+        if (archive.getSize() > archiveLimit) {
+            throw tooLarge("Accepted-bundle archive exceeds its compressed size limit.");
         }
-        return readArchive(readBounded(archive, ARCHIVE_LIMIT, "archive"));
+        return readArchive(readBounded(archive, archiveLimit, "archive"));
     }
 
     ImportDocuments readArchive(byte[] bytes) {
-        if (bytes.length > ARCHIVE_LIMIT) {
-            throw tooLarge("Accepted-bundle archive exceeds 25 MiB.");
+        if (bytes.length > archiveLimit) {
+            throw tooLarge("Accepted-bundle archive exceeds its compressed size limit.");
         }
         if (bytes.length < 4 || bytes[0] != 'P' || bytes[1] != 'K'
                 || (bytes[2] != 3 && bytes[2] != 5 && bytes[2] != 7)
@@ -89,11 +101,11 @@ public class SafeImportReader {
                 if (entries.containsKey(name)) {
                     throw invalid("UNSAFE_ARCHIVE", "The archive contains a duplicate entry.");
                 }
-                long entryLimit = name.equals("workspace-manifest.json") ? MANIFEST_LIMIT : JSON_LIMIT;
+                long entryLimit = name.equals("workspace-manifest.json") ? MANIFEST_LIMIT : jsonLimit;
                 byte[] content = readBounded(zip, entryLimit, name);
                 total += content.length;
-                if (total > UNCOMPRESSED_LIMIT) {
-                    throw tooLarge("Accepted-bundle content exceeds 21 MiB.");
+                if (total > expandedLimit) {
+                    throw tooLarge("Accepted-bundle content exceeds its expanded size limit.");
                 }
                 entries.put(name, content);
                 zip.closeEntry();
@@ -148,10 +160,15 @@ public class SafeImportReader {
         return output.toByteArray();
     }
 
-    private static JsonNode parse(byte[] bytes, String document) {
+    private JsonNode parse(byte[] bytes, String document) {
         try {
-            return JSON.readTree(bytes);
-        } catch (JacksonException exception) {
+            JsonNode value = demo ? DemoInputJson.MAPPER.readTree(java.nio.charset.StandardCharsets.UTF_8.newDecoder()
+                    .onMalformedInput(java.nio.charset.CodingErrorAction.REPORT)
+                    .onUnmappableCharacter(java.nio.charset.CodingErrorAction.REPORT)
+                    .decode(java.nio.ByteBuffer.wrap(bytes)).toString()) : JSON.readTree(bytes);
+            if (demo && (value == null || !value.isObject())) throw invalid("MALFORMED_IMPORT", "The " + document + " must be one complete JSON object.");
+            return value;
+        } catch (JacksonException | java.nio.charset.CharacterCodingException exception) {
             throw invalid("MALFORMED_IMPORT", "The " + document + " is not valid JSON.");
         }
     }

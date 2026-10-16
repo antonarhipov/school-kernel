@@ -1,0 +1,66 @@
+logging:
+  config: classpath:demo-logback.xml
+
+server:
+  address: 0.0.0.0
+  port: ${PORT:8080}
+  forward-headers-strategy: none
+  compression:
+    enabled: true
+    mime-types: application/json,text/html,text/css,text/javascript,application/javascript
+    min-response-size: 1024
+  servlet:
+    session:
+      timeout: 8h
+      cookie:
+        secure: true
+        http-only: true
+        same-site: strict
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration
+  docker:
+    compose:
+      enabled: false
+  flyway:
+    enabled: false
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+demo:
+  observability:
+    summary-interval: 1m
+  public-hosts: ${DEMO_PUBLIC_HOSTS:localhost:8080}
+  # Default off. Enable only after the isolated environment/no-TCP preflight in deploy/demo/README.md.
+  railway-isolated-ingress: ${DEMO_RAILWAY_ISOLATED_INGRESS:false}
+  # Alternate trust model for an operator-controlled proxy with stable addresses.
+  trusted-proxy-addresses: ${DEMO_TRUSTED_PROXY_ADDRESSES:}
+  idle-timeout: 60m
+  absolute-timeout: 8h
+  max-workspaces: 50
+  search:
+    lesson-threshold: 200
+    quick-seconds: 5
+    thorough-seconds: 60
+  complexity:
+    work-max: 11000000
+    lesson-max: 2500
+  queue:
+    max-waiting: 8
+    estimated-start-limit: 2m
+    abandonment: 2m
+  kernel:
+    solve-overhead: 10s
+    daily-allowance: 4h
+    verification-timeout: 30s
+    verification-wait: 10s
+  reuse:
+    enabled: true
+    max-bytes: 67108864
+    ttl: 1h

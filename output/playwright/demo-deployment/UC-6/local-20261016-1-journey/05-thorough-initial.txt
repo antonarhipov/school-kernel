@@ -1,0 +1,95 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school
+Full school
+shared-initial · 2026-10-16T15:24:19.441Z · In use
+
+Saved 2026-10-16T15:24:19.441Z · derived from sample small.
+
+shared-initial · In use as initial draft
+
+Definition JSON
+
+Unchanged
+
+Use this definition
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+The definition is in use as a new initial draft. No timetable is Current and no search was started.
+
+Small school Initial proposal · feasible
+
+sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38
+
+This complete timetable is a proposal. No timetable is accepted yet.
+
+Utilities
+Timetable details
+Time range
+Week
+Day
+Weekday
+Monday
+Search lessons
+Subject investigation
+No subject selected
+Subject 01
+Subject 02
+Teacher investigation
+No teacher selected
+John Doe
+Filters
+Complete school population
+Complete recurring Week
+Showing 1 of 1 classes
+Represented lessons: 2
+Active filters:
+No active filters
+Reset view
+Subject matches: 0
+Teacher matches: 0
+Dual matches: 0
+Class	Period	Monday
+Cohort 01	1	
+Subject 01
+Room 02
+
+2	
+Subject 02
+Room 01
+
+3	
+Empty
+Initial proposal · feasible
+Collapse Proposal task area
+
+Result computed and independently verified. Original solve process: 62.5 seconds; original checking: 1.4 seconds. This request waited 63.9 seconds. Search budget: PT1M. This proposal is private; Current changes only after explicit acceptance.
+
+Lessons
+2
+Termination reason
+TIME_LIMIT
+Execution limit
+PT1M
+Timetable revision
+sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38
+I confirm this proposal should become the initial accepted timetable.
+Accept as current
+Discard proposal
+Change a lesson’s teacher

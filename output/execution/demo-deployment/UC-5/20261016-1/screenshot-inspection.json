@@ -1,0 +1,14 @@
+{
+  "verdict": "PASS",
+  "screenshots": [
+    "output/playwright/demo-deployment/UC-5/public-20261016-1-journey/07-initial-draft.png",
+    "output/playwright/demo-deployment/UC-5/public-20261016-1-journey/03-invalid-reference.png",
+    "output/playwright/demo-deployment/UC-5/public-20261016-1-journey/10-narrow.png"
+  ],
+  "observations": [
+    "Full draft summary and initial-planning entry visible; no Current",
+    "Located refusal visible alongside preserved accepted timetable",
+    "390px read-only panel wraps controls/revision; no page overflow",
+    "Temporary workspace and retention wording visible"
+  ]
+}

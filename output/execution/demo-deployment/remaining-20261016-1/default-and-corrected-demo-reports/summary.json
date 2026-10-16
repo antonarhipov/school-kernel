@@ -1,0 +1,70 @@
+{
+  "DefinitionAuthoringBrowserIT": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  },
+  "DemoDefinitionsBrowserIT": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  },
+  "DemoObservabilityBrowserIT": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  },
+  "DemoSessionBrowserIT": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  },
+  "WorkspaceImportIT": {
+    "tests": 25,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": [
+      "completeVerificationInvalidityMatrixAtHttpBoundary",
+      "exhaustiveLifecycleRefusalMatrix"
+    ]
+  },
+  "WorkspaceInitialPlanningIT": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  },
+  "WorkspaceManualDraftIT": {
+    "tests": 11,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": [
+      "publishesManualDraftAtomicallyAsAcceptedBaseline"
+    ]
+  },
+  "WorkspaceRepairDraftIT": {
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  },
+  "WorkspaceRepairPlanningIT": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failingMethods": []
+  }
+}

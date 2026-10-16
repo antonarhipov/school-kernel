@@ -1,0 +1,32 @@
+{"timestamp":"2026-10-16T13:09:01.618398750Z","level":"info","message":"Starting Container"}
+{"message":"","timestamp":"2026-10-16T13:09:03.589945723Z","level":"info"}
+{"message":"  .   ____          _            __ _ _","timestamp":"2026-10-16T13:09:03.589949773Z","level":"info"}
+{"message":" /\\\\ / ___'_ __ _ _(_)_ __  __ _ \\ \\ \\ \\","timestamp":"2026-10-16T13:09:03.589953663Z","level":"info"}
+{"timestamp":"2026-10-16T13:09:03.589957683Z","level":"info","message":"( ( )\\___ | '_ | '_| | '_ \\/ _` | \\ \\ \\ \\"}
+{"message":" \\\\/  ___)| |_)| | | | | || (_| |  ) ) ) )","level":"info","timestamp":"2026-10-16T13:09:03.589961263Z"}
+{"level":"info","message":"  '  |____| .__|_| |_|_| |_\\__, | / / / /","timestamp":"2026-10-16T13:09:03.589965033Z"}
+{"level":"info","timestamp":"2026-10-16T13:09:03.589975883Z","message":" =========|_|==============|___/=/_/_/_/"}
+{"level":"info","timestamp":"2026-10-16T13:09:03.589979703Z","message":""}
+{"timestamp":"2026-10-16T13:09:03.589983162Z","level":"info","message":" :: Spring Boot ::                (v4.1.1)"}
+{"message":"","timestamp":"2026-10-16T13:09:03.589986902Z","level":"info"}
+{"message":"2026-10-16T13:09:03.038Z  INFO 1 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.4.1 with PID 1 (/opt/demo/workspace.jar started by demo in /opt/demo)","level":"info","timestamp":"2026-10-16T13:09:03.590217320Z"}
+{"level":"info","message":"2026-10-16T13:09:03.040Z  INFO 1 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: \"demo\"","timestamp":"2026-10-16T13:09:03.590224360Z"}
+{"message":"2026-10-16T13:09:05.185Z  INFO 1 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)","level":"info","timestamp":"2026-10-16T13:09:05.191036137Z"}
+{"message":"2026-10-16T13:09:05.232Z  INFO 1 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]","level":"info","timestamp":"2026-10-16T13:09:05.240308302Z"}
+{"timestamp":"2026-10-16T13:09:05.240313462Z","message":"2026-10-16T13:09:05.232Z  INFO 1 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]","level":"info"}
+{"timestamp":"2026-10-16T13:09:05.279095506Z","message":"2026-10-16T13:09:05.267Z  INFO 1 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2097 ms","level":"info"}
+{"message":"2026-10-16T13:09:05.472Z  INFO 1 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)","timestamp":"2026-10-16T13:09:05.473934356Z","level":"info"}
+{"level":"info","message":"2026-10-16T13:09:07.147Z  INFO 1 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=be596e3a-01e5-442e-a9a1-e6373c220abc kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1202","timestamp":"2026-10-16T13:09:07.148404707Z"}
+{"level":"info","message":"2026-10-16T13:09:08.491Z  INFO 1 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=7a193601-b9eb-4e7e-9658-25d0ddb664e3 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1328","timestamp":"2026-10-16T13:09:08.575823179Z"}
+{"level":"info","message":"2026-10-16T13:09:09.996Z  INFO 1 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=3599ec22-4d72-4ee2-ada4-ad14f3e6b90b kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1426","timestamp":"2026-10-16T13:09:10.058912085Z"}
+{"timestamp":"2026-10-16T13:09:11.063261348Z","level":"info","message":"2026-10-16T13:09:11.042Z  INFO 1 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'"}
+{"timestamp":"2026-10-16T13:09:11.086042208Z","message":"2026-10-16T13:09:11.074Z  INFO 1 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 9.387 seconds (process running for 10.137)","level":"info"}
+{"timestamp":"2026-10-16T13:09:13.132445157Z","level":"info","message":"2026-10-16T13:09:13.116Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'"}
+{"level":"info","message":"2026-10-16T13:09:13.116Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'","timestamp":"2026-10-16T13:09:13.132449647Z"}
+{"level":"info","timestamp":"2026-10-16T13:09:13.132454247Z","message":"2026-10-16T13:09:13.118Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms"}
+{"timestamp":"2026-10-16T13:11:03.343805966Z","level":"info","message":"2026-10-16T13:10:57.113Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-5] org.schoolkernel.workspace.DemoSamples   : {\"event\":\"sample_open\",\"sample\":\"small\"}"}
+{"timestamp":"2026-10-16T13:11:03.343812416Z","level":"info","message":"2026-10-16T13:11:00.166Z  INFO 1 --- [timetable-workspace] [.0-8080-exec-10] org.schoolkernel.workspace.DemoSamples   : {\"event\":\"sample_open\",\"sample\":\"two-class\"}"}
+{"message":"2026-10-16T13:11:03.671Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-6] org.schoolkernel.workspace.DemoSamples   : {\"event\":\"sample_open\",\"sample\":\"full\"}","timestamp":"2026-10-16T13:11:03.675797657Z","level":"info"}
+{"message":"2026-10-16T13:11:11.173Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-7] org.schoolkernel.workspace.DemoSamples   : {\"event\":\"sample_open\",\"sample\":\"small\"}","level":"info","timestamp":"2026-10-16T13:11:11.176856868Z"}
+{"level":"info","timestamp":"2026-10-16T13:11:51.232463900Z","message":"2026-10-16T13:11:50.439Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-6] org.schoolkernel.workspace.DemoSamples   : {\"event\":\"sample_open\",\"sample\":\"two-class\"}"}
+{"message":"2026-10-16T13:11:53.068Z  INFO 1 --- [timetable-workspace] [0.0-8080-exec-5] org.schoolkernel.workspace.DemoSamples   : {\"event\":\"sample_open\",\"sample\":\"full\"}","timestamp":"2026-10-16T13:11:53.072921185Z","level":"info"}

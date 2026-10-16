@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="icon" href="/workspace/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/workspace/styles.css">
+</head>
+<body>
+  <header>
+    <p id="eyebrow" class="eyebrow"></p>
+    <h1 id="page-title"></h1>
+    <p id="current-label" class="current-label"></p>
+  </header>
+  <main>
+    <section id="state-card" class="card" aria-live="polite"></section>
+
+    <section id="import-card" class="card" hidden>
+      <h2 id="import-heading"></h2>
+      <p id="import-intro"></p>
+
+      <form id="json-import">
+        <fieldset>
+          <legend id="json-legend"></legend>
+          <label><span id="definition-label"></span><input id="definition" name="definition" type="file" accept="application/json,.json"></label>
+          <label><span id="result-label"></span><input id="result" name="result" type="file" accept="application/json,.json"></label>
+          <button id="json-submit" type="submit"></button>
+        </fieldset>
+      </form>
+
+      <form id="archive-import">
+        <fieldset>
+          <legend id="archive-legend"></legend>
+          <label><span id="archive-label"></span><input id="archive" name="archive" type="file" accept="application/zip,.zip"></label>
+          <button id="archive-submit" type="submit"></button>
+        </fieldset>
+      </form>
+      <p id="import-status" role="status"></p>
+    </section>
+  </main>
+  <script type="module" src="/workspace/app.js"></script>
+</body>
+</html>

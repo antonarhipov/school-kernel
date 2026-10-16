@@ -1,0 +1,125 @@
+[
+  {
+    "id": "f4be45da-754d-4e6c-a80d-7c004b47c1d0",
+    "status": "BUILDING",
+    "createdAt": "2026-10-16T13:56:02.278Z",
+    "meta": {
+      "buildOnly": false,
+      "cliAgentSessionId": "01a144ea-70f2-7bc2-b76f-d70e6690632f",
+      "cliCaller": "codex",
+      "cliMessage": "UC4 final browser-local definitions verification",
+      "fileServiceManifest": {},
+      "logsV2": true,
+      "nixpacksProviders": [],
+      "propertyFileMapping": {},
+      "reason": "deploy",
+      "rootDirectory": null,
+      "runtime": "V2",
+      "serviceManifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "deploy/demo/Dockerfile",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": 30,
+          "healthcheckPath": "/healthz",
+          "healthcheckTimeout": 180,
+          "ipv6EgressEnabled": false,
+          "limitOverride": {
+            "containers": {
+              "cpu": 1,
+              "memoryBytes": 500000000
+            }
+          },
+          "multiRegionConfig": {
+            "europe-west4-drams3a": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": 0,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": 1,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": true,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumeMounts": []
+    }
+  },
+  {
+    "id": "9c261364-3505-4214-8025-b39f51691c61",
+    "status": "SUCCESS",
+    "createdAt": "2026-10-16T13:51:51.236Z",
+    "meta": {
+      "buildOnly": false,
+      "cliAgentSessionId": "01a144ea-70f2-7bc2-b76f-d70e6690632f",
+      "cliCaller": "codex",
+      "cliMessage": "UC4 browser-local definitions verification",
+      "fileServiceManifest": {},
+      "imageDigest": "sha256:100b698eadde9e02a1f52556074871a254e28949b0199407631e717f620dff53",
+      "logsV2": true,
+      "nixpacksProviders": [],
+      "propertyFileMapping": {},
+      "reason": "deploy",
+      "rootDirectory": null,
+      "runtime": "V2",
+      "serviceManifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "deploy/demo/Dockerfile",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": 30,
+          "healthcheckPath": "/healthz",
+          "healthcheckTimeout": 180,
+          "ipv6EgressEnabled": false,
+          "limitOverride": {
+            "containers": {
+              "cpu": 1,
+              "memoryBytes": 500000000
+            }
+          },
+          "multiRegionConfig": {
+            "europe-west4-drams3a": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": 0,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": 1,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": true,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumeMounts": []
+    }
+  }
+]

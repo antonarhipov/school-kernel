@@ -1,0 +1,231 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.26kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-25@sha256:407c4423cec0cf2981055bc2c6c0dc211d9605b6669279b95997f2d1c7e91e2c
+#2 DONE 1.1s
+
+#3 [internal] load metadata for docker.io/library/eclipse-temurin:25-jre@sha256:fd4b1c02c64eef378212e23656fc0b0caa41a357876fa0b60e51ceda94a3db64
+#3 DONE 1.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 670B done
+#4 DONE 0.0s
+
+#5 [build  1/10] FROM docker.io/library/maven:3.9.11-eclipse-temurin-25@sha256:407c4423cec0cf2981055bc2c6c0dc211d9605b6669279b95997f2d1c7e91e2c
+#5 DONE 0.0s
+
+#6 [stage-1 1/6] FROM docker.io/library/eclipse-temurin:25-jre@sha256:fd4b1c02c64eef378212e23656fc0b0caa41a357876fa0b60e51ceda94a3db64
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 236.16kB 0.0s done
+#7 DONE 0.0s
+
+#8 [build  7/10] COPY kernel-contract/src/main kernel-contract/src/main
+#8 CACHED
+
+#9 [build  4/10] COPY kernel-contract/pom.xml kernel-contract/pom.xml
+#9 CACHED
+
+#10 [build  6/10] COPY timetable-workspace/pom.xml timetable-workspace/pom.xml
+#10 CACHED
+
+#11 [build  3/10] COPY pom.xml ./
+#11 CACHED
+
+#12 [build  2/10] WORKDIR /build
+#12 CACHED
+
+#13 [build  5/10] COPY kernel-cli/pom.xml kernel-cli/pom.xml
+#13 CACHED
+
+#14 [build  8/10] COPY kernel-cli/src/main kernel-cli/src/main
+#14 CACHED
+
+#15 [build  9/10] COPY timetable-workspace/src/main timetable-workspace/src/main
+#15 DONE 0.0s
+
+#16 [build 10/10] RUN mvn --batch-mode --no-transfer-progress -Dmaven.test.skip=true package
+#16 0.510 WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+#16 0.510 WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/usr/share/maven/lib/guice-5.1.0-classes.jar)
+#16 0.510 WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+#16 0.510 WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+#16 0.659 [INFO] Scanning for projects...
+#16 5.606 [INFO] ------------------------------------------------------------------------
+#16 5.606 [INFO] Reactor Build Order:
+#16 5.606 [INFO] 
+#16 5.606 [INFO] School Kernel Reactor                                              [pom]
+#16 5.606 [INFO] School Kernel Public Contract                                      [jar]
+#16 5.606 [INFO] School Kernel                                                      [jar]
+#16 5.607 [INFO] School Timetable Operations Workspace                              [jar]
+#16 5.611 [INFO] 
+#16 5.611 [INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+#16 5.611 [INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/4]
+#16 5.611 [INFO]   from pom.xml
+#16 5.611 [INFO] --------------------------------[ pom ]---------------------------------
+#16 6.109 [INFO] 
+#16 6.109 [INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+#16 8.173 [INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+#16 8.173 [INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+#16 8.174 [INFO] 
+#16 8.174 [INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+#16 8.174 [INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/4]
+#16 8.174 [INFO]   from kernel-contract/pom.xml
+#16 8.174 [INFO] --------------------------------[ jar ]---------------------------------
+#16 9.456 [INFO] 
+#16 9.456 [INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+#16 9.457 [INFO] 
+#16 9.457 [INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+#16 14.25 [INFO] Copying 3 resources from src/main/resources to target/classes
+#16 14.25 [INFO] 
+#16 14.25 [INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+#16 15.73 [INFO] No sources to compile
+#16 15.73 [INFO] 
+#16 15.73 [INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+#16 15.73 [INFO] Not copying test resources
+#16 15.73 [INFO] 
+#16 15.73 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+#16 15.73 [INFO] Not compiling test sources
+#16 15.73 [INFO] 
+#16 15.73 [INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+#16 17.69 [INFO] Tests are skipped.
+#16 17.69 [INFO] 
+#16 17.69 [INFO] --- jar:3.4.1:jar (default-jar) @ kernel-contract ---
+#16 22.90 [INFO] Building jar: /build/kernel-contract/target/kernel-contract-1.0.0-SNAPSHOT.jar
+#16 22.91 [INFO] 
+#16 22.91 [INFO] --------------------< org.schoolkernel:kernel-cli >---------------------
+#16 22.91 [INFO] Building School Kernel 1.0.0-SNAPSHOT                              [3/4]
+#16 22.91 [INFO]   from kernel-cli/pom.xml
+#16 22.91 [INFO] --------------------------------[ jar ]---------------------------------
+#16 32.50 [INFO] 
+#16 32.50 [INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-cli ---
+#16 32.50 [INFO] 
+#16 32.50 [INFO] --- resources:3.3.1:resources (default-resources) @ kernel-cli ---
+#16 32.50 [INFO] skip non existing resourceDirectory /build/kernel-cli/src/main/resources
+#16 32.50 [INFO] 
+#16 32.50 [INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-cli ---
+#16 32.52 [INFO] Recompiling the module because of changed dependency.
+#16 32.52 [INFO] Compiling 41 source files with javac [debug parameters release 25] to target/classes
+#16 33.56 [INFO] 
+#16 33.56 [INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-cli ---
+#16 33.56 [INFO] Not copying test resources
+#16 33.56 [INFO] 
+#16 33.56 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-cli ---
+#16 33.56 [INFO] Not compiling test sources
+#16 33.56 [INFO] 
+#16 33.56 [INFO] --- surefire:3.6.0:test (default-test) @ kernel-cli ---
+#16 33.56 [INFO] Tests are skipped.
+#16 33.56 [INFO] 
+#16 33.56 [INFO] --- jar:3.4.1:jar (default-jar) @ kernel-cli ---
+#16 33.56 [INFO] Building jar: /build/kernel-cli/target/school-kernel.jar
+#16 33.57 [INFO] 
+#16 33.57 [INFO] --- shade:3.6.2:shade (default) @ kernel-cli ---
+#16 38.34 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.37 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.43 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.43 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.44 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.44 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.52 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.52 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.57 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.58 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.58 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.58 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.58 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.58 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.72 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.72 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.76 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.79 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.80 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+#16 38.81 [WARNING] HdrHistogram-2.2.2.jar, slf4j-api-2.0.18.jar, slf4j-simple-2.0.17.jar define 1 overlapping resource: 
+#16 38.81 [WARNING]   - META-INF/LICENSE.txt
+#16 38.81 [WARNING] jackson-annotations-2.22.jar, jackson-core-3.2.2.jar, jackson-databind-3.2.2.jar, jackson-dataformat-yaml-3.2.2.jar, micrometer-commons-1.17.1.jar, micrometer-core-1.17.1.jar, micrometer-observation-1.17.1.jar define 2 overlapping resources: 
+#16 38.81 [WARNING]   - META-INF/LICENSE
+#16 38.81 [WARNING]   - META-INF/NOTICE
+#16 38.81 [WARNING] HdrHistogram-2.2.2.jar, angus-activation-2.0.3.jar, gizmo2-2.1.1.jar, istack-commons-runtime-4.1.2.jar, itu-1.14.0.jar, jackson-annotations-2.22.jar, jackson-core-3.2.2.jar, jackson-databind-3.2.2.jar, jackson-dataformat-yaml-3.2.2.jar, jakarta.activation-api-2.1.4.jar, jakarta.xml.bind-api-4.0.5.jar, java-json-canonicalization-1.1.jar, jaxb-core-4.0.9.jar, jaxb-runtime-4.0.9.jar, jboss-logging-3.6.3.Final.jar, jdk-classfile-backport-26.jar, json-schema-validator-3.0.7.jar, jspecify-1.0.1.jar, kernel-contract-1.0.0-SNAPSHOT.jar, micrometer-commons-1.17.1.jar, micrometer-core-1.17.1.jar, micrometer-observation-1.17.1.jar, picocli-4.7.7.jar, school-kernel.jar, slf4j-api-2.0.18.jar, slf4j-simple-2.0.17.jar, smallrye-common-constraint-2.16.0.jar, smallrye-common-resource-2.16.0.jar, snakeyaml-engine-3.0.1.jar, timefold-solver-core-2.6.0.jar, txw2-4.0.9.jar define 1 overlapping resource: 
+#16 38.81 [WARNING]   - META-INF/MANIFEST.MF
+#16 38.81 [WARNING] itu-1.14.0.jar, json-schema-validator-3.0.7.jar, picocli-4.7.7.jar, slf4j-api-2.0.18.jar, slf4j-simple-2.0.17.jar define 1 overlapping classes: 
+#16 38.81 [WARNING]   - META-INF.versions.9.module-info
+#16 38.81 [WARNING] angus-activation-2.0.3.jar, jakarta.activation-api-2.1.4.jar, jakarta.xml.bind-api-4.0.5.jar, jaxb-core-4.0.9.jar, jaxb-runtime-4.0.9.jar, txw2-4.0.9.jar define 2 overlapping resources: 
+#16 38.81 [WARNING]   - META-INF/LICENSE.md
+#16 38.81 [WARNING]   - META-INF/NOTICE.md
+#16 38.81 [WARNING] maven-shade-plugin has detected that some files are
+#16 38.81 [WARNING] present in two or more JARs. When this happens, only one
+#16 38.81 [WARNING] single version of the file is copied to the uber jar.
+#16 38.81 [WARNING] Usually this is not harmful and you can skip these warnings,
+#16 38.81 [WARNING] otherwise try to manually exclude artifacts based on
+#16 38.81 [WARNING] mvn dependency:tree -Ddetail=true and the above output.
+#16 38.81 [WARNING] See https://maven.apache.org/plugins/maven-shade-plugin/
+#16 38.82 [INFO] Replacing original artifact with shaded artifact.
+#16 38.82 [INFO] 
+#16 38.82 [INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+#16 38.82 [INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [4/4]
+#16 38.82 [INFO]   from timetable-workspace/pom.xml
+#16 38.82 [INFO] --------------------------------[ jar ]---------------------------------
+#16 94.44 [INFO] 
+#16 94.44 [INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+#16 94.45 [INFO] 
+#16 94.45 [INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+#16 94.46 [INFO] Copying 45 resources from src/main/resources to target/classes
+#16 94.46 [INFO] 
+#16 94.46 [INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+#16 94.47 [INFO] Recompiling the module because of changed dependency.
+#16 94.47 [INFO] Compiling 52 source files with javac [debug parameters release 25] to target/classes
+#16 95.40 [INFO] /build/timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBaselineExportService.java: Some input files use or override a deprecated API.
+#16 95.40 [INFO] /build/timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBaselineExportService.java: Recompile with -Xlint:deprecation for details.
+#16 95.40 [INFO] 
+#16 95.40 [INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+#16 95.41 [INFO] Not copying test resources
+#16 95.41 [INFO] 
+#16 95.41 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+#16 95.41 [INFO] Not compiling test sources
+#16 95.41 [INFO] 
+#16 95.41 [INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+#16 95.41 [INFO] Tests are skipped.
+#16 95.41 [INFO] 
+#16 95.41 [INFO] --- jar:3.4.1:jar (default-jar) @ timetable-workspace ---
+#16 95.42 [INFO] Building jar: /build/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar
+#16 95.43 [INFO] 
+#16 95.43 [INFO] --- spring-boot:4.1.1:repackage (default) @ timetable-workspace ---
+#16 103.5 [INFO] Replacing main artifact /build/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#16 103.5 [INFO] The original artifact has been renamed to /build/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar.original
+#16 103.5 [INFO] ------------------------------------------------------------------------
+#16 103.5 [INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+#16 103.5 [INFO] 
+#16 103.5 [INFO] School Kernel Reactor .............................. SUCCESS [  2.563 s]
+#16 103.5 [INFO] School Kernel Public Contract ...................... SUCCESS [ 14.740 s]
+#16 103.5 [INFO] School Kernel ...................................... SUCCESS [ 15.907 s]
+#16 103.5 [INFO] School Timetable Operations Workspace .............. SUCCESS [01:04 min]
+#16 103.5 [INFO] ------------------------------------------------------------------------
+#16 103.5 [INFO] BUILD SUCCESS
+#16 103.5 [INFO] ------------------------------------------------------------------------
+#16 103.5 [INFO] Total time:  01:42 min
+#16 103.5 [INFO] Finished at: 2026-10-16T13:02:12Z
+#16 103.5 [INFO] ------------------------------------------------------------------------
+#16 DONE 103.6s
+
+#17 [stage-1 2/6] WORKDIR /opt/demo
+#17 CACHED
+
+#18 [stage-1 3/6] RUN groupadd --gid 10001 demo && useradd --uid 10001 --gid demo --no-create-home demo
+#18 CACHED
+
+#19 [stage-1 4/6] COPY --from=build /build/kernel-cli/target/school-kernel.jar /opt/demo/kernel.jar
+#19 DONE 0.0s
+
+#20 [stage-1 5/6] COPY --from=build /build/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar /opt/demo/workspace.jar
+#20 DONE 0.1s
+
+#21 [stage-1 6/6] COPY --chmod=0555 deploy/demo/start deploy/demo/kernel /opt/demo/
+#21 DONE 0.0s
+
+#22 exporting to image
+#22 exporting layers 0.0s done
+#22 writing image sha256:921f565d163001626a3a85011192886367e210d844604a37e9fdc74c174c68e9 done
+#22 naming to docker.io/library/school-kernel-demo:uc3 done
+#22 DONE 0.1s

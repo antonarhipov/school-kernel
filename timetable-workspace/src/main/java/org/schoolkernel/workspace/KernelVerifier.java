@@ -66,10 +66,28 @@ public class KernelVerifier {
     }
 
     public Verification verify(ImportDocuments documents) {
+        return verify(documents, Duration.ofSeconds(30), ignored -> {});
+    }
+
+    Verification verify(ImportDocuments documents, Duration timeout, java.util.function.Consumer<java.time.Instant> onStart) {
+        return verify(documents, timeout, onStart, () -> {});
+    }
+
+    Verification verify(ImportDocuments documents, Duration timeout, java.util.function.Consumer<java.time.Instant> onStart, Runnable onStop) {
+        JsonNode evidence = execute(documents, timeout, onStart, onStop, false);
+        return trusted(evidence, documents, evidence.path("correlationId").asString());
+    }
+
+    JsonNode review(ImportDocuments documents, Duration timeout, java.util.function.Consumer<java.time.Instant> onStart, Runnable onStop) {
+        return execute(documents, timeout, onStart, onStop, true);
+    }
+
+    private JsonNode execute(ImportDocuments documents, Duration timeout, java.util.function.Consumer<java.time.Instant> onStart, Runnable onStop, boolean review) {
         String correlationId = UUID.randomUUID().toString();
         long started = System.nanoTime();
         Path directory = null;
         boolean logged = false;
+        Process process = null;
         try {
             directory = Files.createTempDirectory(temporaryRoot, "school-workspace-verify-");
             restrict(directory, true);
@@ -78,38 +96,56 @@ public class KernelVerifier {
             writePrivate(definition, CanonicalJson.bytes(documents.definition()));
             List<String> arguments = new ArrayList<>(List.of(
                     executable,
-                    "verify",
+                    review ? "review" : "verify",
                     "--definition", definition.toString(),
                     "--output", output.toString(),
                     "--correlation-id", correlationId));
             if (documents.mode() == ImportDocuments.ImportMode.SUCCESSOR_DEFINITION) arguments.add("--successor");
             if (documents.result() != null) {
                 Path result = directory.resolve("timetable-result.json");
-                writePrivate(result, CanonicalJson.bytes(documents.result()));
-                arguments.add(4, "--result");
+                writePrivate(result, CanonicalJson.bytes(review ? documents.result().path("timetable").path("assignments") : documents.result()));
+                arguments.add(4, review ? "--assignments" : "--result");
                 arguments.add(5, result.toString());
             }
-            Process process = processes.start(List.copyOf(arguments));
-            Thread stdout = Thread.ofVirtual().start(() -> drain(process.getInputStream()));
-            Thread stderr = Thread.ofVirtual().start(() -> drain(process.getErrorStream()));
-            boolean completed = process.waitFor(30, TimeUnit.SECONDS);
+            java.time.Instant beforeStart = java.time.Instant.now();
+            process = processes.start(List.copyOf(arguments));
+            onStart.accept(beforeStart);
+            Process launched = process;
+            Thread stdout = Thread.ofVirtual().start(() -> drain(launched.getInputStream()));
+            Thread stderr = Thread.ofVirtual().start(() -> drain(launched.getErrorStream()));
+            boolean completed = process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
             if (!completed) {
-                process.destroy();
-                if (!process.waitFor(2, TimeUnit.SECONDS)) {
-                    process.destroyForcibly();
-                    process.waitFor(2, TimeUnit.SECONDS);
-                }
                 throw unavailable("Kernel verification did not finish in time.");
             }
-            stdout.join();
-            stderr.join();
+            onStop.run();
+            stdout.join(1000);
+            stderr.join(1000);
             int exit = process.exitValue();
             JsonNode verification = readVerification(output);
+            if (review && (exit == 0 && "REVIEWED".equals(verification.path("status").asString())
+                    || exit == 2 && "INVALID_INPUT".equals(verification.path("status").asString()))) {
+                if (!correlationId.equals(verification.path("correlationId").asString())) throw unavailable("Mismatched review evidence.");
+                if (exit == 0 && (!verification.path("valid").isBoolean() || !verification.path("conflicts").isArray()
+                        || !verification.path("hardMatchCounts").isObject() || !verification.path("softMatchCounts").isObject()
+                        || verification.path("hardMatchCounts").size() != 19 || verification.path("softMatchCounts").size() != 7
+                        || verification.path("hardMatchCounts").properties().stream().anyMatch(e -> !e.getValue().isIntegralNumber() || e.getValue().asLong() < 0)
+                        || !verification.path("truncated").isBoolean()
+                        || !documents.definition().path("schoolId").equals(verification.path("schoolId"))
+                        || verification.path("valid").asBoolean() && (!verification.path("conflicts").isEmpty()
+                          || !verification.path("result").path("inputRevision").equals(verification.path("definitionRevision"))
+                          || verification.path("hardMatchCounts").properties().stream().anyMatch(e -> e.getValue().asLong(-1) != 0))))
+                    throw unavailable("Incomplete review evidence.");
+                if (exit == 2 && (!verification.path("validationReport").path("errors").isArray()
+                        || verification.path("validationReport").path("errors").isEmpty()
+                        || !verification.path("validationReport").path("truncated").isBoolean()))
+                    throw unavailable("Review returned no usable located diagnostics.");
+                log(correlationId, "REVIEWED", started); logged = true; return verification;
+            }
             if (exit == 0 && "VERIFIED".equals(verification.path("status").stringValue())) {
-                Verification trusted = trusted(verification, documents, correlationId);
+                trusted(verification, documents, correlationId);
                 log(correlationId, "VERIFIED", started);
                 logged = true;
-                return trusted;
+                return verification;
             }
             if (exit == 2 && "INVALID_INPUT".equals(verification.path("status").stringValue())) {
                 log(correlationId, "INVALID_INPUT", started);
@@ -135,6 +171,28 @@ public class KernelVerifier {
             log(correlationId, "INTERRUPTED", started);
             throw unavailable("School Kernel verification was interrupted.");
         } finally {
+            if (process != null) {
+                // Also stop children and reap on interruption. Never settle a live process as completed.
+                boolean interrupted = Thread.interrupted();
+                if (process.isAlive()) {
+                    process.descendants().forEach(ProcessHandle::destroy);
+                    process.destroy();
+                    try {
+                        if (!process.waitFor(2, TimeUnit.SECONDS)) {
+                            process.descendants().forEach(ProcessHandle::destroyForcibly);
+                            process.destroyForcibly();
+                            process.waitFor();
+                        }
+                    } catch (InterruptedException exception) {
+                        interrupted = true;
+                        process.destroyForcibly();
+                        process.onExit().join();
+                    }
+                }
+                try { process.getInputStream().close(); process.getErrorStream().close(); } catch (IOException ignored) {}
+                if (interrupted) Thread.currentThread().interrupt();
+            }
+            onStop.run();
             deleteTree(directory);
         }
     }
@@ -173,7 +231,7 @@ public class KernelVerifier {
 
     private static JsonNode readVerification(Path output) {
         try {
-            if (!Files.isRegularFile(output) || Files.size(output) > 1024 * 1024) {
+            if (!Files.isRegularFile(output) || Files.size(output) > 2 * 1024 * 1024) {
                 throw unavailable("School Kernel did not publish bounded verification evidence.");
             }
             return JSON.readTree(Files.readAllBytes(output));

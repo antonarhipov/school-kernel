@@ -1,0 +1,9 @@
+{
+  "verdict": "PASS",
+  "productionFiles": 174,
+  "sourceStageIsolatedAndArchiveAgree": true,
+  "packagedResources": 59,
+  "pinnedVerificationInputs": 9,
+  "sourceArchiveSha256": "e20f7b4d1bba14bfbe09ccfc9ad8280f34ae3d96216249908c3e1fcee4f58fde",
+  "sharedCheckoutBoundary": "Concurrent work preserved; deployment and approval apply to isolated production snapshot only."
+}

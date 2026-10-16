@@ -1,0 +1,356 @@
+SCHOOL KERNEL
+Interactive demo
+School
+Ranniku õppehoone
+Kasevälja Põhikool
+Coruscant Imperial Academy
+Meadowbrook Community School
+Timetable
+Variant A
+Variant B
+Utilities
+Utilities
+Close Utilities
+School definition editor
+
+Edit a copy of this school. Existing schools and timetables stay intact.
+
+Editing a copy of Ranniku õppehoone.
+
+School definition JSON
+New school name
+Save school copy
+Search effort
+Quick (5s)
+Thorough (60s)
+Generate timetable
+
+Use at most 2 MiB UTF-8. This text is only in the open editor; the previous saved editor copy is unchanged.
+
+Save a school copy before generating a timetable. Search budgets cover construction and search; queueing, startup and checking take additional time. More time may help but guarantees nothing.
+
+Locally stored data
+
+Deletes only school definitions, timetables and unfinished edits saved in this browser on this device. Bundled examples remain available. This cannot be undone.
+
+Delete local schools and timetables…
+Variant A
+
+Ranniku õppehoone · 2 classes · 56 lessons per week
+
+Week
+Day
+Day
+Whole week
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Classes
+All classes
+5A
+5B
+Teachers
+All teachers
+Mari Tammela
+Jaan Tammela
+Katrin Tammela
+Toomas Tammela
+Liis Tammela
+Martin Tammela
+Kärt Tammela
+Andres Tammela
+Evelin Tammela
+Siim Tammela
+Helen Tammela
+Priit Tammela
+Kadri Tammela
+Rasmus Tammela
+Annika Tammela
+Tanel Tammela
+Triin Tammela
+Rooms
+All rooms
+Klassiruum 101
+Klassiruum 102
+Klassiruum 103
+Klassiruum 104
+Klassiruum 105
+Klassiruum 106
+Klassiruum 107
+Klassiruum 108
+Klassiruum 109
+Klassiruum 110
+Klassiruum 111
+Muusikaklass 112
+Kunstiklass 113
+Spordisaal
+Tehnoloogiaklass
+Subjects
+All subjects
+Klassijuhatajatund
+Eesti keel
+Kirjandus
+Matemaatika
+Loodusõpetus
+Ajalugu
+Õpiabi
+Muusikaõpetus
+Kunstiõpetus
+Inimeseõpetus
+Inglise keel
+Vene keel
+Kehaline kasvatus
+Käsitöö ja tehnoloogiaõpetus
+Time slots
+All time slots
+Monday · 1. 08:00–08:40
+Monday · 2. 08:45–09:30
+Monday · 3. 09:40–10:25
+Monday · 4. 10:45–11:30
+Monday · 5. 11:50–12:35
+Monday · 6. 12:55–13:40
+Monday · 7. 13:50–14:35
+Tuesday · 1. 08:00–08:40
+Tuesday · 2. 08:45–09:30
+Tuesday · 3. 09:40–10:25
+Tuesday · 4. 10:45–11:30
+Tuesday · 5. 11:50–12:35
+Tuesday · 6. 12:55–13:40
+Tuesday · 7. 13:50–14:35
+Wednesday · 1. 08:00–08:40
+Wednesday · 2. 08:45–09:30
+Wednesday · 3. 09:40–10:25
+Wednesday · 4. 10:45–11:30
+Wednesday · 5. 11:50–12:35
+Wednesday · 6. 12:55–13:40
+Wednesday · 7. 13:50–14:35
+Thursday · 1. 08:00–08:40
+Thursday · 2. 08:45–09:30
+Thursday · 3. 09:40–10:25
+Thursday · 4. 10:45–11:30
+Thursday · 5. 11:50–12:35
+Thursday · 6. 12:55–13:40
+Thursday · 7. 13:50–14:35
+Friday · 1. 08:00–08:40
+Friday · 2. 08:45–09:30
+Friday · 3. 09:40–10:25
+Friday · 4. 10:45–11:30
+Friday · 5. 11:50–12:35
+Friday · 6. 12:55–13:40
+Friday · 7. 13:50–14:35
+Highlight lessons
+Clear filters
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+5A	108:00–08:40	
+—
+	
+Kirjandus
+Klassiruum 103
+	
+Matemaatika
+Klassiruum 109
+	
+Ajalugu
+Klassiruum 105
+	
+—
+
+208:45–09:30	
+Käsitöö ja tehnoloogiaõpetus
+Tehnoloogiaklass
+	
+Eesti keel
+Klassiruum 106
+	
+Kirjandus
+Klassiruum 103
+	
+Matemaatika
+Klassiruum 109
+	
+Matemaatika
+Klassiruum 109
+
+309:40–10:25	
+Matemaatika
+Klassiruum 109
+	
+Matemaatika
+Klassiruum 109
+	
+Inglise keel
+Klassiruum 108
+	
+Klassijuhatajatund
+Klassiruum 111
+	
+Eesti keel
+Klassiruum 104
+
+410:45–11:30	
+Ajalugu
+Klassiruum 105
+	
+Inglise keel
+Klassiruum 104
+	
+Muusikaõpetus
+Muusikaklass 112
+	
+Kunstiõpetus
+Kunstiklass 113
+	
+Inimeseõpetus
+Klassiruum 110
+
+511:50–12:35	
+Loodusõpetus
+Klassiruum 101
+	
+Loodusõpetus
+Klassiruum 101
+	
+Loodusõpetus
+Klassiruum 101
+	
+Eesti keel
+Klassiruum 106
+	
+Kehaline kasvatus
+Spordisaal
+
+612:55–13:40	
+Kehaline kasvatus
+Spordisaal
+	
+—
+	
+—
+	
+Käsitöö ja tehnoloogiaõpetus
+Tehnoloogiaklass
+	
+Inglise keel
+Klassiruum 110
+
+713:50–14:35	
+Eesti keel
+Klassiruum 104
+	
+—
+	
+—
+	
+—
+	
+Vene keel
+Klassiruum 102
+
+5B	108:00–08:40	
+Vene keel
+Klassiruum 102
+	
+—
+	
+Loodusõpetus
+Klassiruum 102
+	
+Matemaatika
+Klassiruum 102
+	
+—
+
+208:45–09:30	
+Eesti keel
+Klassiruum 108
+	
+Kehaline kasvatus
+Spordisaal
+	
+Matemaatika
+Klassiruum 109
+	
+Eesti keel
+Klassiruum 104
+	
+Eesti keel
+Klassiruum 103
+
+309:40–10:25	
+Ajalugu
+Klassiruum 105
+	
+Ajalugu
+Klassiruum 105
+	
+Kirjandus
+Klassiruum 103
+	
+Kirjandus
+Klassiruum 103
+	
+Inimeseõpetus
+Klassiruum 107
+
+410:45–11:30	
+Matemaatika
+Klassiruum 109
+	
+Matemaatika
+Klassiruum 109
+	
+Klassijuhatajatund
+Klassiruum 108
+	
+Muusikaõpetus
+Muusikaklass 112
+	
+Loodusõpetus
+Klassiruum 102
+
+511:50–12:35	
+Inglise keel
+Klassiruum 105
+	
+Matemaatika
+Klassiruum 109
+	
+Eesti keel
+Klassiruum 105
+	
+Inglise keel
+Klassiruum 109
+	
+Käsitöö ja tehnoloogiaõpetus
+Tehnoloogiaklass
+
+612:55–13:40	
+—
+	
+Loodusõpetus
+Klassiruum 102
+	
+Käsitöö ja tehnoloogiaõpetus
+Tehnoloogiaklass
+	
+Kehaline kasvatus
+Spordisaal
+	
+Kunstiõpetus
+Kunstiklass 113
+
+713:50–14:35	
+—
+	
+—
+	
+—
+	
+—
+	
+Inglise keel
+Klassiruum 111
+Fictional staff and schools · Your saved timetables and drafts stay in this browser on this device.
+About storage

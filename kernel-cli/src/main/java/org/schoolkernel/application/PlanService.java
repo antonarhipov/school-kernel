@@ -97,6 +97,10 @@ public final class PlanService {
             }
             var verifiedEvaluation = postSolveEvaluator.evaluate(solveResult.schedule(), definition.softWeights());
             if (!verifiedEvaluation.complete()) {
+                if (request.controls().timeLimit() != null && "TIME_LIMIT".equals(solveResult.terminationReason())) {
+                    return new CommandOutcome.NoFeasibleSolution(results.incompleteConstruction(
+                            correlationId, elapsed(started), definition, derivedInputRevision, request.controls()));
+                }
                 throw new IllegalStateException("Solver returned an incomplete candidate");
             }
             if (!verifiedEvaluation.feasible()) {

@@ -1,0 +1,10 @@
+{
+  "timetable-workspace/src/main/resources/demo/samples/full-definition.json": "timetable-workspace/src/test/resources/demo/legacy-samples/full-definition.json",
+  "timetable-workspace/src/main/resources/demo/samples/full-result.json": "timetable-workspace/src/test/resources/demo/legacy-samples/full-result.json",
+  "timetable-workspace/src/main/resources/demo/samples/generation-evidence.json": "timetable-workspace/src/test/resources/demo/legacy-samples/generation-evidence.json",
+  "timetable-workspace/src/main/resources/demo/samples/scoring-evidence.json": "timetable-workspace/src/test/resources/demo/legacy-samples/scoring-evidence.json",
+  "timetable-workspace/src/main/resources/demo/samples/small-definition.json": "timetable-workspace/src/test/resources/demo/legacy-samples/small-definition.json",
+  "timetable-workspace/src/main/resources/demo/samples/small-result.json": "timetable-workspace/src/test/resources/demo/legacy-samples/small-result.json",
+  "timetable-workspace/src/main/resources/demo/samples/two-class-definition.json": "timetable-workspace/src/test/resources/demo/legacy-samples/two-class-definition.json",
+  "timetable-workspace/src/main/resources/demo/samples/two-class-result.json": "timetable-workspace/src/test/resources/demo/legacy-samples/two-class-result.json"
+}

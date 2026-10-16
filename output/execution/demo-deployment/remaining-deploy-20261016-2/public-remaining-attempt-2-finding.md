@@ -1,0 +1,3 @@
+# Retained public walkthrough attempt 2
+
+All functional steps through exact independent archive/pair import and unsafe ZIP refusal passed. At 390px the document width is 393px with the unbroken synthetic school name PUBLIC_PRIVATE_SENTINEL_20261016. Focused public inspection records the actual 393.296875px school-identity boundary; the day matrix scrolls inside its intended container and is not the page overflow source. This is a genuine presentation finding, not a passing full walkthrough. Prepared one-line demo-only heading wrap must be verified separately; the explicitly authorized original archive remains the deployed version. No changed source has been uploaded.

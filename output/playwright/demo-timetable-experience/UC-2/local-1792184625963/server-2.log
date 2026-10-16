@@ -1,0 +1,36 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-17T00:04:52.921+03:00  INFO 13458 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 13458 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-391505820546513447/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-17T00:04:52.927+03:00  INFO 13458 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-17T00:04:56.214+03:00  INFO 13458 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 53907 (https)
+2026-10-17T00:04:56.233+03:00  INFO 13458 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-17T00:04:56.233+03:00  INFO 13458 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-17T00:04:56.265+03:00  INFO 13458 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3049 ms
+2026-10-17T00:04:56.579+03:00  INFO 13458 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-17T00:04:59.371+03:00  INFO 13458 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=b4c1bce2-06e2-4c7c-9296-16bfaff94b94 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1620
+2026-10-17T00:05:00.999+03:00  INFO 13458 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=8349c727-220a-46c1-88ce-4ff9f4bd317e kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1604
+2026-10-17T00:05:03.171+03:00  INFO 13458 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=4c632e0d-0296-490a-8237-12712c9eff92 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2114
+2026-10-17T00:05:05.214+03:00  INFO 13458 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=98482e79-b7b7-40df-ba30-e77df1616a37 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2017
+2026-10-17T00:05:07.328+03:00  INFO 13458 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=a1f5688f-a0e7-4dd6-a810-58db041539db kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2074
+2026-10-17T00:05:09.411+03:00  INFO 13458 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=a330cbdd-9d9c-4e57-9947-e9f6c16adf50 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2034
+2026-10-17T00:05:11.301+03:00  INFO 13458 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 53907 (https) with context path '/'
+2026-10-17T00:05:11.335+03:00  INFO 13458 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 19.714 seconds (process running for 20.932)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T21:05:11.355856Z","kernelBuild":"441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"4h","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"serviceArtifactSha256":"f083107d586dc173f0f541af5395a67775a251955681b921ba301bf55129cf86","solveSlots":1,"standaloneVerificationSlots":2,"processBounds":{"solveMaximum":"preset + solve-overhead","solveReservationExtraSeconds":8,"standaloneVerificationReservationExtraSeconds":4,"verificationShutdownWaitSeconds":10,"terminationSoftWaitSeconds":2,"reservationRelease":"AFTER_REAP"},"counterReset":"a19c772f-3301-4b36-8567-f2f7532d09fc","utcAllowanceDay":"2026-10-16","sampleVerification":{"two-class":"VERIFIED","full":"VERIFIED","star-wars":"VERIFIED"}}
+2026-10-17T00:05:11.907+03:00  INFO 13458 --- [timetable-workspace] [.1-53907-exec-9] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-17T00:05:11.909+03:00  INFO 13458 --- [timetable-workspace] [.1-53907-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-17T00:05:11.926+03:00  INFO 13458 --- [timetable-workspace] [.1-53907-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 17 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T21:05:16.261871Z","count":1,"reason":"CREATED"}
+{"family":"work","event":"process_started","timestamp":"2026-10-16T21:05:16.408749Z","kind":"VERIFICATION","correlationId":"4e66ebc5-af87-4e74-8ca0-082b574663f1"}
+2026-10-17T00:05:17.260+03:00  INFO 13458 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-17T00:05:18.066+03:00  INFO 13458 --- [timetable-workspace] [1-53907-exec-10] o.schoolkernel.workspace.KernelVerifier  : correlationId=b6f9643c-060c-49c7-807d-8b5980fbe3d0 kernelCommand=verify exitClass=REVIEWED elapsedTimeMs=1685
+{"family":"work","event":"process_finished","timestamp":"2026-10-16T21:05:18.075829Z","kind":"VERIFICATION","outcome":"VERIFIED","processMs":1650,"correlationId":"4e66ebc5-af87-4e74-8ca0-082b574663f1"}
+2026-10-17T00:05:18.085+03:00  INFO 13458 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+{"family":"session","event":"ended","timestamp":"2026-10-16T21:05:18.098237Z","count":1,"reason":"SHUTDOWN"}

@@ -1,0 +1,9 @@
+{
+  "verdict": "FAIL: verification harness",
+  "failure": "AssertionError while checking HTTP redirect Location",
+  "cause": "Case-sensitive dictionary lookup for Location; Railway returned lowercase location. Diagnostic confirms correct 301 and exact HTTPS target. Cookie header checks are now case-insensitive too.",
+  "productionChange": false,
+  "checksBeforeFailure": "40 health/static status reads and nine expected edge status codes passed; redirect target assertion failed due to lookup casing; final repetition required",
+  "evidence": "redirect-diagnostic.json",
+  "retry": "check_public_cleanup.py normalizes response header names"
+}

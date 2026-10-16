@@ -1,0 +1,56 @@
+{
+  "verdict": "PASS",
+  "deployment": "dc3b9ac9-909b-4d18-a60d-b87a5f4cf7e0",
+  "artifactIdentical": true,
+  "kernelIdentical": true,
+  "oldCounterEpoch": "9fbf2748-5394-4c21-acad-495e61ff2d34",
+  "newCounterEpoch": "df307f8f-2dbb-45f5-bade-8d0cb5aa18c2",
+  "activeWorkspaces": 0,
+  "sampleVerification": {
+    "english": "VERIFIED",
+    "full": "VERIFIED",
+    "star-wars": "VERIFIED",
+    "two-class": "VERIFIED"
+  },
+  "aggregate": {
+    "queue": {
+      "distinctWaiting": 0,
+      "waitBinMs": 10,
+      "waitP50UpperMs": 0,
+      "waitP90UpperMs": 0
+    },
+    "context": {
+      "build": "441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881",
+      "config": "ceb36717fd8d71c57b7a11bab37b496408ba095c87cc539301319c199521f7a9",
+      "counterReset": "df307f8f-2dbb-45f5-bade-8d0cb5aa18c2",
+      "intervalMs": 60002,
+      "timestamp": "2026-10-16T21:36:48.712547952Z",
+      "utcAllowanceDay": "2026-10-16"
+    },
+    "timestamp": "2026-10-16T21:36:48.712496373Z",
+    "workspaces": {
+      "active": 0
+    },
+    "level": "info",
+    "event": "interval",
+    "cache": {
+      "entries": 0,
+      "residentBytes": 0
+    },
+    "allowance": {
+      "consumedMs": 0,
+      "releasedReservationMs": 0,
+      "remainingMs": 14400000,
+      "reservedMs": 0,
+      "settlements": 0,
+      "utcResets": 0
+    },
+    "productUse": {},
+    "message": "",
+    "family": "aggregate",
+    "processes": {
+      "runningSolve": 0,
+      "runningVerification": 0
+    }
+  }
+}

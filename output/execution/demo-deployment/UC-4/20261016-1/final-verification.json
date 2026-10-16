@@ -1,0 +1,27 @@
+{
+  "verdict": "PASS",
+  "checkedAt": "2026-10-16T14:07:46.198693+00:00",
+  "uc4": "APPROVED",
+  "uc5": "NOT_STARTED, now eligible",
+  "sourceFilesChanged": 8,
+  "productionFilesChanged": 3,
+  "pinnedProductionFiles": 150,
+  "fullSourceArchiveFiles": 155,
+  "unitTests": 159,
+  "focusedStorageTests": 5,
+  "walkthroughs": [
+    "UC4 local PASS",
+    "UC4 final public PASS",
+    "UC2 fixed-runtime regression PASS",
+    "UC3 sample regression PASS"
+  ],
+  "deployedStaticHashes": 33,
+  "linksChecked": 151,
+  "brokenLinks": [],
+  "unrelatedStartingFilesChanged": 0,
+  "submissionSha256": "16f3124db8d3b304c2d74ba0a2726b7a0eb8febebb37226e6beb0c314d1b733d",
+  "productionSubmissionSha256": "2916453123c622e3392aa3c1391ec2c3753da7c0a3596fce1f0c385fac883669",
+  "cleanup": "Same image restarted; both disposable workspaces removed; 3 sample verifications, 40 stateless reads and 9 edge probes PASS; final isolated topology PASS",
+  "financialOrProviderSettingChanges": false,
+  "committed": false
+}

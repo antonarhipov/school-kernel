@@ -1,0 +1,17 @@
+{
+  "memoryBytes": 512000000,
+  "cpus": 1.0,
+  "webHeapMiB": 128,
+  "verifyHeapMiB": 96,
+  "observed": {
+    "BlockIO": "0B / 0B",
+    "CPUPerc": "0.27%",
+    "Container": "school-demo-smoke-89de1ff174f5468c994a8afe04072926",
+    "ID": "7ca2f4e8d675",
+    "MemPerc": "43.74%",
+    "MemUsage": "213.6MiB / 488.3MiB",
+    "Name": "school-demo-smoke-89de1ff174f5468c994a8afe04072926",
+    "NetIO": "5.66kB / 7.26kB",
+    "PIDs": "35"
+  }
+}

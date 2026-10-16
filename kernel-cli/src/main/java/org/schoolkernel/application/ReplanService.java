@@ -179,6 +179,10 @@ public final class ReplanService {
             }
             var evaluation = evaluator.evaluate(schedule, definition.softWeights());
             if (!evaluation.complete()) {
+                if (request.controls().timeLimit() != null && "TIME_LIMIT".equals(terminationReason)) {
+                    return new CommandOutcome.NoFeasibleSolution(results.incompleteConstruction(
+                            correlationId, elapsed(started), definition, inputRevision, request.controls()));
+                }
                 throw new IllegalStateException("Solver returned an incomplete candidate");
             }
             if (!evaluation.feasible()) {

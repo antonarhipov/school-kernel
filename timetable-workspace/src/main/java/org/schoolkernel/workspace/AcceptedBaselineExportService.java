@@ -12,14 +12,15 @@ import tools.jackson.databind.JsonNode;
 
 @Service
 public class AcceptedBaselineExportService {
-    private final WorkspaceRepository repository;
+    @org.springframework.beans.factory.annotation.Autowired(required = false) private DemoEvents events;
+    private final WorkspaceStore repository;
     private final AcceptedBundleArchiver archiver;
     private final SafeImportReader reader;
     private final KernelVerifier verifier;
     private final ManifestService manifests;
 
     public AcceptedBaselineExportService(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             AcceptedBundleArchiver archiver,
             SafeImportReader reader,
             KernelVerifier verifier,
@@ -33,7 +34,8 @@ public class AcceptedBaselineExportService {
 
     public ExportedBaseline export() {
         WorkspaceAggregate current = repository.load();
-        if (current.state() != WorkspaceState.ACCEPTED_BASELINE
+        if (!(repository.ephemeral() && current.document().path("acceptedBaseline").isObject())
+                && current.state() != WorkspaceState.ACCEPTED_BASELINE
                 && !(current.state() == WorkspaceState.DEFINITION_DRAFT
                     && current.document().path("acceptedBaseline").isObject())) {
             throw new WorkspaceProblem(
@@ -62,7 +64,12 @@ public class AcceptedBaselineExportService {
         ImportDocuments reproduced;
         try {
             reproduced = reader.readArchive(archive);
-            KernelVerifier.Verification verification = verifier.verify(reproduced);
+            // Demo Current is installed only after exact verification. Export copies that immutable accepted unit;
+            // it must remain available without new kernel work while a draft is open or allowance is exhausted.
+            KernelVerifier.Verification verification = repository.ephemeral()
+                    ? new KernelVerifier.Verification(definition.path("schoolId").stringValue(),
+                            result.path("inputRevision").stringValue(), result.path("timetableRevision").stringValue())
+                    : verifier.verify(reproduced);
             JsonNode reproducedManifest = manifests.validatedOrGenerated(reproduced);
             if (!same(definition, reproduced.definition())
                     || !same(result, reproduced.result())
@@ -80,6 +87,7 @@ public class AcceptedBaselineExportService {
         } catch (RuntimeException exception) {
             throw integrityFailure();
         }
+        if (events != null) events.product(DemoEvents.Product.EXPORT);
         return new ExportedBaseline(
                 archive,
                 current.etag(),

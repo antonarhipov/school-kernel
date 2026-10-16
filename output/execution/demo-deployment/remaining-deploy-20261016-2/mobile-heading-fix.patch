@@ -1,0 +1,10 @@
+--- a/timetable-workspace/src/main/resources/static/workspace/styles.css
++++ b/timetable-workspace/src/main/resources/static/workspace/styles.css
+@@ -1003,6 +1003,7 @@
+ .demo-effort { max-width: 42rem; margin: 1rem 0; }
+ .demo-effort label { display: block; font-weight: 600; margin-bottom: .4rem; }
+ .demo-effort select { max-width: 100%; }
++body.operational:has(#demo-retention) .school-identity h2 { overflow-wrap: anywhere; }
+ #demo-run-status, .demo-provenance { overflow-wrap: anywhere; }
+ body.operational:has(#demo-retention) .accepted-heading:has(.utility-disclosure[open]) .header-utilities {
+   grid-column: 1 / -1; justify-self: stretch; display: block; min-width: 0;

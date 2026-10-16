@@ -1,0 +1,1002 @@
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java
+@@ -16,9 +16,7 @@
+ @Profile("demo")
+ class DemoDefinitionLimits {
+     static final int DOCUMENT_BYTES = 2 * 1024 * 1024;
+-    private static final JsonMapper JSON = JsonMapper.builder()
+-            .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
+-            .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).build();
++    private static final JsonMapper JSON = DemoInputJson.MAPPER;
+     private final long workMax;
+     private final int lessonMax;
+     private final com.networknt.schema.Schema schema;
+@@ -29,7 +27,9 @@
+         this.workMax = workMax;
+         this.lessonMax = lessonMax;
+         try (var input = getClass().getResourceAsStream("/schema/school-definition-v1.schema.json")) {
+-            schema = com.networknt.schema.SchemaRegistry.withDefaultDialect(com.networknt.schema.SpecificationVersion.DRAFT_2020_12).getSchema(input);
++            schema = com.networknt.schema.SchemaRegistry.withDefaultDialect(com.networknt.schema.SpecificationVersion.DRAFT_2020_12,
++                    builder -> builder.schemaRegistryConfig(com.networknt.schema.SchemaRegistryConfig.builder()
++                            .failFast(true).build())).getSchema(input);
+             schema.initializeValidators();
+         } catch (IOException exception) { throw new IllegalStateException("Definition schema missing", exception); }
+     }
+@@ -47,7 +47,7 @@
+             definition = JSON.readTree(text);
+         }
+         catch (JacksonException | java.nio.charset.CharacterCodingException exception) {
+-            throw invalid("/", "Expected one valid JSON object without duplicate fields or trailing content.");
++            throw invalid("/", "Expected one valid JSON object within the parsing limits (depth 64, strings 1 MiB, numbers 100 characters, 150000 tokens), without duplicate fields or trailing content.");
+         }
+         check(definition);
+         return definition;
+@@ -74,13 +74,49 @@
+                     "/lessons, /periods, /rooms: This definition exceeds the demo complexity limit (at most "
+                     + lessonMax + " lessons and placement work " + workMax + "). It was not used.");
+         }
+-        if (CanonicalJson.bytes(definition).length > DOCUMENT_BYTES) throw new WorkspaceProblem(HttpStatus.PAYLOAD_TOO_LARGE, "DEFINITION_TOO_LARGE", "The definition must be at most 2 MiB UTF-8.");
++        checkDimensions(definition, "", "", 0);
+         if (initial && definition.has("basedOnRevision")) throw invalid("/basedOnRevision",
+                 "An initial definition must omit repair ancestry. Use a complete accepted bundle to retain a repaired timetable.");
+-        var errors = schema.validate(definition);
+-        if (!errors.isEmpty()) {
+-            var error = errors.stream().sorted(java.util.Comparator.comparing(e -> e.getInstanceLocation().toString())).findFirst().orElseThrow();
+-            throw invalid(error.getInstanceLocation().toString(), error.getMessage());
++        try {
++            var errors = schema.validate(definition);
++            if (!errors.isEmpty()) throw schemaError(errors.getFirst());
++        } catch (com.networknt.schema.FailFastAssertionException exception) {
++            throw schemaError(exception.getError());
++        }
++        // Only schema-valid, bounded values reach the canonicalizer.
++        final byte[] canonical;
++        try { canonical = CanonicalJson.bytes(definition); }
++        catch (IllegalStateException exception) { throw invalid("/", "The definition cannot be represented as canonical JSON."); }
++        if (canonical.length > DOCUMENT_BYTES) throw new WorkspaceProblem(HttpStatus.PAYLOAD_TOO_LARGE,
++                "DEFINITION_TOO_LARGE", "The definition must be at most 2 MiB UTF-8.");
++    }
++
++    private static WorkspaceProblem schemaError(com.networknt.schema.Error error) {
++        return invalid(error.getInstanceLocation().toString(), error.getMessage());
++    }
++
++    private void checkDimensions(JsonNode value, String location, String field, int depth) {
++        if (depth > 64) throw invalid(location, "Use at most 64 levels of nesting.");
++        if (value.isTextual() && value.asString().length() > 512)
++            throw invalid(location, "Use at most 512 characters per string.");
++        if (value.isObject()) {
++            if (value.size() > 32) throw invalid(location, "Use at most 32 fields per object.");
++            for (var property : value.properties()) {
++                if (property.getKey().length() > 128) throw invalid(location, "Use at most 128 characters per field name.");
++                String key = property.getKey().replace("~", "~0").replace("/", "~1");
++                checkDimensions(property.getValue(), location + "/" + key, property.getKey(), depth + 1);
++            }
++        } else if (value.isArray()) {
++            int maximum = switch (field) {
++                case "subjects", "rooms", "periods" -> 512;
++                case "teachers", "cohorts" -> 1024;
++                case "lessons" -> lessonMax;
++                case "roomAssignments" -> 4096;
++                case "softConstraintOverrides" -> 7;
++                default -> 2048;
++            };
++            if (value.size() > maximum) throw invalid(location, "Use at most " + maximum + " entries in this list.");
++            for (int i = 0; i < value.size(); i++) checkDimensions(value.get(i), location + "/" + i, "", depth + 1);
+         }
+     }
+ 
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoTimetableController.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoTimetableController.java
+@@ -11,8 +11,7 @@
+ /** Stateless bounded review; no authority to mutate a school or stored timetable. */
+ @RestController @Profile("demo")
+ class DemoTimetableController {
+-    private static final JsonMapper JSON = JsonMapper.builder().enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
+-            .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).build();
++    private static final JsonMapper JSON = DemoInputJson.MAPPER;
+     private final DemoDefinitionLimits limits;
+     private final DemoVerificationService verification;
+     DemoTimetableController(DemoDefinitionLimits limits, DemoVerificationService verification) { this.limits = limits; this.verification = verification; }
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java
+@@ -162,7 +162,7 @@
+ 
+     private JsonNode parse(byte[] bytes, String document) {
+         try {
+-            JsonNode value = demo ? JSON.readTree(java.nio.charset.StandardCharsets.UTF_8.newDecoder()
++            JsonNode value = demo ? DemoInputJson.MAPPER.readTree(java.nio.charset.StandardCharsets.UTF_8.newDecoder()
+                     .onMalformedInput(java.nio.charset.CodingErrorAction.REPORT)
+                     .onUnmappableCharacter(java.nio.charset.CodingErrorAction.REPORT)
+                     .decode(java.nio.ByteBuffer.wrap(bytes)).toString()) : JSON.readTree(bytes);
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/SecurityConfiguration.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/SecurityConfiguration.java
+@@ -62,7 +62,10 @@
+                 .addFilterBefore(hostOriginFilter, org.springframework.security.web.csrf.CsrfFilter.class)
+                 .addFilterAfter(new DefinitionDraftAccess(repository, problems),
+                         org.springframework.security.web.access.intercept.AuthorizationFilter.class);
+-        if (demo != null) http.addFilterAfter(new DemoSessionFilter(demo, problems), HostOriginFilter.class);
++        if (demo != null) {
++            http.addFilterAfter(new DemoSessionFilter(demo, problems), HostOriginFilter.class);
++            http.addFilterAfter(new DemoInputAdmissionFilter(problems), DefinitionDraftAccess.class);
++        }
+         return http.build();
+     }
+ 
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemHandler.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemHandler.java
+@@ -13,6 +13,7 @@
+ 
+ @RestControllerAdvice
+ public class ProblemHandler {
++    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ProblemHandler.class);
+     private final ProblemResponder responder;
+ 
+     public ProblemHandler(ProblemResponder responder) {
+@@ -71,10 +72,14 @@
+ 
+     @ExceptionHandler(Exception.class)
+     ResponseEntity<ProblemResponse> generalException(Exception ex) {
+-        return response(
++        var result = response(
+                 HttpStatus.INTERNAL_SERVER_ERROR,
+                 "INTERNAL_ERROR",
+-                ex.getMessage() != null ? ex.getMessage() : "An unexpected server error occurred.");
++                "An unexpected server error occurred. Retry shortly or report the correlation ID.");
++        // Exception messages/stacks can contain submitted documents, SQL or credentials.
++        LOG.error("Unexpected request failure correlationId={} exceptionType={}",
++                result.getBody().correlationId(), ex.getClass().getName());
++        return result;
+     }
+ 
+     private ResponseEntity<ProblemResponse> response(HttpStatus status, String code, String message) {
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java
+@@ -40,7 +40,16 @@
+     }
+ 
+     void write(HttpServletResponse response, HttpStatus status, String code, String message) throws IOException {
+-        Snapshot snapshot = snapshot();
++        write(response, status, code, message, snapshot());
++    }
++
++    // Admission refusals must not copy an entire workspace while the input ceiling is already full.
++    void writeWithoutSnapshot(HttpServletResponse response, HttpStatus status, String code, String message) throws IOException {
++        recordRefusal(code);
++        write(response, status, code, message, new Snapshot("UNKNOWN", null));
++    }
++
++    private void write(HttpServletResponse response, HttpStatus status, String code, String message, Snapshot snapshot) throws IOException {
+         response.setStatus(status.value());
+         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+--- a/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoEvents.java
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoEvents.java
+@@ -156,7 +156,7 @@
+                 "SCHOOL_ID_IMMUTABLE", "SCHOOL_ID_RESERVED", "SEEDED_REPAIR_ACTIVE", "SESSION_ACTIVE",
+                 "SESSION_ENDED", "STALE_PROPOSAL", "STALE_RUN", "STALE_WORKSPACE_STATE",
+                 "STALE_WORKSPACE_VERSION", "TEACHER_CHANGE_REQUIRES_AUTHORING", "UNRESOLVED_CONFLICTS", "UNSUPPORTED_DEFINITION_SOURCE",
+-                "VERIFICATION_BUSY", "VERIFICATION_FAILED").contains(code) ? code : "OTHER_REFUSAL";
++                "VERIFICATION_BUSY", "VERIFICATION_FAILED", "INPUT_BUSY").contains(code) ? code : "OTHER_REFUSAL";
+         count("queue.refusal." + safe); ObjectNode line = line("work", "refused"); line.put("reason", safe); emit(line);
+     }
+     ProcessSpan process(ProcessKind kind, String correlation, String computation) {
+--- a/timetable-workspace/src/main/resources/static/workspace/demo-definitions.js
++++ b/timetable-workspace/src/main/resources/static/workspace/demo-definitions.js
+@@ -77,7 +77,7 @@
+ }
+ 
+ export function validateText(text) {
+-  if (bytes(text) > maxBytes) throw new Error('Use at most 2 MiB UTF-8.');
++  if (text.length > maxBytes || bytes(text) > maxBytes) throw new Error('Use at most 2 MiB UTF-8.');
+   const syntax = syntaxFeedback(text);
+   if (syntax) throw new Error(syntax);
+   if (!object(JSON.parse(text))) throw new Error('Save requires a JSON object.');
+--- a/timetable-workspace/src/main/resources/static/workspace/demo-workbench.js
++++ b/timetable-workspace/src/main/resources/static/workspace/demo-workbench.js
+@@ -6,6 +6,7 @@
+ import { demoRequest } from './demo-transport.js';
+ import { conflictItems, warningItems } from './demo-feedback.js';
+ import { validateText, savedRows } from './demo-definitions.js';
++import { createDefinitionAutosave } from './definition-autosave.js';
+ 
+ const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+ const clone = value => structuredClone(value);
+@@ -15,6 +16,8 @@
+ const reviews = new Map(), timers = new Map();
+ const fields = ['teacherId', 'roomId', 'periodId'];
+ let editorMessage = '', savingSchool = false, activeGeneration = null, config = { lessonThreshold: 200, quickSeconds: 5, thoroughSeconds: 60 };
++let editorAutosave;
++const oversizedEditorMessage = 'Use at most 2 MiB UTF-8. This text is only in the open editor; the previous saved editor copy is unchanged.';
+ const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
+   ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
+ 
+@@ -160,16 +163,34 @@
+ }
+ 
+ function bindShell() {
++  let autosaveFailureNotice;
++  editorAutosave = createDefinitionAutosave(value => {
++    const saved = persist(state => { state.editor = value; });
++    if (saved && notice === autosaveFailureNotice) { notice = ''; renderNotice(); }
++    autosaveFailureNotice = saved ? undefined : notice;
++    return saved;
++  }, tooLarge => {
++    if (tooLarge) editorMessage = oversizedEditorMessage;
++    else if (editorMessage === oversizedEditorMessage) editorMessage = '';
++    document.querySelector('#editor-status').textContent = editorMessage;
++  });
++  const scheduleEditorSave = () => editorAutosave.schedule({ text: editorText, source: editorSource,
++    name: document.querySelector('#school-copy-name').value });
++  window.addEventListener('pagehide', () => editorAutosave.flush());
++  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') editorAutosave.flush(); });
++  document.querySelector('#demo-utilities').addEventListener('toggle', event => { if (!event.target.open) editorAutosave.flush(); });
+   document.querySelector('#school-selector').addEventListener('change', event => {
++    editorAutosave.flush();
+     closeInspector(); selectedSchool = event.target.value; filters = blankFilters();
+     const school = currentSchool(), last = repository.state().lastTimetable[selectedSchool];
+     selectedTimetable = school.timetables.has(last) ? last : school.timetables.keys().next().value;
+     rememberSelection(); render();
+   });
+   document.querySelector('#timetable-selector').addEventListener('change', event => {
++    editorAutosave.flush();
+     closeInspector(); selectedTimetable = event.target.value; rememberSelection(); render();
+   });
+-  document.querySelector('#close-editor').addEventListener('click', () => { document.querySelector('#demo-utilities').open = false; });
++  document.querySelector('#close-editor').addEventListener('click', () => { editorAutosave.flush(); document.querySelector('#demo-utilities').open = false; });
+   document.querySelector('#delete-local-data').addEventListener('click', () => {
+     document.querySelector('#delete-local-data-error').hidden = true;
+     document.querySelector('#delete-local-data-dialog').showModal();
+@@ -181,6 +202,7 @@
+       deleteLocalTimetableData(browserStorage);
+       // Pending responses must not restore deleted artifacts while the clean page is loading.
+       deletingLocalData = true;
++      editorAutosave.cancel();
+       for (const timer of timers.values()) clearTimeout(timer);
+       timers.clear(); reviews.clear(); activeGeneration = null;
+       window.location.reload();
+@@ -191,10 +213,10 @@
+   });
+   document.querySelector('#school-definition-json').addEventListener('input', event => {
+     editorText = event.target.value; editorDirty = true;
+-    persist(state => { state.editor = { text: editorText, source: editorSource, name: document.querySelector('#school-copy-name').value }; });
++    scheduleEditorSave();
+   });
+   document.querySelector('#school-copy-name').addEventListener('input', () => {
+-    persist(state => { state.editor = { text: editorText, source: editorSource, name: document.querySelector('#school-copy-name').value }; });
++    scheduleEditorSave();
+   });
+   document.querySelector('#save-school-copy').addEventListener('click', saveSchoolCopy);
+   document.querySelector('#generate-timetable').addEventListener('click', generateTimetable);
+@@ -475,6 +497,7 @@
+ 
+ async function saveSchoolCopy() {
+   if (savingSchool) return;
++  editorAutosave.flush();
+   const text = editorText, name = document.querySelector('#school-copy-name').value.trim(), source = editorSource;
+   try {
+     if (!name) throw new Error('Enter a name for the school copy.');
+@@ -486,6 +509,7 @@
+     const id = crypto.randomUUID(), school = { id, name, definition: JSON.parse(text), definitionRevision: value.definitionRevision,
+       build, sourceSchoolId: source, savedAt: new Date().toISOString() };
+     if (!persist(state => { state.schools[id] = school; state.selected = { schoolId: id, timetableId: null }; state.editor = null; }, true)) return;
++    editorAutosave.cancel();
+     schools.set(id, { ...school, timetables: new Map() }); selectedSchool = id; selectedTimetable = undefined;
+     filters = blankFilters(); closeInspector(); editorDirty = false; editorSource = id; editorText = JSON.stringify(school.definition, null, 2);
+     document.querySelector('#school-copy-name').value = ''; editorMessage = `School copy “${name}” saved in this browser. Generate a timetable when ready.`;
+--- /dev/null
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoInputAdmissionFilter.java
+@@ -0,0 +1,49 @@
++package org.schoolkernel.workspace;
++
++import java.io.IOException;
++import java.util.Set;
++import java.util.concurrent.Semaphore;
++import jakarta.servlet.FilterChain;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import org.springframework.http.HttpStatus;
++import org.springframework.web.filter.OncePerRequestFilter;
++
++/** Runs after authorization/CSRF and before MVC decoding, including multipart resolution. */
++final class DemoInputAdmissionFilter extends OncePerRequestFilter {
++    private static final String SESSION_GATE = DemoInputAdmissionFilter.class.getName();
++    private static final Set<String> INPUT_ROUTES = Set.of("/api/demo/definition/check", "/api/demo/definition",
++            "/api/demo/timetable/review", "/api/import", "/api/workspace/upload-definition");
++    private final Semaphore global = new Semaphore(4);
++    private final ProblemResponder problems;
++
++    DemoInputAdmissionFilter(ProblemResponder problems) { this.problems = problems; }
++
++    @Override protected boolean shouldNotFilter(HttpServletRequest request) {
++        return !"POST".equals(request.getMethod()) || !INPUT_ROUTES.contains(request.getRequestURI());
++    }
++
++    @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
++            throws ServletException, IOException {
++        var session = request.getSession(false);
++        if (session == null) throw DemoWorkspaces.ended();
++        Semaphore owner;
++        synchronized (session) {
++            owner = (Semaphore) session.getAttribute(SESSION_GATE);
++            if (owner == null) { owner = new Semaphore(2); session.setAttribute(SESSION_GATE, owner); }
++        }
++        if (!owner.tryAcquire()) { refuse(response); return; }
++        try {
++            if (!global.tryAcquire()) { refuse(response); return; }
++            try { chain.doFilter(request, response); }
++            finally { global.release(); }
++        } finally { owner.release(); }
++    }
++
++    private void refuse(HttpServletResponse response) throws IOException {
++        response.setHeader("Retry-After", "1");
++        problems.writeWithoutSnapshot(response, HttpStatus.TOO_MANY_REQUESTS, "INPUT_BUSY",
++                "School data checking is busy. Existing work is unchanged. Retry shortly.");
++    }
++}
+--- /dev/null
++++ b/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoInputJson.java
+@@ -0,0 +1,18 @@
++package org.schoolkernel.workspace;
++
++import tools.jackson.core.StreamReadConstraints;
++import tools.jackson.core.json.JsonFactory;
++import tools.jackson.databind.DeserializationFeature;
++import tools.jackson.databind.json.JsonMapper;
++
++/** Shared safeguards for every visitor-supplied demo document, before tree construction. */
++final class DemoInputJson {
++    static final JsonMapper MAPPER = JsonMapper.builder(JsonFactory.builder()
++            .streamReadConstraints(StreamReadConstraints.builder()
++                    .maxNestingDepth(64).maxStringLength(1024 * 1024).maxNumberLength(100)
++                    .maxNameLength(128).maxTokenCount(150_000).build()).build())
++            .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
++            .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).build();
++
++    private DemoInputJson() {}
++}
+--- /dev/null
++++ b/timetable-workspace/src/main/resources/static/workspace/definition-autosave.js
+@@ -0,0 +1,28 @@
++import { bytes, maxBytes } from './demo-definitions.js';
++
++// Retain the latest text in memory; never clone/serialize the repository on every keystroke.
++export function createDefinitionAutosave(save, oversized, delay = 300) {
++  let pending = null, timer, blocked = false;
++  const fits = text => text.length <= maxBytes && bytes(text) <= maxBytes;
++  const cancelTimer = () => { clearTimeout(timer); timer = undefined; };
++  function flush() {
++    cancelTimer();
++    if (!pending) return true;
++    const value = pending;
++    if (!fits(value.text)) { oversized(true); return false; }
++    blocked = !save(value);
++    if (!blocked) pending = null;
++    return !blocked;
++  }
++  return {
++    schedule(value) {
++      cancelTimer();
++      pending = value;
++      const tooLarge = !fits(value.text);
++      oversized(tooLarge);
++      if (!tooLarge && !blocked) timer = setTimeout(flush, delay);
++    },
++    flush,
++    cancel() { cancelTimer(); pending = null; blocked = false; }
++  };
++}
+--- /dev/null
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionInputHardeningTest.java
+@@ -0,0 +1,169 @@
++package org.schoolkernel.workspace;
++
++import static org.junit.jupiter.api.Assertions.*;
++import static org.mockito.Mockito.*;
++import java.io.ByteArrayInputStream;
++import java.nio.charset.StandardCharsets;
++import java.util.List;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.AtomicInteger;
++import jakarta.servlet.ServletException;
++import org.junit.jupiter.api.Test;
++import org.springframework.http.HttpStatus;
++import org.springframework.mock.web.*;
++import org.springframework.test.web.servlet.setup.MockMvcBuilders;
++import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
++import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
++import tools.jackson.databind.json.JsonMapper;
++import tools.jackson.databind.node.ObjectNode;
++
++class DefinitionInputHardeningTest {
++    private final JsonMapper json = JsonMapper.builder().build();
++    private final DemoDefinitionLimits limits = new DemoDefinitionLimits(11_000_000, 2500);
++
++    ObjectNode school() throws Exception {
++        try (var input = getClass().getResourceAsStream("/demo/timetables/two-class-definition.json")) {
++            return (ObjectNode) json.readTree(input);
++        }
++    }
++    WorkspaceProblem rejected(String input) {
++        return assertThrows(WorkspaceProblem.class, () -> limits.read(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8))));
++    }
++
++    @Test void allBundledSchoolsPassExactlyAndNamesRemainData() throws Exception {
++        for (String name : List.of("two-class", "full", "star-wars", "english")) {
++            try (var input = getClass().getResourceAsStream("/demo/timetables/" + name + "-definition.json")) {
++                byte[] bytes = input.readAllBytes();
++                assertEquals(json.readTree(bytes), limits.read(new ByteArrayInputStream(bytes)));
++            }
++        }
++        var value = school().put("displayName", "O'Brien <img src=x onerror=alert(1)>; SELECT * FROM data; --");
++        assertEquals(value, limits.read(new ByteArrayInputStream(json.writeValueAsBytes(value))));
++    }
++
++    @Test void malformedNumbersNestingDuplicatesAndUtf8AreClientErrors() throws Exception {
++        String good = json.writeValueAsString(school());
++        for (String invalid : List.of(good.replace("\"catalogVersion\":9", "\"catalogVersion\":" + "9".repeat(400)),
++                good.replace("\"catalogVersion\":9", "\"catalogVersion\":1e9999"),
++                good.replace("\"catalogVersion\":9", "\"catalogVersion\":9,\"catalogVersion\":9"),
++                good + " {}", "[".repeat(70) + "0" + "]".repeat(70))) {
++            assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, rejected(invalid).status());
++        }
++        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, assertThrows(WorkspaceProblem.class,
++                () -> limits.read(new ByteArrayInputStream(new byte[]{(byte) 0xc3, 0x28}))).status());
++    }
++
++    @Test void everyCollectionStringAndObjectHasABoundEvenWithoutLessons() throws Exception {
++        for (var bound : java.util.Map.of("subjects", 512, "teachers", 1024, "cohorts", 1024,
++                "rooms", 512, "periods", 512, "roomAssignments", 4096, "softConstraintOverrides", 7).entrySet()) {
++            var value = school(); value.putArray("lessons");
++            var array = value.putArray(bound.getKey());
++            for (int i = 0; i <= bound.getValue(); i++) array.addObject();
++            var failure = assertThrows(WorkspaceProblem.class, () -> limits.check(value));
++            assertTrue(failure.getMessage().contains("/" + bound.getKey()), failure.getMessage());
++            assertTrue(failure.getMessage().contains("at most " + bound.getValue()), failure.getMessage());
++        }
++        var refs = school(); var ids = ((ObjectNode) refs.path("teachers").get(0)).putArray("qualifiedSubjectIds");
++        for (int i = 0; i < 2049; i++) ids.add("subject-" + i);
++        assertTrue(assertThrows(WorkspaceProblem.class, () -> limits.check(refs)).getMessage().contains("/teachers/0/qualifiedSubjectIds"));
++        var longName = school().put("displayName", "x".repeat(513));
++        assertTrue(assertThrows(WorkspaceProblem.class, () -> limits.check(longName)).getMessage().contains("/displayName"));
++        var flood = school(); for (int i = 0; i < 33; i++) flood.put("unknown" + i, "x");
++        assertTrue(assertThrows(WorkspaceProblem.class, () -> limits.check(flood)).getMessage().contains("32 fields"));
++    }
++
++    @Test void boundedFirstSchemaErrorAndInvalidHttpInputStartNoVerifierAndChangeNoWork() throws Exception {
++        var verifier = mock(DemoVerificationService.class);
++        var store = mock(WorkspaceStore.class);
++        var original = new WorkspaceAggregate(WorkspaceState.EMPTY, 0, null, json.createObjectNode().put("sentinel", "unchanged"));
++        when(store.load()).thenReturn(original);
++        var mvc = MockMvcBuilders.standaloneSetup(new DemoTimetableController(limits, verifier))
++                .setControllerAdvice(new ProblemHandler(new ProblemResponder(store, json))).build();
++        var value = school(); var subjects = value.putArray("subjects");
++        for (int i = 0; i < 512; i++) subjects.addObject().put("id", "s" + i);
++        var failure = assertThrows(WorkspaceProblem.class, () -> limits.check(value));
++        assertTrue(failure.getMessage().length() < 512);
++        assertTrue(failure.getMessage().contains("/subjects/0"), failure.getMessage());
++        String malformed = json.writeValueAsString(school()).replace("\"catalogVersion\":9", "\"catalogVersion\":" + "9".repeat(400));
++        mvc.perform(post("/api/demo/definition/check").contentType("text/plain").content(malformed))
++                .andExpect(status().isUnprocessableEntity());
++        verifyNoInteractions(verifier);
++        verify(store, never()).replace(anyLong(), any(), any(), any());
++        assertEquals("unchanged", original.document().path("sentinel").asString());
++    }
++
++    @Test void unexpectedHttpErrorsNeverExposeExceptionMessages() throws Exception {
++        var store = mock(WorkspaceStore.class);
++        var verifier = mock(DemoVerificationService.class);
++        when(verifier.verify(any())).thenThrow(new IllegalStateException("SECRET password=hunter2 /private/customer/school.json"));
++        var mvc = MockMvcBuilders.standaloneSetup(new DemoTimetableController(limits, verifier))
++                .setControllerAdvice(new ProblemHandler(new ProblemResponder(store, json))).build();
++        var response = mvc.perform(post("/api/demo/definition/check").contentType("text/plain").content(json.writeValueAsBytes(school())))
++                .andExpect(status().isInternalServerError()).andReturn().getResponse();
++        var body = json.readTree(response.getContentAsString());
++        assertEquals("INTERNAL_ERROR", body.path("code").asString());
++        assertTrue(body.path("message").asString().startsWith("An unexpected server error occurred."));
++        assertDoesNotThrow(() -> java.util.UUID.fromString(body.path("correlationId").asString()));
++        assertFalse(response.getContentAsString().contains("SECRET"));
++        assertFalse(response.getContentAsString().contains("hunter2"));
++    }
++
++    @Test void admissionIsImmediateBeforeBodyReadingAndReleasesOnEveryExit() throws Exception {
++        var store = mock(WorkspaceStore.class);
++        var responder = new ProblemResponder(store, json);
++        var filter = new DemoInputAdmissionFilter(responder);
++        var arrived = new CountDownLatch(4); var release = new CountDownLatch(1);
++        var session = new MockHttpSession();
++        var executor = Executors.newVirtualThreadPerTaskExecutor();
++        try {
++            var first = executor.submit(() -> hold(filter, session, arrived, release));
++            var second = executor.submit(() -> hold(filter, session, arrived, release));
++            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
++            while (arrived.getCount() != 2 && System.nanoTime() < deadline) Thread.onSpinWait();
++            assertEquals(2, arrived.getCount());
++            refused(filter, session);
++            var third = executor.submit(() -> hold(filter, new MockHttpSession(), arrived, release));
++            var fourth = executor.submit(() -> hold(filter, new MockHttpSession(), arrived, release));
++            assertTrue(arrived.await(5, TimeUnit.SECONDS));
++            refused(filter, new MockHttpSession());
++            var reads = new AtomicInteger();
++            var read = request(session); read.setMethod("GET");
++            filter.doFilter(read, new MockHttpServletResponse(), (a, b) -> reads.incrementAndGet());
++            var cancel = request(session); cancel.setMethod("DELETE"); cancel.setRequestURI("/api/runs/123");
++            filter.doFilter(cancel, new MockHttpServletResponse(), (a, b) -> reads.incrementAndGet());
++            assertEquals(2, reads.get());
++            release.countDown(); first.get(); second.get(); third.get(); fourth.get();
++            for (String outcome : List.of("success", "refused", "failed", "interrupted")) {
++                var request = request(session);
++                if (outcome.equals("success")) filter.doFilter(request, new MockHttpServletResponse(), (a,b) -> {});
++                else assertThrows(Exception.class, () -> filter.doFilter(request, new MockHttpServletResponse(), (a,b) -> {
++                    if (outcome.equals("refused")) throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY,"INVALID_INPUT","no");
++                    throw new ServletException(outcome);
++                }));
++            }
++            var allowed = new AtomicInteger();
++            filter.doFilter(request(session), new MockHttpServletResponse(), (a,b) -> allowed.incrementAndGet());
++            assertEquals(1, allowed.get());
++            verifyNoInteractions(store);
++        } finally { release.countDown(); executor.close(); }
++    }
++    void refused(DemoInputAdmissionFilter filter, MockHttpSession session) throws Exception {
++        var response = new MockHttpServletResponse();
++        filter.doFilter(request(session), response, (a,b) -> fail("Rejected input reached decoding"));
++        assertEquals(429, response.getStatus()); assertEquals("1", response.getHeader("Retry-After"));
++        assertEquals("INPUT_BUSY", json.readTree(response.getContentAsString()).path("code").asString());
++    }
++    void hold(DemoInputAdmissionFilter filter, MockHttpSession session, CountDownLatch arrived, CountDownLatch release) {
++        try { filter.doFilter(request(session), new MockHttpServletResponse(), (a,b) -> {
++            arrived.countDown();
++            try { assertTrue(release.await(10, TimeUnit.SECONDS)); }
++            catch (InterruptedException e) { Thread.currentThread().interrupt(); throw new ServletException(e); }
++        }); } catch (Exception e) { throw new RuntimeException(e); }
++    }
++    MockHttpServletRequest request(MockHttpSession session) {
++        var request = new MockHttpServletRequest("POST", "/api/demo/definition/check") {
++            @Override public jakarta.servlet.ServletInputStream getInputStream() { throw new AssertionError("Body was read before admission"); }
++        };
++        request.setSession(session); return request;
++    }
++}
+--- /dev/null
++++ b/timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionInputHardeningBrowserIT.java
+@@ -0,0 +1,189 @@
++package org.schoolkernel.workspace;
++
++import static org.junit.jupiter.api.Assertions.*;
++import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
++import java.nio.file.*;
++import java.time.Instant;
++import java.util.*;
++import java.net.*;
++import javax.net.ssl.*;
++import java.nio.charset.StandardCharsets;
++import com.microsoft.playwright.*;
++import com.microsoft.playwright.options.RequestOptions;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.io.TempDir;
++import tools.jackson.databind.node.ObjectNode;
++
++/** Actual packaged HTTP, kernel and Chrome journey; no operator data or database. */
++class DefinitionInputHardeningBrowserIT {
++    @TempDir Path temporary;
++
++    @Test void safelyChecksDefinitionsAndRetainsDebouncedEditorWork() throws Exception {
++        var h = new DemoPlanningBrowserIT(); h.temporary = temporary;
++        h.initialize("input-hardening", Path.of(System.getProperty("hardening.walkthrough.dir",
++                "../output/playwright/definition-input-hardening/UC-1/local-" + System.currentTimeMillis())));
++        try (Playwright pw = Playwright.create(new Playwright.CreateOptions().setEnv(Map.of("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1")));
++             Browser browser = pw.chromium().launch(new BrowserType.LaunchOptions().setChannel("chrome").setHeadless(true));
++             BrowserContext owner = h.context(browser)) {
++            Page p = owner.newPage(); p.onPageError(h.errors::add);
++            try {
++                ready(p, h); p.locator("#school-selector").selectOption("two-class");
++                p.locator("#demo-utilities summary").click();
++                String original = p.locator("#school-definition-json").inputValue();
++                int schoolCount = p.locator("#school-selector option").count();
++                instrumentStorage(p);
++                for (int i = 0; i < 8; i++) p.locator("#school-definition-json").fill("{\n draft " + i);
++                p.waitForFunction("()=>JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1')).editor?.text==='{\\n draft 7'");
++                assertEquals(1, ((Number) p.evaluate("window.auditWrites")).intValue());
++                p.locator("#school-definition-json").fill("{\n latest before reload");
++                p.reload(); waitReady(p); p.locator("#demo-utilities summary").click();
++                assertEquals("{\n latest before reload", p.locator("#school-definition-json").inputValue());
++                h.record("UC-1 main 1-2: eight rapid edits produce one durable write; an immediate reload flushes the exact latest incomplete JSON", p, "01-debounced-reload");
++
++                instrumentStorage(p); String prior = raw(p);
++                p.locator("#school-definition-json").evaluate("e=>{e.value='€'.repeat(699051);e.dispatchEvent(new Event('input',{bubbles:true}));}");
++                assertThat(p.locator("#editor-status")).containsText("only in the open editor");
++                settle(p); assertEquals(prior, raw(p)); assertEquals(0, ((Number)p.evaluate("window.auditWrites")).intValue());
++                assertEquals(699051, p.locator("#school-definition-json").inputValue().length());
++                assertEquals(schoolCount, p.locator("#school-selector option").count());
++                p.locator("#school-copy-name").fill("Oversized audit copy");
++                p.locator("#save-school-copy").click();
++                assertThat(p.locator("#editor-status")).containsText("at most 2 MiB");
++                assertEquals(prior, raw(p));
++                h.record("UC-1 extension 2a/G2/G5: a multibyte paste above 2 MiB remains editable, visibly explains memory-only retention, performs zero storage writes and preserves the exact prior raw browser document", p, "02-oversized-editor");
++
++                p.evaluate("window.auditQuota=true");
++                p.locator("#school-definition-json").fill(original);
++                p.waitForFunction("()=>document.querySelector('#demo-notice').textContent.includes('full or unavailable')");
++                assertEquals(1, ((Number)p.evaluate("window.auditWrites")).intValue());
++                for (int i = 0; i < 4; i++) p.locator("#school-copy-name").fill("Recovered copy " + i);
++                settle(p); assertEquals(1, ((Number)p.evaluate("window.auditWrites")).intValue());
++                assertEquals(prior, raw(p));
++                p.evaluate("window.auditQuota=false"); p.locator("#close-editor").click();
++                assertThat(p.locator("#demo-notice")).isHidden();
++                assertEquals(original, DemoPlanningBrowserIT.JSON.readTree(raw(p)).path("editor").path("text").asString());
++                p.reload(); waitReady(p); p.locator("#demo-utilities summary").click();
++                assertEquals(original, p.locator("#school-definition-json").inputValue());
++                assertThat(p.locator("#school-copy-name")).hasValue("Recovered copy 3");
++                h.record("UC-1 extension 2b/G5: injected browser quota refusal preserves prior bytes, pauses automatic retry across later edits, and explicit close retries successfully after recovery; exact text/name survive reload", p, "03-quota-recovery");
++
++                var before = h.snapshot(p);
++                long launches = Files.readAllLines(temporary.resolve("launches")).size();
++                var token = DemoPlanningBrowserIT.JSON.readTree(p.request().get(h.base + "/api/csrf").body());
++                String malformed = original.replaceFirst("\"catalogVersion\"\\s*:\\s*9", "\"catalogVersion\":" + "9".repeat(400));
++                var response = p.request().post(h.base + "/api/demo/definition/check", RequestOptions.create()
++                        .setHeader("Origin", h.base).setHeader(token.path("headerName").asString(), token.path("token").asString())
++                        .setHeader("Content-Type", "text/plain").setData(malformed));
++                assertEquals(422, response.status());
++                assertEquals(before, h.snapshot(p));
++                assertEquals(launches, Files.readAllLines(temporary.resolve("launches")).size());
++                Files.writeString(h.output.resolve("malformed-response.json"), response.text());
++                h.record("UC-1 extension 4a/G2: the actual packaged HTTP endpoint rejects the 400-digit integer with 422, starts no kernel process and retains exact server state", p, "04-malformed-http");
++
++                p.locator("#school-copy-name").fill("Checked audit copy");
++                p.locator("#save-school-copy").click();
++                p.waitForFunction("()=>document.querySelector('#editor-status').textContent.includes('saved in this browser')");
++                assertEquals(schoolCount + 1, p.locator("#school-selector option").count());
++                var saved = DemoPlanningBrowserIT.JSON.readTree(raw(p));
++                var copy = saved.path("schools").path(p.locator("#school-selector").inputValue());
++                assertEquals(DemoPlanningBrowserIT.JSON.readTree(original), copy.path("definition"));
++                assertEquals(0, Files.readAllLines(temporary.resolve("launches")).stream().filter("plan"::equals).count());
++                assertFalse(saved.hasNonNull("editor"));
++                settle(p); assertFalse(DemoPlanningBrowserIT.JSON.readTree(raw(p)).hasNonNull("editor"));
++                p.setViewportSize(390, 844);
++                assertTrue((Boolean)p.evaluate("()=>document.documentElement.scrollWidth<=innerWidth+1"));
++                h.record("UC-1 main 3-5/G4/G6: real kernel verification saves a separate exact 56-lesson school without solving or resurrecting the pending editor; feedback fits 390px", p, "05-checked-school-mobile");
++                assertTrue(h.errors.isEmpty(), h.errors.toString());
++                Files.writeString(h.output.resolve("verdict.txt"), "PASS\n");
++            } catch (Throwable failure) {
++                Files.writeString(h.output.resolve("verdict.txt"), "FAIL: " + failure + "\n");
++                h.record("FAIL: " + failure, p, "failure"); throw failure;
++            } finally { ledger(h); }
++        } finally { h.stop(); }
++    }
++
++    @Test void packagedAdmissionRejectsSlowBodiesBeforeDecodingAndRecovers() throws Exception {
++        var h = new DemoPlanningBrowserIT(); h.temporary = temporary;
++        Path output = Path.of(System.getProperty("hardening.http.dir", "../output/execution/definition-input-hardening/http-" + System.currentTimeMillis()));
++        h.initialize("admission", output);
++        var sockets = new ArrayList<SSLSocket>();
++        try (Playwright pw = Playwright.create(new Playwright.CreateOptions().setEnv(Map.of("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1")));
++             Browser browser = pw.chromium().launch(new BrowserType.LaunchOptions().setChannel("chrome").setHeadless(true));
++             BrowserContext one = h.context(browser); BrowserContext two = h.context(browser); BrowserContext three = h.context(browser)) {
++            Page a = one.newPage(), b = two.newPage(), c = three.newPage();
++            ready(a,h); ready(b,h); ready(c,h);
++            var before = h.snapshot(a);
++            var token = DemoPlanningBrowserIT.JSON.readTree(a.request().get(h.base + "/api/csrf").body());
++            sockets.add(slowBody(h, one, token)); sockets.add(slowBody(h, one, token));
++            awaitBusy(h, a, token);
++            assertEquals(200, a.request().get(h.base + "/api/workspace").status());
++            var tokenTwo = DemoPlanningBrowserIT.JSON.readTree(b.request().get(h.base + "/api/csrf").body());
++            sockets.add(slowBody(h, two, tokenTwo)); sockets.add(slowBody(h, two, tokenTwo));
++            var tokenThree = DemoPlanningBrowserIT.JSON.readTree(c.request().get(h.base + "/api/csrf").body());
++            var busy = awaitBusy(h, c, tokenThree);
++            Files.writeString(output.resolve("global-busy.json"), busy.text());
++            assertEquals(before, h.snapshot(a));
++            sockets.forEach(s -> { try { s.close(); } catch(Exception ignored) {} }); sockets.clear();
++            // EOF must release every input lease. A small invalid object then reaches validation again.
++            long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
++            int status;
++            do { status = check(h, a, token).status(); } while (status == 429 && System.nanoTime() < deadline);
++            assertEquals(422, status);
++            assertEquals(before, h.snapshot(a));
++            Files.writeString(output.resolve("ledger.md"), "# UC-1 production HTTP admission evidence\n\nDate: " + Instant.now()
++                    + "\nApplication: " + h.base + "\nIsolated packaged service, real TLS sockets and disposable browser sessions.\n\n"
++                    + "- PASS: two incomplete bodies occupy one owner's slots; a third is rejected with 429/Retry-After before decoding.\n"
++                    + "- PASS: two other incomplete bodies fill the global ceiling; a third owner is rejected with INPUT_BUSY.\n"
++                    + "- PASS: safe workspace reads remain usable; exact initial workspace is unchanged.\n"
++                    + "- PASS: closing incomplete clients releases leases; subsequent input reaches ordinary validation (422).\n\n"
++                    + "No kernel launches beyond startup were requested. All sockets, contexts and the disposable server close.\nOverall: PASS\n");
++        } finally {
++            for (var s : sockets) s.close(); h.stop();
++        }
++    }
++    static APIResponse check(DemoPlanningBrowserIT h, Page p, tools.jackson.databind.JsonNode token) {
++        return p.request().post(h.base + "/api/demo/definition/check", RequestOptions.create().setHeader("Origin", h.base)
++                .setHeader(token.path("headerName").asString(), token.path("token").asString()).setHeader("Content-Type", "text/plain").setData("{}"));
++    }
++    static APIResponse awaitBusy(DemoPlanningBrowserIT h, Page p, tools.jackson.databind.JsonNode token) {
++        long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
++        APIResponse response;
++        do { response = check(h,p,token); } while(response.status() != 429 && System.nanoTime() < deadline);
++        assertEquals(429, response.status()); assertEquals("1", response.headers().get("retry-after"));
++        assertEquals("INPUT_BUSY", DemoPlanningBrowserIT.JSON.readTree(response.body()).path("code").asString()); return response;
++    }
++    static SSLSocket slowBody(DemoPlanningBrowserIT h, BrowserContext owner, tools.jackson.databind.JsonNode token) throws Exception {
++        var context = SSLContext.getInstance("TLS");
++        context.init(null, new javax.net.ssl.TrustManager[]{new X509TrustManager() {
++            public java.security.cert.X509Certificate[] getAcceptedIssuers() { return new java.security.cert.X509Certificate[0]; }
++            public void checkClientTrusted(java.security.cert.X509Certificate[] certs,String auth) {}
++            public void checkServerTrusted(java.security.cert.X509Certificate[] certs,String auth) {}
++        }}, new java.security.SecureRandom());
++        var socket = (SSLSocket)context.getSocketFactory().createSocket("localhost",h.port);
++        socket.setSoTimeout(5000); socket.startHandshake();
++        String cookie = owner.cookies().stream().filter(x -> x.name.equals("JSESSIONID")).findFirst().orElseThrow().value;
++        String headers = "POST /api/demo/definition/check HTTP/1.1\r\nHost: localhost:" + h.port + "\r\nOrigin: " + h.base
++                + "\r\nCookie: JSESSIONID=" + cookie + "\r\n" + token.path("headerName").asString() + ": " + token.path("token").asString()
++                + "\r\nContent-Type: text/plain\r\nContent-Length: 1000\r\n\r\n{";
++        socket.getOutputStream().write(headers.getBytes(StandardCharsets.UTF_8)); socket.getOutputStream().flush(); return socket;
++    }
++    static void ready(Page p, DemoPlanningBrowserIT h) { p.navigate(h.base + "/workspace/"); waitReady(p); }
++    static void waitReady(Page p) { p.locator("#school-selector option[value=full]").waitFor(new Locator.WaitForOptions()
++            .setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED)); }
++    static String raw(Page p) { return (String)p.evaluate("()=>localStorage.getItem('school-kernel.timetable-demo.v1')"); }
++    static void instrumentStorage(Page p) { p.evaluate("""
++            ()=>{window.auditWrites=0;window.auditQuota=false;
++              const original=Storage.prototype.setItem;
++              Storage.prototype.setItem=function(k,v){if(k==='school-kernel.timetable-demo.v1'){
++                window.auditWrites++;if(window.auditQuota)throw new DOMException('Injected quota','QuotaExceededError');}
++                return original.call(this,k,v);};}
++            """); }
++    static void settle(Page p) { p.evaluate("()=>new Promise(resolve=>setTimeout(resolve,650))"); }
++    static void ledger(DemoPlanningBrowserIT h) throws Exception {
++        Files.write(h.output.resolve("browser-errors.txt"),h.errors);
++        Files.writeString(h.output.resolve("ledger.md"), "# UC-1 definition input hardening walkthrough\n\nDate: " + Instant.now()
++                + "\nApplication: " + h.base + "\nPackaged workspace/kernel, real Chrome via Java Playwright, real TLS; isolated disposable browser data; no database.\n\n"
++                + String.join("\n\n",h.steps) + "\n\nOverall: " + Files.readString(h.output.resolve("verdict.txt"))
++                + "\nQuota failures are explicitly injected at the browser storage boundary; successful checks use the real kernel. Contexts close and the private server stops.\n");
++    }
++}
+--- /dev/null
++++ b/spec/definition-input-hardening/status.md
+@@ -0,0 +1,16 @@
++# Definition input hardening status
++
++| Use case | Status | Dependencies | Evidence |
++|---|---|---|---|
++| UC-1 | APPROVED | None | [Checkpoint](checkpoints/UC-1.md), [Chrome walkthrough](../../output/playwright/definition-input-hardening/UC-1/run-3/ledger.md), [HTTP admission](../../output/execution/definition-input-hardening/http-run-2/ledger.md) |
++
++2026-10-17: Implement recommendations 1–5 and 8 under the user's explicit authorization. Base commit:
++`d55ab636558224f2d33a5e71313e840dd9486428`. The checkout contains pre-existing tracked modifications and untracked
++demo implementation, deployment, evidence and local-artifact cleanup work. Preserve all of it; do not commit or deploy.
++Baseline copies/status/diff are retained outside the repository at the path recorded in the execution checkpoint.
++
++2026-10-17: UC-1 APPROVED from automated production-boundary evidence. Consolidated verification passed 86 workspace
++unit/architecture tests and six packaged integration scenarios (two hardening, three timetable, one local cleanup).
++The final autosave delta passed the six hardening tests and its complete Chrome editor journey again. Desktop and
++390px screenshots were inspected. Source hashes match the final isolated build. No destination handoffs remain.
++This approval covers recommendations 1–5 and 8 only; it does not qualify a public deployment or future PostgreSQL use.
+--- /dev/null
++++ b/spec/definition-input-hardening/spec.md
+@@ -0,0 +1,91 @@
++# Definition input hardening
++
++## Feature summary
++
++Visitors can safely edit and check demo school definitions without excessive request concurrency, malformed values
++or failed browser storage damaging existing work or exposing internal error details.
++
++## Scope and resolved decisions
++
++- Implements the user's approved recommendations 1–5 and 8 only. No public deployment is authorized here.
++- Demo input limits supplement existing document-byte and placement-work limits; they do not change the headless
++  kernel's school-definition contract or the normal local workspace's school-size limits.
++- The four existing bundled schools and all their optional fields remain supported without changes.
++- Admission is immediate, without a waiting queue: at most four input-bearing requests globally and two per session.
++  This is separate from solver and verifier admission. Excess requests receive 429 with a retry hint before decoding.
++- Definition arrays allow at most 512 subjects, rooms or periods; 1,024 teachers or cohorts; the configured lesson
++  ceiling (currently 2,500); 4,096 room policies; seven preference overrides; and 2,048 entries per reference list.
++- Every definition string is at most 512 UTF-16 code units; field names are at most 128; objects at most 32 fields.
++  Parsing permits depth 64, strings up to 1 MiB, numbers up to 100 characters and at most 150,000 tokens per document.
++- Schema checking stops on the first error. Diagnostic locations are retained; invalidity is never treated as success.
++- Editor autosaving waits 300 ms after the last input, checks the 2 MiB UTF-8 limit before a storage write, and flushes
++  eligible pending edits on explicit editor close, navigation within the page, save and page exit. Oversized text stays
++  in the open editor with a visible explanation while the previous durable editor copy remains intact.
++- Routine limits are conservative initial safety bounds, not new claims of production capacity qualification.
++
++## Actors and domain terms
++
++- Visitor: a person using the demo in one browser session.
++- Existing work: all saved schools, timetables, drafts and server workspace contents preceding a request.
++- Input-bearing request: a definition check/use, timetable review, accepted-bundle import or definition upload.
++
++## Use-case map
++
++| ID | Actor goal | Primary actor | Relations |
++|---|---|---|---|
++| UC-1 | Safely edit and check a school definition | Visitor | None |
++
++## UC-1 - Safely edit and check a school definition (primary)
++
++- Goal: Keep an edited school copy after a bounded, trustworthy check.
++- Primary actor: Visitor
++- Supporting actors: none
++- Trigger: The visitor opens the demo school-definition editor or submits school data directly.
++- Preconditions: The demo and an active private session are available.
++- Relations:
++  - Requires: none
++  - Includes: none
++  - Extends: none
++
++### Main success scenario
++
++1. The visitor opens a bundled school's definition and edits a copy.
++2. Eligible editor text is retained in this browser after a short debounce; closing or reloading retains pending text.
++3. The visitor names and submits the copy. Admission occurs before any input decoding.
++4. The complete definition is checked within the size, shape, parsing, schema and semantic limits.
++5. A separate browser-local school copy is available with exactly the submitted definition, without starting a solve.
++
++### Extensions
++
++- 2a. Text exceeds the editor byte limit. Explain that it is retained only in the open editor, skip persistence and
++  preserve the previous durable text; resume at step 1.
++- 2b. Storage fails or another tab changes it. Explain the failure, retain open editor text and prior durable work,
++  and allow a later retry without repeatedly attempting storage on every keystroke; resume at step 1.
++- 3a. Global or session admission is full. Refuse immediately with 429 and a retry hint, without reading the body,
++  starting a kernel process or changing existing work; resume at step 3.
++- 4a. Parsing, field size, collection size, schema, canonicalization or semantic validation fails. Return a bounded
++  client-error response, preserve existing work and locate the error where available; resume at step 1.
++- 4b. An unexpected internal error occurs. Return a fixed public explanation and correlation identifier, without
++  exception details or submitted text; existing work remains unchanged; resume at step 3.
++- 4c. The editor changes while checking. Refuse to save stale content and retain the latest text; resume at step 3.
++
++### Guarantees
++
++- G1. Host, origin, CSRF, session ownership, version guards and existing solver/verifier bounds remain in force.
++- G2. Rejected input neither changes existing work nor launches verification after an earlier parsing/shape refusal.
++- G3. Every admitted slot is released after success, refusal, interruption or unexpected failure. Safe reads and
++  cancellation remain usable while input slots are occupied.
++- G4. Definition names and SQL-like/HTML-like text remain data; accepted strings and optional values are preserved.
++- G5. Browser storage failures never repeatedly serialize oversized text; eligible edits recover when storage recovers.
++- G6. The rendered editor and its feedback remain usable at desktop and 390px widths. Real browser evidence and
++  isolated production HTTP checks own approval, with deterministic concurrency tests supplementing them.
++
++### Postconditions
++
++- Success: A separate, checked school copy is stored without modifying its source or starting a solve.
++- Minimal guarantee: Refusal/failure discloses no internal exception text, preserves prior work, and releases admission.
++
++## Out of scope
++
++PostgreSQL persistence/ownership, Unicode compatibility policy for a future database, cache privacy changes, accounts,
++new solver budgets, public redeployment and distributed admission across replicas.
+--- /dev/null
++++ b/spec/definition-input-hardening/proposal.md
+@@ -0,0 +1,7 @@
++# Definition input hardening
++
++Authorized on 2026-10-17: implement recommendations 1–5 and 8 from the definition-input audit:
++bound concurrent preprocessing globally and per session; reject malformed values safely; bound all definition
++dimensions; stop validation at a bounded error count; conceal unexpected exception messages; and protect browser
++autosaving with size checks, debouncing and quota recovery. Preserve existing schools, timetables and unrelated work.
++PostgreSQL ownership, database-compatible Unicode policy, cross-tenant cache policy and deployment are out of scope.
+--- /dev/null
++++ b/spec/definition-input-hardening/checkpoints/UC-1.md
+@@ -0,0 +1,122 @@
++# UC-1 — Safely edit and check a school definition
++
++## Submission
++
++- User authorization: recommendations 1–5 and 8, 2026-10-17.
++- Base: `d55ab636558224f2d33a5e71313e840dd9486428` plus the pre-existing dirty checkout.
++- Initial status/diff and exact copies of touched pre-existing files:
++  `/private/tmp/definition-hardening-base-9g95r8vf`. ProblemResponder's baseline was reconstructed from the captured
++  initial patch and HEAD; no checkout file was reset.
++- Isolated build and source manifests: `/private/tmp/definition-hardening-check-lbrm_j5v` and
++  [run-2 source manifest](../../../output/execution/definition-input-hardening/source-manifest-run-2.json).
++- No commit or deployment. Preserve concurrent local-data cleanup and all earlier demo/kernel work.
++
++## Implemented contract
++
++- UC-1 main step 3 / extension 3a / G1–G3: a demo-only filter follows CSRF/authorization and precedes MVC/multipart
++  decoding on definition check/use, review, import and definition upload. Four global and two session-owned immediate
++  leases span processing and response production. Cancellation and safe reads are excluded. A busy response has
++  `INPUT_BUSY`, 429 and `Retry-After: 1`; it does not copy or read the workspace aggregate.
++- UC-1 main step 4 / extension 4a: shared demo parsing limits depth, number/string/name length and token count, rejects
++  duplicate/trailing content, and preserves strict UTF-8 definition/import handling. Definition dimensions are checked
++  with bounded traversal; schema checking fails on its first error before canonicalization. Canonicalization failure
++  becomes an ordinary 422 response. Existing byte and multiplication-overflow-safe placement gates remain intact.
++- UC-1 extension 4b: unexpected exceptions return a fixed public explanation and correlation ID. The log records that
++  ID and exception class only, excluding potentially sensitive exception messages, stack traces and request text.
++- UC-1 main step 2 / extensions 2a–2b / G5: 300 ms editor debounce, UTF-8 size checks before repository cloning/writing,
++  eligible flush on close/navigation/save/page exit, and pause after storage refusal until explicit retry. Pending
++  editor work is cancelled after successful copy creation and after the existing explicit local cleanup succeeds.
++- UC-1 G4: schema, domain references and existing display escaping are retained. Valid school definitions keep all
++  fields and optional values. Shared kernel schema and PostgreSQL ownership are unchanged.
++
++## Technical evidence
++
++- New `DefinitionInputHardeningTest`: six passing cases cover all bundled schools by value; SQL/HTML-like names as
++  data; numeric overflow, duplicates, trailing content, depth and invalid UTF-8; all collection/string/object bounds;
++  bounded schema diagnostics; no verifier/no mutation on refusal; public exception concealment; concurrency ceilings,
++  safe reads/cancellation, rejection before body access, no workspace read during refusal, and lease release.
++- Consolidated isolated workspace suite: **86 tests, zero failures/errors/skips** in verification run 2.
++- First sandbox attempt hit existing Mockito self-attach/process-inspection restrictions. Supplying the Mockito agent
++  and allowing local process access resolves those checks. The first isolated full run also exposed an omitted
++  `compose.yaml` fixture; adding the unchanged fixture produces the passing 86-test result. Retain these attempts.
++- Browser/API regression suite: **six integration scenarios passed**, zero failures/errors/skips: two new hardening
++  scenarios, all three existing timetable journeys and existing local-artifact cleanup. The final size-guard and stale
++  quota-notice delta then passed all six hardening tests and the complete editor browser journey again.
++
++## Actor evidence
++
++- [Packaged TLS admission ledger](../../../output/execution/definition-input-hardening/http-run-2/ledger.md): real
++  incomplete HTTP bodies fill per-session/global leases; excess owners receive 429 before decoding; safe reads retain
++  exact workspace state; closing the incomplete clients releases leases and subsequent input reaches normal 422
++  validation. No visitor-triggered kernel process is launched.
++- [Recorded Chrome editor journey](../../../output/playwright/definition-input-hardening/UC-1/run-2/ledger.md): exact
++  debounce/reload retention, multibyte oversize non-persistence, injected quota refusal/pause/recovery, real HTTP 422
++  for the 400-digit integer without kernel launch, and an exact checked school copy without solving.
++- Desktop oversized feedback and 390px checked-copy screenshots were opened and inspected: controls and feedback fit,
++  the textarea scrolls internally, and there is no page-level horizontal overflow.
++- Disposable TLS sockets/browser owners/server processes close; no operator school data or database is used.
++
++## Final verification and approval
++
++2026-10-17: **APPROVED**. The final [Chrome editor ledger](../../../output/playwright/definition-input-hardening/UC-1/run-3/ledger.md)
++adds explicit oversized Save refusal and stale quota-notice clearing to the earlier complete journey. Its desktop
++and 390px screenshots were opened and inspected; controls and feedback fit. The browser reported no page errors.
++
++Run 2, from the isolated build directory above:
++
++```sh
++mvn -o -pl timetable-workspace -am -Pworkspace-browser verify \
++  -Dit.test=DefinitionInputHardeningBrowserIT,DemoTimetableBrowserIT,DemoLocalDataBrowserIT \
++  -Dfailsafe.failIfNoSpecifiedTests=false \
++  -DargLine=-javaagent:/Users/anton/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar \
++  -Dhardening.walkthrough.dir=/Users/anton/IdeaProjects/school-kernel/school-kernel/output/playwright/definition-input-hardening/UC-1/run-2 \
++  -Dhardening.http.dir=/Users/anton/IdeaProjects/school-kernel/school-kernel/output/execution/definition-input-hardening/http-run-2 \
++  -Ddemo.local-data.walkthrough.dir=/Users/anton/IdeaProjects/school-kernel/school-kernel/output/playwright/definition-input-hardening/UC-1/local-data-regression-2
++```
++
++Result: BUILD SUCCESS; 86 workspace unit/architecture tests and six integration scenarios passed.
++[Log](../../../output/execution/definition-input-hardening/verification-run-2.log),
++[reports](../../../output/execution/definition-input-hardening/reports-run-2),
++[timetable walkthroughs](../../../output/playwright/definition-input-hardening/UC-1/timetable-regression-run-2),
++[cleanup walkthrough](../../../output/playwright/definition-input-hardening/UC-1/local-data-regression-2/ledger.md).
++
++Run 3, after copying the final two JavaScript changes and strengthened editor assertions into the isolated build:
++
++```sh
++mvn -o -pl timetable-workspace -am -Pworkspace-browser verify \
++  -Dtest=DefinitionInputHardeningTest -Dsurefire.failIfNoSpecifiedTests=false \
++  '-Dit.test=DefinitionInputHardeningBrowserIT#safelyChecksDefinitionsAndRetainsDebouncedEditorWork' \
++  -Dfailsafe.failIfNoSpecifiedTests=false \
++  -DargLine=-javaagent:/Users/anton/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar \
++  -Dhardening.walkthrough.dir=/Users/anton/IdeaProjects/school-kernel/school-kernel/output/playwright/definition-input-hardening/UC-1/run-3 \
++  -Dhardening.http.dir=/Users/anton/IdeaProjects/school-kernel/school-kernel/output/execution/definition-input-hardening/http-run-3
++```
++
++Result: BUILD SUCCESS; six hardening tests and one complete Chrome journey passed, zero failures/errors/skips.
++[Log](../../../output/execution/definition-input-hardening/verification-3.log),
++[reports](../../../output/execution/definition-input-hardening/reports-run-3),
++[final source manifest](../../../output/execution/definition-input-hardening/source-manifest-run-3.json).
++The final isolated manifest matches the live source. Run-2 sources remain recorded separately; only the final autosave
++delta and a concurrent worker's two cleanup-test diagnostic lines changed between runs. Earlier sandbox/fixture
++failure logs are retained in the same execution directory. Final whitespace validation: `git diff --check`.
++
++## Changed files and exact diff
++
++Under `timetable-workspace/src/main/java/org/schoolkernel/workspace/`: `DemoInputAdmissionFilter.java`,
++`DemoInputJson.java` (new); `DemoDefinitionLimits.java`, `DemoTimetableController.java`, `SafeImportReader.java`,
++`SecurityConfiguration.java`, `ProblemHandler.java`, `ProblemResponder.java`, `DemoEvents.java` (updated).
++Under `src/main/resources/static/workspace/`: `definition-autosave.js` (new), `demo-definitions.js` and
++`demo-workbench.js` (updated). Under `src/test/java/org/schoolkernel/workspace/`:
++`DefinitionInputHardeningTest.java` and `DefinitionInputHardeningBrowserIT.java` (new).
++The four Markdown files in `spec/definition-input-hardening/` record this feature and its approval.
++
++[Task-only patch](../../../output/execution/definition-input-hardening/task-only.patch) is relative to the exact
++pre-task dirty baseline, not HEAD; applying it to HEAD alone requires the pre-existing demo work. The patch includes
++only these 14 implementation/test files and four feature documents. Verification artifacts are retained separately.
++No unrelated source was reset, committed or deployed.
++
++## Scope and limitations
++
++These are in-process admission and definition safety limits for the single-replica demo, not a DDoS guarantee or
++production capacity qualification. PostgreSQL tenant isolation, future database Unicode policy and cache privacy
++remain outside authorization. No destination use-case handoffs remain.

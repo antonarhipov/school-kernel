@@ -116,6 +116,28 @@ class PlanServiceTest {
     }
 
     @Test
+    @DisplayName("Demo UC-1: construction time exhaustion is an unsuccessful search, even if solver metadata claims feasibility")
+    void incompleteTimeLimitedConstructionIsNotAnInternalError() throws Exception {
+        Path input = copyFixture("valid-plan.json");
+        var solver = new RecordingSolver();
+        solver.result = new SolverAdapter.SolveResult(
+                new PlanningMapper().toPlanningProblem(validatedDefinition(input)),
+                new ScheduleEvaluator.Evaluation(true, true, java.util.Map.of(), java.util.Map.of(), 0, 0, 0),
+                "TIME_LIMIT", List.of());
+
+        var outcome = assertInstanceOf(CommandOutcome.NoFeasibleSolution.class,
+                service(new FileBoundary(), solver).handle(request(input, temporaryDirectory.resolve("partial.json"), false, false)));
+
+        assertEquals("NO_FEASIBLE_SOLUTION_FOUND", outcome.document().path("status").stringValue());
+        assertEquals("TIME_LIMIT", outcome.document().path("terminationReason").stringValue());
+        assertTrue(outcome.document().path("safeMessage").stringValue().contains("before all lessons were placed"));
+        assertEquals(0, outcome.document().path("searchDiagnostics").path("totalMatches").longValue());
+        assertFalse(outcome.document().has("timetable"));
+        assertFalse(outcome.document().has("score"));
+        assertFalse(outcome.document().has("timetableRevision"));
+    }
+
+    @Test
     @DisplayName("UC-1 ext 2i and minimal guarantee: publication failure preserves the destination")
     void publicationFailurePreservesDestination() throws Exception {
         Path input = copyFixture("empty-plan.json");

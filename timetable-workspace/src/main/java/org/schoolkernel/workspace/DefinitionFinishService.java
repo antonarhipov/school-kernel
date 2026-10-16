@@ -11,12 +11,12 @@ import tools.jackson.databind.node.ObjectNode;
 /** Finishes only the complete saved, reviewed and authoritatively verified candidate; never solves or publishes. */
 @Service
 public class DefinitionFinishService {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final DefinitionReviewService reviews;
     private final KernelVerifier verifier;
     private final ObjectMapper json;
     private final RepairDraftService repairs;
-    public DefinitionFinishService(WorkspaceRepository repository,DefinitionReviewService reviews,KernelVerifier verifier,ObjectMapper json,RepairDraftService repairs){
+    public DefinitionFinishService(WorkspaceStore repository,DefinitionReviewService reviews,KernelVerifier verifier,ObjectMapper json,RepairDraftService repairs){
         this.repository=repository;this.reviews=reviews;this.verifier=verifier;this.json=json;this.repairs=repairs;
     }
     public ObjectNode preview(String ifMatch){

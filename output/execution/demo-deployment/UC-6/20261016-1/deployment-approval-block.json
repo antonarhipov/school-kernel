@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-10-16T15:56:15.961704+00:00",
+  "action": "Upload pinned UC6 production-only stage to existing Railway smoke service",
+  "result": "REJECTED_BY_AUTOMATIC_APPROVAL_REVIEW",
+  "executed": false,
+  "reason": "This uploads 159 files of potentially sensitive production source to an external Railway service and mutates that deployment, but the trusted user request only authorized implementing UC6, not sending this payload to this destination.",
+  "payloadFiles": 159,
+  "archive": "production-submission.zip",
+  "archiveSha256": "f0b3dd8ccebd5843982dec0c886bebc0cfbea4d2a67e786b60040e7bcde488fe",
+  "stage": "/private/tmp/school-demo-uc6-production-rtdvt9wp",
+  "project": "13d509af-1436-4024-bb64-f9f78fa439fc",
+  "environment": "a41a9c0e-ec3f-4ef4-9e08-996d998d1815",
+  "service": "672cabae-b54e-4965-bbb2-5236bec81c33",
+  "domain": "demo-smoke-production.up.railway.app",
+  "requiredAuthority": "Explicit user authorization to upload/deploy this exact payload to this existing destination and perform public verification/same-image cleanup. No provider/resource/spend settings change."
+}

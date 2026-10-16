@@ -1,0 +1,30 @@
+{
+  "verdict": "PASS",
+  "date": "2026-10-16T16:09:32.237135+00:00",
+  "archiveSha256": "f0b3dd8ccebd5843982dec0c886bebc0cfbea4d2a67e786b60040e7bcde488fe",
+  "productionSourceStageArchiveMatch": true,
+  "productionFiles": 159,
+  "startingChangedFiles": [
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelVerifier.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java",
+    "timetable-workspace/src/main/resources/static/workspace/app.js",
+    "timetable-workspace/src/main/resources/static/workspace/styles.css",
+    "deploy/demo/README.md",
+    "spec/demo-deployment/status.md",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelAllowance.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoVerificationService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoWorkspaces.java",
+    "timetable-workspace/src/main/resources/application-demo.yml",
+    "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoCustomDefinitionTest.java",
+    "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoSessionTest.java"
+  ],
+  "missingStartingFiles": [],
+  "postWalkthroughSourceChanges": [
+    "deploy/demo/README.md"
+  ],
+  "sourceChangeExplanation": "Deployment README updated with observed public approval; no production/test source drift",
+  "committed": false,
+  "scope": "UC6 only"
+}

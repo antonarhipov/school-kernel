@@ -13,10 +13,10 @@ import tools.jackson.databind.node.ObjectNode;
 @Service
 public class DefinitionRequirementService {
     static final List<String> SHARED = List.of("teacherId", "requiredRoomCapabilityIds", "preferredRoomIds", "undesirablePeriodIds", "periodLock", "roomLock");
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
     private final DefinitionEntityService entities;
-    public DefinitionRequirementService(WorkspaceRepository repository, ObjectMapper json, DefinitionEntityService entities) {
+    public DefinitionRequirementService(WorkspaceStore repository, ObjectMapper json, DefinitionEntityService entities) {
         this.repository=repository;this.json=json;this.entities=entities;
     }
 

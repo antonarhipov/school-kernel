@@ -1,0 +1,872 @@
+{
+  "createdAt": "2026-10-16T12:41:36.077777+00:00",
+  "base": "d55ab636558224f2d33a5e71313e840dd9486428",
+  "scope": "Final source snapshot includes preserved earlier UC-1/UC-2/deployment inputs; four-file resumed production delta is recorded separately. Output artifacts excluded.",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "bytes": 628,
+      "sha256": "83c9a80651049750a00f11c64bfe4f897e69f2be24ae8f9a50829734f580cf4f"
+    },
+    {
+      "path": "deploy/demo/Dockerfile",
+      "bytes": 1219,
+      "sha256": "87fb58e81ffca98046071172523311b6011afb560306455a0fd1d76b87abd4d2"
+    },
+    {
+      "path": "deploy/demo/README.md",
+      "bytes": 8259,
+      "sha256": "42a4b9a6fbce180583bebe2c071947d1fbed80f04e409f0a4d475997244c8f29"
+    },
+    {
+      "path": "deploy/demo/kernel",
+      "bytes": 335,
+      "sha256": "86149f93e0e037b90c81ae52b998d9964b082c23016860ac5b30717b9b33d11b"
+    },
+    {
+      "path": "deploy/demo/start",
+      "bytes": 255,
+      "sha256": "99fbe7153956ba4b46eaf88831e7516413f44d883b645dcd92de267d7491bf7a"
+    },
+    {
+      "path": "kernel-cli/pom.xml",
+      "bytes": 5950,
+      "sha256": "b01ca7213e03b473ac07f5254038f35c519d48bba4c97b53f9284b003378bd20"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/CommandOutcome.java",
+      "bytes": 1013,
+      "sha256": "b25d1b1ae126aeb5f5240190da65adf28e9d6df867bce2553099a26ac42cffcf"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/DefinitionLoader.java",
+      "bytes": 4533,
+      "sha256": "45fa1c8f476897d701b53b3e853f2cf929463b49ea4f560f6c1cc5a9cff6e277"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/FileBoundary.java",
+      "bytes": 5545,
+      "sha256": "7534781561d0a9caef274fbb64335b00c3e9c751a8e919d3e08863524f2de145"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/PlanFiles.java",
+      "bytes": 465,
+      "sha256": "7438b721c65581e0508b3023963cd745f425293addf405c1606815655f9e4c2b"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/PlanRequest.java",
+      "bytes": 328,
+      "sha256": "c356e59c6a53df8a97083ff64f07aa6d25d1791007ea5fd53845fe5d80e64f68"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/PlanService.java",
+      "bytes": 6875,
+      "sha256": "14c92e8e2c78e4d28644fed92b12e624de9b3cf007e3f381950bb2454a8ab956"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/ReplanRequest.java",
+      "bytes": 392,
+      "sha256": "c9483349a21c6cf23a4c7805514f9f997046216de3c4b9b344bca43914b18e54"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/ReplanService.java",
+      "bytes": 11993,
+      "sha256": "045e774acf9f8960cf16d37c4d8fbc67717f326647b452814c61ecad6e9fd83e"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/TransportException.java",
+      "bytes": 280,
+      "sha256": "56e0e95fcda81fc9b89a8562d3b07e3fc3ed35aa55559aff3db94b8bbab8cf5e"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/VerifyRequest.java",
+      "bytes": 281,
+      "sha256": "5f40685d3b99928428381e5fb239128343fa9d4cda02eaad88f1cb6812e1cf1d"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/application/VerifyService.java",
+      "bytes": 6747,
+      "sha256": "67b8e3991cfc4e8866013c7f19262a3a79016f2b90d7cae5bed4d97205fc7dbc"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/cli/SchoolKernelMain.java",
+      "bytes": 15602,
+      "sha256": "bf0ba4bf14f30e36ba29256ffc7b9d79641bce35dfe324e582e6b677c4761560"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/CurrentTimetableReader.java",
+      "bytes": 6602,
+      "sha256": "b81ff1beb2522a72b97cf6b3c0571d04d2fa1e9fff7626caaa12f2f012d2e529"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/DefinitionSchemaValidator.java",
+      "bytes": 1488,
+      "sha256": "7d26d690f405e952e368701ae6566ae3e89dfba4a35a1db6831643f6c9cd5914"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/JsonSupport.java",
+      "bytes": 2005,
+      "sha256": "1c6d7dd0890d91dba8104a3038d2adc77d66c16ff6fbb66e605d7ce52b6fc357"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/KernelMetadata.java",
+      "bytes": 852,
+      "sha256": "0de090c7d0d33a52efac6d9f664d108cc2eac3a4bbe0476dc05947898e1e9ded"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/ResultFactory.java",
+      "bytes": 15043,
+      "sha256": "1dc0a8414214c4bc0dc6410f91bc93be7933e27aff8e8d6283729ea89219cb25"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/RevisionService.java",
+      "bytes": 4418,
+      "sha256": "938142c43129cd4ea8e1673fb66c29855b958c3dd89549f419d8a5b288e1dbfb"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/SchoolDefinitionDto.java",
+      "bytes": 2675,
+      "sha256": "942e74959f71fb86fcb02eb8706cdcc8e4a5eda0f1d2346c93a86f73c7fe4b75"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/contract/VerificationResultFactory.java",
+      "bytes": 2798,
+      "sha256": "b7da1fc1302900fb83e025be718e5fffb98812af12fd89351f309ed63d6703a1"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/BaselineVerifier.java",
+      "bytes": 5978,
+      "sha256": "a7d364d881aaeb3d2c4680aee47c6e841e1d43b3a7446be06169ad68d40dd66a"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/DefinitionValidator.java",
+      "bytes": 34875,
+      "sha256": "533e5feab90d4fbd9320bdb6c5d723557ab171b5641c7ce1db3a087db3f31f7d"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/KernelCatalog.java",
+      "bytes": 8440,
+      "sha256": "414687ee090797c342ff1d3487d13ba98a6e1a0dc97fa7902792c67f1802cf22"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/RoomAssignmentResolver.java",
+      "bytes": 2120,
+      "sha256": "49eedb3cc24d138ced21f3ef6f1afe899031b5a38ab139320951ec722917bfa1"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/SchoolDefinition.java",
+      "bytes": 6216,
+      "sha256": "cc0b8ac8deee1ff677288ff35bed6142a24189e58afc3692d58da024f0318d56"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/ValidationError.java",
+      "bytes": 618,
+      "sha256": "5e165512c8b52b8b8d840d1e1d7be7365996b6e7bc1d003853d98dae9306392c"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/domain/ValidationReport.java",
+      "bytes": 600,
+      "sha256": "f88e96cfbd28bb694bd9eeb2a029e489b5a0e6af6b4a52143c96fa7090ef1559"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/ConstraintDiagnostic.java",
+      "bytes": 163,
+      "sha256": "3dc93a6790e873867821c5b55dfa32b541916f6194037b3fdcb4d6443d3ac321"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/HardConstraintDiagnostics.java",
+      "bytes": 8247,
+      "sha256": "70ed4ffd4bdf99163059dc0bb10c83499f28da1ef7279dbea59a7f44999ce165"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/InitialSolver.java",
+      "bytes": 252,
+      "sha256": "010aba659980dcb9efc931641129c186714b093252ea803d9006a58ccdfd140f"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/PeriodValue.java",
+      "bytes": 339,
+      "sha256": "66c51c226804687a59a452340f0a73ff07a8aa920cbf7dc337e03c519a37aee4"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/PlacementRules.java",
+      "bytes": 2344,
+      "sha256": "0d142e0280b153b48b5a13b1303fd8acf9bb4e816595bec8dce8843e74d54489"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/PlanningLesson.java",
+      "bytes": 10961,
+      "sha256": "872797127d3ea658cc53e3b4992e987ec027c7ca3f3b1ab7ff54490e2290df85"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/PlanningMapper.java",
+      "bytes": 6741,
+      "sha256": "0f126c20840426a2050364fc520b6c67f576329522ac663378af50860547a3d7"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/PreflightFeasibilityCheck.java",
+      "bytes": 6165,
+      "sha256": "31ffc8285122fd72febe711bb21e93cfb7b3ba9e4df6982f2e781bb1c73a94e5"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/ReplanningSolver.java",
+      "bytes": 358,
+      "sha256": "7b35a0d248be81db8265f84e340004e51a65f393953e53502f3230c9bc2e1fcb"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/RoomValue.java",
+      "bytes": 275,
+      "sha256": "98cea1fb69332676c86dd69715ef0871d6596ec2a037c213a1c3adb79959eed3"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/ScheduleEvaluator.java",
+      "bytes": 9267,
+      "sha256": "018cdb2d531e56192c34a56301d20f4a220314e95b37b6d29fa43762b3871e16"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/SchoolConstraintProvider.java",
+      "bytes": 30257,
+      "sha256": "e56ea2c6269288f01c11be453996db9e5a7b56003b308e35ba0d5ddfd626ed86"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/SchoolSchedule.java",
+      "bytes": 2586,
+      "sha256": "edbb61dc73d353e6f0323763f4d519bde00c33b1e82758291cf83de144c7ff47"
+    },
+    {
+      "path": "kernel-cli/src/main/java/org/schoolkernel/solver/SolverAdapter.java",
+      "bytes": 7287,
+      "sha256": "6972476419f95c14a889e998238b5cbe2bbf5c47305aeb62d5cda799bbfd579d"
+    },
+    {
+      "path": "kernel-cli/src/test/java/org/schoolkernel/application/PlanServiceTest.java",
+      "bytes": 10592,
+      "sha256": "ca4956f9b49949089a3ede78fc9f8d62e0083695ea3d42314732ba64cbf5b5f5"
+    },
+    {
+      "path": "kernel-cli/src/test/java/org/schoolkernel/application/ReplanServiceTest.java",
+      "bytes": 10122,
+      "sha256": "4f266aeb708fce8e254b63aadb111cf5dba374688b8a885dd7768c716a689b59"
+    },
+    {
+      "path": "kernel-cli/src/test/java/org/schoolkernel/cli/IncompleteConstructionCliIT.java",
+      "bytes": 5194,
+      "sha256": "40e9d02c9398929afd96b5aba8ef00b0d2b1a4d3eda24e8f2b3d79abc794fd36"
+    },
+    {
+      "path": "kernel-contract/pom.xml",
+      "bytes": 741,
+      "sha256": "90e4f3e931f3502092316db1fa589e1bbe28fdd45ab41a6182758a32a51532a5"
+    },
+    {
+      "path": "kernel-contract/src/main/resources/schema/result-v1.schema.json",
+      "bytes": 12057,
+      "sha256": "a836fc2514bfae3661aa4cd96570b26e83aee75932dbad57eee1b849957b995d"
+    },
+    {
+      "path": "kernel-contract/src/main/resources/schema/school-definition-v1.schema.json",
+      "bytes": 9750,
+      "sha256": "3f400d63c1dbad614e99f4790fa75ec4125b35014004f2ce197ad5312ccc448d"
+    },
+    {
+      "path": "kernel-contract/src/main/resources/schema/verification-result-v1.schema.json",
+      "bytes": 3410,
+      "sha256": "bc261932f68bb64098fad906f72ccf8df5e6054d8a172fc8037e21dfb6866f78"
+    },
+    {
+      "path": "pom.xml",
+      "bytes": 6794,
+      "sha256": "f4058fcb89d90641dd907c204f632ee58bc92010a09f970189b9465cba00aa39"
+    },
+    {
+      "path": "spec/demo-deployment/checkpoints/UC-12.md",
+      "bytes": 4728,
+      "sha256": "4da39f99ad1a8544c2b90069179e7075a54d3fb14eaa8cbb9d2d3158e93c3ed7"
+    },
+    {
+      "path": "spec/demo-deployment/checkpoints/UC-2.md",
+      "bytes": 8608,
+      "sha256": "ff8a66aad3afd44f9cfb33bc2c0ddcb19d700b24d5e212816f495747858b27ce"
+    },
+    {
+      "path": "spec/demo-deployment/proposal.md",
+      "bytes": 71430,
+      "sha256": "4104ff9060ae9950a581a1d1672c772cbc3c2103eb621d2b38881072e15264ef"
+    },
+    {
+      "path": "spec/demo-deployment/rules.md",
+      "bytes": 4509,
+      "sha256": "fedfa2387f306f032a1fd8653a49e5fb659672c50fe7b05d368a90677a630c4f"
+    },
+    {
+      "path": "spec/demo-deployment/spec.md",
+      "bytes": 92023,
+      "sha256": "94769d868d8f67c26c169bc694104b5a7fc47cd82497a5adbff958a5876a6fd4"
+    },
+    {
+      "path": "spec/demo-deployment/status.md",
+      "bytes": 10289,
+      "sha256": "03b9a21bc46c3fe901bbd6f44bcd33dd9fba844d02553f1145df3c9950fb9333"
+    },
+    {
+      "path": "timetable-workspace/pom.xml",
+      "bytes": 5214,
+      "sha256": "fd5a240bae7a79fd473a3a673a9033c9ed77fe8ed0ed20b7d9536026f70cc9e2"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBaselineExportService.java",
+      "bytes": 5059,
+      "sha256": "179164ecf31c0759303af9727208348372881147b0640aafcf2b32fbede1f8d5"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBundleArchiver.java",
+      "bytes": 199,
+      "sha256": "78dc28e1998cb651ab13c31493f92120da9b1d72c951a07158c9f1bc6118a55a"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/CanonicalJson.java",
+      "bytes": 742,
+      "sha256": "9ef1aa8f8570149d11ca6f31e95e6932a4a8fb6d69df214301691dae965d455f"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionCatalogService.java",
+      "bytes": 5951,
+      "sha256": "a2d67b6de3c8a0eecb8947a709aae436eb28bcb9e4ecb544798e4a8d7b9732ac"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionComparison.java",
+      "bytes": 2889,
+      "sha256": "5356e7d61db048dcd6ce17327f486458928124a040852eaef4b2aa45dabf2e80"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionDraftAccess.java",
+      "bytes": 2459,
+      "sha256": "95e693ecf4a91cb50db0ab624ad48b08cc5a66541504ff8275cb61041d8bed97"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionDraftService.java",
+      "bytes": 21408,
+      "sha256": "c69e446937e8bc561db0fc3912abafa84a59b3b8a7e296d85e78961b45c1e83d"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionEntityService.java",
+      "bytes": 38383,
+      "sha256": "cb14efa8ef03f31db40a263c338da2a2b11e83590fd153eed6d7bccac89e4fbe"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionFinishService.java",
+      "bytes": 6441,
+      "sha256": "a4894264177aa63a9e8d938a94aad2edc356dd28e0e98a74b9b358f7e6d047e8"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionGridService.java",
+      "bytes": 13080,
+      "sha256": "dc80e09bf88f8d6726bc3c453dbd7aeded42f84889868d628bc0625c3e1aeea5"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionOccurrenceService.java",
+      "bytes": 16023,
+      "sha256": "9353446b0746737d77b50e0f64f93c18d50c6baa1eeeae24ab34364d312c26e1"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionPreferenceService.java",
+      "bytes": 6764,
+      "sha256": "1c0413d8529222a6fca1c6167c2af34c5d6b6e353f6696097a50c812275787d7"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionRemovalService.java",
+      "bytes": 24508,
+      "sha256": "b781dfd2ce04519059f530a1d3228b517cd1dd3837e75acd630fd94329135703"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionRequirementService.java",
+      "bytes": 19148,
+      "sha256": "f80d014defee6a38c17a3dc60c92b2bf71c4677569d5257c84022fc6f0242749"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionRestorationService.java",
+      "bytes": 16023,
+      "sha256": "bdde496da7ac33e6ce34085eeacaf7c2bcc381cb887bfffc113b07f1653cad9e"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DefinitionReviewService.java",
+      "bytes": 9986,
+      "sha256": "0bef71fa89a7d0a20acfa5e232d7335d8e55eb2e149d7f8a01d87dd5dbb14f67"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoConfiguration.java",
+      "bytes": 3861,
+      "sha256": "e89fd3e171575daaffa5d3041391db8b96a50f6d9a29a50edb7ec04be6185ad8"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoController.java",
+      "bytes": 1504,
+      "sha256": "301c9d1b091ac7769a0f8a19535e38bbe88668bc45a2a8534bbe27a7ec451281"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSampleController.java",
+      "bytes": 1696,
+      "sha256": "42972b035188a07db8597c5b4bfd3e0c4a8835d227615543bce2ec03b29717e4"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSamples.java",
+      "bytes": 7194,
+      "sha256": "bab7d79d82c9452aeac1f92a44aff37a06959b89c7e0945da2fd1c2167494265"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSessionFilter.java",
+      "bytes": 2956,
+      "sha256": "146dc954bdc4eec522387ee5e3a9f898c95fb9d82ffc95a230173048413e4d30"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSettings.java",
+      "bytes": 1532,
+      "sha256": "0ada70cc640cd04441def6948ce88aa5f46574f11fe5975ef3660490b129746f"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoWorkspaceStore.java",
+      "bytes": 6892,
+      "sha256": "de438840d8d199b218d60c385966acf2fcc8927b3674b6b02e6778ac8289cbba"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoWorkspaces.java",
+      "bytes": 5892,
+      "sha256": "0e1e9dcfd00526d5883c061310d26430e1d9100d355148940e4ebb0f47ce8e64"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/HostOriginFilter.java",
+      "bytes": 5041,
+      "sha256": "9bcea3938b9ab72d501665cb589027fe786348723b62914b626850edcabb0a9f"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ImportDocuments.java",
+      "bytes": 305,
+      "sha256": "ea80ad504301bae8512671b596fa03dcd82720846d9c452881743069f7d1a9f2"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ImportService.java",
+      "bytes": 7264,
+      "sha256": "f0b772675dc588edcd6f78319bee3653f4b67a8dac2f0added82364b9bc78f05"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/InitialPlanningService.java",
+      "bytes": 14976,
+      "sha256": "725f7f6ea8ef6f8862ae1793ae6e2b67ebd02c8b4f571875d5c50afba140a48d"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelPlanner.java",
+      "bytes": 21084,
+      "sha256": "54b82a90929d63ff9fb9081ebd23fb13ee21d0ca094882f57bddcae0d06299a1"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelProcessLauncher.java",
+      "bytes": 319,
+      "sha256": "5a85da9c2910a83dc1e5afecf9d1e4f7d9c0fdd16f6429208537005213cf8388"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/KernelVerifier.java",
+      "bytes": 13185,
+      "sha256": "c9def6db7262e694109b01fe0cbdbd68aea02e187c41a60a8aab20ee36c6bed9"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ManifestService.java",
+      "bytes": 8963,
+      "sha256": "dff7da99cce33876f8039ab44c377b576dc942ca2471b1efb03b545f9749d543"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ManualDraftService.java",
+      "bytes": 36309,
+      "sha256": "fd0db81e44f121c3f37f99ec80a5796c96d1a192492f7fba12989814c67d9784"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemHandler.java",
+      "bytes": 3252,
+      "sha256": "aa5e3ed5fdcf2d9e9dc98f00d08ab539803c69348adf0a7774696b88ac151a73"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java",
+      "bytes": 2540,
+      "sha256": "4eae93818f6c410a0a1d512297d8875ff57b1c60ff398370c106874723b332c3"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponse.java",
+      "bytes": 189,
+      "sha256": "286f6b18d3af348447b8cb218d2e11ea913dc15d3f7e0a7e5c41751bf6848fc2"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProposalReviewService.java",
+      "bytes": 12254,
+      "sha256": "6e22f13f4fbe8fc81e4e1c61aefb5818326939bb0e272c3442c0e263b4e9ec0f"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairDraftService.java",
+      "bytes": 41546,
+      "sha256": "590c3fd07dba4106f306b4dca8dfee04ba5d22ce927ceb03bd3b8d718f509068"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairPlanningService.java",
+      "bytes": 16040,
+      "sha256": "a65f41e7d748fb86c5bd7b2d55a48d5329c3a7e33ab54ff97d612080d45faf7e"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairProposalService.java",
+      "bytes": 9620,
+      "sha256": "36b4a11c9470faed158fc8c3266a32b89b9f0a597467243e27b1f5c74695a8a9"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java",
+      "bytes": 7481,
+      "sha256": "64dcb2109bd9423a3b499d66a57f594547bce363ec6b480552b53f0ab69310e8"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/SecurityConfiguration.java",
+      "bytes": 6513,
+      "sha256": "00c4a4c585cc1b6dcb1f52e804a4089034c3cdc3791e38c6eac452688ee8bd0c"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceAggregate.java",
+      "bytes": 319,
+      "sha256": "cd1a21e5326ee0de6fa329a272f6d873fea850e2897db053a60537f19a2b6dfe"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceApplication.java",
+      "bytes": 480,
+      "sha256": "4880bf857f95b3116b939efef4ee12f198762408bb03655fa7b295eb3e159eeb"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java",
+      "bytes": 26334,
+      "sha256": "a042161fbb88d2ac69ed2d25142a4e0866bf84a28d22aef66448a4437f3c86d4"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceMutation.java",
+      "bytes": 7640,
+      "sha256": "da4de4c6c71edc546112677fc34b85a5d0dab8c0fced16864ef1039537ed0993"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceProblem.java",
+      "bytes": 506,
+      "sha256": "fe343855df70dba14c2409891b99620e72827f407a5c62d8cde0bff9abb518b5"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceRecovery.java",
+      "bytes": 661,
+      "sha256": "42516333eaa9228e2817a95e63fd3973b9e2ddcd471b6f88eda80b503d3921eb"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceRepository.java",
+      "bytes": 12967,
+      "sha256": "76dca0c5905b7d223853b8991314807554627a402c7bdb70c6654e66b773e177"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceState.java",
+      "bytes": 262,
+      "sha256": "651081f81b0a48b84b7dd21b5c0b5802951303e4c72217cbc68df3e0911cad6f"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceStore.java",
+      "bytes": 2255,
+      "sha256": "d66b5bce15f6cdb78fa2c102e797ef754ef8519c430c96171c67244d1c2a2b9f"
+    },
+    {
+      "path": "timetable-workspace/src/main/java/org/schoolkernel/workspace/ZipAcceptedBundleArchiver.java",
+      "bytes": 923,
+      "sha256": "12faa16650c75ee3524a230bd71323672b4f9c0ef16a4d49d92922b1d06c623b"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/application-demo.yml",
+      "bytes": 1242,
+      "sha256": "9db317e7de4c1d3144c76521d2b6b1a6c909958de33f61dc18402a2ad77027d2"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/application.yml",
+      "bytes": 782,
+      "sha256": "b520e4a13ebfcd9df799a5c5fdd423f9c330671d3c6edb709cc81231423cdf0d"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/db/migration/V1__create_workspace_aggregate.sql",
+      "bytes": 577,
+      "sha256": "9c88aaacde0a5e921188033bca3ea5f06a4108a1dd18d28c6be8724689b01eb1"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/db/migration/V2__add_manual_draft_state.sql",
+      "bytes": 378,
+      "sha256": "f93502d3c8e96450d88bb80afccb66aecb1f5afc6f51dcdd3822942fc354d770"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/db/migration/V3__add_definition_draft_state.sql",
+      "bytes": 398,
+      "sha256": "ede79949a2f7b7be4c527e91d778320dab60d9a1217668d5dd7a613c1998ee96"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/full-definition.json",
+      "bytes": 226096,
+      "sha256": "5f0b8ee129492c3c827085016362b7f5a70c8820172a9863b1cf8e94f34e9cd4"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/full-result.json",
+      "bytes": 93265,
+      "sha256": "b6ba045434e63590d8a64523e48817b681406412a7ccc49695d1c49e3bc85b9b"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/generation-evidence.json",
+      "bytes": 1782,
+      "sha256": "4ef95ac3ee80d9ebb2f4c978ac21813ae5dde8a922555b943e179f4c58b34604"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/scoring-evidence.json",
+      "bytes": 725,
+      "sha256": "65209217679256896ba92a13523fa3e133def25508abd2267c29d9bf96a47804"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/small-definition.json",
+      "bytes": 2091,
+      "sha256": "33f9e53cda85018c11a33da268fd9d6943b3555ef6240374d031658658f15e8b"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/small-result.json",
+      "bytes": 2053,
+      "sha256": "3c30719ea1ebf3ec0bde921d3734bd764dde052a3563dbb17d2a6afbe22fd26d"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/two-class-definition.json",
+      "bytes": 26671,
+      "sha256": "5fc87c0ec5fca697ddb14b04f74c96a0514575238d3b02bd88c4980ecb36b4db"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/demo/samples/two-class-result.json",
+      "bytes": 9093,
+      "sha256": "cc80aa4ac3da4941e2bd0028770b2fff5173244631a0ecc496ddb8f3eaf701f8"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/accepted-model.js",
+      "bytes": 2384,
+      "sha256": "d7de994664438d3cff73c72c6e8ff17098a7ec316743be3e52eacbdb7356c99d"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/app.js",
+      "bytes": 174412,
+      "sha256": "c00e2d7da56a43a62620958e989b3d7319d2326544c4c7cf63a7cef23dd945fe"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/day-renderer.js",
+      "bytes": 1321,
+      "sha256": "42871ac8c66ac574f2e0ec197e22e7989f439c80cdfb34a5902504ad9caf5708"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-browser.js",
+      "bytes": 12378,
+      "sha256": "f969776a87367b1ac6c67d0add3f200987c478d4725caa1a38677d010ba447fe"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-catalog.js",
+      "bytes": 4447,
+      "sha256": "9019db7e241c10023a0efd91ee3567c290fcfdca283fbcca0291c39b2bb4891f"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-cohorts.js",
+      "bytes": 19151,
+      "sha256": "8a5f11041f5b0f4312f635176d9a7375d814f561879e6d06655ebdd254b11d17"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-discard.js",
+      "bytes": 3669,
+      "sha256": "8e0865c354a10f9da68015434744ab09e018a49882e1e49909396b37ec29c2b9"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-editor.js",
+      "bytes": 26265,
+      "sha256": "1561e5e9789963112f9a4129336259b0e446f8f4c42197cb2b633494890c4f78"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-finish.js",
+      "bytes": 3157,
+      "sha256": "ebad90a828fee97efad87a95c18d954b5f19fd50e14380713e4c7a0f5edebc26"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-form-controls.js",
+      "bytes": 14937,
+      "sha256": "76094c614f5f6f88d900e40ef7333aa3be2d837b36162a669d9eb9a74bcd1166"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-grid.js",
+      "bytes": 22387,
+      "sha256": "fc640f4b768db37075bd1591ddccda9977031df3b9dd0c60e193d33668bd71a8"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-occurrence-browser.js",
+      "bytes": 2228,
+      "sha256": "bcbab17e62695128d1a46a400ae890d4e032c8872746ff0b740f9356639cb66b"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-occurrences.js",
+      "bytes": 22339,
+      "sha256": "cfa99c2f38cea8570bfed9cc363bd9b36ab8d5e26d5f4796d93b239d5b2c825d"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-preference-guide.js",
+      "bytes": 5411,
+      "sha256": "5d39a3456b0cdc644638909dba6f5457153dbeb193e7f2348e1b5e8d0b0d5fff"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-preferences.js",
+      "bytes": 11362,
+      "sha256": "21f17196e9c7320ff4888198d954e778db1fb74a15a7db3df97de7c943d70442"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-removal.js",
+      "bytes": 12526,
+      "sha256": "3feab6b926685d0af54e7181f6f937183a2653b1a9a2b67ccf301557252ef458"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-requirement-browser.js",
+      "bytes": 2817,
+      "sha256": "6b04fb1ddf63802fd823fff4717a1edd5b2ed5ba4cad2c980e4044ed69543cbc"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-requirements.js",
+      "bytes": 22298,
+      "sha256": "86f802645f4df56934ad6fb891fed965f525fdaceabefb54765a06264cde6cda"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-restoration.js",
+      "bytes": 5745,
+      "sha256": "2cbaf5024cb30f39ad9e12c983140e4cca577d031991fc88478ceec2b975e591"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-review.js",
+      "bytes": 6016,
+      "sha256": "b4f2b4680196835075bbaca56b556d0d65bbbcd7e48bdf739b730548af6d8cd0"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-room-policies.js",
+      "bytes": 18742,
+      "sha256": "59287940cf7f1fe0f6f01c0cde14042a7f945b1e9042935dd60ce87ae166d9b9"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-rooms.js",
+      "bytes": 15503,
+      "sha256": "9a7b2d74e917abb01e7d2f939c259299a65e819dce346815e2ee04d3559ecb10"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-subjects.js",
+      "bytes": 14763,
+      "sha256": "9bbce7b84edc96c9aadbb2bc8fb7a11c07512366cc892d1247a606f3f78eb287"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/definition-teachers.js",
+      "bytes": 15403,
+      "sha256": "18c5287e838bd0f177027ca75b1e269a505529e321dd6df2fb1de1f852e19baa"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/demo-panel.js",
+      "bytes": 13598,
+      "sha256": "2561b606ec1bff5e1dc21d87afac9ecd47a2f499725891e5b74cb90ee504962c"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/favicon.svg",
+      "bytes": 279,
+      "sha256": "2caf8c11a20033b0f30c78116a88eb83febf6772234b6c5e238c547f51db04d6"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/index.html",
+      "bytes": 1589,
+      "sha256": "6c36e9a1fc34b7673cdac98bde31df9f677c5e78aae29df7953ddf48d929e464"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/inspection-state.js",
+      "bytes": 8075,
+      "sha256": "f0c181929064c2e370eba40d6ffe34e4ef1eb32d9b5771435e267a79679d9d10"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/messages.js",
+      "bytes": 19410,
+      "sha256": "3edbaec7a02fb4c64ef0e1d5e9a413e7b0a546265271d14ce5e959eaa7dd35c2"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/proposal-comparison.js",
+      "bytes": 1455,
+      "sha256": "6d3212ce43e48987cdd0cc3396cb4ae7973eca6709561ff10350eb122cefa21d"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/styles.css",
+      "bytes": 71153,
+      "sha256": "f304fe5334fac493e66c32f1727918f2e948037baf1b3a8cf275ad76c8e7aea7"
+    },
+    {
+      "path": "timetable-workspace/src/main/resources/static/workspace/week-renderer.js",
+      "bytes": 2798,
+      "sha256": "9e09e36544caab000bdb1792adfcc27a40db4f16838195fc1e112a83b23385ab"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoOriginBoundaryTest.java",
+      "bytes": 4357,
+      "sha256": "6724374afae8e13638be030cb104cfb4a7ca94fc9e7582a594680f7e5ec6f042"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoRailwayIngressTest.java",
+      "bytes": 5114,
+      "sha256": "def339e002d7835bd366b9b2859e8d5a1eb897adc0243790fcbdab0c419c89c8"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoRemoteEndedSessionIT.java",
+      "bytes": 5711,
+      "sha256": "5de30b9b43d5c688ac237d1e2deff91686063ee63c88d264740c0af7197deb17"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoRemoteExpiryIT.java",
+      "bytes": 11119,
+      "sha256": "e7d4cc111be5e666601641aa2c1fe7bf2ed25cb2da94063ac861b747cccd0ccd"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoRemoteSessionIT.java",
+      "bytes": 20502,
+      "sha256": "147a3cea1652f3b5a5e5651a4c9f065b073e88ea5e446476380be873fce6cefe"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoRemoteSmokeIT.java",
+      "bytes": 9897,
+      "sha256": "1215142a1e762bf0276608f531a95e22927cee0fac16b6cbfc839c242634e0bb"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoSessionBrowserIT.java",
+      "bytes": 20221,
+      "sha256": "413a6ff0218e5bf7e073320a233f5f2251b18e306016efa2a0efe021b8f5d83a"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoSessionTest.java",
+      "bytes": 6664,
+      "sha256": "9fb6d43f375643890b49b7b9eb42b7acae5659f9b7266dd23dcbe8ba3a413f38"
+    },
+    {
+      "path": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoWorkspaceStoreTest.java",
+      "bytes": 5888,
+      "sha256": "fecf1f1c40cf782aed62a3f330c8828e9c65908852027211d3dbcfb2db73aadc"
+    },
+    {
+      "path": "tools/demo/check_railway_boundary.py",
+      "bytes": 2615,
+      "sha256": "d7c49938044f92bec33ee661f1e26909232df865bc4cc9de08d5ee2f3f767818"
+    },
+    {
+      "path": "tools/demo/generate_samples.py",
+      "bytes": 5715,
+      "sha256": "13197fa677b23348961da82849e624e2f879cd48fa0930c4d747ab91b5563db6"
+    },
+    {
+      "path": "tools/demo/names.json",
+      "bytes": 864,
+      "sha256": "c222c4ac8e214da377ab5176967a8ebe28a04541b7ae8595bded6c15f06a51fe"
+    },
+    {
+      "path": "tools/demo/record_scoring_evidence.py",
+      "bytes": 1465,
+      "sha256": "7878e82a5336f6b8dde29050183df3a030c748043f31d0a20863788928f7c0d8"
+    },
+    {
+      "path": "tools/demo/smoke_container.py",
+      "bytes": 5484,
+      "sha256": "54284097e360457c682a060708b551cf9949eaaedd3377732adb24ba492e5d9e"
+    }
+  ]
+}

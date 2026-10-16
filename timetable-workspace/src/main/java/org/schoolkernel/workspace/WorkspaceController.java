@@ -28,7 +28,9 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Controller
 public class WorkspaceController {
-    private final WorkspaceRepository repository;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private DemoPlanningService demoPlanning;
+    private final WorkspaceStore repository;
     private final ImportService imports;
     private final InitialPlanningService planning;
     private final RepairPlanningService repairPlanning;
@@ -51,7 +53,7 @@ public class WorkspaceController {
     private final ObjectMapper json;
 
     public WorkspaceController(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             ImportService imports,
             InitialPlanningService planning,
             RepairPlanningService repairPlanning,
@@ -395,15 +397,25 @@ public class WorkspaceController {
     @ResponseBody
     public ResponseEntity<JsonNode> uploadNewDefinition(
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestParam(value = "confirmed", defaultValue = "false") boolean confirmed,
             @RequestParam(value = "definition", required = false) MultipartFile definition,
             @RequestParam(value = "result", required = false) MultipartFile result,
             @RequestParam(value = "archive", required = false) MultipartFile archive) {
+        if (repository.ephemeral()) {
+            WorkspaceAggregate current = repository.load();
+            ImportService.requireMatchingVersion(ifMatch, current);
+            if (current.state() != WorkspaceState.EMPTY && !confirmed) throw new WorkspaceProblem(
+                    org.springframework.http.HttpStatus.PRECONDITION_REQUIRED, "REPLACEMENT_CONFIRMATION_REQUIRED",
+                    "Confirm replacing the accepted timetable and all unfinished draft/proposal work. Export Current first to keep it.");
+        }
         return response(imports.resetAndUploadDefinition(ifMatch, definition, result, archive));
     }
 
     @GetMapping("/api/accepted/export")
     @ResponseBody
-    public ResponseEntity<byte[]> exportAcceptedBaseline() {
+    public ResponseEntity<byte[]> exportAcceptedBaseline(
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+        if (repository.ephemeral() && ifMatch != null) ImportService.requireMatchingVersion(ifMatch, repository.load());
         AcceptedBaselineExportService.ExportedBaseline exported = exports.export();
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/zip"))
@@ -440,7 +452,7 @@ public class WorkspaceController {
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @RequestBody(required = false) JsonNode request) {
         WorkspaceAggregate current = repository.load();
-        WorkspaceAggregate started = current.state() == WorkspaceState.REPAIR_DRAFT
+        WorkspaceAggregate started = demoPlanning != null ? demoPlanning.start(ifMatch, request) : current.state() == WorkspaceState.REPAIR_DRAFT
                 ? repairPlanning.start(ifMatch, request)
                 : planning.start(ifMatch);
         return ResponseEntity.accepted()
@@ -458,7 +470,7 @@ public class WorkspaceController {
                 .eTag(current.etag())
                 .cacheControl(CacheControl.noStore())
                 .header("X-Content-Type-Options", "nosniff")
-                .body(isRepairRun(current, runId) ? repairPlanning.run(runId) : planning.run(runId));
+                .body(demoPlanning != null ? demoPlanning.run(runId) : isRepairRun(current, runId) ? repairPlanning.run(runId) : planning.run(runId));
     }
 
     @DeleteMapping("/api/runs/{runId}")
@@ -467,7 +479,7 @@ public class WorkspaceController {
             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
             @PathVariable UUID runId) {
         WorkspaceAggregate current = repository.load();
-        return response(current.state() == WorkspaceState.SOLVING_REPAIR
+        return response(demoPlanning != null ? demoPlanning.cancel(ifMatch, runId) : current.state() == WorkspaceState.SOLVING_REPAIR
                 ? repairPlanning.cancel(ifMatch, runId)
                 : planning.cancel(ifMatch, runId));
     }
@@ -493,7 +505,13 @@ public class WorkspaceController {
     @PostMapping("/api/proposal/accept")
     @ResponseBody
     public ResponseEntity<JsonNode> acceptProposal(
-            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch) {
+            @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+            @RequestBody(required = false) JsonNode acknowledgement) {
+        if (repository.ephemeral() && (acknowledgement == null || !acknowledgement.path("confirmed").isBoolean()
+                || !acknowledgement.path("confirmed").booleanValue())) {
+            throw new WorkspaceProblem(org.springframework.http.HttpStatus.PRECONDITION_REQUIRED,
+                    "ACCEPTANCE_CONFIRMATION_REQUIRED", "Confirm acceptance of this complete proposal before making it Current.");
+        }
         return response(repository.load().state() == WorkspaceState.REPAIR_PROPOSAL
                 ? repairProposals.accept(ifMatch) : planning.accept(ifMatch));
     }
@@ -506,7 +524,7 @@ public class WorkspaceController {
                 ? repairProposals.discard(ifMatch) : planning.discard(ifMatch));
     }
 
-    private ResponseEntity<JsonNode> response(WorkspaceAggregate aggregate) {
+    ResponseEntity<JsonNode> response(WorkspaceAggregate aggregate) {
         return ResponseEntity.ok()
                 .eTag(aggregate.etag())
                 .cacheControl(CacheControl.noStore())
@@ -516,6 +534,7 @@ public class WorkspaceController {
 
     private ObjectNode snapshot(WorkspaceAggregate aggregate) {
         ObjectNode body = json.createObjectNode();
+        if (repository.ephemeral()) body.put("demo", true);
         body.put("state", aggregate.state().name());
         body.put("version", aggregate.version());
         body.put("acceptedTimetable", switch (aggregate.state()) {

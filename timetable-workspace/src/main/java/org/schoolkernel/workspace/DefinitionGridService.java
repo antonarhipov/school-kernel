@@ -15,10 +15,10 @@ import tools.jackson.databind.node.ObjectNode;
 public class DefinitionGridService {
     private static final Set<String> FIELDS = Set.of("id", "displayName", "weekday", "order", "startTime", "endTime");
     private static final Set<String> DAYS = Set.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
 
-    public DefinitionGridService(WorkspaceRepository repository, ObjectMapper json) {
+    public DefinitionGridService(WorkspaceStore repository, ObjectMapper json) {
         this.repository = repository; this.json = json;
     }
 

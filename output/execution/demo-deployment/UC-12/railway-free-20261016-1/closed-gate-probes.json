@@ -1,0 +1,48 @@
+[
+  {
+    "url": "https://demo-smoke-production.up.railway.app/api/workspace",
+    "requestHeaders": {},
+    "status": 403,
+    "setsCookie": false,
+    "location": null,
+    "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"6413f26a-8f29-4c34-8571-cd034a1fb1b1\",\"state\":\"UNKNOWN\",\"etag\":null}"
+  },
+  {
+    "url": "https://demo-smoke-production.up.railway.app/api/workspace",
+    "requestHeaders": {
+      "X-Forwarded-Proto": "https"
+    },
+    "status": 403,
+    "setsCookie": false,
+    "location": null,
+    "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"75a53eab-32a3-43b2-97f5-90e5e0df396a\",\"state\":\"UNKNOWN\",\"etag\":null}"
+  },
+  {
+    "url": "https://demo-smoke-production.up.railway.app/api/workspace",
+    "requestHeaders": {
+      "Forwarded": "proto=https"
+    },
+    "status": 403,
+    "setsCookie": false,
+    "location": null,
+    "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"55a9ca2b-d467-40a8-bec2-6afc918684e0\",\"state\":\"UNKNOWN\",\"etag\":null}"
+  },
+  {
+    "url": "https://demo-smoke-production.up.railway.app/api/workspace",
+    "requestHeaders": {
+      "X-Forwarded-Host": "evil.example"
+    },
+    "status": 403,
+    "setsCookie": false,
+    "location": null,
+    "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"0b9ee0d7-1536-4d83-bd44-c0d11ffdb149\",\"state\":\"UNKNOWN\",\"etag\":null}"
+  },
+  {
+    "url": "http://demo-smoke-production.up.railway.app/api/workspace",
+    "requestHeaders": {},
+    "status": 301,
+    "setsCookie": false,
+    "location": "https://demo-smoke-production.up.railway.app/api/workspace",
+    "body": ""
+  }
+]

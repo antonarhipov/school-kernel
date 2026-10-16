@@ -12,16 +12,19 @@ import tools.jackson.databind.node.ObjectNode;
 
 @Service
 public class RepairProposalService {
-    private final WorkspaceRepository repository;
+    @org.springframework.beans.factory.annotation.Autowired(required = false) private DemoEvents events;
+    private final WorkspaceStore repository;
     private final WorkspaceMutation mutation;
     private final KernelVerifier verifier;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private DemoVerificationService demoVerification;
     private final ManifestService manifests;
     private final ProposalReviewService reviews;
     private final ObjectMapper json;
     private final RepairDraftService drafts;
 
     public RepairProposalService(
-            WorkspaceRepository repository,
+            WorkspaceStore repository,
             WorkspaceMutation mutation,
             KernelVerifier verifier,
             ManifestService manifests,
@@ -73,10 +76,10 @@ public class RepairProposalService {
                     throw staleProposal();
                 }
             }
-            verified = verifier.verify(new ImportDocuments(
+            verified = verify(new ImportDocuments(
                     definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
         } catch (WorkspaceProblem problem) {
-            if ("KERNEL_VERIFICATION_FAILED".equals(problem.code())) {
+            if (demoVerification == null && "KERNEL_VERIFICATION_FAILED".equals(problem.code())) {
                 invalidate(current);
                 throw staleProposal();
             }
@@ -107,7 +110,10 @@ public class RepairProposalService {
                 current.document().path("acceptedBaseline").path("manifest"),
                 current.document().path("repairDraft")));
         acceptedDocument.set("lastRun", current.document().path("lastRun").deepCopy());
-        return mutation.acceptRepair(expectedVersion, acceptedDocument);
+        if (demoVerification != null) acceptedDocument.set("solveProvenance", proposal.path("solveProvenance").deepCopy());
+        var installed = mutation.acceptRepair(expectedVersion, acceptedDocument);
+        if (events != null) events.product(DemoEvents.Product.ACCEPT_REPAIR);
+        return installed;
     }
 
     private boolean identityMatches(
@@ -132,7 +138,7 @@ public class RepairProposalService {
                         .equals(text(definition.path("basedOnRevision")))) {
             return false;
         }
-        if (RepairDraftService.seeded(current.document())) {
+        if (demoVerification != null || RepairDraftService.seeded(current.document())) {
             try {
                 ObjectNode checked = copy(current.document());
                 drafts.refreshSavedDraft(checked);
@@ -141,6 +147,10 @@ public class RepairProposalService {
                         || !definition.equals(drafts.compiledDefinition(checked))) return false;
             } catch (WorkspaceProblem invalid) { return false; }
         }
+        if (demoVerification != null && (!proposal.path("limit").equals(result.path("limit").path("duration"))
+                || !proposal.path("limit").equals(proposal.path("solveProvenance").path("duration"))
+                || !demoVerification.build().equals(proposal.path("solveProvenance").path("kernelBuild").asString())
+                || !"REPAIR".equals(proposal.path("solveProvenance").path("operation").asString()))) return false;
         JsonNode report = result.path("changeReport");
         if (!report.isObject() || report.size() != ProposalReviewService.CATEGORIES.size()) return false;
         for (String category : ProposalReviewService.CATEGORIES) {
@@ -153,6 +163,10 @@ public class RepairProposalService {
         return storedReview.isMissingNode() || Arrays.equals(
                 CanonicalJson.bytes(storedReview),
                 CanonicalJson.bytes(reviews.create(accepted, draft, definition, result)));
+    }
+
+    private KernelVerifier.Verification verify(ImportDocuments documents) {
+        return demoVerification == null ? verifier.verify(documents) : demoVerification.verify(documents);
     }
 
     private void invalidate(WorkspaceAggregate current) {

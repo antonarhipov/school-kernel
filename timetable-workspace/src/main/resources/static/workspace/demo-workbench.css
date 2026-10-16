@@ -1,0 +1,98 @@
+.timetable-demo { background: #f0ece1; color: #17241e; }
+.timetable-demo header, .timetable-demo main { width: calc(100% - 24px); max-width: none; }
+.timetable-demo .demo-header { padding: 8px 2px 6px; }
+.demo-brand { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.demo-brand .eyebrow { font-size: .64rem; }
+.demo-tag { color: #43594e; font: .64rem var(--font-mono, monospace); padding-left: 8px; border-left: 1px solid #b8c6bd; }
+.demo-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 10px; }
+.demo-selectors { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
+.demo-selectors label { margin: 0; min-width: 210px; max-width: 100%; font-size: .7rem; color: #43594e; }
+.timetable-demo select, .timetable-demo input:not([type=checkbox]), .timetable-demo textarea { border: 1px solid #b8c5bc; border-radius: 3px; padding: 4px 7px; font: inherit; max-width: 100%; background: #fdfdfb; min-width: 0; }
+.demo-selectors select { min-height: 31px; font-size: .78rem; color: #17241e; font-weight: 650; }
+.timetable-demo label { font-size: .75rem; }
+.timetable-demo button { font-size: .77rem; padding: 6px 9px; }
+.timetable-demo button:disabled { cursor: not-allowed; }
+.demo-main { padding-bottom: max(40px, calc(var(--save-bar-height, 0px) + 30px)); }
+.demo-timetable { background: #fdfcf9; border: 1px solid #c2cdc4; border-radius: 3px; padding: 10px 12px; min-width: 0; box-shadow: 2px 2px 0 rgba(20, 35, 27, .07); }
+.demo-view-heading { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
+.demo-view-heading h1 { font-size: 1.18rem; letter-spacing: -.02em; margin: 0; overflow-wrap: anywhere; }
+.demo-view-heading p { font: .68rem var(--font-mono, monospace); margin: 3px 0 7px; }
+.demo-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 7px; padding: 7px 9px; margin-bottom: 7px; border: 1px solid #c2cdc4; border-radius: 3px; background: #f3f7f4; }
+.demo-filters label { margin: 0; gap: 4px; flex: 1 1 115px; min-width: 110px; max-width: 240px; color: #43594e; font-size: .72rem; }
+.demo-filters select, .demo-filters input { width: 100%; height: 31px; font-size: .78rem !important; }
+.demo-filters .demo-search { flex-basis: 190px; }
+.demo-filters > button { height: 31px; padding: 5px 8px; }
+.demo-range { display: flex; padding: 3px; background: #e2e8e3; border: 1px solid #c0cdc4; border-radius: 3px; }
+.demo-range button { border: 0; color: #3b4e45; background: transparent; padding: 5px 7px; box-shadow: none; }
+.demo-range button[aria-pressed=true] { background: #1b593b; color: #fff; box-shadow: 1px 1px 0 rgba(0, 0, 0, .15); }
+/* Use the established current-mode matrix, week-lesson and subject-color rules in styles.css. */
+.demo-timetable .matrix-wrap { max-width: 100%; max-height: max(320px, calc(100dvh - 235px)); }
+.demo-timetable .week-lesson .week-room, .demo-timetable .week-lesson .week-meta { max-width: 44%; }
+.demo-timetable .demo-lesson:hover { filter: brightness(.96); color: #17241e; background: var(--subject-bg); }
+.demo-timetable .demo-lesson.match { outline: 2px dashed #9c4714; outline-offset: -3px; }
+.demo-empty { text-align: center; padding: 60px 20px; color: #58715f; }
+.demo-utilities > summary { border: 1px solid #b8c6bd; background: #f8faf8; padding: 6px 9px; border-radius: 3px; font-size: .76rem; font-weight: 750; cursor: pointer; }
+.demo-utilities[open] > section { position: fixed; inset: 30px max(24px, calc((100vw - 1100px) / 2)); z-index: 40; overflow: auto; padding: 24px; border: 1px solid #c7d5ca; border-radius: 12px; background: #fafcf8; box-shadow: 0 12px 80px #1e372b50; }
+.demo-editor-heading { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
+.demo-editor-heading h2 { font-size: 1.25rem; }
+.demo-utilities textarea { width: 100%; min-height: 42vh; resize: vertical; font: .78rem/1.5 ui-monospace, monospace !important; }
+.demo-editor-actions, #generation-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin: 12px 0; }
+.demo-editor-actions label, #generation-controls label { margin: 0; flex: 1; }
+#generation-controls { border-top: 1px solid #d8e2d7; padding-top: 18px; }
+.demo-local-data { border-top: 1px solid #d8e2d7; margin-top: 24px; padding-top: 12px; }
+.demo-delete-dialog { width: min(480px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); box-sizing: border-box; overflow: auto; padding: 20px; border: 1px solid #b8c6bd; border-radius: 3px; background: #fdfcf9; color: #17241e; }
+.demo-delete-dialog::backdrop { background: #17241e80; }
+.demo-delete-dialog h2 { font-size: 1.15rem; }
+.demo-footer { padding: 8px 2px; font-size: .68rem; color: #55645e; line-height: 1.6; }
+.demo-footer details { margin-top: 5px; max-width: 90ch; }
+.demo-footer summary { cursor: pointer; width: fit-content; text-decoration: underline; }
+.demo-inspector { position: fixed; margin: 0; width: min(390px, calc(100vw - 24px)); max-height: calc(100dvh - max(100px, var(--save-bar-height, 0px)) - 32px); overflow: auto; padding: 20px; border: 1px solid #c0d0c1; border-radius: 12px; box-shadow: 0 12px 50px #1e372b30; z-index: 20; background: #fff; color: #20372d; }
+.demo-inspector-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.demo-inspector-heading h2 { font-size: 1.3rem; margin: 7px 0 12px; }
+.demo-inspector-heading button { padding: 5px 10px; }
+.demo-inspector dl { display: block; }
+.demo-inspector dl div { margin-bottom: 8px; }
+.demo-inspector select { width: 100%; }
+.demo-save-bar { position: fixed; z-index: 15; bottom: 18px; left: 50%; transform: translateX(-50%); width: min(1080px, calc(100% - 32px)); padding: 16px 20px; border-radius: 12px; border: 1px solid #bfcdc2; box-shadow: 0 8px 40px #1e372b30; background: #fff; }
+.demo-save-bar label { margin: 0; }
+.demo-save-bar:not([hidden]) { display: flex; align-items: end; flex-wrap: wrap; gap: 12px; }
+.demo-save-bar label { flex: 1 1 180px; }
+.demo-save-bar input { width: 100%; }
+.demo-save-status { display: grid; gap: 6px; align-self: center; min-width: 140px; }
+.demo-save-status span { font-size: .75rem; color: #52695b; }
+#timetable-name-error { width: 100%; margin: 0; font-size: .8rem; }
+#timetable-name-error:empty { display: none; }
+.demo-error { color: #982d26; }
+.demo-errors { border: 1px solid #d9978e; background: #fff5f1; border-radius: 8px; padding: 14px; margin-bottom: 16px; font-size: .82rem; }
+.demo-errors h2 { font-size: 1.1rem; margin: 0; color: #982d26; }
+.demo-errors details { border-top: 1px solid #eed3cb; padding: 10px 0; }
+.demo-errors summary, .demo-warnings summary { cursor: pointer; font-weight: 650; }
+.demo-errors ul { max-height: 210px; overflow: auto; padding-left: 18px; }
+.demo-errors .demo-conflict-link { background: transparent; color: #8b2e25; border: 0; padding: 6px 0; text-decoration: underline; text-align: left; }
+.demo-warnings { border: 1px solid #dacb9d; border-radius: 8px; padding: 12px; background: #fffbec; margin: 12px 0; font-size: .8rem; }
+.demo-warnings li { margin: 8px 0; }
+.demo-timetable .demo-lesson.has-conflict { border: 2px solid #b23e30; background: #fff0eb; }
+.demo-conflict-mark { flex: none; font: 750 .55rem var(--font-mono, monospace); color: #982d26; white-space: nowrap; }
+.demo-inspector .muted { font-size: .72rem; line-height: 1.4; }
+.demo-inspector label { display: block; margin-top: 12px; }
+.timetable-demo :focus-visible { outline: 3px solid #b48018; outline-offset: 2px; }
+@media (max-width: 700px) {
+  .timetable-demo header, .timetable-demo main { width: calc(100% - 24px); }
+  .timetable-demo .demo-header { padding-top: 8px; }
+  .demo-heading-row { flex-wrap: wrap; align-items: start; gap: 12px; }
+  .demo-selectors { gap: 10px; flex-basis: 100%; }
+  .demo-selectors label { min-width: 0; flex: 1 1 140px; }
+  .demo-selectors select { width: 100%; font-size: .85rem; }
+  .demo-utilities { margin-left: auto; }
+  .demo-utilities > summary { padding: 7px 12px; }
+  .demo-timetable { padding: 10px; }
+  .demo-view-heading h1 { font-size: 1.2rem; }
+  .demo-filters { gap: 8px; }
+  .demo-filters label { flex-basis: calc(50% - 8px); max-width: none; min-width: 0; }
+  .demo-filters .demo-search { flex-basis: 100%; }
+  .demo-timetable .matrix-wrap { max-height: 65vh; }
+  .demo-utilities[open] > section { inset: 12px; padding: 16px; }
+  .demo-inspector { font-size: .85rem; }
+  .demo-main { padding-bottom: max(40px, calc(var(--save-bar-height, 0px) + 30px)); }
+  .demo-save-bar { bottom: 10px; padding: 12px; }
+}

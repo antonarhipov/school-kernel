@@ -20,13 +20,13 @@ import tools.jackson.databind.node.ObjectNode;
 /** Opening is one compare-and-swap write. Source data and accepted provenance are never transformed. */
 @Service
 public class DefinitionDraftService {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
     private final Schema schema;
     private final ManifestService manifests;
     private final KernelVerifier verifier;
 
-    public DefinitionDraftService(WorkspaceRepository repository, ObjectMapper json, ManifestService manifests, KernelVerifier verifier) {
+    public DefinitionDraftService(WorkspaceStore repository, ObjectMapper json, ManifestService manifests, KernelVerifier verifier) {
         this.repository = repository;
         this.json = json;
         this.manifests = manifests;

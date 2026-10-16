@@ -1,0 +1,22 @@
+{
+  "verdict": "PASS",
+  "deployment": "a96c3c89-1c5e-4a13-9093-fcfb40f29368",
+  "imageDigest": "sha256:54a95debaa4a7615eb205b4ce0fb9c03dd3f65fe3c831d11cf84911e6a789979",
+  "unchangedServiceManifest": true,
+  "newCounterReset": "a59cefa9-cc8f-426b-96bd-55e0304703c7",
+  "startupServiceSha256": "1b09fc5d33b8672c0b3fabf6e007baa4a345c365adfb786073cf4b6f233c9e03",
+  "sampleVerification": {
+    "full": "VERIFIED",
+    "small": "VERIFIED",
+    "two-class": "VERIFIED"
+  },
+  "priorEpochEndedSessions": 2,
+  "noCreatedSessionsAfterCleanup": true,
+  "postRestartChecks": {
+    "healthStaticReads": 40,
+    "edgeProbes": 9,
+    "exactOriginalStaticHashes": 35
+  },
+  "publicMobileFindingRemains": true,
+  "revisedCssUploaded": false
+}

@@ -1,0 +1,80 @@
+{
+  "time": "2026-10-16T11:45:18.659235+00:00",
+  "results": [
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 403,
+      "setsSessionCookie": false,
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"cb16651b-4912-4817-827a-52e035560000\",\"state\":\"UNKNOWN\",\"etag\":null}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 403,
+      "setsSessionCookie": false,
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"063faee8-d5f0-4cbf-be8d-832093119b64\",\"state\":\"UNKNOWN\",\"etag\":null}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    },
+    {
+      "status": 200,
+      "setsSessionCookie": false,
+      "body": "{\"status\":\"UP\"}"
+    }
+  ]
+}

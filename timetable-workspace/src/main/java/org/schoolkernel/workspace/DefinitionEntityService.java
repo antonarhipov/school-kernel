@@ -24,9 +24,9 @@ public class DefinitionEntityService {
             Map.entry("curatorTeacherId",8), Map.entry("homeRoomId",8));
     private static final Map<String,Integer> ROOM_FIELDS = Map.of("id",1,"displayName",1,"capacity",1,"capabilityIds",1,"availablePeriodIds",1);
     private static final Map<String,Integer> POLICY_FIELDS=Map.of("id",9,"subjectId",9,"teacherId",9,"allowedRoomIds",9,"useHomeRoom",9);
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
-    public DefinitionEntityService(WorkspaceRepository repository, ObjectMapper json) { this.repository=repository; this.json=json; }
+    public DefinitionEntityService(WorkspaceStore repository, ObjectMapper json) { this.repository=repository; this.json=json; }
 
     @Transactional
     public WorkspaceAggregate saveSubject(String ifMatch, JsonNode request) {

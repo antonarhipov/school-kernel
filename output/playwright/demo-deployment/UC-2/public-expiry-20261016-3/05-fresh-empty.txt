@@ -1,0 +1,50 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+
+No accepted timetable
+
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 0 minutes without activity or 0 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school
+Full school
+expiry-copy · 2026-10-16T12:33:29.163Z
+
+Fictional school and people for trying timetable planning. 520 lessons · 23 classes · 51 teachers · 42 rooms · 50 periods. Thorough search is the default for a later solve. Selection only previews.
+
+Definition JSON
+
+Unchanged
+
+Use this sample
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all saved versions
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+Empty workspace
+Bring this school into the workspace
+
+No draft or timetable has been imported.
+
+Import school data
+
+Start with an initial school definition, a matching definition and feasible result, or an accepted-bundle ZIP.
+
+JSON documents
+School definition
+Matching feasible result (optional)
+Import JSON documents
+Accepted-bundle archive
+Accepted bundle
+Import accepted bundle

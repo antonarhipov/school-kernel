@@ -1,0 +1,52 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+
+No accepted timetable
+
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school
+Full school
+queued-private · 2026-10-16T16:03:05.721Z · In use
+other-label · 2026-10-16T16:02:49.306Z
+
+Saved 2026-10-16T16:03:05.721Z · derived from sample small.
+
+queued-private · In use as initial draft
+
+Definition JSON
+
+Unchanged
+
+Use this definition
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Wait for or cancel the active run first.
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+The definition is in use as a new initial draft. No timetable is Current and no search was started.
+
+Planning
+Queued private school
+
+Your private run uses shared demo capacity. You may cancel while queued, running or checking.
+
+Queued · position 1. Approximate start in 64 seconds; this is an estimate, not a promised start or finish time.
+
+Execution limit
+PT5S
+Cancel run
+Change a lesson’s teacher

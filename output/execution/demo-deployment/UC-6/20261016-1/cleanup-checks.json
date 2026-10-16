@@ -1,0 +1,14 @@
+{
+  "verdict": "PASS",
+  "recordedAt": "2026-10-16T16:09:07.209024+00:00",
+  "deployment": "a3ebd477-0aa8-46ee-a8b5-38d33d35b78a",
+  "imageDigest": "sha256:6bbb29d521a633a0934a8066533b807e79e63e2f92c7c3ee7f8218c5c605b084",
+  "serviceManifestUnchanged": true,
+  "startupVerifications": 3,
+  "visitorKernelProcessesAfterRestart": 0,
+  "sampleOpensAfterRestart": 0,
+  "statelessReads": 40,
+  "edgeProbes": 9,
+  "exactStaticAssets": 34,
+  "disposition": "Same-image fresh process; two disposable visitor workspaces, jobs and cache cleared; browser contexts closed; no session created by cleanup checks"
+}

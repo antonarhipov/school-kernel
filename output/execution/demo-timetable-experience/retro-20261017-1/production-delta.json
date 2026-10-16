@@ -1,0 +1,8 @@
+{
+  "priorDeployment": "0a3da7be-c9ac-4d08-9d84-005c8d6ff087",
+  "changedProductionFiles": [
+    "timetable-workspace/src/main/resources/static/workspace/demo-workbench.css",
+    "timetable-workspace/src/main/resources/static/workspace/demo-workbench.js"
+  ],
+  "scope": "Restore compact retro presentation using shared current-mode matrix and subject palette; preserve timetable lifecycle/validation/storage"
+}

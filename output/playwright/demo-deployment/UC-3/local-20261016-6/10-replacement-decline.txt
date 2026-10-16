@@ -1,0 +1,854 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school
+Full school · In use
+
+Fictional school and people for trying timetable planning. 42 lessons · 2 classes · 12 teachers · 13 rooms · 35 periods. Quick search (5 seconds) is the default for a later solve. Selection only previews.
+
+Full school · In use as Current
+
+Definition JSON
+
+Unchanged
+
+Use this sample
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all saved versions
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+Full school✓ Current · acceptedRepair draft · not current
+
+Accepted revision: sha256:0401bc53ddb05360fe1bf9379692eb5c52b202e771d5f256ef4c1a602b50c7e5
+
+Accepted baseline remains current
+
+Utilities
+Export accepted baseline
+
+Download the exact accepted definition, feasible result, and lock provenance as one locally verified ZIP archive.
+
+School
+Full school
+Definition revision
+sha256:131003c4d77754d54506b9133e1eed52fb34d813b98a0d57c304f847db06dc73
+Timetable revision
+sha256:0401bc53ddb05360fe1bf9379692eb5c52b202e771d5f256ef4c1a602b50c7e5
+Download verified accepted bundle
+
+Clear workspace data
+
+Reset all stored data and start over with an empty workspace.
+
+Clear data
+
+Upload new school definition
+
+Replace current workspace data and start fresh with a new school definition.
+
+School definition
+Upload school definition
+
+Current
+Draft
+Time range
+Week
+Day
+Weekday
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Search lessons
+Subject investigation
+No subject selected
+Subject 01
+Subject 02
+Subject 03
+Subject 04
+Subject 07
+Subject 08
+Subject 09
+Subject 10
+Subject 11
+Subject 12
+Subject 13
+Subject 14
+Subject 15
+Subject 16
+Subject 17
+Subject 18
+Subject 19
+Subject 20
+Subject 21
+Subject 22
+Subject 23
+Subject 24
+Subject 25
+Subject 26
+Subject 05
+Subject 06
+Teacher investigation
+No teacher selected
+Jacob Walker
+Rachel Brooks
+Leo Turner
+Fiona Green
+Daisy Moore
+Zachary King
+Nina Stone
+Laura Gray
+George White
+Ulysses Park
+Wendy Hall
+Bob Smith
+Bella Fox
+Yvonne Lane
+Paula Reed
+Grace Baker
+Kevin Gray
+Felix Scott
+Caleb Young
+Benjamin Fox
+Hazel Clark
+Ethan Hill
+Ivy Lewis
+Jane Doe
+Quentin Brooks
+William Hall
+Freya Scott
+Oliver Reed
+Tina Woods
+Clara Young
+Xavier Lane
+Ian Black
+Alice Smith
+Charlie Brown
+John Doe
+Jasmine Walker
+Aaron Bell
+Amelia Bell
+Edward Green
+Emma Hill
+Diana Prince
+Zoe King
+Daniel Moore
+Helen White
+Henry Clark
+Julia Black
+Samuel Woods
+Michael Stone
+Gabriel Baker
+Isaac Lewis
+Vera Park
+Previous weekday
+Next weekday
+Filters
+Class filter
+All classes
+Cohort 01
+Cohort 02
+Cohort 03
+Cohort 04
+Cohort 05
+Cohort 06
+Cohort 07
+Cohort 08
+Cohort 09
+Cohort 10
+Cohort 11
+Cohort 12
+Cohort 13
+Cohort 14
+Cohort 15
+Cohort 16
+Cohort 17
+Cohort 18
+Cohort 19
+Cohort 20
+Cohort 21
+Cohort 22
+Cohort 23
+Teacher filter
+All teachers
+Jacob Walker
+Rachel Brooks
+Leo Turner
+Fiona Green
+Daisy Moore
+Zachary King
+Nina Stone
+Laura Gray
+George White
+Ulysses Park
+Wendy Hall
+Bob Smith
+Bella Fox
+Yvonne Lane
+Paula Reed
+Grace Baker
+Kevin Gray
+Felix Scott
+Caleb Young
+Benjamin Fox
+Hazel Clark
+Ethan Hill
+Ivy Lewis
+Jane Doe
+Quentin Brooks
+William Hall
+Freya Scott
+Oliver Reed
+Tina Woods
+Clara Young
+Xavier Lane
+Ian Black
+Alice Smith
+Charlie Brown
+John Doe
+Jasmine Walker
+Aaron Bell
+Amelia Bell
+Edward Green
+Emma Hill
+Diana Prince
+Zoe King
+Daniel Moore
+Helen White
+Henry Clark
+Julia Black
+Samuel Woods
+Michael Stone
+Gabriel Baker
+Isaac Lewis
+Vera Park
+Room filter
+All rooms
+Room 01
+Room 02
+Room 03
+Room 04
+Room 05
+Room 06
+Room 07
+Room 08
+Room 09
+Room 10
+Room 11
+Room 12
+Room 13
+Room 14
+Room 15
+Room 16
+Room 17
+Room 18
+Room 19
+Room 20
+Room 21
+Room 22
+Room 23
+Room 24
+Room 25
+Room 26
+Room 27
+Room 28
+Room 29
+Room 30
+Room 31
+Room 32
+Room 33
+Room 34
+Room 35
+Room 36
+Room 37
+Room 39
+Room 40
+Room 41
+Room 42
+Room 38
+Period focus
+All periods
+Monday 1 · 08:00:00–08:40:00
+Monday 2 · 08:45:00–09:30:00
+Monday 3 · 09:40:00–10:25:00
+Monday 4 · 10:45:00–11:30:00
+Monday 5 · 11:50:00–12:35:00
+Monday 6 · 12:55:00–13:40:00
+Monday 7 · 13:50:00–14:35:00
+Monday 8 · 14:45:00–15:30:00
+Monday 9 · 15:40:00–16:25:00
+Monday 10 · 16:30:00–17:15:00
+Show only matches
+Show only matches
+Clear subject
+Clear teacher
+Complete school population
+Day · Monday
+Showing 23 of 23 classes
+Represented lessons: 105
+Active filters:
+No active filters
+Reset view
+Subject matches: 0
+Teacher matches: 0
+Dual matches: 0
+Class	Monday 1
+08:00:00–08:40:00
+	Monday 2
+08:45:00–09:30:00
+	Monday 3
+09:40:00–10:25:00
+	Monday 4
+10:45:00–11:30:00
+	Monday 5
+11:50:00–12:35:00
+	Monday 6
+12:55:00–13:40:00
+	Monday 7
+13:50:00–14:35:00
+	Monday 8
+14:45:00–15:30:00
+	Monday 9
+15:40:00–16:25:00
+	Monday 10
+16:30:00–17:15:00
+
+Cohort 01
+demo-cohort-001
+	Empty	
+Subject 17
+Felix Scott
+Room 01
+	
+Subject 17
+Felix Scott
+Room 01
+	
+Subject 15
+Julia Black
+Room 33
+	
+Subject 24
+Felix Scott
+Room 01
+	Empty	Empty	Empty	Empty	Empty
+Cohort 02
+demo-cohort-002
+	Empty	
+Subject 24
+Quentin Brooks
+Room 06
+	
+Subject 17
+Quentin Brooks
+Room 06
+	
+Subject 17
+Quentin Brooks
+Room 06
+	
+Subject 17
+Quentin Brooks
+Room 06
+	
+Subject 17
+Quentin Brooks
+Room 06
+	Empty	Empty	Empty	Empty
+Cohort 03
+demo-cohort-003
+	Empty	
+Subject 17
+Kevin Gray
+Room 04
+	
+Subject 17
+Kevin Gray
+Room 04
+	
+Subject 17
+Kevin Gray
+Room 04
+	
+Subject 17
+Kevin Gray
+Room 04
+	Empty	Empty	Empty	Empty	Empty
+Cohort 04
+demo-cohort-004
+	Empty	Empty	
+Subject 23
+Paula Reed
+Room 39
+	
+Subject 17
+Bob Smith
+Room 02
+	
+Subject 17
+Bob Smith
+Room 02
+	
+Subject 17
+Bob Smith
+Room 02
+	Empty	Empty	Empty	Empty
+Cohort 05
+demo-cohort-005
+	Empty	
+Subject 17
+Aaron Bell
+Room 03
+	
+Subject 17
+Aaron Bell
+Room 03
+	
+Subject 17
+Aaron Bell
+Room 03
+	
+Subject 17
+Aaron Bell
+Room 03
+	Empty	Empty	Empty	Empty	Empty
+Cohort 06
+demo-cohort-006
+	Empty	Empty	
+Subject 17
+Nina Stone
+Room 09
+	
+Subject 17
+Nina Stone
+Room 09
+	
+Subject 17
+Nina Stone
+Room 09
+	
+Subject 17
+Nina Stone
+Room 09
+	Empty	Empty	Empty	Empty
+Cohort 07
+demo-cohort-007
+	Empty	
+Subject 17
+William Hall
+Room 20
+	
+Subject 17
+William Hall
+Room 20
+	
+Subject 17
+William Hall
+Room 20
+	
+Subject 17
+William Hall
+Room 20
+	
+Subject 17
+William Hall
+Room 20
+	Empty	Empty	Empty	Empty
+Cohort 08
+demo-cohort-008
+	Empty	
+Subject 17
+Grace Baker
+Room 15
+	
+Subject 17
+Grace Baker
+Room 15
+	
+Subject 17
+Grace Baker
+Room 15
+	
+Subject 17
+Grace Baker
+Room 15
+	
+Subject 17
+Grace Baker
+Room 15
+	Empty	Empty	Empty	Empty
+Cohort 09
+demo-cohort-009
+	
+Subject 24
+Alice Smith
+Room 16
+	
+Subject 17
+Alice Smith
+Room 16
+	
+Subject 17
+Alice Smith
+Room 16
+	
+Subject 23
+Paula Reed
+Room 31
+	Empty	Empty	Empty	Empty	Empty	Empty
+Cohort 10
+demo-cohort-010
+	Empty	Empty	
+Subject 17
+Hazel Clark
+Room 05
+	
+Subject 17
+Hazel Clark
+Room 05
+	
+Subject 17
+Hazel Clark
+Room 05
+	
+Subject 17
+Hazel Clark
+Room 05
+	
+Subject 17
+Hazel Clark
+Room 05
+	Empty	Empty	Empty
+Cohort 11
+demo-cohort-011
+	Empty	
+Subject 03
+Ian Black
+Room 19
+	
+Subject 03
+Ian Black
+Room 12
+	
+Subject 11
+Helen White
+Room 25
+	
+Subject 23
+Wendy Hall
+Room 39
+	Empty	Empty	Empty	Empty	Empty
+Cohort 12
+demo-cohort-012
+	Empty	Empty	Empty	
+Subject 12
+Samuel Woods
+Room 14
+POLICY ROOM LOCK
+	
+Subject 01
+Alice Smith
+Room 23
+	
+Subject 18
+Daisy Moore
+Room 40
+	
+Subject 21
+Leo Turner
+Room 27
+	Empty	Empty	Empty
+Cohort 13
+demo-cohort-013
+	Empty	Empty	Empty	
+Subject 17
+Xavier Lane
+Room 12
+	
+Subject 17
+Xavier Lane
+Room 12
+	
+Subject 17
+Xavier Lane
+Room 12
+	
+Subject 17
+Xavier Lane
+Room 12
+	
+Subject 17
+Xavier Lane
+Room 12
+	Empty	Empty
+Cohort 14
+demo-cohort-014
+	Empty	
+Subject 19
+Yvonne Lane
+Room 07
+	
+Subject 19
+Yvonne Lane
+Room 17
+	
+Subject 21
+Leo Turner
+Room 07
+	
+Subject 21
+Leo Turner
+Room 11
+	Empty	Empty	Empty	Empty	Empty
+Cohort 15
+demo-cohort-015
+	Empty	Empty	Empty	
+Subject 25
+Alice Smith
+Room 18
+	
+Subject 03
+Ian Black
+Room 31
+	
+Subject 21
+Leo Turner
+Room 01
+	
+Subject 16
+Ian Black
+Room 10
+	Empty	Empty	Empty
+Cohort 16
+demo-cohort-016
+	Empty	Empty	Empty	
+Subject 10
+Caleb Young
+Room 21
+	
+Subject 11
+Helen White
+Room 14
+	
+Subject 12
+Helen White
+Room 19
+	
+Subject 04
+Quentin Brooks
+Room 11
+	Empty	Empty	Empty
+Cohort 17
+demo-cohort-017
+	Empty	Empty	Empty	
+Subject 10
+Diana Prince
+Room 13
+	
+Subject 19
+Bella Fox
+Room 10
+	
+Subject 16
+Ian Black
+Room 10
+	
+Subject 09
+Zoe King
+Room 04
+	
+Subject 21
+Freya Scott
+Room 26
+	Empty	Empty
+Cohort 18
+demo-cohort-018
+	Empty	
+Subject 11
+Edward Green
+Room 18
+	
+Subject 19
+Bella Fox
+Room 31
+	
+Subject 23
+Wendy Hall
+Room 39
+	
+Subject 21
+Freya Scott
+Room 26
+	Empty	Empty	Empty	Empty	Empty
+Cohort 19
+demo-cohort-019
+	Empty	Empty	
+Subject 03
+Samuel Woods
+Room 28
+	
+Subject 02
+Gabriel Baker
+Room 29
+	
+Subject 18
+Daisy Moore
+Room 40
+	
+Subject 01
+Jacob Walker
+Room 23
+POLICY ROOM LOCK
+	
+Subject 10
+Diana Prince
+Room 06
+	
+Subject 12
+Helen White
+Room 28
+POLICY ROOM LOCK
+	Empty	Empty
+Cohort 20
+demo-cohort-020
+	Empty	Empty	
+Subject 02
+Gabriel Baker
+Room 08
+	
+Subject 21
+Bella Fox
+Room 32
+	
+Subject 12
+Clara Young
+Room 22
+POLICY ROOM LOCK
+	
+Subject 21
+Bella Fox
+Room 04
+	
+Subject 08
+Yvonne Lane
+Room 17
+	
+Subject 02
+Gabriel Baker
+Room 07
+	Empty	Empty
+Cohort 21
+demo-cohort-021
+	Empty	Empty	
+Subject 12
+Caleb Young
+Room 07
+POLICY ROOM LOCK
+	
+Subject 21
+Freya Scott
+Room 26
+	
+Subject 25
+Jacob Walker
+Room 08
+	
+Subject 23
+Wendy Hall
+Room 39
+	
+Subject 05
+John Doe
+Room 08
+	Empty	Empty	Empty
+Cohort 22
+demo-cohort-022
+	Empty	
+Subject 21
+Freya Scott
+Room 26
+	
+Subject 01
+Jacob Walker
+Room 23
+POLICY ROOM LOCK
+	
+Subject 25
+Jacob Walker
+Room 27
+	
+Subject 14
+Yvonne Lane
+Room 24
+	
+Subject 08
+Yvonne Lane
+Room 17
+	Empty	Empty	Empty	Empty
+Cohort 23
+demo-cohort-023
+	Empty	Empty	
+Subject 21
+Freya Scott
+Room 26
+	
+Subject 14
+Yvonne Lane
+Room 24
+	
+Subject 02
+Amelia Bell
+Room 16
+	
+Subject 21
+Freya Scott
+Room 26
+	
+Subject 25
+Jacob Walker
+Room 07
+	Empty	Empty	Empty
+Repair draft · not current
+Collapse Draft task area
+
+Staged weekly changes
+
+Weekly unavailability Jacob Walker · Monday 1
+
+Stage weekly unavailability
+Directly affected lessons
+Directly affected lessons
+0
+Attempt-scoped pins
+0
+Blocking conflicts
+0
+
+This rule currently conflicts with no accepted assignment. The staged intent remains saved.
+
+✓ Draft is durably saved with no blocking conflict.
+
+Protect accepted assignment dimensions
+
+Select an accepted lesson on the canvas to protect its period or room.
+
+Protected accepted assignments · 25
+Bulk-protect accepted assignments
+I confirm the staged changes and attempt-scoped pins should be discarded.
+Discard draft
+Generate 1-minute repair proposal
+Change a lesson’s teacher

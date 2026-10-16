@@ -1,0 +1,70 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+16:37:55.598 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=956ae037-7912-4ba8-867d-025d8cf7f348 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=37
+16:37:55.637 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=e86c4f4b-8658-428b-985d-add62a5da8ba kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=3
+16:37:55.659 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=02621e8a-80e8-45ef-aca0-399bb107be19 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=4
+16:37:55.676 [virtual-49] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=d735045b-56ea-4717-892b-a1912b026036 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=1
+16:37:55.692 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=f76449b4-a206-4f5e-b2e2-b629a4306ebe kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=1
+16:37:55.873 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:37:56.321 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+16:37:56.603 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:37:56.633 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T16:37:57.206+03:00  INFO 61265 --- [           main] o.s.workspace.DemoSessionTest            : Starting DemoSessionTest using Java 25.0.1 with PID 61265 (started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T16:37:57.209+03:00  INFO 61265 --- [           main] o.s.workspace.DemoSessionTest            : The following 1 profile is active: "demo"
+2026-10-16T16:38:00.960+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=76fe5184-6f3f-4c82-b7dd-35d08a695ea6 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1376
+2026-10-16T16:38:02.542+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=8d852cbc-df1d-4f8f-bfa8-d3fa1a820cd8 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1536
+2026-10-16T16:38:04.582+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=1840120a-644f-4088-a543-2338b1fad614 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1986
+2026-10-16T16:38:05.436+03:00  INFO 61265 --- [           main] o.s.workspace.DemoSessionTest            : Started DemoSessionTest in 8.712 seconds (process running for 12.09)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-16T16:38:05.759+03:00  INFO 61265 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T16:38:05.764+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T16:38:05.767+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+2026-10-16T16:38:05.921+03:00  INFO 61265 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T16:38:05.922+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T16:38:05.924+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-16T16:38:05.989+03:00  INFO 61265 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T16:38:05.990+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T16:38:05.993+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+2026-10-16T16:38:06.006+03:00  INFO 61265 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-16T16:38:06.006+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-16T16:38:06.007+03:00  INFO 61265 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-16T16:38:06.183+03:00  INFO 61265 --- [           main] com.tngtech.archunit.core.PluginLoader   : Detected Java version 25.0.1
+2026-10-16T16:38:11.300+03:00  INFO 61265 --- [onPool-worker-1] o.schoolkernel.workspace.KernelPlanner   : correlationId=1789e232-8e2e-4712-9fc4-cb590c7f366d runId=ae74a09f-7611-4440-8ba5-1c1bfbf7b17d kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2012 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.336+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=79c7c618-440e-400a-9247-6d964d140714 runId=d9601889-be53-4ad4-884a-69fcbfd32993 kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=8 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.340+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=88ba67eb-5603-4a90-823a-7265d2a746d7 runId=d4cebe54-a09c-4d69-a711-e75d3b350296 kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+2026-10-16T16:38:11.341+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=c9d4ab93-6399-4ccf-a0d1-c048a226a091 runId=6e0557f3-0702-40fc-9240-16cade578b6c kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.343+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=1a5fe539-fd9a-4132-9f47-c8237da134d6 runId=c425f51a-8a0c-4330-bf9f-379c053b1722 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.348+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=9e6a1f22-4c58-4e2e-80f5-c6cd75fed813 runId=a025c4d0-6eb9-448d-911d-c80d4d6d1968 kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.353+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=fb2e249a-928d-4e7d-956c-7b1a954edd20 runId=41c11fef-fd76-4bff-9121-8b4376c80bf9 kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.355+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=a5fab6a8-7009-41f9-8910-744481e9037b runId=808d8a38-666a-4bf2-8213-750f2a3a4a0c kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.358+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=df0baf02-94ec-4a1a-b0dc-a14fd944690a runId=55f06b37-e6fa-4182-81e2-6d658bc06c58 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:11.369+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=5498044b-25d4-48f1-a900-94fea2dfd65a runId=ed3ba82b-a58c-465f-8a6e-c6675abb1a58 kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=5 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-16T16:38:11.372+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=6b5b480a-9903-438d-bc0e-7080b9ba71f0 runId=0acf019b-c411-481b-a260-1e198c89f928 kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=2 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-16T16:38:11.395+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=424fb5b3-da20-4998-b69f-6dfcfe7ca060 runId=8acee7ab-1efa-48d6-9293-65eed369f07b kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=19 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+2026-10-16T16:38:11.412+03:00  INFO 61265 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=7f973360-f3ff-455e-9c54-db3fbd16b85f runId=96c6782d-63d3-4405-afca-298da7395517 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=14 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-16T16:38:12.098+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T16:38:12.122+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.142+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.155+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.164+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.173+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.177+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.317+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T16:38:12.319+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"two-class"}
+2026-10-16T16:38:12.321+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.355+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T16:38:12.638+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T16:38:12.640+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"full"}
+2026-10-16T16:38:12.729+03:00  INFO 61265 --- [           main] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"two-class"}

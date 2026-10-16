@@ -13,12 +13,12 @@ import tools.jackson.databind.node.ObjectNode;
 @Service
 public class DefinitionRemovalService {
     static final Map<String,String> COLLECTIONS=Map.of("Period","periods","Subject","subjects","Teacher","teachers","Cohort","cohorts","Room","rooms","Lesson","lessons","RoomAssignment","roomAssignments");
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
     private final DefinitionEntityService entities;
     private final DefinitionRequirementService requirements;
     private final DefinitionGridService grid;
-    public DefinitionRemovalService(WorkspaceRepository repository,ObjectMapper json,DefinitionEntityService entities,DefinitionRequirementService requirements,DefinitionGridService grid){this.repository=repository;this.json=json;this.entities=entities;this.requirements=requirements;this.grid=grid;}
+    public DefinitionRemovalService(WorkspaceStore repository,ObjectMapper json,DefinitionEntityService entities,DefinitionRequirementService requirements,DefinitionGridService grid){this.repository=repository;this.json=json;this.entities=entities;this.requirements=requirements;this.grid=grid;}
 
     public ObjectNode inspect(String ifMatch,JsonNode target){return inspection(checked(ifMatch),target);}
     public ObjectNode preview(String ifMatch,JsonNode request){

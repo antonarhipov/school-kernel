@@ -1,10 +1,13 @@
 import { M } from './messages.js';
+import { effortControls, bindEffort, runStatus, proposalProvenance } from './demo-runs.js';
 import { renderDefinitionEditor, resetAuthoringSection } from './definition-editor.js';
 import { makeAcceptedModel } from './accepted-model.js';
 import { createProposalComparison } from './proposal-comparison.js';
 import { createInspectionState } from './inspection-state.js';
 import { renderDayMatrix } from './day-renderer.js';
 import { renderWeekMatrix } from './week-renderer.js';
+import { mountDemoPanel, updateDemoPanel } from './demo-panel.js';
+import { mountDemoImport, updateDemoImport } from './demo-import.js';
 
 let authoringCurrent = false;
 let etag;
@@ -29,6 +32,9 @@ const boundShowWeekButtons = new WeakSet();
 const boundManualForms = new WeakSet();
 let editedLessonId = null;
 let detachedLessonId = null;
+let demo = false;
+let demoMounted = false;
+let demoConfig;
 
 const view = {
   day: null, search: '', cohortId: '', teacherId: '', roomId: '', periodId: '',
@@ -45,18 +51,80 @@ const importStatus = document.querySelector('#import-status');
 localizeShell();
 
 async function load(force = false) {
-  const [csrfResponse, workspaceResponse] = await Promise.all([fetch('/api/csrf'), fetch('/api/workspace')]);
-  csrf = await csrfResponse.json();
+  if (!csrf) {
+    const csrfResponse = await fetch('/api/csrf');
+    if (!csrfResponse.ok) throw new Error('The session could not open.');
+    csrf = await csrfResponse.json();
+  }
+  const workspaceResponse = await fetch('/api/workspace');
   const snapshot = await workspaceResponse.json();
+  if (!workspaceResponse.ok) {
+    if (snapshot.code === 'SESSION_ENDED' || snapshot.code === 'DEMO_FULL') {
+      const { mountTimetableDemo } = await import('./demo-workbench.js');
+      await mountTimetableDemo();
+      return;
+    }
+    throw new Error(snapshot.message || M.unavailableDetail);
+  }
+  demo = snapshot.demo === true;
+  if (demo) {
+    const { mountTimetableDemo } = await import('./demo-workbench.js');
+    await mountTimetableDemo();
+    return snapshot;
+  }
+  if (demo) await ensureDemoPanel();
+  if (demo && snapshot.state.startsWith('SOLVING_')) {
+    const statusResponse = await fetch(`/api/runs/${encodeURIComponent(snapshot.workspace.run.id)}`);
+    if (statusResponse.ok) snapshot.workspace.run = await statusResponse.json();
+  }
   const unchangedRun = currentSnapshot?.state === 'SOLVING_REPAIR' && snapshot.state === 'SOLVING_REPAIR'
     && currentSnapshot.workspace.run.id === snapshot.workspace.run.id && etag === workspaceResponse.headers.get('ETag');
   etag = workspaceResponse.headers.get('ETag');
-  if (unchangedRun && !force) { pollTimer = setTimeout(load, 300); return; }
+  if (unchangedRun && !force) { pollTimer = demo ? setTimeout(() => pollDemoRun(currentSnapshot.workspace.run.id), 1000) : setTimeout(load, 300); return; }
   render(snapshot);
   return snapshot;
 }
 
+async function ensureDemoPanel() {
+  if (!demoMounted) {
+    document.querySelector('#eyebrow').textContent = 'Public school timetable demo';
+    const config = await (await fetch('/api/demo/config')).json();
+    demoConfig = config;
+    await mountDemoPanel({ reload: () => load(true), lessonThreshold: config.lessonThreshold, quickSeconds: config.quickSeconds, thoroughSeconds: config.thoroughSeconds, useSample: async (id, confirmed) => {
+      const response = await fetchWithCsrf(`/api/samples/${encodeURIComponent(id)}/use`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ confirmed })
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.message || M.actionFailed);
+      etag = response.headers.get('ETag'); inspectionState = null; preferenceSchoolId = null;
+      render(body); syncInspectionState(inspectionState.resetFilters().state);
+      syncInspectionState(inspectionState.selectRange('WEEK').state); render(body); stateCard.scrollIntoView({ block: 'start' });
+      return body;
+    }, useDefinition: async (text, confirmed, source) => {
+      const response = await fetchWithCsrf('/api/demo/definition', {
+        method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8', 'X-Demo-Confirmed': String(confirmed), 'X-Demo-Source': source }, body: text
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.message || M.actionFailed);
+      etag = response.headers.get('ETag'); inspectionState = null; preferenceSchoolId = null;
+      render(body); stateCard.scrollIntoView({ block: 'start' });
+      return body;
+    } }, config);
+    mountDemoImport({ importBundle: async form => {
+      const response = await fetchWithCsrf('/api/workspace/upload-definition', { method: 'POST', body: form });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.message || M.actionFailed);
+      etag = response.headers.get('ETag'); inspectionState = null; preferenceSchoolId = null;
+      render(body); syncInspectionState(inspectionState.resetFilters().state);
+      syncInspectionState(inspectionState.selectRange('WEEK').state); render(body); stateCard.scrollIntoView({ block: 'start' });
+      return body;
+    } });
+    demoMounted = true;
+  }
+}
+
 function render(snapshot) {
+  if (demo) { updateDemoPanel(snapshot); updateDemoImport(snapshot); }
   const matrix = stateCard.querySelector('.matrix-wrap');
   if (matrix && stateCard.classList.contains('narrow-mode') === view.narrow) canvasScroll = { left: matrix.scrollLeft, top: matrix.scrollTop };
   else canvasScroll = null;
@@ -71,7 +139,12 @@ function render(snapshot) {
     currentLabel.textContent = M.noAccepted;
     stateCard.className = 'card';
     stateCard.innerHTML = `<span class="state">${M.emptyState}</span><h2>${M.emptyHeading}</h2><p>${M.emptyDetail}</p>`;
-    importCard.hidden = view.narrow;
+    importCard.hidden = demo || view.narrow;
+    if (demo && !importCard.querySelector('#demo-import-guidance')) {
+      const note = document.createElement('p'); note.id = 'demo-import-guidance';
+      note.textContent = 'For definition-only files, open and save a version in the School definition panel, then use it there. This import form needs a matching accepted result or complete accepted bundle.';
+      importCard.prepend(note);
+    }
     bindAuthoringEntry(snapshot);
     return;
   }
@@ -149,21 +222,23 @@ function render(snapshot) {
     const lastRun = snapshot.workspace.lastRun;
     stateCard.className = 'card';
     stateCard.innerHTML = `
-      <div class="accepted-heading"><div class="school-identity"><span class="state">${M.initialDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div><p>${M.draftDetail}</p>
+      <div class="accepted-heading"><div class="school-identity"><span class="state">${M.initialDraft}</span><h2>${escapeHtml(schoolName)}</h2></div><div class="header-utilities">${view.narrow ? '' : renderUtilities(snapshot)}</div></div><p>${demo ? 'The definition is verified in this temporary workspace. Review the summary before requesting the first timetable.' : M.draftDetail}</p>
       ${summary(definition)}
-      ${lastRun?.message ? `<p class="notice" role="status"><strong>${escapeHtml(lastRun.message)}</strong> ${M.noAcceptedAfterFailure}</p>` : ''}
+      ${lastRun?.message ? (demo ? repairRunFeedback(lastRun) : `<p class="notice" role="status"><strong>${escapeHtml(lastRun.message)}</strong> ${M.noAcceptedAfterFailure}</p>`) : ''}
       <p class="muted">${M.definitionRevision} <code>${escapeHtml(snapshot.workspace.definitionRevision)}</code></p>
-      <div class="actions"><button id="start-plan">${M.createProposal}</button></div>
-      <form id="replace-definition" class="replace-form"><label>${M.replaceDefinition} <input name="definition" type="file" accept="application/json,.json" required></label><button type="submit" class="secondary">${M.validateReplace}</button></form>`;
+      ${demo ? `<p id="demo-default-effort">${snapshot.workspace.defaultEffort === 'THOROUGH' ? 'Thorough search' : 'Quick search'} (${Number(snapshot.workspace.defaultEffortSeconds || 5)} seconds) is the default effort for this school. More time may help but guarantees nothing.</p>` : ''}
+      ${demo ? effortControls(definition, demoConfig) : ''}<div class="actions"><button id="start-plan">${demo ? 'Create proposal' : M.createProposal}</button></div>
+      ${demo ? '' : `<form id="replace-definition" class="replace-form"><label>${M.replaceDefinition} <input name="definition" type="file" accept="application/json,.json" required></label><button type="submit" class="secondary">${M.validateReplace}</button></form>`}`;
+    if (demo) bindEffort(definition, demoConfig);
     bindInitialActions();
     bindUtilities();
   } else if (snapshot.state === 'SOLVING_INITIAL') {
     currentLabel.textContent = M.noAccepted;
     const run = snapshot.workspace.run;
     stateCard.className = 'card';
-    stateCard.innerHTML = `<span class="state running">${M.planning}</span><h2>${escapeHtml(schoolName)}</h2><p>${M.planningDetail}</p><dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div><div><dt>${M.status}</dt><dd>${M.running}</dd></div></dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div>`;
+    stateCard.innerHTML = `<span class="state running">${M.planning}</span><h2>${escapeHtml(schoolName)}</h2><p>${demo ? 'Your private run uses shared demo capacity. You may cancel while queued, running or checking.' : M.planningDetail}</p>${demo ? `<p id="demo-run-status" role="status">${runStatus(run)}</p>` : ''}<dl><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(run.limit)}</dd></div>${demo ? '' : `<div><dt>${M.status}</dt><dd>${M.running}</dd></div>`}</dl><div class="actions"><button id="cancel-run" class="danger">${M.cancelRun}</button></div>`;
     document.querySelector('#cancel-run').addEventListener('click', () => cancelRun(run.id));
-    pollTimer = setTimeout(load, 300);
+    pollTimer = demo ? setTimeout(() => pollDemoRun(currentSnapshot.workspace.run.id), 1000) : setTimeout(load, 300);
   } else if (snapshot.state === 'INITIAL_PROPOSAL') {
     currentLabel.textContent = M.noAccepted;
     const proposal = snapshot.workspace.proposal;
@@ -212,7 +287,7 @@ function render(snapshot) {
     initializeInspectionState(snapshot.workspace.school?.id);
     syncInspectionState(inspectionState.enterLifecycle(snapshot.state));
     renderSolving(snapshot, schoolName);
-    pollTimer = setTimeout(load, 300);
+    pollTimer = demo ? setTimeout(() => pollDemoRun(currentSnapshot.workspace.run.id), 1000) : setTimeout(load, 300);
   } else if (snapshot.state === 'REPAIR_PROPOSAL') {
     currentLabel.textContent = M.acceptedTimetable(schoolName);
     acceptedModel = makeAcceptedModel(snapshot.workspace.acceptedBaseline);
@@ -269,6 +344,7 @@ function render(snapshot) {
 }
 
 function bindAuthoringEntry(snapshot) {
+  if (demo) return;
   const allowed = ['EMPTY', 'INITIAL_DRAFT', 'ACCEPTED_BASELINE'].includes(snapshot.state);
   const entry = document.createElement('section'); entry.className = 'authoring-entry';
   const status = document.createElement('p'); status.id = 'authoring-status'; status.setAttribute('role', 'status');
@@ -355,7 +431,7 @@ function renderInitialProposal(snapshot, schoolName) {
         <h3>${M.initialProposal}</h3>
         <button id="collapse-proposal-task" type="button" class="secondary">${M.collapseProposalTask}</button>
       </div>
-      <dl class="proposal-facts">
+      ${demo ? proposalProvenance(proposal) : ''}<dl class="proposal-facts">
         <div><dt>${M.lessons}</dt><dd>${result.timetable.assignments.length}</dd></div>
         <div><dt>${M.terminationReason}</dt><dd>${escapeHtml(result.terminationReason)}</dd></div>
         <div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div>
@@ -388,7 +464,7 @@ function bindInitialProposalTaskArea() {
   const confirmation = document.querySelector('#confirm-accept');
   const accept = document.querySelector('#accept-proposal');
   confirmation?.addEventListener('change', () => { accept.disabled = !confirmation.checked; });
-  accept?.addEventListener('click', () => mutate('/api/proposal/accept', 'POST'));
+  accept?.addEventListener('click', () => demo ? mutateJson('/api/proposal/accept', 'POST', { confirmed: true }) : mutate('/api/proposal/accept', 'POST'));
   document.querySelector('#discard-proposal')?.addEventListener('click', () => mutate('/api/proposal', 'DELETE'));
 }
 
@@ -466,7 +542,7 @@ function proposalContext() {
   const categories = review.categories.map(category => `<section class="review-category" data-category="${escapeAttribute(category.id)}"><h4>${escapeHtml(M[category.id])} <span>${category.count}</span></h4>${category.lessonIds.length ? `<ul>${category.lessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</section>`).join('');
   const unchanged = acceptedModel.assignments.filter(item => !comparison.entries.get(item.lessonId)?.change);
   return `<section id="proposal-context" aria-label="${M.proposalImpact}"><h3>${M.proposalImpact}</h3><p class="notice">${M.repairPriority}</p><div id="review-selection">${reviewSelection()}</div>
-    <dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
+    ${demo ? proposalProvenance(proposal) : ''}<dl class="proposal-facts"><div><dt>${M.uniqueChangedLessons}</dt><dd>${review.uniqueChangedLessonCount}</dd></div><div><dt>${M.protectedAssignments}</dt><dd>${protectedIds.length}</dd></div><div><dt>${M.terminationReason}</dt><dd>${escapeHtml(proposal.terminationReason)}</dd></div><div><dt>${M.executionLimit}</dt><dd>${escapeHtml(proposal.limit)}</dd></div><div><dt>${M.elapsedTime}</dt><dd>${M.milliseconds(proposal.elapsedTimeMs)}</dd></div></dl>
     <details class="review-groups"><summary>${M.protectedAssignments} · ${protectedIds.length}</summary>${protectedIds.length ? `<ul>${protectedIds.map(id => `<li><button type="button" class="link-button" data-review-lesson="${escapeAttribute(id)}">${escapeHtml(reviewLessonName(id))}</button> · ${escapeHtml(comparisonProtection(id))}</li>`).join('')}</ul>` : `<p>${M.emptyCategory}</p>`}</details>
     <div class="impact-totals"><span class="direct-label">${M.directEffectChanges}: ${review.directEffectChangedCount}</span><span class="ripple-label">${M.rippleEffectChanges}: ${review.rippleEffectCount}</span></div><p>${M.overlappingTotals}</p>
     ${nativeChangesHtml(review.definitionChanges)}${review.timingImpactLessonIds ? `<details class="timing-impact"><summary>Actual timing impacts · ${review.timingImpactCount} (separate from period-ID moves)</summary><ul>${review.timingImpactLessonIds.map(id => `<li>${reviewLessonActions(id)}</li>`).join('')}</ul></details>` : ''}
@@ -514,7 +590,7 @@ function bindRepairReview() {
     element.addEventListener(eventName, listener);
   };
   bind(confirmation, 'change', () => { accept.disabled = !confirmation.checked; });
-  bind(accept, 'click', () => mutate('/api/proposal/accept', 'POST'));
+  bind(accept, 'click', () => demo ? mutateJson('/api/proposal/accept', 'POST', { confirmed: true }) : mutate('/api/proposal/accept', 'POST'));
   bind(document.querySelector('#revise-proposal'), 'click', () => mutate('/api/proposal', 'DELETE'));
   bind(document.querySelector('#discard-proposal'), 'click', () => mutate('/api/proposal', 'DELETE'));
   bindReviewLinks(document);
@@ -630,6 +706,7 @@ function legacyTeacherDifferences(snapshot) {
 }
 
 function teacherChangeMarkup(snapshot) {
+  if (demo) return '<section class="teacher-change-guidance"><h4>Change a lesson’s teacher</h4><p>Edit the definition JSON and save a browser version. Using it starts new initial planning. Pending repair or manual changes are not transferred or discarded automatically.</p></section>';
   const state = snapshot.state, differences = legacyTeacherDifferences(snapshot);
   const routes = {
     ACCEPTED_BASELINE: 'Current is accepted. Open definition authoring to change shared teaching settings or selected occurrences.',
@@ -681,12 +758,12 @@ function renderUtilities(snapshot) {
   const runFeedback = lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED'
     ? repairRunFeedback(lastRun)
     : '';
-  return `<details id="utilities" class="utility-disclosure"><summary>${M.utilities}</summary><div class="utilities-content">${hasAccepted ? exportAcceptedSection(snapshot) : ''}${runFeedback}<section class="utility-section clear-workspace-section" aria-labelledby="clear-title"><h3 id="clear-title">${M.clearDataTitle}</h3><p>${M.clearDataDetail}</p><button id="clear-workspace" type="button" class="danger">${M.clearData}</button><p id="clear-status" role="status"></p></section><section class="utility-section upload-definition-section" aria-labelledby="upload-definition-title"><h3 id="upload-definition-title">${M.uploadDefinitionTitle}</h3><p>${M.uploadDefinitionDetail}</p><form id="utilities-upload-definition" class="upload-form"><label><span>${M.schoolDefinition}</span><input id="utilities-definition" name="definition" type="file" accept="application/json,.json" required></label><button id="utilities-upload-submit" type="submit">${M.uploadDefinitionSubmit}</button><p id="utilities-upload-status" role="status"></p></form></section></div></details>`;
+  return `<details id="utilities" class="utility-disclosure"><summary>${M.utilities}</summary><div class="utilities-content">${hasAccepted ? exportAcceptedSection(snapshot) : ''}${runFeedback}<section class="utility-section clear-workspace-section" aria-labelledby="clear-title"><h3 id="clear-title">${M.clearDataTitle}</h3><p>${M.clearDataDetail}</p><button id="clear-workspace" type="button" class="danger">${M.clearData}</button><p id="clear-status" role="status"></p></section>${demo ? '<p>To start a new timetable, edit or open JSON in the School definition panel, save a browser version, then use it. Existing work is kept until confirmed successful replacement.</p>' : `<section class="utility-section upload-definition-section" aria-labelledby="upload-definition-title"><h3 id="upload-definition-title">${M.uploadDefinitionTitle}</h3><p>${M.uploadDefinitionDetail}</p><form id="utilities-upload-definition" class="upload-form"><label><span>${M.schoolDefinition}</span><input id="utilities-definition" name="definition" type="file" accept="application/json,.json" required></label><button id="utilities-upload-submit" type="submit">${M.uploadDefinitionSubmit}</button><p id="utilities-upload-status" role="status"></p></form></section>`}</div></details>`;
 }
 
 function exportAcceptedSection(snapshot) {
   const baseline = snapshot.workspace.acceptedBaseline;
-  return `<section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a><p id="export-status" role="status"></p></section>`;
+  return `<section class="export-baseline" aria-labelledby="export-title"><h3 id="export-title">${M.exportAccepted}</h3><p>${M.exportDetail}${demo ? ' Only Current is included. Unfinished repair/manual drafts and unaccepted proposals are excluded.' : ''}</p><dl><div><dt>${M.school}</dt><dd>${escapeHtml(snapshot.workspace.school.displayName)}</dd></div><div><dt>${M.definitionRevision}</dt><dd><code>${escapeHtml(baseline.result.inputRevision)}</code></dd></div><div><dt>${M.timetableRevision}</dt><dd><code>${escapeHtml(baseline.result.timetableRevision)}</code></dd></div></dl><a id="export-accepted" class="button-link" href="/api/accepted/export" download="accepted-baseline.zip">${M.downloadAccepted}</a><p id="export-status" role="status"></p></section>`;
 }
 
 function bindUtilities() {
@@ -702,6 +779,7 @@ function bindUtilities() {
 }
 
 async function clearWorkspace() {
+  if (demo && !confirm(`Clear ${currentSnapshot?.state} and all its accepted timetable, draft and proposal work? Export Current first if you want to keep it. Browser versions stay on this device.`)) return;
   const status = document.querySelector('#clear-status');
   if (status) { status.className = ''; status.textContent = M.clearing; }
   const button = document.querySelector('#clear-workspace');
@@ -750,7 +828,7 @@ async function downloadAccepted(event) {
   event.preventDefault();
   const status = document.querySelector('#export-status');
   try {
-    const response = await fetch('/api/accepted/export');
+    const response = await fetch('/api/accepted/export', { headers: demo ? { 'If-Match': etag } : {} });
     if (!response.ok) throw new Error(M.exportFailed);
     const archive = await response.blob();
     if (!archive.size) throw new Error(M.exportFailed);
@@ -871,11 +949,14 @@ function bindDraftTaskArea() {
 }
 
 function renderSolving(snapshot, schoolName) {
+  const heading = demo ? 'Repair generation' : M.repairRunning;
   if (view.narrow) {
-    renderNarrowReadOnly(schoolName, M.repairRunning, M.acceptedStillCurrent); renderSeedIdentity(snapshot); return;
+    renderNarrowReadOnly(schoolName, heading, M.acceptedStillCurrent);
+    if (demo) stateCard.insertAdjacentHTML('beforeend', `<p id="demo-run-status" role="status">${runStatus(snapshot.workspace.run)}</p>`);
+    renderSeedIdentity(snapshot); return;
   }
   stateCard.className = 'card workspace-card solving-mode current-mode compact-density';
-  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${M.repairRunning}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${runTaskArea()}`;
+  stateCard.innerHTML = `<div class="accepted-heading"><div class="school-identity"><h2>${escapeHtml(schoolName)}</h2><span class="state accepted">✓ ${M.currentAccepted}</span><span class="lifecycle-label">${heading}</span><p class="revision">${escapeHtml(M.acceptedRevision(snapshot.workspace.acceptedBaseline.result.timetableRevision || snapshot.workspace.timetableRevision))}</p></div><div class="header-utilities"><p class="mode-note">${M.acceptedStillCurrent}</p>${view.narrow ? '' : renderUtilities(snapshot)}</div></div><div id="accepted-view"></div>${runTaskArea()}`;
   bindUtilities();
   renderWholeSchool();
   bindRunTaskArea();
@@ -883,10 +964,11 @@ function renderSolving(snapshot, schoolName) {
 }
 
 function runTaskArea() {
+  const heading = demo ? 'Repair generation' : M.repairRunning;
   const run = currentSnapshot.workspace.run;
   const mode = inspectionState.current().mode;
   const open = inspectionState.current().taskAreaOpen[mode];
-  return `<section id="workbench-task-area" class="task-area solving-task-area" aria-label="${M.repairRunning}"><div class="run-status-bar"><div><strong class="state running">${M.repairRunning}</strong><span>${M.executionLimit}: ${escapeHtml(run.limit)}</span><span>${M.status}: ${M.running}</span><span>${M.acceptedStillCurrent}</span></div><div class="actions"><button id="toggle-run-detail" type="button" class="secondary" aria-expanded="${open}" aria-controls="run-secondary">${open ? M.collapseRunDetail : M.reopenRunDetail}</button><button id="cancel-run" type="button" class="danger">${M.cancelRun}</button></div></div><div id="run-secondary"${open ? '' : ' hidden'}><p>${M.repairRunningDetail}</p>${draftContext(true)}</div></section>`;
+  return `<section id="workbench-task-area" class="task-area solving-task-area" aria-label="${heading}"><div class="run-status-bar"><div><strong class="state running">${heading}</strong><span>${M.executionLimit}: ${escapeHtml(run.limit)}</span>${demo ? '' : `<span>${M.status}: ${M.running}</span>`}${demo ? `<span id="demo-run-status" role="status">${runStatus(run)}</span>` : ''}<span>${M.acceptedStillCurrent}</span></div><div class="actions"><button id="toggle-run-detail" type="button" class="secondary" aria-expanded="${open}" aria-controls="run-secondary">${open ? M.collapseRunDetail : M.reopenRunDetail}</button><button id="cancel-run" type="button" class="danger">${M.cancelRun}</button></div></div><div id="run-secondary"${open ? '' : ' hidden'}><p>${M.repairRunningDetail}</p>${draftContext(true)}</div></section>`;
 }
 
 function bindRunTaskArea() {
@@ -904,7 +986,7 @@ function bindRunTaskArea() {
 function draftContext(frozen = false) {
   const draft = currentSnapshot.workspace.repairDraft;
   const lastRun = currentSnapshot.workspace.lastRun;
-  const retryAvailable = lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
+  const retryAvailable = !demo && lastRun?.kind === 'REPAIR' && lastRun.code === 'NO_FEASIBLE_SOLUTION_FOUND' && lastRun.intentRevision === draft.intentRevision;
   const changes = draft.intent.changes.map(change => repairChange(change)).join('');
   const conflicts = draft.conflicts.length ? `<div class="conflict-list" role="alert"><h4>${M.blockingConflicts}</h4>${draft.conflicts.map(item => `<p><button type="button" class="link-button" data-draft-conflict="${escapeAttribute(item.lessonId)}">${escapeHtml(entityName(acceptedModel.maps.lessons.get(item.lessonId), item.lessonId))} · ${escapeHtml(item.lessonId)}</button> · ${escapeHtml(item.message)}</p>`).join('')}</div>` : `<p class="ready-state">✓ ${M.readyToSolve}</p>`;
   if (frozen) return `<section class="draft-context frozen-draft-context" aria-label="${M.frozenDraft}"><h3>${M.frozenDraft}</h3><p>${M.frozenDraftDetail}</p>${changes || `<p>${M.noWeeklyChanges}</p>`}<dl><div><dt>${M.directEffects}</dt><dd>${draft.directEffectLessonIds.length}</dd></div><div><dt>${M.attemptPins}</dt><dd>${draft.intent.pins.length}</dd></div><div><dt>${M.conflicts}</dt><dd>${draft.conflicts.length}</dd></div></dl>${draft.intent.pins.length ? `<ul>${draft.intent.pins.map(pin => `<li>${escapeHtml(entityName(acceptedModel.maps.lessons.get(pin.lessonId), pin.lessonId))} · ${escapeHtml(pin.lessonId)} · ${[pin.periodSources?.length ? M.acceptedPeriod : null, pin.roomSources?.length ? M.acceptedRoom : null].filter(Boolean).join(', ')}</li>`).join('')}</ul>` : ''}</section>`;
@@ -915,8 +997,8 @@ function draftContext(frozen = false) {
     <section class="draft-task-section"><h4>${M.protectAcceptedAssignment}</h4><div id="draft-selected-protection">${draftSelectedProtection()}</div>${draftProtectionSummary(draft)}</section>
     <section class="draft-task-section"><details class="repair-controls"${bulkPreview ? ' open' : ''}><summary>${M.bulkPin}</summary><div class="repair-grid">${selectControl('bulk-scope', M.bulkScope, [['DAY', M.day], ['CLASS', M.class], ['UNAFFECTED', M.allUnaffected]], 'UNAFFECTED')}<label><span>${M.scopeValue}</span><select id="bulk-scope-id"></select></label></div>${pinDimensionControls('bulk')}<button id="preview-bulk" type="button" class="secondary">${M.previewBulk}</button><div id="bulk-preview-host">${bulkPreviewHtml()}</div></details>
       <div class="bulk-history">${draft.intent.bulkActions.map(action => `<p><span>${M.bulkApplied(action.lessonIds.length)} · ${escapeHtml(action.id)} · ${action.dimensions.map(value => value === 'PERIOD' ? M.acceptedPeriod : M.acceptedRoom).join(', ')}</span><button type="button" class="secondary" data-undo-bulk="${escapeAttribute(action.id)}">${M.undoBulk}</button></p>`).join('')}</div></section>
-    </div><div class="draft-task-decisions">${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
-    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${draft.seedDefinition ? "Remove repair staging and pins; keep authored changes and return to authoring." : M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${draft.seedDefinition ? "Discard repair draft and return to authoring" : M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? M.createRepairProposal : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></div></section>`;
+    </div><div class="draft-task-decisions">${demo ? effortControls(successorDefinition(), demoConfig) : ''}${lastRun?.kind === 'REPAIR' && lastRun.status !== 'FEASIBLE' && lastRun.status !== 'CANCELLED' ? repairRunFeedback(lastRun) : ''}
+    ${draftSaveFailed ? `<p class="error" role="alert">${M.draftSaveFailed}</p>` : ''}<label class="confirmation"><input id="confirm-discard-draft" type="checkbox"> ${draft.seedDefinition ? "Remove repair staging and pins; keep authored changes and return to authoring." : M.confirmDiscardDraft}</label><div class="actions"><button id="discard-draft" class="danger" disabled>${draft.seedDefinition ? "Discard repair draft and return to authoring" : M.discardDraft}</button><button id="solve-draft"${draft.readyToSolve && !draftSaveFailed ? '' : ' disabled'}>${draft.readyToSolve && !draftSaveFailed ? (demo ? 'Create repair proposal' : M.createRepairProposal) : M.resolveConflicts}</button>${retryAvailable && !draftSaveFailed ? `<button id="retry-repair" class="secondary">${M.retryRepair}</button>` : ''}</div></div></section>`;
 }
 
 function draftSelectedProtection() {
@@ -960,7 +1042,7 @@ function repairIntentForm(draft) {
 function repairChange(change) {
   const map = change.resourceType === 'TEACHER' ? acceptedModel.maps.teachers : acceptedModel.maps.rooms;
   const periods = change.unavailablePeriodIds.map(id => entityName(acceptedModel.maps.periods.get(id), id)).join(', ');
-  return `<p><span class="state direct-state">${M.directIntent}</span> <strong>${escapeHtml(entityName(map.get(change.resourceId), change.resourceId))}</strong> · ${escapeHtml(periods)}</p>`;
+  return `<p><span class="state direct-state">${M.directIntent}</span> <strong>${escapeHtml(entityName(map.get(change.resourceId), change.resourceId))}</strong> · ${escapeHtml(periods)}${currentSnapshot.state === 'REPAIR_DRAFT' ? ` <button type="button" class="secondary" data-undo-availability="${escapeAttribute(change.resourceId)}" data-resource-type="${escapeAttribute(change.resourceType)}">Undo unavailability</button>` : ''}</p>`;
 }
 
 function pinDimensionControls(prefix) {
@@ -978,6 +1060,7 @@ function bindRepairControls() {
   const fill = () => { const items = type.value === 'TEACHER' ? successorDefinition().teachers : successorDefinition().rooms; resource.innerHTML = options(items).map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); const staged = currentSnapshot.workspace.repairDraft.intent.changes.find(change => change.resourceType === type.value); if (staged) resource.value = staged.resourceId; };
   fill(); type.addEventListener('change', fill);
   form.addEventListener('submit', event => { event.preventDefault(); mutateJson('/api/repair-draft', 'PATCH', { action: 'STAGE_UNAVAILABILITY', resourceType: type.value, resourceId: resource.value, periodIds: [...form.querySelectorAll('[name=stage-period]:checked')].map(input => input.value) }); });
+  document.querySelectorAll('[data-undo-availability]').forEach(button => button.addEventListener('click', () => mutateJson('/api/repair-draft', 'PATCH', { action: 'REMOVE_UNAVAILABILITY', resourceType: button.dataset.resourceType, resourceId: button.dataset.undoAvailability })));
   const scope = document.querySelector('#bulk-scope'); const scopeId = document.querySelector('#bulk-scope-id');
   const fillScope = () => { const values = scope.value === 'DAY' ? acceptedModel.weekdays.map(day => [day, M.days[day] || day]) : scope.value === 'CLASS' ? options(acceptedModel.definition.cohorts) : [['', M.snapshotCurrentUnaffected]]; scopeId.innerHTML = values.map(([value, text]) => `<option value="${escapeAttribute(value)}">${escapeHtml(text)}</option>`).join(''); scopeId.disabled = scope.value === 'UNAFFECTED'; };
   fillScope(); scope.addEventListener('change', fillScope);
@@ -998,7 +1081,8 @@ function bindRepairControls() {
   const confirmation = document.querySelector('#confirm-discard-draft'); const discard = document.querySelector('#discard-draft');
   confirmation.addEventListener('change', () => { discard.disabled = !confirmation.checked; });
   discard.addEventListener('click', () => mutateJson(currentSnapshot.workspace.repairDraft.seedDefinition ? '/api/repair-draft/return-to-authoring' : '/api/repair-draft', currentSnapshot.workspace.repairDraft.seedDefinition ? 'POST' : 'DELETE', { confirmed: true }));
-  document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT1M' }));
+  if (demo) bindEffort(successorDefinition(), demoConfig);
+  document.querySelector('#solve-draft').addEventListener('click', () => mutateJson('/api/runs', 'POST', demo ? { effort: document.querySelector('#demo-effort').value } : { limit: 'PT1M' }));
   document.querySelector('#retry-repair')?.addEventListener('click', () => mutateJson('/api/runs', 'POST', { limit: 'PT2M' }));
   document.querySelectorAll('[data-draft-conflict], [data-draft-effect], [data-draft-protection]').forEach(button => button.addEventListener('click', () => selectDraftLesson(button.dataset.draftConflict || button.dataset.draftEffect || button.dataset.draftProtection)));
   bindPinActions();
@@ -1026,9 +1110,9 @@ function selectDraftLesson(id) {
 function repairRunFeedback(run) {
   if (!run) return '';
   const diagnostics = run.searchDiagnostics?.constraints || [];
-  const rows = diagnostics.map(item => `<li><strong>${escapeHtml(item.constraintId)}</strong> · ${M.diagnosticMatches(item.matchCount)} ${item.examples.flat().map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
+  const rows = diagnostics.map(item => `<li><strong>${escapeHtml(item.constraintId)}</strong> · ${M.diagnosticMatches(item.matchCount)} ${(item.examples || []).flat().map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
   const validation = run.validationReport?.errors || [];
-  const validationRows = validation.map(item => `<li>${escapeHtml(item.message || item.code || M.actionFailed)} ${(item.entityIds || []).map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
+  const validationRows = validation.map(item => `<li>${demo && item.location ? `${escapeHtml(item.location)}: ` : ''}${escapeHtml(item.message || item.code || M.actionFailed)} ${(item.entityIds || []).map(id => `<button type="button" class="link-button" data-diagnostic-id="${escapeAttribute(id)}">${escapeHtml(id)}</button>`).join(' ')}</li>`).join('');
   return `<section class="conflict-list" role="status"><h3>${M.runDiagnostics}</h3><p><strong>${escapeHtml(run.code === 'INTERRUPTED' ? M.repairInterrupted : run.message || M.actionFailed)}</strong></p>${rows || validationRows ? `<ul>${rows}${validationRows}</ul>` : ''}<p>${M.diagnosticsCaution}</p></section>`;
 }
 
@@ -1447,7 +1531,7 @@ function lessonDetails(item) {
     ${showWeekActions(item)}
 
     <p class="teacher-change-guidance">Teaching responsibility belongs to the school definition. Manual editing supports period and room changes.</p>
-    <button type="button" class="secondary" data-show-teacher-route>See teacher-change authoring route</button>
+    <button type="button" class="secondary" data-show-teacher-route>${demo ? 'See teacher-change JSON route' : 'See teacher-change authoring route'}</button>
     ${conflictAlert}
     ${repairCues ? `<div class="popover-repair-cues">${repairCues}</div>` : ''}
 
@@ -2302,8 +2386,27 @@ function selectControl(id, label, values, selected) { return `<label><span>${lab
 function summary(definition) { return `<dl><div><dt>${M.lessons}</dt><dd>${definition.lessons.length}</dd></div><div><dt>${M.teachers}</dt><dd>${definition.teachers.length}</dd></div><div><dt>${M.classes}</dt><dd>${definition.cohorts.length}</dd></div><div><dt>${M.rooms}</dt><dd>${definition.rooms.length}</dd></div><div><dt>${M.weeklyPeriods}</dt><dd>${definition.periods.length}</dd></div></dl>`; }
 
 function bindInitialActions() {
-  document.querySelector('#start-plan').addEventListener('click', () => mutate('/api/runs', 'POST'));
-  document.querySelector('#replace-definition').addEventListener('submit', async event => { event.preventDefault(); await mutate('/api/initial-draft/replace', 'POST', new FormData(event.currentTarget)); });
+  document.querySelector('#start-plan').addEventListener('click', () => demo ? mutateJson('/api/runs', 'POST', { effort: document.querySelector('#demo-effort').value }) : mutate('/api/runs', 'POST'));
+  document.querySelector('#replace-definition')?.addEventListener('submit', async event => { event.preventDefault(); await mutate('/api/initial-draft/replace', 'POST', new FormData(event.currentTarget)); });
+}
+async function pollDemoRun(id) {
+  try {
+    const response = await fetch(`/api/runs/${encodeURIComponent(id)}`);
+    const run = await response.json();
+    if (!response.ok) {
+      if (run.code === 'SESSION_ENDED') { showDemoUnavailable(run); return; }
+      await load(true); return;
+    }
+    etag = response.headers.get('ETag') || etag;
+    if (!['QUEUED', 'RUNNING', 'CHECKING_RESULT'].includes(run.status)) { await load(true); return; }
+    if (currentSnapshot?.workspace.run?.id !== id) return;
+    currentSnapshot.workspace.run = run;
+    const status = document.querySelector('#demo-run-status');
+    if (status) status.textContent = runStatus(run);
+    pollTimer = setTimeout(() => pollDemoRun(id), run.status === 'QUEUED' ? 2500 : 1000);
+  } catch (_) {
+    pollTimer = setTimeout(() => pollDemoRun(id), 3000);
+  }
 }
 async function cancelRun(id) { await mutate(`/api/runs/${encodeURIComponent(id)}`, 'DELETE'); }
 async function startManualDraft() { await mutate('/api/manual-draft', 'POST'); }
@@ -2313,7 +2416,8 @@ async function fetchWithCsrf(url, options = {}) {
   if (csrf) headers[csrf.headerName] = csrf.token;
   if (etag && !headers['If-Match']) headers['If-Match'] = etag;
   let response = await fetch(url, Object.assign({}, options, { headers }));
-  if (response.status === 403) {
+  if (demo && response.status === 410) { showDemoUnavailable(await response.clone().json()); return response; }
+  if (!demo && response.status === 403) {
     const clone = response.clone();
     try {
       const errorJson = await clone.json();
@@ -2454,6 +2558,7 @@ window.addEventListener('click', event => {
   toggleInspector(false);
 });
 window.addEventListener('keydown', event => {
+  if (demo) return;
   if (event.key === 'Escape') {
     toggleInspector(false);
   }
@@ -2461,5 +2566,25 @@ window.addEventListener('keydown', event => {
 
 function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]); }
 function escapeAttribute(value) { return escapeHtml(value); }
+
+function showDemoUnavailable(problem) {
+  clearTimeout(pollTimer);
+  currentSnapshot = null; acceptedModel = null; proposedModel = null; manualDraftModel = null;
+  updateDemoPanel({ state: 'SESSION_ENDED' }); updateDemoImport({ state: 'SESSION_ENDED' });
+  currentLabel.textContent = problem.code === 'DEMO_FULL' ? 'Demo full' : 'Temporary workspace ended';
+  stateCard.className = 'card';
+  stateCard.innerHTML = `<h2>${escapeHtml(currentLabel.textContent)}</h2><p>${escapeHtml(problem.message)}</p><button id="demo-start-again">Start again</button><p id="demo-restart-status" role="status"></p>`;
+  importCard.hidden = false;
+  document.querySelector('#demo-start-again').addEventListener('click', async () => {
+    const status = document.querySelector('#demo-restart-status');
+    try {
+      csrf = await (await fetch('/api/csrf')).json();
+      const response = await fetch('/api/demo/session', { method: 'POST', headers: { [csrf.headerName]: csrf.token } });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.message || M.actionFailed);
+      etag = null; await load(true);
+    } catch (error) { status.textContent = error.message; }
+  });
+}
 
 load().catch(() => { currentLabel.textContent = M.unavailable; stateCard.innerHTML = `<p class="error">${M.unavailableDetail}</p>`; });

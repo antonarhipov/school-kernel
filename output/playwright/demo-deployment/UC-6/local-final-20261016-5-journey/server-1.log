@@ -1,0 +1,55 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T18:50:41.573+03:00  INFO 80016 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 80016 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-17851810977158434857/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T18:50:41.579+03:00  INFO 80016 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T18:50:44.737+03:00  INFO 80016 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 56318 (https)
+2026-10-16T18:50:44.763+03:00  INFO 80016 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T18:50:44.763+03:00  INFO 80016 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T18:50:44.802+03:00  INFO 80016 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 3032 ms
+2026-10-16T18:50:45.135+03:00  INFO 80016 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T18:50:48.061+03:00  INFO 80016 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=2eedd80a-a84c-409a-a108-74a4b978c9d5 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1778
+2026-10-16T18:50:49.648+03:00  INFO 80016 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=38885f17-3dde-462c-be2e-38b66da71f10 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1554
+2026-10-16T18:50:51.720+03:00  INFO 80016 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=3e7c8262-13ec-4941-b638-e802012948de kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2022
+2026-10-16T18:50:52.932+03:00  INFO 80016 --- [timetable-workspace] [           main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-127.0.0.1-56318], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-10-16T18:50:52.947+03:00  INFO 80016 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 56318 (https) with context path '/'
+2026-10-16T18:50:52.980+03:00  INFO 80016 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 12.593 seconds (process running for 13.741)
+2026-10-16T18:50:59.080+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-9] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T18:50:59.081+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T18:50:59.089+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2026-10-16T18:51:11.705+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-2] o.schoolkernel.workspace.KernelVerifier  : correlationId=ffc8fb9a-7e8a-48a6-849d-8450b6a9049e kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1316
+2026-10-16T18:51:16.065+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-9] o.schoolkernel.workspace.KernelVerifier  : correlationId=58b2e98b-59b4-400b-97a4-2f54dc3c7f74 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1311
+2026-10-16T18:51:16.615+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-1] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"97030c7c-67ef-40f6-be0f-729273901fe7","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+2026-10-16T18:51:16.915+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-8] o.s.workspace.DemoPlanningService        : {"family":"work","event":"coalesced","computationId":"97030c7c-67ef-40f6-be0f-729273901fe7","operation":"INITIAL","preset":"QUICK","outcome":"RUNNING"}
+2026-10-16T18:51:17.625+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-6] o.s.workspace.DemoPlanningService        : {"family":"work","event":"detached","computationId":"97030c7c-67ef-40f6-be0f-729273901fe7","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+2026-10-16T18:51:25.320+03:00  INFO 80016 --- [timetable-workspace] [0f-729273901fe7] o.schoolkernel.workspace.KernelVerifier  : correlationId=e59ca354-5eca-46ce-8d75-a4756a22b2e0 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1433
+2026-10-16T18:51:25.327+03:00  INFO 80016 --- [timetable-workspace] [0f-729273901fe7] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"97030c7c-67ef-40f6-be0f-729273901fe7","operation":"INITIAL","outcome":"FEASIBLE"}
+2026-10-16T18:51:27.465+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-7] o.s.workspace.DemoPlanningService        : {"family":"work","event":"reused","computationId":"97030c7c-67ef-40f6-be0f-729273901fe7","operation":"INITIAL","preset":"QUICK","outcome":"FEASIBLE"}
+2026-10-16T18:51:30.800+03:00  INFO 80016 --- [timetable-workspace] [1-56318-exec-10] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"583d8224-dcf4-4ba6-a49b-a900f52b9399","operation":"INITIAL","preset":"THOROUGH","outcome":"QUEUED"}
+2026-10-16T18:51:31.018+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-3] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"b08dcd12-5b4d-4fa0-9452-b17c55dacec2","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+2026-10-16T18:51:31.680+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-7] o.s.workspace.DemoPlanningService        : {"family":"work","event":"detached","computationId":"b08dcd12-5b4d-4fa0-9452-b17c55dacec2","operation":"INITIAL","preset":"QUICK","outcome":"CANCELLED_OR_EXPIRED"}
+2026-10-16T18:52:34.624+03:00  INFO 80016 --- [timetable-workspace] [9b-a900f52b9399] o.schoolkernel.workspace.KernelVerifier  : correlationId=d6cda40b-e4ea-4b3c-8ebe-b482568fb068 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1368
+2026-10-16T18:52:34.630+03:00  INFO 80016 --- [timetable-workspace] [9b-a900f52b9399] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"583d8224-dcf4-4ba6-a49b-a900f52b9399","operation":"INITIAL","outcome":"FEASIBLE"}
+2026-10-16T18:52:36.199+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-7] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T18:52:37.648+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-7] org.schoolkernel.workspace.DemoSamples   : {"event":"sample_open","sample":"small"}
+2026-10-16T18:52:40.894+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-9] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"59f00e8c-9aab-4519-9958-38d5ac227a87","operation":"REPAIR","preset":"QUICK","outcome":"QUEUED"}
+2026-10-16T18:52:41.337+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-1] o.s.workspace.DemoPlanningService        : {"family":"work","event":"coalesced","computationId":"59f00e8c-9aab-4519-9958-38d5ac227a87","operation":"REPAIR","preset":"QUICK","outcome":"RUNNING"}
+2026-10-16T18:52:49.794+03:00  INFO 80016 --- [timetable-workspace] [58-38d5ac227a87] o.schoolkernel.workspace.KernelVerifier  : correlationId=e552e03c-2bbc-44eb-ac7a-677d3c922988 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1392
+2026-10-16T18:52:49.806+03:00  INFO 80016 --- [timetable-workspace] [58-38d5ac227a87] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"59f00e8c-9aab-4519-9958-38d5ac227a87","operation":"REPAIR","outcome":"FEASIBLE"}
+2026-10-16T18:52:52.883+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-1] o.s.workspace.DemoPlanningService        : {"family":"work","event":"reused","computationId":"59f00e8c-9aab-4519-9958-38d5ac227a87","operation":"REPAIR","preset":"QUICK","outcome":"FEASIBLE"}
+2026-10-16T18:52:53.707+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-7] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"cf6fc036-7973-42d1-ac3c-f5acf5d52937","operation":"REPAIR","preset":"THOROUGH","outcome":"QUEUED"}
+2026-10-16T18:53:57.700+03:00  INFO 80016 --- [timetable-workspace] [3c-f5acf5d52937] o.schoolkernel.workspace.KernelVerifier  : correlationId=b441ef01-2635-450c-8a18-3235fad86df7 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1389
+2026-10-16T18:53:57.709+03:00  INFO 80016 --- [timetable-workspace] [3c-f5acf5d52937] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"cf6fc036-7973-42d1-ac3c-f5acf5d52937","operation":"REPAIR","outcome":"FEASIBLE"}
+2026-10-16T18:54:03.698+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-9] o.schoolkernel.workspace.KernelVerifier  : correlationId=f0e0bca2-38b9-4935-95a2-2410a9b7c986 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1798
+2026-10-16T18:54:08.998+03:00  INFO 80016 --- [timetable-workspace] [.1-56318-exec-6] o.schoolkernel.workspace.KernelVerifier  : correlationId=665ef034-69ec-4fa6-a659-daba49b58915 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1305
+2026-10-16T18:54:09.103+03:00  INFO 80016 --- [timetable-workspace] [1-56318-exec-10] o.s.workspace.DemoPlanningService        : {"family":"work","event":"admitted","computationId":"59a39de6-1b35-44bf-80d7-6e68ee08adf6","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+2026-10-16T18:54:09.228+03:00  INFO 80016 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T18:54:09.248+03:00  INFO 80016 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-10-16T18:54:09.308+03:00  INFO 80016 --- [timetable-workspace] [d7-6e68ee08adf6] o.s.workspace.DemoPlanningService        : {"family":"work","event":"finished","computationId":"59a39de6-1b35-44bf-80d7-6e68ee08adf6","operation":"INITIAL","outcome":"FAILED"}

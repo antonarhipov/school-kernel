@@ -1,0 +1,11 @@
+{
+  "verdict": "PASS",
+  "revisedPayloadFiles": 162,
+  "packagedResourcesExact": 49,
+  "originalStartingPaths": 522,
+  "missingStartingPaths": [],
+  "onlyProductionDeltaFromAuthorizedPayload": "timetable-workspace/src/main/resources/static/workspace/styles.css",
+  "revisedUploaded": false,
+  "preview": "actual public DOM and endpoints; one substituted same-origin stylesheet in disposable browser, no CSP bypass",
+  "localWorkspaceJarSha256": "307fb19090cf6fedb424e0663f02bf1c26d3ca676e3191cc25f967e051a7c489"
+}

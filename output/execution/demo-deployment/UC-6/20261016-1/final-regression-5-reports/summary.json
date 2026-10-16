@@ -1,0 +1,29 @@
+[
+  {
+    "kind": "surefire-reports",
+    "name": "org.schoolkernel.workspace.DemoPlanningTest",
+    "tests": "9",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "5.367"
+  },
+  {
+    "kind": "surefire-reports",
+    "name": "org.schoolkernel.workspace.DemoKernelRunnerTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "2.551"
+  },
+  {
+    "kind": "failsafe-reports",
+    "name": "org.schoolkernel.workspace.DemoPlanningBrowserIT",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "396.065"
+  }
+]

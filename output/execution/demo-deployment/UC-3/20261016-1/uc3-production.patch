@@ -1,0 +1,453 @@
+--- before/timetable-workspace/src/main/resources/application-demo.yml
++++ after/timetable-workspace/src/main/resources/application-demo.yml
+@@ -39,3 +39,7 @@
+   idle-timeout: 60m
+   absolute-timeout: 8h
+   max-workspaces: 50
++  search:
++    lesson-threshold: 200
++    quick-seconds: 5
++    thorough-seconds: 60
+--- before/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoController.java
++++ after/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoController.java
+@@ -14,6 +14,9 @@
+ class DemoController {
+     private final DemoWorkspaces workspaces;
+     private final DemoSettings settings;
++    @org.springframework.beans.factory.annotation.Value("${demo.search.lesson-threshold:200}") private int lessonThreshold;
++    @org.springframework.beans.factory.annotation.Value("${demo.search.quick-seconds:5}") private int quickSeconds;
++    @org.springframework.beans.factory.annotation.Value("${demo.search.thorough-seconds:60}") private int thoroughSeconds;
+     DemoController(DemoWorkspaces workspaces, DemoSettings settings) {
+         this.workspaces = workspaces;
+         this.settings = settings;
+@@ -22,7 +25,8 @@
+     @GetMapping("/api/demo/config") ResponseEntity<?> config() {
+         return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(Map.of(
+                 "demo", true, "idleMinutes", settings.idleTimeout().toMinutes(),
+-                "absoluteHours", settings.absoluteTimeout().toHours()));
++                "absoluteHours", settings.absoluteTimeout().toHours(), "lessonThreshold", lessonThreshold,
++                "quickSeconds", quickSeconds, "thoroughSeconds", thoroughSeconds));
+     }
+     @PostMapping("/api/demo/session") ResponseEntity<?> restart(HttpServletRequest request) {
+         var session = request.getSession(true);
+--- before/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSamples.java
++++ after/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSamples.java
+@@ -23,6 +23,7 @@
+ @Component
+ @Profile("demo")
+ class DemoSamples {
++    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(DemoSamples.class);
+     private static final List<String> IDS = List.of("small", "two-class", "full");
+     private static final List<String> TITLES = List.of("Small school", "Two-class school", "Full school");
+     private final Map<String, Sample> samples = new LinkedHashMap<>();
+@@ -48,21 +49,25 @@
+         if (!kernelBuild(Path.of(KernelVerifier.resolveExecutable(artifact))).equals(evidence.path("kernelBuild").stringValue())) {
+             throw new IllegalStateException("Packaged samples need current kernel scoring evidence");
+         }
++        Map<String, Sample> verifiedSamples = new LinkedHashMap<>();
+         for (int index = 0; index < IDS.size(); index++) {
+             String id = IDS.get(index);
+             JsonNode definition = read(id + "-definition.json");
+             JsonNode result = read(id + "-result.json");
+             JsonNode expected = evidence.path("samples").path(id);
+-            if (definition.path("catalogVersion").intValue() != 9
++            if (definition.path("catalogVersion").intValue() != evidence.path("catalogVersion").intValue()
++                    || !result.path("score").equals(expected.path("score"))
+                     || !hash(CanonicalJson.bytes(definition)).equals(expected.path("definitionSha256").stringValue())
+                     || !hash(CanonicalJson.bytes(result)).equals(expected.path("resultSha256").stringValue())) {
+                 throw new IllegalStateException("Packaged sample evidence does not match " + id);
+             }
+             var documents = new ImportDocuments(definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE);
+             var verified = verifier.verify(documents);
+-            samples.put(id, new Sample(id, TITLES.get(index), definition, result,
++            verifiedSamples.put(id, new Sample(id, TITLES.get(index), definition, result,
+                     manifests.validatedOrGenerated(documents), verified));
+         }
++        samples.clear();
++        samples.putAll(verifiedSamples);
+     }
+ 
+     ArrayNode catalog() {
+@@ -93,6 +98,9 @@
+         Sample sample = sample(id);
+         var current = store.load();
+         long version = ImportService.requireMatchingVersion(ifMatch, current);
++        if (current.state() == WorkspaceState.SOLVING_INITIAL || current.state() == WorkspaceState.SOLVING_REPAIR)
++            throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
++                    "Wait for or cancel the active run before opening a sample.");
+         if (current.state() != WorkspaceState.EMPTY && !confirmed) throw new WorkspaceProblem(
+                 HttpStatus.PRECONDITION_REQUIRED, "REPLACEMENT_CONFIRMATION_REQUIRED", "Confirm replacing the current workspace first.");
+         ObjectNode document = json.createObjectNode();
+@@ -105,7 +113,9 @@
+         baseline.set("definition", sample.definition().deepCopy());
+         baseline.set("result", sample.result().deepCopy());
+         baseline.set("manifest", sample.manifest().deepCopy());
+-        return mutation.resetAndImport(version, WorkspaceState.ACCEPTED_BASELINE, document);
++        WorkspaceAggregate opened = mutation.resetAndImport(version, WorkspaceState.ACCEPTED_BASELINE, document);
++        LOG.info("{\"event\":\"sample_open\",\"sample\":\"{}\"}", id);
++        return opened;
+     }
+ 
+     private Sample sample(String id) {
+@@ -113,7 +123,7 @@
+         if (sample == null) throw new WorkspaceProblem(HttpStatus.NOT_FOUND, "SAMPLE_NOT_FOUND", "The sample does not exist.");
+         return sample;
+     }
+-    private JsonNode read(String name) throws IOException {
++    JsonNode read(String name) throws IOException {
+         try (var input = new ClassPathResource("demo/samples/" + name).getInputStream()) { return json.readTree(input); }
+     }
+     private static String hash(byte[] bytes) throws Exception {
+--- before/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSampleController.java
++++ after/timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSampleController.java
+@@ -25,7 +25,7 @@
+     @PostMapping("/api/samples/{id}/use") ResponseEntity<JsonNode> use(@PathVariable String id,
+             @RequestHeader(value = HttpHeaders.IF_MATCH, required = false) String ifMatch,
+             @RequestBody(required = false) JsonNode body) {
+-        return workspace.response(samples.use(id, ifMatch, body != null && body.path("confirmed").booleanValue()));
++        return workspace.response(samples.use(id, ifMatch, body != null && body.path("confirmed").isBoolean() && body.path("confirmed").booleanValue()));
+     }
+     private static ResponseEntity<JsonNode> publicContent(JsonNode content) throws Exception {
+         String hash = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(CanonicalJson.bytes(content)));
+--- before/timetable-workspace/src/main/resources/static/workspace/demo-panel.js
++++ after/timetable-workspace/src/main/resources/static/workspace/demo-panel.js
+@@ -2,7 +2,7 @@
+ const maxBytes = 2 * 1024 * 1024;
+ const validId = /^[a-z0-9][a-z0-9-]{0,39}$/;
+ let panel, selection, editor, feedback, use, changed, entries = [], selected = 'full', storedText = '', origin;
+-let api, current, preview;
++let api, current, preview, inUse, useHint, loading = false, using = false, selectionRequest = 0;
+ const bytes = text => new TextEncoder().encode(text).length;
+ const dirty = () => editor.value !== storedText;
+ const message = text => { feedback.textContent = text; };
+@@ -19,17 +19,22 @@
+     <p>Only the necessary application session cookie is used; application logs exclude school data. Do not submit personal data you are not permitted to share. Keep documents and personal details out of URLs.</p></details>`;
+   panel = document.createElement('section'); panel.id = 'demo-definition-panel'; panel.className = 'card';
+   panel.innerHTML = `<h2>School definition</h2><label>Choose a definition<select id="demo-definition"></select></label>
+-    <p id="demo-sample-preview"></p><label>Definition JSON<textarea id="demo-json" spellcheck="false" rows="10"></textarea></label>
++    <p id="demo-sample-preview"></p><p id="demo-in-use" role="status"></p><label>Definition JSON<textarea id="demo-json" spellcheck="false" rows="10"></textarea></label>
+     <p id="demo-edit-status" role="status"></p><div class="actions"><button id="demo-use">Use this sample</button>
+     <button id="demo-save" class="secondary">Save as</button><button id="demo-revert" class="secondary">Revert changes</button>
+     <button id="demo-download" class="secondary">Download JSON</button><button id="demo-delete" class="secondary">Delete saved version</button>
+     <button id="demo-delete-all" class="secondary">Delete all saved versions</button></div>
+     <label>Open a definition file<input id="demo-file" type="file" accept="application/json,.json"></label>
+-    <p>Browser versions have no cross-device sync. Download a copy to keep it.</p><p id="demo-feedback" role="status"></p>`;
++    <p id="demo-use-hint" role="status"></p><button id="demo-reload" class="secondary" hidden>Reload current workspace</button><p>Browser versions have no cross-device sync. Download a copy to keep it.</p><p id="demo-feedback" role="status"></p>`;
+   const main = document.querySelector('main'); main.prepend(panel); main.prepend(banner);
+   selection = panel.querySelector('#demo-definition'); editor = panel.querySelector('#demo-json');
+   feedback = panel.querySelector('#demo-feedback'); use = panel.querySelector('#demo-use');
+   changed = panel.querySelector('#demo-edit-status'); preview = panel.querySelector('#demo-sample-preview');
++  inUse = panel.querySelector('#demo-in-use'); useHint = panel.querySelector('#demo-use-hint');
++  panel.querySelector('#demo-reload').addEventListener('click', async () => {
++    try { await api.reload(); panel.querySelector('#demo-reload').hidden = true; message('Current workspace reloaded. Your selected definition and text were retained.'); }
++    catch (error) { message(error.message); }
++  });
+   const response = await fetch('/api/samples');
+   if (!response.ok) throw new Error('The sample catalog is unavailable.');
+   entries = await response.json();
+@@ -78,17 +83,22 @@
+     } catch (error) { message(error.message || 'This file could not be read.'); }
+   });
+   use.addEventListener('click', async () => {
+-    if (dirty() || !entries.some(entry => entry.identifier === selected)) return;
++    if (using || loading || dirty() || current?.state?.startsWith('SOLVING_') || !entries.some(entry => entry.identifier === selected)) return;
+     let confirmed = false;
+     if (current?.state !== 'EMPTY') {
+-      const accepted = current?.acceptedTimetable ? ' Export Current first if you want to keep it.' : '';
+-      confirmed = confirm(`Replace ${current?.state} and all its current timetable, draft and proposal work with ${selected}?${accepted}`);
++      const accepted = current?.acceptedTimetable ? ' Export Current first if you want to keep it; Cancel and use Export accepted baseline in Utilities.' : '';
++      const work = { ACCEPTED_BASELINE: 'accepted timetable', INITIAL_DRAFT: 'initial draft', INITIAL_PROPOSAL: 'initial draft and unaccepted proposal', REPAIR_DRAFT: 'accepted timetable and repair draft', REPAIR_PROPOSAL: 'accepted timetable, repair draft and unaccepted proposal', MANUAL_DRAFT: 'accepted timetable and manual draft' }[current.state] || current.state;
++      const title = current.workspace?.school?.displayName || 'this school';
++      confirmed = confirm(`Replace ${work} for "${title}" with ${entries.find(entry => entry.identifier === selected).title}?${accepted}`);
+       if (!confirmed) return;
+     }
+-    use.disabled = true;
++    using = true; update();
+     try { await api.useSample(selected, confirmed); message('The accepted sample is in use. No search was started.'); }
+-    catch (error) { message(error.message); }
+-    finally { update(); }
++    catch (error) {
++      message(`${error.message} The sample was not opened. Reload current workspace to check or retry.`);
++      panel.querySelector('#demo-reload').hidden = false;
++    }
++    finally { using = false; update(); }
+   });
+   window.addEventListener('storage', event => {
+     if (event.key !== null && !event.key.startsWith(prefix)) return;
+@@ -130,25 +140,33 @@
+ 
+ async function select(id, check = true) {
+   if (check && dirty() && !confirm('Discard the unsaved definition text?')) return;
+-  selected = id; selection.value = id; message('');
++  const request = ++selectionRequest;
++  loading = true; update(); message('');
+   const sample = entries.find(entry => entry.identifier === id);
+   try {
++    let text, nextOrigin, description;
+     if (sample) {
+       const response = await fetch(`/api/samples/${encodeURIComponent(id)}`);
+       if (!response.ok) throw new Error('This sample could not be read.');
+-      const body = await response.json(); storedText = JSON.stringify(body.definition, null, 2) + '\n';
+-      origin = { kind: 'sample', identifier: id };
+-      preview.textContent = `${sample.description} ${sample.lessons} lessons · ${sample.cohorts} classes · ${sample.teachers} teachers · ${sample.rooms} rooms · ${sample.periods} periods. ${sample.lessons > 200 ? 'Thorough' : 'Quick'} search is the default for a later solve. Selection only previews.`;
++      const body = await response.json(); text = JSON.stringify(body.definition, null, 2) + '\n';
++      nextOrigin = { kind: 'sample', identifier: id };
++      const effort = sample.lessons > api.lessonThreshold ? 'Thorough' : 'Quick';
++      const seconds = sample.lessons > api.lessonThreshold ? api.thoroughSeconds : api.quickSeconds;
++      description = `${sample.description} ${sample.lessons} lessons · ${sample.cohorts} classes · ${sample.teachers} teachers · ${sample.rooms} rooms · ${sample.periods} periods. ${effort} search (${seconds} seconds) is the default for a later solve. Selection only previews.`;
+     } else {
+-      const value = envelope(id); storedText = value.documentText; origin = { kind: 'saved', identifier: id };
+-      preview.textContent = `Saved ${value.savedAt} · derived from ${value.derivedFrom.kind}${value.derivedFrom.identifier ? ` ${value.derivedFrom.identifier}` : ''}.`;
+-    }
+-    editor.disabled = false; editor.value = storedText;
++      const value = envelope(id); text = value.documentText; nextOrigin = { kind: 'saved', identifier: id };
++      description = `Saved ${value.savedAt} · derived from ${value.derivedFrom.kind}${value.derivedFrom.identifier ? ` ${value.derivedFrom.identifier}` : ''}.`;
++    }
++    if (request !== selectionRequest) return;
++    selected = id; selection.value = id; storedText = text; origin = nextOrigin;
++    preview.textContent = description; editor.disabled = false; editor.value = storedText;
+   } catch (error) {
+-    storedText = ''; editor.value = ''; editor.disabled = true;
+-    message(`${error.message} Delete this unreadable entry to remove it.`);
+-  }
+-  update();
++    if (request !== selectionRequest) return;
++    selection.value = selected;
++    message(`${error.message} Previous selection and text were retained.`);
++  } finally {
++    if (request === selectionRequest) { loading = false; update(); }
++  }
+ }
+ 
+ function update() {
+@@ -164,8 +182,16 @@
+   editor.readOnly = narrow;
+   use.textContent = isSample ? 'Use this sample' : 'Use this definition';
+   // Custom use is implemented by the initial-definition UC; preserving a local version does not validate it.
+-  use.disabled = dirty() || editor.disabled || running || current?.state === 'SESSION_ENDED' || !isSample;
+-  use.title = running ? 'Wait for or cancel the active run first.' : dirty() ? 'Save or revert the changed text first.' : !isSample ? 'This local version is available to edit and download.' : '';
++  selection.disabled = using; editor.disabled = using || loading;
++  use.disabled = loading || using || dirty() || editor.disabled || running || current?.state === 'SESSION_ENDED' || !isSample;
++  use.title = loading ? 'Loading sample preview.' : using ? 'Opening the selected sample.' : running ? 'Wait for or cancel the active run first.' : dirty() ? 'Save or revert the changed text first.' : !isSample ? 'This local version is available to edit and download.' : '';
++  useHint.textContent = use.title;
++  const active = current?.workspace?.importMode === 'PACKAGED_SAMPLE' && current?.acceptedTimetable ? current.workspace.origin : null;
++  for (const option of selection.querySelectorAll('optgroup:first-child option')) {
++    const entry = entries.find(entry => entry.identifier === option.value);
++    option.textContent = entry.title + (entry.identifier === active ? ' · In use' : '');
++  }
++  inUse.textContent = active ? `${entries.find(entry => entry.identifier === active)?.title || active} · In use as Current` : '';
+   panel.querySelector('#demo-delete').disabled = isSample || !selected;
+   panel.querySelector('#demo-revert').disabled = !dirty();
+   panel.querySelector('#demo-save').disabled = editor.disabled || narrow;
+--- before/timetable-workspace/src/main/resources/static/workspace/app.js
++++ after/timetable-workspace/src/main/resources/static/workspace/app.js
+@@ -77,13 +77,15 @@
+   if (!demoMounted) {
+     document.querySelector('#eyebrow').textContent = 'Public school timetable demo';
+     const config = await (await fetch('/api/demo/config')).json();
+-    await mountDemoPanel({ useSample: async (id, confirmed) => {
++    await mountDemoPanel({ reload: () => load(true), lessonThreshold: config.lessonThreshold, quickSeconds: config.quickSeconds, thoroughSeconds: config.thoroughSeconds, useSample: async (id, confirmed) => {
+       const response = await fetchWithCsrf(`/api/samples/${encodeURIComponent(id)}/use`, {
+         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ confirmed })
+       });
+       const body = await response.json();
+       if (!response.ok) throw new Error(body.message || M.actionFailed);
+-      etag = response.headers.get('ETag'); render(body); stateCard.scrollIntoView({ block: 'start' });
++      etag = response.headers.get('ETag'); inspectionState = null; preferenceSchoolId = null;
++      render(body); syncInspectionState(inspectionState.resetFilters().state);
++      syncInspectionState(inspectionState.selectRange('WEEK').state); render(body); stateCard.scrollIntoView({ block: 'start' });
+     } }, config);
+     demoMounted = true;
+   }
+--- before/timetable-workspace/src/main/resources/demo/samples/scoring-evidence.json
++++ after/timetable-workspace/src/main/resources/demo/samples/scoring-evidence.json
+@@ -1,17 +1,186 @@
+ {
+   "kernelBuild": "e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b",
++  "catalogVersion": 9,
+   "samples": {
+     "small": {
+       "definitionSha256": "ce3c23410831017ff5aea1f1fd1f44911850024a96310ccdde22a2dd9721922b",
+-      "resultSha256": "3c30719ea1ebf3ec0bde921d3734bd764dde052a3563dbb17d2a6afbe22fd26d"
++      "resultSha256": "3c30719ea1ebf3ec0bde921d3734bd764dde052a3563dbb17d2a6afbe22fd26d",
++      "score": {
++        "constraintBreakdown": [
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.teacher-gap",
++            "effectiveWeight": 2,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-gap",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-late-start",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-week-balance",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.series-same-day",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.undesirable-period",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.non-preferred-room",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          }
++        ],
++        "ordinaryPreferencePenalty": 0,
++        "periodMoves": 0,
++        "roomOnlyMoves": 0
++      }
+     },
+     "two-class": {
+       "definitionSha256": "ab2be2aba384888a489fe25eb98a988ceddf87c64790e5f31635e0dbd33bd85d",
+-      "resultSha256": "cc80aa4ac3da4941e2bd0028770b2fff5173244631a0ecc496ddb8f3eaf701f8"
++      "resultSha256": "cc80aa4ac3da4941e2bd0028770b2fff5173244631a0ecc496ddb8f3eaf701f8",
++      "score": {
++        "constraintBreakdown": [
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.teacher-gap",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-gap",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-late-start",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-week-balance",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 3,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.series-same-day",
++            "effectiveWeight": 1,
++            "matchCount": 3
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.undesirable-period",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 1,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.non-preferred-room",
++            "effectiveWeight": 1,
++            "matchCount": 1
++          }
++        ],
++        "ordinaryPreferencePenalty": 4,
++        "periodMoves": 0,
++        "roomOnlyMoves": 0
++      }
+     },
+     "full": {
+       "definitionSha256": "f57bdd320c65bf4823fba0c062c40118ed13d6ffe9d5bdba1636565b0b9805e7",
+-      "resultSha256": "b6ba045434e63590d8a64523e48817b681406412a7ccc49695d1c49e3bc85b9b"
++      "resultSha256": "b6ba045434e63590d8a64523e48817b681406412a7ccc49695d1c49e3bc85b9b",
++      "score": {
++        "constraintBreakdown": [
++          {
++            "aggregatePenalty": 360,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.teacher-gap",
++            "effectiveWeight": 5,
++            "matchCount": 72
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-gap",
++            "effectiveWeight": 1000000,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-late-start",
++            "effectiveWeight": 10000,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 4000,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.cohort-week-balance",
++            "effectiveWeight": 1000,
++            "matchCount": 4
++          },
++          {
++            "aggregatePenalty": 164,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.series-same-day",
++            "effectiveWeight": 1,
++            "matchCount": 164
++          },
++          {
++            "aggregatePenalty": 0,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.undesirable-period",
++            "effectiveWeight": 1,
++            "matchCount": 0
++          },
++          {
++            "aggregatePenalty": 915,
++            "category": "ORDINARY_PREFERENCE",
++            "constraintId": "soft.non-preferred-room",
++            "effectiveWeight": 5,
++            "matchCount": 183
++          }
++        ],
++        "ordinaryPreferencePenalty": 5439,
++        "periodMoves": 0,
++        "roomOnlyMoves": 0
++      }
+     }
+   }
+ }

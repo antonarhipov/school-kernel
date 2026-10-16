@@ -1,0 +1,20 @@
+{
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java": "bab109942261a74d422c3ed8acd9e0dbbdbde93b11ab125fb2fffecb652b177c",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoTimetableController.java": "988d4fc2d5c6c349caf0d26e9fd314d3624fe9bdd3ea27b152c0a62d6de69603",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java": "ad08a76c2adaa689db30141081502ed7aa705030ae70ae2763e654e31b682261",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/SecurityConfiguration.java": "218b6027073bc8f6d37be2d67b7ce394bbb5bfad0c354708adee969f501bbf3c",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemHandler.java": "78f54bc073df95f5a9c0d367aa0030d3b9c34562d93ce10ed4b6ed4ed53eccc6",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java": "fe54c937b1070ff2badf1eb789bb1a158905aee02bee7742ab6d19152a207e3f",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoEvents.java": "16248e0376ff88fb0ad3dbf8a51bc37b40142f7f45c9607ddb09b986dbcb2dcf",
+  "timetable-workspace/src/main/resources/static/workspace/demo-definitions.js": "ec9f03b6947affbc2f07b155617d1af469076fb3c52a1f95f6eec8ae197ffa94",
+  "timetable-workspace/src/main/resources/static/workspace/demo-workbench.js": "75572382fa27043dfdcdaaec2ff2489967a94c7c9838cca09920f72f0f1b274e",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoInputAdmissionFilter.java": "5b5a623ec7a4f0bc2ff01c6fb5c86e31d763c4bc7e37b46e45865f5311c14392",
+  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoInputJson.java": "8d79bf2ce619334c9246da294c4b3f3d368a8c8676075c7f74d0f5aa4999a045",
+  "timetable-workspace/src/main/resources/static/workspace/definition-autosave.js": "4614538b0da4065e45a6fe828e46ccab79397ade3b0f44304993c7e0099d9949",
+  "timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionInputHardeningTest.java": "17ef038aa35146ff6a7e2e685245590ecd9541f17cb8f7b5fdd46c1c29857be8",
+  "timetable-workspace/src/test/java/org/schoolkernel/workspace/DefinitionInputHardeningBrowserIT.java": "d97aa5df669f2535f128bac7ee83a4897bdd350b5b55706fde4aa48bf5911acb",
+  "spec/definition-input-hardening/status.md": "80ecaab0f0d8d3753e2d5af756540e19236cc041724ea450b548647ecd89a681",
+  "spec/definition-input-hardening/spec.md": "eb0d526d4beb78d7197479acca2a8547f2441719ed5367fcd05d4c9c5a96977b",
+  "spec/definition-input-hardening/proposal.md": "2f5786226486bc4604413c3b0821dc092c6c4aec8877c5c7d6ae44bf3a30c556",
+  "spec/definition-input-hardening/checkpoints/UC-1.md": "8fb6eb252c666ff33a02e0777d5bc90568ccbd43cee07adc10c388bc3dfaa0fa"
+}

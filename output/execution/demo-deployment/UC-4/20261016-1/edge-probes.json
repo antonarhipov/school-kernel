@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-16T14:03:38.419689+00:00",
+  "probes": [
+    {
+      "name": "normal",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-http-scheme",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-foreign-forwarded-host",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "duplicate-client-scheme",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-forwarded-ip",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "forwarded-rejected",
+      "status": 403,
+      "contentType": "application/json;charset=UTF-8",
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"014ef2de-37d5-4db1-9670-cdca17c31e4c\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "foreign-origin-rejected",
+      "status": 403,
+      "contentType": "application/json;charset=UTF-8",
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"c84c80ac-1541-4182-b626-bcbf27a8e138\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "missing-origin-csrf-rejected",
+      "status": 403,
+      "contentType": "application/json;charset=UTF-8",
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"ae437f25-0fdc-4978-986b-f389a4648292\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "public-http-redirect",
+      "status": 301,
+      "contentType": null,
+      "body": "",
+      "setsCookie": false,
+      "location": "https://demo-smoke-production.up.railway.app/healthz"
+    }
+  ],
+  "verdict": "PASS"
+}

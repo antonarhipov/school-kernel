@@ -1,0 +1,343 @@
+{
+  "verdict": "PASS for observed physical/logical/decision/privacy events; full public walkthrough retains mobile finding",
+  "epochs": [
+    {
+      "reset": "b2462d75-b07a-4290-9304-e5aec30d9a45",
+      "start": "2026-10-16T18:21:39.310312764Z",
+      "serviceSha256": "1b09fc5d33b8672c0b3fabf6e007baa4a345c365adfb786073cf4b6f233c9e03",
+      "families": {
+        "startup": 1,
+        "aggregate": 3,
+        "session": 4,
+        "reuse": 11,
+        "work": 25,
+        "definition": 2,
+        "decision": 11
+      },
+      "decisions": {
+        "ACCEPT_INITIAL": 2,
+        "EXPORT": 5,
+        "ACCEPT_REPAIR": 1,
+        "MANUAL_PUBLISH": 1,
+        "IMPORT": 2
+      },
+      "physicalStarts": {
+        "VERIFICATION": 4,
+        "SOLVE": 2
+      },
+      "physicalCompletions": {
+        "VERIFICATION:VERIFIED": 4,
+        "SOLVE:EXIT_0": 2
+      },
+      "logicalCompletions": 3,
+      "processMs": 16837,
+      "startedEqualsFinished": true,
+      "aggregateCount": 3,
+      "finalAggregate": {
+        "level": "info",
+        "processes": {
+          "completed.SOLVE.EXIT_0": 1,
+          "completed.VERIFICATION.VERIFIED": 2,
+          "durationMs.SOLVE": 6662,
+          "durationMs.VERIFICATION": 1791,
+          "runningSolve": 0,
+          "runningVerification": 0
+        },
+        "family": "aggregate",
+        "event": "interval",
+        "queue": {
+          "admissions": 1,
+          "distinctWaiting": 0,
+          "logical.FEASIBLE": 1,
+          "preset.QUICK": 1,
+          "refusal.TEACHER_CHANGE_REQUIRES_AUTHORING": 1,
+          "waitBinMs": 10,
+          "waitP50UpperMs": 0,
+          "waitP90UpperMs": 0
+        },
+        "timestamp": "2026-10-16T18:24:39.514849248Z",
+        "allowance": {
+          "consumedMs": 16846,
+          "releasedReservationMs": 78542,
+          "remainingMs": 14383153,
+          "reservedMs": 0,
+          "settlements": 2,
+          "utcResets": 0
+        },
+        "message": "",
+        "context": {
+          "build": "e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b",
+          "config": "ceb36717fd8d71c57b7a11bab37b496408ba095c87cc539301319c199521f7a9",
+          "counterReset": "b2462d75-b07a-4290-9304-e5aec30d9a45",
+          "intervalMs": 60001,
+          "timestamp": "2026-10-16T18:24:39.514902438Z",
+          "utcAllowanceDay": "2026-10-16"
+        },
+        "cache": {
+          "HIT": 3,
+          "MISS": 2,
+          "entries": 6,
+          "residentBytes": 86686
+        },
+        "workspaces": {
+          "active": 2
+        },
+        "productUse": {
+          "ACCEPT_REPAIR": 1,
+          "EXPORT": 5,
+          "IMPORT": 2,
+          "MANUAL_PUBLISH": 1,
+          "conversion.ACCEPT_REPAIR": 1,
+          "conversion.EXPORT": 1,
+          "conversion.MANUAL_PUBLISH": 1
+        }
+      }
+    },
+    {
+      "reset": "6cfed886-461a-4001-980e-d191a80dab65",
+      "start": "2026-10-16T18:25:46.082681693Z",
+      "serviceSha256": "1b09fc5d33b8672c0b3fabf6e007baa4a345c365adfb786073cf4b6f233c9e03",
+      "families": {
+        "startup": 1,
+        "session": 4,
+        "reuse": 11,
+        "work": 26,
+        "definition": 2,
+        "aggregate": 2,
+        "decision": 11
+      },
+      "decisions": {
+        "ACCEPT_INITIAL": 2,
+        "EXPORT": 5,
+        "ACCEPT_REPAIR": 1,
+        "MANUAL_PUBLISH": 1,
+        "IMPORT": 2
+      },
+      "physicalStarts": {
+        "VERIFICATION": 4,
+        "SOLVE": 2
+      },
+      "physicalCompletions": {
+        "VERIFICATION:VERIFIED": 4,
+        "SOLVE:EXIT_0": 2
+      },
+      "logicalCompletions": 3,
+      "processMs": 16514,
+      "startedEqualsFinished": true,
+      "aggregateCount": 2,
+      "finalAggregate": {
+        "allowance": {
+          "consumedMs": 16523,
+          "releasedReservationMs": 124292,
+          "remainingMs": 14383476,
+          "reservedMs": 0,
+          "settlements": 3,
+          "utcResets": 0
+        },
+        "cache": {
+          "HIT": 5,
+          "MISS": 3,
+          "entries": 6,
+          "residentBytes": 86686
+        },
+        "processes": {
+          "completed.SOLVE.EXIT_0": 2,
+          "completed.VERIFICATION.VERIFIED": 3,
+          "durationMs.SOLVE": 13055,
+          "durationMs.VERIFICATION": 2645,
+          "runningSolve": 0,
+          "runningVerification": 0
+        },
+        "timestamp": "2026-10-16T18:27:46.233521882Z",
+        "family": "aggregate",
+        "queue": {
+          "admissions": 3,
+          "distinctWaiting": 0,
+          "logical.FEASIBLE": 3,
+          "preset.QUICK": 3,
+          "refusal.ACCEPTANCE_CONFIRMATION_REQUIRED": 1,
+          "refusal.STALE_WORKSPACE_VERSION": 1,
+          "refusal.TEACHER_CHANGE_REQUIRES_AUTHORING": 1,
+          "waitBinMs": 10,
+          "waitP50UpperMs": 0,
+          "waitP90UpperMs": 10
+        },
+        "productUse": {
+          "ACCEPT_INITIAL": 2,
+          "ACCEPT_REPAIR": 1,
+          "DEFINITION_SAMPLE": 1,
+          "EXPORT": 5,
+          "MANUAL_PUBLISH": 1,
+          "conversion.ACCEPT_INITIAL": 2,
+          "conversion.ACCEPT_REPAIR": 1,
+          "conversion.EXPORT": 1,
+          "conversion.MANUAL_PUBLISH": 1
+        },
+        "context": {
+          "build": "e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b",
+          "config": "ceb36717fd8d71c57b7a11bab37b496408ba095c87cc539301319c199521f7a9",
+          "counterReset": "6cfed886-461a-4001-980e-d191a80dab65",
+          "intervalMs": 60005,
+          "timestamp": "2026-10-16T18:27:46.233562781Z",
+          "utcAllowanceDay": "2026-10-16"
+        },
+        "event": "interval",
+        "workspaces": {
+          "active": 2
+        },
+        "message": "",
+        "level": "info"
+      }
+    },
+    {
+      "reset": "cdfb4113-4fb9-40ac-b119-cad6f9282560",
+      "start": "2026-10-16T18:28:41.348893187Z",
+      "serviceSha256": "1b09fc5d33b8672c0b3fabf6e007baa4a345c365adfb786073cf4b6f233c9e03",
+      "families": {
+        "startup": 1,
+        "session": 2,
+        "reuse": 1,
+        "work": 2,
+        "decision": 1,
+        "aggregate": 2
+      },
+      "decisions": {
+        "IMPORT": 1
+      },
+      "physicalStarts": {
+        "VERIFICATION": 1
+      },
+      "physicalCompletions": {
+        "VERIFICATION:VERIFIED": 1
+      },
+      "logicalCompletions": 0,
+      "processMs": 1098,
+      "startedEqualsFinished": true,
+      "aggregateCount": 2,
+      "finalAggregate": {
+        "message": "",
+        "timestamp": "2026-10-16T18:30:41.462065730Z",
+        "context": {
+          "build": "e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b",
+          "config": "ceb36717fd8d71c57b7a11bab37b496408ba095c87cc539301319c199521f7a9",
+          "counterReset": "cdfb4113-4fb9-40ac-b119-cad6f9282560",
+          "intervalMs": 60004,
+          "timestamp": "2026-10-16T18:30:41.462130519Z",
+          "utcAllowanceDay": "2026-10-16"
+        },
+        "processes": {
+          "runningSolve": 0,
+          "runningVerification": 0
+        },
+        "productUse": {},
+        "event": "interval",
+        "family": "aggregate",
+        "queue": {
+          "distinctWaiting": 0,
+          "waitBinMs": 10,
+          "waitP50UpperMs": 0,
+          "waitP90UpperMs": 0
+        },
+        "level": "info",
+        "workspaces": {
+          "active": 1
+        },
+        "cache": {
+          "entries": 1,
+          "residentBytes": 9608
+        },
+        "allowance": {
+          "consumedMs": 1100,
+          "releasedReservationMs": 0,
+          "remainingMs": 14398899,
+          "reservedMs": 0,
+          "settlements": 0,
+          "utcResets": 0
+        }
+      }
+    },
+    {
+      "reset": "7f077f96-2866-46f4-85e4-17b8d2c97215",
+      "start": "2026-10-16T18:30:57.460613322Z",
+      "serviceSha256": "1b09fc5d33b8672c0b3fabf6e007baa4a345c365adfb786073cf4b6f233c9e03",
+      "families": {
+        "startup": 1,
+        "session": 2,
+        "reuse": 2,
+        "work": 3,
+        "decision": 2,
+        "aggregate": 2,
+        "definition": 1
+      },
+      "decisions": {
+        "IMPORT": 2
+      },
+      "physicalStarts": {
+        "VERIFICATION": 1
+      },
+      "physicalCompletions": {
+        "VERIFICATION:VERIFIED": 1
+      },
+      "logicalCompletions": 0,
+      "processMs": 990,
+      "startedEqualsFinished": true,
+      "aggregateCount": 2,
+      "finalAggregate": {
+        "level": "info",
+        "cache": {
+          "HIT": 1,
+          "entries": 1,
+          "residentBytes": 9608
+        },
+        "allowance": {
+          "consumedMs": 991,
+          "releasedReservationMs": 0,
+          "remainingMs": 14399008,
+          "reservedMs": 0,
+          "settlements": 0,
+          "utcResets": 0
+        },
+        "productUse": {
+          "IMPORT": 1
+        },
+        "message": "",
+        "timestamp": "2026-10-16T18:32:57.565517071Z",
+        "queue": {
+          "distinctWaiting": 0,
+          "waitBinMs": 10,
+          "waitP50UpperMs": 0,
+          "waitP90UpperMs": 0
+        },
+        "context": {
+          "build": "e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b",
+          "config": "ceb36717fd8d71c57b7a11bab37b496408ba095c87cc539301319c199521f7a9",
+          "counterReset": "7f077f96-2866-46f4-85e4-17b8d2c97215",
+          "intervalMs": 60004,
+          "timestamp": "2026-10-16T18:32:57.565566740Z",
+          "utcAllowanceDay": "2026-10-16"
+        },
+        "workspaces": {
+          "active": 2,
+          "created": 1
+        },
+        "event": "interval",
+        "family": "aggregate",
+        "processes": {
+          "runningSolve": 0,
+          "runningVerification": 0
+        }
+      }
+    }
+  ],
+  "privacyMarkersAbsent": 7,
+  "exactFamilies": [
+    "aggregate",
+    "decision",
+    "definition",
+    "reuse",
+    "session",
+    "startup",
+    "work"
+  ],
+  "limits": "Free demo; no Hobby cost/capacity qualification. Interval sums cover completed intervals only; final partial intervals may end at restart."
+}

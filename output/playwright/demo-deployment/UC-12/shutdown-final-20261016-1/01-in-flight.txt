@@ -1,0 +1,82 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school · In use
+Two-class school
+Full school
+shutdown-copy · 2026-10-16T17:37:58.698Z
+
+Saved 2026-10-16T17:37:58.698Z · derived from sample small.
+
+Small school · In use as Current
+
+Definition JSON
+
+Unchanged
+
+Use this definition
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Validating and opening the selected definition.
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+Saved in this browser. Download is the durable copy; saving does not check kernel validity.
+
+Open an accepted timetable
+Small school✓ Current · acceptedAccepted baseline · current timetable
+
+Accepted revision: sha256:5e24f40b9509dedc99a7eadcd643bcfec57449b93ba9ea0d2e35e46be2286d38
+
+Utilities
+Current
+Timetable details
+Time range
+Week
+Day
+Weekday
+Monday
+Search lessons
+Subject investigation
+No subject selected
+Subject 01
+Subject 02
+Teacher investigation
+No teacher selected
+John Doe
+Filters
+Complete school population
+Complete recurring Week
+Showing 1 of 1 classes
+Represented lessons: 2
+Active filters:
+No active filters
+Reset view
+Subject matches: 0
+Teacher matches: 0
+Dual matches: 0
+Class	Period	Monday
+Cohort 01	1	
+Subject 01
+Room 02
+
+2	
+Subject 02
+Room 01
+
+3	
+Empty
+Start a protected repair
+Change a lesson’s teacher

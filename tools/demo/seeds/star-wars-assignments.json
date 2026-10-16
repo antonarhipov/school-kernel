@@ -1,0 +1,2702 @@
+[
+  {
+    "lessonId": "imperial-lesson-junior-1A-conditioning-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-natural-science-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-teamwork-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-basic-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-numeracy-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-citizenship-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-numeracy-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-basic-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-history-1",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-droid-literacy-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-basic-3",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-natural-science-2",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-numeracy-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-history-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-droid-literacy-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-basic-4",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-conditioning-2",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-teamwork-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-natural-science-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-numeracy-4",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-numeracy-5",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-citizenship-2",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-history-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-basic-5",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-1A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1A-conditioning-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-numeracy-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-basic-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-conditioning-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-citizenship-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-history-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-numeracy-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-history-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-conditioning-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-basic-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-natural-science-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-citizenship-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-basic-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-teamwork-1",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-conditioning-3",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-numeracy-3",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-basic-4",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-numeracy-4",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-history-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-droid-literacy-1",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-natural-science-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-droid-literacy-2",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-teamwork-2",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-numeracy-5",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-natural-science-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-1B-basic-5",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-1B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-basic-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-natural-science-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-conditioning-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-numeracy-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-history-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-droid-literacy-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-basic-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-numeracy-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-teamwork-1",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-natural-science-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-numeracy-3",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-natural-science-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-history-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-citizenship-1",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-basic-3",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-numeracy-4",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-history-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-basic-4",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-citizenship-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-conditioning-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-teamwork-2",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-numeracy-5",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-droid-literacy-2",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-conditioning-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2A-basic-5",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-2A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-history-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-basic-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-natural-science-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-numeracy-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-conditioning-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-numeracy-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-droid-literacy-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-natural-science-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-basic-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-citizenship-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-history-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-conditioning-2",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-basic-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-numeracy-3",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-teamwork-1",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-history-3",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-numeracy-4",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-teamwork-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-citizenship-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-basic-4",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-basic-5",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-natural-science-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-droid-literacy-2",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-conditioning-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-2B-numeracy-5",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-2B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-numeracy-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-conditioning-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-natural-science-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-basic-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-droid-literacy-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-basic-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-conditioning-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-natural-science-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-numeracy-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-citizenship-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-basic-3",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-teamwork-1",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-citizenship-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-numeracy-3",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-history-1",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-history-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-basic-4",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-natural-science-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-numeracy-4",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-teamwork-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-history-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-conditioning-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-basic-5",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-numeracy-5",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-3A"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3A-droid-literacy-2",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-conditioning-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-history-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-teamwork-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-basic-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-numeracy-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-citizenship-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-natural-science-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-history-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-numeracy-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-basic-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-natural-science-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-basic-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-numeracy-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-conditioning-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-droid-literacy-1",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-basic-4",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-conditioning-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-citizenship-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-teamwork-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-numeracy-4",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-numeracy-5",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-droid-literacy-2",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-natural-science-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-basic-5",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-junior-3B-history-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-3B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-command-law-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-4A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-survival-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-physics-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-conditioning-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-tactical-basics-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-communication-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-4A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-conditioning-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-survival-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-command-law-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-4A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-tactical-basics-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-physics-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-simulation-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-survival-3",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-systems-1",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-conditioning-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-navigation-1",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-emergency-medicine-1",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-communication-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-4A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-simulation-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-navigation-2",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-communication-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-4A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-emergency-medicine-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-systems-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-physics-3",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-tactical-basics-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-systems-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-physics-4",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-navigation-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-simulation-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4A-command-law-3",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-4A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-emergency-medicine-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-simulation-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-tactical-basics-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-command-law-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-4B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-communication-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-4B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-survival-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-conditioning-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-physics-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-communication-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-4B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-survival-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-tactical-basics-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-command-law-2",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-4B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-physics-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-conditioning-2",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-systems-1",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-simulation-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-navigation-1",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-emergency-medicine-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-conditioning-3",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-systems-2",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-physics-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-tactical-basics-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-communication-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-4B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-navigation-2",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-survival-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-navigation-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-command-law-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-4B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-physics-4",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-simulation-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-4B-systems-3",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-navigation-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-conditioning-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-systems-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-tactical-basics-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-physics-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-communication-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-5A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-survival-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-tactical-basics-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-conditioning-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-physics-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-systems-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-simulation-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-emergency-medicine-1",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-command-law-1",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-5A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-communication-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-5A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-systems-3",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-physics-3",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-navigation-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-simulation-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-tactical-basics-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-navigation-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-communication-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-5A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-command-law-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-5A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-survival-2",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-physics-4",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-simulation-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-conditioning-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-command-law-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-5A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-emergency-medicine-2",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5A-survival-3",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-communication-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-5B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-tactical-basics-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-navigation-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-systems-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-emergency-medicine-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-physics-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-systems-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-emergency-medicine-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-survival-1",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-command-law-1",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-5B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-simulation-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-physics-2",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-conditioning-1",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-physics-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-navigation-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-communication-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-5B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-tactical-basics-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-systems-3",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-survival-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-tactical-basics-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-navigation-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-simulation-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-conditioning-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-command-law-2",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-5B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-command-law-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-5B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-communication-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-5B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-survival-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-simulation-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-physics-4",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-5B-conditioning-3",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-systems-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-tactical-basics-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-command-law-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-6A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-physics-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-simulation-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-navigation-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-navigation-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-command-law-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-6A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-survival-1",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-conditioning-1",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-communication-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-6A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-emergency-medicine-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-simulation-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-tactical-basics-2",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-navigation-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-physics-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-conditioning-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-communication-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-6A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-emergency-medicine-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-tactical-basics-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-tactical-3"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-systems-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-physics-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-survival-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-communication-3",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-6A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-simulation-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-command-law-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-6A"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-survival-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-systems-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-conditioning-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6A-physics-4",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-physics-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-tactical-basics-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-tactical-3"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-command-law-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-6B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-conditioning-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-systems-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-navigation-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-simulation-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-survival-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-emergency-medicine-1",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-conditioning-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-navigation-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-communication-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-6B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-communication-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-6B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-navigation-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-physics-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-survival-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-command-law-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-6B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-systems-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-physics-3",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-systems-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-tactical-basics-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-simulation-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-survival-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-conditioning-3",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-tactical-basics-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-physics-4",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-physics-1"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-communication-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-6B"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-simulation-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-emergency-medicine-2",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-intermediate-6B-command-law-3",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-6B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-engineering-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-intelligence-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-briefing-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-7A"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-mission-planning-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-flight-operations-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-leadership-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-combined-operations-1",
+    "periodId": "imperial-period-1-7",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-combined-operations-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-fleet-tactics-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-mission-planning-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-leadership-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-advanced-navigation-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-conditioning-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-combat-medicine-1",
+    "periodId": "imperial-period-2-7",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-engineering-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-leadership-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-mission-planning-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-combat-medicine-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-combined-operations-3",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-flight-operations-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-fleet-tactics-2",
+    "periodId": "imperial-period-3-7",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-combined-operations-4",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-flight-operations-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-conditioning-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-fleet-tactics-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-advanced-navigation-2",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-briefing-2",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-7A"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-intelligence-2",
+    "periodId": "imperial-period-4-7",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-conditioning-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-advanced-navigation-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-mission-planning-4",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-fleet-tactics-4",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-intelligence-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-flight-operations-4",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7A-engineering-3",
+    "periodId": "imperial-period-5-7",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-briefing-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-7B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-advanced-navigation-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-combined-operations-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-engineering-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-leadership-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-mission-planning-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-fleet-tactics-1",
+    "periodId": "imperial-period-1-7",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-mission-planning-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-flight-operations-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-advanced-navigation-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-engineering-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-conditioning-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-combined-operations-2",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-intelligence-1",
+    "periodId": "imperial-period-2-7",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-leadership-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-mission-planning-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-combined-operations-3",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-fleet-tactics-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-intelligence-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-advanced-navigation-3",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-flight-operations-2",
+    "periodId": "imperial-period-3-7",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-fleet-tactics-3",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-flight-operations-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-intelligence-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-briefing-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-7B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-engineering-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-combat-medicine-1",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-conditioning-2",
+    "periodId": "imperial-period-4-7",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-conditioning-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-leadership-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-flight-operations-4",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-combat-medicine-2",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-combined-operations-4",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-fleet-tactics-4",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-7B-mission-planning-4",
+    "periodId": "imperial-period-5-7",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-combined-operations-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-briefing-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-8A"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-intelligence-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-fleet-tactics-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-flight-operations-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-flight-3"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-conditioning-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-advanced-navigation-1",
+    "periodId": "imperial-period-1-7",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-briefing-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-8A"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-mission-planning-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-advanced-navigation-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-engineering-1",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-combat-medicine-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-conditioning-2",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-combined-operations-2",
+    "periodId": "imperial-period-2-7",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-mission-planning-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-combined-operations-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-combat-medicine-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-flight-operations-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-leadership-1",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-fleet-tactics-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-engineering-2",
+    "periodId": "imperial-period-3-7",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-engineering-3",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-flight-operations-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-flight-3"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-conditioning-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-leadership-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-mission-planning-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-fleet-tactics-3",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-intelligence-2",
+    "periodId": "imperial-period-4-7",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-fleet-tactics-4",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-tactical-3"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-leadership-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-intelligence-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-combined-operations-4",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-advanced-navigation-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-mission-planning-4",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8A-flight-operations-4",
+    "periodId": "imperial-period-5-7",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-combined-operations-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-leadership-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-engineering-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-combat-medicine-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-intelligence-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-flight-operations-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-mission-planning-1",
+    "periodId": "imperial-period-1-7",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-fleet-tactics-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-flight-operations-2",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-intelligence-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-mission-planning-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-conditioning-1",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-combined-operations-2",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-combat-medicine-2",
+    "periodId": "imperial-period-2-7",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-advanced-navigation-1",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-fleet-tactics-2",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-engineering-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-flight-operations-3",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-flight-3"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-conditioning-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-mission-planning-3",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-combined-operations-3",
+    "periodId": "imperial-period-3-7",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-advanced-navigation-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-briefing-1",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-8B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-engineering-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-conditioning-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-conditioning-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-fleet-tactics-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-intelligence-3",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-leadership-2",
+    "periodId": "imperial-period-4-7",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-mission-planning-4",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-flight-operations-4",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-briefing-2",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-8B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-combined-operations-4",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-leadership-3",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-fleet-tactics-4",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-8B-advanced-navigation-3",
+    "periodId": "imperial-period-5-7",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-combat-medicine-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-engineering-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-mission-planning-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-intelligence-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-leadership-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-flight-operations-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-combined-operations-1",
+    "periodId": "imperial-period-1-7",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-flight-operations-2",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-briefing-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-9A"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-fleet-tactics-1",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-mission-planning-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-combined-operations-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-advanced-navigation-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-navigation-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-leadership-2",
+    "periodId": "imperial-period-2-7",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-conditioning-1",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-flight-operations-3",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-fleet-tactics-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-engineering-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-advanced-navigation-2",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-combined-operations-3",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-mission-planning-3",
+    "periodId": "imperial-period-3-7",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-engineering-3",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-intelligence-2",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-briefing-2",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-9A"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-conditioning-2",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-fleet-tactics-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-combined-operations-4",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-flight-operations-4",
+    "periodId": "imperial-period-4-7",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-leadership-3",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-intelligence-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-conditioning-3",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-mission-planning-4",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-fleet-tactics-4",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-combat-medicine-2",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9A-advanced-navigation-3",
+    "periodId": "imperial-period-5-7",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-advanced-navigation-1",
+    "periodId": "imperial-period-1-1",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-flight-operations-1",
+    "periodId": "imperial-period-1-2",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-combined-operations-1",
+    "periodId": "imperial-period-1-3",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-leadership-1",
+    "periodId": "imperial-period-1-4",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-fleet-tactics-1",
+    "periodId": "imperial-period-1-5",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-engineering-1",
+    "periodId": "imperial-period-1-6",
+    "roomId": "imperial-room-workshop-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-mission-planning-1",
+    "periodId": "imperial-period-1-7",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-combat-medicine-1",
+    "periodId": "imperial-period-2-1",
+    "roomId": "imperial-room-medical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-conditioning-1",
+    "periodId": "imperial-period-2-2",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-fleet-tactics-2",
+    "periodId": "imperial-period-2-3",
+    "roomId": "imperial-room-tactical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-flight-operations-2",
+    "periodId": "imperial-period-2-4",
+    "roomId": "imperial-room-flight-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-leadership-2",
+    "periodId": "imperial-period-2-5",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-intelligence-1",
+    "periodId": "imperial-period-2-6",
+    "roomId": "imperial-room-intelligence-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-mission-planning-2",
+    "periodId": "imperial-period-2-7",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-engineering-2",
+    "periodId": "imperial-period-3-1",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-intelligence-2",
+    "periodId": "imperial-period-3-2",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-conditioning-2",
+    "periodId": "imperial-period-3-3",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-advanced-navigation-2",
+    "periodId": "imperial-period-3-4",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-mission-planning-3",
+    "periodId": "imperial-period-3-5",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-combined-operations-2",
+    "periodId": "imperial-period-3-6",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-flight-operations-3",
+    "periodId": "imperial-period-3-7",
+    "roomId": "imperial-room-flight-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-combat-medicine-2",
+    "periodId": "imperial-period-4-1",
+    "roomId": "imperial-room-medical-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-advanced-navigation-3",
+    "periodId": "imperial-period-4-2",
+    "roomId": "imperial-room-navigation-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-leadership-3",
+    "periodId": "imperial-period-4-3",
+    "roomId": "imperial-room-field-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-combined-operations-3",
+    "periodId": "imperial-period-4-4",
+    "roomId": "imperial-room-field-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-fleet-tactics-3",
+    "periodId": "imperial-period-4-5",
+    "roomId": "imperial-room-tactical-3"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-intelligence-3",
+    "periodId": "imperial-period-4-6",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-briefing-1",
+    "periodId": "imperial-period-4-7",
+    "roomId": "imperial-room-9B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-briefing-2",
+    "periodId": "imperial-period-5-1",
+    "roomId": "imperial-room-9B"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-conditioning-3",
+    "periodId": "imperial-period-5-2",
+    "roomId": "imperial-room-conditioning-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-fleet-tactics-4",
+    "periodId": "imperial-period-5-3",
+    "roomId": "imperial-room-tactical-1"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-engineering-3",
+    "periodId": "imperial-period-5-4",
+    "roomId": "imperial-room-workshop-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-flight-operations-4",
+    "periodId": "imperial-period-5-5",
+    "roomId": "imperial-room-flight-3"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-mission-planning-4",
+    "periodId": "imperial-period-5-6",
+    "roomId": "imperial-room-intelligence-2"
+  },
+  {
+    "lessonId": "imperial-lesson-senior-9B-combined-operations-4",
+    "periodId": "imperial-period-5-7",
+    "roomId": "imperial-room-field-1"
+  }
+]

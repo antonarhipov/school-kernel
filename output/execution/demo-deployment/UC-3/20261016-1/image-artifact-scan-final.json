@@ -1,0 +1,14 @@
+{
+  "verdict": "PASS",
+  "artifacts": {
+    "/private/tmp/uc3-image-artifacts-hnj402bs/kernel.jar": "0249edc2df31ec38eaffa3a25f414b6290303447ddfd300c3023a93215b60957",
+    "/private/tmp/uc3-image-artifacts-hnj402bs/workspace.jar": "b356adc4adf8393759641439a950d59a9b84ea741883e4c0ad0916d9d9cde173"
+  },
+  "scannedEntries": 23656,
+  "sourceIdentityCount": 54,
+  "namesPoolDistinct": 51,
+  "inverseAndOrdering": "exact for all three",
+  "sourceIdentityMatches": 0,
+  "sourceReferenceOverlap": 0,
+  "packagedExamples": 0
+}

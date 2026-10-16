@@ -1,0 +1,211 @@
+{
+  "buckets": {
+    "edges": []
+  },
+  "deletedAt": null,
+  "environments": {
+    "edges": [
+      {
+        "node": {
+          "canAccess": true,
+          "deletedAt": null,
+          "id": "a41a9c0e-ec3f-4ef4-9e08-996d998d1815",
+          "name": "production",
+          "serviceInstances": {
+            "edges": [
+              {
+                "node": {
+                  "activeDeployments": [
+                    {
+                      "createdAt": "2026-10-16T21:52:17.520Z",
+                      "deploymentStopped": true,
+                      "id": "fe66a8a4-9004-4d01-b229-2e7216d83c5f",
+                      "instances": [
+                        {
+                          "id": "d40c653b-9f11-49ee-a236-113952bf29d4",
+                          "status": "RUNNING"
+                        }
+                      ],
+                      "meta": {
+                        "buildOnly": false,
+                        "cliAgentSessionId": "01a14603-6cac-7c90-a932-3ccf9095e670",
+                        "cliCaller": "codex",
+                        "cliMessage": "Progressive balanced Coruscant Imperial Academy curriculum",
+                        "fileServiceManifest": {},
+                        "imageDigest": "sha256:8698504f77f230139b0ff6a45cfaebb9b30f91c3ce5018d4b9f67460f00a8772",
+                        "logsV2": true,
+                        "nixpacksProviders": [],
+                        "propertyFileMapping": {},
+                        "reason": "deploy",
+                        "rootDirectory": null,
+                        "runtime": "V2",
+                        "serviceManifest": {
+                          "build": {
+                            "buildCommand": null,
+                            "buildEnvironment": "V3",
+                            "builder": "DOCKERFILE",
+                            "dockerfilePath": "deploy/demo/Dockerfile",
+                            "nixpacksConfigPath": null,
+                            "nixpacksPlan": null,
+                            "watchPatterns": []
+                          },
+                          "deploy": {
+                            "cronSchedule": null,
+                            "drainingSeconds": 30,
+                            "healthcheckPath": "/healthz",
+                            "healthcheckTimeout": 180,
+                            "ipv6EgressEnabled": false,
+                            "limitOverride": {
+                              "containers": {
+                                "cpu": 1,
+                                "memoryBytes": 500000000
+                              }
+                            },
+                            "multiRegionConfig": {
+                              "europe-west4-drams3a": {
+                                "numReplicas": 1
+                              }
+                            },
+                            "numReplicas": 1,
+                            "overlapSeconds": 0,
+                            "preDeployCommand": null,
+                            "preDeployTimeoutSeconds": null,
+                            "region": null,
+                            "registryCredentials": null,
+                            "requiredMountPath": null,
+                            "restartPolicyMaxRetries": 1,
+                            "restartPolicyType": "ON_FAILURE",
+                            "runtime": "V2",
+                            "sleepApplication": true,
+                            "startCommand": null,
+                            "useLegacyStacker": false
+                          }
+                        },
+                        "volumeMounts": []
+                      },
+                      "status": "SLEEPING"
+                    }
+                  ],
+                  "autoInstrumentationEnabled": false,
+                  "cronSchedule": null,
+                  "domains": {
+                    "customDomains": [],
+                    "serviceDomains": [
+                      {
+                        "domain": "demo-smoke-production.up.railway.app",
+                        "id": "0e730736-4311-4309-b2a5-a044c2e54433",
+                        "targetPort": 8080
+                      }
+                    ]
+                  },
+                  "environmentId": "a41a9c0e-ec3f-4ef4-9e08-996d998d1815",
+                  "id": "c0c17467-0884-41eb-849d-05c76895e825",
+                  "latestDeployment": {
+                    "canRedeploy": true,
+                    "createdAt": "2026-10-16T21:52:17.520Z",
+                    "deploymentStopped": true,
+                    "id": "fe66a8a4-9004-4d01-b229-2e7216d83c5f",
+                    "instances": [
+                      {
+                        "id": "d40c653b-9f11-49ee-a236-113952bf29d4",
+                        "status": "RUNNING"
+                      }
+                    ],
+                    "meta": {
+                      "buildOnly": false,
+                      "cliAgentSessionId": "01a14603-6cac-7c90-a932-3ccf9095e670",
+                      "cliCaller": "codex",
+                      "cliMessage": "Progressive balanced Coruscant Imperial Academy curriculum",
+                      "fileServiceManifest": {},
+                      "imageDigest": "sha256:8698504f77f230139b0ff6a45cfaebb9b30f91c3ce5018d4b9f67460f00a8772",
+                      "logsV2": true,
+                      "nixpacksProviders": [],
+                      "propertyFileMapping": {},
+                      "reason": "deploy",
+                      "rootDirectory": null,
+                      "runtime": "V2",
+                      "serviceManifest": {
+                        "build": {
+                          "buildCommand": null,
+                          "buildEnvironment": "V3",
+                          "builder": "DOCKERFILE",
+                          "dockerfilePath": "deploy/demo/Dockerfile",
+                          "nixpacksConfigPath": null,
+                          "nixpacksPlan": null,
+                          "watchPatterns": []
+                        },
+                        "deploy": {
+                          "cronSchedule": null,
+                          "drainingSeconds": 30,
+                          "healthcheckPath": "/healthz",
+                          "healthcheckTimeout": 180,
+                          "ipv6EgressEnabled": false,
+                          "limitOverride": {
+                            "containers": {
+                              "cpu": 1,
+                              "memoryBytes": 500000000
+                            }
+                          },
+                          "multiRegionConfig": {
+                            "europe-west4-drams3a": {
+                              "numReplicas": 1
+                            }
+                          },
+                          "numReplicas": 1,
+                          "overlapSeconds": 0,
+                          "preDeployCommand": null,
+                          "preDeployTimeoutSeconds": null,
+                          "region": null,
+                          "registryCredentials": null,
+                          "requiredMountPath": null,
+                          "restartPolicyMaxRetries": 1,
+                          "restartPolicyType": "ON_FAILURE",
+                          "runtime": "V2",
+                          "sleepApplication": true,
+                          "startCommand": null,
+                          "useLegacyStacker": false
+                        }
+                      },
+                      "volumeMounts": []
+                    },
+                    "status": "SLEEPING"
+                  },
+                  "nextCronRunAt": null,
+                  "numReplicas": 1,
+                  "serviceId": "672cabae-b54e-4965-bbb2-5236bec81c33",
+                  "serviceName": "demo-smoke",
+                  "source": {
+                    "image": null,
+                    "repo": null
+                  },
+                  "startCommand": null,
+                  "tracingEnabled": false
+                }
+              }
+            ]
+          },
+          "unmergedChangesCount": null,
+          "volumeInstances": {
+            "edges": []
+          }
+        }
+      }
+    ]
+  },
+  "id": "13d509af-1436-4024-bb64-f9f78fa439fc",
+  "name": "school-kernel-free-smoke",
+  "services": {
+    "edges": [
+      {
+        "node": {
+          "id": "672cabae-b54e-4965-bbb2-5236bec81c33",
+          "name": "demo-smoke"
+        }
+      }
+    ]
+  },
+  "workspace": {
+    "name": "Anton Arhipov's Projects"
+  },
+  "workspaceId": "848d6e6f-edcd-49ce-8d19-273f5c6a2e47"
+}

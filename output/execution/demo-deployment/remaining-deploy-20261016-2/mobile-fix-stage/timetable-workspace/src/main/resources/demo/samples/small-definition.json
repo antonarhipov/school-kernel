@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": 9,
+  "schoolId": "demo-school-001",
+  "displayName": "Small school",
+  "subjects": [
+    {
+      "id": "demo-subject-001",
+      "displayName": "Subject 01"
+    },
+    {
+      "id": "demo-subject-002",
+      "displayName": "Subject 02"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "demo-teacher-001",
+      "displayName": "John Doe",
+      "qualifiedSubjectIds": [
+        "demo-subject-001",
+        "demo-subject-002"
+      ],
+      "undesirablePeriodIds": [
+        "demo-period-003"
+      ]
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "demo-cohort-001",
+      "displayName": "Cohort 01",
+      "size": 24
+    }
+  ],
+  "rooms": [
+    {
+      "id": "demo-room-001",
+      "displayName": "Room 01",
+      "capacity": 30,
+      "capabilityIds": [
+        "demo-capability-001"
+      ]
+    },
+    {
+      "id": "demo-room-002",
+      "displayName": "Room 02",
+      "capacity": 30,
+      "capabilityIds": []
+    }
+  ],
+  "periods": [
+    {
+      "id": "demo-period-001",
+      "displayName": "Monday 1",
+      "weekday": "MONDAY",
+      "order": 1
+    },
+    {
+      "id": "demo-period-002",
+      "displayName": "Monday 2",
+      "weekday": "MONDAY",
+      "order": 2
+    },
+    {
+      "id": "demo-period-003",
+      "displayName": "Monday 3",
+      "weekday": "MONDAY",
+      "order": 3
+    }
+  ],
+  "lessons": [
+    {
+      "id": "demo-lesson-001",
+      "displayName": "Lesson 01",
+      "subjectId": "demo-subject-001",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-001",
+      "seriesId": "demo-series-001",
+      "preferredRoomIds": [
+        "demo-room-002"
+      ]
+    },
+    {
+      "id": "demo-lesson-002",
+      "displayName": "Lesson 02",
+      "subjectId": "demo-subject-002",
+      "cohortId": "demo-cohort-001",
+      "teacherId": "demo-teacher-001",
+      "requiredRoomCapabilityIds": [
+        "demo-capability-001"
+      ],
+      "preferredRoomIds": [
+        "demo-room-001"
+      ]
+    }
+  ],
+  "softConstraintOverrides": [
+    {
+      "constraintId": "soft.teacher-gap",
+      "weight": 2
+    }
+  ]
+}

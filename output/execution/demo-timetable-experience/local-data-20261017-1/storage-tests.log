@@ -1,0 +1,21 @@
+✔ syntax error locations include nested structures, escapes, CRLF, EOF and non-JSON whitespace (0.727291ms)
+✔ exact five-field envelopes preserve text and enforce complete provenance/format (1.698416ms)
+✔ size is inclusive UTF-8 bytes and syntax-valid unfinished objects need no kernel (2.412834ms)
+✔ rows sort newest first, retain corrupt entries and never touch view preferences (6.718959ms)
+✔ in-use binds complete definition, exact saved envelope, source and loaded workspace; imports cannot inherit it (3.831ms)
+✔ draft identities and exact optional values survive independent browser reopen (1.29025ms)
+✔ quota failure preserves last complete durable value and current in-memory draft (0.259875ms)
+✔ another tab cannot be overwritten by a stale browser catalog (0.111166ms)
+✔ corrupt or unsupported storage is retained without overwriting it (0.080375ms)
+✔ atomic version save failure retains the source draft and adds no phantom saved version (0.13675ms)
+✔ cleanup removes current and legacy artifacts including corrupt entries, preserving unrelated values and stale-tab guards (0.186166ms)
+✔ failed cleanup restores the exact raw values and allows retry without clearing unrelated storage (0.14825ms)
+✔ cleanup reports possible partial deletion when the browser also refuses restoration (0.088375ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57.289333

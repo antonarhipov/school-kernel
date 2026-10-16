@@ -1,0 +1,233 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/anton/.sdkman/candidates/maven/current/lib/jansi-2.4.1.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/anton/.sdkman/candidates/maven/current/lib/guava-33.2.0-jre.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] School Kernel Reactor                                              [pom]
+[INFO] School Kernel Public Contract                                      [jar]
+[INFO] School Timetable Operations Workspace                              [jar]
+[INFO] 
+[INFO] ---------------< org.schoolkernel:school-kernel-reactor >---------------
+[INFO] Building School Kernel Reactor 1.0.0-SNAPSHOT                      [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ school-kernel-reactor ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] Rule 1: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] ------------------< org.schoolkernel:kernel-contract >------------------
+[INFO] Building School Kernel Public Contract 1.0.0-SNAPSHOT              [2/3]
+[INFO]   from kernel-contract/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ kernel-contract ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ kernel-contract ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ kernel-contract ---
+[INFO] skip non existing resourceDirectory /private/tmp/definition-hardening-check-lbrm_j5v/kernel-contract/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ kernel-contract ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ kernel-contract ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ kernel-contract ---
+[INFO] 
+[INFO] ----------------< org.schoolkernel:timetable-workspace >----------------
+[INFO] Building School Timetable Operations Workspace 1.0.0-SNAPSHOT      [3/3]
+[INFO]   from timetable-workspace/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.3:enforce (enforce-java-and-maven) @ timetable-workspace ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ timetable-workspace ---
+[INFO] Copying 60 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ timetable-workspace ---
+[INFO] Copying 10 resources from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ timetable-workspace ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.6.0:test (default-test) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.446 s -- in org.schoolkernel.workspace.SafeImportReaderTest
+[INFO] Running org.schoolkernel.workspace.DemoImportLimitsTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 s -- in org.schoolkernel.workspace.DemoImportLimitsTest
+[INFO] Running org.schoolkernel.workspace.DefinitionInputHardeningTest
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+01:14:26.851 [main] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+01:14:26.863 [main] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+01:14:26.867 [main] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 1 ms
+01:14:27.113 [main] INFO org.springframework.mock.web.MockServletContext -- Initializing Spring TestDispatcherServlet ''
+01:14:27.118 [main] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Initializing Servlet ''
+01:14:27.119 [main] INFO org.springframework.test.web.servlet.TestDispatcherServlet -- Completed initialization in 0 ms
+01:14:27.210 [main] ERROR org.schoolkernel.workspace.ProblemHandler -- Unexpected request failure correlationId=875e24d6-e899-4681-8cb9-e3fe52bec390 exceptionType=java.lang.IllegalStateException
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.996 s -- in org.schoolkernel.workspace.DefinitionInputHardeningTest
+[INFO] Running org.schoolkernel.workspace.KernelVerifierTest
+01:14:27.766 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=4f912dc8-f737-4e12-9d6a-95774249f0d6 kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=15
+01:14:27.794 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=321fe9d3-823d-4d93-8ba5-8a6fb0365059 kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=4
+01:14:27.819 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=e540b0ae-6e4b-4054-b26f-aa22d5d5c3bb kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=4
+01:14:27.832 [virtual-57] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=cd115fac-e87d-447f-8d83-7e4b837b07f6 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=1
+01:14:27.847 [main] INFO org.schoolkernel.workspace.KernelVerifier -- correlationId=35d19841-97c6-4b44-bada-ead306ff64df kernelCommand=verify exitClass=INVALID_INPUT elapsedTimeMs=4
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.134 s -- in org.schoolkernel.workspace.KernelVerifierTest
+[INFO] Running org.schoolkernel.workspace.DemoSessionTest
+01:14:27.933 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+01:14:28.566 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+01:14:28.886 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.schoolkernel.workspace.DemoSessionTest]: DemoSessionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+01:14:28.929 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.schoolkernel.workspace.WorkspaceApplication for test class org.schoolkernel.workspace.DemoSessionTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-17T01:14:29.684+03:00  INFO 22781 --- [           main] o.s.workspace.DemoSessionTest            : Starting DemoSessionTest using Java 25.0.1 with PID 22781 (started by anton in /private/tmp/definition-hardening-check-lbrm_j5v/timetable-workspace)
+2026-10-17T01:14:29.689+03:00  INFO 22781 --- [           main] o.s.workspace.DemoSessionTest            : The following 1 profile is active: "demo"
+2026-10-17T01:14:33.477+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=6281ece2-829b-475b-b081-8e3b934919d0 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1704
+2026-10-17T01:14:35.188+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=00b6ae19-143c-47d8-93e8-8169e8a17cb6 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1701
+2026-10-17T01:14:37.262+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=887b6a55-3683-4493-a554-26d7acae034f kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2046
+2026-10-17T01:14:39.385+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=17c31b1c-6f75-4b82-a4a0-d013a159e28c kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2096
+2026-10-17T01:14:41.471+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=3d506def-107c-4548-9bc1-16fababe8b08 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2061
+2026-10-17T01:14:43.513+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=74c88a94-4a6c-43cd-9ee1-c380fa7310dc kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2020
+2026-10-17T01:14:45.575+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=da70909d-88ff-4350-8f2a-c5e7e787525b kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2033
+2026-10-17T01:14:47.758+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=6886f1da-ed07-4722-b270-f919cdd4c923 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=2171
+2026-10-17T01:14:48.561+03:00  INFO 22781 --- [           main] o.s.workspace.DemoSessionTest            : Started DemoSessionTest in 19.517 seconds (process running for 26.548)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T22:14:48.572727Z","kernelBuild":"441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"4h","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"solveSlots":1,"standaloneVerificationSlots":2,"processBounds":{"solveMaximum":"preset + solve-overhead","solveReservationExtraSeconds":8,"standaloneVerificationReservationExtraSeconds":4,"verificationShutdownWaitSeconds":10,"terminationSoftWaitSeconds":2,"reservationRelease":"AFTER_REAP"},"counterReset":"69e3c165-a5ed-482d-bb3e-00d74e31c37f","utcAllowanceDay":"2026-10-16","sampleVerification":{"two-class":"VERIFIED","full":"VERIFIED","star-wars":"VERIFIED","english":"VERIFIED"}}
+2026-10-17T01:14:48.614+03:00  INFO 22781 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:14:48.615+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:14:48.616+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T22:14:48.639481Z","count":1,"reason":"CREATED"}
+2026-10-17T01:14:48.685+03:00  INFO 22781 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:14:48.685+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:14:48.686+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T22:14:48.724384Z","count":1,"reason":"CREATED"}
+2026-10-17T01:14:48.746+03:00  INFO 22781 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:14:48.747+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:14:48.749+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-17T01:14:48.760+03:00  INFO 22781 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-17T01:14:48.760+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-17T01:14:48.761+03:00  INFO 22781 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T22:14:48.762688Z","count":1,"reason":"CREATED"}
+{"family":"session","event":"created","timestamp":"2026-10-16T22:14:48.766153Z","count":1,"reason":"CREATED"}
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 20.93 s -- in org.schoolkernel.workspace.DemoSessionTest
+[INFO] Running org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in org.schoolkernel.workspace.DefinitionPreferenceTest
+[INFO] Running org.schoolkernel.workspace.DemoAcceptanceTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.479 s -- in org.schoolkernel.workspace.DemoAcceptanceTest
+[INFO] Running org.schoolkernel.workspace.DemoOriginBoundaryTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in org.schoolkernel.workspace.DemoOriginBoundaryTest
+[INFO] Running org.schoolkernel.workspace.DemoWorkspaceStoreTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s -- in org.schoolkernel.workspace.DemoWorkspaceStoreTest
+[INFO] Running org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.035 s -- in org.schoolkernel.workspace.SeededRepairServiceTest
+[INFO] Running org.schoolkernel.workspace.DemoEventsTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.374 s -- in org.schoolkernel.workspace.DemoEventsTest
+[INFO] Running org.schoolkernel.workspace.ArchitectureTest
+2026-10-17T01:14:49.760+03:00  INFO 22781 --- [           main] com.tngtech.archunit.core.PluginLoader   : Detected Java version 25.0.1
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.418 s -- in org.schoolkernel.workspace.ArchitectureTest
+[INFO] Running org.schoolkernel.workspace.KernelPlannerTest
+2026-10-17T01:14:56.232+03:00  INFO 22781 --- [onPool-worker-1] o.schoolkernel.workspace.KernelPlanner   : correlationId=37f78454-039e-45c4-89e2-1234192b79ef runId=586808a9-815b-4efe-92fe-43a4ba7c3f95 kernelCommand=plan exitClass=CANCELLED elapsedTimeMs=2025 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.307+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=6b726f5a-ccfe-4d2b-9a32-e318b8f44c26 runId=b7634ca6-670c-4e09-bf43-a90ae4284874 kernelCommand=plan exitClass=INVALID_INPUT elapsedTimeMs=32 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.314+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=78693d1f-2fe7-4042-b824-19dd59ee4d52 runId=35de4f65-9f70-4452-bf88-8ccf7ddd7a46 kernelCommand=plan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=3 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false
+2026-10-17T01:14:56.316+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=fadaf7d1-e88c-4abb-bf4d-af995d0fcdea runId=c886d0ae-6f7e-490e-b5c2-765836baa3a2 kernelCommand=plan exitClass=INTERNAL_ERROR elapsedTimeMs=1 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.318+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=c471812b-4ce0-43cf-80ea-6f244f643d09 runId=0c2b168d-07a6-474a-91d5-f93f5fbbb497 kernelCommand=plan exitClass=TRANSPORT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.324+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=25d1c8c4-4068-4db3-9d00-2cb607b0686f runId=e0eeb2ca-1d12-4a50-bbfc-9299279f2861 kernelCommand=plan exitClass=TIMEOUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.327+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=2cc86a6a-735e-4641-951a-8345eaea12a3 runId=a45d9bed-5260-4120-a610-2fba22a18bfc kernelCommand=plan exitClass=INTERRUPTED elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.329+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=be0fb682-406a-4494-8b12-28dc5106e554 runId=1f452104-5148-4f10-9925-3dfbdbf3b3ef kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=0 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.333+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=0988e801-4b82-47cc-8658-6f6ff6620530 runId=fd8946d3-72b1-48c8-a15b-9230bb45ab86 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=2 configuredLimit=PT1M terminationReason=NONE feasible=false
+2026-10-17T01:14:56.353+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=56c86936-347f-4ef6-85dc-229b5ea79d13 runId=9b8b1731-ba22-48a8-8bb3-f8a16b9455ac kernelCommand=replan exitClass=FEASIBLE elapsedTimeMs=14 configuredLimit=PT2M terminationReason=TIME_LIMIT feasible=true additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-17T01:14:56.360+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=f47c0ceb-cb62-471b-a0a6-b7093430d6f4 runId=869df061-1966-4db6-b35d-65570042c1de kernelCommand=replan exitClass=NO_FEASIBLE_SOLUTION_FOUND elapsedTimeMs=4 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=false additions=0 cancellations=0 teacherChanges=0 forcedMoves=0 periodMoves=0 roomOnlyMoves=0
+2026-10-17T01:14:56.397+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=4a03a281-a51c-40ca-a831-3e758a2f316a runId=ce049848-d418-4892-bac5-2babae6d4dfe kernelCommand=plan exitClass=FEASIBLE elapsedTimeMs=27 configuredLimit=PT1M terminationReason=TIME_LIMIT feasible=true
+2026-10-17T01:14:56.419+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelPlanner   : correlationId=f04c1c38-0636-4cbd-b60f-9264b8ef2a14 runId=88d92453-7cc8-497e-a639-b1a9f16797f4 kernelCommand=plan exitClass=REJECTED_OUTPUT elapsedTimeMs=18 configuredLimit=PT1M terminationReason=NONE feasible=false
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.240 s -- in org.schoolkernel.workspace.KernelPlannerTest
+[INFO] Running org.schoolkernel.workspace.DemoSamplesTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.971 s -- in org.schoolkernel.workspace.DemoSamplesTest
+[INFO] Running org.schoolkernel.workspace.DemoVerificationLifecycleTest
+2026-10-17T01:14:58.509+03:00  INFO 22781 --- [pool-3-thread-2] o.schoolkernel.workspace.KernelVerifier  : correlationId=034ced1f-1635-446b-82a1-d949b1740748 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=28
+2026-10-17T01:14:58.509+03:00  INFO 22781 --- [pool-3-thread-1] o.schoolkernel.workspace.KernelVerifier  : correlationId=14630ad3-5957-4450-b583-f93824c49cb1 kernelCommand=verify exitClass=INTERRUPTED elapsedTimeMs=28
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.141 s -- in org.schoolkernel.workspace.DemoVerificationLifecycleTest
+[INFO] Running org.schoolkernel.workspace.DemoCustomDefinitionTest
+2026-10-17T01:14:58.983+03:00  INFO 22781 --- [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=ad356c60-fd4b-4c60-8ebc-a48338f1c2ec kernelCommand=verify exitClass=TRANSPORT elapsedTimeMs=111
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.449 s -- in org.schoolkernel.workspace.DemoCustomDefinitionTest
+[INFO] Running org.schoolkernel.workspace.DemoRailwayIngressTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 s -- in org.schoolkernel.workspace.DemoRailwayIngressTest
+[INFO] Running org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in org.schoolkernel.workspace.ManifestServiceTest
+[INFO] Running org.schoolkernel.workspace.DemoPlanningTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.000 s -- in org.schoolkernel.workspace.DemoPlanningTest
+[INFO] Running org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 s -- in org.schoolkernel.workspace.ProposalReviewServiceTest
+[INFO] Running org.schoolkernel.workspace.DemoKernelRunnerTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.427 s -- in org.schoolkernel.workspace.DemoKernelRunnerTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 86, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.1:jar (default-jar) @ timetable-workspace ---
+[INFO] Building jar: /private/tmp/definition-hardening-check-lbrm_j5v/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (default) @ timetable-workspace ---
+[INFO] Replacing main artifact /private/tmp/definition-hardening-check-lbrm_j5v/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /private/tmp/definition-hardening-check-lbrm_j5v/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.6.0:integration-test (default) @ timetable-workspace ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.schoolkernel.workspace.DefinitionInputHardeningBrowserIT
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 166.5 s -- in org.schoolkernel.workspace.DefinitionInputHardeningBrowserIT
+[INFO] Running org.schoolkernel.workspace.DemoTimetableBrowserIT
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 334.8 s -- in org.schoolkernel.workspace.DemoTimetableBrowserIT
+[INFO] Running org.schoolkernel.workspace.DemoLocalDataBrowserIT
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 113.5 s -- in org.schoolkernel.workspace.DemoLocalDataBrowserIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.6.0:verify (default) @ timetable-workspace ---
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for School Kernel Reactor 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] School Kernel Reactor .............................. SUCCESS [  0.596 s]
+[INFO] School Kernel Public Contract ...................... SUCCESS [  1.714 s]
+[INFO] School Timetable Operations Workspace .............. SUCCESS [11:01 min]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  11:04 min
+[INFO] Finished at: 2026-10-17T01:25:22+03:00
+[INFO] ------------------------------------------------------------------------

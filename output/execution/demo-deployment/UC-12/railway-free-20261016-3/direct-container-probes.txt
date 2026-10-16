@@ -1,0 +1,39 @@
+HTTP/1.1 200 
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
+Referrer-Policy: same-origin
+Content-Type: application/json
+Content-Length: 15
+Date: Fri, 16 Oct 2026 11:36:49 GMT
+Connection: close
+
+{"status":"UP"}HTTP/1.1 403 
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
+Referrer-Policy: same-origin
+Content-Type: application/json;charset=UTF-8
+Content-Length: 191
+Date: Fri, 16 Oct 2026 11:36:49 GMT
+Connection: close
+
+{"code":"PUBLIC_REQUEST_DENIED","message":"This demo request does not match the configured HTTPS origin.","correlationId":"728c6c5a-d283-4443-9446-8cc078b930d3","state":"UNKNOWN","etag":null}HTTP/1.1 403 
+Cache-Control: no-store
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
+Referrer-Policy: same-origin
+Content-Type: application/json;charset=UTF-8
+Content-Length: 191
+Date: Fri, 16 Oct 2026 11:36:49 GMT
+Connection: close
+
+{"code":"PUBLIC_REQUEST_DENIED","message":"This demo request does not match the configured HTTPS origin.","correlationId":"2d7c5a65-1560-400c-9dd2-1a7b75d82178","state":"UNKNOWN","etag":null}

@@ -1,0 +1,7 @@
+{
+  "verdict": "PASS",
+  "uc2": "output/playwright/demo-deployment/UC-2/uc4-regression-20261016-2/ledger.md",
+  "uc3": "output/playwright/demo-deployment/UC-3/uc4-regression-20261016-1/ledger.md",
+  "runtimeIssue": "First UC2 attempt invalidated by overlapping rebuild replacing running JAR; fixed to copy once per runtime and rerun fully.",
+  "sourceHashesMatch": true
+}

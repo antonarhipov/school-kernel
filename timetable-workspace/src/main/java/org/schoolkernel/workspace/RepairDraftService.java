@@ -26,12 +26,11 @@ public class RepairDraftService {
     private static final Set<String> DIMENSIONS = Set.of("PERIOD", "ROOM");
     private static final Set<String> BULK_SCOPES = Set.of("DAY", "CLASS", "UNAFFECTED");
 
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final WorkspaceMutation mutation;
     private final ObjectMapper json;
-    private volatile long failedAutosaveVersion = -1;
 
-    public RepairDraftService(WorkspaceRepository repository, WorkspaceMutation mutation, ObjectMapper json) {
+    public RepairDraftService(WorkspaceStore repository, WorkspaceMutation mutation, ObjectMapper json) {
         this.repository = repository;
         this.mutation = mutation;
         this.json = json;
@@ -52,7 +51,7 @@ public class RepairDraftService {
         refreshSavedDraft(document);
         WorkspaceAggregate started = mutation.replaceRepair(expectedVersion, WorkspaceState.ACCEPTED_BASELINE,
                 WorkspaceState.REPAIR_DRAFT, document);
-        failedAutosaveVersion = -1;
+        repository.recordRepairSaveFailure(-1);
         return started;
     }
 
@@ -67,6 +66,15 @@ public class RepairDraftService {
         String action = requiredText(request, "action");
         switch (action) {
             case "STAGE_UNAVAILABILITY" -> stageAvailability(intent, request, effectiveDefinition(current));
+            case "REMOVE_UNAVAILABILITY" -> {
+                String type = requiredEnum(request, "resourceType", RESOURCE_TYPES);
+                String id = requiredText(request, "resourceId");
+                ArrayNode changes = (ArrayNode) intent.path("changes");
+                for (int i = changes.size() - 1; i >= 0; i--) {
+                    JsonNode change = changes.get(i);
+                    if (type.equals(change.path("resourceType").asString()) && id.equals(change.path("resourceId").asString())) changes.remove(i);
+                }
+            }
             case "PIN" -> { requireSeedPin(current,request); applyIndividualPin(intent, request, acceptedAssignments(current)); }
             case "UNPIN" -> removeIndividualPin(intent, request);
             case "CONFIRM_BULK_PIN" -> confirmBulk(intent, request.path("preview"), current);
@@ -78,10 +86,10 @@ public class RepairDraftService {
         try {
             WorkspaceAggregate saved = mutation.replaceRepair(expectedVersion, WorkspaceState.REPAIR_DRAFT,
                     WorkspaceState.REPAIR_DRAFT, document);
-            failedAutosaveVersion = -1;
+            repository.recordRepairSaveFailure(-1);
             return saved;
         } catch (RuntimeException failure) {
-            failedAutosaveVersion = expectedVersion;
+            repository.recordRepairSaveFailure(expectedVersion);
             throw failure;
         }
     }
@@ -89,7 +97,7 @@ public class RepairDraftService {
     public MinimalUpdate updateMinimalPin(String ifMatch, JsonNode request) {
         String requestedLessonId = request.path("lessonId").isTextual()
                 ? request.path("lessonId").stringValue() : "";
-        WorkspaceRepository.RepairPinContext current = repository.loadRepairPinContext(requestedLessonId);
+        WorkspaceStore.RepairPinContext current = repository.loadRepairPinContext(requestedLessonId);
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current.version());
         if (current.state() != WorkspaceState.REPAIR_DRAFT) {
             throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
@@ -113,10 +121,10 @@ public class RepairDraftService {
         refreshPin(draft, lessonId, current.assignment(), current.lesson(), current.manifestLock());
         try {
             long version = mutation.replaceRepairDraft(expectedVersion, draft);
-            failedAutosaveVersion = -1;
+            repository.recordRepairSaveFailure(-1);
             return new MinimalUpdate(draft, version);
         } catch (RuntimeException failure) {
-            failedAutosaveVersion = expectedVersion;
+            repository.recordRepairSaveFailure(expectedVersion);
             throw failure;
         }
     }
@@ -198,7 +206,7 @@ public class RepairDraftService {
         document.set("definitionDraft", current.document().path("repairDraft").path("retainedAuthoring").deepCopy());
         WorkspaceAggregate restored = mutation.replaceRepair(version, WorkspaceState.REPAIR_DRAFT,
                 WorkspaceState.DEFINITION_DRAFT, document);
-        failedAutosaveVersion = -1;
+        repository.recordRepairSaveFailure(-1);
         return restored;
     }
 
@@ -314,7 +322,7 @@ public class RepairDraftService {
     }
 
     boolean hasUnsavedBrowserState(long durableVersion) {
-        return failedAutosaveVersion == durableVersion;
+        return repository.repairSaveFailed(durableVersion);
     }
 
     private void stageAvailability(ObjectNode intent, JsonNode request, JsonNode definition) {

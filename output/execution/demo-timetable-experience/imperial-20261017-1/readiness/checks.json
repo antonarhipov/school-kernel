@@ -1,0 +1,42 @@
+[
+  {
+    "case": "old-build",
+    "exit": 1,
+    "ready": false,
+    "log": "old-build.log",
+    "verdict": "PASS"
+  },
+  {
+    "case": "stale-score",
+    "exit": 1,
+    "ready": false,
+    "log": "stale-score.log",
+    "verdict": "PASS"
+  },
+  {
+    "case": "invalid-pair",
+    "exit": 1,
+    "ready": false,
+    "log": "invalid-pair.log",
+    "verdict": "PASS"
+  },
+  {
+    "case": "english-invalid-pair",
+    "exit": 1,
+    "ready": false,
+    "log": "english-invalid-pair.log",
+    "verdict": "PASS"
+  },
+  {
+    "case": "imperial-invalid-pair",
+    "exit": 1,
+    "ready": false,
+    "log": "imperial-invalid-pair.log",
+    "verdict": "PASS"
+  },
+  {
+    "case": "stale-score-maintenance",
+    "exit": 1,
+    "verdict": "PASS"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "verdict": "PASS",
+  "productionInputs": 162,
+  "exactPackagedResources": 49,
+  "startingFilesMissing": 0,
+  "changedStartingFiles": 29,
+  "addedFiles": 24,
+  "notUploaded": true
+}

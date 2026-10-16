@@ -5,10 +5,11 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@org.springframework.context.annotation.Profile("!demo")
 public class WorkspaceRecovery {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
 
-    public WorkspaceRecovery(WorkspaceRepository repository) {
+    public WorkspaceRecovery(WorkspaceStore repository) {
         this.repository = repository;
     }
 

@@ -1,0 +1,461 @@
+--- start/timetable-workspace/src/main/resources/static/workspace/demo-panel.js
++++ uc4/timetable-workspace/src/main/resources/static/workspace/demo-panel.js
+@@ -1,10 +1,10 @@
+-const prefix = 'school-kernel.definition.v1.';
+-const maxBytes = 2 * 1024 * 1024;
+-const validId = /^[a-z0-9][a-z0-9-]{0,39}$/;
++import { prefix, useKey, maxBytes, bytes, validIdentifier, syntaxFeedback, validateText, readEnvelope, savedRows, deleteVersions, savedVersionInUse, rememberDefinitionUse } from './demo-definitions.js';
+ let panel, selection, editor, feedback, use, changed, entries = [], selected = 'full', storedText = '', origin;
+-let api, current, preview, inUse, useHint, loading = false, using = false, selectionRequest = 0;
+-const bytes = text => new TextEncoder().encode(text).length;
+-const dirty = () => editor.value !== storedText;
++let api, current, preview, inUse, useHint, loading = false, using = false, selectionRequest = 0, fileRequest = 0, markRequest = 0, sourceRaw = null, stale = false, rows = [];
++let sourceDescription = '';
++const normalized = text => text.replace(/\r\n?/g, '\n');
++const dirty = () => editor.value !== normalized(storedText);
++const exactText = () => dirty() ? editor.value : storedText;
+ const message = text => { feedback.textContent = text; };
+ 
+ export async function mountDemoPanel(actions, config) {
+@@ -14,16 +14,16 @@
+   banner.innerHTML = `<strong>Temporary public demo · export accepted timetables to keep them.</strong>
+     <p>Workspaces expire after ${Number(config.idleMinutes)} minutes without activity or ${Number(config.absoluteHours)} hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.</p>
+     <details><summary>Privacy and storage</summary><p>Your workspace is held in memory. Private temporary kernel files are cleaned up. Complete identical inputs, results and successful verification may remain in a shared memory cache for up to one hour after computation, independently of your session, subject to eviction; a restart clears them.</p>
+-    <p>Saved definitions stay on this origin, browser and device until removed or evicted. Other users of a shared browser can read them. Download is the durable copy.</p>
++    <p>Saved definitions stay on this origin, browser and device until removed or evicted. Other users of a shared browser can read them. Download is the durable copy. Site-data clearing, browser eviction, or private-window closure can remove browser versions.</p>
+     <p>Railway edge logs include IP address, user agent and URL and cannot be disabled or redacted. Hobby viewing lasts seven days; provider staff report 90-day underlying storage, deletion afterward, in US West even for EU services.</p>
+     <p>Only the necessary application session cookie is used; application logs exclude school data. Do not submit personal data you are not permitted to share. Keep documents and personal details out of URLs.</p></details>`;
+   panel = document.createElement('section'); panel.id = 'demo-definition-panel'; panel.className = 'card';
+   panel.innerHTML = `<h2>School definition</h2><label>Choose a definition<select id="demo-definition"></select></label>
+     <p id="demo-sample-preview"></p><p id="demo-in-use" role="status"></p><label>Definition JSON<textarea id="demo-json" spellcheck="false" rows="10"></textarea></label>
+-    <p id="demo-edit-status" role="status"></p><div class="actions"><button id="demo-use">Use this sample</button>
++    <p id="demo-edit-status" role="status"></p><p id="demo-storage-status" role="status"></p><button id="demo-refresh-version" class="secondary" hidden>Reload saved version</button><ul id="demo-unreadable"></ul><div class="actions"><button id="demo-use">Use this sample</button>
+     <button id="demo-save" class="secondary">Save as</button><button id="demo-revert" class="secondary">Revert changes</button>
+     <button id="demo-download" class="secondary">Download JSON</button><button id="demo-delete" class="secondary">Delete saved version</button>
+-    <button id="demo-delete-all" class="secondary" title="Deletes only definitions saved for this site in this browser. Bundled samples and your active workspace are kept. The JSON editor resets to the Full sample preview.">Delete all definitions saved in this browser</button></div>
++    <button id="demo-delete-all" class="secondary" title="Deletes only definitions saved for this site in this browser. Bundled samples and your active workspace are kept. The JSON editor text is retained.">Delete all definitions saved in this browser</button></div>
+     <label>Open a definition file<input id="demo-file" type="file" accept="application/json,.json"></label>
+     <p id="demo-use-hint" role="status"></p><button id="demo-reload" class="secondary" hidden>Reload current workspace</button><p>Browser versions have no cross-device sync. Download a copy to keep it.</p><p id="demo-feedback" role="status"></p>`;
+   const main = document.querySelector('main'); main.prepend(panel); main.prepend(banner);
+@@ -49,38 +49,35 @@
+   panel.querySelector('#demo-save').addEventListener('click', save);
+   panel.querySelector('#demo-revert').addEventListener('click', () => {
+     if (dirty() && !confirm('Discard the unsaved text and restore the exact stored definition?')) return;
+-    editor.value = storedText; update();
++    editor.value = storedText; update(); message('Exact opened text restored.');
+   });
+   panel.querySelector('#demo-download').addEventListener('click', () => {
+-    const url = URL.createObjectURL(new Blob([editor.value], { type: 'application/json' }));
++    const url = URL.createObjectURL(new Blob([exactText()], { type: 'application/json' }));
+     const link = document.createElement('a'); link.href = url; link.download = `${selected || 'definition'}.json`; link.click();
+     setTimeout(() => URL.revokeObjectURL(url), 1000);
+   });
+-  panel.querySelector('#demo-delete').addEventListener('click', async () => {
+-    if (entries.some(entry => entry.identifier === selected)) return;
+-    if (!confirm(`Delete saved version "${selected}"?`)) return;
+-    try { localStorage.removeItem(prefix + selected); refreshList(); await select('full', false); }
+-    catch { message('Browser storage could not be changed. Your text remains available to download.'); }
+-  });
+-  panel.querySelector('#demo-delete-all').addEventListener('click', async () => {
+-    if (!confirm('Delete all definitions saved for this site in this browser? Bundled samples and your active workspace will be kept. The JSON editor will reset to the Full sample preview; any unsaved text will be discarded.')) return;
+-    try {
+-      for (const key of Object.keys(localStorage).filter(key => key.startsWith(prefix))) localStorage.removeItem(key);
+-      refreshList(); await select('full', false);
+-    } catch { message('Browser storage could not be changed. Your text remains available to download.'); }
+-  });
++  panel.querySelector('#demo-delete').addEventListener('click', () => removeSaved([selected]));
++  panel.querySelector('#demo-delete-all').addEventListener('click', () => {
++    try { removeSaved(savedRows(localStorage).map(row => row.id), true); }
++    catch { message('Browser storage could not be read. Your text remains available to download.'); }
++  });
++  panel.querySelector('#demo-refresh-version').addEventListener('click', () => select(selected));
+   panel.querySelector('#demo-file').addEventListener('change', async event => {
+-    const file = event.target.files[0]; if (!file) return;
++    const file = event.target.files[0]; event.target.value = ''; if (!file) return;
++    const request = ++fileRequest;
+     if (file.size > maxBytes) { message('The definition must be at most 2 MiB UTF-8.'); return; }
+     try {
+-      const text = await file.text();
++      const text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(await file.arrayBuffer());
++      if (request !== fileRequest) return;
+       if (bytes(text) > maxBytes) throw new Error('The definition must be at most 2 MiB UTF-8.');
+       if (dirty() && !confirm('Discard the unsaved definition text and open this file?')) return;
+-      selected = ''; origin = { kind: 'file' }; storedText = ''; editor.disabled = false; editor.value = text;
+-      selection.value = ''; preview.textContent = 'Opened file · save a browser version before use.';
++      ++selectionRequest; loading = false;
++      selected = ''; origin = { kind: 'file' }; storedText = text; sourceRaw = null; stale = false;
++      editor.value = text; selection.value = '';
++      sourceDescription = 'Opened file · save a browser version before use.'; preview.textContent = sourceDescription;
+       panel.dataset.fileSuggestion = file.name.replace(/\.json$/i, '').toLowerCase().replace(/[^a-z0-9-]/g, '-').slice(0, 40);
+-      update();
+-    } catch (error) { message(error.message || 'This file could not be read.'); }
++      update(); message('Opened locally. Save a browser version before use.');
++    } catch (error) { message(`${error.message || 'This file could not be read.'} Previous selection and text were retained.`); }
+   });
+   use.addEventListener('click', async () => {
+     if (using || loading || dirty() || current?.state?.startsWith('SOLVING_') || !entries.some(entry => entry.identifier === selected)) return;
+@@ -93,7 +90,11 @@
+       if (!confirmed) return;
+     }
+     using = true; update();
+-    try { await api.useSample(selected, confirmed); message('The accepted sample is in use. No search was started.'); }
++    try {
++      const loaded = await api.useSample(selected, confirmed);
++      try { await rememberDefinitionUse(localStorage, selected, loaded); } catch { /* actual server sample origin still identifies Current */ }
++      message('The accepted sample is in use. No search was started.');
++    }
+     catch (error) {
+       message(`${error.message} The sample was not opened. Reload current workspace to check or retry.`);
+       panel.querySelector('#demo-reload').hidden = false;
+@@ -101,22 +102,9 @@
+     finally { using = false; update(); }
+   });
+   window.addEventListener('storage', event => {
+-    if (event.key !== null && !event.key.startsWith(prefix)) return;
++    if (event.key !== null && event.key !== useKey && !event.key.startsWith(prefix)) return;
+     refreshList(); update();
+   });
+-}
+-
+-function envelope(id) {
+-  const value = JSON.parse(localStorage.getItem(prefix + id));
+-  const fields = ['formatVersion', 'identifier', 'savedAt', 'derivedFrom', 'documentText'];
+-  if (!value || Object.keys(value).sort().join() !== fields.sort().join()
+-      || value.formatVersion !== 1 || value.identifier !== id || !validId.test(id)
+-      || entries.some(entry => entry.identifier === id) || typeof value.documentText !== 'string'
+-      || bytes(value.documentText) > maxBytes || !Number.isFinite(Date.parse(value.savedAt))
+-      || !value.derivedFrom || !['sample', 'saved', 'file'].includes(value.derivedFrom.kind)) throw new Error('Unreadable saved version');
+-  const parsed = JSON.parse(value.documentText);
+-  if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') throw new Error('Unreadable saved version');
+-  return value;
+ }
+ 
+ function refreshList() {
+@@ -126,25 +114,54 @@
+     const option = document.createElement('option'); option.value = entry.identifier; option.textContent = entry.title; samples.append(option);
+   }
+   const saved = document.createElement('optgroup'); saved.label = 'Saved in this browser';
+-  try {
+-    const rows = Object.keys(localStorage).filter(key => key.startsWith(prefix)).map(key => {
+-      const id = key.slice(prefix.length); try { return { id, value: envelope(id) }; } catch { return { id }; }
+-    }).sort((left, right) => (right.value?.savedAt || '').localeCompare(left.value?.savedAt || '') || left.id.localeCompare(right.id));
++  const unreadable = panel.querySelector('#demo-unreadable'); unreadable.replaceChildren();
++  try {
++    rows = savedRows(localStorage);
+     for (const row of rows) {
+       const option = document.createElement('option'); option.value = row.id;
+-      option.textContent = row.value ? `${row.id} · ${row.value.savedAt}` : `${row.id} · unreadable`; saved.append(option);
+-    }
+-  } catch { message('Browser storage is unavailable. Your text can still be downloaded.'); }
+-  selection.append(samples, saved); selection.value = selected;
++      option.textContent = row.value ? `${row.id} · ${row.value.savedAt}` : `${row.id} · unreadable`;
++      option.disabled = !row.value; saved.append(option);
++      if (!row.value) {
++        const item = document.createElement('li'), button = document.createElement('button');
++        item.append(document.createTextNode(`${row.id} · unreadable. `));
++        button.textContent = `Delete unreadable version "${row.id}"`; button.className = 'secondary';
++        button.addEventListener('click', () => removeSaved([row.id])); item.append(button); unreadable.append(item);
++      }
++    }
++    if (selected && origin?.kind === 'saved') stale = localStorage.getItem(prefix + selected) !== sourceRaw;
++  } catch { message('Browser storage is unavailable. Your text can still be downloaded; deleting older versions may free space.'); }
++  selection.append(samples, saved);
++  if (selected && !Array.from(selection.options).some(option => option.value === selected)) {
++    const retained = document.createElement('option'); retained.value = selected; retained.textContent = `${selected} · removed elsewhere (text retained)`;
++    retained.disabled = true; saved.append(retained);
++  }
++  selection.value = selected;
++}
++
++function removeSaved(ids, all = false) {
++  if (!ids.length) return;
++  const warning = dirty() ? ' The unsaved editor text will be retained.' : '';
++  if (!confirm(all
++    ? `Delete all definitions saved for this site in this browser? Bundled samples and your active workspace will be kept. The editor text will be retained.`
++    : `Delete saved version "${ids[0]}"?${warning} Your active workspace is kept.`)) return;
++  try {
++    deleteVersions(localStorage, ids);
++    // Deletion never discards open text, including edits or a version removed from another tab.
++    if (origin?.kind === 'saved' && ids.includes(selected)) { selected = ''; sourceRaw = null; stale = false;
++      storedText = ''; sourceDescription = 'Deleted browser version · editor text retained; save or download to keep it.';
++      preview.textContent = sourceDescription; }
++    refreshList(); update(); message('Deleted from this browser. Your workspace and editor text were retained.');
++  } catch { refreshList(); update(); message('Browser storage could not be changed. Your text remains available to download.'); }
+ }
+ 
+ async function select(id, check = true) {
+-  if (check && dirty() && !confirm('Discard the unsaved definition text?')) return;
++  if (check && (dirty() || stale) && !confirm('Discard the unsaved definition text?')) return;
++  ++fileRequest;
+   const request = ++selectionRequest;
+   loading = true; update(); message('');
+   const sample = entries.find(entry => entry.identifier === id);
+   try {
+-    let text, nextOrigin, description;
++    let text, nextOrigin, description, raw = null;
+     if (sample) {
+       const response = await fetch(`/api/samples/${encodeURIComponent(id)}`);
+       if (!response.ok) throw new Error('This sample could not be read.');
+@@ -154,12 +171,12 @@
+       const seconds = sample.lessons > api.lessonThreshold ? api.thoroughSeconds : api.quickSeconds;
+       description = `${sample.description} ${sample.lessons} lessons · ${sample.cohorts} classes · ${sample.teachers} teachers · ${sample.rooms} rooms · ${sample.periods} periods. ${effort} search (${seconds} seconds) is the default for a later solve. Selection only previews.`;
+     } else {
+-      const value = envelope(id); text = value.documentText; nextOrigin = { kind: 'saved', identifier: id };
++      const value = readEnvelope(localStorage, id); raw = localStorage.getItem(prefix + id); text = value.documentText; nextOrigin = { kind: 'saved', identifier: id };
+       description = `Saved ${value.savedAt} · derived from ${value.derivedFrom.kind}${value.derivedFrom.identifier ? ` ${value.derivedFrom.identifier}` : ''}.`;
+     }
+     if (request !== selectionRequest) return;
+-    selected = id; selection.value = id; storedText = text; origin = nextOrigin;
+-    preview.textContent = description; editor.disabled = false; editor.value = storedText;
++    selected = id; selection.value = id; storedText = text; origin = nextOrigin; sourceRaw = raw; stale = false;
++    sourceDescription = description; preview.textContent = description; editor.disabled = false; editor.value = storedText;
+   } catch (error) {
+     if (request !== selectionRequest) return;
+     selection.value = selected;
+@@ -173,49 +190,62 @@
+   if (!editor) return;
+   const isSample = entries.some(entry => entry.identifier === selected);
+   changed.textContent = dirty() ? 'Changed, not saved' : 'Unchanged';
+-  if (dirty()) {
+-    try { JSON.parse(editor.value); }
+-    catch (error) { changed.textContent += ` · ${error.message}`; }
+-  }
++  const syntax = syntaxFeedback(editor.value);
++  if (syntax) changed.textContent += ` · ${syntax}`;
++  panel.querySelector('#demo-storage-status').textContent = stale ? 'This saved version changed or was removed in another tab. Your open text is retained. Reload it explicitly or Save as to keep your text.' : '';
++  panel.querySelector('#demo-refresh-version').hidden = !stale || !rows.some(row => row.id === selected && row.value);
+   const running = current?.state?.startsWith('SOLVING_');
+   const narrow = window.matchMedia('(max-width: 700px)').matches;
+   editor.readOnly = narrow;
+   use.textContent = isSample ? 'Use this sample' : 'Use this definition';
+   // Custom use is implemented by the initial-definition UC; preserving a local version does not validate it.
+   selection.disabled = using; editor.disabled = using || loading;
+-  use.disabled = loading || using || dirty() || editor.disabled || running || current?.state === 'SESSION_ENDED' || !isSample;
+-  use.title = loading ? 'Loading sample preview.' : using ? 'Opening the selected sample.' : running ? 'Wait for or cancel the active run first.' : dirty() ? 'Save or revert the changed text first.' : !isSample ? 'This local version is available to edit and download.' : '';
++  use.disabled = loading || using || dirty() || stale || editor.disabled || running || current?.state === 'SESSION_ENDED' || !isSample;
++  use.title = loading ? 'Loading sample preview.' : using ? 'Opening the selected sample.' : running ? 'Wait for or cancel the active run first.' : stale ? 'Reload the saved version or Save as first.' : dirty() ? 'Save or revert the changed text first.' : !isSample ? 'This local version is available to edit and download.' : '';
+   useHint.textContent = use.title;
+-  const active = current?.workspace?.importMode === 'PACKAGED_SAMPLE' && current?.acceptedTimetable ? current.workspace.origin : null;
+-  for (const option of selection.querySelectorAll('optgroup:first-child option')) {
+-    const entry = entries.find(entry => entry.identifier === option.value);
+-    option.textContent = entry.title + (entry.identifier === active ? ' · In use' : '');
+-  }
+-  inUse.textContent = active ? `${entries.find(entry => entry.identifier === active)?.title || active} · In use as Current` : '';
++  updateInUse();
+   panel.querySelector('#demo-delete').disabled = isSample || !selected;
+   panel.querySelector('#demo-revert').disabled = !dirty();
+   panel.querySelector('#demo-save').disabled = editor.disabled || narrow;
+-  panel.querySelector('#demo-file').disabled = narrow;
++  panel.querySelector('#demo-file').disabled = narrow || using;
++  panel.querySelector('#demo-download').disabled = loading;
++  panel.querySelector('#demo-delete-all').disabled = using || !rows.length;
+   if (narrow) changed.textContent += ' · Definition editing requires a wider view.';
+ }
+ 
++async function updateInUse() {
++  const request = ++markRequest, snapshot = current;
++  let active = snapshot?.workspace?.importMode === 'PACKAGED_SAMPLE' && snapshot?.acceptedTimetable ? snapshot.workspace.origin : null;
++  if (!active) {
++    try { active = await savedVersionInUse(localStorage, snapshot); } catch { /* missing/corrupt/unavailable mark is never authority */ }
++  }
++  if (request !== markRequest) return;
++  for (const option of selection.options) {
++    const entry = option.parentElement.label === 'Sample schools' ? entries.find(entry => entry.identifier === option.value) : null, row = rows.find(row => row.id === option.value);
++    if (entry) option.textContent = entry.title + (entry.identifier === active ? ' · In use' : '');
++    else if (row?.value) option.textContent = `${row.id} · ${row.value.savedAt}${row.id === active ? ' · In use' : ''}`;
++  }
++  inUse.textContent = active ? `${entries.find(entry => entry.identifier === active)?.title || active} · In use${snapshot.acceptedTimetable ? ' as Current' : ' as initial draft'}`
++    : snapshot?.acceptedTimetable ? `Current origin: ${snapshot.workspace.importMode === 'REPAIR_ACCEPTANCE' ? 'accepted repair' : snapshot.workspace.importMode === 'MANUAL_EDIT_PUBLICATION' ? 'manual changes' : snapshot.workspace.importMode === 'ACCEPTED_BASELINE' ? 'imported bundle' : 'custom definition'}.` : '';
++}
++
+ async function save() {
+-  let parsed;
+-  try { parsed = JSON.parse(editor.value); }
+-  catch (error) { message(`Save refused: ${error.message}`); return; }
+-  if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') { message('Save requires a JSON object.'); return; }
+-  if (bytes(editor.value) > maxBytes) { message('Save requires at most 2 MiB UTF-8.'); return; }
++  try { validateText(exactText()); } catch (error) { message(`Save refused: ${error.message}`); return; }
+   const isSample = entries.some(entry => entry.identifier === selected);
+   const id = prompt('Identifier for the version saved in this browser', isSample ? `${selected}-1` : selected || panel.dataset.fileSuggestion || 'my-school');
+   if (id === null) return;
+-  if (!validId.test(id) || entries.some(entry => entry.identifier === id)) { message('Use 1–40 lowercase letters, numbers or hyphens, starting with a letter or number. Sample identifiers are reserved.'); return; }
+-  try {
+-    if (localStorage.getItem(prefix + id) !== null && !confirm(`Replace saved version "${id}"?`)) return;
+-    const value = { formatVersion: 1, identifier: id, savedAt: new Date().toISOString(), derivedFrom: origin, documentText: editor.value };
+-    localStorage.setItem(prefix + id, JSON.stringify(value));
+-    storedText = editor.value; selected = id; origin = { kind: 'saved', identifier: id };
++  if (!validIdentifier(id)) { message('Use 1–40 lowercase letters, numbers or hyphens, starting with a letter or number. Sample identifiers are reserved.'); return; }
++  try {
++    const previous = localStorage.getItem(prefix + id);
++    if (previous !== null && !confirm(`Replace saved version "${id}"?`)) return;
++    const value = { formatVersion: 1, identifier: id, savedAt: new Date().toISOString(), derivedFrom: origin, documentText: exactText() };
++    // setItem is atomic: a quota/security failure retains the existing complete value.
++    const raw = JSON.stringify(value); localStorage.setItem(prefix + id, raw);
++    storedText = value.documentText; selected = id; origin = { kind: 'saved', identifier: id }; sourceRaw = raw; stale = false;
++    sourceDescription = `Saved ${value.savedAt} · derived from ${value.derivedFrom.kind}${value.derivedFrom.identifier ? ` ${value.derivedFrom.identifier}` : ''}.`;
++    preview.textContent = sourceDescription;
+     refreshList(); update(); message('Saved in this browser. Download is the durable copy; saving does not check kernel validity.');
+-  } catch { message('Browser storage is unavailable or full. Your edited text is retained. Download it or delete older versions.'); }
++  } catch { message('Browser storage is unavailable or full. Nothing was saved. Your edited text is retained. Download it or delete older versions.'); }
+ }
+ 
+ export function updateDemoPanel(snapshot) { current = snapshot; update(); }
+--- start/timetable-workspace/src/main/resources/static/workspace/app.js
++++ uc4/timetable-workspace/src/main/resources/static/workspace/app.js
+@@ -86,6 +86,7 @@
+       etag = response.headers.get('ETag'); inspectionState = null; preferenceSchoolId = null;
+       render(body); syncInspectionState(inspectionState.resetFilters().state);
+       syncInspectionState(inspectionState.selectRange('WEEK').state); render(body); stateCard.scrollIntoView({ block: 'start' });
++      return body;
+     } }, config);
+     demoMounted = true;
+   }
+--- /dev/null
++++ uc4/timetable-workspace/src/main/resources/static/workspace/demo-definitions.js
+@@ -0,0 +1,146 @@
++export const prefix = 'school-kernel.definition.v1.';
++export const useKey = 'school-kernel.definition-use.v1';
++export const maxBytes = 2 * 1024 * 1024;
++export const bytes = text => new TextEncoder().encode(text).length;
++export const validIdentifier = id => typeof id === 'string' && /^[a-z0-9][a-z0-9-]{0,39}$/.test(id)
++  && !['small', 'two-class', 'full'].includes(id);
++const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
++const fields = (value, names) => object(value) && Object.keys(value).sort().join() === [...names].sort().join();
++
++// JSON.parse remains the syntax authority. The scanner only locates the first error consistently across engines.
++export function syntaxFeedback(text) {
++  try { JSON.parse(text); return ''; } catch { /* locate below */ }
++  let i = 0, error = null;
++  const stack = ['root'];
++  const fail = () => { error = i; };
++  const string = () => {
++    i++;
++    while (i < text.length) {
++      const c = text[i++];
++      if (c === '"') return;
++      if (c.charCodeAt(0) < 32) { i--; return fail(); }
++      if (c === '\\') {
++        if (i === text.length) return fail();
++        const escape = text[i++];
++        if (escape === 'u') {
++          for (let n = 0; n < 4; n++, i++) if (!/[0-9a-f]/i.test(text[i] || '')) return fail();
++        } else if (!'"\\/bfnrt'.includes(escape)) { i--; return fail(); }
++      }
++    }
++    fail();
++  };
++  while (stack.length && error === null) {
++    while (/[\x20\t\r\n]/.test(text[i] || '\0')) i++;
++    const state = stack.pop(), c = text[i];
++    if (state === 'end') { if (i !== text.length) fail(); }
++    else if (state === 'colon') { if (c !== ':') fail(); else i++; }
++    else if (state === 'key' || state === 'keyOrEnd') {
++      if (c === '}' && state === 'keyOrEnd') i++;
++      else if (c !== '"') fail();
++      else { string(); stack.push('objectNext', 'value', 'colon'); }
++    } else if (state === 'objectNext' || state === 'arrayNext') {
++      const end = state === 'objectNext' ? '}' : ']';
++      if (c === end) i++;
++      else if (c !== ',') fail();
++      else { i++; stack.push(state === 'objectNext' ? 'key' : 'arrayValue'); }
++    } else {
++      if (state === 'root') stack.push('end');
++      if (c === ']' && state === 'arrayFirst') { i++; continue; }
++      if (state === 'arrayFirst' || state === 'arrayValue') stack.push('arrayNext');
++      if (c === '{') { i++; stack.push('keyOrEnd'); }
++      else if (c === '[') { i++; stack.push('arrayFirst'); }
++      else if (c === '"') string();
++      else if (c === '-' || /[0-9]/.test(c || '')) {
++        if (text[i] === '-') i++;
++        if (text[i] === '0') i++;
++        else if (/[1-9]/.test(text[i] || '')) { while (/[0-9]/.test(text[i] || '')) i++; }
++        else fail();
++        if (error === null && text[i] === '.') {
++          i++; if (!/[0-9]/.test(text[i] || '')) fail();
++          while (/[0-9]/.test(text[i] || '')) i++;
++        }
++        if (error === null && /[eE]/.test(text[i] || '')) {
++          i++; if (/[+-]/.test(text[i] || '')) i++;
++          if (!/[0-9]/.test(text[i] || '')) fail();
++          while (/[0-9]/.test(text[i] || '')) i++;
++        }
++      } else {
++        const literal = ['true', 'false', 'null'].find(word => word[0] === c);
++        if (!literal) fail();
++        else for (const letter of literal) { if (text[i] !== letter) { fail(); break; } i++; }
++      }
++    }
++  }
++  const position = error ?? i;
++  const before = text.slice(0, position).split('\n');
++  return `JSON syntax error at line ${before.length}, column ${before.at(-1).length + 1}.`;
++}
++
++export function validateText(text) {
++  if (bytes(text) > maxBytes) throw new Error('Use at most 2 MiB UTF-8.');
++  const syntax = syntaxFeedback(text);
++  if (syntax) throw new Error(syntax);
++  if (!object(JSON.parse(text))) throw new Error('Save requires a JSON object.');
++}
++
++export function readEnvelope(storage, id) {
++  const value = JSON.parse(storage.getItem(prefix + id));
++  if (!validIdentifier(id) || !fields(value, ['formatVersion', 'identifier', 'savedAt', 'derivedFrom', 'documentText'])
++      || value.formatVersion !== 1 || value.identifier !== id || typeof value.documentText !== 'string'
++      || typeof value.savedAt !== 'string' || !/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$/.test(value.savedAt)
++      || !Number.isFinite(Date.parse(value.savedAt)) || new Date(value.savedAt).toISOString() !== value.savedAt)
++    throw new Error('Unreadable saved version.');
++  const source = value.derivedFrom;
++  if (!object(source) || (source.kind === 'file' ? !fields(source, ['kind'])
++      : !fields(source, ['kind', 'identifier']) || (source.kind === 'sample'
++        ? !['small', 'two-class', 'full'].includes(source.identifier)
++        : source.kind !== 'saved' || !validIdentifier(source.identifier)))) throw new Error('Unreadable saved origin.');
++  validateText(value.documentText);
++  return value;
++}
++
++export function savedRows(storage) {
++  return Object.keys(storage).filter(key => key.startsWith(prefix)).map(key => {
++    const id = key.slice(prefix.length);
++    try { return { id, value: readEnvelope(storage, id) }; } catch { return { id }; }
++  }).sort((a, b) => (b.value?.savedAt || '').localeCompare(a.value?.savedAt || '') || a.id.localeCompare(b.id));
++}
++
++// Browser Storage writes/removals are synchronous. Restore prior entries if a multi-key removal fails.
++export function deleteVersions(storage, ids) {
++  const previous = ids.map(id => [prefix + id, storage.getItem(prefix + id)]);
++  try { for (const [key] of previous) storage.removeItem(key); }
++  catch (error) {
++    for (const [key, value] of previous) if (value !== null && storage.getItem(key) !== value) storage.setItem(key, value);
++    throw error;
++  }
++}
++
++const canonical = value => Array.isArray(value) ? value.map(canonical) : object(value)
++  ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
++const digest = async text => Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))))
++  .map(byte => byte.toString(16).padStart(2, '0')).join('');
++const definition = snapshot => snapshot?.workspace?.acceptedBaseline?.definition || snapshot?.workspace?.initialDefinition;
++
++// Called only after successful use, with the returned real snapshot. UC-5 consumes the saved-version branch.
++export async function rememberDefinitionUse(storage, identifier, snapshot) {
++  const sample = ['small', 'two-class', 'full'].includes(identifier), loaded = definition(snapshot);
++  const saved = sample ? null : readEnvelope(storage, identifier);
++  if (!loaded || (sample ? snapshot.workspace.importMode !== 'PACKAGED_SAMPLE' || snapshot.workspace.origin !== identifier
++      : JSON.stringify(canonical(JSON.parse(saved.documentText))) !== JSON.stringify(canonical(loaded))))
++    throw new Error('The loaded definition does not match this version.');
++  const mark = { kind: sample ? 'sample' : 'saved', identifier,
++    envelope: sample ? null : await digest(JSON.stringify(saved)), definition: await digest(JSON.stringify(canonical(loaded))) };
++  storage.setItem(useKey, JSON.stringify(mark));
++}
++
++export async function savedVersionInUse(storage, snapshot) {
++  const mark = JSON.parse(storage.getItem(useKey));
++  // Accepted file imports never inherit a browser label, even when their definition is identical.
++  if (!mark || !['PACKAGED_SAMPLE', 'INITIAL_DEFINITION', 'INITIAL_ACCEPTANCE', 'MANUAL_EDIT_PUBLICATION', 'REPAIR_ACCEPTANCE'].includes(snapshot?.workspace?.importMode)
++      || !definition(snapshot) || mark.definition !== await digest(JSON.stringify(canonical(definition(snapshot))))) return null;
++  if (mark.kind === 'sample') return ['small', 'two-class', 'full'].includes(mark.identifier) ? mark.identifier : null;
++  if (mark.kind !== 'saved') return null;
++  const saved = readEnvelope(storage, mark.identifier);
++  return mark.envelope === await digest(JSON.stringify(saved)) ? mark.identifier : null;
++}

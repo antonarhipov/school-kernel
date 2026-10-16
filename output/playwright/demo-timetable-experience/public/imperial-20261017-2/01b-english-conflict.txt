@@ -1,0 +1,2445 @@
+SCHOOL KERNEL
+Interactive demo
+School
+Ranniku õppehoone
+Kasevälja Põhikool
+Coruscant Imperial Academy
+Meadowbrook Community School
+Timetable
+Variant A
+Variant B · unsaved changes
+Utilities
+Variant B
+
+Meadowbrook Community School · 22 classes · 614 lessons per week
+
+Week
+Day
+Day
+Whole week
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Classes
+All classes
+Year 1A
+Year 1B
+Year 2A
+Year 2B
+Year 3A
+Year 3B
+Year 4A
+Year 4B
+Year 5A
+Year 5B
+Year 6A
+Year 6B
+Year 6C
+Year 7A
+Year 7B
+Year 7C
+Year 8A
+Year 8B
+Year 8C
+Year 9A
+Year 9B
+Year 9C
+Teachers
+All teachers
+Alice Whitcombe
+Oliver Fenwick
+Amelia Hartwell
+George Ashcroft
+Isla Brookfield
+Harry Westcott
+Grace Ellerton
+Jack Wrenford
+Sophie Alderwick
+Thomas Fairbourne
+Freya Henshaw
+William Oakley
+Lily Bracken
+James Merrivale
+Florence Wycliffe
+Henry Calder
+Evie Northwood
+Arthur Bellamy
+Charlotte Winslow
+Oscar Redfern
+Matilda Fallow
+Leo Penrose
+Emily Thorne
+Archie Ashwell
+Poppy Langford
+Samuel Briar
+Imogen Marchwood
+Daniel Ridley
+Rosie Whitford
+Edward Beckett
+Lucy Hartley
+Joseph Waverley
+Eleanor Foxley
+Benjamin Cresswell
+Daisy Rowan
+Frederick Dale
+Hannah Elmhurst
+Alexander Hawthorne
+Clara Woodleigh
+Nathan Everley
+Martha Greenwell
+Rooms
+All rooms
+Classroom 111
+Classroom 112
+Classroom 121
+Classroom 122
+Classroom 131
+Classroom 132
+Classroom 141
+Classroom 142
+Classroom 151
+Classroom 152
+Classroom 161
+Classroom 162
+Classroom 163
+Classroom 171
+Classroom 172
+Classroom 173
+Classroom 181
+Classroom 182
+Classroom 183
+Classroom 191
+Classroom 192
+Classroom 193
+Science Laboratory 1
+Science Laboratory 2
+Science Laboratory 3
+Sports Hall 1
+Sports Hall 2
+Art Studio 1
+Art Studio 2
+Music Room 1
+Music Room 2
+Computer Suite 1
+Computer Suite 2
+Design Workshop 1
+Design Workshop 2
+Subjects
+All subjects
+English
+Mathematics
+Science
+History
+Geography
+French
+Spanish
+Physical Education
+Art and Design
+Music
+Computing
+Design and Technology
+Personal, Social and Health Education
+Time slots
+All time slots
+Monday · 1. 08:45–09:35
+Monday · 2. 09:40–10:30
+Monday · 3. 10:50–11:40
+Monday · 4. 11:45–12:35
+Monday · 5. 13:20–14:10
+Monday · 6. 14:15–15:05
+Tuesday · 1. 08:45–09:35
+Tuesday · 2. 09:40–10:30
+Tuesday · 3. 10:50–11:40
+Tuesday · 4. 11:45–12:35
+Tuesday · 5. 13:20–14:10
+Tuesday · 6. 14:15–15:05
+Wednesday · 1. 08:45–09:35
+Wednesday · 2. 09:40–10:30
+Wednesday · 3. 10:50–11:40
+Wednesday · 4. 11:45–12:35
+Wednesday · 5. 13:20–14:10
+Wednesday · 6. 14:15–15:05
+Thursday · 1. 08:45–09:35
+Thursday · 2. 09:40–10:30
+Thursday · 3. 10:50–11:40
+Thursday · 4. 11:45–12:35
+Thursday · 5. 13:20–14:10
+Thursday · 6. 14:15–15:05
+Friday · 1. 08:45–09:35
+Friday · 2. 09:40–10:30
+Friday · 3. 10:50–11:40
+Friday · 4. 11:45–12:35
+Friday · 5. 13:20–14:10
+Friday · 6. 14:15–15:05
+Highlight lessons
+Clear filters
+Must fix
+
+Save is blocked until these mandatory rules pass.
+
+Teacher double-booked
+
+These lessons use the same teacher at the same time. Choose another qualified teacher or move one lesson to a free time slot.
+
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Class double-booked
+
+This class has more than one lesson at the same time. Move one of the lessons to a free time slot.
+
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Room double-booked
+
+These lessons use the same room at the same time. Choose another suitable room or move one lesson.
+
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Gap in the class day
+
+This class has too many empty periods between lessons. Move a lesson into a gap or move an edge lesson to shorten the day. Empty periods: Thursday · 4 (11:45–12:35).
+
+Year 1A · English · Alice Whitcombe · Classroom 111 · Thursday · 3. 10:50–11:40
+Year 1A · History · Alice Whitcombe · Classroom 111 · Thursday · 2. 09:40–10:30
+Year 1A · Mathematics · Alice Whitcombe · Classroom 111 · Thursday · 5. 13:20–14:10
+Year 1A · Personal, Social and Health Education · Alice Whitcombe · Classroom 111 · Thursday · 1. 08:45–09:35
+Too many lessons of one subject today
+
+This class exceeds the daily subject limit. Move one of these subject lessons to another weekday.
+
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Class days are too uneven
+
+The difference between this class’s longest and shortest days is too large. Move an appropriate lesson from a longer day to a shorter day.
+
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Year 1A · Art and Design · Benjamin Cresswell · Art Studio 1 · Friday · 1. 08:45–09:35
+Year 1A · English · Alice Whitcombe · Classroom 111 · Thursday · 3. 10:50–11:40
+Year 1A · English · Alice Whitcombe · Classroom 111 · Friday · 2. 09:40–10:30
+Year 1A · English · Alice Whitcombe · Classroom 111 · Friday · 3. 10:50–11:40
+Year 1A · History · Alice Whitcombe · Classroom 111 · Thursday · 2. 09:40–10:30
+Year 1A · Mathematics · Alice Whitcombe · Classroom 111 · Thursday · 5. 13:20–14:10
+Year 1A · Mathematics · Alice Whitcombe · Classroom 111 · Friday · 5. 13:20–14:10
+Year 1A · Personal, Social and Health Education · Alice Whitcombe · Classroom 111 · Thursday · 1. 08:45–09:35
+Year 1A · Personal, Social and Health Education · Alice Whitcombe · Classroom 111 · Friday · 4. 11:45–12:35
+Could be improved · 4 preferences
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+Year 1A	108:45–09:35	
+Geography
+Classroom 111
+	
+Mathematics
+Classroom 111
+	
+Design and Technology
+Design Workshop 1
+	
+Must fix
+Personal, Social and Health Education
+Classroom 111
+	
+Must fix
+Art and Design
+Art Studio 1
+Must fix
+Art and Design
+Art Studio 1
+
+209:40–10:30	
+English
+Classroom 111
+	
+Science
+Classroom 111
+	
+Mathematics
+Classroom 111
+	
+Must fix
+History
+Classroom 111
+	
+Must fix
+English
+Classroom 111
+
+310:50–11:40	
+Physical Education
+Sports Hall 1
+	
+Physical Education
+Sports Hall 1
+	
+Music
+Music Room 1
+	
+Must fix
+English
+Classroom 111
+	
+Must fix
+English
+Classroom 111
+
+411:45–12:35	
+Mathematics
+Classroom 111
+	
+English
+Classroom 111
+	
+Science
+Classroom 111
+	
+—
+	
+Must fix
+Personal, Social and Health Education
+Classroom 111
+
+513:20–14:10	
+English
+Classroom 111
+	
+Computing
+Computer Suite 1
+	
+English
+Classroom 111
+	
+Must fix
+Mathematics
+Classroom 111
+	
+Must fix
+Mathematics
+Classroom 111
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 1B	108:45–09:35	
+History
+Classroom 112
+	
+Mathematics
+Classroom 112
+	
+English
+Classroom 112
+	
+Design and Technology
+Design Workshop 1
+	
+Science
+Classroom 112
+
+209:40–10:30	
+Mathematics
+Classroom 112
+	
+Geography
+Classroom 112
+	
+Physical Education
+Sports Hall 1
+	
+Physical Education
+Sports Hall 1
+	
+English
+Classroom 112
+
+310:50–11:40	
+Music
+Music Room 1
+	
+English
+Classroom 112
+	
+Mathematics
+Classroom 112
+	
+Mathematics
+Classroom 112
+	
+Personal, Social and Health Education
+Classroom 112
+
+411:45–12:35	
+English
+Classroom 112
+	
+Personal, Social and Health Education
+Classroom 112
+	
+Art and Design
+Art Studio 1
+	
+English
+Classroom 112
+	
+English
+Classroom 112
+
+513:20–14:10	
+Computing
+Computer Suite 1
+	
+Science
+Classroom 112
+	
+English
+Classroom 112
+	
+Art and Design
+Art Studio 1
+	
+Mathematics
+Classroom 112
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 2A	108:45–09:35	
+English
+Classroom 121
+	
+Personal, Social and Health Education
+Classroom 121
+	
+Mathematics
+Classroom 121
+	
+Art and Design
+Art Studio 1
+	
+English
+Classroom 121
+
+209:40–10:30	
+Design and Technology
+Design Workshop 1
+	
+English
+Classroom 121
+	
+Personal, Social and Health Education
+Classroom 121
+	
+English
+Classroom 121
+	
+Geography
+Classroom 121
+
+310:50–11:40	
+Science
+Classroom 121
+	
+Mathematics
+Classroom 121
+	
+English
+Classroom 121
+	
+Mathematics
+Classroom 121
+	
+Computing
+Computer Suite 1
+
+411:45–12:35	
+Art and Design
+Art Studio 1
+	
+Physical Education
+Sports Hall 1
+	
+Music
+Music Room 1
+	
+History
+Classroom 121
+	
+Physical Education
+Sports Hall 1
+
+513:20–14:10	
+Mathematics
+Classroom 121
+	
+English
+Classroom 121
+	
+Science
+Classroom 121
+	
+English
+Classroom 121
+	
+Mathematics
+Classroom 121
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 2B	108:45–09:35	
+Science
+Classroom 122
+	
+Mathematics
+Classroom 122
+	
+English
+Classroom 122
+	
+Science
+Classroom 122
+	
+Music
+Music Room 1
+
+209:40–10:30	
+Mathematics
+Classroom 122
+	
+Personal, Social and Health Education
+Classroom 122
+	
+Design and Technology
+Design Workshop 1
+	
+Physical Education
+Sports Hall 2
+	
+Mathematics
+Classroom 122
+
+310:50–11:40	
+English
+Classroom 122
+	
+Art and Design
+Art Studio 1
+	
+Mathematics
+Classroom 122
+	
+Mathematics
+Classroom 122
+	
+English
+Classroom 122
+
+411:45–12:35	
+Personal, Social and Health Education
+Classroom 122
+	
+Geography
+Classroom 122
+	
+English
+Classroom 122
+	
+English
+Classroom 122
+	
+English
+Classroom 122
+
+513:20–14:10	
+Art and Design
+Art Studio 1
+	
+Physical Education
+Sports Hall 1
+	
+History
+Classroom 122
+	
+English
+Classroom 122
+	
+Computing
+Computer Suite 1
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 3A	108:45–09:35	
+Art and Design
+Art Studio 1
+	
+Music
+Music Room 1
+	
+English
+Classroom 131
+	
+History
+Classroom 131
+	
+English
+Classroom 131
+
+209:40–10:30	
+Mathematics
+Classroom 131
+	
+Mathematics
+Classroom 131
+	
+Geography
+Classroom 131
+	
+Science
+Classroom 131
+	
+Computing
+Computer Suite 1
+
+310:50–11:40	
+Personal, Social and Health Education
+Classroom 131
+	
+English
+Classroom 131
+	
+Art and Design
+Art Studio 1
+	
+Mathematics
+Classroom 131
+	
+English
+Classroom 131
+
+411:45–12:35	
+Science
+Classroom 131
+	
+English
+Classroom 131
+	
+Mathematics
+Classroom 131
+	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 131
+
+513:20–14:10	
+English
+Classroom 131
+	
+Personal, Social and Health Education
+Classroom 131
+	
+Physical Education
+Sports Hall 1
+	
+English
+Classroom 131
+	
+Physical Education
+Sports Hall 1
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 3B	108:45–09:35	
+Music
+Music Room 1
+	
+English
+Classroom 132
+	
+English
+Classroom 132
+	
+Art and Design
+Art Studio 2
+	
+Science
+Classroom 132
+
+209:40–10:30	
+Personal, Social and Health Education
+Classroom 132
+	
+History
+Classroom 132
+	
+Art and Design
+Art Studio 1
+	
+Mathematics
+Classroom 132
+	
+Design and Technology
+Design Workshop 1
+
+310:50–11:40	
+Mathematics
+Classroom 132
+	
+Mathematics
+Classroom 132
+	
+Physical Education
+Sports Hall 1
+	
+Science
+Classroom 132
+	
+Computing
+Computer Suite 2
+
+411:45–12:35	
+Physical Education
+Sports Hall 1
+	
+English
+Classroom 132
+	
+Mathematics
+Classroom 132
+	
+English
+Classroom 132
+	
+Mathematics
+Classroom 132
+
+513:20–14:10	
+English
+Classroom 132
+	
+Geography
+Classroom 132
+	
+English
+Classroom 132
+	
+English
+Classroom 132
+	
+Personal, Social and Health Education
+Classroom 132
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 4A	108:45–09:35	
+Music
+Music Room 2
+	
+English
+Classroom 141
+	
+Science
+Classroom 141
+	
+English
+Classroom 141
+	
+Design and Technology
+Design Workshop 1
+
+209:40–10:30	
+Mathematics
+Classroom 141
+	
+Mathematics
+Classroom 141
+	
+Personal, Social and Health Education
+Classroom 141
+	
+Personal, Social and Health Education
+Classroom 141
+	
+Mathematics
+Classroom 141
+
+310:50–11:40	
+English
+Classroom 141
+	
+Art and Design
+Art Studio 2
+	
+English
+Classroom 141
+	
+Science
+Classroom 141
+	
+English
+Classroom 141
+
+411:45–12:35	
+History
+Classroom 141
+	
+Geography
+Classroom 141
+	
+Computing
+Computer Suite 1
+	
+Mathematics
+Classroom 141
+	
+Art and Design
+Art Studio 1
+
+513:20–14:10	
+Physical Education
+Sports Hall 1
+	
+Physical Education
+Sports Hall 2
+	
+Mathematics
+Classroom 141
+	
+English
+Classroom 141
+	
+English
+Classroom 141
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 4B	108:45–09:35	
+History
+Classroom 142
+	
+English
+Classroom 142
+	
+Personal, Social and Health Education
+Classroom 142
+	
+English
+Classroom 142
+	
+English
+Classroom 142
+
+209:40–10:30	
+Computing
+Computer Suite 1
+	
+Art and Design
+Art Studio 2
+	
+Mathematics
+Classroom 142
+	
+Science
+Classroom 142
+	
+Science
+Classroom 142
+
+310:50–11:40	
+Art and Design
+Art Studio 1
+	
+Geography
+Classroom 142
+	
+Physical Education
+Sports Hall 2
+	
+Mathematics
+Classroom 142
+	
+Physical Education
+Sports Hall 1
+
+411:45–12:35	
+English
+Classroom 142
+	
+Mathematics
+Classroom 142
+	
+English
+Classroom 142
+	
+Design and Technology
+Design Workshop 2
+	
+Mathematics
+Classroom 142
+
+513:20–14:10	
+Mathematics
+Classroom 142
+	
+Personal, Social and Health Education
+Classroom 142
+	
+English
+Classroom 142
+	
+Music
+Music Room 1
+	
+English
+Classroom 142
+
+614:15–15:05	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+Year 5A	108:45–09:35	
+Science
+Science Laboratory 1
+	
+Science
+Science Laboratory 1
+	
+English
+Classroom 151
+	
+English
+Classroom 151
+	
+Physical Education
+Sports Hall 1
+
+209:40–10:30	
+History
+Classroom 151
+	
+Geography
+Classroom 151
+	
+Art and Design
+Art Studio 2
+	
+English
+Classroom 151
+	
+Mathematics
+Classroom 151
+
+310:50–11:40	
+Mathematics
+Classroom 151
+	
+English
+Classroom 151
+	
+Computing
+Computer Suite 1
+	
+French
+Classroom 151
+	
+English
+Classroom 151
+
+411:45–12:35	
+Geography
+Classroom 151
+	
+History
+Classroom 151
+	
+Science
+Science Laboratory 1
+	
+Personal, Social and Health Education
+Classroom 151
+	
+English
+Classroom 151
+
+513:20–14:10	
+Physical Education
+Sports Hall 2
+	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 151
+	
+Music
+Music Room 2
+	
+French
+Classroom 151
+
+614:15–15:05	
+—
+	
+Mathematics
+Classroom 151
+	
+—
+	
+Mathematics
+Classroom 151
+	
+—
+
+Year 5B	108:45–09:35	
+Spanish
+Classroom 152
+	
+Physical Education
+Sports Hall 1
+	
+Geography
+Classroom 152
+	
+English
+Classroom 152
+	
+Spanish
+Classroom 152
+
+209:40–10:30	
+History
+Classroom 152
+	
+Mathematics
+Classroom 152
+	
+Science
+Science Laboratory 1
+	
+Geography
+Classroom 152
+	
+Mathematics
+Classroom 152
+
+310:50–11:40	
+Mathematics
+Classroom 152
+	
+Music
+Music Room 1
+	
+English
+Classroom 152
+	
+Physical Education
+Sports Hall 1
+	
+English
+Classroom 152
+
+411:45–12:35	
+Art and Design
+Art Studio 2
+	
+Design and Technology
+Design Workshop 1
+	
+Personal, Social and Health Education
+Classroom 152
+	
+Science
+Science Laboratory 1
+	
+History
+Classroom 152
+
+513:20–14:10	
+English
+Classroom 152
+	
+English
+Classroom 152
+	
+Mathematics
+Classroom 152
+	
+Mathematics
+Classroom 152
+	
+Science
+Science Laboratory 1
+
+614:15–15:05	
+—
+	
+English
+Classroom 152
+	
+—
+	
+Computing
+Computer Suite 1
+	
+—
+
+Year 6A	108:45–09:35	
+Computing
+Computer Suite 1
+	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 161
+	
+Mathematics
+Classroom 161
+	
+Personal, Social and Health Education
+Classroom 161
+
+209:40–10:30	
+Science
+Science Laboratory 1
+	
+Music
+Music Room 1
+	
+English
+Classroom 161
+	
+English
+Classroom 161
+	
+French
+Classroom 161
+
+310:50–11:40	
+Mathematics
+Classroom 161
+	
+English
+Classroom 161
+	
+History
+Classroom 161
+	
+Physical Education
+Sports Hall 2
+	
+Science
+Science Laboratory 1
+
+411:45–12:35	
+English
+Classroom 161
+	
+Science
+Science Laboratory 1
+	
+Physical Education
+Sports Hall 1
+	
+French
+Classroom 161
+	
+Mathematics
+Classroom 161
+
+513:20–14:10	
+Art and Design
+Art Studio 2
+	
+Geography
+Classroom 161
+	
+Science
+Science Laboratory 1
+	
+Geography
+Classroom 161
+	
+English
+Classroom 161
+
+614:15–15:05	
+History
+Classroom 161
+	
+Mathematics
+Classroom 161
+	
+French
+Classroom 161
+	
+Science
+Science Laboratory 1
+	
+Design and Technology
+Design Workshop 1
+
+Year 6B	108:45–09:35	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 162
+	
+Spanish
+Classroom 162
+	
+Spanish
+Classroom 162
+	
+Physical Education
+Sports Hall 2
+
+209:40–10:30	
+English
+Classroom 162
+	
+Geography
+Classroom 162
+	
+Mathematics
+Classroom 162
+	
+English
+Classroom 162
+	
+Science
+Science Laboratory 1
+
+310:50–11:40	
+Mathematics
+Classroom 162
+	
+Physical Education
+Sports Hall 2
+	
+Computing
+Computer Suite 2
+	
+History
+Classroom 162
+	
+Design and Technology
+Design Workshop 1
+
+411:45–12:35	
+Science
+Science Laboratory 1
+	
+Personal, Social and Health Education
+Classroom 162
+	
+English
+Classroom 162
+	
+Music
+Music Room 1
+	
+Mathematics
+Classroom 162
+
+513:20–14:10	
+Geography
+Classroom 162
+	
+English
+Classroom 162
+	
+Art and Design
+Art Studio 1
+	
+Science
+Science Laboratory 1
+	
+Spanish
+Classroom 162
+
+614:15–15:05	
+History
+Classroom 162
+	
+Science
+Science Laboratory 1
+	
+Science
+Science Laboratory 1
+	
+Mathematics
+Classroom 162
+	
+English
+Classroom 162
+
+Year 6C	108:45–09:35	
+English
+Classroom 163
+	
+Mathematics
+Classroom 163
+	
+English
+Classroom 163
+	
+Personal, Social and Health Education
+Classroom 163
+	
+Science
+Science Laboratory 1
+
+209:40–10:30	
+Science
+Science Laboratory 2
+	
+English
+Classroom 163
+	
+Science
+Science Laboratory 2
+	
+Computing
+Computer Suite 1
+	
+History
+Classroom 163
+
+310:50–11:40	
+Design and Technology
+Design Workshop 1
+	
+Design and Technology
+Design Workshop 2
+	
+Mathematics
+Classroom 163
+	
+Mathematics
+Classroom 163
+	
+English
+Classroom 163
+
+411:45–12:35	
+French
+Classroom 163
+	
+Art and Design
+Art Studio 1
+	
+History
+Classroom 163
+	
+Science
+Science Laboratory 2
+	
+Music
+Music Room 1
+
+513:20–14:10	
+Mathematics
+Classroom 163
+	
+Science
+Science Laboratory 1
+	
+French
+Classroom 163
+	
+English
+Classroom 163
+	
+Mathematics
+Classroom 163
+
+614:15–15:05	
+Physical Education
+Sports Hall 1
+	
+Physical Education
+Sports Hall 1
+	
+Geography
+Classroom 163
+	
+French
+Classroom 163
+	
+Geography
+Classroom 163
+
+Year 7A	108:45–09:35	
+Mathematics
+Classroom 171
+	
+Mathematics
+Classroom 171
+	
+History
+Classroom 171
+	
+English
+Classroom 171
+	
+Mathematics
+Classroom 171
+
+209:40–10:30	
+Science
+Science Laboratory 3
+	
+Physical Education
+Sports Hall 1
+	
+Science
+Science Laboratory 3
+	
+Mathematics
+Classroom 171
+	
+Computing
+Computer Suite 2
+
+310:50–11:40	
+Design and Technology
+Design Workshop 2
+	
+French
+Classroom 171
+	
+Geography
+Classroom 171
+	
+French
+Classroom 171
+	
+French
+Classroom 171
+
+411:45–12:35	
+Music
+Music Room 1
+	
+Science
+Science Laboratory 2
+	
+Mathematics
+Classroom 171
+	
+Science
+Science Laboratory 3
+	
+English
+Classroom 171
+
+513:20–14:10	
+English
+Classroom 171
+	
+Art and Design
+Art Studio 1
+	
+Design and Technology
+Design Workshop 1
+	
+Geography
+Classroom 171
+	
+Science
+Science Laboratory 2
+
+614:15–15:05	
+History
+Classroom 171
+	
+English
+Classroom 171
+	
+English
+Classroom 171
+	
+Personal, Social and Health Education
+Classroom 171
+	
+Physical Education
+Sports Hall 1
+
+Year 7B	108:45–09:35	
+English
+Classroom 172
+	
+English
+Classroom 172
+	
+Physical Education
+Sports Hall 1
+	
+Geography
+Classroom 172
+	
+History
+Classroom 172
+
+209:40–10:30	
+Music
+Music Room 1
+	
+Mathematics
+Classroom 172
+	
+English
+Classroom 172
+	
+Mathematics
+Classroom 172
+	
+English
+Classroom 172
+
+310:50–11:40	
+Science
+Science Laboratory 1
+	
+Spanish
+Classroom 172
+	
+Spanish
+Classroom 172
+	
+English
+Classroom 172
+	
+Science
+Science Laboratory 2
+
+411:45–12:35	
+Mathematics
+Classroom 172
+	
+Geography
+Classroom 172
+	
+Science
+Science Laboratory 2
+	
+Physical Education
+Sports Hall 1
+	
+Design and Technology
+Design Workshop 1
+
+513:20–14:10	
+Spanish
+Classroom 172
+	
+History
+Classroom 172
+	
+Mathematics
+Classroom 172
+	
+Design and Technology
+Design Workshop 1
+	
+Computing
+Computer Suite 2
+
+614:15–15:05	
+Art and Design
+Art Studio 1
+	
+Science
+Science Laboratory 2
+	
+Personal, Social and Health Education
+Classroom 172
+	
+Science
+Science Laboratory 2
+	
+Mathematics
+Classroom 172
+
+Year 7C	108:45–09:35	
+Mathematics
+Classroom 173
+	
+English
+Classroom 173
+	
+Physical Education
+Sports Hall 2
+	
+Mathematics
+Classroom 173
+	
+English
+Classroom 173
+
+209:40–10:30	
+History
+Classroom 173
+	
+Mathematics
+Classroom 173
+	
+Geography
+Classroom 173
+	
+Design and Technology
+Design Workshop 1
+	
+Science
+Science Laboratory 2
+
+310:50–11:40	
+English
+Classroom 173
+	
+French
+Classroom 173
+	
+Science
+Science Laboratory 1
+	
+French
+Classroom 173
+	
+French
+Classroom 173
+
+411:45–12:35	
+Science
+Science Laboratory 2
+	
+Art and Design
+Art Studio 2
+	
+History
+Classroom 173
+	
+Physical Education
+Sports Hall 2
+	
+Music
+Music Room 2
+
+513:20–14:10	
+Design and Technology
+Design Workshop 1
+	
+Geography
+Classroom 173
+	
+Mathematics
+Classroom 173
+	
+Science
+Science Laboratory 2
+	
+Personal, Social and Health Education
+Classroom 173
+
+614:15–15:05	
+Computing
+Computer Suite 1
+	
+Science
+Science Laboratory 3
+	
+English
+Classroom 173
+	
+English
+Classroom 173
+	
+Mathematics
+Classroom 173
+
+Year 8A	108:45–09:35	
+Mathematics
+Classroom 181
+	
+Art and Design
+Art Studio 1
+	
+Music
+Music Room 2
+	
+English
+Classroom 181
+	
+Mathematics
+Classroom 181
+
+209:40–10:30	
+Physical Education
+Sports Hall 1
+	
+Science
+Science Laboratory 1
+	
+Mathematics
+Classroom 181
+	
+Design and Technology
+Design Workshop 2
+	
+English
+Classroom 181
+
+310:50–11:40	
+French
+Classroom 181
+	
+Mathematics
+Classroom 181
+	
+Science
+Science Laboratory 2
+	
+Geography
+Classroom 181
+	
+Geography
+Classroom 181
+
+411:45–12:35	
+History
+Classroom 181
+	
+Design and Technology
+Design Workshop 2
+	
+English
+Classroom 181
+	
+History
+Classroom 181
+	
+Physical Education
+Sports Hall 2
+
+513:20–14:10	
+Science
+Science Laboratory 1
+	
+English
+Classroom 181
+	
+Computing
+Computer Suite 1
+	
+Mathematics
+Classroom 181
+	
+Science
+Science Laboratory 3
+
+614:15–15:05	
+English
+Classroom 181
+	
+French
+Classroom 181
+	
+French
+Classroom 181
+	
+Science
+Science Laboratory 3
+	
+Personal, Social and Health Education
+Classroom 181
+
+Year 8B	108:45–09:35	
+History
+Classroom 182
+	
+Science
+Science Laboratory 2
+	
+Science
+Science Laboratory 1
+	
+Science
+Science Laboratory 1
+	
+Computing
+Computer Suite 1
+
+209:40–10:30	
+Mathematics
+Classroom 182
+	
+Personal, Social and Health Education
+Classroom 182
+	
+Mathematics
+Classroom 182
+	
+Art and Design
+Art Studio 1
+	
+Spanish
+Classroom 182
+
+310:50–11:40	
+Science
+Science Laboratory 2
+	
+English
+Classroom 182
+	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 182
+	
+English
+Classroom 182
+
+411:45–12:35	
+Geography
+Classroom 182
+	
+Mathematics
+Classroom 182
+	
+Physical Education
+Sports Hall 2
+	
+History
+Classroom 182
+	
+Mathematics
+Classroom 182
+
+513:20–14:10	
+Spanish
+Classroom 182
+	
+Geography
+Classroom 182
+	
+English
+Classroom 182
+	
+English
+Classroom 182
+	
+Design and Technology
+Design Workshop 1
+
+614:15–15:05	
+English
+Classroom 182
+	
+Physical Education
+Sports Hall 2
+	
+Music
+Music Room 1
+	
+Spanish
+Classroom 182
+	
+Science
+Science Laboratory 1
+
+Year 8C	108:45–09:35	
+Physical Education
+Sports Hall 2
+	
+Geography
+Classroom 183
+	
+Art and Design
+Art Studio 1
+	
+Science
+Science Laboratory 2
+	
+English
+Classroom 183
+
+209:40–10:30	
+French
+Classroom 183
+	
+French
+Classroom 183
+	
+Music
+Music Room 1
+	
+Geography
+Classroom 183
+	
+Science
+Science Laboratory 3
+
+310:50–11:40	
+English
+Classroom 183
+	
+Science
+Science Laboratory 1
+	
+Science
+Science Laboratory 3
+	
+Mathematics
+Classroom 183
+	
+Mathematics
+Classroom 183
+
+411:45–12:35	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 183
+	
+English
+Classroom 183
+	
+Computing
+Computer Suite 1
+	
+History
+Classroom 183
+
+513:20–14:10	
+Science
+Science Laboratory 2
+	
+English
+Classroom 183
+	
+French
+Classroom 183
+	
+History
+Classroom 183
+	
+Physical Education
+Sports Hall 2
+
+614:15–15:05	
+Mathematics
+Classroom 183
+	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 183
+	
+English
+Classroom 183
+	
+Personal, Social and Health Education
+Classroom 183
+
+Year 9A	108:45–09:35	
+French
+Classroom 191
+	
+French
+Classroom 191
+	
+Science
+Science Laboratory 2
+	
+Science
+Science Laboratory 3
+	
+Mathematics
+Classroom 191
+
+209:40–10:30	
+English
+Classroom 191
+	
+Science
+Science Laboratory 2
+	
+English
+Classroom 191
+	
+Mathematics
+Classroom 191
+	
+Physical Education
+Sports Hall 1
+
+310:50–11:40	
+Personal, Social and Health Education
+Classroom 191
+	
+English
+Classroom 191
+	
+Mathematics
+Classroom 191
+	
+Art and Design
+Art Studio 1
+	
+History
+Classroom 191
+
+411:45–12:35	
+Science
+Science Laboratory 3
+	
+Physical Education
+Sports Hall 2
+	
+Design and Technology
+Design Workshop 1
+	
+English
+Classroom 191
+	
+English
+Classroom 191
+
+513:20–14:10	
+Music
+Music Room 1
+	
+Mathematics
+Classroom 191
+	
+History
+Classroom 191
+	
+Design and Technology
+Design Workshop 2
+	
+Geography
+Classroom 191
+
+614:15–15:05	
+Mathematics
+Classroom 191
+	
+Geography
+Classroom 191
+	
+Computing
+Computer Suite 1
+	
+French
+Classroom 191
+	
+Science
+Science Laboratory 2
+
+Year 9B	108:45–09:35	
+Science
+Science Laboratory 2
+	
+Spanish
+Classroom 192
+	
+Science
+Science Laboratory 3
+	
+Geography
+Classroom 192
+	
+English
+Classroom 192
+
+209:40–10:30	
+Mathematics
+Classroom 192
+	
+Science
+Science Laboratory 3
+	
+Geography
+Classroom 192
+	
+Spanish
+Classroom 192
+	
+Physical Education
+Sports Hall 2
+
+310:50–11:40	
+English
+Classroom 192
+	
+History
+Classroom 192
+	
+English
+Classroom 192
+	
+Science
+Science Laboratory 1
+	
+Mathematics
+Classroom 192
+
+411:45–12:35	
+Physical Education
+Sports Hall 2
+	
+English
+Classroom 192
+	
+Mathematics
+Classroom 192
+	
+Mathematics
+Classroom 192
+	
+Science
+Science Laboratory 1
+
+513:20–14:10	
+Design and Technology
+Design Workshop 2
+	
+Mathematics
+Classroom 192
+	
+Design and Technology
+Design Workshop 2
+	
+Computing
+Computer Suite 1
+	
+Personal, Social and Health Education
+Classroom 192
+
+614:15–15:05	
+History
+Classroom 192
+	
+Art and Design
+Art Studio 1
+	
+Music
+Music Room 2
+	
+English
+Classroom 192
+	
+Spanish
+Classroom 192
+
+Year 9C	108:45–09:35	
+English
+Classroom 193
+	
+Computing
+Computer Suite 1
+	
+English
+Classroom 193
+	
+Music
+Music Room 1
+	
+Science
+Science Laboratory 2
+
+209:40–10:30	
+Physical Education
+Sports Hall 2
+	
+French
+Classroom 193
+	
+Geography
+Classroom 193
+	
+Science
+Science Laboratory 1
+	
+English
+Classroom 193
+
+310:50–11:40	
+Geography
+Classroom 193
+	
+Mathematics
+Classroom 193
+	
+Mathematics
+Classroom 193
+	
+English
+Classroom 193
+	
+Physical Education
+Sports Hall 2
+
+411:45–12:35	
+French
+Classroom 193
+	
+English
+Classroom 193
+	
+Science
+Science Laboratory 3
+	
+French
+Classroom 193
+	
+Design and Technology
+Design Workshop 2
+
+513:20–14:10	
+Mathematics
+Classroom 193
+	
+Science
+Science Laboratory 2
+	
+History
+Classroom 193
+	
+History
+Classroom 193
+	
+Mathematics
+Classroom 193
+
+614:15–15:05	
+Science
+Science Laboratory 1
+	
+Art and Design
+Art Studio 2
+	
+Design and Technology
+Design Workshop 1
+	
+Mathematics
+Classroom 193
+	
+Personal, Social and Health Education
+Classroom 193
+Fictional staff and schools · Your saved timetables and drafts stay in this browser on this device.
+About storage
+
+YEAR 1A
+
+Art and Design
+✕
+Teacher
+Alice Whitcombe · not eligible for this lesson
+Oliver Fenwick · not eligible for this lesson
+Amelia Hartwell · not eligible for this lesson
+George Ashcroft · not eligible for this lesson
+Isla Brookfield · not eligible for this lesson
+Harry Westcott · not eligible for this lesson
+Grace Ellerton · not eligible for this lesson
+Jack Wrenford · not eligible for this lesson
+Sophie Alderwick · not eligible for this lesson
+Thomas Fairbourne · not eligible for this lesson
+Freya Henshaw · not eligible for this lesson
+William Oakley · not eligible for this lesson
+Lily Bracken · not eligible for this lesson
+James Merrivale · not eligible for this lesson
+Florence Wycliffe · not eligible for this lesson
+Henry Calder · not eligible for this lesson
+Evie Northwood · not eligible for this lesson
+Arthur Bellamy · not eligible for this lesson
+Charlotte Winslow · not eligible for this lesson
+Oscar Redfern · not eligible for this lesson
+Matilda Fallow · not eligible for this lesson
+Leo Penrose · not eligible for this lesson
+Emily Thorne · not eligible for this lesson
+Archie Ashwell · not eligible for this lesson
+Poppy Langford · not eligible for this lesson
+Samuel Briar · not eligible for this lesson
+Imogen Marchwood · not eligible for this lesson
+Daniel Ridley · not eligible for this lesson
+Rosie Whitford · not eligible for this lesson
+Edward Beckett · not eligible for this lesson
+Lucy Hartley · not eligible for this lesson
+Joseph Waverley · not eligible for this lesson
+Eleanor Foxley · not eligible for this lesson
+Benjamin Cresswell
+Daisy Rowan
+Frederick Dale · not eligible for this lesson
+Hannah Elmhurst · not eligible for this lesson
+Alexander Hawthorne · not eligible for this lesson
+Clara Woodleigh · not eligible for this lesson
+Nathan Everley · not eligible for this lesson
+Martha Greenwell · not eligible for this lesson
+
+Only eligible teachers can be saved. Busy teachers remain selectable so you can swap lessons.
+
+Room
+Classroom 111 · 30 seats · missing required equipment
+Classroom 112 · 30 seats · missing required equipment
+Classroom 121 · 30 seats · missing required equipment
+Classroom 122 · 30 seats · missing required equipment
+Classroom 131 · 30 seats · missing required equipment
+Classroom 132 · 30 seats · missing required equipment
+Classroom 141 · 30 seats · missing required equipment
+Classroom 142 · 30 seats · missing required equipment
+Classroom 151 · 30 seats · missing required equipment
+Classroom 152 · 30 seats · missing required equipment
+Classroom 161 · 30 seats · missing required equipment
+Classroom 162 · 30 seats · missing required equipment
+Classroom 163 · 30 seats · missing required equipment
+Classroom 171 · 30 seats · missing required equipment
+Classroom 172 · 30 seats · missing required equipment
+Classroom 173 · 30 seats · missing required equipment
+Classroom 181 · 30 seats · missing required equipment
+Classroom 182 · 30 seats · missing required equipment
+Classroom 183 · 30 seats · missing required equipment
+Classroom 191 · 30 seats · missing required equipment
+Classroom 192 · 30 seats · missing required equipment
+Classroom 193 · 30 seats · missing required equipment
+Science Laboratory 1 · 32 seats · missing required equipment
+Science Laboratory 2 · 32 seats · missing required equipment
+Science Laboratory 3 · 32 seats · missing required equipment
+Sports Hall 1 · 32 seats · missing required equipment
+Sports Hall 2 · 32 seats · missing required equipment
+Art Studio 1 · 32 seats
+Art Studio 2 · 32 seats
+Music Room 1 · 32 seats · missing required equipment
+Music Room 2 · 32 seats · missing required equipment
+Computer Suite 1 · 32 seats · missing required equipment
+Computer Suite 2 · 32 seats · missing required equipment
+Design Workshop 1 · 32 seats · missing required equipment
+Design Workshop 2 · 32 seats · missing required equipment
+Time slot
+Monday · 1. 08:45–09:35
+Monday · 2. 09:40–10:30
+Monday · 3. 10:50–11:40
+Monday · 4. 11:45–12:35
+Monday · 5. 13:20–14:10
+Monday · 6. 14:15–15:05
+Tuesday · 1. 08:45–09:35
+Tuesday · 2. 09:40–10:30
+Tuesday · 3. 10:50–11:40
+Tuesday · 4. 11:45–12:35
+Tuesday · 5. 13:20–14:10
+Tuesday · 6. 14:15–15:05
+Wednesday · 1. 08:45–09:35
+Wednesday · 2. 09:40–10:30
+Wednesday · 3. 10:50–11:40
+Wednesday · 4. 11:45–12:35
+Wednesday · 5. 13:20–14:10
+Wednesday · 6. 14:15–15:05
+Thursday · 1. 08:45–09:35
+Thursday · 2. 09:40–10:30
+Thursday · 3. 10:50–11:40
+Thursday · 4. 11:45–12:35
+Thursday · 5. 13:20–14:10
+Thursday · 6. 14:15–15:05
+Friday · 1. 08:45–09:35
+Friday · 2. 09:40–10:30
+Friday · 3. 10:50–11:40
+Friday · 4. 11:45–12:35
+Friday · 5. 13:20–14:10
+Friday · 6. 14:15–15:05
+
+Must fix: Teacher double-booked
+These lessons use the same teacher at the same time. Choose another qualified teacher or move one lesson to a free time slot.
+
+Must fix: Class double-booked
+This class has more than one lesson at the same time. Move one of the lessons to a free time slot.
+
+Must fix: Room double-booked
+These lessons use the same room at the same time. Choose another suitable room or move one lesson.
+
+Must fix: Too many lessons of one subject today
+This class exceeds the daily subject limit. Move one of these subject lessons to another weekday.
+
+Must fix: Class days are too uneven
+The difference between this class’s longest and shortest days is too large. Move an appropriate lesson from a longer day to a shorter day.
+
+Must fix · 6 rules
+1 changed lesson
+New timetable name
+Save as new timetable
+Discard changes

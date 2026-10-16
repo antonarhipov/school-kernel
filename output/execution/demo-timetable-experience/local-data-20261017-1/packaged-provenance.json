@@ -1,0 +1,15 @@
+{
+  "verdict": "PASS",
+  "artifacts": {
+    "/private/tmp/school-demo-local-data-verification-20261017-1/kernel-cli/target/school-kernel.jar": "f033f9f430a388c609d0374875b826b7f41d3025813ab2ed032ab5bf772d491c",
+    "/private/tmp/school-demo-local-data-verification-20261017-1/timetable-workspace/target/timetable-workspace-1.0.0-SNAPSHOT.jar": "c0fce660f0246fa3dcb7c23998e5c397e81ce08348f7798636da134cf0789583"
+  },
+  "scannedEntries": 23695,
+  "sourceIdentityCount": 54,
+  "schools": 4,
+  "variants": 8,
+  "identityMapping": "two synthetic mappings; English and Imperial schools independently constructed",
+  "sourceIdentityMatches": 0,
+  "sourceReferenceOverlap": 0,
+  "packagedExamples": 0
+}

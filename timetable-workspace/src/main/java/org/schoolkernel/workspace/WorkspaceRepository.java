@@ -11,9 +11,14 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 @Repository
-public class WorkspaceRepository {
+@org.springframework.context.annotation.Profile("!demo")
+public class WorkspaceRepository implements WorkspaceStore {
     private final JdbcClient jdbc;
     private final ObjectMapper json;
+    private volatile long failedRepairSaveVersion = -1;
+
+    @Override public void recordRepairSaveFailure(long version) { failedRepairSaveVersion = version; }
+    @Override public boolean repairSaveFailed(long version) { return failedRepairSaveVersion == version; }
 
     public WorkspaceRepository(JdbcClient jdbc, ObjectMapper json) {
         this.jdbc = jdbc;
@@ -286,11 +291,4 @@ public class WorkspaceRepository {
         }
     }
 
-    public record RepairPinContext(
-            WorkspaceState state,
-            long version,
-            tools.jackson.databind.node.ObjectNode repairDraft,
-            JsonNode assignment,
-            JsonNode lesson,
-            JsonNode manifestLock) {}
 }

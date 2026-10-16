@@ -1,0 +1,65 @@
+PUBLIC SCHOOL TIMETABLE DEMO
+
+Operations workspace
+
+No accepted timetable
+
+Temporary public demo · export accepted timetables to keep them.
+
+Workspaces expire after 60 minutes without activity or 8 hours in total, and on every restart or deployment. Unfinished repair and manual work disappears.
+
+Privacy and storage
+School definition
+Choose a definition
+Small school
+Two-class school
+Full school
+small-custom · 2026-10-16T14:57:40.896Z · In use
+too-complex · 2026-10-16T14:57:10.251Z
+unsupported · 2026-10-16T14:57:09.149Z
+lineage · 2026-10-16T14:57:08.483Z
+invalid-reference · 2026-10-16T14:57:05.309Z
+private-not-sent · 2026-10-16T14:57:00.915Z
+
+Saved 2026-10-16T14:57:40.896Z · derived from sample small.
+
+small-custom · In use as initial draft
+
+Definition JSON
+
+Unchanged
+
+Use this definition
+Save as
+Revert changes
+Download JSON
+Delete saved version
+Delete all definitions saved in this browser
+Open a definition file
+
+Browser versions have no cross-device sync. Download a copy to keep it.
+
+The definition is in use as a new initial draft. No timetable is Current and no search was started.
+
+Initial draft
+Small custom
+Utilities
+
+The definition is verified in this temporary workspace. Review the summary before requesting the first timetable.
+
+Lessons
+2
+Teachers
+1
+Classes
+1
+Rooms
+2
+Weekly periods
+3
+
+Definition revision sha256:ec303ec4ce8821cf53b40432ea69068baef6d18eb0c7c7f6a180a6a36e407ab6
+
+Quick search (5 seconds) is the default effort for this school. More time guarantees no result.
+
+Create proposal

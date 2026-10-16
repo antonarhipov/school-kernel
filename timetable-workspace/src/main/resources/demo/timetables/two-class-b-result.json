@@ -1,0 +1,469 @@
+{
+  "schemaVersion" : 1,
+  "status" : "FEASIBLE",
+  "kernelVersion" : "1.0.0-SNAPSHOT",
+  "correlationId" : "bundled-two-class-b",
+  "elapsedTimeMs" : 0,
+  "schoolId" : "demo-two-class-school",
+  "catalogVersion" : 9,
+  "inputRevision" : "sha256:bfa9f57cba60cd0178d72b5a33a3edff9d5e200f9a647f37338fbe31077a06e2",
+  "effectiveSoftWeights" : {
+    "soft.teacher-gap" : 1,
+    "soft.cohort-gap" : 1,
+    "soft.cohort-late-start" : 1,
+    "soft.cohort-week-balance" : 1,
+    "soft.series-same-day" : 1,
+    "soft.undesirable-period" : 1,
+    "soft.non-preferred-room" : 1
+  },
+  "seed" : 0,
+  "limit" : {
+    "type" : "STEP",
+    "steps" : 1
+  },
+  "terminationReason" : "STEP_LIMIT",
+  "timetable" : {
+    "assignments" : [ {
+      "lessonId" : "demo-cohort-001.english.1",
+      "subjectId" : "demo-subject-english",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-english",
+      "periodId" : "demo-period-006",
+      "roomId" : "demo-room-010"
+    }, {
+      "lessonId" : "demo-cohort-001.english.2",
+      "subjectId" : "demo-subject-english",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-english",
+      "periodId" : "demo-period-031",
+      "roomId" : "demo-room-008"
+    }, {
+      "lessonId" : "demo-cohort-001.english.3",
+      "subjectId" : "demo-subject-english",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-english",
+      "periodId" : "demo-period-025",
+      "roomId" : "demo-room-004"
+    }, {
+      "lessonId" : "demo-cohort-001.pe.1",
+      "subjectId" : "demo-subject-pe",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-pe",
+      "periodId" : "demo-period-013",
+      "roomId" : "demo-room-pe"
+    }, {
+      "lessonId" : "demo-cohort-001.pe.2",
+      "subjectId" : "demo-subject-pe",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-pe",
+      "periodId" : "demo-period-005",
+      "roomId" : "demo-room-pe"
+    }, {
+      "lessonId" : "demo-cohort-001.russian.1",
+      "subjectId" : "demo-subject-russian",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-russian",
+      "periodId" : "demo-period-007",
+      "roomId" : "demo-room-002"
+    }, {
+      "lessonId" : "demo-cohort-001.technology.1",
+      "subjectId" : "demo-subject-technology",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-technology",
+      "periodId" : "demo-period-009",
+      "roomId" : "demo-room-technology"
+    }, {
+      "lessonId" : "demo-cohort-001.technology.2",
+      "subjectId" : "demo-subject-technology",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-extra-technology",
+      "periodId" : "demo-period-020",
+      "roomId" : "demo-room-technology"
+    }, {
+      "lessonId" : "demo-cohort-002.english.1",
+      "subjectId" : "demo-subject-english",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-english",
+      "periodId" : "demo-period-012",
+      "roomId" : "demo-room-005"
+    }, {
+      "lessonId" : "demo-cohort-002.english.2",
+      "subjectId" : "demo-subject-english",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-english",
+      "periodId" : "demo-period-019",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-cohort-002.english.3",
+      "subjectId" : "demo-subject-english",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-english",
+      "periodId" : "demo-period-007",
+      "roomId" : "demo-room-011"
+    }, {
+      "lessonId" : "demo-cohort-002.pe.1",
+      "subjectId" : "demo-subject-pe",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-pe",
+      "periodId" : "demo-period-023",
+      "roomId" : "demo-room-pe"
+    }, {
+      "lessonId" : "demo-cohort-002.pe.2",
+      "subjectId" : "demo-subject-pe",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-pe",
+      "periodId" : "demo-period-020",
+      "roomId" : "demo-room-pe"
+    }, {
+      "lessonId" : "demo-cohort-002.russian.1",
+      "subjectId" : "demo-subject-russian",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-russian",
+      "periodId" : "demo-period-008",
+      "roomId" : "demo-room-002"
+    }, {
+      "lessonId" : "demo-cohort-002.technology.1",
+      "subjectId" : "demo-subject-technology",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-technology",
+      "periodId" : "demo-period-034",
+      "roomId" : "demo-room-technology"
+    }, {
+      "lessonId" : "demo-cohort-002.technology.2",
+      "subjectId" : "demo-subject-technology",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-extra-technology",
+      "periodId" : "demo-period-005",
+      "roomId" : "demo-room-technology"
+    }, {
+      "lessonId" : "demo-lesson-003",
+      "subjectId" : "demo-subject-002",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-010",
+      "periodId" : "demo-period-029",
+      "roomId" : "demo-room-013"
+    }, {
+      "lessonId" : "demo-lesson-004",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-005",
+      "periodId" : "demo-period-022",
+      "roomId" : "demo-room-006"
+    }, {
+      "lessonId" : "demo-lesson-005",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-005",
+      "periodId" : "demo-period-017",
+      "roomId" : "demo-room-004"
+    }, {
+      "lessonId" : "demo-lesson-006",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-005",
+      "periodId" : "demo-period-030",
+      "roomId" : "demo-room-006"
+    }, {
+      "lessonId" : "demo-lesson-007",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-005",
+      "periodId" : "demo-period-002",
+      "roomId" : "demo-room-004"
+    }, {
+      "lessonId" : "demo-lesson-008",
+      "subjectId" : "demo-subject-004",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-001",
+      "periodId" : "demo-period-026",
+      "roomId" : "demo-room-005"
+    }, {
+      "lessonId" : "demo-lesson-009",
+      "subjectId" : "demo-subject-004",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-001",
+      "periodId" : "demo-period-004",
+      "roomId" : "demo-room-005"
+    }, {
+      "lessonId" : "demo-lesson-010",
+      "subjectId" : "demo-subject-005",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-004",
+      "periodId" : "demo-period-015",
+      "roomId" : "demo-room-010"
+    }, {
+      "lessonId" : "demo-lesson-011",
+      "subjectId" : "demo-subject-006",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-003",
+      "periodId" : "demo-period-003",
+      "roomId" : "demo-room-011"
+    }, {
+      "lessonId" : "demo-lesson-012",
+      "subjectId" : "demo-subject-007",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-011",
+      "periodId" : "demo-period-019",
+      "roomId" : "demo-room-003"
+    }, {
+      "lessonId" : "demo-lesson-013",
+      "subjectId" : "demo-subject-007",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-011",
+      "periodId" : "demo-period-023",
+      "roomId" : "demo-room-003"
+    }, {
+      "lessonId" : "demo-lesson-014",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-012",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-015",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-014",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-016",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-033",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-017",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-018",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-018",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-032",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-019",
+      "subjectId" : "demo-subject-009",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-007",
+      "periodId" : "demo-period-024",
+      "roomId" : "demo-room-012"
+    }, {
+      "lessonId" : "demo-lesson-020",
+      "subjectId" : "demo-subject-010",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-002",
+      "periodId" : "demo-period-016",
+      "roomId" : "demo-room-001"
+    }, {
+      "lessonId" : "demo-lesson-021",
+      "subjectId" : "demo-subject-010",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-002",
+      "periodId" : "demo-period-010",
+      "roomId" : "demo-room-001"
+    }, {
+      "lessonId" : "demo-lesson-022",
+      "subjectId" : "demo-subject-010",
+      "cohortId" : "demo-cohort-001",
+      "teacherId" : "demo-teacher-002",
+      "periodId" : "demo-period-011",
+      "roomId" : "demo-room-001"
+    }, {
+      "lessonId" : "demo-lesson-023",
+      "subjectId" : "demo-subject-002",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-010",
+      "periodId" : "demo-period-010",
+      "roomId" : "demo-room-013"
+    }, {
+      "lessonId" : "demo-lesson-024",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-006",
+      "periodId" : "demo-period-024",
+      "roomId" : "demo-room-004"
+    }, {
+      "lessonId" : "demo-lesson-025",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-006",
+      "periodId" : "demo-period-027",
+      "roomId" : "demo-room-005"
+    }, {
+      "lessonId" : "demo-lesson-026",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-006",
+      "periodId" : "demo-period-030",
+      "roomId" : "demo-room-008"
+    }, {
+      "lessonId" : "demo-lesson-027",
+      "subjectId" : "demo-subject-003",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-006",
+      "periodId" : "demo-period-015",
+      "roomId" : "demo-room-003"
+    }, {
+      "lessonId" : "demo-lesson-028",
+      "subjectId" : "demo-subject-004",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-001",
+      "periodId" : "demo-period-006",
+      "roomId" : "demo-room-005"
+    }, {
+      "lessonId" : "demo-lesson-029",
+      "subjectId" : "demo-subject-004",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-001",
+      "periodId" : "demo-period-016",
+      "roomId" : "demo-room-005"
+    }, {
+      "lessonId" : "demo-lesson-030",
+      "subjectId" : "demo-subject-005",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-004",
+      "periodId" : "demo-period-003",
+      "roomId" : "demo-room-007"
+    }, {
+      "lessonId" : "demo-lesson-031",
+      "subjectId" : "demo-subject-006",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-006",
+      "periodId" : "demo-period-032",
+      "roomId" : "demo-room-008"
+    }, {
+      "lessonId" : "demo-lesson-032",
+      "subjectId" : "demo-subject-007",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-011",
+      "periodId" : "demo-period-017",
+      "roomId" : "demo-room-003"
+    }, {
+      "lessonId" : "demo-lesson-033",
+      "subjectId" : "demo-subject-007",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-011",
+      "periodId" : "demo-period-031",
+      "roomId" : "demo-room-003"
+    }, {
+      "lessonId" : "demo-lesson-034",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-009",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-035",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-002",
+      "roomId" : "demo-room-002"
+    }, {
+      "lessonId" : "demo-lesson-036",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-029",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-037",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-011",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-038",
+      "subjectId" : "demo-subject-008",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-012",
+      "periodId" : "demo-period-026",
+      "roomId" : "demo-room-009"
+    }, {
+      "lessonId" : "demo-lesson-039",
+      "subjectId" : "demo-subject-009",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-007",
+      "periodId" : "demo-period-018",
+      "roomId" : "demo-room-012"
+    }, {
+      "lessonId" : "demo-lesson-040",
+      "subjectId" : "demo-subject-010",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-008",
+      "periodId" : "demo-period-025",
+      "roomId" : "demo-room-002"
+    }, {
+      "lessonId" : "demo-lesson-041",
+      "subjectId" : "demo-subject-010",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-008",
+      "periodId" : "demo-period-004",
+      "roomId" : "demo-room-002"
+    }, {
+      "lessonId" : "demo-lesson-042",
+      "subjectId" : "demo-subject-010",
+      "cohortId" : "demo-cohort-002",
+      "teacherId" : "demo-teacher-008",
+      "periodId" : "demo-period-033",
+      "roomId" : "demo-room-002"
+    } ]
+  },
+  "timetableRevision" : "sha256:f74555eab02011656ef8764f8460794fa383eace147509b31704ee0482ea234f",
+  "score" : {
+    "periodMoves" : 0,
+    "roomOnlyMoves" : 0,
+    "ordinaryPreferencePenalty" : 15,
+    "constraintBreakdown" : [ {
+      "constraintId" : "soft.teacher-gap",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 9,
+      "aggregatePenalty" : 9
+    }, {
+      "constraintId" : "soft.cohort-gap",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.cohort-late-start",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.cohort-week-balance",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.series-same-day",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 5,
+      "aggregatePenalty" : 5
+    }, {
+      "constraintId" : "soft.undesirable-period",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 0,
+      "aggregatePenalty" : 0
+    }, {
+      "constraintId" : "soft.non-preferred-room",
+      "category" : "ORDINARY_PREFERENCE",
+      "effectiveWeight" : 1,
+      "matchCount" : 1,
+      "aggregatePenalty" : 1
+    } ]
+  }
+}

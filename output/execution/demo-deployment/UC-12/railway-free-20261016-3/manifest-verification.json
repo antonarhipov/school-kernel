@@ -1,0 +1,6 @@
+{
+  "productionFilesChecked": 149,
+  "mismatches": [],
+  "browserSmokeSource": "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoRemoteSmokeIT.java",
+  "browserSmokeSourceSHA256": "1215142a1e762bf0276608f531a95e22927cee0fac16b6cbfc839c242634e0bb"
+}

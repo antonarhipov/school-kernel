@@ -1,0 +1,30 @@
+{
+  "startingFiles": 522,
+  "changedExistingPaths": [
+    "deploy/demo/README.md",
+    "spec/demo-deployment/status.md",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/AcceptedBaselineExportService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoArtifactCache.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoController.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionController.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelAllowance.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoKernelRunner.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoPlanningService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoSamples.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoVerificationService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoWorkspaces.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/ImportService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/InitialPlanningService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/ManualDraftService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemResponder.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairDraftService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/RepairProposalService.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java",
+    "timetable-workspace/src/main/java/org/schoolkernel/workspace/WorkspaceController.java",
+    "timetable-workspace/src/main/resources/application-demo.yml",
+    "timetable-workspace/src/main/resources/static/workspace/app.js",
+    "timetable-workspace/src/main/resources/static/workspace/demo-panel.js",
+    "timetable-workspace/src/test/java/org/schoolkernel/workspace/DemoPlanningBrowserIT.java"
+  ],
+  "missingStartingPaths": []
+}

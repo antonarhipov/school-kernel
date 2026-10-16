@@ -1,0 +1,361 @@
+SCHOOL KERNEL
+Interactive demo
+School
+Ranniku õppehoone
+Kasevälja Põhikool
+Coruscant Academy
+Timetable
+Variant A
+Variant B
+Utilities
+Variant B
+
+Coruscant Academy · 23 classes · 520 lessons per week
+
+Week
+Day
+Day
+Whole week
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Classes
+All classes
+Padawan 1A
+Padawan 1B
+Padawan 1C
+Padawan 2A
+Padawan 2B
+Padawan 2C
+Padawan 3A
+Padawan 3B
+Padawan 4A
+Padawan 4B
+Padawan 5A
+Padawan 5B
+Padawan 5D
+Padawan 6A
+Padawan 6B
+Padawan 6C
+Padawan 7A
+Padawan 7B
+Padawan 8A
+Padawan 8B
+Padawan 9A
+Padawan 9B
+Padawan 9C
+Teachers
+All teachers
+Yoda
+Obi-Wan Kenobi
+Leia Organa
+Han Solo
+Chewbacca
+Luke Skywalker
+Ahsoka Tano
+Rey
+Finn
+Poe Dameron
+R2-D2
+C-3PO
+Qui-Gon Jinn
+Mace Windu
+Anakin Skywalker
+Darth Vader
+Padmé Amidala
+Lando Calrissian
+Hera Syndulla
+Kanan Jarrus
+Ezra Bridger
+Sabine Wren
+Chopper
+Zeb Orrelios
+Plo Koon
+Kit Fisto
+Shaak Ti
+Aayla Secura
+Ki-Adi-Mundi
+Luminara Unduli
+Barriss Offee
+Depa Billaba
+Cal Kestis
+Mon Mothma
+Bail Organa
+Wedge Antilles
+Admiral Ackbar
+Jyn Erso
+Cassian Andor
+K-2SO
+Din Djarin
+Bo-Katan Kryze
+Boba Fett
+Jango Fett
+Fennec Shand
+Grogu
+Hondo Ohnaka
+Grand Admiral Thrawn
+Palpatine
+Rose Tico
+Maz Kanata
+Rooms
+All rooms
+Jedi Training Hall 1
+Holocron Library 2
+Droid Workshop 3
+Flight Simulator 4
+Council Chamber 5
+Kyber Laboratory 6
+Starship Hangar 7
+Jedi Training Hall 8
+Holocron Library 9
+Droid Workshop 10
+Flight Simulator 11
+Council Chamber 12
+Kyber Laboratory 13
+Starship Hangar 14
+Jedi Training Hall 15
+Holocron Library 16
+Droid Workshop 17
+Flight Simulator 18
+Council Chamber 19
+Kyber Laboratory 20
+Starship Hangar 21
+Jedi Training Hall 22
+Holocron Library 23
+Droid Workshop 24
+Flight Simulator 25
+Council Chamber 26
+Kyber Laboratory 27
+Starship Hangar 28
+Jedi Training Hall 29
+Holocron Library 30
+Droid Workshop 31
+Flight Simulator 32
+Council Chamber 33
+Kyber Laboratory 34
+Starship Hangar 35
+Jedi Training Hall 36
+Holocron Library 37
+Droid Workshop 38
+Flight Simulator 39
+Council Chamber 40
+Kyber Laboratory 41
+Starship Hangar 42
+Subjects
+All subjects
+Galactic History
+Xenobiology
+Galactic Basic
+Holocron Literature
+Astrogation Exam Practice
+Hyperspace Physics
+Planetary Geography
+Diplomacy
+Force Meditation
+Droid Engineering
+Kyber Chemistry
+Lightsaber Practice
+Jedi Archives
+Jedi Council
+Holocron Art
+Planetary Ecology
+Holographic Field Studies
+Astrogation
+Advanced Astrogation
+Cantina Music
+Padawan Mentoring
+Galactic Citizenship
+Huttese
+Astromech Programming
+Learning Support
+Galactic Basic Exam Practice
+Time slots
+All time slots
+Monday · 1. 08:00–08:40
+Monday · 2. 08:45–09:30
+Monday · 3. 09:40–10:25
+Monday · 4. 10:45–11:30
+Monday · 5. 11:50–12:35
+Monday · 6. 12:55–13:40
+Monday · 7. 13:50–14:35
+Monday · 8. 14:45–15:30
+Monday · 9. 15:40–16:25
+Monday · 10. 16:30–17:15
+Tuesday · 1. 08:00–08:40
+Tuesday · 2. 08:45–09:30
+Tuesday · 3. 09:40–10:25
+Tuesday · 4. 10:45–11:30
+Tuesday · 5. 11:50–12:35
+Tuesday · 6. 12:55–13:40
+Tuesday · 7. 13:50–14:35
+Tuesday · 8. 14:45–15:30
+Tuesday · 9. 15:40–16:25
+Tuesday · 10. 16:30–17:15
+Wednesday · 1. 08:00–08:40
+Wednesday · 2. 08:45–09:30
+Wednesday · 3. 09:40–10:25
+Wednesday · 4. 10:45–11:30
+Wednesday · 5. 11:50–12:35
+Wednesday · 6. 12:55–13:40
+Wednesday · 7. 13:50–14:35
+Wednesday · 8. 14:45–15:30
+Wednesday · 9. 15:40–16:25
+Wednesday · 10. 16:30–17:15
+Thursday · 1. 08:00–08:40
+Thursday · 2. 08:45–09:30
+Thursday · 3. 09:40–10:25
+Thursday · 4. 10:45–11:30
+Thursday · 5. 11:50–12:35
+Thursday · 6. 12:55–13:40
+Thursday · 7. 13:50–14:35
+Thursday · 8. 14:45–15:30
+Thursday · 9. 15:40–16:25
+Thursday · 10. 16:30–17:15
+Friday · 1. 08:00–08:40
+Friday · 2. 08:45–09:30
+Friday · 3. 09:40–10:25
+Friday · 4. 10:45–11:30
+Friday · 5. 11:50–12:35
+Friday · 6. 12:55–13:40
+Friday · 7. 13:50–14:35
+Friday · 8. 14:45–15:30
+Friday · 9. 15:40–16:25
+Friday · 10. 16:30–17:15
+Highlight lessons
+Clear filters
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+Padawan 1A	108:00–08:40	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+208:45–09:30	
+Galactic Basic
+Jedi Training Hall 1
+	
+—
+	
+Galactic Citizenship
+Jedi Training Hall 1
+	
+Force Meditation
+Jedi Training Hall 1
+	
+Galactic Basic
+Jedi Training Hall 1
+
+309:40–10:25	
+Holographic Field Studies
+Jedi Training Hall 1
+	
+Galactic Citizenship
+Jedi Training Hall 1
+	
+Advanced Astrogation
+Jedi Training Hall 1
+	
+Planetary Ecology
+Jedi Training Hall 1
+	
+Holocron Art
+Jedi Training Hall 1
+
+410:45–11:30	
+Planetary Ecology
+Jedi Training Hall 1
+	
+Advanced Astrogation
+Jedi Training Hall 1
+	
+Holographic Field Studies
+Jedi Training Hall 1
+	
+Galactic Basic
+Jedi Training Hall 1
+	
+Advanced Astrogation
+Jedi Training Hall 1
+
+511:50–12:35	
+Galactic Basic
+Jedi Training Hall 1
+	
+Advanced Astrogation
+Jedi Training Hall 1
+	
+Padawan Mentoring
+Droid Workshop 38
+	
+Padawan Mentoring
+Droid Workshop 38
+	
+Galactic Basic
+Jedi Training Hall 1
+
+612:55–13:40	
+—
+	
+Jedi Archives
+Kyber Laboratory 34
+	
+—
+	
+Jedi Archives
+Council Chamber 33
+	
+—
+
+713:50–14:35	
+—
+	
+Galactic Basic
+Jedi Training Hall 1
+	
+—
+	
+—
+	
+—
+
+814:45–15:30	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+915:40–16:25	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+
+1016:30–17:15	
+—
+	
+—
+	
+—
+	
+—
+	
+—
+Fictional staff and schools · Your saved timetables and drafts stay in this browser on this device.
+About storage

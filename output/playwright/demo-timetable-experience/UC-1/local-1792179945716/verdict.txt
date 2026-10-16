@@ -1,0 +1,9 @@
+FAIL: org.opentest4j.AssertionFailedError: Locator expected to have value
+Expected: full
+Received: Loading schools…
+
+Call log:
+  - Assert "hasValue" locator("#school-selector") with timeout 5000ms
+  - waiting for locator("#school-selector")
+    2 × locator resolved to <select aria-label="School" id="school-selector">…</select>
+      - unexpected value "Loading schools…"

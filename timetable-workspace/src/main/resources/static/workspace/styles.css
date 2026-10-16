@@ -10,6 +10,9 @@
 [hidden] { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 body { margin: 0; min-height: 100vh; }
+#demo-json { width: 100%; max-width: 100%; min-height: 12rem; resize: vertical; font-family: var(--font-mono); font-size: .85rem; line-height: 1.45; padding: 12px; border: 1px solid #b8c5bc; background: #fff; }
+#demo-definition-panel select { max-width: 100%; }
+#demo-retention p { max-width: 90ch; }
 header, main { width: min(1440px, calc(100% - 32px)); margin-inline: auto; }
 header { padding: 52px 0 22px; }
 h1 { margin: 4px 0 10px; font-size: clamp(2rem, 5vw, 3.7rem); letter-spacing: -.045em; font-weight: 800; }
@@ -996,3 +999,16 @@ body.authoring .current-label { margin: 8px 0; }
 .definition-preference-explanation p, .definition-preference-example p { margin:6px 0 12px; line-height:1.45; }
 .definition-preference-comparison { grid-column:1 / -1; padding:12px; border:1px solid #c2cdc4; border-radius:6px; }
 .definition-preference-example { background:#edf2ec; border-radius:4px; padding:12px; font-variant-numeric:tabular-nums; }
+
+.demo-effort { max-width: 42rem; margin: 1rem 0; }
+.demo-effort label { display: block; font-weight: 600; margin-bottom: .4rem; }
+.demo-effort select { max-width: 100%; }
+body.operational:has(#demo-retention) .school-identity h2 { overflow-wrap: anywhere; }
+#demo-run-status, .demo-provenance { overflow-wrap: anywhere; }
+body.operational:has(#demo-retention) .accepted-heading:has(.utility-disclosure[open]) .header-utilities {
+  grid-column: 1 / -1; justify-self: stretch; display: block; min-width: 0;
+}
+body.operational:has(#demo-retention) .header-utilities:has(.utility-disclosure[open]) .mode-note {
+  width: fit-content; margin-bottom: .5rem;
+}
+body.operational:has(#demo-retention) .header-utilities .utility-disclosure[open] { width: 100%; max-width: 100%; }

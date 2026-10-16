@@ -1,0 +1,525 @@
+{
+  "kernelBuild": "441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881",
+  "exactSamplePairs": [
+    "two-class/a",
+    "two-class/b",
+    "full/a",
+    "full/b",
+    "star-wars/a",
+    "star-wars/b",
+    "english/a",
+    "english/b"
+  ],
+  "date": "2026-10-16T22:32:46.143595+00:00",
+  "verdict": "PASS",
+  "statelessResponses": [
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "setsCookie": false
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "setsCookie": false
+    }
+  ],
+  "edgeProbes": [
+    {
+      "name": "normal",
+      "status": 200,
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-http-scheme",
+      "status": 200,
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-foreign-forwarded-host",
+      "status": 200,
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "duplicate-client-scheme",
+      "status": 200,
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "client-forwarded-ip",
+      "status": 200,
+      "body": "{\"status\":\"UP\"}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "forwarded-rejected",
+      "status": 403,
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"8eca73e7-2bb9-42b6-afa8-94ee96339f37\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "foreign-origin-rejected",
+      "status": 403,
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"34055f09-2a38-405a-894d-5019d5b0176b\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "missing-origin-csrf-rejected",
+      "status": 403,
+      "body": "{\"code\":\"PUBLIC_REQUEST_DENIED\",\"message\":\"This demo request does not match the configured HTTPS origin.\",\"correlationId\":\"2af6c34e-becd-4f73-be24-93558fda1974\",\"state\":\"UNKNOWN\",\"etag\":null}",
+      "setsCookie": false,
+      "location": null
+    },
+    {
+      "name": "public-http-redirect",
+      "status": 301,
+      "body": "",
+      "setsCookie": false,
+      "location": "https://demo-smoke-production.up.railway.app/healthz"
+    }
+  ],
+  "staticAssets": [
+    {
+      "path": "/workspace/demo-workbench.js",
+      "status": 200,
+      "sha256": "a078ad605eb0b7f3d210d45c9b7014f44534c96f4d778f63c6bf5134c0ee2813",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-grid.js",
+      "status": 200,
+      "sha256": "fc640f4b768db37075bd1591ddccda9977031df3b9dd0c60e193d33668bd71a8",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/day-renderer.js",
+      "status": 200,
+      "sha256": "42871ac8c66ac574f2e0ec197e22e7989f439c80cdfb34a5902504ad9caf5708",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-rooms.js",
+      "status": 200,
+      "sha256": "9a7b2d74e917abb01e7d2f939c259299a65e819dce346815e2ee04d3559ecb10",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-panel.js",
+      "status": 200,
+      "sha256": "f7a746bb0a9fcfb73e0aab902ea5e893d1ebf1f8636cd645a9805f1f67c6eaf3",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-occurrence-browser.js",
+      "status": 200,
+      "sha256": "bcbab17e62695128d1a46a400ae890d4e032c8872746ff0b740f9356639cb66b",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/index.html",
+      "status": 200,
+      "sha256": "ba5e87e69fe6855ecd1646bb565204a8ccc1b34eb52d1f8d66f1e1ce93606df8",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-occurrences.js",
+      "status": 200,
+      "sha256": "cfa99c2f38cea8570bfed9cc363bd9b36ab8d5e26d5f4796d93b239d5b2c825d",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/styles.css",
+      "status": 200,
+      "sha256": "60f2e37f121438324887987eb0affdef4e12a96a80ee0cf550cee54d18ac324c",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-restoration.js",
+      "status": 200,
+      "sha256": "2cbaf5024cb30f39ad9e12c983140e4cca577d031991fc88478ceec2b975e591",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-removal.js",
+      "status": 200,
+      "sha256": "3feab6b926685d0af54e7181f6f937183a2653b1a9a2b67ccf301557252ef458",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/inspection-state.js",
+      "status": 200,
+      "sha256": "f0c181929064c2e370eba40d6ffe34e4ef1eb32d9b5771435e267a79679d9d10",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-review.js",
+      "status": 200,
+      "sha256": "b4f2b4680196835075bbaca56b556d0d65bbbcd7e48bdf739b730548af6d8cd0",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/week-renderer.js",
+      "status": 200,
+      "sha256": "9e09e36544caab000bdb1792adfcc27a40db4f16838195fc1e112a83b23385ab",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-requirement-browser.js",
+      "status": 200,
+      "sha256": "6b04fb1ddf63802fd823fff4717a1edd5b2ed5ba4cad2c980e4044ed69543cbc",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-form-controls.js",
+      "status": 200,
+      "sha256": "76094c614f5f6f88d900e40ef7333aa3be2d837b36162a669d9eb9a74bcd1166",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-definitions.js",
+      "status": 200,
+      "sha256": "0dff9459fe67d30184da9181480b6ecfba368ef4e29e53ac73b8eac39197ecd3",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-teachers.js",
+      "status": 200,
+      "sha256": "18c5287e838bd0f177027ca75b1e269a505529e321dd6df2fb1de1f852e19baa",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-cohorts.js",
+      "status": 200,
+      "sha256": "8a5f11041f5b0f4312f635176d9a7375d814f561879e6d06655ebdd254b11d17",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-catalog.js",
+      "status": 200,
+      "sha256": "9019db7e241c10023a0efd91ee3567c290fcfdca283fbcca0291c39b2bb4891f",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/timetable-storage.js",
+      "status": 200,
+      "sha256": "d797f633c92ff03c0e19c30cad05abb85dd277aab47256e63f0e913279ba3ebd",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-requirements.js",
+      "status": 200,
+      "sha256": "86f802645f4df56934ad6fb891fed965f525fdaceabefb54765a06264cde6cda",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-room-policies.js",
+      "status": 200,
+      "sha256": "59287940cf7f1fe0f6f01c0cde14042a7f945b1e9042935dd60ce87ae166d9b9",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-subjects.js",
+      "status": 200,
+      "sha256": "9bbce7b84edc96c9aadbb2bc8fb7a11c07512366cc892d1247a606f3f78eb287",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-runs.js",
+      "status": 200,
+      "sha256": "85e81831cc47a33bcf26e5138b327cd1b65a602d79ea66bb7b98157b071d71b9",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-feedback.js",
+      "status": 200,
+      "sha256": "9822d977684b32a73b0a950f0b82dd040cee25f6775269402510dd33d035016f",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-import.js",
+      "status": 200,
+      "sha256": "8c48909f12942ef04e5f80a7414a5ec89dfc23d2297fb1034df186bc3a53cf34",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-preference-guide.js",
+      "status": 200,
+      "sha256": "5d39a3456b0cdc644638909dba6f5457153dbeb193e7f2348e1b5e8d0b0d5fff",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-preferences.js",
+      "status": 200,
+      "sha256": "21f17196e9c7320ff4888198d954e778db1fb74a15a7db3df97de7c943d70442",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-transport.js",
+      "status": 200,
+      "sha256": "018133439cbfa265d10742a71beb73e1056d0b79c6dcfdef99792f40b2ad31af",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/accepted-model.js",
+      "status": 200,
+      "sha256": "d7de994664438d3cff73c72c6e8ff17098a7ec316743be3e52eacbdb7356c99d",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/demo-workbench.css",
+      "status": 200,
+      "sha256": "b19963cf06a9cbce0ac4ed43537da41c276aeb8a2121757c309d8814cac46bb1",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-finish.js",
+      "status": 200,
+      "sha256": "ebad90a828fee97efad87a95c18d954b5f19fd50e14380713e4c7a0f5edebc26",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-editor.js",
+      "status": 200,
+      "sha256": "1561e5e9789963112f9a4129336259b0e446f8f4c42197cb2b633494890c4f78",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/messages.js",
+      "status": 200,
+      "sha256": "3edbaec7a02fb4c64ef0e1d5e9a413e7b0a546265271d14ce5e959eaa7dd35c2",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/app.js",
+      "status": 200,
+      "sha256": "4b2636a7f3a63b264e1cbd02c891e955c5acaf45d71ad77a4701460f58366aee",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/favicon.svg",
+      "status": 200,
+      "sha256": "2caf8c11a20033b0f30c78116a88eb83febf6772234b6c5e238c547f51db04d6",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-discard.js",
+      "status": 200,
+      "sha256": "8e0865c354a10f9da68015434744ab09e018a49882e1e49909396b37ec29c2b9",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/definition-browser.js",
+      "status": 200,
+      "sha256": "f969776a87367b1ac6c67d0add3f200987c478d4725caa1a38677d010ba447fe",
+      "matchesPinned": true
+    },
+    {
+      "path": "/workspace/proposal-comparison.js",
+      "status": 200,
+      "sha256": "6d3212ce43e48987cdd0cc3396cb4ae7973eca6709561ff10350eb122cefa21d",
+      "matchesPinned": true
+    }
+  ],
+  "disposition": "No session created; only stateless health/static and refused/redirected edge requests"
+}

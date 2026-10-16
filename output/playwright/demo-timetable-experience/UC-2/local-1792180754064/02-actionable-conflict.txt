@@ -1,0 +1,577 @@
+SCHOOL KERNEL
+Interactive demo
+School
+Ranniku õppehoone
+Kasevälja Põhikool
+Coruscant Academy
+Timetable
+Variant A · unsaved changes
+Variant B
+Utilities
+Variant A
+
+Ranniku õppehoone · 2 classes · 56 lessons per week
+
+Compact
+Week
+Day
+Day
+Whole week
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+Classes
+All classes
+5A
+5B
+Teachers
+All teachers
+Mari Tammela
+Jaan Tammela
+Katrin Tammela
+Toomas Tammela
+Liis Tammela
+Martin Tammela
+Kärt Tammela
+Andres Tammela
+Evelin Tammela
+Siim Tammela
+Helen Tammela
+Priit Tammela
+Kadri Tammela
+Rasmus Tammela
+Annika Tammela
+Tanel Tammela
+Triin Tammela
+Rooms
+All rooms
+Klassiruum 101
+Klassiruum 102
+Klassiruum 103
+Klassiruum 104
+Klassiruum 105
+Klassiruum 106
+Klassiruum 107
+Klassiruum 108
+Klassiruum 109
+Klassiruum 110
+Klassiruum 111
+Muusikaklass 112
+Kunstiklass 113
+Spordisaal
+Tehnoloogiaklass
+Subjects
+All subjects
+Klassijuhatajatund
+Eesti keel
+Kirjandus
+Matemaatika
+Loodusõpetus
+Ajalugu
+Õpiabi
+Muusikaõpetus
+Kunstiõpetus
+Inimeseõpetus
+Inglise keel
+Vene keel
+Kehaline kasvatus
+Käsitöö ja tehnoloogiaõpetus
+Time slots
+All time slots
+Monday · 1. 08:00–08:40
+Monday · 2. 08:45–09:30
+Monday · 3. 09:40–10:25
+Monday · 4. 10:45–11:30
+Monday · 5. 11:50–12:35
+Monday · 6. 12:55–13:40
+Monday · 7. 13:50–14:35
+Tuesday · 1. 08:00–08:40
+Tuesday · 2. 08:45–09:30
+Tuesday · 3. 09:40–10:25
+Tuesday · 4. 10:45–11:30
+Tuesday · 5. 11:50–12:35
+Tuesday · 6. 12:55–13:40
+Tuesday · 7. 13:50–14:35
+Wednesday · 1. 08:00–08:40
+Wednesday · 2. 08:45–09:30
+Wednesday · 3. 09:40–10:25
+Wednesday · 4. 10:45–11:30
+Wednesday · 5. 11:50–12:35
+Wednesday · 6. 12:55–13:40
+Wednesday · 7. 13:50–14:35
+Thursday · 1. 08:00–08:40
+Thursday · 2. 08:45–09:30
+Thursday · 3. 09:40–10:25
+Thursday · 4. 10:45–11:30
+Thursday · 5. 11:50–12:35
+Thursday · 6. 12:55–13:40
+Thursday · 7. 13:50–14:35
+Friday · 1. 08:00–08:40
+Friday · 2. 08:45–09:30
+Friday · 3. 09:40–10:25
+Friday · 4. 10:45–11:30
+Friday · 5. 11:50–12:35
+Friday · 6. 12:55–13:40
+Friday · 7. 13:50–14:35
+Highlight lessons
+Clear filters
+Must fix
+
+Save is blocked until these mandatory rules pass.
+
+Class double-booked
+
+This class has more than one lesson at the same time. Move one of the lessons to a free time slot.
+
+5A · Inglise keel · Triin Tammela · Klassiruum 110 · Wednesday · 3. 09:40–10:25
+5A · Inglise keel · Kadri Tammela · Klassiruum 108 · Wednesday · 3. 09:40–10:25
+Gap in the class day
+
+This class has too many empty periods between lessons. Move a lesson into a gap or move an edge lesson to shorten the day.
+
+5A · Inglise keel · Triin Tammela · Klassiruum 110 · Wednesday · 3. 09:40–10:25
+5A · Inglise keel · Kadri Tammela · Klassiruum 108 · Wednesday · 3. 09:40–10:25
+5A · Inglise keel · Kadri Tammela · Klassiruum 104 · Tuesday · 4. 10:45–11:30
+5A · Kehaline kasvatus · Annika Tammela · Spordisaal · Monday · 6. 12:55–13:40
+5A · Kehaline kasvatus · Annika Tammela · Spordisaal · Friday · 5. 11:50–12:35
+5A · Vene keel · Rasmus Tammela · Klassiruum 102 · Friday · 7. 13:50–14:35
+5A · Käsitöö ja tehnoloogiaõpetus · Tanel Tammela · Tehnoloogiaklass · Monday · 2. 08:45–09:30
+5A · Käsitöö ja tehnoloogiaõpetus · Tanel Tammela · Tehnoloogiaklass · Thursday · 6. 12:55–13:40
+5A · Kunstiõpetus · Evelin Tammela · Kunstiklass 113 · Thursday · 4. 10:45–11:30
+5A · Eesti keel · Jaan Tammela · Klassiruum 106 · Thursday · 5. 11:50–12:35
+5A · Eesti keel · Jaan Tammela · Klassiruum 104 · Friday · 3. 09:40–10:25
+5A · Eesti keel · Jaan Tammela · Klassiruum 106 · Tuesday · 2. 08:45–09:30
+5A · Eesti keel · Jaan Tammela · Klassiruum 104 · Monday · 7. 13:50–14:35
+5A · Ajalugu · Martin Tammela · Klassiruum 105 · Monday · 4. 10:45–11:30
+5A · Ajalugu · Martin Tammela · Klassiruum 105 · Thursday · 1. 08:00–08:40
+5A · Inimeseõpetus · Siim Tammela · Klassiruum 110 · Friday · 4. 10:45–11:30
+5A · Klassijuhatajatund · Mari Tammela · Klassiruum 111 · Thursday · 3. 09:40–10:25
+5A · Kirjandus · Katrin Tammela · Klassiruum 103 · Tuesday · 1. 08:00–08:40
+5A · Kirjandus · Katrin Tammela · Klassiruum 103 · Wednesday · 2. 08:45–09:30
+5A · Matemaatika · Toomas Tammela · Klassiruum 109 · Thursday · 2. 08:45–09:30
+5A · Matemaatika · Toomas Tammela · Klassiruum 109 · Friday · 2. 08:45–09:30
+5A · Matemaatika · Toomas Tammela · Klassiruum 109 · Monday · 3. 09:40–10:25
+5A · Matemaatika · Toomas Tammela · Klassiruum 109 · Wednesday · 1. 08:00–08:40
+5A · Matemaatika · Toomas Tammela · Klassiruum 109 · Tuesday · 3. 09:40–10:25
+5A · Muusikaõpetus · Andres Tammela · Muusikaklass 112 · Wednesday · 4. 10:45–11:30
+5A · Loodusõpetus · Liis Tammela · Klassiruum 101 · Monday · 5. 11:50–12:35
+5A · Loodusõpetus · Liis Tammela · Klassiruum 101 · Wednesday · 5. 11:50–12:35
+5A · Loodusõpetus · Liis Tammela · Klassiruum 101 · Tuesday · 5. 11:50–12:35
+Could be improved · 3 preferences
+Class	Period	Monday	Tuesday	Wednesday	Thursday	Friday
+5A	1
+08:00–08:40
+	
+—
+	
+Must fix
+Kirjandus
+Katrin Tammela
+Klassiruum 103
+	
+Must fix
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Must fix
+Ajalugu
+Martin Tammela
+Klassiruum 105
+	
+—
+
+2
+08:45–09:30
+	
+Must fix
+Käsitöö ja tehnoloogiaõpetus
+Tanel Tammela
+Tehnoloogiaklass
+	
+Must fix
+Eesti keel
+Jaan Tammela
+Klassiruum 106
+	
+Must fix
+Kirjandus
+Katrin Tammela
+Klassiruum 103
+	
+Must fix
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Must fix
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+
+3
+09:40–10:25
+	
+Must fix
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Must fix
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Must fix
+Inglise keel
+Triin Tammela
+Klassiruum 110
+Must fix
+Inglise keel
+Kadri Tammela
+Klassiruum 108
+	
+Must fix
+Klassijuhatajatund
+Mari Tammela
+Klassiruum 111
+	
+Must fix
+Eesti keel
+Jaan Tammela
+Klassiruum 104
+
+4
+10:45–11:30
+	
+Must fix
+Ajalugu
+Martin Tammela
+Klassiruum 105
+	
+Must fix
+Inglise keel
+Kadri Tammela
+Klassiruum 104
+	
+Must fix
+Muusikaõpetus
+Andres Tammela
+Muusikaklass 112
+	
+Must fix
+Kunstiõpetus
+Evelin Tammela
+Kunstiklass 113
+	
+Must fix
+Inimeseõpetus
+Siim Tammela
+Klassiruum 110
+
+5
+11:50–12:35
+	
+Must fix
+Loodusõpetus
+Liis Tammela
+Klassiruum 101
+	
+Must fix
+Loodusõpetus
+Liis Tammela
+Klassiruum 101
+	
+Must fix
+Loodusõpetus
+Liis Tammela
+Klassiruum 101
+	
+Must fix
+Eesti keel
+Jaan Tammela
+Klassiruum 106
+	
+Must fix
+Kehaline kasvatus
+Annika Tammela
+Spordisaal
+
+6
+12:55–13:40
+	
+Must fix
+Kehaline kasvatus
+Annika Tammela
+Spordisaal
+	
+—
+	
+—
+	
+Must fix
+Käsitöö ja tehnoloogiaõpetus
+Tanel Tammela
+Tehnoloogiaklass
+	
+—
+
+7
+13:50–14:35
+	
+Must fix
+Eesti keel
+Jaan Tammela
+Klassiruum 104
+	
+—
+	
+—
+	
+—
+	
+Must fix
+Vene keel
+Rasmus Tammela
+Klassiruum 102
+
+5B	1
+08:00–08:40
+	
+Vene keel
+Rasmus Tammela
+Klassiruum 102
+	
+—
+	
+Loodusõpetus
+Priit Tammela
+Klassiruum 102
+	
+Matemaatika
+Toomas Tammela
+Klassiruum 102
+	
+—
+
+2
+08:45–09:30
+	
+Eesti keel
+Helen Tammela
+Klassiruum 108
+	
+Kehaline kasvatus
+Annika Tammela
+Spordisaal
+	
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Eesti keel
+Helen Tammela
+Klassiruum 104
+	
+Eesti keel
+Helen Tammela
+Klassiruum 103
+
+3
+09:40–10:25
+	
+Ajalugu
+Martin Tammela
+Klassiruum 105
+	
+Ajalugu
+Martin Tammela
+Klassiruum 105
+	
+Kirjandus
+Katrin Tammela
+Klassiruum 103
+	
+Kirjandus
+Katrin Tammela
+Klassiruum 103
+	
+Inimeseõpetus
+Siim Tammela
+Klassiruum 107
+
+4
+10:45–11:30
+	
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Klassijuhatajatund
+Helen Tammela
+Klassiruum 108
+	
+Muusikaõpetus
+Andres Tammela
+Muusikaklass 112
+	
+Loodusõpetus
+Priit Tammela
+Klassiruum 102
+
+5
+11:50–12:35
+	
+Inglise keel
+Kadri Tammela
+Klassiruum 105
+	
+Matemaatika
+Toomas Tammela
+Klassiruum 109
+	
+Eesti keel
+Helen Tammela
+Klassiruum 105
+	
+Inglise keel
+Kadri Tammela
+Klassiruum 109
+	
+Käsitöö ja tehnoloogiaõpetus
+Tanel Tammela
+Tehnoloogiaklass
+
+6
+12:55–13:40
+	
+—
+	
+Loodusõpetus
+Priit Tammela
+Klassiruum 102
+	
+Käsitöö ja tehnoloogiaõpetus
+Tanel Tammela
+Tehnoloogiaklass
+	
+Kehaline kasvatus
+Annika Tammela
+Spordisaal
+	
+Kunstiõpetus
+Evelin Tammela
+Kunstiklass 113
+
+7
+13:50–14:35
+	
+—
+	
+—
+	
+—
+	
+—
+	
+Inglise keel
+Kadri Tammela
+Klassiruum 111
+Fictional staff and schools · Your saved timetables and drafts stay in this browser on this device.
+About storage
+
+5A
+
+Inglise keel
+✕
+Teacher
+Mari Tammela · not eligible for this lesson
+Jaan Tammela · not eligible for this lesson
+Katrin Tammela · not eligible for this lesson
+Toomas Tammela · not eligible for this lesson
+Liis Tammela · not eligible for this lesson
+Martin Tammela · not eligible for this lesson
+Kärt Tammela · not eligible for this lesson
+Andres Tammela · not eligible for this lesson
+Evelin Tammela · not eligible for this lesson
+Siim Tammela · not eligible for this lesson
+Helen Tammela · not eligible for this lesson
+Priit Tammela · not eligible for this lesson
+Kadri Tammela
+Rasmus Tammela · not eligible for this lesson
+Annika Tammela · not eligible for this lesson
+Tanel Tammela · not eligible for this lesson
+Triin Tammela
+
+Only eligible teachers can be saved. Busy teachers remain selectable so you can swap lessons.
+
+Room
+Klassiruum 101 · 30 seats
+Klassiruum 102 · 30 seats
+Klassiruum 103 · 30 seats
+Klassiruum 104 · 30 seats
+Klassiruum 105 · 30 seats
+Klassiruum 106 · 30 seats
+Klassiruum 107 · 30 seats
+Klassiruum 108 · 30 seats
+Klassiruum 109 · 30 seats
+Klassiruum 110 · 30 seats
+Klassiruum 111 · 30 seats
+Muusikaklass 112 · 30 seats
+Kunstiklass 113 · 30 seats
+Spordisaal · 30 seats
+Tehnoloogiaklass · 30 seats
+Time slot
+Monday · 1. 08:00–08:40
+Monday · 2. 08:45–09:30
+Monday · 3. 09:40–10:25
+Monday · 4. 10:45–11:30
+Monday · 5. 11:50–12:35
+Monday · 6. 12:55–13:40
+Monday · 7. 13:50–14:35
+Tuesday · 1. 08:00–08:40
+Tuesday · 2. 08:45–09:30
+Tuesday · 3. 09:40–10:25
+Tuesday · 4. 10:45–11:30
+Tuesday · 5. 11:50–12:35
+Tuesday · 6. 12:55–13:40
+Tuesday · 7. 13:50–14:35
+Wednesday · 1. 08:00–08:40
+Wednesday · 2. 08:45–09:30
+Wednesday · 3. 09:40–10:25
+Wednesday · 4. 10:45–11:30
+Wednesday · 5. 11:50–12:35
+Wednesday · 6. 12:55–13:40
+Wednesday · 7. 13:50–14:35
+Thursday · 1. 08:00–08:40
+Thursday · 2. 08:45–09:30
+Thursday · 3. 09:40–10:25
+Thursday · 4. 10:45–11:30
+Thursday · 5. 11:50–12:35
+Thursday · 6. 12:55–13:40
+Thursday · 7. 13:50–14:35
+Friday · 1. 08:00–08:40
+Friday · 2. 08:45–09:30
+Friday · 3. 09:40–10:25
+Friday · 4. 10:45–11:30
+Friday · 5. 11:50–12:35
+Friday · 6. 12:55–13:40
+Friday · 7. 13:50–14:35
+
+Must fix: Class double-booked
+This class has more than one lesson at the same time. Move one of the lessons to a free time slot.
+
+Must fix: Gap in the class day
+This class has too many empty periods between lessons. Move a lesson into a gap or move an edge lesson to shorten the day.
+
+Must fix · 2 rules
+1 changed lesson
+New timetable name
+Save as new timetable
+Discard changes

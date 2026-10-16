@@ -1,0 +1,10 @@
+{
+  "DEMO_WEB_HEAP_MB": "128",
+  "DEMO_VERIFY_HEAP_MB": "96",
+  "DEMO_SOLVER_HEAP_MB": "128",
+  "DEMO_RAILWAY_ISOLATED_INGRESS": "true",
+  "DEMO_TRUSTED_PROXY_ADDRESSES": "",
+  "SPRING_APPLICATION_JSON": "{\"demo\":{\"max-workspaces\":2}}",
+  "DEMO_PUBLIC_HOSTS": "demo-smoke-production.up.railway.app",
+  "RAILWAY_PUBLIC_DOMAIN": "demo-smoke-production.up.railway.app"
+}

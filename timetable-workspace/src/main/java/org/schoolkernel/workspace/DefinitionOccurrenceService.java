@@ -13,11 +13,11 @@ import tools.jackson.databind.node.ObjectNode;
 @Service
 public class DefinitionOccurrenceService {
     private static final Set<String> FIELDS=Set.of("displayName","subjectId","cohortId","teacherId","requiredRoomCapabilityIds","preferredRoomIds","undesirablePeriodIds","periodLock","roomLock");
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
     private final DefinitionRequirementService requirements;
     private final DefinitionEntityService entities;
-    public DefinitionOccurrenceService(WorkspaceRepository repository,ObjectMapper json,DefinitionRequirementService requirements,DefinitionEntityService entities){this.repository=repository;this.json=json;this.requirements=requirements;this.entities=entities;}
+    public DefinitionOccurrenceService(WorkspaceStore repository,ObjectMapper json,DefinitionRequirementService requirements,DefinitionEntityService entities){this.repository=repository;this.json=json;this.requirements=requirements;this.entities=entities;}
 
     public ObjectNode preview(String ifMatch,JsonNode request) {
         WorkspaceAggregate current=repository.load();ImportService.requireMatchingVersion(ifMatch,current);requireDraft(current);

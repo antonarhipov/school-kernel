@@ -1,0 +1,75 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-10-16T19:47:16.953+03:00  INFO 88164 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Starting WorkspaceApplication using Java 25.0.1 with PID 88164 (/private/var/folders/c_/5_n98lpd65j__pbwgzctxx_80000gn/T/junit-8510460561132828223/workspace.jar started by anton in /Users/anton/IdeaProjects/school-kernel/school-kernel/timetable-workspace)
+2026-10-16T19:47:16.958+03:00  INFO 88164 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : The following 1 profile is active: "demo"
+2026-10-16T19:47:19.949+03:00  INFO 88164 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 59857 (https)
+2026-10-16T19:47:19.966+03:00  INFO 88164 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-16T19:47:19.967+03:00  INFO 88164 --- [timetable-workspace] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.24]
+2026-10-16T19:47:19.993+03:00  INFO 88164 --- [timetable-workspace] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2832 ms
+2026-10-16T19:47:20.271+03:00  INFO 88164 --- [timetable-workspace] [           main] o.s.boot.web.servlet.RegistrationBean    : Filter hostFilterRegistration was not registered (disabled)
+2026-10-16T19:47:23.067+03:00  INFO 88164 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=9f046446-cc65-4736-9e33-1a3f6d96fff9 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1659
+2026-10-16T19:47:24.552+03:00  INFO 88164 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=8421b5ff-7e9d-49df-9839-dfbbcd73b9ea kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1454
+2026-10-16T19:47:26.502+03:00  INFO 88164 --- [timetable-workspace] [           main] o.schoolkernel.workspace.KernelVerifier  : correlationId=7ba3b5be-c6fd-47bc-ac8f-d1d97645bb7d kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1903
+2026-10-16T19:47:28.149+03:00  INFO 88164 --- [timetable-workspace] [           main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-127.0.0.1-59857], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-10-16T19:47:28.165+03:00  INFO 88164 --- [timetable-workspace] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 59857 (https) with context path '/'
+2026-10-16T19:47:28.201+03:00  INFO 88164 --- [timetable-workspace] [           main] o.s.workspace.WorkspaceApplication       : Started WorkspaceApplication in 12.493 seconds (process running for 13.554)
+{"family":"startup","event":"ready","timestamp":"2026-10-16T16:47:28.217412Z","kernelBuild":"e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b","effective":{"demo.idle-timeout":"60m","demo.absolute-timeout":"8h","demo.max-workspaces":"50","demo.search.lesson-threshold":"200","demo.search.quick-seconds":"5","demo.search.thorough-seconds":"60","demo.complexity.work-max":"11000000","demo.complexity.lesson-max":"2500","demo.queue.max-waiting":"8","demo.queue.estimated-start-limit":"2m","demo.queue.abandonment":"2m","demo.kernel.solve-overhead":"10s","demo.kernel.daily-allowance":"4h","demo.kernel.verification-timeout":"30s","demo.kernel.verification-wait":"10s","demo.reuse.enabled":"true","demo.reuse.max-bytes":"67108864","demo.reuse.ttl":"1h","demo.observability.summary-interval":"1m"},"solveSlots":1,"standaloneVerificationSlots":2,"counterReset":"a5506d06-e50a-461e-bad4-3bed389d01e3","utcAllowanceDay":"2026-10-16","sampleVerification":{"small":"VERIFIED","two-class":"VERIFIED","full":"VERIFIED"}}
+2026-10-16T19:47:49.059+03:00  INFO 88164 --- [timetable-workspace] [.1-59857-exec-7] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-16T19:47:49.063+03:00  INFO 88164 --- [timetable-workspace] [.1-59857-exec-7] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-16T19:47:49.090+03:00  INFO 88164 --- [timetable-workspace] [.1-59857-exec-7] o.s.web.servlet.DispatcherServlet        : Completed initialization in 26 ms
+{"family":"session","event":"created","timestamp":"2026-10-16T16:47:50.702108Z","count":1,"reason":"CREATED"}
+{"family":"session","event":"created","timestamp":"2026-10-16T16:47:53.923978Z","count":1,"reason":"CREATED"}
+{"family":"reuse","event":"MISS","timestamp":"2026-10-16T16:47:58.022708Z","operation":"VERIFICATION","physicalProcessStarted":false}
+{"family":"work","event":"process_started","timestamp":"2026-10-16T16:47:58.038556Z","kind":"VERIFICATION","correlationId":"013783fe-aa3a-4c93-be38-21ed861e5837"}
+2026-10-16T19:47:59.319+03:00  INFO 88164 --- [timetable-workspace] [.1-59857-exec-3] o.schoolkernel.workspace.KernelVerifier  : correlationId=dacc6563-f214-485c-9d9a-107f16b7eea7 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1296
+{"family":"work","event":"process_finished","timestamp":"2026-10-16T16:47:59.323407Z","kind":"VERIFICATION","outcome":"FEASIBLE","processMs":1275,"correlationId":"013783fe-aa3a-4c93-be38-21ed861e5837"}
+{"family":"definition","event":"DEFINITION_SAMPLE","timestamp":"2026-10-16T16:47:59.352773Z","sample":"small","lessons":2,"placementWork":12,"complexityBucket":"SMALL","verification":"VERIFIED"}
+{"family":"reuse","event":"HIT","timestamp":"2026-10-16T16:48:00.573571Z","operation":"VERIFICATION","physicalProcessStarted":false}
+{"family":"definition","event":"DEFINITION_SAMPLE","timestamp":"2026-10-16T16:48:00.574843Z","sample":"small","lessons":2,"placementWork":12,"complexityBucket":"SMALL","verification":"VERIFIED"}
+{"family":"work","event":"admitted","timestamp":"2026-10-16T16:48:00.976482Z","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+{"family":"reuse","event":"MISS","timestamp":"2026-10-16T16:48:00.976738Z","operation":"SOLVE","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","physicalProcessStarted":false}
+{"family":"work","event":"started","timestamp":"2026-10-16T16:48:00.976900Z","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","operation":"INITIAL","outcome":"RUNNING"}
+{"family":"work","event":"process_started","timestamp":"2026-10-16T16:48:00.992059Z","kind":"SOLVE","correlationId":"e42021b2-f9a4-4431-9321-2ef41ba4e6e8","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16"}
+{"family":"work","event":"process_finished","timestamp":"2026-10-16T16:48:08.042445Z","kind":"SOLVE","outcome":"EXIT_0","processMs":7049,"correlationId":"e42021b2-f9a4-4431-9321-2ef41ba4e6e8","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16"}
+{"family":"work","event":"process_started","timestamp":"2026-10-16T16:48:08.059583Z","kind":"VERIFICATION","correlationId":"4ce5eb6e-d8ef-4c25-ac8a-07f96aca9f9e"}
+2026-10-16T19:48:09.416+03:00  INFO 88164 --- [timetable-workspace] [11-1c7e5c500c16] o.schoolkernel.workspace.KernelVerifier  : correlationId=ef265fae-3177-463c-8840-93dc2cdf704b kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1366
+{"family":"work","event":"process_finished","timestamp":"2026-10-16T16:48:09.418107Z","kind":"VERIFICATION","outcome":"FEASIBLE","processMs":1353,"correlationId":"4ce5eb6e-d8ef-4c25-ac8a-07f96aca9f9e"}
+{"family":"work","event":"logical_finished","timestamp":"2026-10-16T16:48:09.429825Z","correlationId":"37a9fb1d-3a31-4b54-ba12-05b428974a12","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","operation":"INITIAL","preset":"QUICK","outcome":"FEASIBLE","waitMs":2,"requestDurationMs":8454,"reused":false,"originalSolveProcessMs":7060,"originalVerificationProcessMs":1368,"accounting":"PHYSICAL_PROCESS_EVENTS_ONLY"}
+{"family":"work","event":"finished","timestamp":"2026-10-16T16:48:09.430162Z","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","operation":"INITIAL","outcome":"FEASIBLE"}
+{"family":"work","event":"refused","timestamp":"2026-10-16T16:48:10.835071Z","reason":"ACCEPTANCE_CONFIRMATION_REQUIRED"}
+{"family":"reuse","event":"HIT","timestamp":"2026-10-16T16:48:11.661506Z","operation":"VERIFICATION","physicalProcessStarted":false}
+{"family":"decision","event":"ACCEPT_INITIAL","timestamp":"2026-10-16T16:48:11.668157Z"}
+{"family":"work","event":"refused","timestamp":"2026-10-16T16:48:12.105877Z","reason":"OTHER_REFUSAL"}
+{"family":"work","event":"admitted","timestamp":"2026-10-16T16:48:12.350191Z","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","operation":"INITIAL","preset":"QUICK","outcome":"QUEUED"}
+{"family":"reuse","event":"HIT","timestamp":"2026-10-16T16:48:12.350360Z","operation":"SOLVE","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","physicalProcessStarted":false}
+{"family":"work","event":"logical_finished","timestamp":"2026-10-16T16:48:12.350861Z","correlationId":"c3c09ea4-e2da-494c-a341-83372c99e54a","computationId":"c38a551a-75df-4849-b511-1c7e5c500c16","operation":"INITIAL","preset":"QUICK","outcome":"FEASIBLE","waitMs":0,"requestDurationMs":1,"reused":true,"originalSolveProcessMs":7060,"originalVerificationProcessMs":1368,"accounting":"PHYSICAL_PROCESS_EVENTS_ONLY"}
+{"family":"reuse","event":"HIT","timestamp":"2026-10-16T16:48:13.223508Z","operation":"VERIFICATION","physicalProcessStarted":false}
+{"family":"decision","event":"ACCEPT_INITIAL","timestamp":"2026-10-16T16:48:13.224126Z"}
+{"family":"work","event":"admitted","timestamp":"2026-10-16T16:48:14.924464Z","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","operation":"REPAIR","preset":"QUICK","outcome":"QUEUED"}
+{"family":"reuse","event":"MISS","timestamp":"2026-10-16T16:48:14.924710Z","operation":"SOLVE","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","physicalProcessStarted":false}
+{"family":"work","event":"started","timestamp":"2026-10-16T16:48:14.924802Z","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","operation":"REPAIR","outcome":"RUNNING"}
+{"family":"work","event":"process_started","timestamp":"2026-10-16T16:48:14.942299Z","kind":"SOLVE","correlationId":"ccb0066a-7f67-4801-a1cd-ca0b03169b52","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4"}
+{"family":"work","event":"process_finished","timestamp":"2026-10-16T16:48:22.352552Z","kind":"SOLVE","outcome":"EXIT_0","processMs":7409,"correlationId":"ccb0066a-7f67-4801-a1cd-ca0b03169b52","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4"}
+{"family":"work","event":"process_started","timestamp":"2026-10-16T16:48:22.391608Z","kind":"VERIFICATION","correlationId":"48708ff9-5285-4b31-b89d-07e61debf7ab"}
+2026-10-16T19:48:23.809+03:00  INFO 88164 --- [timetable-workspace] [2d-b4e84dd285e4] o.schoolkernel.workspace.KernelVerifier  : correlationId=8fccbb4a-ceea-46e6-848f-c76463819578 kernelCommand=verify exitClass=VERIFIED elapsedTimeMs=1454
+{"family":"work","event":"process_finished","timestamp":"2026-10-16T16:48:23.810521Z","kind":"VERIFICATION","outcome":"FEASIBLE","processMs":1416,"correlationId":"48708ff9-5285-4b31-b89d-07e61debf7ab"}
+{"family":"work","event":"logical_finished","timestamp":"2026-10-16T16:48:23.820918Z","correlationId":"606a7585-8fa4-49a7-a5b2-1a203ed187c6","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","operation":"REPAIR","preset":"QUICK","outcome":"FEASIBLE","waitMs":1,"requestDurationMs":8897,"reused":false,"originalSolveProcessMs":7420,"originalVerificationProcessMs":1456,"accounting":"PHYSICAL_PROCESS_EVENTS_ONLY"}
+{"family":"work","event":"finished","timestamp":"2026-10-16T16:48:23.821304Z","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","operation":"REPAIR","outcome":"FEASIBLE"}
+{"family":"work","event":"admitted","timestamp":"2026-10-16T16:48:27.175823Z","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","operation":"REPAIR","preset":"QUICK","outcome":"QUEUED"}
+{"family":"reuse","event":"HIT","timestamp":"2026-10-16T16:48:27.176118Z","operation":"SOLVE","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","physicalProcessStarted":false}
+{"family":"work","event":"logical_finished","timestamp":"2026-10-16T16:48:27.177267Z","correlationId":"fb6fade0-3b16-44b9-ad98-3b7a19b758fd","computationId":"44ccb086-d621-4bb9-802d-b4e84dd285e4","operation":"REPAIR","preset":"QUICK","outcome":"FEASIBLE","waitMs":0,"requestDurationMs":2,"reused":true,"originalSolveProcessMs":7420,"originalVerificationProcessMs":1456,"accounting":"PHYSICAL_PROCESS_EVENTS_ONLY"}
+{"family":"reuse","event":"HIT","timestamp":"2026-10-16T16:48:27.813471Z","operation":"VERIFICATION","physicalProcessStarted":false}
+{"family":"decision","event":"ACCEPT_REPAIR","timestamp":"2026-10-16T16:48:27.815481Z"}
+{"family":"aggregate","event":"interval","timestamp":"2026-10-16T16:48:28.237916Z","context":{"timestamp":"2026-10-16T16:48:28.237942Z","build":"e52ad2b0638c13259f4c14d5a48e2ba82365798c24b2e599a0399ee33e2be86b","config":"52b0d1cd","counterReset":"a5506d06-e50a-461e-bad4-3bed389d01e3","intervalMs":68073,"utcAllowanceDay":"2026-10-16"},"workspaces":{"created":2,"active":2},"queue":{"admissions":4,"logical.FEASIBLE":4,"preset.QUICK":4,"refusal.ACCEPTANCE_CONFIRMATION_REQUIRED":1,"refusal.OTHER_REFUSAL":1,"distinctWaiting":0,"waitP50UpperMs":0,"waitP90UpperMs":10,"waitBinMs":10},"processes":{"completed.SOLVE.EXIT_0":2,"completed.VERIFICATION.FEASIBLE":3,"durationMs.SOLVE":14458,"durationMs.VERIFICATION":4044,"runningSolve":0,"runningVerification":0},"cache":{"HIT":6,"MISS":3,"entries":5,"residentBytes":76714},"allowance":{"consumedMs":18556,"reservedMs":0,"remainingMs":14381443,"utcResets":0,"settlements":3,"releasedReservationMs":121443},"productUse":{"ACCEPT_INITIAL":2,"ACCEPT_REPAIR":1,"DEFINITION_SAMPLE":2,"conversion.ACCEPT_INITIAL":2,"conversion.ACCEPT_REPAIR":1}}
+2026-10-16T19:48:29.825+03:00  INFO 88164 --- [timetable-workspace] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-10-16T19:48:29.831+03:00  INFO 88164 --- [timetable-workspace] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+{"family":"session","event":"ended","timestamp":"2026-10-16T16:48:29.845117Z","count":1,"reason":"SHUTDOWN"}
+{"family":"session","event":"ended","timestamp":"2026-10-16T16:48:29.845665Z","count":1,"reason":"SHUTDOWN"}

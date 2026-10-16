@@ -17,19 +17,22 @@ import tools.jackson.databind.ObjectMapper;
 
 @Component
 public class ProblemResponder {
-    private final WorkspaceRepository repository;
+    @org.springframework.beans.factory.annotation.Autowired(required = false) private DemoEvents events;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
 
-    public ProblemResponder(WorkspaceRepository repository, ObjectMapper json) {
+    public ProblemResponder(WorkspaceStore repository, ObjectMapper json) {
         this.repository = repository;
         this.json = json;
     }
 
     ResponseEntity<ProblemResponse> response(HttpStatus status, String code, String message) {
+        recordRefusal(code);
         Snapshot snapshot = snapshot();
         ResponseEntity.BodyBuilder response = ResponseEntity.status(status)
                 .cacheControl(CacheControl.noStore())
                 .header("X-Content-Type-Options", "nosniff");
+        if ("DEMO_BUSY".equals(code)) response.header("Retry-After", "5");
         if (snapshot.etag() != null) {
             response.header(HttpHeaders.ETAG, snapshot.etag());
         }
@@ -37,16 +40,32 @@ public class ProblemResponder {
     }
 
     void write(HttpServletResponse response, HttpStatus status, String code, String message) throws IOException {
-        Snapshot snapshot = snapshot();
+        write(response, status, code, message, snapshot());
+    }
+
+    // Admission refusals must not copy an entire workspace while the input ceiling is already full.
+    void writeWithoutSnapshot(HttpServletResponse response, HttpStatus status, String code, String message) throws IOException {
+        recordRefusal(code);
+        write(response, status, code, message, new Snapshot("UNKNOWN", null));
+    }
+
+    private void write(HttpServletResponse response, HttpStatus status, String code, String message, Snapshot snapshot) throws IOException {
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setHeader(HttpHeaders.CACHE_CONTROL, "no-store");
+        if ("DEMO_BUSY".equals(code)) response.setHeader("Retry-After", "5");
         response.setHeader("X-Content-Type-Options", "nosniff");
         if (snapshot.etag() != null) {
             response.setHeader(HttpHeaders.ETAG, snapshot.etag());
         }
         json.writeValue(response.getOutputStream(), body(code, message, snapshot));
+    }
+
+    private void recordRefusal(String code) {
+        var attributes = org.springframework.web.context.request.RequestContextHolder.getRequestAttributes();
+        if (events != null && attributes instanceof org.springframework.web.context.request.ServletRequestAttributes servlet
+                && !"GET".equals(servlet.getRequest().getMethod()) && !"SESSION_ENDED".equals(code)) events.refusal(code);
     }
 
     private static ProblemResponse body(String code, String message, Snapshot snapshot) {

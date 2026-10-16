@@ -1,0 +1,2 @@
+Exception in thread "main" java.lang.IllegalStateException: Stored scoring is stale; regenerate the result: two-class
+	at VerifySampleScores.main(VerifySampleScores.java:43)

@@ -1,0 +1,3 @@
+# Retained public walkthrough attempt 1
+
+FAIL: test harness selected an unsafe ZIP while the prior separate JSON documents remained selected. The production UI correctly refuses ambiguous modes before an import request; the test waited for the wrong server-refusal text. Initial/reused acceptance, repair edits/conflict/undo, exact repair acceptance/ancestry, manual verified publication, private archive and standalone pair import passed before this point. No production change needed. Archive-selection helper now explicitly clears both JSON inputs, matching a real mode change. Retest the full public journey after same-image cleanup of the two disposable owners. Failed XML/log/screenshots/ledger remain intact.

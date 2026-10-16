@@ -1,0 +1,15 @@
+{
+  "verdict": "PASS",
+  "plan": "FREE",
+  "completeServiceManifestUnchanged": true,
+  "effectiveRuntimeSettingsUnchanged": true,
+  "kernelBuildUnchanged": true,
+  "sourceStageManifestFiles": 177,
+  "deployedStaticAssets": 41,
+  "publicBrowserScenarios": 1,
+  "publicVisitorVerificationProcesses": 1,
+  "publicVisitorSolveProcesses": 0,
+  "sameImageRestart": true,
+  "deployment": "2ecc350c-5519-4a0d-ba20-a4f19edd5137",
+  "imageDigest": "sha256:53604e78f073345453d825b7264e2d0d9af9c41b6648dc7159324ca220232ae2"
+}

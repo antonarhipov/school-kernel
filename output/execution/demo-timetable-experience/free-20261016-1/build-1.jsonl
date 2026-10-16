@@ -1,0 +1,8 @@
+{"message":"scheduling build on Metal builder \"production-builderv3-europe-west4-bd82\"","level":"info","timestamp":"2026-10-16T20:24:57.314902877Z"}
+{"message":"scheduling build on Metal builder \"production-builderv3-europe-west4-bd82\"","timestamp":"2026-10-16T20:25:11.279290652Z","level":"info"}
+{"message":"fetched snapshot sha256:d0dfd37cf6da2696019183046218fc688ee255ef6aa2affd462cf01a46505def (406 kB bytes)","timestamp":"2026-10-16T20:25:13.075262861Z","level":"info"}
+{"level":"info","size":406151,"source":"railway.progress","message":"fetching snapshot","status":"complete","duration_ms":159,"timestamp":"2026-10-16T20:25:13.075352203Z"}
+{"size":2741248,"status":"complete","level":"info","duration_ms":6,"message":"unpacking archive","timestamp":"2026-10-16T20:25:13.428889278Z","source":"railway.progress"}
+{"message":"[internal] load build definition from deploy/demo/Dockerfile","digest":"sha256:6cc6a25bc4305d154c7af030ba775e82aa5ffde44c934e76e3aec8ef94073399","source":"buildkit","level":"info","type":"vertex","timestamp":"2026-10-16T20:25:14.125621487Z"}
+{"started":"2026-10-16T20:25:14.124174849Z","type":"vertex","completed":"2026-10-16T20:25:14.12419822Z","level":"info","digest":"sha256:6cc6a25bc4305d154c7af030ba775e82aa5ffde44c934e76e3aec8ef94073399","message":"[internal] load build definition from deploy/demo/Dockerfile","timestamp":"2026-10-16T20:25:14.125622829Z","source":"buildkit"}
+{"level":"info","timestamp":"2026-10-16T20:25:14.125623183Z","type":"vertex","digest":"sha256:6cc6a25bc4305d154c7af030ba775e82aa5ffde44c934e76e3aec8ef94073399","started":"2026-10-16T20:25:14.125309277Z","message":"[internal] load build definition from deploy/demo/Dockerfile","source":"buildkit"}

@@ -1,0 +1,33 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldBase has been called by com.google.inject.internal.aop.HiddenClassDefiner (file:/Users/anton/.m2/wrapper/dists/apache-maven-3.9.11/a2d47e15/lib/guice-5.1.0-classes.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.inject.internal.aop.HiddenClassDefiner
+WARNING: sun.misc.Unsafe::staticFieldBase will be removed in a future release
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.789 s <<< FAILURE! -- in org.schoolkernel.workspace.DemoLocalDataBrowserIT
+[ERROR] org.schoolkernel.workspace.DemoLocalDataBrowserIT.deletesOnlyLocalArtifactsWithCancelFailureRecoveryAndCleanReload -- Time elapsed: 1.746 s <<< ERROR!
+java.nio.file.NoSuchFileException: ../kernel-cli/target/school-kernel.jar
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixFileSystem.copy(UnixFileSystem.java:960)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.copy(UnixFileSystemProvider.java:280)
+	at java.base/java.nio.file.Files.copy(Files.java:1192)
+	at org.schoolkernel.workspace.DemoPlanningBrowserIT.initialize(DemoPlanningBrowserIT.java:141)
+	at org.schoolkernel.workspace.DemoLocalDataBrowserIT.deletesOnlyLocalArtifactsWithCancelFailureRecoveryAndCleanReload(DemoLocalDataBrowserIT.java:20)
+
+[ERROR] Errors: 
+[ERROR]   DemoLocalDataBrowserIT.deletesOnlyLocalArtifactsWithCancelFailureRecoveryAndCleanReload:20 » NoSuchFile ../kernel-cli/target/school-kernel.jar
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-failsafe-plugin:3.6.0:verify (default-cli) on project timetable-workspace: 
+[ERROR] 
+[ERROR] See /private/tmp/school-demo-local-data-verification-20261017-1/timetable-workspace/target/failsafe-reports for the individual test results.
+[ERROR] See dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :timetable-workspace

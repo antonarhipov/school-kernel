@@ -1,0 +1,17 @@
+[
+  {
+    "file": "timetable-workspace/src/main/resources/static/workspace/app.js",
+    "before": "c4ff79ffaea1e9b2a2d8c299c9da53ffdc78a3020a4035976ed999e7228f2bad",
+    "after": "d87a8fc03a6e346c746dd966aa702cfe8ac0dbd1c75a89aa86633476a4e5a927"
+  },
+  {
+    "file": "timetable-workspace/src/main/resources/static/workspace/demo-definitions.js",
+    "before": null,
+    "after": "0dff9459fe67d30184da9181480b6ecfba368ef4e29e53ac73b8eac39197ecd3"
+  },
+  {
+    "file": "timetable-workspace/src/main/resources/static/workspace/demo-panel.js",
+    "before": "c911e7982ce4956bd25930235efabf5b97fe2d089cd0119f5405c36957e3d723",
+    "after": "de9415068c096417d72264df61c48e08ac7229c7c24f63ba407ec8f83a6151f4"
+  }
+]

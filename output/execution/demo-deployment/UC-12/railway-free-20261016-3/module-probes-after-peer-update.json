@@ -1,0 +1,176 @@
+[
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 22387,
+    "module": "definition-grid.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 1321,
+    "module": "day-renderer.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 15503,
+    "module": "definition-rooms.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 13598,
+    "module": "demo-panel.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 2228,
+    "module": "definition-occurrence-browser.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 22339,
+    "module": "definition-occurrences.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 5745,
+    "module": "definition-restoration.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 12526,
+    "module": "definition-removal.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 8075,
+    "module": "inspection-state.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 6016,
+    "module": "definition-review.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 2798,
+    "module": "week-renderer.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 2817,
+    "module": "definition-requirement-browser.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 14937,
+    "module": "definition-form-controls.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 15403,
+    "module": "definition-teachers.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 19151,
+    "module": "definition-cohorts.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 4447,
+    "module": "definition-catalog.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 22298,
+    "module": "definition-requirements.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 18742,
+    "module": "definition-room-policies.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 14763,
+    "module": "definition-subjects.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 5411,
+    "module": "definition-preference-guide.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 11362,
+    "module": "definition-preferences.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 2384,
+    "module": "accepted-model.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 3157,
+    "module": "definition-finish.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 26265,
+    "module": "definition-editor.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 19410,
+    "module": "messages.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 174412,
+    "module": "app.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 3669,
+    "module": "definition-discard.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 12378,
+    "module": "definition-browser.js"
+  },
+  {
+    "status": 200,
+    "type": "text/javascript",
+    "bytes": 1455,
+    "module": "proposal-comparison.js"
+  }
+]

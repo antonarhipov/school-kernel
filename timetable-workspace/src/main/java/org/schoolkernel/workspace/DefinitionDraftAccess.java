@@ -10,10 +10,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 /** Runs after access/CSRF checks and before request decoding, including multipart commands. */
 final class DefinitionDraftAccess extends OncePerRequestFilter {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ProblemResponder problems;
 
-    DefinitionDraftAccess(WorkspaceRepository repository, ProblemResponder problems) {
+    DefinitionDraftAccess(WorkspaceStore repository, ProblemResponder problems) {
         this.repository = repository;
         this.problems = problems;
     }
@@ -21,7 +21,7 @@ final class DefinitionDraftAccess extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        if (request.getRequestURI().startsWith("/api/")
+        if (!repository.ephemeral() && request.getRequestURI().startsWith("/api/")
                 && !java.util.Set.of("GET", "HEAD", "OPTIONS").contains(request.getMethod())
                 && !java.util.Set.of("/api/definition-draft", "/api/definition-draft/preview", "/api/definition-draft/school", "/api/definition-draft/grid", "/api/definition-draft/grid/preview", "/api/definition-draft/subjects", "/api/definition-draft/teachers", "/api/definition-draft/cohorts", "/api/definition-draft/rooms", "/api/definition-draft/room-policies", "/api/definition-draft/preferences", "/api/definition-draft/finish", "/api/definition-draft/finish/preview", "/api/definition-draft/restoration", "/api/definition-draft/restoration/inspect", "/api/definition-draft/restoration/preview", "/api/definition-draft/removal", "/api/definition-draft/removal/inspect", "/api/definition-draft/removal/preview", "/api/definition-draft/catalog", "/api/definition-draft/catalog/preview", "/api/definition-draft/requirements", "/api/definition-draft/requirements/preview", "/api/definition-draft/occurrences", "/api/definition-draft/occurrences/preview").contains(request.getRequestURI())
                 && repository.load().state() == WorkspaceState.DEFINITION_DRAFT) {

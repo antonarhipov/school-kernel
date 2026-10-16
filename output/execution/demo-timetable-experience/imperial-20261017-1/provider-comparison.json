@@ -1,0 +1,52 @@
+{
+  "verdict": "PASS",
+  "plan": "FREE",
+  "serviceManifestUnchanged": true,
+  "fileServiceManifestUnchanged": true,
+  "effectiveRuntimeLimitsUnchanged": true,
+  "processBoundsUnchanged": true,
+  "imageDigest": "sha256:8698504f77f230139b0ff6a45cfaebb9b30f91c3ce5018d4b9f67460f00a8772",
+  "deployment": "fe66a8a4-9004-4d01-b229-2e7216d83c5f",
+  "manifest": {
+    "build": {
+      "buildCommand": null,
+      "buildEnvironment": "V3",
+      "builder": "DOCKERFILE",
+      "dockerfilePath": "deploy/demo/Dockerfile",
+      "nixpacksConfigPath": null,
+      "nixpacksPlan": null,
+      "watchPatterns": []
+    },
+    "deploy": {
+      "cronSchedule": null,
+      "drainingSeconds": 30,
+      "healthcheckPath": "/healthz",
+      "healthcheckTimeout": 180,
+      "ipv6EgressEnabled": false,
+      "limitOverride": {
+        "containers": {
+          "cpu": 1,
+          "memoryBytes": 500000000
+        }
+      },
+      "multiRegionConfig": {
+        "europe-west4-drams3a": {
+          "numReplicas": 1
+        }
+      },
+      "numReplicas": 1,
+      "overlapSeconds": 0,
+      "preDeployCommand": null,
+      "preDeployTimeoutSeconds": null,
+      "region": null,
+      "registryCredentials": null,
+      "requiredMountPath": null,
+      "restartPolicyMaxRetries": 1,
+      "restartPolicyType": "ON_FAILURE",
+      "runtime": "V2",
+      "sleepApplication": true,
+      "startCommand": null,
+      "useLegacyStacker": false
+    }
+  }
+}

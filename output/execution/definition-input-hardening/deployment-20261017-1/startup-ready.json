@@ -1,0 +1,48 @@
+{
+  "counterReset": "378127d9-7bf9-487c-b464-e5478eb06b85",
+  "serviceArtifactSha256": "9edb488ae162213c8c5e08252bd07d004a471b1943d6e1050991ad1d8ad71dc6",
+  "solveSlots": 1,
+  "message": "",
+  "standaloneVerificationSlots": 2,
+  "sampleVerification": {
+    "english": "VERIFIED",
+    "full": "VERIFIED",
+    "star-wars": "VERIFIED",
+    "two-class": "VERIFIED"
+  },
+  "level": "info",
+  "timestamp": "2026-10-16T22:54:22.912802771Z",
+  "kernelBuild": "441ecda0b67e36a7a75db9611b5e22871ce2dcf5045dd1c343df57b853990881",
+  "processBounds": {
+    "reservationRelease": "AFTER_REAP",
+    "solveMaximum": "preset + solve-overhead",
+    "solveReservationExtraSeconds": 8,
+    "standaloneVerificationReservationExtraSeconds": 4,
+    "terminationSoftWaitSeconds": 2,
+    "verificationShutdownWaitSeconds": 10
+  },
+  "effective": {
+    "demo.absolute-timeout": "8h",
+    "demo.complexity.lesson-max": "2500",
+    "demo.complexity.work-max": "11000000",
+    "demo.idle-timeout": "60m",
+    "demo.kernel.daily-allowance": "4h",
+    "demo.kernel.solve-overhead": "10s",
+    "demo.kernel.verification-timeout": "30s",
+    "demo.kernel.verification-wait": "10s",
+    "demo.max-workspaces": "2",
+    "demo.observability.summary-interval": "1m",
+    "demo.queue.abandonment": "2m",
+    "demo.queue.estimated-start-limit": "2m",
+    "demo.queue.max-waiting": "8",
+    "demo.reuse.enabled": "true",
+    "demo.reuse.max-bytes": "67108864",
+    "demo.reuse.ttl": "1h",
+    "demo.search.lesson-threshold": "200",
+    "demo.search.quick-seconds": "5",
+    "demo.search.thorough-seconds": "60"
+  },
+  "family": "startup",
+  "event": "ready",
+  "utcAllowanceDay": "2026-10-16"
+}

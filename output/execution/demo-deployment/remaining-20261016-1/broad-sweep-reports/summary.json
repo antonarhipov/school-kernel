@@ -1,0 +1,27 @@
+{
+  "kernel-cli-surefire": {
+    "tests": 107,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failing": []
+  },
+  "timetable-workspace-surefire": {
+    "tests": 76,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "failing": []
+  },
+  "timetable-workspace-failsafe": {
+    "tests": 13,
+    "failures": 0,
+    "errors": 3,
+    "skipped": 0,
+    "failing": [
+      "org.schoolkernel.workspace.DemoObservabilityBrowserIT#safeSummariesReconcileQueueCoalescingCancellationReuseDecisionsAndActualProcesses",
+      "org.schoolkernel.workspace.DemoDefinitionsBrowserIT#completeBrowserVersionJourney",
+      "org.schoolkernel.workspace.DemoSessionBrowserIT#privateSamplesDraftsRunsExportsStaleTabsAndRestart"
+    ]
+  }
+}

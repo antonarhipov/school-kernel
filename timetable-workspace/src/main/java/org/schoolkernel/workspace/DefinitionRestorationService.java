@@ -12,12 +12,12 @@ import tools.jackson.databind.node.ObjectNode;
 /** A source revert is a selected-scope operation, never an undo or a source rebase. */
 @Service
 public class DefinitionRestorationService {
-    private final WorkspaceRepository repository;
+    private final WorkspaceStore repository;
     private final ObjectMapper json;
     private final DefinitionEntityService entities;
     private final DefinitionGridService grid;
     private final DefinitionRequirementService requirements;
-    public DefinitionRestorationService(WorkspaceRepository repository,ObjectMapper json,DefinitionEntityService entities,DefinitionGridService grid,DefinitionRequirementService requirements){this.repository=repository;this.json=json;this.entities=entities;this.grid=grid;this.requirements=requirements;}
+    public DefinitionRestorationService(WorkspaceStore repository,ObjectMapper json,DefinitionEntityService entities,DefinitionGridService grid,DefinitionRequirementService requirements){this.repository=repository;this.json=json;this.entities=entities;this.grid=grid;this.requirements=requirements;}
 
     public ObjectNode inspect(String ifMatch){
         WorkspaceAggregate current=checked(ifMatch);ObjectNode draft=(ObjectNode)current.document().path("definitionDraft");JsonNode source=DefinitionRemovalService.sourceDefinition(draft);ObjectNode result=json.createObjectNode().put("version",current.version());ArrayNode choices=result.putArray("choices");

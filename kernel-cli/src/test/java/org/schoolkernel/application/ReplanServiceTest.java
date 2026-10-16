@@ -80,6 +80,27 @@ class ReplanServiceTest {
     }
 
     @Test
+    @DisplayName("Demo UC-1: incomplete repair construction uses the same budget outcome as initial planning")
+    void incompleteTimeLimitedConstructionPreservesBaseline() throws Exception {
+        Baseline baseline = baseline("valid-plan.json");
+        byte[] current = Files.readAllBytes(baseline.current());
+        byte[] definition = Files.readAllBytes(baseline.currentDefinition());
+        ReplanningSolver partialSolver = (school, controls, assignments) -> new SolverAdapter.SolveResult(
+                new PlanningMapper().toPlanningProblem(school), null, "TIME_LIMIT", java.util.List.of());
+        var outcome = assertInstanceOf(CommandOutcome.NoFeasibleSolution.class,
+                service(new FileBoundary(), partialSolver)
+                        .handle(request(baseline, temporaryDirectory.resolve("partial.json"), false, false)));
+
+        assertEquals("NO_FEASIBLE_SOLUTION_FOUND", outcome.document().path("status").stringValue());
+        assertEquals("TIME_LIMIT", outcome.document().path("terminationReason").stringValue());
+        assertTrue(outcome.document().path("safeMessage").stringValue().contains("before all lessons were placed"));
+        assertFalse(outcome.document().has("timetable"));
+        assertFalse(outcome.document().has("changeReport"));
+        assertArrayEquals(current, Files.readAllBytes(baseline.current()));
+        assertArrayEquals(definition, Files.readAllBytes(baseline.currentDefinition()));
+    }
+
+    @Test
     @DisplayName("UC-2 ext 2k and minimal guarantee: publication failure preserves prior destination bytes")
     void publicationFailurePreservesDestination() throws Exception {
         Baseline baseline = baseline("empty-plan.json");
