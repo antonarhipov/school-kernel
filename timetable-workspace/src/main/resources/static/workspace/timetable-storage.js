@@ -1,5 +1,6 @@
 import { prefix as definitionPrefix, useKey as definitionUseKey } from './demo-definitions.js';
 
+export const cleanupEpochKey = 'school-kernel.timetable-demo.epoch.v1';
 export const storageKey = 'school-kernel.timetable-demo.v1';
 const empty = () => ({ formatVersion: 1, schools: {}, timetables: {}, drafts: {}, selected: null, lastTimetable: {}, editor: null });
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -15,12 +16,13 @@ export function deleteLocalTimetableData(storage) {
       const key = storage.key(i);
       if (key?.startsWith(definitionPrefix)) keys.push(key);
     }
-    previous = keys.map(key => [key, storage.getItem(key)]).filter(([, value]) => value !== null);
-    for (const [key] of previous) storage.removeItem(key);
+    previous = [...new Set([...keys,cleanupEpochKey])].map(key => [key, storage.getItem(key)]);
+    storage.setItem(cleanupEpochKey,crypto.randomUUID());
+    for (const [key,value] of previous) if(key!==cleanupEpochKey&&value!==null)storage.removeItem(key);
   } catch {
     let restored = true;
     for (const [key, value] of previous) {
-      try { if (storage.getItem(key) !== value) storage.setItem(key, value); }
+      try { if (storage.getItem(key) !== value) { if(value===null)storage.removeItem(key);else storage.setItem(key,value); } }
       catch { restored = false; }
     }
     throw new Error(restored
@@ -31,9 +33,10 @@ export function deleteLocalTimetableData(storage) {
 
 // A single atomic browser write keeps a new version and removal of its source draft inseparable.
 export function createTimetableStorage(storage) {
-  let state = empty(), previous = null, writable = true;
+  let state = empty(), previous = null, writable = true,epoch;
   const notices = [];
   try {
+    epoch=storage.getItem(cleanupEpochKey);
     previous = storage.getItem(storageKey);
     if (previous !== null) {
       const value = JSON.parse(previous);
@@ -48,6 +51,14 @@ export function createTimetableStorage(storage) {
   return {
     state: () => structuredClone(state),
     notices,
+    reload() {
+      const latestEpoch=storage.getItem(cleanupEpochKey);
+      const raw = storage.getItem(storageKey);
+      const fresh = createTimetableStorage({ getItem: key => key===storageKey?raw:latestEpoch });
+      if (fresh.notices.length) throw new Error(fresh.notices.join(' '));
+      if (storage.getItem(storageKey) !== raw||storage.getItem(cleanupEpochKey)!==latestEpoch) throw new Error('Another tab changed browser data during recovery. Retry recovery.');
+      state = fresh.state(); previous = raw; epoch=latestEpoch;writable = true;
+    },
     write(change, { atomic = false } = {}) {
       const next = structuredClone(state);
       change(next);
@@ -55,7 +66,7 @@ export function createTimetableStorage(storage) {
       if (!atomic) state = next;
       if (!writable) throw new Error('Browser storage is unavailable. This change is only in memory and will be lost when this page closes.');
       try {
-        if (storage.getItem(storageKey) !== previous)
+        if (storage.getItem(storageKey) !== previous||storage.getItem(cleanupEpochKey)!==epoch)
           throw new Error('Another tab changed this browser’s timetables. Reload before saving; your current edits are still on this page.');
         const serialized = JSON.stringify(next);
         storage.setItem(storageKey, serialized);

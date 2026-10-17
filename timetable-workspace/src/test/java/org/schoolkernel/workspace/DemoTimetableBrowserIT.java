@@ -34,7 +34,7 @@ class DemoTimetableBrowserIT {
                 assertEquals(0, page.locator("#open-repair-setup, #reopen-inspector, #teacher-change-route, [data-show-teacher-route]").count());
                 assertFalse(page.locator("#demo-utilities").getAttribute("open") != null);
                 long startupLaunches = Files.readAllLines(temporary.resolve("launches")).size();
-                assertEquals(8, startupLaunches);
+                assertEquals(0, startupLaunches);
                 h.record("UC-1 main 1-2/G1/G4: default full Estonian timetable, exact four schools and two variants each, 520 real labels, Utilities closed and obsolete actions absent", page, "01-default-matrix");
 
                 page.locator("#cohort-filter").selectOption("demo-cohort-001");
@@ -108,8 +108,8 @@ class DemoTimetableBrowserIT {
                 page.locator("#timetable-selector").selectOption("b");
 
                 page.reload(); page.locator("#school-selector option[value=star-wars]").waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
-                assertThat(page.locator("#school-selector")).hasValue("star-wars");
-                assertThat(page.locator("#timetable-selector")).hasValue("b");
+                assertThat(page.locator("#school-selector")).hasValue("full");
+                assertThat(page.locator("#timetable-selector")).hasValue("a");
                 Page foreign = other.newPage(); foreign.navigate(h.base+"/workspace/");
                 foreign.locator("#school-selector option[value=full]").waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
                 assertThat(foreign.locator("#school-selector")).hasValue("full");
@@ -118,7 +118,7 @@ class DemoTimetableBrowserIT {
                 assertThat(page.locator("#definition-editor-title")).hasText("School definition editor");
                 assertEquals(1, page.locator("#demo-utilities section").count());
                 page.locator("#close-editor").click();
-                h.record("UC-1 main 7/G4/G6: reload retains this browser's exact selected school/version; another owner independently opens the default; Utilities contains only the school definition editor and related generation", page, "04-reload-and-utilities");
+                h.record("UC-1 main 7/G4/G6: reload starts clean on the bundled full-school Variant A; another owner independently opens the default; Utilities contains only the school definition editor and related generation", page, "04-reload-and-utilities");
 
                 page.setViewportSize(390, 844); page.locator("#school-selector").selectOption("two-class");
                 assertTrue((Boolean)page.evaluate("()=>document.documentElement.scrollWidth<=innerWidth+1"));
@@ -128,6 +128,8 @@ class DemoTimetableBrowserIT {
                 h.record("UC-1 extension 3a/G5: 390px selectors wrap, matrix scroll stays inside its container, and the clickable lesson inspector fits the viewport", page, "05-mobile-inspector");
                 page.evaluate("()=>{const k='school-kernel.timetable-demo.v1',s=JSON.parse(localStorage.getItem(k));s.drafts['two-class/b']={changes:{unknown:{periodId:'missing'}}};localStorage.setItem(k,JSON.stringify(s));}");
                 page.reload(); page.locator("#school-selector option[value=two-class]").waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
+                page.locator("#school-selector").selectOption("two-class");
+                page.locator("#timetable-selector").selectOption("b");
                 assertThat(page.locator("#demo-notice")).containsText("retained");
                 assertEquals(56, page.locator(".demo-lesson").count());
                 assertTrue(page.evaluate("()=>localStorage.getItem('school-kernel.timetable-demo.v1').includes('missing')").equals(true));
@@ -218,7 +220,7 @@ class DemoTimetableBrowserIT {
                 String exactDraft=(String)p.evaluate("()=>JSON.stringify(JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1')).drafts['two-class/a'])");
                 p.locator("#school-selector").selectOption("star-wars"); p.locator("#school-selector").selectOption("two-class");
                 assertEquals(exactDraft,p.evaluate("()=>JSON.stringify(JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1')).drafts['two-class/a'])"));
-                p.reload();readyWait(p);valid(p);
+                p.reload();readyWait(p);assertThat(p.locator("#timetable-save-bar")).not().isVisible();p.locator("#school-selector").selectOption("two-class");valid(p);
                 assertEquals(exactDraft,p.evaluate("()=>JSON.stringify(JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1')).drafts['two-class/a'])"));
                 p.locator("#save-new-timetable").click();assertThat(p.locator("#timetable-name-error")).containsText("Enter a name");
                 p.locator("#new-timetable-name").fill("Variant A");p.locator("#save-new-timetable").click();assertThat(p.locator("#timetable-name-error")).containsText("already has");
@@ -237,7 +239,7 @@ class DemoTimetableBrowserIT {
                 Files.writeString(h.output.resolve("saved-timetable.json"),saved.toPrettyString());
                 p.locator("#timetable-selector").selectOption("a");p.locator("[data-lesson-id='"+lesson+"']").click();assertThat(p.locator("#inspector-teacher")).hasValue(assignment.path("teacherId").asString());p.keyboard().press("Escape");
                 p.locator("#timetable-selector").selectOption(saved.path("id").asString());
-                h.stop();h.start(List.of(),2);p.reload();readyWait(p);assertThat(p.locator("#timetable-title")).hasText("English with cover teacher");
+                h.stop();h.start(List.of(),2);p.reload();readyWait(p);p.locator("#school-selector").selectOption("two-class");assertThat(p.locator("#timetable-title")).hasText("English with cover teacher");
                 p.locator("[data-lesson-id='"+lesson+"']").click();p.locator("#inspector-room").selectOption("demo-room-pe");p.keyboard().press("Escape");
                 p.locator("#discard-timetable-changes").click();assertThat(p.locator("#timetable-save-bar")).not().isVisible();
                 h.record("UC-2 main 6-7/G3-G4/G7: named save stores exact teacher-only delta and actual kernel revisions/score; original Variant A remains exact; saved alternative survives real packaged-server restart; discard restores source",p,"04-saved-after-restart");
@@ -290,7 +292,7 @@ class DemoTimetableBrowserIT {
                 assertThat(p.locator("#school-selector")).hasValue("star-wars");assertThat(p.locator("#cohort-filter")).hasValue("imperial-cohort-junior-1A");assertThat(p.locator("#timetable-title")).hasText("Variant A");
                 p.locator("[data-view-generated]").click();assertThat(p.locator("#school-selector")).hasValue(copyId);valid(p);assertEquals(56,p.locator(".demo-lesson").count());
                 h.record("UC-3 main 4-5/extension 4c: explicit Quick produces a complete checked 56-lesson candidate; switching away does not change the other school's matrix/filter; completion handoff returns to the originating copy for naming",p,"05-generated-candidate");
-                p.reload();readyWait(p);valid(p);assertThat(p.locator("#timetable-save-bar")).isVisible();
+                p.reload();readyWait(p);assertThat(p.locator("#timetable-save-bar")).not().isVisible();p.locator("#school-selector").selectOption(copyId);valid(p);assertThat(p.locator("#timetable-save-bar")).isVisible();
                 p.locator("#new-timetable-name").fill("Planned week");p.locator("#save-new-timetable").click();assertThat(p.locator("#timetable-title")).hasText("Planned week");assertEquals(1,p.locator("#timetable-selector option").count());
                 JsonNode saved=DemoPlanningBrowserIT.JSON.readTree((String)p.evaluate("()=>{const s=JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1'));return JSON.stringify(s.timetables[s.selected.schoolId][s.selected.timetableId])}"));
                 assertEquals("PT5S",saved.path("result").path("limit").path("duration").asString());

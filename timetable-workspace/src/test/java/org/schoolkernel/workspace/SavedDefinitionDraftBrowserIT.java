@@ -62,7 +62,7 @@ class SavedDefinitionDraftBrowserIT extends WorkbenchBrowserSupport {
         ObjectNode document = JSON.createObjectNode();
         document.putObject("school").put("id", "demo-school").put("displayName", "Demo School");
         document.putObject("definitionDraft").set("definition",
-                JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile()));
+                JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile()));
         storeDefinitionDraft(document);
         String before = storedDocument();
 

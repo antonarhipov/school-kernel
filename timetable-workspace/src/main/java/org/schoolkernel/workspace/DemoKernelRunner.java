@@ -81,7 +81,7 @@ class DemoKernelRunner {
                     || !result.path("seed").isIntegralNumber() || result.path("seed").asLong() != 0
                     || !"TIME".equals(result.path("limit").path("type").asString(""))
                     || !input.effort().toString().equals(result.path("limit").path("duration").asString(""))
-                    || !"TIME_LIMIT".equals(result.path("terminationReason").asString(""))
+                    || !java.util.Set.of("TIME_LIMIT", "SEARCH_EXHAUSTED").contains(result.path("terminationReason").asString(""))
                     || !result.path("elapsedTimeMs").isIntegralNumber() || result.path("elapsedTimeMs").asLong() < 0
                     || !result.path("timetable").path("assignments").isArray()
                     || "REPAIR".equals(input.operation()) && (!completeChanges(result.path("changeReport"))

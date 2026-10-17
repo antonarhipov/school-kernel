@@ -28,57 +28,44 @@ class DemoSamples {
     private static final List<String> TITLES = List.of("Ranniku õppehoone", "Kasevälja Põhikool", "Coruscant Imperial Academy", "Meadowbrook Community School");
     private final Map<String, Sample> samples = new LinkedHashMap<>();
     private final ObjectMapper json;
-    private final KernelVerifier verifier;
     private final String artifact;
     private final ManifestService manifests;
     private final WorkspaceStore store;
     private final WorkspaceMutation mutation;
     private String build;
 
-    DemoSamples(ObjectMapper json, KernelVerifier verifier, ManifestService manifests, WorkspaceStore store,
+    DemoSamples(ObjectMapper json, ManifestService manifests, WorkspaceStore store,
             WorkspaceMutation mutation, @Value("${demo.kernel-artifact:kernel-cli/target/school-kernel.jar}") String artifact) {
         this.json = json;
-        this.verifier = verifier;
         this.manifests = manifests;
         this.store = store;
         this.mutation = mutation;
         this.artifact = artifact;
     }
 
-    @PostConstruct void verifyPackagedSamples() throws Exception {
-        JsonNode evidence = read("scoring-evidence.json");
+    /** Bundled artifacts are prepared and checked by maintenance tooling, never reverified at startup. */
+    @PostConstruct void loadPackagedSamples() throws Exception {
         build = kernelBuild(Path.of(KernelVerifier.resolveExecutable(artifact)));
-        if (!build.equals(evidence.path("kernelBuild").stringValue())) {
-            throw new IllegalStateException("Packaged samples need current kernel scoring evidence");
-        }
-        Map<String, Sample> verifiedSamples = new LinkedHashMap<>();
+        Map<String, Sample> loaded = new LinkedHashMap<>();
         for (int index = 0; index < IDS.size(); index++) {
             String id = IDS.get(index);
             JsonNode definition = read(id + "-definition.json");
             ArrayNode variants = json.createArrayNode();
-            KernelVerifier.Verification firstVerification = null;
             JsonNode firstManifest = null;
             for (String variant : List.of("a", "b")) {
-            JsonNode result = read(id + "-" + variant + "-result.json");
-            JsonNode expected = evidence.path("samples").path(id + "/" + variant);
-            if (definition.path("catalogVersion").intValue() != evidence.path("catalogVersion").intValue()
-                    || !result.path("score").equals(expected.path("score"))
-                    || !hash(CanonicalJson.bytes(definition)).equals(expected.path("definitionSha256").stringValue())
-                    || !hash(CanonicalJson.bytes(result)).equals(expected.path("resultSha256").stringValue())) {
-                throw new IllegalStateException("Packaged sample evidence does not match " + id);
+                JsonNode result = read(id + "-" + variant + "-result.json");
+                JsonNode manifest = manifests.validatedOrGenerated(new ImportDocuments(
+                        definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+                ObjectNode entry = variants.addObject().put("id", variant)
+                        .put("name", "Variant " + variant.toUpperCase(java.util.Locale.ROOT));
+                entry.set("result", result); entry.set("manifest", manifest);
+                if (firstManifest == null) firstManifest = manifest;
             }
-            var documents = new ImportDocuments(definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE);
-            var verified = verifier.verify(documents);
-            JsonNode manifest = manifests.validatedOrGenerated(documents);
-            ObjectNode entry = variants.addObject().put("id", variant).put("name", "Variant " + variant.toUpperCase(java.util.Locale.ROOT));
-            entry.set("result", result); entry.set("manifest", manifest);
-            if (firstVerification == null) { firstVerification = verified; firstManifest = manifest; }
-            }
-            verifiedSamples.put(id, new Sample(id, TITLES.get(index), definition, variants.get(0).path("result"),
-                    firstManifest, firstVerification, variants));
+            loaded.put(id, new Sample(id, TITLES.get(index), definition, variants.get(0).path("result"),
+                    firstManifest, variants));
         }
         samples.clear();
-        samples.putAll(verifiedSamples);
+        samples.putAll(loaded);
     }
 
     ArrayNode catalog() {
@@ -127,11 +114,11 @@ class DemoSamples {
         if (current.state() != WorkspaceState.EMPTY && !confirmed) throw new WorkspaceProblem(
                 HttpStatus.PRECONDITION_REQUIRED, "REPLACEMENT_CONFIRMATION_REQUIRED", "Confirm replacing the current workspace first.");
         ObjectNode document = json.createObjectNode();
-        document.putObject("school").put("id", sample.verification().schoolId()).put("displayName", sample.title());
+        document.putObject("school").put("id", sample.definition().path("schoolId").stringValue()).put("displayName", sample.title());
         document.put("origin", id);
         document.put("importMode", "PACKAGED_SAMPLE");
-        document.put("definitionRevision", sample.verification().definitionRevision());
-        document.put("timetableRevision", sample.verification().timetableRevision());
+        document.put("definitionRevision", sample.result().path("inputRevision").stringValue());
+        document.put("timetableRevision", sample.result().path("timetableRevision").stringValue());
         ObjectNode baseline = document.putObject("acceptedBaseline");
         baseline.set("definition", sample.definition().deepCopy());
         baseline.set("result", sample.result().deepCopy());
@@ -149,9 +136,6 @@ class DemoSamples {
     JsonNode read(String name) throws IOException {
         try (var input = new ClassPathResource("demo/timetables/" + name).getInputStream()) { return json.readTree(input); }
     }
-    private static String hash(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
-    }
     static String kernelBuild(Path artifact) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         try (var jar = new ZipFile(artifact.toFile())) {
@@ -168,5 +152,5 @@ class DemoSamples {
         return HexFormat.of().formatHex(digest.digest());
     }
     private record Sample(String id, String title, JsonNode definition, JsonNode result, JsonNode manifest,
-            KernelVerifier.Verification verification, JsonNode variants) {}
+            JsonNode variants) {}
 }

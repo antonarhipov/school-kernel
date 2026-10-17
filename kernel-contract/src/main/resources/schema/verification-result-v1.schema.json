@@ -14,7 +14,7 @@
     "basedOnRevision": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
     "mode": { "enum": ["INITIAL_DEFINITION", "ACCEPTED_BASELINE", "SUCCESSOR_DEFINITION"] },
     "schoolId": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$" },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
     "definitionRevision": { "$ref": "#/$defs/revision" },
     "timetableRevision": { "$ref": "#/$defs/revision" },
     "validationReport": { "$ref": "#/$defs/validationReport" },

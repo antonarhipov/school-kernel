@@ -101,7 +101,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 main, G1-G6, RULE-10/11/17: real HTTP and packaged plan create only a proposal until explicit atomic acceptance")
     void plansAndExplicitlyAcceptsInitialTimetable() throws Exception {
-        JsonNode definition = importInitial(ROOT.resolve("examples/initial-school.json"));
+        JsonNode definition = importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         Session beforeRun = session();
 
         HttpResponse<String> started = command("POST", "/api/runs", beforeRun, null);
@@ -149,7 +149,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 extensions 2a and 4a: cancel and discard return to the unchanged initial draft with no proposal")
     void cancelAndDiscardPreserveInitialDraft() throws Exception {
-        JsonNode definition = importInitial(ROOT.resolve("examples/initial-school.json"));
+        JsonNode definition = importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         processes.blockPlan = true;
         HttpResponse<String> started = command("POST", "/api/runs", session(), null);
         JsonNode solving = JSON.readTree(started.body());
@@ -180,7 +180,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 extensions 1a and 3a: replacement is atomic and unsuccessful search retains the exact replacement")
     void replacesDraftAndPreservesItAfterUnsuccessfulSearch() throws Exception {
-        importInitial(ROOT.resolve("examples/initial-school.json"));
+        importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         JsonNode replacement = JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/search-conflict-plan.json"));
         ((ObjectNode) replacement).put("displayName", "Conflict School");
         HttpResponse<String> replaced = multipart(
@@ -215,7 +215,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 extension 3b and RULE-10: mismatched packaged output returns to the exact draft with no candidate")
     void mismatchedKernelOutputNeverBecomesProposal() throws Exception {
-        JsonNode definition = importInitial(ROOT.resolve("examples/initial-school.json"));
+        JsonNode definition = importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         processes.mismatchPlanEvidence = true;
 
         command("POST", "/api/runs", session(), null);
@@ -242,7 +242,7 @@ class WorkspaceInitialPlanningIT {
 
         for (FailureExpectation failure : failures) {
             reset();
-            JsonNode definition = importInitial(ROOT.resolve("examples/initial-school.json"));
+            JsonNode definition = importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
             processes.planFailure = failure.failure();
 
             command("POST", "/api/runs", session(), null);
@@ -261,7 +261,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 extensions 2b, 5a and 6a: restart, stale identity, and acceptance storage failure never create accepted state")
     void restartStaleIdentityAndStorageFailureAreSafe() throws Exception {
-        JsonNode definition = importInitial(ROOT.resolve("examples/initial-school.json"));
+        JsonNode definition = importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         ObjectNode interrupted = (ObjectNode) storedDocument().deepCopy();
         UUID interruptedRun = UUID.randomUUID();
         interrupted.putObject("run").put("id", interruptedRun.toString()).put("status", "RUNNING");
@@ -356,7 +356,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 RULE-6/11/12/21/22: preconditions, single-run guard, and route surface reject without process or state changes")
     void concurrencyAndRouteGuardsAreMutationFree() throws Exception {
-        importInitial(ROOT.resolve("examples/initial-school.json"));
+        importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         Session current = session();
         int before = processes.commands().size();
         HttpResponse<String> missing = commandWithoutVersion("POST", "/api/runs", current);
@@ -394,7 +394,7 @@ class WorkspaceInitialPlanningIT {
     @Test
     @DisplayName("UC-2 extension 5a and RULE-17: every proposal identity and the stored result are revalidated before acceptance")
     void rejectsEveryStaleProposalIdentity() throws Exception {
-        JsonNode definition = importInitial(ROOT.resolve("examples/initial-school.json"));
+        JsonNode definition = importInitial(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         command("POST", "/api/runs", session(), null);
         awaitState("INITIAL_PROPOSAL", Duration.ofSeconds(20));
         ObjectNode pristine = (ObjectNode) storedDocument().deepCopy();

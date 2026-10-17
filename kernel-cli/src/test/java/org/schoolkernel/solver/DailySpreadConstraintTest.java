@@ -97,7 +97,7 @@ class DailySpreadConstraintTest {
 
     @Test
     void mvkCarriesTheCohortLimitOntoEveryLesson() throws Exception {
-        var mvk = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        var mvk = JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "policy-school.json"));
         var outcome = new DefinitionValidator().validateForPlan(
                 JsonSupport.mapper().treeToValue(mvk, SchoolDefinitionDto.class));
         assertTrue(outcome.report().isValid(), outcome.report().toString());

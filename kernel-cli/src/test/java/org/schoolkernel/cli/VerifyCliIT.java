@@ -32,7 +32,7 @@ class VerifyCliIT {
     Path temporaryDirectory;
 
     @Test void explicitlyVerifiesCompleteSuccessorWithoutSolving() throws Exception {
-        ObjectNode definition = (ObjectNode) JsonSupport.mapper().readTree(Path.of("..", "examples", "initial-school.json"));
+        ObjectNode definition = (ObjectNode) JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "initial-school.json"));
         definition.put("catalogVersion",8).put("basedOnRevision","sha256:"+"0".repeat(64));
         Path input=temporaryDirectory.resolve("successor-complete.json"),output=temporaryDirectory.resolve("successor-proof.json");
         Files.write(input,JsonSupport.mapper().writeValueAsBytes(definition));
@@ -50,7 +50,7 @@ class VerifyCliIT {
     @Test
     @DisplayName("timetable-workspace UC-1 main definition mode: verify publishes non-solving structured evidence")
     void verifiesInitialDefinitionWithoutCandidateDisclosure() throws Exception {
-        Path definition = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path definition = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         Path output = temporaryDirectory.resolve("verification.json");
 
         ProcessResult process = run("verify", "--definition", definition.toString(), "--output", output.toString(),
@@ -72,7 +72,7 @@ class VerifyCliIT {
     @Test
     @DisplayName("timetable-workspace UC-1 accepted mode: verify accepts an exact complete FEASIBLE pair")
     void verifiesAcceptedBaseline() throws Exception {
-        Path definition = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path definition = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         Path result = temporaryDirectory.resolve("result.json");
         assertEquals(0, run("plan", "--definition", definition.toString(), "--output", result.toString(),
                 "--step-limit", "100").exitCode());
@@ -94,8 +94,8 @@ class VerifyCliIT {
     @Test
     @DisplayName("RULE-26: one shared fixture family traverses plan, replan and both verify modes")
     void sharedFixtureTraversesEveryCommandHandler() throws Exception {
-        Path initial = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
-        Path updated = Path.of("..", "examples", "updated-school.json").toAbsolutePath();
+        Path initial = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
+        Path updated = Path.of("src", "test", "resources", "fixtures", "updated-school.json").toAbsolutePath();
         Path current = temporaryDirectory.resolve("shared-current.json");
         Path initialEvidence = temporaryDirectory.resolve("shared-initial-evidence.json");
         Path baselineEvidence = temporaryDirectory.resolve("shared-baseline-evidence.json");
@@ -124,7 +124,7 @@ class VerifyCliIT {
     @Test
     @DisplayName("timetable-workspace UC-1 extensions 2b and 2c: successor-only and mismatched pairs are rejected")
     void rejectsSuccessorOnlyAndMismatchedPair() throws Exception {
-        Path definition = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path definition = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         Path result = temporaryDirectory.resolve("result.json");
         assertEquals(0, run("plan", "--definition", definition.toString(), "--output", result.toString(),
                 "--step-limit", "100").exitCode());
@@ -157,7 +157,7 @@ class VerifyCliIT {
     @Test
     @DisplayName("timetable-workspace UC-1 extension 2a: packaged verify rejects the complete baseline invalidity matrix")
     void rejectsCompleteBaselineInvalidityMatrix() throws Exception {
-        Path definitionPath = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path definitionPath = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         Path validResultPath = temporaryDirectory.resolve("valid-result.json");
         assertEquals(0, run("plan", "--definition", definitionPath.toString(), "--output", validResultPath.toString(),
                 "--step-limit", "100").exitCode());
@@ -169,7 +169,7 @@ class VerifyCliIT {
         unsupportedSchema.put("schemaVersion", 2);
         invalidDefinitions.add(unsupportedSchema);
         ObjectNode unsupportedCatalog = definition.deepCopy();
-        unsupportedCatalog.put("catalogVersion", 10);
+        unsupportedCatalog.put("catalogVersion", 11);
         invalidDefinitions.add(unsupportedCatalog);
         ObjectNode missingSchoolName = definition.deepCopy();
         missingSchoolName.remove("displayName");
@@ -266,7 +266,7 @@ class VerifyCliIT {
     @Test
     @DisplayName("RULE-28: concurrent packaged publishers have one unforced winner and a complete forced winner")
     void concurrentPackagedPublicationIsRaceSafe() throws Exception {
-        Path definition = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path definition = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         Path unforced = temporaryDirectory.resolve("unforced.json");
         Process first = start("verify", "--definition", definition.toString(), "--output", unforced.toString(),
                 "--correlation-id", "first");

@@ -27,19 +27,19 @@ The build creates `kernel-cli/target/school-kernel.jar` and
 
 ```bash
 ./school-kernel plan \
-  --definition examples/initial-school.json \
+  --definition kernel-cli/src/test/resources/fixtures/initial-school.json \
   --output /tmp/timetable.json \
   --step-limit 100
 
 ./school-kernel replan \
-  --current-definition examples/initial-school.json \
-  --definition examples/updated-school.json \
+  --current-definition kernel-cli/src/test/resources/fixtures/initial-school.json \
+  --definition kernel-cli/src/test/resources/fixtures/updated-school.json \
   --current /tmp/timetable.json \
   --output /tmp/revised-timetable.json \
   --step-limit 100
 
 ./school-kernel verify \
-  --definition examples/initial-school.json \
+  --definition kernel-cli/src/test/resources/fixtures/initial-school.json \
   --output /tmp/verification.json
 ```
 
@@ -84,12 +84,11 @@ scratch.
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
 - Schema version `1` supports catalog versions `1` through `9`. Earlier catalogs remain readable for existing accepted
-  results; [`MV5`](examples/mv5.json) uses catalog `2`, and [`MVK`](examples/mvk.json) uses catalog `9`.
+  results. Public demo schools and precomputed timetables live in `timetable-workspace/src/main/resources/demo/timetables/`.
 - Definitions and timetable assignment state use RFC 8785 canonical JSON hashed with SHA-256. Revision IDs have the
   form `sha256:<lowercase-hex>`.
 - A feasible result assigns every lesson once and satisfies the exact hard catalog in the specification.
-- Optional `reservedPeriodIds` names declared school periods excluded from ordinary planning and repair. MVK reserves
-  `mon-0`, `tue-0`, `wed-0`, `thu-0`, and `fri-0`; period names or ID suffixes alone have no special meaning. A feasible
+- Optional `reservedPeriodIds` names declared school periods excluded from ordinary planning and repair. Period names or ID suffixes alone have no special meaning. A feasible
   result never assigns a lesson there unless its subject declares `reservedPeriodsAllowed` (catalog `6`). Omitting the
   field preserves existing definitions and results.
 - Product scoring is lexicographic: feasibility, period stability, room stability, then ordinary preference penalty.
@@ -103,8 +102,7 @@ scratch.
   the timetable infeasible. Catalog `5` makes cohort gaps a hard constraint, `hard.cohort-gap`: each cohort-day may
   contain at most the cohort's `maxDailyGaps` gaps, which defaults to `0`. A gap-free timetable that cannot be found
   is reported as unsuccessful rather than published with gaps. Catalogs `1` through `4` place no hard limit on gaps,
-  so their accepted results remain verifiable. MVK declares `maxDailyLessonSpread: 1` on every cohort and weights cohort gaps at the supported maximum of
-  `1,000,000`, late starts at `10,000`, weekly balance at `1,000`, and teacher gaps and non-preferred rooms at `5`. A cohort gap
+  so their accepted results remain verifiable. A cohort gap
   is an empty available period between that cohort's first and last lesson of the day, not time before or after its
   lesson block. The late-start preference discourages first lessons after the third regular period; it does not
   compare start times within the first three periods.
@@ -113,40 +111,33 @@ scratch.
   predecessor, so a repair proposal also closes any gaps an older accepted timetable had. In repair, preferences choose among equally stable proposals; they do not authorize extra period or
   room moves solely to improve class quality.
 - Catalog `6` adds per-cohort start bounds and per-subject placement rules. Slots count regular periods from `1` in
-  declared order, so in MVK slot `2` is `mon-2` and the reserved `mon-0` comes before slot `1`. A cohort's hard
+  declared order; reserved periods do not count as regular slots. A cohort's hard
   `latestStartSlot` makes a taught day that starts later infeasible (`hard.cohort-late-start`), and
   `preferredLatestStartSlot` replaces the late-start preference's third-slot threshold for that cohort. A subject may
   declare `reservedPeriodsAllowed`, `maxWeeklyReservedLessonsPerCohort`, `dayEdgeOnly` (each lesson is the cohort's
   first or last of the day), and `maxDailyLessonsPerCohort`; each is a hard rule. An occupied reserved period counts
-  as part of the cohort's day for gaps. MVK bounds grades 1 through 3 at slot `2` and lets Õpiabi use slot `0` once a
-  week per cohort, at most once a day, and only at the start or end of the day.
+  as part of the cohort's day for gaps.
 - Catalog `7` adds a hard per-cohort `dailyLessonSpreadLimit` (`hard.cohort-daily-spread`). It uses the weekly-balance
   count with the limit in place of `maxDailyLessonSpread`, so a feasible timetable has no pair of available weekdays
   whose lesson counts differ by more than the limit. Omitting it imposes no hard limit, and `maxDailyLessonSpread`
-  remains the preferred target. MVK limits grades 1 through 4 to `1` and grades 5 through 9 to `2`. Because an even
-  week can push a whole day into the afternoon, MVK also bounds grades 4 through 9 at `latestStartSlot: 4` and lets
-  classroom `K2` host music lessons next to `MU`; with a single music room, music filled every morning period.
-  The workspace plans and repairs with a one-minute limit because MVK does not
-  reliably reach a feasible catalog `7` timetable in 30 seconds.
+  remains the preferred target.
 - Catalog `8` lets a cohort declare its curator (`curatorTeacherId`) and home room (`homeRoomId`), and a subject
   declare `curatorLesson`. Each curator lesson must be taught by its cohort's curator, who needs no separate
   qualification for it, and is held in the cohort's home room when one is declared (`hard.cohort-home-room`). A
   lesson with no room preference of its own prefers the home room if the room can host it. A curator creates no
-  lessons; a school adds Klassitund only where it wants one. MVK marks Klassitund as its curator lesson, takes
-  21 curators from EduPage class records, infers 5D's curator and room from its Klassitund lessons, and assigns a
-  synthetic 6C curator from teachers who teach that cohort. It declares home rooms for grades 1 through 4 and
-  derives older-cohort rooms from the curator-taught IntÕ lesson, except 5D's Klassitund room and the unresolved 6C.
-  MVK locks those eleven IntÕ lessons to their home rooms and Siiri Aiaste's History lessons to A231, where the
-  published timetable consistently assigns them.
+  lessons; a school adds Klassitund only where it wants one.
   Workspace repair upgrades older catalogs to `8` and preserves newer catalog versions.
 - Catalog `9` adds top-level `roomAssignments`: each rule selects a subject and optionally a teacher, then declares
   non-empty `allowedRoomIds` or `useHomeRoom: true`. Every matching rule applies, so their allowed-room sets
   intersect. Empty intersections, missing matched home rooms, and conflicts with individual room locks or room
   requirements are invalid input. `hard.room-assignment` requires every matching lesson to use a permitted room in
-  planning, repair, and independent verification. MVK uses this for History in A231, Piret Noor Mathematics in B212,
-  Heiki Raudla Literature in A209, Chemistry in a newly declared A233, Physics in A223(LAB), PE in KK1/KK2/KK3,
-  and Õpiabi in each cohort's home room. Music still prefers MU but may use another music-capable room. The
-  requested A233 is not in the EduPage snapshot; it is synthetic in MVK until its source details are confirmed.
+  planning, repair, and independent verification.
+- Catalog `10` adds explicit `adjacentToNext` on each teaching period and optional `consecutiveBlocks` rules
+  (`id`, `cohortId`, `subjectId`, `length`, `operator: EXACTLY|AT_LEAST`, `weeklyCount`). Same-class/subject maximal
+  runs of two or more require permission for that exact length, one teacher and room, and the declared weekly
+  frequency. Ordinary breaks preserve adjacency; lunch boundaries interrupt it. Missing block rules forbid all
+  consecutive runs. Mandatory valid blocks receive a bounded spreading exemption; extra At least blocks retain
+  ordinary clustering cost. Catalogs 1–9 retain their original behavior and scores.
 - A failed search returns diagnostics only. It never publishes a partial or hard-violating timetable and never claims
   infeasibility or optimality.
 
@@ -177,8 +168,8 @@ workspace across ordinary restarts. Open <http://localhost:8080/workspace/>.
 
 In an empty workspace, choose **Create school** to author a new catalog 9 definition through forms. Alternatively,
 import an initial definition, a matching definition/result pair, or an accepted-bundle ZIP. Import verification runs
-through the packaged kernel. Try [`examples/initial-school.json`](examples/initial-school.json) for a small school or
-[`examples/mvk.json`](examples/mvk.json) for the larger MVK example.
+through the packaged kernel. Try [`kernel-cli/src/test/resources/fixtures/initial-school.json`](kernel-cli/src/test/resources/fixtures/initial-school.json) for a small school or
+[`full-definition.json`](timetable-workspace/src/main/resources/demo/timetables/full-definition.json) for the fictional Kasevälja school.
 
 Use **Author definition** from an initial definition or accepted timetable to edit the existing school. Saved drafts
 resume after reload or application restart. Authoring requires a viewport wider than 700 CSS pixels; narrower screens
@@ -268,7 +259,7 @@ repository root, then open <http://localhost:8081/ui/>:
 python3 -m http.server 8081 --bind 127.0.0.1
 ```
 
-[`examples/timetable.json`](examples/timetable.json) loads automatically. Use **Open JSON** or drag another result
+The bundled Kasevälja precomputed Variant A loads automatically. Use **Open JSON** or drag another result
 file onto the page to inspect it. On mobile screens, the weekly grid becomes a touch-friendly daily agenda.
 
 ## Performance measurement
@@ -281,3 +272,28 @@ The target-scale performance measurement is deliberately separate from correctne
 
 It reports elapsed time for 1,000 lessons, 100 teachers, 60 cohorts, 100 rooms, and 60 periods without imposing a
 shared-CI timing threshold.
+
+### Run the timetable demo locally
+
+Run `WorkspaceApplication` with IntelliJ's active profile set to `demo`, then open <http://localhost:8080/workspace/>.
+The same profile works at <http://127.0.0.1:8080/workspace/> without certificates or proxy headers. With the default
+loopback host configuration, it binds only to loopback and uses HTTP-compatible local session cookies. A configured
+public hostname keeps the public HTTPS/proxy-origin checks and secure cookies. No database is needed for the demo.
+
+Bundled timetables load directly from the packaged JSON. Startup performs no kernel verification or sample scoring;
+explicit artifact maintenance performs those checks. School edits still validate on demand.
+
+### Public demo school setup
+
+Open **School setup** beside the timetable, then **New school** to start empty. Arrange the week, subjects,
+classes, teacher eligibility/availability, rooms and class-owned weekly allocations. Review checks the exact draft
+against the packaged kernel. **Save school copy** creates a named browser-local definition without solving.
+Reopen its Review section to explicitly choose Quick/Thorough generation, inspect the candidate and save a named
+timetable. Invalid work remains an independent recoverable setup draft.
+
+JSON import/conversion, kernel export and transfer to the advanced buffer are explicit. Older definitions preview
+catalog-10 adoption and compensating defaults/weights. **Download recovery** retains the complete authoring snapshot,
+including unfinished work, named breaks/lunch and extended eligibility that kernel JSON does not carry. Local cleanup
+in Utilities removes all saved artifacts and drafts and prevents stale tabs from restoring them.
+
+Execution checkpoints and recorded browser/kernel evidence: [school setup status](spec/school-setup-editor/status.md).

@@ -18,6 +18,8 @@ class DemoController {
     @org.springframework.beans.factory.annotation.Value("${demo.search.quick-seconds:5}") private int quickSeconds;
     @org.springframework.beans.factory.annotation.Value("${demo.search.thorough-seconds:60}") private int thoroughSeconds;
     @org.springframework.beans.factory.annotation.Value("${demo.reuse.enabled:true}") private boolean reuseEnabled;
+    @org.springframework.beans.factory.annotation.Value("${demo.complexity.lesson-max:2500}") private int lessonMax;
+    @org.springframework.beans.factory.annotation.Value("${demo.complexity.work-max:11000000}") private long workMax;
     DemoController(DemoWorkspaces workspaces, DemoSettings settings) {
         this.workspaces = workspaces;
         this.settings = settings;
@@ -27,7 +29,8 @@ class DemoController {
         return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(Map.of(
                 "demo", true, "idleMinutes", settings.idleTimeout().toMinutes(),
                 "absoluteHours", settings.absoluteTimeout().toHours(), "lessonThreshold", lessonThreshold,
-                "quickSeconds", quickSeconds, "thoroughSeconds", thoroughSeconds, "reuseEnabled", reuseEnabled));
+                "quickSeconds", quickSeconds, "thoroughSeconds", thoroughSeconds, "reuseEnabled", reuseEnabled,
+                "lessonMax", lessonMax, "workMax", workMax));
     }
     @PostMapping("/api/demo/session") ResponseEntity<?> restart(HttpServletRequest request) {
         var session = request.getSession(true);

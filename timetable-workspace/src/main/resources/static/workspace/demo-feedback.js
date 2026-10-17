@@ -1,4 +1,5 @@
 const rules = {
+  'hard.consecutive-block': ['Consecutive lesson rule', 'This class-subject arrangement has an undeclared run, wrong maximal length, teacher/room change or missing/excess weekly block frequency. Restore the declared exact-length blocks without skipping teaching periods or lunch.'],
   'hard.teacher-period': ['Teacher double-booked', 'These lessons use the same teacher at the same time. Choose another qualified teacher or move one lesson to a free time slot.'],
   'hard.cohort-period': ['Class double-booked', 'This class has more than one lesson at the same time. Move one of the lessons to a free time slot.'],
   'hard.room-period': ['Room double-booked', 'These lessons use the same room at the same time. Choose another suitable room or move one lesson.'],

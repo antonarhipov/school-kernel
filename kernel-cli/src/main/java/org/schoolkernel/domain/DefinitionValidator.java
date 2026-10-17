@@ -69,6 +69,7 @@ public final class DefinitionValidator {
         checkOverrides(input.softConstraintOverrides(), input, errors);
         checkLockConflicts(input, errors);
         checkCuratorLessons(input, errors);
+        checkConsecutiveBlocks(input, errors);
 
         var report = ValidationReport.from(errors);
         if (!report.isValid()) {
@@ -600,7 +601,8 @@ public final class DefinitionValidator {
                 .map(value -> new SchoolDefinition.Period(
                         value.id(), value.displayName(), DayOfWeek.valueOf(value.weekday()), value.order(),
                         value.startTime() == null ? null : LocalTime.parse(value.startTime()),
-                        value.endTime() == null ? null : LocalTime.parse(value.endTime())))
+                        value.endTime() == null ? null : LocalTime.parse(value.endTime()),
+                        Boolean.TRUE.equals(value.adjacentToNext())))
                 .toList();
         var lessons = input.lessons().stream()
                 .map(value -> new SchoolDefinition.Lesson(
@@ -618,7 +620,43 @@ public final class DefinitionValidator {
                 input.basedOnRevision(),
                 subjects, teachers, cohorts, rooms,
                 periods, set(input.reservedPeriodIds()), lessons, roomAssignments,
-                Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())));
+                Map.copyOf(effectiveWeights(input.softConstraintOverrides(), input.catalogVersion())),
+                input.consecutiveBlocks() == null ? List.of() : input.consecutiveBlocks().stream().map(r ->
+                    new SchoolDefinition.ConsecutiveBlock(r.id(), r.cohortId(), r.subjectId(), r.length(),
+                            r.operator(), r.weeklyCount())).toList());
+    }
+
+    private static void checkConsecutiveBlocks(SchoolDefinitionDto input, List<ValidationError> errors) {
+        if (input.catalogVersion() < 10) return;
+        var periodsByDay = input.periods().stream().collect(java.util.stream.Collectors.groupingBy(PeriodDto::weekday));
+        for (var day : periodsByDay.values()) {
+            var last = day.stream().max(java.util.Comparator.comparingInt(PeriodDto::order)).orElseThrow();
+            if (Boolean.TRUE.equals(last.adjacentToNext()))
+                error(errors, "/periods", List.of(last.id()), "last teaching period of a day cannot be adjacent to next");
+        }
+        if (input.consecutiveBlocks() == null) return;
+        var ids = new HashSet<String>();
+        var lengths = new HashSet<String>();
+        var consumed = new HashMap<String, Long>();
+        for (int i = 0; i < input.consecutiveBlocks().size(); i++) {
+            var rule = input.consecutiveBlocks().get(i);
+            var location = "/consecutiveBlocks/" + i;
+            var refs = List.of(rule.id(), rule.cohortId(), rule.subjectId());
+            var key = rule.cohortId() + "\u0000" + rule.subjectId();
+            if (!ids.add(rule.id()) || !lengths.add(key + "\u0000" + rule.length()))
+                error(errors, location, refs, "block identity and class-subject length must be unique");
+            if (input.cohorts().stream().noneMatch(c -> c.id().equals(rule.cohortId()))
+                    || input.subjects().stream().noneMatch(s -> s.id().equals(rule.subjectId())))
+                error(errors, location, refs, "block references an unknown class or subject");
+            var lessons = input.lessons().stream().filter(l -> l.cohortId().equals(rule.cohortId())
+                    && l.subjectId().equals(rule.subjectId())).toList();
+            long minimum = consumed.merge(key, (long) rule.length() * rule.weeklyCount(), Long::sum);
+            if (minimum > lessons.size()) error(errors, location, refs, "minimum block consumption exceeds weekly lesson demand");
+            // Block scoring belongs to a single ordinary series. No implicit regrouping of imported lessons.
+            var series = lessons.stream().map(LessonDto::seriesId).collect(java.util.stream.Collectors.toSet());
+            if (series.size() != 1 || series.contains(null))
+                error(errors, location, refs, "block rules require one shared non-null spreading series for the class-subject");
+        }
     }
 
     private static int maxDailyGaps(CohortDto cohort, int catalogVersion) {

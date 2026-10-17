@@ -36,7 +36,7 @@ spring:
 demo:
   observability:
     summary-interval: 1m
-  public-hosts: ${DEMO_PUBLIC_HOSTS:localhost:8080}
+  public-hosts: ${DEMO_PUBLIC_HOSTS:localhost:8080,127.0.0.1:8080}
   # Default off. Enable only after the isolated environment/no-TCP preflight in deploy/demo/README.md.
   railway-isolated-ingress: ${DEMO_RAILWAY_ISOLATED_INGRESS:false}
   # Alternate trust model for an operator-controlled proxy with stable addresses.

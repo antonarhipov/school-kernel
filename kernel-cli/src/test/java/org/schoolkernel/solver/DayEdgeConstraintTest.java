@@ -172,7 +172,7 @@ class DayEdgeConstraintTest {
 
     @Test
     void reservedPeriodsJoinTheRangeOnlyWhenPermitted() throws Exception {
-        var mvk = (ObjectNode) JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        var mvk = (ObjectNode) JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "policy-school.json"));
         SchoolSchedule permitted = new PlanningMapper().toPlanningProblem(domain(mvk));
         assertEquals(50, permitted.getPeriods().size());
         assertEquals(Set.of("mon-0", "tue-0", "wed-0", "thu-0", "fri-0"), permitted.getPeriods().stream()

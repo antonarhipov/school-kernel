@@ -18,7 +18,6 @@ class DemoSamplesTest {
     private final JsonMapper json = JsonMapper.builder().build();
     private DemoWorkspaces owners;
     private DemoWorkspaceStore store;
-    private KernelVerifier verifier;
     private DemoSamples samples;
     private final String artifact = "../kernel-cli/target/school-kernel.jar";
 
@@ -27,18 +26,12 @@ class DemoSamplesTest {
         owners = new DemoWorkspaces(new DemoSettings(List.of("demo.example"), List.of(), false,
                 Duration.ofHours(1), Duration.ofHours(8), 50), json, beans.getBeanProvider(KernelPlanner.class));
         store = new DemoWorkspaceStore(owners);
-        verifier = mock(KernelVerifier.class);
-        when(verifier.verify(any())).thenAnswer(call -> {
-            ImportDocuments docs = call.getArgument(0);
-            return new KernelVerifier.Verification(docs.definition().path("schoolId").asString(),
-                    docs.result().path("inputRevision").asString(), docs.result().path("timetableRevision").asString());
-        });
         samples = sampleService(new WorkspaceMutation(store));
-        samples.verifyPackagedSamples();
+        samples.loadPackagedSamples();
     }
     @AfterEach void close() { owners.close(); }
     private DemoSamples sampleService(WorkspaceMutation mutation) {
-        return new DemoSamples(json, verifier, new ManifestService(), store, mutation, artifact);
+        return new DemoSamples(json, new ManifestService(), store, mutation, artifact);
     }
     private JsonNode read(String name) { try { return samples.read(name); } catch (IOException e) { throw new RuntimeException(e); } }
     @Test void exactCatalogCopiesPreviewAndFourOpensNeverInvokeVisitorVerification() {
@@ -60,7 +53,7 @@ class DemoSamplesTest {
                 assertEquals(original, store.load().document().path("acceptedBaseline").path("definition"));
             }
         });
-        verify(verifier, times(8)).verify(any()); // two variants per school; deployment only
+
     }
     @Test void declineUnknownStaleAndActiveRunPreserveCompleteWorkInEveryLifecycle() {
         var owner = owners.open(new MockHttpSession(), true);
@@ -91,7 +84,7 @@ class DemoSamplesTest {
                 } else assertEquals(WorkspaceState.ACCEPTED_BASELINE, samples.use("full", prior.etag(), true).state());
             }
         });
-        verify(verifier, times(8)).verify(any());
+
     }
     @Test void englishSchoolHasItsOwnScaleCurriculumAndTwoCompleteDifferentTimetables() {
         var english = samples.preview("english");
@@ -168,7 +161,7 @@ class DemoSamplesTest {
         var failingMutation = mock(WorkspaceMutation.class);
         when(failingMutation.resetAndImport(anyLong(), any(), any())).thenThrow(new IllegalStateException("save unavailable"));
         DemoSamples failing = sampleService(failingMutation);
-        assertDoesNotThrow(failing::verifyPackagedSamples);
+        assertDoesNotThrow(failing::loadPackagedSamples);
         owners.bound(first, () -> {
             var prior = store.load();
             assertThrows(IllegalStateException.class, () -> failing.use("two-class", prior.etag(), true));
@@ -177,23 +170,15 @@ class DemoSamplesTest {
         });
         owners.bound(second, () -> assertEquals("full", store.load().document().path("origin").asString()));
     }
-    @Test void buildScoreDefinitionResultAndCatalogMismatchFailReadinessBeforePublishingSamples() throws Exception {
-        for (String field : List.of("build", "score", "definition", "result", "catalog")) {
-            DemoSamples corrupt = new DemoSamples(json, verifier, new ManifestService(), store, new WorkspaceMutation(store), artifact) {
-                @Override JsonNode read(String name) throws IOException {
-                    ObjectNode node = (ObjectNode) super.read(name);
-                    if (field.equals("build") && name.equals("scoring-evidence.json")) node.put("kernelBuild", "old-build");
-                    if (field.equals("score") && name.equals("scoring-evidence.json"))
-                        ((ObjectNode) node.path("samples").path("full/a").path("score")).put("ordinaryPreferencePenalty", -1);
-                    if (field.equals("definition") && name.equals("full-definition.json")) node.put("displayName", "tampered");
-                    if (field.equals("result") && name.equals("full-a-result.json")) node.put("elapsedTimeMs", -1);
-                    if (field.equals("catalog") && name.equals("scoring-evidence.json")) node.put("catalogVersion", -1);
-                    return node;
-                }
-            };
-            assertThrows(IllegalStateException.class, corrupt::verifyPackagedSamples, field);
-            assertTrue(corrupt.catalog().isEmpty(), "No partially validated catalog: " + field);
-        }
+    @Test void startupLoadsArtifactsWithoutReadingScoringEvidence() throws Exception {
+        DemoSamples direct = new DemoSamples(json, new ManifestService(), store, new WorkspaceMutation(store), artifact) {
+            @Override JsonNode read(String name) throws IOException {
+                assertNotEquals("scoring-evidence.json", name, "Startup must not inspect maintenance evidence");
+                return super.read(name);
+            }
+        };
+        direct.loadPackagedSamples();
+        assertEquals(samples.bundle(), direct.bundle());
     }
     @Test void missingOrNonBooleanConfirmationIsASafeRefusalAtControllerBoundary() {
         var owner = owners.open(new MockHttpSession(), true);
@@ -210,11 +195,14 @@ class DemoSamplesTest {
             assertEquals(prior, store.load());
         });
     }
-    @Test void realVerificationFailurePreventsSamplePublication() {
-        doThrow(new WorkspaceProblem(org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY,
-                "KERNEL_VERIFICATION_FAILED", "Invalid pair")).when(verifier).verify(any());
-        var invalid = sampleService(new WorkspaceMutation(store));
-        assertThrows(WorkspaceProblem.class, invalid::verifyPackagedSamples);
-        assertTrue(invalid.catalog().isEmpty());
+    @Test void unreadableResourceDoesNotPublishAPartialCatalog() {
+        DemoSamples missing = new DemoSamples(json, new ManifestService(), store, new WorkspaceMutation(store), artifact) {
+            @Override JsonNode read(String name) throws IOException {
+                if (name.equals("english-b-result.json")) throw new IOException("Missing bundled resource");
+                return super.read(name);
+            }
+        };
+        assertThrows(IOException.class, missing::loadPackagedSamples);
+        assertTrue(missing.catalog().isEmpty());
     }
 }

@@ -44,7 +44,7 @@ final class WorkbenchFixtures {
     }
 
     ObjectNode acceptedDocument(boolean empty) {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         definition.withArray("periods").addObject().put("id", "tue-1").put("displayName", "Tuesday 1")
                 .put("weekday", "TUESDAY").put("order", 1);
         ((ObjectNode) definition.path("teachers").get(0)).putArray("availablePeriodIds").add("mon-1").add("tue-1");
@@ -68,7 +68,7 @@ final class WorkbenchFixtures {
     }
 
     ObjectNode validAcceptedDocument() {
-        JsonNode definition = JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        JsonNode definition = JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         JsonNode result = JSON.readTree(Path.of("src/test/resources/uc5-accepted-result.json").toFile());
         ObjectNode document = JSON.createObjectNode();
         document.putObject("school").put("id", "demo-school").put("displayName", "Demo School");

@@ -18,7 +18,7 @@ import tools.jackson.databind.node.ObjectNode;
 class DemoPlanningBrowserIT {
     static final JsonMapper JSON=JsonMapper.builder().build();
     @TempDir Path temporary;
-    Process server; int port; String base; Path output,key; boolean remote;
+    Process server; int port; String base; Path output,key; boolean remote, plainHttp;
     final List<String> steps=new ArrayList<>(),errors=new ArrayList<>();
     final List<String> traffic=new ArrayList<>();
     @Test void realInitialAndRepairPresetsSharingCancellationReuseQueueAndRestart() throws Exception {
@@ -136,14 +136,16 @@ class DemoPlanningBrowserIT {
         remote=System.getProperty("demo.run.base")!=null;
         output=directory.toAbsolutePath();Files.createDirectories(output);
         if(remote){base=System.getProperty("demo.run.base");return;}
-        try(ServerSocket free=new ServerSocket(0)){port=free.getLocalPort();}base="https://localhost:"+port;key=temporary.resolve("demo.p12");
+        try(ServerSocket free=new ServerSocket(0)){port=free.getLocalPort();}base=(plainHttp?"http":"https")+"://localhost:"+port;key=temporary.resolve("demo.p12");
         var kt=new ProcessBuilder(Path.of(System.getProperty("java.home"),"bin","keytool").toString(),"-genkeypair","-alias","demo","-keyalg","RSA","-storetype","PKCS12","-keystore",key.toString(),"-storepass","disposable-demo-test","-dname","CN=localhost","-ext","SAN=dns:localhost","-validity","1").redirectErrorStream(true).redirectOutput(temporary.resolve("keytool.log").toFile()).start();assertTrue(kt.waitFor(15,TimeUnit.SECONDS));assertEquals(0,kt.exitValue());
         Files.copy(Path.of("target/timetable-workspace-1.0.0-SNAPSHOT.jar"),temporary.resolve("workspace.jar"));Files.copy(Path.of("../kernel-cli/target/school-kernel.jar"),temporary.resolve("kernel.jar"));
         Files.writeString(temporary.resolve("kernel"),"#!/bin/sh\nprintf '%s\\n' \"$1\" >> '"+temporary.resolve("launches")+"'\nif [ \"$1\" != verify ]; then\n if [ -f '"+temporary.resolve("crash")+"' ]; then exit 4; fi\n if [ -f '"+temporary.resolve("stall")+"' ]; then exec sleep 60; fi\nfi\nexec '"+Path.of(System.getProperty("java.home"),"bin","java")+"' -Xmx512m -jar '"+temporary.resolve("kernel.jar")+"' \"$@\"\n");temporary.resolve("kernel").toFile().setExecutable(true,true);
+        Files.writeString(temporary.resolve("launches"), "");
         start(List.of(),1);
     }
     void start(List<String> overrides,int number)throws Exception {
         var args=new ArrayList<>(List.of(Path.of(System.getProperty("java.home"),"bin","java").toString(),"-Xmx512m","-jar",temporary.resolve("workspace.jar").toString(),"--spring.profiles.active=demo","--server.address=127.0.0.1","--server.port="+port,"--demo.public-hosts=localhost:"+port,"--demo.trusted-proxy-addresses=","--server.ssl.enabled=true","--server.ssl.key-store="+key,"--server.ssl.key-store-password=disposable-demo-test","--server.ssl.key-store-type=PKCS12","--workspace.kernel-executable="+temporary.resolve("kernel"),"--demo.kernel-artifact="+temporary.resolve("kernel.jar")));
+        if (plainHttp) args.removeIf(arg -> arg.startsWith("--server.ssl.") || arg.startsWith("--demo.public-hosts="));
         args.addAll(overrides);server=new ProcessBuilder(args).redirectErrorStream(true).redirectOutput(output.resolve("server-"+number+".log").toFile()).start();
         long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(45);
         while(System.nanoTime()<deadline){if(!server.isAlive())fail(Files.readString(output.resolve("server-"+number+".log")));if(Files.readString(output.resolve("server-"+number+".log")).contains("Started WorkspaceApplication"))return;Thread.sleep(100);}fail("Readiness timeout");

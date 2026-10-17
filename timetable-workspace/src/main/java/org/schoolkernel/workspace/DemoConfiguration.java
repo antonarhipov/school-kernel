@@ -12,6 +12,15 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 @Profile("demo")
 @EnableConfigurationProperties(DemoSettings.class)
 class DemoConfiguration {
+    @Bean org.springframework.boot.web.server.WebServerFactoryCustomizer<org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory>
+            localDemoServer(DemoSettings settings) {
+        return factory -> {
+            if (!settings.localOnly()) return;
+            factory.setAddress(java.net.InetAddress.getLoopbackAddress());
+            factory.getSettings().getSession().getCookie().setSecure(false);
+        };
+    }
+
     @Bean org.springframework.beans.factory.InitializingBean isolatedIngressBoundary(
             DemoSettings settings, org.springframework.core.env.Environment environment) {
         return () -> {

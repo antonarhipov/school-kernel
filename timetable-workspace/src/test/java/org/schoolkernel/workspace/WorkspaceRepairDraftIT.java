@@ -398,7 +398,7 @@ class WorkspaceRepairDraftIT {
     }
 
     private void storeAccepted(boolean persistentPeriodLock) throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         if (persistentPeriodLock) ((ObjectNode) definition.path("lessons").get(0)).put("periodLock", "mon-1");
         ObjectNode result = JSON.createObjectNode().put("status", "FEASIBLE").put("inputRevision", "sha256:accepted-input")
                 .put("timetableRevision", "sha256:accepted-timetable");

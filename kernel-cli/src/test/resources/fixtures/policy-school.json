@@ -1,24 +1,89 @@
 {
   "schemaVersion": 1,
   "catalogVersion": 9,
-  "schoolId": "merivalja-kool",
-  "displayName": "Merivälja Kool",
-  "reservedPeriodIds": ["mon-0", "tue-0", "wed-0", "thu-0", "fri-0"],
+  "schoolId": "policy-school-regression",
+  "displayName": "Policy-School regression fixture",
+  "reservedPeriodIds": [
+    "mon-0",
+    "tue-0",
+    "wed-0",
+    "thu-0",
+    "fri-0"
+  ],
   "softConstraintOverrides": [
-    { "constraintId": "soft.teacher-gap", "weight": 5 },
-    { "constraintId": "soft.cohort-gap", "weight": 1000000 },
-    { "constraintId": "soft.cohort-late-start", "weight": 10000 },
-    { "constraintId": "soft.cohort-week-balance", "weight": 1000 },
-    { "constraintId": "soft.non-preferred-room", "weight": 5 }
+    {
+      "constraintId": "soft.teacher-gap",
+      "weight": 5
+    },
+    {
+      "constraintId": "soft.cohort-gap",
+      "weight": 1000000
+    },
+    {
+      "constraintId": "soft.cohort-late-start",
+      "weight": 10000
+    },
+    {
+      "constraintId": "soft.cohort-week-balance",
+      "weight": 1000
+    },
+    {
+      "constraintId": "soft.non-preferred-room",
+      "weight": 5
+    }
   ],
   "roomAssignments": [
-    { "id": "mvk-history-a231", "subjectId": "ajalugu", "allowedRoomIds": ["a231"] },
-    { "id": "mvk-piret-maths-b212", "subjectId": "matemaatika", "teacherId": "piret-noor", "allowedRoomIds": ["b212"] },
-    { "id": "mvk-heiki-literature-a209", "subjectId": "kirjandus", "teacherId": "heiki-raudla", "allowedRoomIds": ["a209"] },
-    { "id": "mvk-chemistry-a233", "subjectId": "keemia", "allowedRoomIds": ["a233"] },
-    { "id": "mvk-physics-a223", "subjectId": "fuusika", "allowedRoomIds": ["a223-lab"] },
-    { "id": "mvk-physical-education-halls", "subjectId": "kehaline-kasvatus", "allowedRoomIds": ["kk1", "kk2", "kk3"] },
-    { "id": "mvk-study-support-home", "subjectId": "opiabi", "useHomeRoom": true }
+    {
+      "id": "policy-001",
+      "subjectId": "ajalugu",
+      "allowedRoomIds": [
+        "a231"
+      ]
+    },
+    {
+      "id": "policy-002",
+      "subjectId": "matemaatika",
+      "teacherId": "policy-school-teacher-027",
+      "allowedRoomIds": [
+        "b212"
+      ]
+    },
+    {
+      "id": "policy-003",
+      "subjectId": "kirjandus",
+      "teacherId": "policy-school-teacher-032",
+      "allowedRoomIds": [
+        "a209"
+      ]
+    },
+    {
+      "id": "policy-004",
+      "subjectId": "keemia",
+      "allowedRoomIds": [
+        "a233"
+      ]
+    },
+    {
+      "id": "policy-005",
+      "subjectId": "fuusika",
+      "allowedRoomIds": [
+        "a223-lab"
+      ]
+    },
+    {
+      "id": "policy-006",
+      "subjectId": "kehaline-kasvatus",
+      "allowedRoomIds": [
+        "kk1",
+        "kk2",
+        "kk3"
+      ]
+    },
+    {
+      "id": "policy-007",
+      "subjectId": "opiabi",
+      "useHomeRoom": true
+    }
   ],
   "subjects": [
     {
@@ -133,86 +198,86 @@
   ],
   "teachers": [
     {
-      "id": "siiri-aiaste",
-      "displayName": "Siiri Aiaste",
+      "id": "policy-school-teacher-001",
+      "displayName": "Fictional Teacher 001",
       "qualifiedSubjectIds": [
         "ajalugu",
         "uhiskonnaopetus"
       ]
     },
     {
-      "id": "karl-kristian-alasi",
-      "displayName": "Karl Kristian Alasi",
+      "id": "policy-school-teacher-002",
+      "displayName": "Fictional Teacher 002",
       "qualifiedSubjectIds": [
         "kehaline-kasvatus"
       ]
     },
     {
-      "id": "vaike-antsov",
-      "displayName": "Vaike Antsov",
+      "id": "policy-school-teacher-003",
+      "displayName": "Fictional Teacher 003",
       "qualifiedSubjectIds": [
         "into",
         "matemaatika"
       ]
     },
     {
-      "id": "ene-avson",
-      "displayName": "Ene Avson",
+      "id": "policy-school-teacher-004",
+      "displayName": "Fictional Teacher 004",
       "qualifiedSubjectIds": [
         "into"
       ]
     },
     {
-      "id": "maya-blinder",
-      "displayName": "Maya Blinder",
+      "id": "policy-school-teacher-005",
+      "displayName": "Fictional Teacher 005",
       "qualifiedSubjectIds": [
         "inglise-keel",
         "kunstiopetus"
       ]
     },
     {
-      "id": "maarja-doyle",
-      "displayName": "Maarja Doyle",
+      "id": "policy-school-teacher-006",
+      "displayName": "Fictional Teacher 006",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "indra-feldman",
-      "displayName": "Indra Feldman",
+      "id": "policy-school-teacher-007",
+      "displayName": "Fictional Teacher 007",
       "qualifiedSubjectIds": [
         "klassitund"
       ]
     },
     {
-      "id": "helina-silberg",
-      "displayName": "Helina Silberg",
+      "id": "policy-school-teacher-008",
+      "displayName": "Fictional Teacher 008",
       "qualifiedSubjectIds": [
         "eripedagoog",
         "into"
       ]
     },
     {
-      "id": "greta-henriksson",
-      "displayName": "Greta Henriksson",
+      "id": "policy-school-teacher-009",
+      "displayName": "Fictional Teacher 009",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "katrin-jaaksoo",
-      "displayName": "Katrin Jaaksoo",
+      "id": "policy-school-teacher-010",
+      "displayName": "Fictional Teacher 010",
       "qualifiedSubjectIds": [
         "eesti-keel",
         "kirjandus"
       ]
     },
     {
-      "id": "leelo-jaanimagi",
-      "displayName": "Leelo Jaanimägi",
+      "id": "policy-school-teacher-011",
+      "displayName": "Fictional Teacher 011",
       "qualifiedSubjectIds": [
         "muusikaopetus"
       ]
     },
     {
-      "id": "anita-kalmus",
-      "displayName": "Anita Kalmus",
+      "id": "policy-school-teacher-012",
+      "displayName": "Fictional Teacher 012",
       "qualifiedSubjectIds": [
         "klassitund",
         "loodusopetus",
@@ -220,16 +285,16 @@
       ]
     },
     {
-      "id": "mari-kamps",
-      "displayName": "Mari Kamps",
+      "id": "policy-school-teacher-013",
+      "displayName": "Fictional Teacher 013",
       "qualifiedSubjectIds": [
         "loodusopetus",
         "matemaatika"
       ]
     },
     {
-      "id": "liivi-kivimae-bondarev",
-      "displayName": "Liivi Kivimäe-Bondarev",
+      "id": "policy-school-teacher-014",
+      "displayName": "Fictional Teacher 014",
       "qualifiedSubjectIds": [
         "fuusika",
         "into",
@@ -238,23 +303,23 @@
       ]
     },
     {
-      "id": "kaie-kodres",
-      "displayName": "Kaie Kodres",
+      "id": "policy-school-teacher-015",
+      "displayName": "Fictional Teacher 015",
       "qualifiedSubjectIds": [
         "muusikaopetus"
       ]
     },
     {
-      "id": "reena-korp",
-      "displayName": "Reena Korp",
+      "id": "policy-school-teacher-016",
+      "displayName": "Fictional Teacher 016",
       "qualifiedSubjectIds": [
         "klassitund",
         "opiabi"
       ]
     },
     {
-      "id": "helena-kroon",
-      "displayName": "Helena Kroon",
+      "id": "policy-school-teacher-017",
+      "displayName": "Fictional Teacher 017",
       "qualifiedSubjectIds": [
         "kasitoo-ja-tehnoloogiaopetus",
         "klassitund",
@@ -263,29 +328,29 @@
       ]
     },
     {
-      "id": "piret-laanesaar",
-      "displayName": "Piret Laanesaar",
+      "id": "policy-school-teacher-018",
+      "displayName": "Fictional Teacher 018",
       "qualifiedSubjectIds": [
         "klassitund",
         "opiabi"
       ]
     },
     {
-      "id": "marilin-laanetu",
-      "displayName": "Marilin Laanetu",
+      "id": "policy-school-teacher-019",
+      "displayName": "Fictional Teacher 019",
       "qualifiedSubjectIds": [
         "inglise-keel",
         "into"
       ]
     },
     {
-      "id": "marek-leemets",
-      "displayName": "Marek Leemets",
+      "id": "policy-school-teacher-020",
+      "displayName": "Fictional Teacher 020",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "rita-lumiste",
-      "displayName": "Rita Lumiste",
+      "id": "policy-school-teacher-021",
+      "displayName": "Fictional Teacher 021",
       "qualifiedSubjectIds": [
         "kirjandus",
         "klassitund",
@@ -293,27 +358,27 @@
       ]
     },
     {
-      "id": "merle-mand",
-      "displayName": "Merle Mänd",
+      "id": "policy-school-teacher-022",
+      "displayName": "Fictional Teacher 022",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "saale-maripuu",
-      "displayName": "Saale Maripuu",
+      "id": "policy-school-teacher-023",
+      "displayName": "Fictional Teacher 023",
       "qualifiedSubjectIds": [
         "into"
       ]
     },
     {
-      "id": "aida-martin",
-      "displayName": "Aida Martin",
+      "id": "policy-school-teacher-024",
+      "displayName": "Fictional Teacher 024",
       "qualifiedSubjectIds": [
         "matemaatika-vr"
       ]
     },
     {
-      "id": "kairi-meressaar",
-      "displayName": "Kairi Meressaar",
+      "id": "policy-school-teacher-025",
+      "displayName": "Fictional Teacher 025",
       "qualifiedSubjectIds": [
         "eesti-keel-kirjandus",
         "klassitund",
@@ -321,16 +386,16 @@
       ]
     },
     {
-      "id": "kristin-muul",
-      "displayName": "Kristin Muul",
+      "id": "policy-school-teacher-026",
+      "displayName": "Fictional Teacher 026",
       "qualifiedSubjectIds": [
         "klassitund",
         "opiabi"
       ]
     },
     {
-      "id": "piret-noor",
-      "displayName": "Piret Noor",
+      "id": "policy-school-teacher-027",
+      "displayName": "Fictional Teacher 027",
       "qualifiedSubjectIds": [
         "into",
         "matemaatika",
@@ -338,42 +403,42 @@
       ]
     },
     {
-      "id": "janek-pallase",
-      "displayName": "Janek Pallase",
+      "id": "policy-school-teacher-028",
+      "displayName": "Fictional Teacher 028",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "katri-plooman",
-      "displayName": "Katri Plooman",
+      "id": "policy-school-teacher-029",
+      "displayName": "Fictional Teacher 029",
       "qualifiedSubjectIds": [
         "kehaline-kasvatus"
       ]
     },
     {
-      "id": "marina-pokintsereda",
-      "displayName": "Marina Pokintšereda",
+      "id": "policy-school-teacher-030",
+      "displayName": "Fictional Teacher 030",
       "qualifiedSubjectIds": [
         "into"
       ]
     },
     {
-      "id": "liisi-rannik",
-      "displayName": "Liisi Rannik",
+      "id": "policy-school-teacher-031",
+      "displayName": "Fictional Teacher 031",
       "qualifiedSubjectIds": [
         "klassitund"
       ]
     },
     {
-      "id": "heiki-raudla",
-      "displayName": "Heiki Raudla",
+      "id": "policy-school-teacher-032",
+      "displayName": "Fictional Teacher 032",
       "qualifiedSubjectIds": [
         "eesti-keel",
         "kirjandus"
       ]
     },
     {
-      "id": "anette-maria-rennit",
-      "displayName": "Anette Maria Rennit",
+      "id": "policy-school-teacher-033",
+      "displayName": "Fictional Teacher 033",
       "qualifiedSubjectIds": [
         "ajalugu",
         "klassitund",
@@ -382,26 +447,26 @@
       ]
     },
     {
-      "id": "anne-reet-riismandel",
-      "displayName": "Anne-Reet Riismandel",
+      "id": "policy-school-teacher-034",
+      "displayName": "Fictional Teacher 034",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "aarne-ruben",
-      "displayName": "Aarne Ruben",
+      "id": "policy-school-teacher-035",
+      "displayName": "Fictional Teacher 035",
       "qualifiedSubjectIds": [
         "eesti-keel",
         "eksami-ettevalmistus-eesti-keel"
       ]
     },
     {
-      "id": "simmo-saar",
-      "displayName": "Simmo Saar",
+      "id": "policy-school-teacher-036",
+      "displayName": "Fictional Teacher 036",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "maiki-saaring",
-      "displayName": "Maiki Saaring",
+      "id": "policy-school-teacher-037",
+      "displayName": "Fictional Teacher 037",
       "qualifiedSubjectIds": [
         "klassitund",
         "loodusopetus",
@@ -409,49 +474,49 @@
       ]
     },
     {
-      "id": "malle-salu",
-      "displayName": "Malle Salu",
+      "id": "policy-school-teacher-038",
+      "displayName": "Fictional Teacher 038",
       "qualifiedSubjectIds": [
         "bioloogia"
       ]
     },
     {
-      "id": "bergit-semre",
-      "displayName": "Bergit Semre",
+      "id": "policy-school-teacher-039",
+      "displayName": "Fictional Teacher 039",
       "qualifiedSubjectIds": [
         "inimeseopetus",
         "into"
       ]
     },
     {
-      "id": "olga-simonovits",
-      "displayName": "Olga Simonovitš",
+      "id": "policy-school-teacher-040",
+      "displayName": "Fictional Teacher 040",
       "qualifiedSubjectIds": [
         "vene-keel"
       ]
     },
     {
-      "id": "annika-sirel",
-      "displayName": "Annika Sirel",
+      "id": "policy-school-teacher-041",
+      "displayName": "Fictional Teacher 041",
       "qualifiedSubjectIds": [
         "inglise-keel"
       ]
     },
     {
-      "id": "madelen-monika-soiver",
-      "displayName": "Madelen Monika Soiver",
+      "id": "policy-school-teacher-042",
+      "displayName": "Fictional Teacher 042",
       "qualifiedSubjectIds": [
         "geograafia"
       ]
     },
     {
-      "id": "marri-steinmann",
-      "displayName": "Marri Steinmann",
+      "id": "policy-school-teacher-043",
+      "displayName": "Fictional Teacher 043",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "grete-suurvali",
-      "displayName": "Grete Suurväli",
+      "id": "policy-school-teacher-044",
+      "displayName": "Fictional Teacher 044",
       "qualifiedSubjectIds": [
         "ajalugu",
         "inimeseopetus",
@@ -461,20 +526,20 @@
       ]
     },
     {
-      "id": "reet-suviste",
-      "displayName": "Reet Suviste",
+      "id": "policy-school-teacher-045",
+      "displayName": "Fictional Teacher 045",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "hektor-talviste",
-      "displayName": "Hektor Talviste",
+      "id": "policy-school-teacher-046",
+      "displayName": "Fictional Teacher 046",
       "qualifiedSubjectIds": [
         "kehaline-kasvatus"
       ]
     },
     {
-      "id": "katariin-treial",
-      "displayName": "Katariin Treial",
+      "id": "policy-school-teacher-047",
+      "displayName": "Fictional Teacher 047",
       "qualifiedSubjectIds": [
         "eesti-keel",
         "into",
@@ -482,25 +547,25 @@
       ]
     },
     {
-      "id": "ilona-vaher",
-      "displayName": "Ilona Vaher",
+      "id": "policy-school-teacher-048",
+      "displayName": "Fictional Teacher 048",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "reeli-valk",
-      "displayName": "Reeli Valk",
+      "id": "policy-school-teacher-049",
+      "displayName": "Fictional Teacher 049",
       "qualifiedSubjectIds": [
         "bioloogia"
       ]
     },
     {
-      "id": "ruslana-volkova",
-      "displayName": "Ruslana Volkova",
+      "id": "policy-school-teacher-050",
+      "displayName": "Fictional Teacher 050",
       "qualifiedSubjectIds": []
     },
     {
-      "id": "kirke-kobi",
-      "displayName": "Kirke Kobi",
+      "id": "policy-school-teacher-051",
+      "displayName": "Fictional Teacher 051",
       "qualifiedSubjectIds": [
         "eripedagoog"
       ]
@@ -514,7 +579,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "piret-laanesaar",
+      "curatorTeacherId": "policy-school-teacher-018",
       "homeRoomId": "a106"
     },
     {
@@ -524,7 +589,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "kairi-meressaar",
+      "curatorTeacherId": "policy-school-teacher-025",
       "homeRoomId": "a120"
     },
     {
@@ -534,7 +599,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "helena-kroon",
+      "curatorTeacherId": "policy-school-teacher-017",
       "homeRoomId": "a118"
     },
     {
@@ -544,7 +609,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "anita-kalmus",
+      "curatorTeacherId": "policy-school-teacher-012",
       "homeRoomId": "a109"
     },
     {
@@ -554,7 +619,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "maiki-saaring",
+      "curatorTeacherId": "policy-school-teacher-037",
       "homeRoomId": "a117"
     },
     {
@@ -564,7 +629,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "indra-feldman",
+      "curatorTeacherId": "policy-school-teacher-007",
       "homeRoomId": "a207"
     },
     {
@@ -574,7 +639,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "kristin-muul",
+      "curatorTeacherId": "policy-school-teacher-026",
       "homeRoomId": "a228"
     },
     {
@@ -584,7 +649,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 2,
-      "curatorTeacherId": "reena-korp",
+      "curatorTeacherId": "policy-school-teacher-016",
       "homeRoomId": "a217"
     },
     {
@@ -594,7 +659,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 4,
-      "curatorTeacherId": "anette-maria-rennit",
+      "curatorTeacherId": "policy-school-teacher-033",
       "homeRoomId": "a218"
     },
     {
@@ -604,7 +669,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 1,
       "latestStartSlot": 4,
-      "curatorTeacherId": "rita-lumiste",
+      "curatorTeacherId": "policy-school-teacher-021",
       "homeRoomId": "a119"
     },
     {
@@ -614,7 +679,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "ene-avson",
+      "curatorTeacherId": "policy-school-teacher-004",
       "homeRoomId": "a215"
     },
     {
@@ -624,7 +689,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "katariin-treial",
+      "curatorTeacherId": "policy-school-teacher-047",
       "homeRoomId": "a216"
     },
     {
@@ -634,7 +699,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "liisi-rannik",
+      "curatorTeacherId": "policy-school-teacher-031",
       "homeRoomId": "a211"
     },
     {
@@ -644,7 +709,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "vaike-antsov",
+      "curatorTeacherId": "policy-school-teacher-003",
       "homeRoomId": "b213"
     },
     {
@@ -654,7 +719,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "liivi-kivimae-bondarev",
+      "curatorTeacherId": "policy-school-teacher-014",
       "homeRoomId": "b214"
     },
     {
@@ -664,7 +729,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "olga-simonovits"
+      "curatorTeacherId": "policy-school-teacher-040"
     },
     {
       "id": "7a",
@@ -673,7 +738,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "saale-maripuu",
+      "curatorTeacherId": "policy-school-teacher-023",
       "homeRoomId": "b216"
     },
     {
@@ -683,7 +748,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "bergit-semre",
+      "curatorTeacherId": "policy-school-teacher-039",
       "homeRoomId": "a229"
     },
     {
@@ -693,7 +758,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "grete-suurvali",
+      "curatorTeacherId": "policy-school-teacher-044",
       "homeRoomId": "b214"
     },
     {
@@ -703,7 +768,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "marina-pokintsereda",
+      "curatorTeacherId": "policy-school-teacher-030",
       "homeRoomId": "a230"
     },
     {
@@ -713,7 +778,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "marilin-laanetu",
+      "curatorTeacherId": "policy-school-teacher-019",
       "homeRoomId": "a204"
     },
     {
@@ -723,7 +788,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "piret-noor",
+      "curatorTeacherId": "policy-school-teacher-027",
       "homeRoomId": "b212"
     },
     {
@@ -733,7 +798,7 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "helina-silberg",
+      "curatorTeacherId": "policy-school-teacher-008",
       "homeRoomId": "b215"
     }
   ],
@@ -982,7 +1047,10 @@
       "id": "k2",
       "displayName": "K2",
       "capacity": 30,
-      "capabilityIds": ["general-classroom", "music-room"]
+      "capabilityIds": [
+        "general-classroom",
+        "music-room"
+      ]
     },
     {
       "id": "k4",
@@ -1481,7 +1549,7 @@
       "displayName": "1A Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1495,7 +1563,7 @@
       "displayName": "1A Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1509,7 +1577,7 @@
       "displayName": "1A Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1523,7 +1591,7 @@
       "displayName": "1A Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1537,7 +1605,7 @@
       "displayName": "1A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "1a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "1a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1551,7 +1619,7 @@
       "displayName": "1A Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1565,7 +1633,7 @@
       "displayName": "1A Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1579,7 +1647,7 @@
       "displayName": "1A Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1593,7 +1661,7 @@
       "displayName": "1A Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1607,7 +1675,7 @@
       "displayName": "1A Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1621,7 +1689,7 @@
       "displayName": "1A Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1635,7 +1703,7 @@
       "displayName": "1A Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1649,7 +1717,7 @@
       "displayName": "1A Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1663,7 +1731,7 @@
       "displayName": "1A Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1677,7 +1745,7 @@
       "displayName": "1A Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1691,7 +1759,7 @@
       "displayName": "1A Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1a",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "1a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1705,7 +1773,7 @@
       "displayName": "1A Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1719,7 +1787,7 @@
       "displayName": "1A Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "1a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "1a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1733,7 +1801,7 @@
       "displayName": "1A Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1a",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "1a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1747,7 +1815,7 @@
       "displayName": "1A Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1761,7 +1829,7 @@
       "displayName": "1A Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1775,7 +1843,7 @@
       "displayName": "1A Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "policy-school-teacher-018",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1789,7 +1857,7 @@
       "displayName": "1B Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1803,7 +1871,7 @@
       "displayName": "1B Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1817,7 +1885,7 @@
       "displayName": "1B Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1831,7 +1899,7 @@
       "displayName": "1B Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1b",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "1b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1845,7 +1913,7 @@
       "displayName": "1B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "1b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "1b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1859,7 +1927,7 @@
       "displayName": "1B Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1873,7 +1941,7 @@
       "displayName": "1B Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1887,7 +1955,7 @@
       "displayName": "1B Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1901,7 +1969,7 @@
       "displayName": "1B Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1915,7 +1983,7 @@
       "displayName": "1B Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1929,7 +1997,7 @@
       "displayName": "1B Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1943,7 +2011,7 @@
       "displayName": "1B Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1957,7 +2025,7 @@
       "displayName": "1B Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1971,7 +2039,7 @@
       "displayName": "1B Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "1b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "1b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1985,7 +2053,7 @@
       "displayName": "1B Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1999,7 +2067,7 @@
       "displayName": "1B Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2013,7 +2081,7 @@
       "displayName": "1B Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2027,7 +2095,7 @@
       "displayName": "1B Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2041,7 +2109,7 @@
       "displayName": "1B Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2055,7 +2123,7 @@
       "displayName": "1B Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1b",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "1b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2069,7 +2137,7 @@
       "displayName": "1B Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2083,7 +2151,7 @@
       "displayName": "1B Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2097,7 +2165,7 @@
       "displayName": "1C Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2111,7 +2179,7 @@
       "displayName": "1C Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2125,7 +2193,7 @@
       "displayName": "1C Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "1c",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "1c.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2139,7 +2207,7 @@
       "displayName": "1C Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1c",
-      "teacherId": "katri-plooman",
+      "teacherId": "policy-school-teacher-029",
       "seriesId": "1c.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2153,7 +2221,7 @@
       "displayName": "1C Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2167,7 +2235,7 @@
       "displayName": "1C Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2181,7 +2249,7 @@
       "displayName": "1C Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2195,7 +2263,7 @@
       "displayName": "1C Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2209,7 +2277,7 @@
       "displayName": "1C Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1c",
-      "teacherId": "katri-plooman",
+      "teacherId": "policy-school-teacher-029",
       "seriesId": "1c.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2223,7 +2291,7 @@
       "displayName": "1C Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "1c",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "1c.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2237,7 +2305,7 @@
       "displayName": "1C Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2251,7 +2319,7 @@
       "displayName": "1C Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2265,7 +2333,7 @@
       "displayName": "1C Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2279,7 +2347,7 @@
       "displayName": "1C Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2293,7 +2361,7 @@
       "displayName": "1C Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2307,7 +2375,7 @@
       "displayName": "1C Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2321,7 +2389,7 @@
       "displayName": "1C Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2335,7 +2403,7 @@
       "displayName": "1C Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2349,7 +2417,7 @@
       "displayName": "1C Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2363,7 +2431,7 @@
       "displayName": "1C Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2377,7 +2445,7 @@
       "displayName": "1C Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2391,7 +2459,7 @@
       "displayName": "1C Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "1c",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "1c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2405,7 +2473,7 @@
       "displayName": "2A Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2419,7 +2487,7 @@
       "displayName": "2A Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2433,7 +2501,7 @@
       "displayName": "2A Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2447,7 +2515,7 @@
       "displayName": "2A Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2461,7 +2529,7 @@
       "displayName": "2A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "2a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "2a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2475,7 +2543,7 @@
       "displayName": "2A Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2489,7 +2557,7 @@
       "displayName": "2A Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "2a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "2a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2503,7 +2571,7 @@
       "displayName": "2A Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "2a",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "2a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2517,7 +2585,7 @@
       "displayName": "2A Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2531,7 +2599,7 @@
       "displayName": "2A Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2545,7 +2613,7 @@
       "displayName": "2A Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2559,7 +2627,7 @@
       "displayName": "2A Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2573,7 +2641,7 @@
       "displayName": "2A Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2587,7 +2655,7 @@
       "displayName": "2A Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2601,7 +2669,7 @@
       "displayName": "2A Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2615,7 +2683,7 @@
       "displayName": "2A Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "2a",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "2a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2629,7 +2697,7 @@
       "displayName": "2A Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2643,7 +2711,7 @@
       "displayName": "2A Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2657,7 +2725,7 @@
       "displayName": "2A Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2671,7 +2739,7 @@
       "displayName": "2A Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2685,7 +2753,7 @@
       "displayName": "2A Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2699,7 +2767,7 @@
       "displayName": "2A Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "2a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "2a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2713,7 +2781,7 @@
       "displayName": "2B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "2b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "2b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2727,7 +2795,7 @@
       "displayName": "2B Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2741,7 +2809,7 @@
       "displayName": "2B Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2755,7 +2823,7 @@
       "displayName": "2B Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2769,7 +2837,7 @@
       "displayName": "2B Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2783,7 +2851,7 @@
       "displayName": "2B Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2797,7 +2865,7 @@
       "displayName": "2B Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2811,7 +2879,7 @@
       "displayName": "2B Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "2b",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "2b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2825,7 +2893,7 @@
       "displayName": "2B Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2839,7 +2907,7 @@
       "displayName": "2B Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2853,7 +2921,7 @@
       "displayName": "2B Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2867,7 +2935,7 @@
       "displayName": "2B Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "2b",
-      "teacherId": "hektor-talviste",
+      "teacherId": "policy-school-teacher-046",
       "seriesId": "2b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2881,7 +2949,7 @@
       "displayName": "2B Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2895,7 +2963,7 @@
       "displayName": "2B Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2909,7 +2977,7 @@
       "displayName": "2B Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2923,7 +2991,7 @@
       "displayName": "2B Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2937,7 +3005,7 @@
       "displayName": "2B Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2951,7 +3019,7 @@
       "displayName": "2B Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2965,7 +3033,7 @@
       "displayName": "2B Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "2b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "2b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2979,7 +3047,7 @@
       "displayName": "2B Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2993,7 +3061,7 @@
       "displayName": "2B Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3007,7 +3075,7 @@
       "displayName": "2B Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "2b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "2b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3021,7 +3089,7 @@
       "displayName": "2C Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3035,7 +3103,7 @@
       "displayName": "2C Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3049,7 +3117,7 @@
       "displayName": "2C Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3063,7 +3131,7 @@
       "displayName": "2C Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3077,7 +3145,7 @@
       "displayName": "2C Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3091,7 +3159,7 @@
       "displayName": "2C Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3105,7 +3173,7 @@
       "displayName": "2C Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3119,7 +3187,7 @@
       "displayName": "2C Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3133,7 +3201,7 @@
       "displayName": "2C Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3147,7 +3215,7 @@
       "displayName": "2C Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3161,7 +3229,7 @@
       "displayName": "2C Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3175,7 +3243,7 @@
       "displayName": "2C Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3189,7 +3257,7 @@
       "displayName": "2C Eripedagoog 1",
       "subjectId": "eripedagoog",
       "cohortId": "2c",
-      "teacherId": "kirke-kobi",
+      "teacherId": "policy-school-teacher-051",
       "seriesId": "2c.eripedagoog",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3203,7 +3271,7 @@
       "displayName": "2C Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3217,7 +3285,7 @@
       "displayName": "2C Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3231,7 +3299,7 @@
       "displayName": "2C Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3245,7 +3313,7 @@
       "displayName": "2C Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3259,7 +3327,7 @@
       "displayName": "2C Klassitund 17",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3273,7 +3341,7 @@
       "displayName": "2C Klassitund 18",
       "subjectId": "klassitund",
       "cohortId": "2c",
-      "teacherId": "indra-feldman",
+      "teacherId": "policy-school-teacher-007",
       "seriesId": "2c.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3287,7 +3355,7 @@
       "displayName": "3A Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3301,7 +3369,7 @@
       "displayName": "3A Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3315,7 +3383,7 @@
       "displayName": "3A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "3a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "3a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -3329,7 +3397,7 @@
       "displayName": "3A Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3343,7 +3411,7 @@
       "displayName": "3A Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3357,7 +3425,7 @@
       "displayName": "3A Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3371,7 +3439,7 @@
       "displayName": "3A Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3385,7 +3453,7 @@
       "displayName": "3A Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3399,7 +3467,7 @@
       "displayName": "3A Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "3a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "3a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -3413,7 +3481,7 @@
       "displayName": "3A Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3427,7 +3495,7 @@
       "displayName": "3A Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "3a",
-      "teacherId": "karl-kristian-alasi",
+      "teacherId": "policy-school-teacher-002",
       "seriesId": "3a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -3441,7 +3509,7 @@
       "displayName": "3A Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3455,7 +3523,7 @@
       "displayName": "3A Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3469,7 +3537,7 @@
       "displayName": "3A Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3483,7 +3551,7 @@
       "displayName": "3A Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3497,7 +3565,7 @@
       "displayName": "3A Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3511,7 +3579,7 @@
       "displayName": "3A Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3525,7 +3593,7 @@
       "displayName": "3A Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "3a",
-      "teacherId": "karl-kristian-alasi",
+      "teacherId": "policy-school-teacher-002",
       "seriesId": "3a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -3539,7 +3607,7 @@
       "displayName": "3A Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3553,7 +3621,7 @@
       "displayName": "3A Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3567,7 +3635,7 @@
       "displayName": "3A Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3581,7 +3649,7 @@
       "displayName": "3A Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3595,7 +3663,7 @@
       "displayName": "3A Klassitund 17",
       "subjectId": "klassitund",
       "cohortId": "3a",
-      "teacherId": "kristin-muul",
+      "teacherId": "policy-school-teacher-026",
       "seriesId": "3a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3609,7 +3677,7 @@
       "displayName": "3B Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3623,7 +3691,7 @@
       "displayName": "3B Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3637,7 +3705,7 @@
       "displayName": "3B Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "3b",
-      "teacherId": "karl-kristian-alasi",
+      "teacherId": "policy-school-teacher-002",
       "seriesId": "3b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -3651,7 +3719,7 @@
       "displayName": "3B Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3665,7 +3733,7 @@
       "displayName": "3B Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3679,7 +3747,7 @@
       "displayName": "3B Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3693,7 +3761,7 @@
       "displayName": "3B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "3b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "3b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -3707,7 +3775,7 @@
       "displayName": "3B Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3721,7 +3789,7 @@
       "displayName": "3B Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3735,7 +3803,7 @@
       "displayName": "3B Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3749,7 +3817,7 @@
       "displayName": "3B Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3763,7 +3831,7 @@
       "displayName": "3B Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3777,7 +3845,7 @@
       "displayName": "3B Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3791,7 +3859,7 @@
       "displayName": "3B Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3805,7 +3873,7 @@
       "displayName": "3B Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3819,7 +3887,7 @@
       "displayName": "3B Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3833,7 +3901,7 @@
       "displayName": "3B Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3847,7 +3915,7 @@
       "displayName": "3B Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3861,7 +3929,7 @@
       "displayName": "3B Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "3b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "3b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -3875,7 +3943,7 @@
       "displayName": "3B Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3889,7 +3957,7 @@
       "displayName": "3B Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3903,7 +3971,7 @@
       "displayName": "3B Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "3b",
-      "teacherId": "karl-kristian-alasi",
+      "teacherId": "policy-school-teacher-002",
       "seriesId": "3b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -3917,7 +3985,7 @@
       "displayName": "3B Klassitund 17",
       "subjectId": "klassitund",
       "cohortId": "3b",
-      "teacherId": "reena-korp",
+      "teacherId": "policy-school-teacher-016",
       "seriesId": "3b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3931,7 +3999,7 @@
       "displayName": "4A Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3945,7 +4013,7 @@
       "displayName": "4A Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3959,7 +4027,7 @@
       "displayName": "4A Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "4a",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "4a.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3973,7 +4041,7 @@
       "displayName": "4A Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3987,7 +4055,7 @@
       "displayName": "4A Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4a",
-      "teacherId": "katri-plooman",
+      "teacherId": "policy-school-teacher-029",
       "seriesId": "4a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -4001,7 +4069,7 @@
       "displayName": "4A Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4015,7 +4083,7 @@
       "displayName": "4A Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4a",
-      "teacherId": "katri-plooman",
+      "teacherId": "policy-school-teacher-029",
       "seriesId": "4a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -4029,7 +4097,7 @@
       "displayName": "4A Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4043,7 +4111,7 @@
       "displayName": "4A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "4a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "4a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -4057,7 +4125,7 @@
       "displayName": "4A Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4071,7 +4139,7 @@
       "displayName": "4A Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4085,7 +4153,7 @@
       "displayName": "4A Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4099,7 +4167,7 @@
       "displayName": "4A Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4113,7 +4181,7 @@
       "displayName": "4A Käsitöö- ja tehnoloogiaõpetus 1",
       "subjectId": "kasitoo-ja-tehnoloogiaopetus",
       "cohortId": "4a",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "4a.kasitoo-ja-tehnoloogiaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4127,7 +4195,7 @@
       "displayName": "4A Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "4a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "4a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -4141,7 +4209,7 @@
       "displayName": "4A Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4155,7 +4223,7 @@
       "displayName": "4A Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4169,7 +4237,7 @@
       "displayName": "4A Käsitöö- ja tehnoloogiaõpetus 2",
       "subjectId": "kasitoo-ja-tehnoloogiaopetus",
       "cohortId": "4a",
-      "teacherId": "helena-kroon",
+      "teacherId": "policy-school-teacher-017",
       "seriesId": "4a.kasitoo-ja-tehnoloogiaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4183,7 +4251,7 @@
       "displayName": "4A Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4197,7 +4265,7 @@
       "displayName": "4A Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4211,7 +4279,7 @@
       "displayName": "4A Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4225,7 +4293,7 @@
       "displayName": "4A Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4239,7 +4307,7 @@
       "displayName": "4A Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4253,7 +4321,7 @@
       "displayName": "4B Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4267,7 +4335,7 @@
       "displayName": "4B Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4281,7 +4349,7 @@
       "displayName": "4B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "4b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "4b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -4295,7 +4363,7 @@
       "displayName": "4B Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4b",
-      "teacherId": "katri-plooman",
+      "teacherId": "policy-school-teacher-029",
       "seriesId": "4b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -4309,7 +4377,7 @@
       "displayName": "4B Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4323,7 +4391,7 @@
       "displayName": "4B Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4337,7 +4405,7 @@
       "displayName": "4B Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4b",
-      "teacherId": "katri-plooman",
+      "teacherId": "policy-school-teacher-029",
       "seriesId": "4b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -4351,7 +4419,7 @@
       "displayName": "4B Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4365,7 +4433,7 @@
       "displayName": "4B Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4379,7 +4447,7 @@
       "displayName": "4B Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4393,7 +4461,7 @@
       "displayName": "4B Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4407,7 +4475,7 @@
       "displayName": "4B Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4421,7 +4489,7 @@
       "displayName": "4B Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4435,7 +4503,7 @@
       "displayName": "4B Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4449,7 +4517,7 @@
       "displayName": "4B Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "4b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "policy-school-teacher-015",
       "seriesId": "4b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -4463,7 +4531,7 @@
       "displayName": "4B Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4477,7 +4545,7 @@
       "displayName": "4B Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4491,7 +4559,7 @@
       "displayName": "4B Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4505,7 +4573,7 @@
       "displayName": "4B Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4519,7 +4587,7 @@
       "displayName": "4B Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4533,7 +4601,7 @@
       "displayName": "4B Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4547,7 +4615,7 @@
       "displayName": "4B Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4561,7 +4629,7 @@
       "displayName": "4B Klassitund 17",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4575,7 +4643,7 @@
       "displayName": "5A Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "5a",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "5a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4589,7 +4657,7 @@
       "displayName": "5A IntÕ 1",
       "subjectId": "into",
       "cohortId": "5a",
-      "teacherId": "ene-avson",
+      "teacherId": "policy-school-teacher-004",
       "seriesId": "5a.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4604,7 +4672,7 @@
       "displayName": "5A Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "5a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4618,7 +4686,7 @@
       "displayName": "5A Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "5a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "5a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4632,7 +4700,7 @@
       "displayName": "5A Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "5a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "5a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4646,7 +4714,7 @@
       "displayName": "5A Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "5a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4660,7 +4728,7 @@
       "displayName": "5A Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "5a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "5a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4674,7 +4742,7 @@
       "displayName": "5A Loodusõpetus 1",
       "subjectId": "loodusopetus",
       "cohortId": "5a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "5a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4688,7 +4756,7 @@
       "displayName": "5A Eesti keel 3",
       "subjectId": "eesti-keel",
       "cohortId": "5a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "5a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4702,7 +4770,7 @@
       "displayName": "5A Loodusõpetus 2",
       "subjectId": "loodusopetus",
       "cohortId": "5a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "5a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4716,7 +4784,7 @@
       "displayName": "5A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "5a",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "5a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -4730,7 +4798,7 @@
       "displayName": "5A Eesti keel 4",
       "subjectId": "eesti-keel",
       "cohortId": "5a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "5a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4744,7 +4812,7 @@
       "displayName": "5A Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "5a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "5a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4758,7 +4826,7 @@
       "displayName": "5A Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "5a",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "5a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4772,7 +4840,7 @@
       "displayName": "5A Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "5a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4786,7 +4854,7 @@
       "displayName": "5A Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "5a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4800,7 +4868,7 @@
       "displayName": "5A Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "5a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4814,7 +4882,7 @@
       "displayName": "5A Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "5a",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "5a.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4828,7 +4896,7 @@
       "displayName": "5A Loodusõpetus 3",
       "subjectId": "loodusopetus",
       "cohortId": "5a",
-      "teacherId": "anita-kalmus",
+      "teacherId": "policy-school-teacher-012",
       "seriesId": "5a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4842,7 +4910,7 @@
       "displayName": "5A Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "5a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "5a.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -4856,7 +4924,7 @@
       "displayName": "5B Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "5b",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "5b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4870,7 +4938,7 @@
       "displayName": "5B Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "5b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4884,7 +4952,7 @@
       "displayName": "5B Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "5b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "5b.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -4898,7 +4966,7 @@
       "displayName": "5B Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "5b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "5b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4912,7 +4980,7 @@
       "displayName": "5B Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "5b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "5b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4926,7 +4994,7 @@
       "displayName": "5B Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "5b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4940,7 +5008,7 @@
       "displayName": "5B Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "5b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4954,7 +5022,7 @@
       "displayName": "5B Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "5b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "5b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4968,7 +5036,7 @@
       "displayName": "5B Loodusõpetus 1",
       "subjectId": "loodusopetus",
       "cohortId": "5b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "5b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -4982,7 +5050,7 @@
       "displayName": "5B Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "5b",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "5b.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -4996,7 +5064,7 @@
       "displayName": "5B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "5b",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "5b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -5010,7 +5078,7 @@
       "displayName": "5B Loodusõpetus 2",
       "subjectId": "loodusopetus",
       "cohortId": "5b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "5b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5024,7 +5092,7 @@
       "displayName": "5B Eesti keel 3",
       "subjectId": "eesti-keel",
       "cohortId": "5b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "5b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5038,7 +5106,7 @@
       "displayName": "5B IntÕ 1",
       "subjectId": "into",
       "cohortId": "5b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "5b.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5053,7 +5121,7 @@
       "displayName": "5B Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "5b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5067,7 +5135,7 @@
       "displayName": "5B Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "5b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "policy-school-teacher-021",
       "seriesId": "5b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5081,7 +5149,7 @@
       "displayName": "5B Eesti keel 4",
       "subjectId": "eesti-keel",
       "cohortId": "5b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "5b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5095,7 +5163,7 @@
       "displayName": "5B Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "5b",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "5b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5109,7 +5177,7 @@
       "displayName": "5B Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "5b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "5b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5123,7 +5191,7 @@
       "displayName": "5B Loodusõpetus 3",
       "subjectId": "loodusopetus",
       "cohortId": "5b",
-      "teacherId": "maiki-saaring",
+      "teacherId": "policy-school-teacher-037",
       "seriesId": "5b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5137,7 +5205,7 @@
       "displayName": "5D Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5151,7 +5219,7 @@
       "displayName": "5D Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5165,7 +5233,7 @@
       "displayName": "5D Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5179,7 +5247,7 @@
       "displayName": "5D Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5193,7 +5261,7 @@
       "displayName": "5D Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5207,7 +5275,7 @@
       "displayName": "5D Eripedagoog 1",
       "subjectId": "eripedagoog",
       "cohortId": "5d",
-      "teacherId": "helina-silberg",
+      "teacherId": "policy-school-teacher-008",
       "seriesId": "5d.eripedagoog",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5221,7 +5289,7 @@
       "displayName": "5D Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5235,7 +5303,7 @@
       "displayName": "5D Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5249,7 +5317,7 @@
       "displayName": "5D Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5263,7 +5331,7 @@
       "displayName": "5D Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5277,7 +5345,7 @@
       "displayName": "5D Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5291,7 +5359,7 @@
       "displayName": "5D Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5305,7 +5373,7 @@
       "displayName": "5D Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5319,7 +5387,7 @@
       "displayName": "5D Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5333,7 +5401,7 @@
       "displayName": "5D Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5347,7 +5415,7 @@
       "displayName": "5D Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5361,7 +5429,7 @@
       "displayName": "5D Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5375,7 +5443,7 @@
       "displayName": "5D Klassitund 17",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5389,7 +5457,7 @@
       "displayName": "5D Klassitund 18",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5403,7 +5471,7 @@
       "displayName": "5D Klassitund 19",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5417,7 +5485,7 @@
       "displayName": "5D Klassitund 20",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5431,7 +5499,7 @@
       "displayName": "5D Klassitund 21",
       "subjectId": "klassitund",
       "cohortId": "5d",
-      "teacherId": "liisi-rannik",
+      "teacherId": "policy-school-teacher-031",
       "seriesId": "5d.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5445,7 +5513,7 @@
       "displayName": "6A Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "6a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5459,7 +5527,7 @@
       "displayName": "6A Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "6a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5473,7 +5541,7 @@
       "displayName": "6A Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "6a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "6a.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5487,7 +5555,7 @@
       "displayName": "6A Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "6a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5501,7 +5569,7 @@
       "displayName": "6A Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "6a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "6a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5515,7 +5583,7 @@
       "displayName": "6A Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "6a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5529,7 +5597,7 @@
       "displayName": "6A Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "6a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5543,7 +5611,7 @@
       "displayName": "6A Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "6a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5557,7 +5625,7 @@
       "displayName": "6A Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "6a",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6a.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5571,7 +5639,7 @@
       "displayName": "6A Loodusõpetus 1",
       "subjectId": "loodusopetus",
       "cohortId": "6a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "6a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -5585,7 +5653,7 @@
       "displayName": "6A Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "6a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "6a.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -5599,7 +5667,7 @@
       "displayName": "6A Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "6a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5613,7 +5681,7 @@
       "displayName": "6A Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "6a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5627,7 +5695,7 @@
       "displayName": "6A Loodusõpetus 2",
       "subjectId": "loodusopetus",
       "cohortId": "6a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "6a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5641,7 +5709,7 @@
       "displayName": "6A Eesti keel 3",
       "subjectId": "eesti-keel",
       "cohortId": "6a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5655,7 +5723,7 @@
       "displayName": "6A Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "6a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "6a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5669,7 +5737,7 @@
       "displayName": "6A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "6a",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "6a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -5683,7 +5751,7 @@
       "displayName": "6A IntÕ 1",
       "subjectId": "into",
       "cohortId": "6a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6a.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5698,7 +5766,7 @@
       "displayName": "6A Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "6a",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5712,7 +5780,7 @@
       "displayName": "6B Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "6b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5726,7 +5794,7 @@
       "displayName": "6B Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "6b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5740,7 +5808,7 @@
       "displayName": "6B Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "6b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5754,7 +5822,7 @@
       "displayName": "6B Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "6b",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6b.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5768,7 +5836,7 @@
       "displayName": "6B Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "6b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5782,7 +5850,7 @@
       "displayName": "6B Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "6b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5796,7 +5864,7 @@
       "displayName": "6B Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "6b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5810,7 +5878,7 @@
       "displayName": "6B Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "6b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5824,7 +5892,7 @@
       "displayName": "6B Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "6b",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "6b.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5838,7 +5906,7 @@
       "displayName": "6B Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "6b",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "6b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5852,7 +5920,7 @@
       "displayName": "6B Eesti keel 3",
       "subjectId": "eesti-keel",
       "cohortId": "6b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5866,7 +5934,7 @@
       "displayName": "6B Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "6b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "6b.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -5880,7 +5948,7 @@
       "displayName": "6B Loodusõpetus 1",
       "subjectId": "loodusopetus",
       "cohortId": "6b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "6b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -5894,7 +5962,7 @@
       "displayName": "6B Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "6b",
-      "teacherId": "vaike-antsov",
+      "teacherId": "policy-school-teacher-003",
       "seriesId": "6b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5908,7 +5976,7 @@
       "displayName": "6B IntÕ 1",
       "subjectId": "into",
       "cohortId": "6b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "6b.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5923,7 +5991,7 @@
       "displayName": "6B Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "6b",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "policy-school-teacher-033",
       "seriesId": "6b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5937,7 +6005,7 @@
       "displayName": "6B Loodusõpetus 2",
       "subjectId": "loodusopetus",
       "cohortId": "6b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "6b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -5951,7 +6019,7 @@
       "displayName": "6B Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "6b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "6b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5965,7 +6033,7 @@
       "displayName": "6B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "6b",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "6b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -5979,7 +6047,7 @@
       "displayName": "6C Vene keel 1",
       "subjectId": "vene-keel",
       "cohortId": "6c",
-      "teacherId": "olga-simonovits",
+      "teacherId": "policy-school-teacher-040",
       "seriesId": "6c.vene-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -5993,7 +6061,7 @@
       "displayName": "6C Eesti keel / Kirjandus 1",
       "subjectId": "eesti-keel-kirjandus",
       "cohortId": "6c",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "6c.eesti-keel-kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6007,7 +6075,7 @@
       "displayName": "6C IntÕ 1",
       "subjectId": "into",
       "cohortId": "6c",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6c.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6021,7 +6089,7 @@
       "displayName": "6C Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "6c",
-      "teacherId": "marilin-laanetu",
+      "teacherId": "policy-school-teacher-019",
       "seriesId": "6c.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6035,7 +6103,7 @@
       "displayName": "6C Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "6c",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6c.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -6049,7 +6117,7 @@
       "displayName": "6C Matemaatika VR 1",
       "subjectId": "matemaatika-vr",
       "cohortId": "6c",
-      "teacherId": "aida-martin",
+      "teacherId": "policy-school-teacher-024",
       "seriesId": "6c.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6063,7 +6131,7 @@
       "displayName": "6C Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "6c",
-      "teacherId": "marilin-laanetu",
+      "teacherId": "policy-school-teacher-019",
       "seriesId": "6c.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6077,7 +6145,7 @@
       "displayName": "6C Eesti keel / Kirjandus 2",
       "subjectId": "eesti-keel-kirjandus",
       "cohortId": "6c",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "6c.eesti-keel-kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6091,7 +6159,7 @@
       "displayName": "6C Eripedagoog 1",
       "subjectId": "eripedagoog",
       "cohortId": "6c",
-      "teacherId": "helina-silberg",
+      "teacherId": "policy-school-teacher-008",
       "seriesId": "6c.eripedagoog",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6105,7 +6173,7 @@
       "displayName": "6C Matemaatika VR 2",
       "subjectId": "matemaatika-vr",
       "cohortId": "6c",
-      "teacherId": "aida-martin",
+      "teacherId": "policy-school-teacher-024",
       "seriesId": "6c.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6119,7 +6187,7 @@
       "displayName": "6C Vene keel 2",
       "subjectId": "vene-keel",
       "cohortId": "6c",
-      "teacherId": "olga-simonovits",
+      "teacherId": "policy-school-teacher-040",
       "seriesId": "6c.vene-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6133,7 +6201,7 @@
       "displayName": "6C Matemaatika VR 3",
       "subjectId": "matemaatika-vr",
       "cohortId": "6c",
-      "teacherId": "aida-martin",
+      "teacherId": "policy-school-teacher-024",
       "seriesId": "6c.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6147,7 +6215,7 @@
       "displayName": "6C Eesti keel / Kirjandus 3",
       "subjectId": "eesti-keel-kirjandus",
       "cohortId": "6c",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "6c.eesti-keel-kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6161,7 +6229,7 @@
       "displayName": "6C Loodusõpetus VR 1",
       "subjectId": "loodusopetus-vr",
       "cohortId": "6c",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6c.loodusopetus-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6175,7 +6243,7 @@
       "displayName": "6C Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "6c",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6c.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6189,7 +6257,7 @@
       "displayName": "6C Matemaatika VR 4",
       "subjectId": "matemaatika-vr",
       "cohortId": "6c",
-      "teacherId": "aida-martin",
+      "teacherId": "policy-school-teacher-024",
       "seriesId": "6c.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6203,7 +6271,7 @@
       "displayName": "6C Loodusõpetus VR 2",
       "subjectId": "loodusopetus-vr",
       "cohortId": "6c",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6c.loodusopetus-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6217,7 +6285,7 @@
       "displayName": "6C Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "6c",
-      "teacherId": "marilin-laanetu",
+      "teacherId": "policy-school-teacher-019",
       "seriesId": "6c.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6231,7 +6299,7 @@
       "displayName": "6C Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "6c",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "6c.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6245,7 +6313,7 @@
       "displayName": "6C Eesti keel / Kirjandus 4",
       "subjectId": "eesti-keel-kirjandus",
       "cohortId": "6c",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "policy-school-teacher-025",
       "seriesId": "6c.eesti-keel-kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6259,7 +6327,7 @@
       "displayName": "7A Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "7a",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "7a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6273,7 +6341,7 @@
       "displayName": "7A Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "7a",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "7a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6287,7 +6355,7 @@
       "displayName": "7A Loodusõpetus 1",
       "subjectId": "loodusopetus",
       "cohortId": "7a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "7a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6301,7 +6369,7 @@
       "displayName": "7A Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "7a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6315,7 +6383,7 @@
       "displayName": "7A Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "7a",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "7a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6329,7 +6397,7 @@
       "displayName": "7A Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "7a",
-      "teacherId": "aarne-ruben",
+      "teacherId": "policy-school-teacher-035",
       "seriesId": "7a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6343,7 +6411,7 @@
       "displayName": "7A Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "7a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "7a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6358,7 +6426,7 @@
       "displayName": "7A IntÕ 1",
       "subjectId": "into",
       "cohortId": "7a",
-      "teacherId": "saale-maripuu",
+      "teacherId": "policy-school-teacher-023",
       "seriesId": "7a.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6373,7 +6441,7 @@
       "displayName": "7A Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "7a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "7a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6387,7 +6455,7 @@
       "displayName": "7A Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "7a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6401,7 +6469,7 @@
       "displayName": "7A Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "7a",
-      "teacherId": "bergit-semre",
+      "teacherId": "policy-school-teacher-039",
       "seriesId": "7a.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6415,7 +6483,7 @@
       "displayName": "7A Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "7a",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "7a.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6429,7 +6497,7 @@
       "displayName": "7A Geograafia 2",
       "subjectId": "geograafia",
       "cohortId": "7a",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "7a.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6443,7 +6511,7 @@
       "displayName": "7A Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "7a",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "7a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6457,7 +6525,7 @@
       "displayName": "7A Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "7a",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "7a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6471,7 +6539,7 @@
       "displayName": "7A Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "7a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6485,7 +6553,7 @@
       "displayName": "7A Loodusõpetus 2",
       "subjectId": "loodusopetus",
       "cohortId": "7a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "7a.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6499,7 +6567,7 @@
       "displayName": "7A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "7a",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "7a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -6513,7 +6581,7 @@
       "displayName": "7A Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "7a",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "7a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6527,7 +6595,7 @@
       "displayName": "7A Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "7a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "7a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6542,7 +6610,7 @@
       "displayName": "7A Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "7a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6556,7 +6624,7 @@
       "displayName": "7A Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "7a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "7a.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -6570,7 +6638,7 @@
       "displayName": "7A Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "7a",
-      "teacherId": "aarne-ruben",
+      "teacherId": "policy-school-teacher-035",
       "seriesId": "7a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6584,7 +6652,7 @@
       "displayName": "7B Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "7b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "7b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6599,7 +6667,7 @@
       "displayName": "7B Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "7b",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "7b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6613,7 +6681,7 @@
       "displayName": "7B Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "7b",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "7b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6627,7 +6695,7 @@
       "displayName": "7B Loodusõpetus 1",
       "subjectId": "loodusopetus",
       "cohortId": "7b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "7b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6641,7 +6709,7 @@
       "displayName": "7B Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "7b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6655,7 +6723,7 @@
       "displayName": "7B Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "7b",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "7b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6669,7 +6737,7 @@
       "displayName": "7B Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "7b",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "7b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6683,7 +6751,7 @@
       "displayName": "7B Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "7b",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "7b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6697,7 +6765,7 @@
       "displayName": "7B Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "7b",
-      "teacherId": "bergit-semre",
+      "teacherId": "policy-school-teacher-039",
       "seriesId": "7b.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6711,7 +6779,7 @@
       "displayName": "7B Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "7b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6725,7 +6793,7 @@
       "displayName": "7B Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "7b",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "7b.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6739,7 +6807,7 @@
       "displayName": "7B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "7b",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "7b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -6753,7 +6821,7 @@
       "displayName": "7B Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "7b",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "7b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6767,7 +6835,7 @@
       "displayName": "7B Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "7b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "7b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6781,7 +6849,7 @@
       "displayName": "7B Geograafia 2",
       "subjectId": "geograafia",
       "cohortId": "7b",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "7b.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6795,7 +6863,7 @@
       "displayName": "7B Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "7b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "7b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6810,7 +6878,7 @@
       "displayName": "7B Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "7b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "7b.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -6824,7 +6892,7 @@
       "displayName": "7B Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "7b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6838,7 +6906,7 @@
       "displayName": "7B Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "7b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "7b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6852,7 +6920,7 @@
       "displayName": "7B Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "7b",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "7b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6866,7 +6934,7 @@
       "displayName": "7B Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "7b",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "7b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6880,7 +6948,7 @@
       "displayName": "7B IntÕ 1",
       "subjectId": "into",
       "cohortId": "7b",
-      "teacherId": "bergit-semre",
+      "teacherId": "policy-school-teacher-039",
       "seriesId": "7b.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6895,7 +6963,7 @@
       "displayName": "7B Loodusõpetus 2",
       "subjectId": "loodusopetus",
       "cohortId": "7b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "7b.loodusopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6909,7 +6977,7 @@
       "displayName": "8A Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "8a",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "8a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6923,7 +6991,7 @@
       "displayName": "8A Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "8a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6937,7 +7005,7 @@
       "displayName": "8A Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "8a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6951,7 +7019,7 @@
       "displayName": "8A Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "8a",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "8a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6965,7 +7033,7 @@
       "displayName": "8A Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "8a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "8a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6980,7 +7048,7 @@
       "displayName": "8A Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "8a",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "8a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -6994,7 +7062,7 @@
       "displayName": "8A Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "8a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8a.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7008,7 +7076,7 @@
       "displayName": "8A Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "8a",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "8a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7022,7 +7090,7 @@
       "displayName": "8A Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "8a",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "8a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7036,7 +7104,7 @@
       "displayName": "8A Keemia 1",
       "subjectId": "keemia",
       "cohortId": "8a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8a.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7050,7 +7118,7 @@
       "displayName": "8A Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "8a",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "8a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7064,7 +7132,7 @@
       "displayName": "8A Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "8a",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "8a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7078,7 +7146,7 @@
       "displayName": "8A Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "8a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7092,7 +7160,7 @@
       "displayName": "8A Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "8a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8a.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7106,7 +7174,7 @@
       "displayName": "8A Keemia 2",
       "subjectId": "keemia",
       "cohortId": "8a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8a.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7120,7 +7188,7 @@
       "displayName": "8A Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "8a",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "8a.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7134,7 +7202,7 @@
       "displayName": "8A Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "8a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "8a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7149,7 +7217,7 @@
       "displayName": "8A Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "8a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7163,7 +7231,7 @@
       "displayName": "8A Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "8a",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "8a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7177,7 +7245,7 @@
       "displayName": "8A Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "8a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "8a.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -7191,7 +7259,7 @@
       "displayName": "8A Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "8a",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "8a.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7205,7 +7273,7 @@
       "displayName": "8A Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "8a",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "8a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7219,7 +7287,7 @@
       "displayName": "8A Geograafia 2",
       "subjectId": "geograafia",
       "cohortId": "8a",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "8a.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7233,7 +7301,7 @@
       "displayName": "8A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "8a",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "8a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -7247,7 +7315,7 @@
       "displayName": "8A Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "8a",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7261,7 +7329,7 @@
       "displayName": "8A IntÕ 1",
       "subjectId": "into",
       "cohortId": "8a",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "8a.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7276,7 +7344,7 @@
       "displayName": "8B Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "8b",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "8b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7290,7 +7358,7 @@
       "displayName": "8B Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "8b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "8b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7305,7 +7373,7 @@
       "displayName": "8B Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "8b",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "8b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7319,7 +7387,7 @@
       "displayName": "8B Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "8b",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "8b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7333,7 +7401,7 @@
       "displayName": "8B Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "8b",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "8b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7347,7 +7415,7 @@
       "displayName": "8B Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "8b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7361,7 +7429,7 @@
       "displayName": "8B Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "8b",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "8b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7375,7 +7443,7 @@
       "displayName": "8B Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "8b",
-      "teacherId": "reeli-valk",
+      "teacherId": "policy-school-teacher-049",
       "seriesId": "8b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7389,7 +7457,7 @@
       "displayName": "8B Keemia 1",
       "subjectId": "keemia",
       "cohortId": "8b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8b.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7403,7 +7471,7 @@
       "displayName": "8B Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "8b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "8b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7418,7 +7486,7 @@
       "displayName": "8B Inimeseõpetus 1",
       "subjectId": "inimeseopetus",
       "cohortId": "8b",
-      "teacherId": "grete-suurvali",
+      "teacherId": "policy-school-teacher-044",
       "seriesId": "8b.inimeseopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7432,7 +7500,7 @@
       "displayName": "8B Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "8b",
-      "teacherId": "annika-sirel",
+      "teacherId": "policy-school-teacher-041",
       "seriesId": "8b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7446,7 +7514,7 @@
       "displayName": "8B IntÕ 1",
       "subjectId": "into",
       "cohortId": "8b",
-      "teacherId": "marina-pokintsereda",
+      "teacherId": "policy-school-teacher-030",
       "seriesId": "8b.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7461,7 +7529,7 @@
       "displayName": "8B Keemia 2",
       "subjectId": "keemia",
       "cohortId": "8b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8b.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7475,7 +7543,7 @@
       "displayName": "8B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "8b",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "8b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -7489,7 +7557,7 @@
       "displayName": "8B Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "8b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7503,7 +7571,7 @@
       "displayName": "8B Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "8b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8b.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7517,7 +7585,7 @@
       "displayName": "8B Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "8b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7531,7 +7599,7 @@
       "displayName": "8B Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "8b",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "8b.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7545,7 +7613,7 @@
       "displayName": "8B Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "8b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "8b.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -7559,7 +7627,7 @@
       "displayName": "8B Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "8b",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "8b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7573,7 +7641,7 @@
       "displayName": "8B Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "8b",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "8b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7587,7 +7655,7 @@
       "displayName": "8B Geograafia 2",
       "subjectId": "geograafia",
       "cohortId": "8b",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "8b.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7601,7 +7669,7 @@
       "displayName": "8B Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "8b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7615,7 +7683,7 @@
       "displayName": "8B Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "8b",
-      "teacherId": "mari-kamps",
+      "teacherId": "policy-school-teacher-013",
       "seriesId": "8b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7629,7 +7697,7 @@
       "displayName": "8B Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "8b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "8b.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7643,7 +7711,7 @@
       "displayName": "9A Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7657,7 +7725,7 @@
       "displayName": "9A Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7671,7 +7739,7 @@
       "displayName": "9A Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "9a",
-      "teacherId": "malle-salu",
+      "teacherId": "policy-school-teacher-038",
       "seriesId": "9a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7685,7 +7753,7 @@
       "displayName": "9A Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9a.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7699,7 +7767,7 @@
       "displayName": "9A IntÕ 1",
       "subjectId": "into",
       "cohortId": "9a",
-      "teacherId": "marilin-laanetu",
+      "teacherId": "policy-school-teacher-019",
       "seriesId": "9a.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7714,7 +7782,7 @@
       "displayName": "9A Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7728,7 +7796,7 @@
       "displayName": "9A Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "9a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7742,7 +7810,7 @@
       "displayName": "9A Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "9a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7756,7 +7824,7 @@
       "displayName": "9A Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7770,7 +7838,7 @@
       "displayName": "9A Eksami ettevalmistus eesti keel 1",
       "subjectId": "eksami-ettevalmistus-eesti-keel",
       "cohortId": "9a",
-      "teacherId": "aarne-ruben",
+      "teacherId": "policy-school-teacher-035",
       "seriesId": "9a.eksami-ettevalmistus-eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7784,7 +7852,7 @@
       "displayName": "9A Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7798,7 +7866,7 @@
       "displayName": "9A Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "9a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7812,7 +7880,7 @@
       "displayName": "9A Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "9a",
-      "teacherId": "malle-salu",
+      "teacherId": "policy-school-teacher-038",
       "seriesId": "9a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7826,7 +7894,7 @@
       "displayName": "9A Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7840,7 +7908,7 @@
       "displayName": "9A Keemia 1",
       "subjectId": "keemia",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9a.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7854,7 +7922,7 @@
       "displayName": "9A Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7868,7 +7936,7 @@
       "displayName": "9A Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7882,7 +7950,7 @@
       "displayName": "9A Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7897,7 +7965,7 @@
       "displayName": "9A Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "policy-school-teacher-010",
       "seriesId": "9a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7911,7 +7979,7 @@
       "displayName": "9A Ühiskonnaõpetus 2",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9a.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7925,7 +7993,7 @@
       "displayName": "9A Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "9a",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "9a.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7939,7 +8007,7 @@
       "displayName": "9A Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9a.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7953,7 +8021,7 @@
       "displayName": "9A Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -7968,7 +8036,7 @@
       "displayName": "9A Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9a.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -7982,7 +8050,7 @@
       "displayName": "9A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "9a",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "9a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -7996,7 +8064,7 @@
       "displayName": "9A Eksami ettevalmistus matemaatika 1",
       "subjectId": "eksami-ettevalmistus-matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9a.eksami-ettevalmistus-matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8010,7 +8078,7 @@
       "displayName": "9A Keemia 2",
       "subjectId": "keemia",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9a.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8024,7 +8092,7 @@
       "displayName": "9B Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "9b",
-      "teacherId": "malle-salu",
+      "teacherId": "policy-school-teacher-038",
       "seriesId": "9b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8038,7 +8106,7 @@
       "displayName": "9B Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "9b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8052,7 +8120,7 @@
       "displayName": "9B Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8066,7 +8134,7 @@
       "displayName": "9B Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8081,7 +8149,7 @@
       "displayName": "9B Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8095,7 +8163,7 @@
       "displayName": "9B Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8109,7 +8177,7 @@
       "displayName": "9B Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8124,7 +8192,7 @@
       "displayName": "9B Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "9b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8138,7 +8206,7 @@
       "displayName": "9B Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8152,7 +8220,7 @@
       "displayName": "9B Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "9b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8166,7 +8234,7 @@
       "displayName": "9B Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9b.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8180,7 +8248,7 @@
       "displayName": "9B Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "9b",
-      "teacherId": "malle-salu",
+      "teacherId": "policy-school-teacher-038",
       "seriesId": "9b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8194,7 +8262,7 @@
       "displayName": "9B Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8208,7 +8276,7 @@
       "displayName": "9B Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8222,7 +8290,7 @@
       "displayName": "9B Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9b.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8236,7 +8304,7 @@
       "displayName": "9B Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "policy-school-teacher-047",
       "seriesId": "9b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8250,7 +8318,7 @@
       "displayName": "9B Eksami ettevalmistus matemaatika 1",
       "subjectId": "eksami-ettevalmistus-matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.eksami-ettevalmistus-matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8264,7 +8332,7 @@
       "displayName": "9B Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "9b",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "9b.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8278,7 +8346,7 @@
       "displayName": "9B Eksami ettevalmistus eesti keel 1",
       "subjectId": "eksami-ettevalmistus-eesti-keel",
       "cohortId": "9b",
-      "teacherId": "aarne-ruben",
+      "teacherId": "policy-school-teacher-035",
       "seriesId": "9b.eksami-ettevalmistus-eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8292,7 +8360,7 @@
       "displayName": "9B Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8306,7 +8374,7 @@
       "displayName": "9B Keemia 1",
       "subjectId": "keemia",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9b.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8320,7 +8388,7 @@
       "displayName": "9B Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9b.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8334,7 +8402,7 @@
       "displayName": "9B IntÕ 1",
       "subjectId": "into",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8349,7 +8417,7 @@
       "displayName": "9B Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8363,7 +8431,7 @@
       "displayName": "9B Ühiskonnaõpetus 2",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9b.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8377,7 +8445,7 @@
       "displayName": "9B Keemia 2",
       "subjectId": "keemia",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9b.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8391,7 +8459,7 @@
       "displayName": "9B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "9b",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "9b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -8405,7 +8473,7 @@
       "displayName": "9C Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "9c",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "9c.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8419,7 +8487,7 @@
       "displayName": "9C Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "9c",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9c.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8433,7 +8501,7 @@
       "displayName": "9C Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "9c",
-      "teacherId": "malle-salu",
+      "teacherId": "policy-school-teacher-038",
       "seriesId": "9c.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8447,7 +8515,7 @@
       "displayName": "9C Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "9c",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9c.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8462,7 +8530,7 @@
       "displayName": "9C Keemia 1",
       "subjectId": "keemia",
       "cohortId": "9c",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9c.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8476,7 +8544,7 @@
       "displayName": "9C Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "9c",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9c.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8490,7 +8558,7 @@
       "displayName": "9C Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "9c",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "9c.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8504,7 +8572,7 @@
       "displayName": "9C Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "9c",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9c.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8519,7 +8587,7 @@
       "displayName": "9C Eksami ettevalmistus matemaatika 1",
       "subjectId": "eksami-ettevalmistus-matemaatika",
       "cohortId": "9c",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9c.eksami-ettevalmistus-matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8533,7 +8601,7 @@
       "displayName": "9C Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "9c",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9c.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8547,7 +8615,7 @@
       "displayName": "9C Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "9c",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "9c.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8561,7 +8629,7 @@
       "displayName": "9C Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "9c",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "policy-school-teacher-011",
       "seriesId": "9c.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -8575,7 +8643,7 @@
       "displayName": "9C Keemia 2",
       "subjectId": "keemia",
       "cohortId": "9c",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9c.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8589,7 +8657,7 @@
       "displayName": "9C Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "9c",
-      "teacherId": "malle-salu",
+      "teacherId": "policy-school-teacher-038",
       "seriesId": "9c.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8603,7 +8671,7 @@
       "displayName": "9C Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "9c",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9c.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8617,7 +8685,7 @@
       "displayName": "9C Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "9c",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9c.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8631,7 +8699,7 @@
       "displayName": "9C Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "9c",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9c.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8645,7 +8713,7 @@
       "displayName": "9C Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "9c",
-      "teacherId": "piret-noor",
+      "teacherId": "policy-school-teacher-027",
       "seriesId": "9c.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8659,7 +8727,7 @@
       "displayName": "9C Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "9c",
-      "teacherId": "heiki-raudla",
+      "teacherId": "policy-school-teacher-032",
       "seriesId": "9c.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8673,7 +8741,7 @@
       "displayName": "9C Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "9c",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9c.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8687,7 +8755,7 @@
       "displayName": "9C Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9c",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9c.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8701,7 +8769,7 @@
       "displayName": "9C IntÕ 1",
       "subjectId": "into",
       "cohortId": "9c",
-      "teacherId": "helina-silberg",
+      "teacherId": "policy-school-teacher-008",
       "seriesId": "9c.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8716,7 +8784,7 @@
       "displayName": "9C Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "9c",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "policy-school-teacher-014",
       "seriesId": "9c.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -8730,7 +8798,7 @@
       "displayName": "9C Ühiskonnaõpetus 2",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9c",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "policy-school-teacher-001",
       "seriesId": "9c.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8744,7 +8812,7 @@
       "displayName": "9C Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "9c",
-      "teacherId": "maya-blinder",
+      "teacherId": "policy-school-teacher-005",
       "seriesId": "9c.inglise-keel",
       "requiredRoomCapabilityIds": [
         "art-studio"
@@ -8758,7 +8826,7 @@
       "displayName": "9C Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "9c",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "policy-school-teacher-042",
       "seriesId": "9c.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -8772,7 +8840,7 @@
       "displayName": "9C Eksami ettevalmistus eesti keel 1",
       "subjectId": "eksami-ettevalmistus-eesti-keel",
       "cohortId": "9c",
-      "teacherId": "aarne-ruben",
+      "teacherId": "policy-school-teacher-035",
       "seriesId": "9c.eksami-ettevalmistus-eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"

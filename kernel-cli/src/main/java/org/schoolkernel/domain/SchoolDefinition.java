@@ -20,7 +20,19 @@ public record SchoolDefinition(
         Set<String> reservedPeriodIds,
         List<Lesson> lessons,
         List<RoomAssignment> roomAssignments,
-        Map<String, Long> softWeights) {
+        Map<String, Long> softWeights,
+        List<ConsecutiveBlock> consecutiveBlocks) {
+
+    public SchoolDefinition(int schemaVersion, int catalogVersion, String schoolId, String displayName,
+            String basedOnRevision, List<Subject> subjects, List<Teacher> teachers, List<Cohort> cohorts,
+            List<Room> rooms, List<Period> periods, Set<String> reservedPeriodIds, List<Lesson> lessons,
+            List<RoomAssignment> roomAssignments, Map<String, Long> softWeights) {
+        this(schemaVersion, catalogVersion, schoolId, displayName, basedOnRevision, subjects, teachers,
+                cohorts, rooms, periods, reservedPeriodIds, lessons, roomAssignments, softWeights, List.of());
+    }
+
+    public record ConsecutiveBlock(String id, String cohortId, String subjectId, int length,
+            String operator, int weeklyCount) {}
 
     public SchoolDefinition(
             int schemaVersion, int catalogVersion, String schoolId, String displayName, String basedOnRevision,
@@ -125,7 +137,13 @@ public record SchoolDefinition(
             DayOfWeek weekday,
             int order,
             LocalTime startTime,
-            LocalTime endTime) {}
+            LocalTime endTime,
+            boolean adjacentToNext) {
+        public Period(String id, String displayName, DayOfWeek weekday, int order,
+                LocalTime startTime, LocalTime endTime) {
+            this(id, displayName, weekday, order, startTime, endTime, false);
+        }
+    }
 
     public record Lesson(
             String id,

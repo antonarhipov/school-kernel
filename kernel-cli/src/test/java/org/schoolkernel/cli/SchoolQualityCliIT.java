@@ -494,7 +494,7 @@ class SchoolQualityCliIT {
     }
 
     private static ObjectNode mv5() throws Exception {
-        return (ObjectNode) JsonSupport.mapper().readTree(Path.of("..", "examples", "mv5.json"));
+        return (ObjectNode) JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "quality-school.json"));
     }
 
     private static ObjectNode lateStartDefinition() throws Exception {

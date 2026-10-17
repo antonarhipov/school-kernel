@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schemaVersion": { "const": 1 },
-    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+    "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
     "schoolId": { "$ref": "#/$defs/id" },
     "displayName": { "$ref": "#/$defs/displayName" },
     "basedOnRevision": { "$ref": "#/$defs/revision" },
@@ -18,6 +18,7 @@
     "teachers": { "type": "array", "items": { "$ref": "#/$defs/teacher" } },
     "cohorts": { "type": "array", "items": { "$ref": "#/$defs/cohort" } },
     "rooms": { "type": "array", "items": { "$ref": "#/$defs/room" } },
+    "consecutiveBlocks": { "type": "array", "items": { "$ref": "#/$defs/consecutiveBlock" } },
     "periods": { "type": "array", "items": { "$ref": "#/$defs/period" } },
     "reservedPeriodIds": { "$ref": "#/$defs/idArray" },
     "lessons": { "type": "array", "items": { "$ref": "#/$defs/lesson" } },
@@ -107,6 +108,7 @@
         "availablePeriodIds": { "$ref": "#/$defs/idArray" }
       }
     },
+    "consecutiveBlock": {"type": "object", "additionalProperties": false, "required": ["id", "cohortId", "subjectId", "length", "operator", "weeklyCount"], "properties": {"id": {"$ref": "#/$defs/id"}, "cohortId": {"$ref": "#/$defs/id"}, "subjectId": {"$ref": "#/$defs/id"}, "length": {"type": "integer", "minimum": 2, "maximum": 2147483647}, "operator": {"enum": ["EXACTLY", "AT_LEAST"]}, "weeklyCount": {"type": "integer", "minimum": 1, "maximum": 2147483647}}},
     "period": {
       "type": "object",
       "additionalProperties": false,
@@ -121,6 +123,7 @@
         "weekday": {
           "enum": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
         },
+        "adjacentToNext": { "type": "boolean" },
         "order": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
         "startTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" },
         "endTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" }
@@ -176,6 +179,7 @@
     }
   },
   "allOf": [
+    {"if": {"properties": {"catalogVersion": {"const": 10}}}, "then": {"properties": {"periods": {"items": {"required": ["adjacentToNext"]}}}}, "else": {"not": {"required": ["consecutiveBlocks"]}, "properties": {"periods": {"items": {"not": {"required": ["adjacentToNext"]}}}}}},
     {
       "if": { "properties": { "catalogVersion": { "enum": [1, 2, 3, 4, 5, 6, 7, 8] } } },
       "then": { "not": { "required": ["roomAssignments"] } }

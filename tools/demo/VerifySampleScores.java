@@ -18,8 +18,8 @@ class VerifySampleScores {
         for (String id : List.of("two-class", "full", "star-wars", "english")) {
             var loaded = loader.load(root.resolve(id + "-definition.json"), DefinitionLoader.Mode.INITIAL);
             if (!(loaded instanceof DefinitionLoader.Accepted accepted)
-                    || accepted.definition().catalogVersion() != KernelCatalog.VERSION)
-                throw new IllegalStateException("Sample is not a valid current-catalog initial definition: " + id);
+                    || accepted.definition().catalogVersion() != KernelCatalog.ROOM_ASSIGNMENT_VERSION)
+                throw new IllegalStateException("Sample is not a valid legacy sample-catalog initial definition: " + id);
             for (String variant : List.of("a", "b")) {
             var result = json.readTree(Files.readAllBytes(root.resolve(id + "-" + variant + "-result.json")));
             var current = new CurrentTimetableReader().read(result);

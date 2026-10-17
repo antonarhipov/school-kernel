@@ -60,6 +60,8 @@ public final class PlanningMapper {
                     baseline == null ? null : baseline.roomId(),
                     periods, cohort.maxDailyLessonSpread(), cohort.maxDailyGaps(),
                     PlacementRules.of(cohort, subjects.get(lesson.subjectId())));
+            if (definition.catalogVersion() >= 10) planningLesson.setConsecutivePolicy(
+                    ConsecutivePolicy.of(definition, lesson.cohortId(), lesson.subjectId()));
             var roomAssignment = RoomAssignmentResolver.resolve(definition, lesson);
             planningLesson.setRoomAssignment(roomAssignment.allowedRoomIds(), roomAssignment.policyIds());
             if (baseline != null) {

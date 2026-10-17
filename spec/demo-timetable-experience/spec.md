@@ -12,6 +12,9 @@ named alternatives in their browser, and optionally generate timetables for a sc
 - Schools group timetables sharing a resource/subject/class catalog. Each saved version preserves its matching
   definition and assignments, including version-specific teaching responsibility. Existing versions are immutable.
 - Different schools clear entity filters and selected lessons. Timetables within one school preserve filters.
+- Every arrival or reload opens the bundled full Estonian school’s precomputed Variant A. Stored selections and
+  unfinished edits never replace this clean baseline. Resume saved changes or explicit school/timetable navigation
+  opens retained work. This 2026-10-18 user correction supersedes automatic startup restoration.
 - Browser-local saved timetables and drafts survive visits, session expiry, restart and deployment. They belong to
   this origin/browser/device. Cross-device accounts, sharing and database persistence are outside this feature.
 - Changes are manual and lesson-specific. No other lessons move automatically. Intermediate conflicts are allowed.
@@ -64,7 +67,8 @@ versions are isolated by school and timetable identities; labels are not identit
 - Primary actor: Visitor
 - Supporting actors: none
 - Trigger: The visitor opens the demo or selects a school/timetable.
-- Preconditions: The demo is available and its bundled timetables passed startup verification.
+- Preconditions: The demo is available and its bundled timetables were prepared by the maintenance workflow.
+  Startup loads those artifacts directly, without revalidation or kernel processes (2026-10-18 user correction).
 - Relations:
   - Requires: none
   - Includes: none
@@ -79,7 +83,8 @@ versions are isolated by school and timetable identities; labels are not identit
 4. The visitor selects another timetable of the same school. The matrix changes immediately with filters retained.
 5. The visitor selects another school. Its timetable opens immediately with filters and lesson selection cleared.
 6. The visitor returns to a previously viewed timetable and sees any unfinished edits restored.
-7. On a later visit, saved school copies, named timetables and unfinished edits from this browser are available.
+7. On a later visit, the clean bundled Variant A opens. Saved school copies, named timetables and unfinished edits
+   remain available through explicit navigation or Resume saved changes.
 
 ### Extensions
 
@@ -92,7 +97,7 @@ versions are isolated by school and timetable identities; labels are not identit
   fits the viewport width, with short weekday headings, class/teacher/room names above their schedule, and a slim
   numbered period column. Full lesson names and actual timings remain available by opening a lesson. Selectors,
   lesson details and editing controls fit the viewport; resume at step 3.
-- 4a. If the selected timetable has a draft, its current draft is displayed with its pending/error/warning state;
+- 4a. If the visitor explicitly selects a timetable that has a draft, its current draft is displayed with its pending/error/warning state;
   continue at step 5.
 - 5a. If a saved school has no timetable, the visitor sees that fact and an editor/generation handoff; end.
 - 7a. If a stored timetable no longer matches supported rules, preserve it and explain the check/recovery failure;
@@ -167,7 +172,8 @@ versions are isolated by school and timetable identities; labels are not identit
   errors; continue at step 6.
 - 5a. The visitor discards changes or reverts all changed values. The source timetable returns exactly and the toolbar
   disappears; end.
-- 5b. The visitor switches schools/timetables or reloads. Restore the exact draft on return; resume at step 3.
+- 5b. The visitor switches schools/timetables or reloads. Retain the exact draft. Reload opens the clean bundled
+  baseline; explicit navigation or Resume saved changes restores the draft on return; resume at step 3.
 - 6a. If the name is blank or duplicates another version in this school, explain the name error and retain the draft;
   resume at step 6.
 - 6b. If any mandatory error, pending check or check failure exists, Save is refused without adding a version; resume

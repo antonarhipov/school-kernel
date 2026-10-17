@@ -437,14 +437,14 @@ class ReplanCliIT {
 
     private Path produceCurrent() throws Exception {
         Path output = temporaryDirectory.resolve("current-" + System.nanoTime() + ".json");
-        ProcessResult process = run("plan", "--definition", Path.of("..", "examples", "initial-school.json").toString(),
+        ProcessResult process = run("plan", "--definition", Path.of("src", "test", "resources", "fixtures", "initial-school.json").toString(),
                 "--output", output.toString(), "--step-limit", "100");
         assertEquals(0, process.exitCode());
         return output;
     }
 
     private ObjectNode updatedFromCurrent(Path current) throws Exception {
-        ObjectNode updated = (ObjectNode) JsonSupport.mapper().readTree(Path.of("..", "examples", "initial-school.json"));
+        ObjectNode updated = (ObjectNode) JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "initial-school.json"));
         updated.put("basedOnRevision", JsonSupport.mapper().readTree(current).path("inputRevision").stringValue());
         return updated;
     }
@@ -480,7 +480,7 @@ class ReplanCliIT {
                 && !supplied.contains("--current-definition")) {
             command.add("replan");
             command.add("--current-definition");
-            command.add(Path.of("..", "examples", "initial-school.json").toString());
+            command.add(Path.of("src", "test", "resources", "fixtures", "initial-school.json").toString());
             command.addAll(supplied.subList(1, supplied.size()));
         } else {
             command.addAll(supplied);

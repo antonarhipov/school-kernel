@@ -125,6 +125,10 @@ public final class HardConstraintDiagnostics {
             }
         }
 
+        var policies = new LinkedHashMap<ConsecutivePolicy, List<PlanningLesson>>();
+        lessons.stream().filter(l -> l.getConsecutivePolicy() != null).forEach(l ->
+                policies.computeIfAbsent(l.getConsecutivePolicy(), ignored -> new ArrayList<>()).add(l));
+        policies.forEach((policy, week) -> examples.get(KernelCatalog.CONSECUTIVE_BLOCK.id()).addAll(policy.analyze(week).conflicts()));
         return KernelCatalog.hardConstraintIds().stream()
                 .filter(id -> evaluation.hardMatchCounts().getOrDefault(id, 0L) > 0)
                 .map(id -> new ConstraintDiagnostic(

@@ -158,20 +158,20 @@ class RoomAssignmentContractTest {
     }
 
     @Test
-    @DisplayName("Room assignment UC-1 normative MVK/RULE-5: exact seven policies and synthetic A233 are present")
+    @DisplayName("Room assignment UC-1 normative fictional policy school/RULE-5: exact seven policies and synthetic A233 are present")
     void mvkPolicyValues() throws Exception {
-        JsonNode mvk = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        JsonNode mvk = JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "policy-school.json"));
         assertTrue(schema.validate(mvk).isEmpty());
         assertEquals(9, mvk.path("catalogVersion").intValue());
         assertEquals(JsonSupport.mapper().readTree("""
                 [
-                  {"id":"mvk-history-a231","subjectId":"ajalugu","allowedRoomIds":["a231"]},
-                  {"id":"mvk-piret-maths-b212","subjectId":"matemaatika","teacherId":"piret-noor","allowedRoomIds":["b212"]},
-                  {"id":"mvk-heiki-literature-a209","subjectId":"kirjandus","teacherId":"heiki-raudla","allowedRoomIds":["a209"]},
-                  {"id":"mvk-chemistry-a233","subjectId":"keemia","allowedRoomIds":["a233"]},
-                  {"id":"mvk-physics-a223","subjectId":"fuusika","allowedRoomIds":["a223-lab"]},
-                  {"id":"mvk-physical-education-halls","subjectId":"kehaline-kasvatus","allowedRoomIds":["kk1","kk2","kk3"]},
-                  {"id":"mvk-study-support-home","subjectId":"opiabi","useHomeRoom":true}
+                  {"id":"policy-001","subjectId":"ajalugu","allowedRoomIds":["a231"]},
+                  {"id":"policy-002","subjectId":"matemaatika","teacherId":"policy-school-teacher-027","allowedRoomIds":["b212"]},
+                  {"id":"policy-003","subjectId":"kirjandus","teacherId":"policy-school-teacher-032","allowedRoomIds":["a209"]},
+                  {"id":"policy-004","subjectId":"keemia","allowedRoomIds":["a233"]},
+                  {"id":"policy-005","subjectId":"fuusika","allowedRoomIds":["a223-lab"]},
+                  {"id":"policy-006","subjectId":"kehaline-kasvatus","allowedRoomIds":["kk1","kk2","kk3"]},
+                  {"id":"policy-007","subjectId":"opiabi","useHomeRoom":true}
                 ]
                 """), mvk.path("roomAssignments"));
         JsonNode a233 = java.util.stream.StreamSupport.stream(mvk.path("rooms").spliterator(), false)
@@ -199,10 +199,10 @@ class RoomAssignmentContractTest {
         }
         assertEquals(29, musicLessons);
         assertEquals(java.util.Map.of(
-                "mvk-history-a231", 23, "mvk-piret-maths-b212", 23,
-                "mvk-heiki-literature-a209", 10, "mvk-chemistry-a233", 10,
-                "mvk-physics-a223", 10, "mvk-physical-education-halls", 18,
-                "mvk-study-support-home", 18), counts);
+                "policy-001", 23, "policy-002", 23,
+                "policy-003", 10, "policy-004", 10,
+                "policy-005", 10, "policy-006", 18,
+                "policy-007", 18), counts);
     }
 
     private DefinitionValidator.Outcome validate(ObjectNode input) throws Exception {

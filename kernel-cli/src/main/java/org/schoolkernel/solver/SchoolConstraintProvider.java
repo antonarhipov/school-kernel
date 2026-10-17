@@ -53,6 +53,7 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 cohortGap(factory),
                 cohortLateStart(factory),
                 cohortWeekBalance(factory),
+                consecutiveBlocks(factory),
                 seriesSameDay(factory),
                 undesirablePeriod(factory),
                 nonPreferredRoom(factory)
@@ -313,14 +314,17 @@ public final class SchoolConstraintProvider implements ConstraintProvider {
                 .asConstraint(KernelCatalog.COHORT_WEEK_BALANCE.id());
     }
 
+    public Constraint consecutiveBlocks(ConstraintFactory factory) {
+        return factory.forEach(PlanningLesson.class).filter(l -> l.getConsecutivePolicy() != null)
+                .groupBy(PlanningLesson::getConsecutivePolicy, ConstraintCollectors.toList())
+                .penalize(DAY_SHAPE_HARD, (policy, lessons) -> policy.analyze(lessons).violations())
+                .asConstraint(KernelCatalog.CONSECUTIVE_BLOCK.id());
+    }
+
     public Constraint seriesSameDay(ConstraintFactory factory) {
-        return factory.forEach(PlanningLesson.class)
-                .filter(lesson -> lesson.getSeriesId() != null)
-                .groupBy(
-                        lesson -> new SeriesDay(lesson.getSeriesId(), lesson.getPeriod().weekday()),
-                        ConstraintCollectors.count())
-                .filter((seriesDay, count) -> count > 1)
-                .penalize(PREFERENCE, (seriesDay, count) -> count - 1)
+        return factory.forEach(PlanningLesson.class).filter(l -> l.getSeriesId() != null)
+                .groupBy(PlanningLesson::getSeriesId, ConstraintCollectors.toList())
+                .penalize(PREFERENCE, (series, lessons) -> ConsecutivePolicy.seriesPenalty(lessons))
                 .asConstraint(KernelCatalog.SERIES_SAME_DAY.id());
     }
 

@@ -4,8 +4,6 @@ import argparse
 import hashlib
 import io
 import json
-import subprocess
-import struct
 import sys
 import zipfile
 from pathlib import Path
@@ -16,37 +14,20 @@ parser.add_argument('--output', required=True, type=Path)
 parser.add_argument('jars', nargs='+', type=Path)
 args = parser.parse_args()
 sys.dont_write_bytecode = True
-from generate_samples import COLLECTIONS, FIELDS, strings
+import re
 samples = ROOT / 'timetable-workspace/src/main/resources/demo/timetables'
-source_names = set()
-for filename in ['mv5', 'mvk', 'initial-school']:
-    source = json.loads((ROOT / f'examples/{filename}.json').read_text())
-    source_names.add(source['displayName'])
-    source_names.update(t['displayName'] for t in source['teachers'])
-for identifier, filename, title in [('two-class','mv5','Ranniku õppehoone'), ('full','mvk','Kasevälja Põhikool')]:
-    source = json.loads((ROOT / f'examples/{filename}.json').read_text())
+retired_hashes = set(json.loads(Path(__file__).with_name('retired-identity-hashes.json').read_text()))
+for identifier, title in [('two-class', 'Ranniku õppehoone'), ('full', 'Kasevälja Põhikool'),
+                           ('english', 'Meadowbrook Community School'), ('star-wars', 'Coruscant Imperial Academy')]:
     sample = json.loads((samples / f'{identifier}-definition.json').read_text())
     assert sample['displayName'] == title
     teachers = [t['displayName'] for t in sample['teachers']]
-    assert len(teachers) == len(set(teachers)) and set(teachers).isdisjoint(source_names)
-    for collection in COLLECTIONS:
-        assert {row['id'] for row in source.get(collection, [])}.isdisjoint(row['id'] for row in sample.get(collection, [])), identifier
-    for field in FIELDS:
-        assert set(strings(source, field)).isdisjoint(strings(sample, field)), identifier
+    assert len(teachers) == len(set(teachers))
+    assert all(hashlib.sha256(name.encode()).hexdigest() not in retired_hashes for name in teachers)
 
-# Both full-size fictional curricula below are independently constructed, with no source mapping.
-for identifier, title, prefix in [('english', 'Meadowbrook Community School', 'meadowbrook-'),
-                                   ('star-wars', 'Coruscant Imperial Academy', 'imperial-')]:
-    sample = json.loads((samples / f'{identifier}-definition.json').read_text())
-    assert sample['displayName'] == title
-    teachers = [t['displayName'] for t in sample['teachers']]
-    assert len(teachers) == len(set(teachers)) and set(teachers).isdisjoint(source_names)
-    for collection in COLLECTIONS:
-        assert all(row['id'].startswith(prefix) for row in sample.get(collection, []))
-    for filename in ['mv5', 'mvk', 'initial-school']:
-        source = json.loads((ROOT / f'examples/{filename}.json').read_text())
-        for field in FIELDS:
-            assert set(strings(source, field)).isdisjoint(strings(sample, field)), identifier
+
+def check_identity(value):
+    assert hashlib.sha256(value.encode()).hexdigest() not in retired_hashes, 'Retired identity found in shipped artifact'
 
 checked = []
 def scan(data, path):
@@ -56,17 +37,23 @@ def scan(data, path):
             assert not entry.filename.startswith('examples/'), 'Real examples packaged'
             assert '/demo/samples/' not in entry.filename and '/demo/timetables/small-' not in entry.filename, 'Retired sample packaged'
             body = archive.read(entry)
+            if "/demo/timetables/" in entry.filename:
+                resource = samples / Path(entry.filename).name
+                assert resource.is_file() and body == resource.read_bytes(), "Packaged timetable resource differs from authoritative file"
             if entry.filename.endswith('.jar'):
                 scan(body, path + '!' + entry.filename)
             else:
-                # Exact string literals cover every source name; full multiword names are also scanned as raw bytes.
-                # A generic single-word substring in third-party author metadata is not a source identity.
-                for name in source_names:
-                    for literal in ({json.dumps(name, ensure_ascii=False), json.dumps(name, ensure_ascii=True)} | ({name} if ' ' in name else set())):
-                        assert literal.encode() not in body, 'Source identity found in shipped artifact'
-                    encoded = name.encode()
-                    if entry.filename.endswith('.class'):
-                        assert b'\x01' + struct.pack('>H', len(encoded)) + encoded not in body, 'Source identity in JVM string constant'
+                # Check JSON/JS string literals and JVM UTF-8 constants against the
+                # historical deny-list without retaining the retired source identities.
+                for literal in re.findall(rb'"(?:[^"\\]|\\.)*"', body):
+                    try: check_identity(json.loads(literal))
+                    except (ValueError, UnicodeError): pass
+                if entry.filename.endswith('.class'):
+                    for offset, marker in enumerate(body[:-2]):
+                        if marker != 1: continue
+                        length = int.from_bytes(body[offset+1:offset+3], 'big')
+                        try: check_identity(body[offset+3:offset+3+length].decode())
+                        except UnicodeError: pass
                 checked.append(path + '!' + entry.filename)
 
 artifacts = {}
@@ -75,7 +62,6 @@ for jar in args.jars:
     artifacts[str(jar)] = hashlib.sha256(data).hexdigest()
 args.output.parent.mkdir(parents=True, exist_ok=True)
 args.output.write_text(json.dumps({'verdict': 'PASS', 'artifacts': artifacts, 'scannedEntries': len(checked),
-    'sourceIdentityCount': len(source_names), 'schools': 4, 'variants': 8,
-    'identityMapping': 'two synthetic mappings; English and Imperial schools independently constructed', 'sourceIdentityMatches': 0,
-    'sourceReferenceOverlap': 0, 'packagedExamples': 0}, indent=2) + '\n')
-print('PASS: fictional sample provenance, source reference exclusion and', len(checked), 'packaged entries')
+    'retiredIdentityHashCount': len(retired_hashes), 'schools': 4, 'variants': 8,
+    'identityCheck': 'retired JSON literals and JVM UTF-8 constants checked by SHA-256', 'retiredIdentityMatches': 0, 'packagedExamples': 0}, indent=2) + '\n')
+print('PASS: authoritative fictional samples, retired identity exclusion and', len(checked), 'packaged entries')

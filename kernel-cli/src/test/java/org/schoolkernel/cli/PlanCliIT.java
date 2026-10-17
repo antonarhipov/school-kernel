@@ -99,7 +99,7 @@ class PlanCliIT {
     @Test
     @DisplayName("UC-1 ext 2e: a reached step limit publishes the best complete feasible timetable")
     void reachedStepLimitPublishesBestFeasibleResult() throws Exception {
-        Path input = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path input = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         Path output = temporaryDirectory.resolve("step-limited-result.json");
 
         ProcessResult process = run("plan", "--definition", input.toString(), "--output", output.toString(),
@@ -149,7 +149,7 @@ class PlanCliIT {
 
         Path unsupported = copyFixture("valid-plan.json", "unsupported.json");
         var unsupportedJson = (tools.jackson.databind.node.ObjectNode) JsonSupport.mapper().readTree(unsupported);
-        unsupportedJson.put("catalogVersion", 10);
+        unsupportedJson.put("catalogVersion", 11);
         Files.write(unsupported, JsonSupport.mapper().writeValueAsBytes(unsupportedJson));
         Path unsupportedOutput = temporaryDirectory.resolve("unsupported-result.json");
         ProcessResult unsupportedProcess = run("plan", "--definition", unsupported.toString(), "--output",

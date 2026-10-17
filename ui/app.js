@@ -1,4 +1,4 @@
-const DEFAULT_RESULT_URL = "../examples/timetable.json";
+const DEFAULT_RESULT_URL = "../timetable-workspace/src/main/resources/demo/timetables/full-a-result.json";
 
 const DAY_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const DAY_NAMES = {
@@ -416,5 +416,5 @@ fetch(DEFAULT_RESULT_URL)
         if (!response.ok) throw new Error(`Example request failed with ${response.status}.`);
         return response.json();
     })
-    .then(result => setResult(result, "examples/timetable.json"))
+    .then(result => setResult(result, "Kasevälja Põhikool · Variant A"))
     .catch(() => showMessage("Open a timetable JSON to begin. The bundled example loads automatically when this page is served from the repository root."));

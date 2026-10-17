@@ -8,7 +8,7 @@ export function renderWeekMatrix({ rows, rowHeading, weekdays, cellItems, emptyM
     const times = periods.map(period => period.startTime ? labels.optionalTime(period.startTime.slice(0, 5), period.endTime.slice(0, 5)) : '');
     const sharedTime = times.length && times.every(time => time === times[0]) ? times[0] : '';
     const classCell = index === 0 ? `<th scope="rowgroup" rowspan="${orders.length || 1}" class="week-class" title="${escapeAttribute(row.label)}">${escapeHtml(row.label)}</th>` : '';
-    const periodCell = periods.length ? `<th scope="row" class="week-period" title="${escapeAttribute(periodLabel(periods[0]))}"><span>${escapeHtml(order)}</span>${sharedTime ? `<small>${escapeHtml(sharedTime)}</small>` : ''}</th>` : `<th scope="row" class="week-period"></th>`;
+    const periodCell = periods.length ? `<th scope="row" class="week-period" title="${escapeAttribute(periodLabel(periods[0]))}"><span>${escapeHtml(Number.isInteger(order)?order:"·")}</span>${sharedTime ? `<small>${escapeHtml(sharedTime)}</small>` : ''}</th>` : `<th scope="row" class="week-period"></th>`;
     const slots = weekdays.map((day, dayIndex) => {
       const period = dayPeriods[dayIndex].get(order);
       if (!period) return `<td data-weekday="${escapeAttribute(day)}"><span class="empty-cell">${labels.emptyCell}</span></td>`;

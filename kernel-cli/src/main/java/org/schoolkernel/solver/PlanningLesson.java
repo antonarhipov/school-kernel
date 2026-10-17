@@ -32,6 +32,9 @@ public class PlanningLesson {
     private String baselineRoomId;
     private List<PeriodValue> periodCatalog;
     private PlacementRules placementRules = PlacementRules.NONE;
+    private ConsecutivePolicy consecutivePolicy;
+    public ConsecutivePolicy getConsecutivePolicy() { return consecutivePolicy; }
+    public void setConsecutivePolicy(ConsecutivePolicy value) { consecutivePolicy = value; }
     private PeriodValue period;
     private RoomValue room;
 

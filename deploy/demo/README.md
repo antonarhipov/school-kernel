@@ -12,11 +12,12 @@ docker build --file deploy/demo/Dockerfile --tag school-kernel-demo:local .
 
 The build context explicitly includes only production inputs. It excludes real-school examples, tests, operator
 configuration, Git metadata and prior build output. The runtime image contains the workspace JAR, packaged kernel
-and two launchers. It runs as UID/GID 10001, with a private umask and no database/volume. The demo profile binds to
-`0.0.0.0:$PORT` (8080 by default). All eight packaged timetable pairs must pass code/document fingerprint checks and real
-kernel verification before the HTTP server becomes ready. A scoring-evidence mismatch intentionally fails startup;
-never regenerate that evidence merely to bypass the failure. Regenerate/verify the sample results through the
-explicit maintenance workflow when kernel scoring/build inputs change.
+and two launchers. It runs as UID/GID 10001, with a private umask and no database/volume. With configured public hostnames, the demo binds to `0.0.0.0:$PORT` (8080 by default) and enforces the
+configured HTTPS origin. With default loopback-only hosts, the same profile binds only to loopback and accepts
+direct same-origin HTTP with local session cookies; no certificates or proxy headers are needed for local tests.
+Startup reads the bundled definition/result JSON directly without kernel verification, evidence/hash comparisons
+or scoring. Verify/regenerate results through the explicit maintenance workflow when artifact inputs change.
+Custom input verification remains on demand.
 
 Starting JVM heap ceilings are 512 MiB for the web process, 1,024 MiB for a solve and 256 MiB for each verification.
 `DEMO_WEB_HEAP_MB`, `DEMO_SOLVER_HEAP_MB` and `DEMO_VERIFY_HEAP_MB` can override them with positive integers.
@@ -156,7 +157,8 @@ Historical synthetic examples live only in test resources. The Imperial academy 
 18 cohorts, 540 weekly lessons, 29 specialist teachers and 37 rooms; junior/intermediate/senior curricula have
 25/30/35 lessons a week. The [curriculum specification](../../spec/demo-timetable-experience/spec.md#imperial-academy-progression) records the progression.
 
-For deliberate fixture maintenance, run `python3 tools/demo/build_timetable_samples.py`, then
+The retired source examples and their conversion scripts have been removed. The four definitions under
+`src/main/resources/demo/timetables` are the authoritative demo inputs. For deliberate variant maintenance, run
 `java --class-path kernel-cli/target/school-kernel.jar tools/demo/BuildTimetableVariants.java timetable-workspace/src/main/resources/demo/timetables`
 and `python3 tools/demo/record_timetable_evidence.py`. To rebuild only Meadowbrook without touching the original
 schools, run `python3 tools/demo/build_english_school.py`, then the Java builder above with a final `english`
@@ -168,9 +170,9 @@ The variant builder evaluates every candidate with all kernel rules. Evidence re
 all eight stored pairs, score breakdowns, weights and revisions before hashing; stale claimed scoring is refused.
 
 `tools/demo/check_packaged_samples.py --output <evidence.json> <kernel.jar> <workspace.jar>` scans actual JARs,
-including nested dependencies, for source staff identities, original references, real examples and retired samples.
-`tools/demo/check_sample_readiness.py --output <directory>` requires startup refusal for corrupted disposable JARs
-and verifies that maintenance cannot bless stale scores. Tools, seeds, tests and real examples are excluded from
+including nested dependencies, for retired staff identity hashes, real examples and retired samples.
+`tools/demo/check_sample_readiness.py --output <directory>` checks packaged samples offline and proves that
+maintenance rejects corrupted or stale results. It never starts the web application. Tools, seeds, tests and real examples are excluded from
 production images. Capacity/billing qualification remains separate from functional browser verification.
 
 UC-5 custom saved-definition use is approved from complete local packaged Chrome/fault journeys and the public

@@ -12,15 +12,15 @@ import org.schoolkernel.contract.SchoolDefinitionDto;
 import org.schoolkernel.domain.DefinitionValidator;
 import org.schoolkernel.solver.PreflightFeasibilityCheck;
 
-class MerivaljaExampleFixtureTests {
+class SharedTeacherFixtureTests {
     @Test
     void fixtureIsAValidPreflightFeasiblePlanDefinition() throws IOException {
-        assertValidFixture("/fixtures/merivalja-5a-5b.json", 2, 42);
+        assertValidFixture("/fixtures/shared-teachers-two-classes.json", 2, 42);
     }
 
     @Test
     void selectedClassesFixtureIsAValidPreflightFeasiblePlanDefinition() throws IOException {
-        assertValidFixture("/fixtures/merivalja-1a-1b-4a-4avr-4b-9a-9b.json", 7, 176);
+        assertValidFixture("/fixtures/shared-teachers-seven-classes.json", 7, 176);
     }
 
     private void assertValidFixture(String resource, int expectedCohorts, int expectedLessons) throws IOException {

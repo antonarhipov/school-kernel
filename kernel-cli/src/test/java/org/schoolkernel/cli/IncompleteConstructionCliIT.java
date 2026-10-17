@@ -23,7 +23,7 @@ class IncompleteConstructionCliIT {
 
     @Test
     void boundedConstructionHasTheSameSafeOutcomeForPlanningAndRepair() throws Exception {
-        Path definition = Path.of("..", "examples", "initial-school.json").toAbsolutePath();
+        Path definition = Path.of("src", "test", "resources", "fixtures", "initial-school.json").toAbsolutePath();
         byte[] original = Files.readAllBytes(definition);
         Path partialPlan = directory.resolve("partial-plan.json");
         assertEquals(3, run("plan", "--definition", definition.toString(), "--output", partialPlan.toString(),

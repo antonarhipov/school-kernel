@@ -122,7 +122,7 @@ class WorkspaceImportIT {
     @DisplayName("UC-1 main definition mode: real local HTTP import durably opens an initial draft")
     void importsInitialDefinition() throws Exception {
         Session session = session();
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
 
         HttpResponse<String> response = post(session, Map.of("definition", new FilePart("school.json", definition)), true, true);
 
@@ -145,7 +145,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("Cohort balance UC-1: HTTP import preserves a catalog 4 cohort target by value")
     void importsCohortDailySpreadDefinition() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         definition.put("catalogVersion", 4);
         ((ObjectNode) definition.path("cohorts").get(0)).put("maxDailyLessonSpread", 2);
 
@@ -162,7 +162,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("Reserved periods UC-1 main: HTTP import retains explicit school reservation without rewriting availability")
     void importsReservedPeriodDefinition() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         definition.putArray("reservedPeriodIds").add("mon-3");
         Session session = session();
 
@@ -181,9 +181,9 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-1 main accepted mode: exact definition/result pair becomes one atomic accepted baseline")
     void importsAcceptedPair() throws Exception {
-        Path result = plannedResult(ROOT.resolve("examples/initial-school.json"), "accepted-result.json");
+        Path result = plannedResult(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "accepted-result.json");
         Session session = session();
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         byte[] resultBytes = Files.readAllBytes(result);
 
         HttpResponse<String> response = post(session, Map.of(
@@ -207,7 +207,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("Room assignment UC-1 ext 1b/RULE-4: HTTP accepted import and repair preserve catalog-9 policies")
     void importsAndRepairsRoomAssignmentDefinition() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         definition.put("catalogVersion", 9);
         definition.putArray("roomAssignments").addObject().put("id", "math-room")
                 .put("subjectId", "math").putArray("allowedRoomIds").add("room-102");
@@ -282,7 +282,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-1 extension 1b: exact accepted archive imports and unsafe archive is rejected without mutation")
     void archiveImportAndUnsafeRejection() throws Exception {
-        Path definitionPath = ROOT.resolve("examples/initial-school.json");
+        Path definitionPath = ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json");
         Path resultPath = plannedResult(definitionPath, "archive-result.json");
         JsonNode definition = JSON.readTree(definitionPath);
         JsonNode result = JSON.readTree(resultPath);
@@ -323,7 +323,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-8 main, G1-G4, success postcondition: export is exact, verified, immutable, and re-importable")
     void exportsExactAcceptedBaselineAndReimportsIt() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         ((ObjectNode) definition.path("lessons").get(0)).put("periodLock", "mon-1");
         Path definitionPath = temporaryDirectory.resolve("uc8-definition.json");
         Files.write(definitionPath, JSON.writeValueAsBytes(definition));
@@ -390,7 +390,7 @@ class WorkspaceImportIT {
         assertTrue(refused.headers().firstValue("Content-Disposition").isEmpty());
         assertEmpty();
 
-        Path definitionPath = ROOT.resolve("examples/initial-school.json");
+        Path definitionPath = ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json");
         Path resultPath = plannedResult(definitionPath, "uc8-failure-result.json");
         Session importSession = session();
         assertEquals(200, post(importSession, Map.of(
@@ -421,7 +421,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-1 extension 1b: complete unsafe archive corpus is rejected through HTTP without kernel invocation")
     void malformedArchiveMatrixAtHttpBoundary() throws Exception {
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         List<ArchiveCase> cases = List.of(
                 new ArchiveCase(zip(Map.of(
                         "school-definition.json", definition,
@@ -459,7 +459,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-1 extensions 1a, 2a, 2c and RULE-6: refused imports preserve the empty aggregate")
     void refusedImportsDoNotMutateOrDiscloseCandidate() throws Exception {
-        Path result = plannedResult(ROOT.resolve("examples/initial-school.json"), "orphan-result.json");
+        Path result = plannedResult(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "orphan-result.json");
         Session resultOnlySession = session();
         HttpResponse<String> resultOnly = post(resultOnlySession,
                 Map.of("result", new FilePart("result.json", Files.readAllBytes(result))), true, true);
@@ -477,14 +477,14 @@ class WorkspaceImportIT {
         Session missingVersionSession = session();
         HttpResponse<String> missingVersion = post(missingVersionSession,
                 Map.of("definition", new FilePart("definition.json",
-                        Files.readAllBytes(ROOT.resolve("examples/initial-school.json")))), true, false);
+                        Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json")))), true, false);
         assertEquals(428, missingVersion.statusCode());
         assertEmpty();
 
         Session staleSession = session();
         HttpResponse<String> stale = post(new Session(staleSession.csrfHeader(), staleSession.csrfToken(), "\"ws-99\""),
                 Map.of("definition", new FilePart("definition.json",
-                        Files.readAllBytes(ROOT.resolve("examples/initial-school.json")))), true, true);
+                        Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json")))), true, true);
         assertEquals(412, stale.statusCode());
         assertEmpty();
         assertEquals(0, processes.count(), "precondition refusals must not invoke the kernel");
@@ -493,9 +493,9 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-1 extensions 2a and 2b: every definition and baseline invalidity is refused through real HTTP")
     void completeVerificationInvalidityMatrixAtHttpBoundary() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json"));
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         ObjectNode validResult = (ObjectNode) JSON.readTree(plannedResult(
-                ROOT.resolve("examples/initial-school.json"), "matrix-result.json"));
+                ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "matrix-result.json"));
         processes.reset();
 
         List<ObjectNode> invalidDefinitions = new ArrayList<>();
@@ -554,7 +554,7 @@ class WorkspaceImportIT {
     void racingImportsHaveOneWinner() throws Exception {
         Session session = session();
         Map<String, FilePart> parts = Map.of("definition", new FilePart(
-                "definition.json", Files.readAllBytes(ROOT.resolve("examples/initial-school.json"))));
+                "definition.json", Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"))));
 
         List<Integer> statuses;
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
@@ -574,7 +574,7 @@ class WorkspaceImportIT {
     void localSecurityDenialsPreserveState() throws Exception {
         Session session = session();
         Map<String, FilePart> parts = Map.of("definition", new FilePart(
-                "definition.json", Files.readAllBytes(ROOT.resolve("examples/initial-school.json"))));
+                "definition.json", Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"))));
 
         HttpResponse<String> noCsrf = post(session, parts, false, true);
         assertEquals(403, noCsrf.statusCode());
@@ -682,7 +682,7 @@ class WorkspaceImportIT {
     @DisplayName("UC-1 precondition and RULE-5: a second import is refused without changing the first draft")
     void occupiedWorkspaceRefusesImport() throws Exception {
         Session first = session();
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         HttpResponse<String> imported = post(first,
                 Map.of("definition", new FilePart("definition.json", definition)), true, true);
         assertEquals(200, imported.statusCode());
@@ -705,7 +705,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("RULE-5: UC-1 import is refused from every non-empty lifecycle without process, data, or version effects")
     void exhaustiveLifecycleRefusalMatrix() throws Exception {
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         for (WorkspaceState state : WorkspaceState.values()) {
             if (state == WorkspaceState.EMPTY) {
                 continue;
@@ -739,9 +739,9 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("UC-1 extension 4a and RULE-7: storage failure rolls back import and exposes no accepted baseline")
     void storageFailureRollsBack() throws Exception {
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         byte[] result = Files.readAllBytes(plannedResult(
-                ROOT.resolve("examples/initial-school.json"), "rollback-result.json"));
+                ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "rollback-result.json"));
         jdbc.sql("""
                 CREATE OR REPLACE FUNCTION reject_workspace_update() RETURNS trigger AS $$
                 BEGIN RAISE EXCEPTION 'injected workspace write failure'; END;
@@ -769,9 +769,9 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("RULE-7: deferred commit failure rolls back the complete accepted bundle and canonical state")
     void commitFailureRollsBackAcceptedImport() throws Exception {
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         byte[] result = Files.readAllBytes(plannedResult(
-                ROOT.resolve("examples/initial-school.json"), "commit-failure-result.json"));
+                ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "commit-failure-result.json"));
         byte[] before = CanonicalJson.bytes(storedDocument());
         jdbc.sql("""
                 CREATE OR REPLACE FUNCTION reject_workspace_commit() RETURNS trigger AS $$
@@ -801,9 +801,9 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("RULE-7: database connection termination during acceptance leaves the complete prior state unchanged")
     void connectionTerminationRollsBackAcceptedImport() throws Exception {
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         byte[] result = Files.readAllBytes(plannedResult(
-                ROOT.resolve("examples/initial-school.json"), "connection-failure-result.json"));
+                ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "connection-failure-result.json"));
         byte[] before = CanonicalJson.bytes(storedDocument());
         jdbc.sql("""
                 CREATE OR REPLACE FUNCTION terminate_workspace_connection() RETURNS trigger AS $$
@@ -835,9 +835,9 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("RULE-7: a durable accepted bundle survives a fresh application context unchanged")
     void acceptedImportSurvivesApplicationRestart() throws Exception {
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         byte[] result = Files.readAllBytes(plannedResult(
-                ROOT.resolve("examples/initial-school.json"), "restart-result.json"));
+                ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"), "restart-result.json"));
         Session session = session();
         assertEquals(200, post(session, Map.of(
                 "definition", new FilePart("definition.json", definition),
@@ -864,7 +864,7 @@ class WorkspaceImportIT {
     @Test
     @DisplayName("RULE-8: Unicode, key order, whitespace, arrays and omitted fields round-trip losslessly through HTTP and JSONB")
     void canonicalWorkspaceBoundaryFidelity() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json"));
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         definition.put("displayName", "Demo Õppekool \uD83C\uDF93");
         ((ObjectNode) definition.path("subjects").get(0)).put("displayName", "Matemaatika e\u0301");
         ((ObjectNode) definition.path("teachers").get(0)).remove("undesirablePeriodIds");
@@ -984,7 +984,7 @@ class WorkspaceImportIT {
     @DisplayName("Clearing workspace resets data to empty state via POST and DELETE")
     void clearsWorkspaceViaPostAndDeletes() throws Exception {
         Session session = session();
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         HttpResponse<String> imported = post(session, Map.of("definition", new FilePart("school.json", definition)), true, true);
         assertEquals(200, imported.statusCode());
         assertEquals("INITIAL_DRAFT", lifecycle());
@@ -1027,7 +1027,7 @@ class WorkspaceImportIT {
     @DisplayName("Uploading new school definition resets non-empty workspace to new initial draft")
     void uploadsNewSchoolDefinitionFromNonEmptyState() throws Exception {
         Session session = session();
-        byte[] definition = Files.readAllBytes(ROOT.resolve("examples/initial-school.json"));
+        byte[] definition = Files.readAllBytes(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         HttpResponse<String> imported = post(session, Map.of("definition", new FilePart("school.json", definition)), true, true);
         assertEquals(200, imported.statusCode());
         assertEquals("INITIAL_DRAFT", lifecycle());

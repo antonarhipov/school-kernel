@@ -49,7 +49,7 @@ class DefinitionAuthoringBrowserIT extends WorkbenchBrowserSupport {
 
     @Test
     void uc1InitialSourceOptionalFidelityAndRealRestart() {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/mvk.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/policy-school.json").toFile());
         definition.put("displayName", "Õpetajate <img src=x onerror=alert(1)> kool");
         ((ObjectNode) definition.path("teachers").get(0)).putArray("availablePeriodIds");
         ObjectNode source = JSON.createObjectNode(); source.set("initialDefinition", definition);
@@ -184,7 +184,7 @@ class DefinitionAuthoringBrowserIT extends WorkbenchBrowserSupport {
     void uc1UnsupportedSourcesStaleOpeningAndSecurityDenialPreserveData() {
         workbench.open();
         for (String bad : List.of("version", "unknownRoot", "unknownNested", "unmappable")) {
-            ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+            ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
             switch (bad) {
                 case "version" -> definition.put("catalogVersion", 10);
                 case "unknownRoot" -> definition.put("externalMetadata", "must not vanish");

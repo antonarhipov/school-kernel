@@ -15,7 +15,8 @@ export async function demoRequest(path, { method = 'GET', body, headers = {} } =
       if (value.code === 'SESSION_ENDED') await demoRequest('/api/demo/session', { method: 'POST' }, false);
       return demoRequest(path, { method, body, headers }, false);
     }
-    throw new Error(value.message || value.detail || 'The request failed. Your browser data is retained. Retry shortly.');
+    const error=new Error(value.message || value.detail || 'The request failed. Your browser data is retained. Retry shortly.');
+    error.status=response.status;error.code=value.code;error.validationReport=value.validationReport;throw error;
   }
   return { value, etag: response.headers.get('ETag') };
 }

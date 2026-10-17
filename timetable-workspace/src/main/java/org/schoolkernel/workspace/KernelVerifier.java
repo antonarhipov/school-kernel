@@ -127,9 +127,11 @@ public class KernelVerifier {
                 if (!correlationId.equals(verification.path("correlationId").asString())) throw unavailable("Mismatched review evidence.");
                 if (exit == 0 && (!verification.path("valid").isBoolean() || !verification.path("conflicts").isArray()
                         || !verification.path("hardMatchCounts").isObject() || !verification.path("softMatchCounts").isObject()
-                        || verification.path("hardMatchCounts").size() != 19 || verification.path("softMatchCounts").size() != 7
+                        || verification.path("hardMatchCounts").size() != (documents.definition().path("catalogVersion").asInt() >= 10 ? 20 : 19) || verification.path("softMatchCounts").size() != 7
                         || verification.path("hardMatchCounts").properties().stream().anyMatch(e -> !e.getValue().isIntegralNumber() || e.getValue().asLong() < 0)
                         || !verification.path("truncated").isBoolean()
+                        || !documents.definition().path("catalogVersion").equals(verification.path("catalogVersion"))
+                        || documents.definition().path("catalogVersion").asInt() >= 10 && !verification.path("hardMatchCounts").has("hard.consecutive-block")
                         || !documents.definition().path("schoolId").equals(verification.path("schoolId"))
                         || verification.path("valid").asBoolean() && (!verification.path("conflicts").isEmpty()
                           || !verification.path("result").path("inputRevision").equals(verification.path("definitionRevision"))

@@ -16,7 +16,11 @@ public record SchoolDefinitionDto(
         List<String> reservedPeriodIds,
         List<LessonDto> lessons,
         List<RoomAssignmentDto> roomAssignments,
-        List<SoftConstraintOverrideDto> softConstraintOverrides) {
+        List<SoftConstraintOverrideDto> softConstraintOverrides,
+        List<ConsecutiveBlockDto> consecutiveBlocks) {
+
+    public record ConsecutiveBlockDto(String id, String cohortId, String subjectId, int length,
+            String operator, int weeklyCount) {}
 
     public record SubjectDto(
             String id,
@@ -61,7 +65,7 @@ public record SchoolDefinitionDto(
             String weekday,
             int order,
             String startTime,
-            String endTime) {}
+            String endTime, Boolean adjacentToNext) {}
 
     public record LessonDto(
             String id,

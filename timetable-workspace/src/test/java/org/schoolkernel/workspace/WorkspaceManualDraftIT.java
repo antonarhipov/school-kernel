@@ -519,7 +519,7 @@ class WorkspaceManualDraftIT {
     }
 
     private void storeAccepted() throws Exception {
-        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        ObjectNode definition = (ObjectNode) JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         String defRevision = verifier.verify(new ImportDocuments(definition, null, null,
                 ImportDocuments.ImportMode.INITIAL_DEFINITION)).definitionRevision();
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createTimetableStorage, deleteLocalTimetableData, storageKey } from '../../timetable-workspace/src/main/resources/static/workspace/timetable-storage.js';
+import { createTimetableStorage, deleteLocalTimetableData, storageKey, cleanupEpochKey } from '../../timetable-workspace/src/main/resources/static/workspace/timetable-storage.js';
 import { prefix, useKey } from '../../timetable-workspace/src/main/resources/static/workspace/demo-definitions.js';
 const storage = () => {
   const values = new Map();
@@ -78,7 +78,31 @@ test('cleanup reports possible partial deletion when the browser also refuses re
   const store = storage(); store.setItem(storageKey, 'saved root'); store.setItem(prefix + 'legacy', 'saved legacy'); store.setItem('unrelated', 'keep');
   const remove = store.removeItem;
   store.removeItem = key => { if (key === prefix + 'legacy') throw new Error('refused'); remove(key); };
-  store.setItem = () => { throw new Error('restoration refused'); };
+  const set=store.setItem;store.setItem=(key,value)=>{if(key===cleanupEpochKey)set(key,value);else throw new Error('restoration refused');};
   assert.throws(() => deleteLocalTimetableData(store), /Some local data may have been deleted/);
   assert.equal(store.getItem('unrelated'), 'keep'); assert.equal(store.getItem(prefix + 'legacy'), 'saved legacy');
+});
+
+test('explicit recovery reads latest catalog and preserves independent setup snapshots by value', () => {
+  const store = storage(), one = createTimetableStorage(store), two = createTimetableStorage(store);
+  const latest = { formatVersion: 1, id: 'source', name: 'latest', retained: { empty: [], absentDistinction: null } };
+  one.write(s => { s.setupDrafts = { source: latest }; });
+  assert.throws(() => two.write(s => { s.setupDrafts = { source: { ...latest, name: 'conflict' } }; }), /Another tab/);
+  const recovery = two.state().setupDrafts.source;
+  two.reload();
+  assert.deepEqual(two.state().setupDrafts.source, latest);
+  two.write(s => { s.setupDrafts.recovered = { ...recovery, id: 'recovered', recoveredFrom: 'source' }; });
+  const restored = createTimetableStorage(store).state().setupDrafts;
+  assert.deepEqual(restored.source, latest);
+  assert.deepEqual(restored.recovered, { ...recovery, id: 'recovered', recoveredFrom: 'source' });
+  store.setItem(storageKey, '{unreadable new data');
+  assert.throws(() => two.reload(), /could not be opened/);
+  assert.deepEqual(two.state().setupDrafts, restored);
+  assert.equal(store.getItem(storageKey), '{unreadable new data');
+});
+
+test('cleanup epoch refuses a tab whose original catalog was absent, even after deletion returns catalog to absent',()=>{
+ const store=storage(),stale=createTimetableStorage(store),owner=createTimetableStorage(store);owner.write(s=>{s.setupDrafts={draft:{name:'deleted'}};});deleteLocalTimetableData(store);
+ assert.equal(store.getItem(storageKey),null);assert.throws(()=>stale.write(s=>{s.setupDrafts={resurrected:{name:'stale'}};}),/Another tab/);assert.equal(store.getItem(storageKey),null);
+ stale.reload();stale.write(s=>{s.setupDrafts={fresh:{name:'new explicit work'}};});assert.equal(createTimetableStorage(store).state().setupDrafts.fresh.name,'new explicit work');
 });

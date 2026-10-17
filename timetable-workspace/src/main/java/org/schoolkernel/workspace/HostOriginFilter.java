@@ -38,14 +38,17 @@ public class HostOriginFilter extends OncePerRequestFilter {
             FilterChain chain) throws ServletException, IOException {
         String host = request.getHeader("Host");
         String origin = request.getHeader("Origin");
-        if (demo != null) {
+        if (demo != null && !demo.localOnly()) {
             publicRequest(request, response, chain, host, origin);
             return;
         }
         int port = request.getLocalPort();
         Set<String> acceptedHosts = Set.of("localhost:" + port, "127.0.0.1:" + port, "[::1]:" + port);
         boolean mutationWithoutOrigin = MUTATING_METHODS.contains(request.getMethod()) && origin == null;
-        if (host == null || !acceptedHosts.contains(host.toLowerCase(Locale.ROOT))
+        boolean indirectDemoRequest = demo != null && (!loopback(request.getRemoteAddr())
+                || !loopback(request.getLocalAddr()) || request.getHeader("Forwarded") != null
+                || request.getHeader("X-Forwarded-Proto") != null || request.getHeader("X-Forwarded-Host") != null);
+        if (indirectDemoRequest || host == null || !acceptedHosts.contains(host.toLowerCase(Locale.ROOT))
                 || mutationWithoutOrigin
                 || (origin != null && !origin.equalsIgnoreCase(request.getScheme() + "://" + host))) {
             problems.write(response, HttpStatus.FORBIDDEN, "LOCAL_REQUEST_DENIED",
@@ -53,6 +56,11 @@ public class HostOriginFilter extends OncePerRequestFilter {
             return;
         }
         chain.doFilter(request, response);
+    }
+
+    private static boolean loopback(String address) {
+        try { return java.net.InetAddress.getByName(address).isLoopbackAddress(); }
+        catch (java.net.UnknownHostException ignored) { return false; }
     }
 
     private void publicRequest(HttpServletRequest request, HttpServletResponse response, FilterChain chain,

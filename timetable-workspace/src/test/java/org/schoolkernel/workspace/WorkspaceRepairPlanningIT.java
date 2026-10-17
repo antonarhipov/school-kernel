@@ -537,7 +537,7 @@ class WorkspaceRepairPlanningIT {
     }
 
     private void establishAcceptedBaseline() throws Exception {
-        JsonNode definition = JSON.readTree(ROOT.resolve("examples/initial-school.json").toFile());
+        JsonNode definition = JSON.readTree(ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json").toFile());
         JsonNode result = JSON.readTree(Path.of("src/test/resources/uc5-accepted-result.json").toFile());
         var document = JSON.createObjectNode();
         document.putObject("school").put("id", "demo-school").put("displayName", "Demo School");

@@ -12,6 +12,12 @@ public record DemoSettings(
         Duration idleTimeout,
         Duration absoluteTimeout,
         int maxWorkspaces) {
+    /** Local development is selected only by an exclusively loopback host configuration. */
+    boolean localOnly() {
+        return !railwayIsolatedIngress && trustedProxyAddresses.stream().allMatch(String::isBlank)
+                && publicHosts.stream().allMatch(host -> host.matches("(?:localhost|127\\.0\\.0\\.1)(?::[0-9]{1,5})?"));
+    }
+
     public DemoSettings {
         publicHosts = publicHosts == null ? List.of() : List.copyOf(publicHosts);
         trustedProxyAddresses = trustedProxyAddresses == null ? List.of() : List.copyOf(trustedProxyAddresses);

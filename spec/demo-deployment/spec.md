@@ -1,5 +1,11 @@
 # Public Demo Deployment Specification
 
+
+2026-10-18 user correction: bundled artifacts load directly at startup. Kernel verification, fingerprint/evidence
+checks and scoring belong to explicit maintenance, not web readiness. This supersedes startup-verification
+requirements below. Local demo runs with loopback-only hosts accept direct same-origin HTTP and bind only to
+loopback; public hostname/proxy configurations retain the HTTPS boundary.
+
 ## Feature summary
 
 The public demo lets a visitor inspect and modify a school timetable without installation or login. Full school is

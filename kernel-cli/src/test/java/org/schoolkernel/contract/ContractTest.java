@@ -204,9 +204,9 @@ class ContractTest {
     }
 
     @Test
-    @DisplayName("Curator RULE-5: MVK declares source-backed curators and rooms plus a synthetic 6C curator")
+    @DisplayName("Curator RULE-5: fictional policy school declares source-backed curators and rooms plus a synthetic 6C curator")
     void mvkDeclaresCuratorsAndHomeRooms() throws Exception {
-        var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        var definition = JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "policy-school.json"));
         var curators = new java.util.LinkedHashMap<String, String>();
         var homeRooms = new java.util.LinkedHashMap<String, String>();
         definition.path("cohorts").forEach(cohort -> {
@@ -219,18 +219,18 @@ class ContractTest {
             }
         });
         assertEquals(java.util.Map.ofEntries(
-                java.util.Map.entry("1a", "piret-laanesaar"), java.util.Map.entry("1b", "kairi-meressaar"),
-                java.util.Map.entry("1c", "helena-kroon"), java.util.Map.entry("2a", "anita-kalmus"),
-                java.util.Map.entry("2b", "maiki-saaring"), java.util.Map.entry("2c", "indra-feldman"),
-                java.util.Map.entry("3a", "kristin-muul"), java.util.Map.entry("3b", "reena-korp"),
-                java.util.Map.entry("4a", "anette-maria-rennit"), java.util.Map.entry("4b", "rita-lumiste"),
-                java.util.Map.entry("5a", "ene-avson"), java.util.Map.entry("5b", "katariin-treial"),
-                java.util.Map.entry("5d", "liisi-rannik"), java.util.Map.entry("6a", "vaike-antsov"),
-                java.util.Map.entry("6b", "liivi-kivimae-bondarev"), java.util.Map.entry("6c", "olga-simonovits"),
-                java.util.Map.entry("7a", "saale-maripuu"), java.util.Map.entry("7b", "bergit-semre"),
-                java.util.Map.entry("8a", "grete-suurvali"),
-                java.util.Map.entry("8b", "marina-pokintsereda"), java.util.Map.entry("9a", "marilin-laanetu"),
-                java.util.Map.entry("9b", "piret-noor"), java.util.Map.entry("9c", "helina-silberg")), curators);
+                java.util.Map.entry("1a", "policy-school-teacher-018"), java.util.Map.entry("1b", "policy-school-teacher-025"),
+                java.util.Map.entry("1c", "policy-school-teacher-017"), java.util.Map.entry("2a", "policy-school-teacher-012"),
+                java.util.Map.entry("2b", "policy-school-teacher-037"), java.util.Map.entry("2c", "policy-school-teacher-007"),
+                java.util.Map.entry("3a", "policy-school-teacher-026"), java.util.Map.entry("3b", "policy-school-teacher-016"),
+                java.util.Map.entry("4a", "policy-school-teacher-033"), java.util.Map.entry("4b", "policy-school-teacher-021"),
+                java.util.Map.entry("5a", "policy-school-teacher-004"), java.util.Map.entry("5b", "policy-school-teacher-047"),
+                java.util.Map.entry("5d", "policy-school-teacher-031"), java.util.Map.entry("6a", "policy-school-teacher-003"),
+                java.util.Map.entry("6b", "policy-school-teacher-014"), java.util.Map.entry("6c", "policy-school-teacher-040"),
+                java.util.Map.entry("7a", "policy-school-teacher-023"), java.util.Map.entry("7b", "policy-school-teacher-039"),
+                java.util.Map.entry("8a", "policy-school-teacher-044"),
+                java.util.Map.entry("8b", "policy-school-teacher-030"), java.util.Map.entry("9a", "policy-school-teacher-019"),
+                java.util.Map.entry("9b", "policy-school-teacher-027"), java.util.Map.entry("9c", "policy-school-teacher-008")), curators);
         assertTrue(StreamSupport.stream(definition.path("lessons").spliterator(), false)
                 .anyMatch(lesson -> lesson.path("cohortId").stringValue().equals("6c")
                         && lesson.path("teacherId").stringValue().equals(curators.get("6c"))),
@@ -264,7 +264,7 @@ class ContractTest {
         curatorInto.forEach(lesson -> assertEquals(homeRooms.get(lesson.path("cohortId").stringValue()),
                 lesson.path("roomLock").stringValue()));
         var history = StreamSupport.stream(lessons.spliterator(), false)
-                .filter(lesson -> lesson.path("teacherId").stringValue().equals("siiri-aiaste"))
+                .filter(lesson -> lesson.path("teacherId").stringValue().equals("policy-school-teacher-001"))
                 .filter(lesson -> lesson.path("subjectId").stringValue().equals("ajalugu"))
                 .toList();
         assertEquals(14, history.size());
@@ -274,9 +274,9 @@ class ContractTest {
     }
 
     @Test
-    @DisplayName("Cohort balance UC-1 G5/RULE-5: MVK has the exact gap, daily-load and start preference configuration")
+    @DisplayName("Cohort balance UC-1 G5/RULE-5: fictional policy school has the exact gap, daily-load and start preference configuration")
     void mvkHasExactBalancedPreferenceConfiguration() throws Exception {
-        var definition = JsonSupport.mapper().readTree(Path.of("..", "examples", "mvk.json"));
+        var definition = JsonSupport.mapper().readTree(Path.of("src", "test", "resources", "fixtures", "policy-school.json"));
         assertTrue(new DefinitionSchemaValidator().validate(definition).isEmpty());
         assertEquals(9, definition.path("catalogVersion").intValue());
         var cohorts = definition.path("cohorts");

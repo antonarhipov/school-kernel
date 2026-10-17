@@ -28,7 +28,7 @@ class ImportAndInitialPlanningBrowserIT extends WorkbenchBrowserSupport {
     @DisplayName("UC-1 browser journey: administrator imports a definition and sees its supplied school name")
     void importsInitialDefinition() {
         workbench.open().awaitText("Empty workspace");
-        workbench.setFiles("#definition", ROOT.resolve("examples/initial-school.json"));
+        workbench.setFiles("#definition", ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         workbench.click("#json-import button[type=submit]");
 
         String rendered = workbench.awaitText("Initial draft", Workbench.SOLVE);
@@ -65,7 +65,7 @@ class ImportAndInitialPlanningBrowserIT extends WorkbenchBrowserSupport {
     @DisplayName("UC-2 browser journey: administrator creates, reviews, confirms, and opens the first accepted timetable")
     void plansReviewsAndAcceptsInitialTimetable() {
         workbench.open().awaitText("Empty workspace");
-        workbench.setFiles("#definition", ROOT.resolve("examples/initial-school.json"));
+        workbench.setFiles("#definition", ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         workbench.click("#json-import button[type=submit]");
         String initial = workbench.awaitText("Create 1-minute proposal", Workbench.SOLVE);
         assertTrue(initial.contains("Lessons\n2"));
@@ -155,7 +155,7 @@ class ImportAndInitialPlanningBrowserIT extends WorkbenchBrowserSupport {
         workbench.open().awaitText("Accepted baseline · current timetable");
         workbench.click("#utilities > summary");
         workbench.awaitText("Upload new school definition");
-        workbench.setFiles("#utilities-definition", ROOT.resolve("examples/initial-school.json"));
+        workbench.setFiles("#utilities-definition", ROOT.resolve("kernel-cli/src/test/resources/fixtures/initial-school.json"));
         workbench.click("#utilities-upload-submit");
 
         String rendered = workbench.awaitText("Initial draft", Workbench.SOLVE);

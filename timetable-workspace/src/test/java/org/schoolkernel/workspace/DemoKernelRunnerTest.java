@@ -19,11 +19,11 @@ class DemoKernelRunnerTest {
     ObjectNode result()throws Exception{return(ObjectNode)json.readTree(Path.of("src/test/resources/demo/legacy-samples/small-result.json"));}
     DemoSearchSettings settings(int thorough){return new DemoSearchSettings(5,thorough,200,8,Duration.ofMinutes(2),Duration.ofMinutes(2),Duration.ofSeconds(1));}
     @Test void bothOperationsPassActualDurationsThroughQualified120SecondsAndBindCompleteVerification()throws Exception {
-        for(String operation:List.of("INITIAL","REPAIR"))for(int seconds:List.of(5,60,120)) {
+        for(String operation:List.of("INITIAL","REPAIR"))for(int seconds:List.of(5,60,120)) for(String termination:List.of("TIME_LIMIT","SEARCH_EXHAUSTED")) {
             var verification=mock(DemoVerificationService.class);var accepted=result();var definition=definition();if(operation.equals("REPAIR"))definition.put("basedOnRevision",accepted.path("inputRevision").asString());
             var commands=new AtomicReference<List<String>>();
             var launcher=new KernelProcessLauncher(){public Process start(List<String> args)throws java.io.IOException {
-                commands.set(args);var out=resultUnchecked();out.put("correlationId",args.get(args.indexOf("--correlation-id")+1));((ObjectNode)out.path("limit")).put("duration",args.get(args.indexOf("--time-limit")+1));
+                commands.set(args);var out=resultUnchecked();out.put("terminationReason",termination);out.put("correlationId",args.get(args.indexOf("--correlation-id")+1));((ObjectNode)out.path("limit")).put("duration",args.get(args.indexOf("--time-limit")+1));
                 if(operation.equals("REPAIR")){var changes=out.putObject("changeReport");for(String field:List.of("additions","cancellations","teacherChanges","forcedMoves","periodMoves","roomOnlyMoves"))changes.putArray(field);}
                 Files.write(Path.of(args.get(args.indexOf("--output")+1)),json.writeValueAsBytes(out));return new ProcessBuilder("/usr/bin/true").start();
             }};

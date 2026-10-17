@@ -85,8 +85,10 @@ public final class ScheduleEvaluator {
         var teacherDays = new HashMap<String, List<PlanningLesson>>();
         var cohortDays = new HashMap<String, List<PlanningLesson>>();
         var cohorts = new HashMap<String, List<PlanningLesson>>();
-        var seriesDays = new HashMap<String, Long>();
+        var seriesWeeks = new HashMap<String, List<PlanningLesson>>();
+        var policies = new HashMap<ConsecutivePolicy, List<PlanningLesson>>();
         for (var lesson : schedule.getLessons()) {
+            if (lesson.getConsecutivePolicy() != null) policies.computeIfAbsent(lesson.getConsecutivePolicy(), ignored -> new ArrayList<>()).add(lesson);
             String day = lesson.getPeriod().weekday().name();
             teacherDays.computeIfAbsent(lesson.getTeacherId() + "\u0000" + day, ignored -> new ArrayList<>())
                     .add(lesson);
@@ -94,7 +96,7 @@ public final class ScheduleEvaluator {
                     .add(lesson);
             cohorts.computeIfAbsent(lesson.getCohortId(), ignored -> new ArrayList<>()).add(lesson);
             if (lesson.getSeriesId() != null) {
-                seriesDays.merge(lesson.getSeriesId() + "\u0000" + day, 1L, Long::sum);
+                seriesWeeks.computeIfAbsent(lesson.getSeriesId(), ignored -> new ArrayList<>()).add(lesson);
             }
         }
         teacherDays.values().forEach(lessons -> soft.compute(
@@ -127,8 +129,11 @@ public final class ScheduleEvaluator {
         cohorts.values().forEach(lessons -> soft.compute(
                 KernelCatalog.COHORT_WEEK_BALANCE.id(),
                 (key, count) -> count + SchoolConstraintProvider.countCohortWeekImbalance(lessons)));
-        seriesDays.values().forEach(count -> soft.compute(
-                KernelCatalog.SERIES_SAME_DAY.id(), (key, total) -> total + Math.max(0, count - 1)));
+        seriesWeeks.values().forEach(lessons -> soft.compute(
+                KernelCatalog.SERIES_SAME_DAY.id(), (key, total) -> total + ConsecutivePolicy.seriesPenalty(lessons)));
+        policies.forEach((policy, lessons) -> hard.compute(KernelCatalog.CONSECUTIVE_BLOCK.id(),
+                (key, total) -> total + policy.analyze(lessons).violations()));
+        if (policies.isEmpty()) hard.remove(KernelCatalog.CONSECUTIVE_BLOCK.id());
 
         long ordinaryPenalty = 0;
         for (String constraintId : KernelCatalog.softConstraintIds()) {

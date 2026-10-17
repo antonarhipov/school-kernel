@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "catalogVersion": 1,
-  "schoolId": "merivalja-selected-classes-example",
-  "displayName": "Merivälja Kool",
+  "schoolId": "shared-teachers-seven-classes",
+  "displayName": "Shared Teachers Seven Classes",
   "subjects": [
     {
       "id": "opiabi",
@@ -119,128 +119,128 @@
   ],
   "teachers": [
     {
-      "id": "piret-laanesaar",
-      "displayName": "Piret Laanesaar",
+      "id": "fictional-teacher-001",
+      "displayName": "Fictional Teacher 001",
       "qualifiedSubjectIds": [
         "opiabi",
         "klassitund"
       ]
     },
     {
-      "id": "kaie-kodres",
-      "displayName": "Kaie Kodres",
+      "id": "fictional-teacher-002",
+      "displayName": "Fictional Teacher 002",
       "qualifiedSubjectIds": [
         "muusikaopetus",
         "mudilaskoor"
       ]
     },
     {
-      "id": "hektor-talviste",
-      "displayName": "Hektor Talviste",
+      "id": "fictional-teacher-003",
+      "displayName": "Fictional Teacher 003",
       "qualifiedSubjectIds": [
         "kehaline-kasvatus",
         "ujumine"
       ]
     },
     {
-      "id": "kairi-meressaar",
-      "displayName": "Kairi Meressaar",
+      "id": "fictional-teacher-004",
+      "displayName": "Fictional Teacher 004",
       "qualifiedSubjectIds": [
         "klassitund",
         "opiabi"
       ]
     },
     {
-      "id": "anette-maria-rennit",
-      "displayName": "Anette Maria Rennit",
+      "id": "fictional-teacher-005",
+      "displayName": "Fictional Teacher 005",
       "qualifiedSubjectIds": [
         "opiabi",
         "klassitund"
       ]
     },
     {
-      "id": "katri-plooman",
-      "displayName": "Katri Plooman",
+      "id": "fictional-teacher-006",
+      "displayName": "Fictional Teacher 006",
       "qualifiedSubjectIds": [
         "kehaline-kasvatus"
       ]
     },
     {
-      "id": "helena-kroon",
-      "displayName": "Helena Kroon",
+      "id": "fictional-teacher-007",
+      "displayName": "Fictional Teacher 007",
       "qualifiedSubjectIds": [
         "kunstiopetus",
         "kasitoo-ja-tehnoloogiaopetus"
       ]
     },
     {
-      "id": "marina-pokintsereda",
-      "displayName": "Marina Pokintšereda",
+      "id": "fictional-teacher-008",
+      "displayName": "Fictional Teacher 008",
       "qualifiedSubjectIds": [
         "taiendav-eesti-keel-i-kooliaste",
         "taiendav-eesti-keel-ii-iii-kooliaste"
       ]
     },
     {
-      "id": "reena-korp",
-      "displayName": "Reena Korp",
+      "id": "fictional-teacher-009",
+      "displayName": "Fictional Teacher 009",
       "qualifiedSubjectIds": [
         "eesti-keel-vr"
       ]
     },
     {
-      "id": "aida-martin",
-      "displayName": "Aida Martin",
+      "id": "fictional-teacher-010",
+      "displayName": "Fictional Teacher 010",
       "qualifiedSubjectIds": [
         "matemaatika-vr"
       ]
     },
     {
-      "id": "grete-suurvali",
-      "displayName": "Grete Suurväli",
+      "id": "fictional-teacher-011",
+      "displayName": "Fictional Teacher 011",
       "qualifiedSubjectIds": [
         "sotsiaalpedagoog"
       ]
     },
     {
-      "id": "helina-silberg",
-      "displayName": "Helina Silberg",
+      "id": "fictional-teacher-012",
+      "displayName": "Fictional Teacher 012",
       "qualifiedSubjectIds": [
         "eripedagoog"
       ]
     },
     {
-      "id": "rita-lumiste",
-      "displayName": "Rita Lumiste",
+      "id": "fictional-teacher-013",
+      "displayName": "Fictional Teacher 013",
       "qualifiedSubjectIds": [
         "klassitund"
       ]
     },
     {
-      "id": "malle-salu",
-      "displayName": "Malle Salu",
+      "id": "fictional-teacher-014",
+      "displayName": "Fictional Teacher 014",
       "qualifiedSubjectIds": [
         "bioloogia"
       ]
     },
     {
-      "id": "siiri-aiaste",
-      "displayName": "Siiri Aiaste",
+      "id": "fictional-teacher-015",
+      "displayName": "Fictional Teacher 015",
       "qualifiedSubjectIds": [
         "uhiskonnaopetus",
         "ajalugu"
       ]
     },
     {
-      "id": "marilin-laanetu",
-      "displayName": "Marilin Laanetu",
+      "id": "fictional-teacher-016",
+      "displayName": "Fictional Teacher 016",
       "qualifiedSubjectIds": [
         "into"
       ]
     },
     {
-      "id": "piret-noor",
-      "displayName": "Piret Noor",
+      "id": "fictional-teacher-017",
+      "displayName": "Fictional Teacher 017",
       "qualifiedSubjectIds": [
         "matemaatika",
         "eksami-ettevalmistus-matemaatika",
@@ -248,53 +248,53 @@
       ]
     },
     {
-      "id": "katrin-jaaksoo",
-      "displayName": "Katrin Jaaksoo",
+      "id": "fictional-teacher-018",
+      "displayName": "Fictional Teacher 018",
       "qualifiedSubjectIds": [
         "kirjandus",
         "eesti-keel"
       ]
     },
     {
-      "id": "aarne-ruben",
-      "displayName": "Aarne Ruben",
+      "id": "fictional-teacher-019",
+      "displayName": "Fictional Teacher 019",
       "qualifiedSubjectIds": [
         "eksami-ettevalmistus-eesti-keel"
       ]
     },
     {
-      "id": "liivi-kivimae-bondarev",
-      "displayName": "Liivi Kivimäe-Bondarev",
+      "id": "fictional-teacher-020",
+      "displayName": "Fictional Teacher 020",
       "qualifiedSubjectIds": [
         "keemia",
         "fuusika"
       ]
     },
     {
-      "id": "maya-blinder",
-      "displayName": "Maya Blinder",
+      "id": "fictional-teacher-021",
+      "displayName": "Fictional Teacher 021",
       "qualifiedSubjectIds": [
         "inglise-keel",
         "eksami-ettevalmistus"
       ]
     },
     {
-      "id": "madelen-monika-soiver",
-      "displayName": "Madelen Monika Soiver",
+      "id": "fictional-teacher-022",
+      "displayName": "Fictional Teacher 022",
       "qualifiedSubjectIds": [
         "geograafia"
       ]
     },
     {
-      "id": "leelo-jaanimagi",
-      "displayName": "Leelo Jaanimägi",
+      "id": "fictional-teacher-023",
+      "displayName": "Fictional Teacher 023",
       "qualifiedSubjectIds": [
         "muusikaopetus"
       ]
     },
     {
-      "id": "katariin-treial",
-      "displayName": "Katariin Treial",
+      "id": "fictional-teacher-024",
+      "displayName": "Fictional Teacher 024",
       "qualifiedSubjectIds": [
         "kirjandus",
         "eesti-keel"
@@ -860,7 +860,7 @@
       "displayName": "1A Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -872,7 +872,7 @@
       "displayName": "1A Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -884,7 +884,7 @@
       "displayName": "1A Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -896,7 +896,7 @@
       "displayName": "1A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "1a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "1a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -910,7 +910,7 @@
       "displayName": "1A Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -922,7 +922,7 @@
       "displayName": "1A Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -934,7 +934,7 @@
       "displayName": "1A Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -946,7 +946,7 @@
       "displayName": "1A Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -958,7 +958,7 @@
       "displayName": "1A Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -970,7 +970,7 @@
       "displayName": "1A Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -982,7 +982,7 @@
       "displayName": "1A Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -994,7 +994,7 @@
       "displayName": "1A Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1006,7 +1006,7 @@
       "displayName": "1A Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1018,7 +1018,7 @@
       "displayName": "1A Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1030,7 +1030,7 @@
       "displayName": "1A Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1042,7 +1042,7 @@
       "displayName": "1A Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1a",
-      "teacherId": "hektor-talviste",
+      "teacherId": "fictional-teacher-003",
       "seriesId": "1a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1056,7 +1056,7 @@
       "displayName": "1A Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "1a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "1a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1070,7 +1070,7 @@
       "displayName": "1A Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1082,7 +1082,7 @@
       "displayName": "1A Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1094,7 +1094,7 @@
       "displayName": "1A Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1a",
-      "teacherId": "hektor-talviste",
+      "teacherId": "fictional-teacher-003",
       "seriesId": "1a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1108,7 +1108,7 @@
       "displayName": "1A Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1120,7 +1120,7 @@
       "displayName": "1A Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "1a",
-      "teacherId": "piret-laanesaar",
+      "teacherId": "fictional-teacher-001",
       "seriesId": "1a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1132,7 +1132,7 @@
       "displayName": "1B Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1144,7 +1144,7 @@
       "displayName": "1B Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1b",
-      "teacherId": "hektor-talviste",
+      "teacherId": "fictional-teacher-003",
       "seriesId": "1b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1158,7 +1158,7 @@
       "displayName": "1B Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1170,7 +1170,7 @@
       "displayName": "1B Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1182,7 +1182,7 @@
       "displayName": "1B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "1b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "1b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1196,7 +1196,7 @@
       "displayName": "1B Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1208,7 +1208,7 @@
       "displayName": "1B Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1220,7 +1220,7 @@
       "displayName": "1B Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1232,7 +1232,7 @@
       "displayName": "1B Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1244,7 +1244,7 @@
       "displayName": "1B Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1256,7 +1256,7 @@
       "displayName": "1B Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1268,7 +1268,7 @@
       "displayName": "1B Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1280,7 +1280,7 @@
       "displayName": "1B Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1292,7 +1292,7 @@
       "displayName": "1B Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1304,7 +1304,7 @@
       "displayName": "1B Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1316,7 +1316,7 @@
       "displayName": "1B Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "1b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "1b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1330,7 +1330,7 @@
       "displayName": "1B Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1342,7 +1342,7 @@
       "displayName": "1B Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1354,7 +1354,7 @@
       "displayName": "1B Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1366,7 +1366,7 @@
       "displayName": "1B Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1378,7 +1378,7 @@
       "displayName": "1B Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "1b",
-      "teacherId": "hektor-talviste",
+      "teacherId": "fictional-teacher-003",
       "seriesId": "1b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1392,7 +1392,7 @@
       "displayName": "1B Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "1b",
-      "teacherId": "kairi-meressaar",
+      "teacherId": "fictional-teacher-004",
       "seriesId": "1b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1404,7 +1404,7 @@
       "displayName": "4A Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1416,7 +1416,7 @@
       "displayName": "4A Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4a",
-      "teacherId": "katri-plooman",
+      "teacherId": "fictional-teacher-006",
       "seriesId": "4a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1430,7 +1430,7 @@
       "displayName": "4A Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "4a",
-      "teacherId": "helena-kroon",
+      "teacherId": "fictional-teacher-007",
       "seriesId": "4a.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1444,7 +1444,7 @@
       "displayName": "4A Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1456,7 +1456,7 @@
       "displayName": "4A Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1468,7 +1468,7 @@
       "displayName": "4A Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4a",
-      "teacherId": "katri-plooman",
+      "teacherId": "fictional-teacher-006",
       "seriesId": "4a.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1482,7 +1482,7 @@
       "displayName": "4A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "4a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1496,7 +1496,7 @@
       "displayName": "4A Mudilaskoor 1",
       "subjectId": "mudilaskoor",
       "cohortId": "4a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4a.mudilaskoor",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1510,7 +1510,7 @@
       "displayName": "4A Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1522,7 +1522,7 @@
       "displayName": "4A Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1534,7 +1534,7 @@
       "displayName": "4A Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1546,7 +1546,7 @@
       "displayName": "4A Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1558,7 +1558,7 @@
       "displayName": "4A Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1570,7 +1570,7 @@
       "displayName": "4A Käsitöö- ja tehnoloogiaõpetus 1",
       "subjectId": "kasitoo-ja-tehnoloogiaopetus",
       "cohortId": "4a",
-      "teacherId": "helena-kroon",
+      "teacherId": "fictional-teacher-007",
       "seriesId": "4a.kasitoo-ja-tehnoloogiaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1584,7 +1584,7 @@
       "displayName": "4A Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1596,7 +1596,7 @@
       "displayName": "4A Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1608,7 +1608,7 @@
       "displayName": "4A Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "4a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1622,7 +1622,7 @@
       "displayName": "4A Mudilaskoor 2",
       "subjectId": "mudilaskoor",
       "cohortId": "4a",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4a.mudilaskoor",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1636,7 +1636,7 @@
       "displayName": "4A Käsitöö- ja tehnoloogiaõpetus 2",
       "subjectId": "kasitoo-ja-tehnoloogiaopetus",
       "cohortId": "4a",
-      "teacherId": "helena-kroon",
+      "teacherId": "fictional-teacher-007",
       "seriesId": "4a.kasitoo-ja-tehnoloogiaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1650,7 +1650,7 @@
       "displayName": "4A Täiendav eesti keel I kooliaste 1",
       "subjectId": "taiendav-eesti-keel-i-kooliaste",
       "cohortId": "4a",
-      "teacherId": "marina-pokintsereda",
+      "teacherId": "fictional-teacher-008",
       "seriesId": "4a.taiendav-eesti-keel-i-kooliaste",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1664,7 +1664,7 @@
       "displayName": "4A Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1676,7 +1676,7 @@
       "displayName": "4A Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1688,7 +1688,7 @@
       "displayName": "4A Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1700,7 +1700,7 @@
       "displayName": "4A Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1712,7 +1712,7 @@
       "displayName": "4A Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "4a",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4a.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1724,7 +1724,7 @@
       "displayName": "4AVR Õpiabi 1",
       "subjectId": "opiabi",
       "cohortId": "4avr",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4avr.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1736,7 +1736,7 @@
       "displayName": "4AVR Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4avr",
-      "teacherId": "katri-plooman",
+      "teacherId": "fictional-teacher-006",
       "seriesId": "4avr.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1750,7 +1750,7 @@
       "displayName": "4AVR Kunstiõpetus 1",
       "subjectId": "kunstiopetus",
       "cohortId": "4avr",
-      "teacherId": "helena-kroon",
+      "teacherId": "fictional-teacher-007",
       "seriesId": "4avr.kunstiopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1764,7 +1764,7 @@
       "displayName": "4AVR Eesti keel VR 1",
       "subjectId": "eesti-keel-vr",
       "cohortId": "4avr",
-      "teacherId": "reena-korp",
+      "teacherId": "fictional-teacher-009",
       "seriesId": "4avr.eesti-keel-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1778,7 +1778,7 @@
       "displayName": "4AVR Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4avr",
-      "teacherId": "katri-plooman",
+      "teacherId": "fictional-teacher-006",
       "seriesId": "4avr.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1792,7 +1792,7 @@
       "displayName": "4AVR Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "4avr",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4avr.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1806,7 +1806,7 @@
       "displayName": "4AVR Mudilaskoor 1",
       "subjectId": "mudilaskoor",
       "cohortId": "4avr",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4avr.mudilaskoor",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1820,7 +1820,7 @@
       "displayName": "4AVR Eesti keel VR 2",
       "subjectId": "eesti-keel-vr",
       "cohortId": "4avr",
-      "teacherId": "reena-korp",
+      "teacherId": "fictional-teacher-009",
       "seriesId": "4avr.eesti-keel-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1834,7 +1834,7 @@
       "displayName": "4AVR Eesti keel VR 3",
       "subjectId": "eesti-keel-vr",
       "cohortId": "4avr",
-      "teacherId": "reena-korp",
+      "teacherId": "fictional-teacher-009",
       "seriesId": "4avr.eesti-keel-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1848,7 +1848,7 @@
       "displayName": "4AVR Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "4avr",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4avr.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1860,7 +1860,7 @@
       "displayName": "4AVR Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "4avr",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4avr.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1872,7 +1872,7 @@
       "displayName": "4AVR Käsitöö- ja tehnoloogiaõpetus 1",
       "subjectId": "kasitoo-ja-tehnoloogiaopetus",
       "cohortId": "4avr",
-      "teacherId": "helena-kroon",
+      "teacherId": "fictional-teacher-007",
       "seriesId": "4avr.kasitoo-ja-tehnoloogiaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1886,7 +1886,7 @@
       "displayName": "4AVR Ujumine 1",
       "subjectId": "ujumine",
       "cohortId": "4avr",
-      "teacherId": "hektor-talviste",
+      "teacherId": "fictional-teacher-003",
       "seriesId": "4avr.ujumine",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -1900,7 +1900,7 @@
       "displayName": "4AVR Matemaatika VR 1",
       "subjectId": "matemaatika-vr",
       "cohortId": "4avr",
-      "teacherId": "aida-martin",
+      "teacherId": "fictional-teacher-010",
       "seriesId": "4avr.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1914,7 +1914,7 @@
       "displayName": "4AVR Sotsiaalpedagoog 1",
       "subjectId": "sotsiaalpedagoog",
       "cohortId": "4avr",
-      "teacherId": "grete-suurvali",
+      "teacherId": "fictional-teacher-011",
       "seriesId": "4avr.sotsiaalpedagoog",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1928,7 +1928,7 @@
       "displayName": "4AVR Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "4avr",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4avr.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1940,7 +1940,7 @@
       "displayName": "4AVR Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "4avr",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4avr.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1954,7 +1954,7 @@
       "displayName": "4AVR Mudilaskoor 2",
       "subjectId": "mudilaskoor",
       "cohortId": "4avr",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4avr.mudilaskoor",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -1968,7 +1968,7 @@
       "displayName": "4AVR Käsitöö- ja tehnoloogiaõpetus 2",
       "subjectId": "kasitoo-ja-tehnoloogiaopetus",
       "cohortId": "4avr",
-      "teacherId": "helena-kroon",
+      "teacherId": "fictional-teacher-007",
       "seriesId": "4avr.kasitoo-ja-tehnoloogiaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1982,7 +1982,7 @@
       "displayName": "4AVR Matemaatika VR 2",
       "subjectId": "matemaatika-vr",
       "cohortId": "4avr",
-      "teacherId": "aida-martin",
+      "teacherId": "fictional-teacher-010",
       "seriesId": "4avr.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -1996,7 +1996,7 @@
       "displayName": "4AVR Eripedagoog 1",
       "subjectId": "eripedagoog",
       "cohortId": "4avr",
-      "teacherId": "helina-silberg",
+      "teacherId": "fictional-teacher-012",
       "seriesId": "4avr.eripedagoog",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2010,7 +2010,7 @@
       "displayName": "4AVR Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "4avr",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4avr.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2022,7 +2022,7 @@
       "displayName": "4AVR Õpiabi 2",
       "subjectId": "opiabi",
       "cohortId": "4avr",
-      "teacherId": "anette-maria-rennit",
+      "teacherId": "fictional-teacher-005",
       "seriesId": "4avr.opiabi",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2034,7 +2034,7 @@
       "displayName": "4AVR Eesti keel VR 4",
       "subjectId": "eesti-keel-vr",
       "cohortId": "4avr",
-      "teacherId": "reena-korp",
+      "teacherId": "fictional-teacher-009",
       "seriesId": "4avr.eesti-keel-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2048,7 +2048,7 @@
       "displayName": "4AVR Matemaatika VR 3",
       "subjectId": "matemaatika-vr",
       "cohortId": "4avr",
-      "teacherId": "aida-martin",
+      "teacherId": "fictional-teacher-010",
       "seriesId": "4avr.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2062,7 +2062,7 @@
       "displayName": "4AVR Matemaatika VR 4",
       "subjectId": "matemaatika-vr",
       "cohortId": "4avr",
-      "teacherId": "aida-martin",
+      "teacherId": "fictional-teacher-010",
       "seriesId": "4avr.matemaatika-vr",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2076,7 +2076,7 @@
       "displayName": "4B Kehaline kasvatus 1",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4b",
-      "teacherId": "katri-plooman",
+      "teacherId": "fictional-teacher-006",
       "seriesId": "4b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2090,7 +2090,7 @@
       "displayName": "4B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "4b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2104,7 +2104,7 @@
       "displayName": "4B Klassitund 1",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2116,7 +2116,7 @@
       "displayName": "4B Klassitund 2",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2128,7 +2128,7 @@
       "displayName": "4B Kehaline kasvatus 2",
       "subjectId": "kehaline-kasvatus",
       "cohortId": "4b",
-      "teacherId": "katri-plooman",
+      "teacherId": "fictional-teacher-006",
       "seriesId": "4b.kehaline-kasvatus",
       "requiredRoomCapabilityIds": [
         "sports-hall"
@@ -2142,7 +2142,7 @@
       "displayName": "4B Klassitund 3",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2154,7 +2154,7 @@
       "displayName": "4B Klassitund 4",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2166,7 +2166,7 @@
       "displayName": "4B Klassitund 5",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2178,7 +2178,7 @@
       "displayName": "4B Klassitund 6",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2190,7 +2190,7 @@
       "displayName": "4B Klassitund 7",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2202,7 +2202,7 @@
       "displayName": "4B Klassitund 8",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2214,7 +2214,7 @@
       "displayName": "4B Klassitund 9",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2226,7 +2226,7 @@
       "displayName": "4B Muusikaõpetus 2",
       "subjectId": "muusikaopetus",
       "cohortId": "4b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2240,7 +2240,7 @@
       "displayName": "4B Mudilaskoor 1",
       "subjectId": "mudilaskoor",
       "cohortId": "4b",
-      "teacherId": "kaie-kodres",
+      "teacherId": "fictional-teacher-002",
       "seriesId": "4b.mudilaskoor",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2254,7 +2254,7 @@
       "displayName": "4B Klassitund 10",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2266,7 +2266,7 @@
       "displayName": "4B Klassitund 11",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2278,7 +2278,7 @@
       "displayName": "4B Täiendav eesti keel I kooliaste 1",
       "subjectId": "taiendav-eesti-keel-i-kooliaste",
       "cohortId": "4b",
-      "teacherId": "marina-pokintsereda",
+      "teacherId": "fictional-teacher-008",
       "seriesId": "4b.taiendav-eesti-keel-i-kooliaste",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2292,7 +2292,7 @@
       "displayName": "4B Klassitund 12",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2304,7 +2304,7 @@
       "displayName": "4B Klassitund 13",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2316,7 +2316,7 @@
       "displayName": "4B Klassitund 14",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2328,7 +2328,7 @@
       "displayName": "4B Klassitund 15",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2340,7 +2340,7 @@
       "displayName": "4B Klassitund 16",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2352,7 +2352,7 @@
       "displayName": "4B Klassitund 17",
       "subjectId": "klassitund",
       "cohortId": "4b",
-      "teacherId": "rita-lumiste",
+      "teacherId": "fictional-teacher-013",
       "seriesId": "4b.klassitund",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2364,7 +2364,7 @@
       "displayName": "9A Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "9a",
-      "teacherId": "malle-salu",
+      "teacherId": "fictional-teacher-014",
       "seriesId": "9a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2378,7 +2378,7 @@
       "displayName": "9A Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9a.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2392,7 +2392,7 @@
       "displayName": "9A IntÕ 1",
       "subjectId": "into",
       "cohortId": "9a",
-      "teacherId": "marilin-laanetu",
+      "teacherId": "fictional-teacher-016",
       "seriesId": "9a.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2404,7 +2404,7 @@
       "displayName": "9A Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2418,7 +2418,7 @@
       "displayName": "9A Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2432,7 +2432,7 @@
       "displayName": "9A Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "fictional-teacher-018",
       "seriesId": "9a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2446,7 +2446,7 @@
       "displayName": "9A Eksami ettevalmistus eesti keel 1",
       "subjectId": "eksami-ettevalmistus-eesti-keel",
       "cohortId": "9a",
-      "teacherId": "aarne-ruben",
+      "teacherId": "fictional-teacher-019",
       "seriesId": "9a.eksami-ettevalmistus-eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2460,7 +2460,7 @@
       "displayName": "9A Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2474,7 +2474,7 @@
       "displayName": "9A Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "fictional-teacher-018",
       "seriesId": "9a.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2488,7 +2488,7 @@
       "displayName": "9A Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2502,7 +2502,7 @@
       "displayName": "9A Keemia 1",
       "subjectId": "keemia",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9a.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -2516,7 +2516,7 @@
       "displayName": "9A Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "9a",
-      "teacherId": "malle-salu",
+      "teacherId": "fictional-teacher-014",
       "seriesId": "9a.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2530,7 +2530,7 @@
       "displayName": "9A Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "fictional-teacher-018",
       "seriesId": "9a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2544,7 +2544,7 @@
       "displayName": "9A Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9a.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2558,7 +2558,7 @@
       "displayName": "9A Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2572,7 +2572,7 @@
       "displayName": "9A Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2586,7 +2586,7 @@
       "displayName": "9A Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "9a",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "fictional-teacher-022",
       "seriesId": "9a.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2600,7 +2600,7 @@
       "displayName": "9A Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9a.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -2614,7 +2614,7 @@
       "displayName": "9A Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "9a",
-      "teacherId": "katrin-jaaksoo",
+      "teacherId": "fictional-teacher-018",
       "seriesId": "9a.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2628,7 +2628,7 @@
       "displayName": "9A Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2642,7 +2642,7 @@
       "displayName": "9A Ühiskonnaõpetus 2",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9a.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2656,7 +2656,7 @@
       "displayName": "9A Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9a.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2670,7 +2670,7 @@
       "displayName": "9A Eksami ettevalmistus matemaatika 1",
       "subjectId": "eksami-ettevalmistus-matemaatika",
       "cohortId": "9a",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9a.eksami-ettevalmistus-matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2684,7 +2684,7 @@
       "displayName": "9A Keemia 2",
       "subjectId": "keemia",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9a.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -2698,7 +2698,7 @@
       "displayName": "9A Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "9a",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9a.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -2712,7 +2712,7 @@
       "displayName": "9A Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "9a",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9a.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2726,7 +2726,7 @@
       "displayName": "9A Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "9a",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "fictional-teacher-023",
       "seriesId": "9a.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2740,7 +2740,7 @@
       "displayName": "9A Eksami ettevalmistus 1",
       "subjectId": "eksami-ettevalmistus",
       "cohortId": "9a",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9a.eksami-ettevalmistus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2754,7 +2754,7 @@
       "displayName": "9B Eksami ettevalmistus matemaatika 1",
       "subjectId": "eksami-ettevalmistus-matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.eksami-ettevalmistus-matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2766,7 +2766,7 @@
       "displayName": "9B Kirjandus 1",
       "subjectId": "kirjandus",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "fictional-teacher-024",
       "seriesId": "9b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2780,7 +2780,7 @@
       "displayName": "9B Bioloogia 1",
       "subjectId": "bioloogia",
       "cohortId": "9b",
-      "teacherId": "malle-salu",
+      "teacherId": "fictional-teacher-014",
       "seriesId": "9b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2794,7 +2794,7 @@
       "displayName": "9B Ajalugu 1",
       "subjectId": "ajalugu",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2808,7 +2808,7 @@
       "displayName": "9B Matemaatika 1",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2820,7 +2820,7 @@
       "displayName": "9B Inglise keel 1",
       "subjectId": "inglise-keel",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2834,7 +2834,7 @@
       "displayName": "9B Füüsika 1",
       "subjectId": "fuusika",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9b.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -2848,7 +2848,7 @@
       "displayName": "9B Eesti keel 1",
       "subjectId": "eesti-keel",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "fictional-teacher-024",
       "seriesId": "9b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2862,7 +2862,7 @@
       "displayName": "9B Kirjandus 2",
       "subjectId": "kirjandus",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "fictional-teacher-024",
       "seriesId": "9b.kirjandus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2876,7 +2876,7 @@
       "displayName": "9B Ajalugu 2",
       "subjectId": "ajalugu",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9b.ajalugu",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2890,7 +2890,7 @@
       "displayName": "9B Täiendav eesti keel II/III kooliaste 1",
       "subjectId": "taiendav-eesti-keel-ii-iii-kooliaste",
       "cohortId": "9b",
-      "teacherId": "marina-pokintsereda",
+      "teacherId": "fictional-teacher-008",
       "seriesId": "9b.taiendav-eesti-keel-ii-iii-kooliaste",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2902,7 +2902,7 @@
       "displayName": "9B Matemaatika 2",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2914,7 +2914,7 @@
       "displayName": "9B Geograafia 1",
       "subjectId": "geograafia",
       "cohortId": "9b",
-      "teacherId": "madelen-monika-soiver",
+      "teacherId": "fictional-teacher-022",
       "seriesId": "9b.geograafia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2928,7 +2928,7 @@
       "displayName": "9B Keemia 1",
       "subjectId": "keemia",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9b.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -2942,7 +2942,7 @@
       "displayName": "9B Bioloogia 2",
       "subjectId": "bioloogia",
       "cohortId": "9b",
-      "teacherId": "malle-salu",
+      "teacherId": "fictional-teacher-014",
       "seriesId": "9b.bioloogia",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2956,7 +2956,7 @@
       "displayName": "9B Täiendav eesti keel II/III kooliaste 2",
       "subjectId": "taiendav-eesti-keel-ii-iii-kooliaste",
       "cohortId": "9b",
-      "teacherId": "marina-pokintsereda",
+      "teacherId": "fictional-teacher-008",
       "seriesId": "9b.taiendav-eesti-keel-ii-iii-kooliaste",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2968,7 +2968,7 @@
       "displayName": "9B Matemaatika 3",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -2980,7 +2980,7 @@
       "displayName": "9B Muusikaõpetus 1",
       "subjectId": "muusikaopetus",
       "cohortId": "9b",
-      "teacherId": "leelo-jaanimagi",
+      "teacherId": "fictional-teacher-023",
       "seriesId": "9b.muusikaopetus",
       "requiredRoomCapabilityIds": [
         "music-room"
@@ -2994,7 +2994,7 @@
       "displayName": "9B Inglise keel 2",
       "subjectId": "inglise-keel",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3008,7 +3008,7 @@
       "displayName": "9B Matemaatika 4",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3020,7 +3020,7 @@
       "displayName": "9B Füüsika 2",
       "subjectId": "fuusika",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9b.fuusika",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -3034,7 +3034,7 @@
       "displayName": "9B Eesti keel 2",
       "subjectId": "eesti-keel",
       "cohortId": "9b",
-      "teacherId": "katariin-treial",
+      "teacherId": "fictional-teacher-024",
       "seriesId": "9b.eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3048,7 +3048,7 @@
       "displayName": "9B Ühiskonnaõpetus 1",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9b.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3062,7 +3062,7 @@
       "displayName": "9B Eksami ettevalmistus eesti keel 1",
       "subjectId": "eksami-ettevalmistus-eesti-keel",
       "cohortId": "9b",
-      "teacherId": "aarne-ruben",
+      "teacherId": "fictional-teacher-019",
       "seriesId": "9b.eksami-ettevalmistus-eesti-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3076,7 +3076,7 @@
       "displayName": "9B IntÕ 1",
       "subjectId": "into",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.into",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3088,7 +3088,7 @@
       "displayName": "9B Keemia 2",
       "subjectId": "keemia",
       "cohortId": "9b",
-      "teacherId": "liivi-kivimae-bondarev",
+      "teacherId": "fictional-teacher-020",
       "seriesId": "9b.keemia",
       "requiredRoomCapabilityIds": [
         "science-lab"
@@ -3102,7 +3102,7 @@
       "displayName": "9B Ühiskonnaõpetus 2",
       "subjectId": "uhiskonnaopetus",
       "cohortId": "9b",
-      "teacherId": "siiri-aiaste",
+      "teacherId": "fictional-teacher-015",
       "seriesId": "9b.uhiskonnaopetus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3116,7 +3116,7 @@
       "displayName": "9B Matemaatika 5",
       "subjectId": "matemaatika",
       "cohortId": "9b",
-      "teacherId": "piret-noor",
+      "teacherId": "fictional-teacher-017",
       "seriesId": "9b.matemaatika",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3128,7 +3128,7 @@
       "displayName": "9B Inglise keel 3",
       "subjectId": "inglise-keel",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9b.inglise-keel",
       "requiredRoomCapabilityIds": [
         "general-classroom"
@@ -3142,7 +3142,7 @@
       "displayName": "9B Eksami ettevalmistus 1",
       "subjectId": "eksami-ettevalmistus",
       "cohortId": "9b",
-      "teacherId": "maya-blinder",
+      "teacherId": "fictional-teacher-021",
       "seriesId": "9b.eksami-ettevalmistus",
       "requiredRoomCapabilityIds": [
         "general-classroom"
