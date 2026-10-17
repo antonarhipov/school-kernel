@@ -1,6 +1,0 @@
-### Result
-{"verdict":"PASS","refusal":{"code":"INVALID_WORKSPACE_TRANSITION","message":"Return to authoring requires a repair draft. Cancel an active solve or discard only the proposal first.","correlationId":"b1278782-3815-46e7-9756-2686dbe7e285","state":"REPAIR_PROPOSAL","etag":"\"ws-10\""},"version":10}
-### Ran Playwright code
-```js
-await (async page => {const base="http://127.0.0.1:18109",read=async()=>await(await page.request.get(base+"/api/workspace")).json();await page.getByText(/To return to authoring, first discard only the generated proposal/).waitFor();const before=await read(),csrf=await(await page.request.get(base+"/api/csrf")).json();const r=await page.request.post(base+"/api/repair-draft/return-to-authoring",{headers:{"Content-Type":"application/json",Origin:base,"If-Match":"\"ws-"+before.version+"\"",[csrf.headerName]:csrf.token},data:{confirmed:true}});if(r.status()!==409)throw Error("proposal return allowed");if(JSON.stringify((await read()).workspace)!==JSON.stringify(before.workspace))throw Error("proposal return changed work");await page.screenshot({path:"output/playwright/school-definition-authoring/UC-18/20261012-1/08-proposal-first-guidance.png"});return {verdict:"PASS",refusal:await r.json(),version:before.version};})(page);
-```

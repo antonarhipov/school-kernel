@@ -1,3 +1,0 @@
-# UC-23 first attempt — FAIL / preserved
-
-First changed-build form walkthrough stopped at a focus assertion after Playwright selectOption. The helper had never focused the select; therefore that assertion did not demonstrate focus loss. No save had occurred. Retained journey/log and initial compact teacher screenshot. Repeat explicitly focuses the select before changing it. Technical teacher regression separately expected visible “Reserved”; the grid legend used lowercase “reserved” while cells used R. Changed legend to “R = Reserved period” for visible, explicit meaning; identity and reservation semantics unchanged. Also added focus-aware footer handling and review navigation expansion. Complete changed-build repeat required, no PASS inferred.

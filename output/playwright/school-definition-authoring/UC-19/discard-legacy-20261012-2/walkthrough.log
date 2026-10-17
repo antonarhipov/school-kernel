@@ -1,2 +1,0 @@
-### Error
-Error: legacy discard 409 {"code":"INVALID_AUTHORING_SOURCE","message":"Recorded authoring source is unavailable or no longer matches its saved revision. Nothing was discarded.","correlationId":"3063cbb7-3ecb-48f6-a6bd-563d6546c781","state":"DEFINITION_DRAFT","etag":"\"ws-233\""}

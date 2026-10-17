@@ -1,7 +1,0 @@
-{
-  "verdict": "PASS",
-  "files": 162,
-  "sha256": "d292a016f6edb85874eb98597643e555159829e2ec3f10a73cc082d46f054dd7",
-  "exactSourceStageArchive": true,
-  "authorization": "User explicitly authorized the exact 162-file payload/hash, existing school-kernel-free-smoke / demo-smoke / production destination and generated domain, public verification and same-image cleanup restart; resource and billing settings unchanged."
-}

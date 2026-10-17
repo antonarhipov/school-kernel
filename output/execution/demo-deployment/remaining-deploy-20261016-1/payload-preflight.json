@@ -1,9 +1,0 @@
-{
-  "verdict": "PASS",
-  "files": 162,
-  "sourceStageArchiveExact": true,
-  "sha256": "d292a016f6edb85874eb98597643e555159829e2ec3f10a73cc082d46f054dd7",
-  "destination": "existing isolated Railway school-kernel-free-smoke / demo-smoke, generated domain demo-smoke-production.up.railway.app",
-  "authorization": "User: ok. lets deploy. I authorize",
-  "planChangesAuthorized": false
-}

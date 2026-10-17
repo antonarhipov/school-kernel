@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.schoolkernel.workspace.DemoRemoteEndedSessionIT
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 41.95 s -- in org.schoolkernel.workspace.DemoRemoteEndedSessionIT

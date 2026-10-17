@@ -1,9 +1,0 @@
-Transient provider readiness read; retrying: CalledProcessError
-Test-only 15s / 45s clock deployment ready
-Expiry walkthrough exit code: 1
-Original 60m / 8h session configuration restored and ready
-Traceback (most recent call last):
-  File "/private/tmp/uc2-expiry-run.py", line 73, in <module>
-    assert report.get('testExitCode')==0, 'Expiry walkthrough failed; defaults were restored'
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: Expiry walkthrough failed; defaults were restored

@@ -1,9 +1,0 @@
-{
-  "formatVersion" : 1,
-  "identifier" : "my-draft",
-  "savedAt" : "2026-10-16T14:37:25.323Z",
-  "derivedFrom" : {
-    "kind" : "file"
-  },
-  "documentText" : "{\r\n  \"unfinished\": \"é and 👩‍🏫\",\r\n  \"notes\": [1, 2]\r\n}\r\n "
-}

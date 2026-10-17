@@ -1,6 +1,0 @@
-- generic [active] [ref=f2e1]:
-  - banner [ref=f2e2]:
-    - paragraph [ref=f2e3]: Local school timetable
-    - heading "Operations workspace" [level=1] [ref=f2e4]
-    - paragraph [ref=f2e5]: Loading the local workspace…
-  - main [ref=f2e6]

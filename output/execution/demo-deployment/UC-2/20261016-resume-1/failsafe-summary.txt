@@ -1,1 +1,0 @@
-org.schoolkernel.workspace.DemoSessionBrowserIT: tests=1 failures=0 errors=0 skipped=0

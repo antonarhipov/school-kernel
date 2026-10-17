@@ -1,9 +1,0 @@
-### Ran Playwright code
-```js
-await page.goto('http://localhost:18086/workspace/');
-```
-### Page
-- Page URL: http://localhost:18086/workspace/
-- Page Title: School timetable workspace
-### Snapshot
-- [Snapshot](.playwright-cli/page-2026-10-11T19-53-45-735Z.yml)

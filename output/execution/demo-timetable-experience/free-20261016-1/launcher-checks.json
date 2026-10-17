@@ -1,9 +1,0 @@
-{
-  "verify": "-Xmx96m",
-  "review": "-Xmx96m",
-  "plan": "-Xmx128m",
-  "replan": "-Xmx128m",
-  "shellSyntax": "PASS",
-  "fullSchoolReviewAt96MiB": "REVIEWED",
-  "launcherSha256": "f6fdda66b84bd7f760c2368c1581db017f4cb8c1d3449bf94cfc2b1840906f7a"
-}

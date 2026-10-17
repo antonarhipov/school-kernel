@@ -1,2 +1,0 @@
-- workbench.expect("document.querySelector('#edit-teacher').disabled");
-+ workbench.expectNot("document.querySelector('#edit-teacher')");

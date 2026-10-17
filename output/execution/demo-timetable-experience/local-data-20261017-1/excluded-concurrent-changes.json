@@ -1,8 +1,0 @@
-[
-  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoDefinitionLimits.java",
-  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoEvents.java",
-  "timetable-workspace/src/main/java/org/schoolkernel/workspace/DemoTimetableController.java",
-  "timetable-workspace/src/main/java/org/schoolkernel/workspace/ProblemHandler.java",
-  "timetable-workspace/src/main/java/org/schoolkernel/workspace/SafeImportReader.java",
-  "timetable-workspace/src/main/java/org/schoolkernel/workspace/SecurityConfiguration.java"
-]

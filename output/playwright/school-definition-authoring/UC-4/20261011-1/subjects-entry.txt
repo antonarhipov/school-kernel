@@ -1,9 +1,0 @@
-### Ran Playwright code
-```js
-await page.getByRole('button', { name: 'Subjects' }).click();
-```
-### Page
-- Page URL: http://localhost:18083/workspace/
-- Page Title: School timetable workspace
-### Snapshot
-- [Snapshot](.playwright-cli/page-2026-10-11T17-57-11-775Z.yml)

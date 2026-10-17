@@ -1,8 +1,0 @@
-### Error
-Error: locator.waitFor: Error: strict mode violation: getByText('REPAIR_PROPOSAL is active.') resolved to 2 elements:
-    1) <p role="status" id="authoring-status">Authoring unavailable while REPAIR_PROPOSAL is ac…</p> aka getByText('Authoring unavailable while')
-    2) <p>REPAIR_PROPOSAL is active. Review and explicitly …</p> aka getByText('REPAIR_PROPOSAL is active. Review and explicitly accept, or discard only the')
-
-Call log:
-[2m  - waiting for getByText('REPAIR_PROPOSAL is active.') to be visible[22m
-

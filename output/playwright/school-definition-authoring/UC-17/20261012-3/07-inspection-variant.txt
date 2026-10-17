@@ -1,6 +1,0 @@
-### Error
-TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
-Call log:
-[2m  - waiting for locator('#draft-save-status') to be visible[22m
-[2m    64 × locator resolved to hidden <p role="alert" class="error" id="draft-save-status"></p>[22m
-

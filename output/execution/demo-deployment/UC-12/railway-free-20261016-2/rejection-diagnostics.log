@@ -1,1 +1,0 @@
-2026-10-16T11:29:28.211Z DEBUG 1 --- [timetable-workspace] [0.0-8080-exec-3] o.s.workspace.HostOriginFilter           : Demo origin refused: allowedHost=true trustedProxy=true secure=true forwardedPresent=false forwardedHostPresent=true originPresent=false

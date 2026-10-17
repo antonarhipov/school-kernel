@@ -1,5 +1,0 @@
-# UC-19 legacy discard regression — FAIL reproduced
-
-Base `5c87f44`, unmodified existing packaged build `/tmp/uc20-workspace-r8.jar`, headed Chrome/Playwright CLI. Isolated exact copy of operator persisted v233 DEFINITION_DRAFT, source ACCEPTED_BASELINE with old sourceDefinitionRevision/sourceCatalogVersion fields and no sourceDocument. URL18111, disposable `authoring_discard_legacy_20261012` in test container. Operator data read only; no operator server restarted or draft discarded.
-
-Click actual Discard authoring: expected confirmation, observed no dialog and uncaught `Cannot read properties of undefined (reading 'school')`. [Screenshot](failure.png), [full state/error values](values.json), [initial snapshot](snapshot.log). Entire snapshot before/after exact; no discard request/mutation. Backend also requires sourceDocument, so an optional-chain-only repair would still refuse this authentic legacy source. Production fix must safely restore the preserved source on explicit confirmation and retain data on incomplete/mismatched source.

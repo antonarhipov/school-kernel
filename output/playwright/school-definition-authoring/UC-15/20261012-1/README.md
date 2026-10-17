@@ -1,5 +1,0 @@
-# UC-15 walkthrough attempt 1 — FAIL
-
-Submission `528d082`, 2026-10-12, Chromium at localhost:18092, copied production JAR /tmp/uc15-workspace.jar and isolated authoring_loop_uc15. EMPTY start. The import was still being verified when the harness proceeded: `#open-authoring` already existed as Create school, and the async predicate supplied to waitForFunction did not provide the required durable-state wait. Recorded entry state remained EMPTY v0, then explicit Create opened a new empty draft v1. The concurrent import was correctly refused by version protection. Main failed looking for the absent mon1. No accepted-source/timing scenario was exercised and there is no approval.
-
-[Entry output](entry.txt) and [failure state/snapshot](failure.txt), [screenshot](failure.png) retained. Correct entry to await the rendered Author definition button and independently assert ACCEPTED_BASELINE with three placements before opening authoring. Repeat the complete UC-15 journey on a fresh isolated database. No production assertion weakened; operator data untouched. Server/database retained as failed harness evidence.
