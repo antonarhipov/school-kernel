@@ -61,6 +61,11 @@ Current feature directories:
   Instead of structured authoring, visitors pick a pseudonymized sample school from a dropdown and can edit its JSON;
   edited versions are saved under an identifier in the browser's local storage and join the dropdown. Persistence,
   accounts, and a hosted Timefold solver remain later, demand-driven steps.
+- [`school-setup-editor`](school-setup-editor/proposal.md) proposes a fresh structured editor for the current demo:
+  grid-first setup, class-owned weekly requirements, explicit teacher eligibility, contextual scheduling rules,
+  autosaved drafts and named school copies. It includes new kernel support for required consecutive lesson pairs;
+  real-product definition versioning and activation are future requirements. The earlier authoring feature remains
+  a separate historical implementation.
 
 The approved `kernel-v1` evidence preserves path names recorded at the time of its original submissions, even though
 the artifacts now live below `spec/kernel-v1/`.
