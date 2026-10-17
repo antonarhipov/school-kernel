@@ -40,3 +40,4 @@ build/
 
 # Local browser-automation session state
 .playwright-cli/
+/output/

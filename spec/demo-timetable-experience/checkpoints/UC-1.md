@@ -57,3 +57,34 @@ The initial public harness's first-cohort-difference assumption was corrected to
 failed evidence retained, no production change needed. The unchanged Free service is live as
 `fe66a8a4-9004-4d01-b229-2e7216d83c5f`. Final workspaces/processes are zero; existing handoffs remain closed.
 [Exact production manifest, evidence and deployment ledger](../../../output/execution/demo-timetable-experience/imperial-20261017-1/ledger.md).
+
+# Compact mobile correction, 2026-10-17
+
+Base `4911b04`, initially clean. User authorized phone-friendly compact presentation. UC-1 extension 3a and G7
+now require collapsed filters and a whole week fitting phone width. Phone rendering places population labels
+above schedules, uses short weekday labels and a 22px period column, and preserves full details in lesson inspection.
+Week/Day controls remain visible; filters retain values and show an active count. Desktop keeps its original matrix.
+
+Changed production files: `demo-workbench.js`, `demo-workbench.css`, new `mobile-matrix.js`. The new
+`MobileTimetableBrowserIT` records the complete phone journey; the existing exploration test opens the disclosure
+before selecting a mobile filter. Proposal/spec/status record the user request and verification. No definition,
+result, storage contract, backend or operator data changes; no commit or deployment.
+
+APPROVED: final package and exact resource hashes, full exploration and dedicated mobile journeys pass;
+320/360/390/430/700px, all eight variants, exact source lesson identities, zero horizontal overflow, visible rooms,
+filters/lenses/highlights, inspector timings, phone/desktop resize and reload are verified. No mutating requests or
+additional kernel processes during exploration; no browser runtime errors. Screenshot inspection confirms layout.
+Earlier edit/save and generation PASS evidence is reused for unchanged behavior. Failed attempts are retained.
+No outstanding destination handoff.
+
+[Execution ledger and exact manifest](../../../output/execution/demo-timetable-experience/mobile-20261017-1/ledger.md),
+[final phone journey](../../../output/playwright/demo-timetable-experience/UC-1/mobile-1792192912633/ledger.md),
+[final exploration journey](../../../output/playwright/demo-timetable-experience/UC-1/local-1792192823136/ledger.md).
+
+## Mobile deployment, 2026-10-17
+
+After local verification, the user explicitly requested deployment. The exact three mobile assets are live in
+`e8b68aa9-97a3-4e68-80a1-a65658fac2fb` (SUCCESS), with all other bytes from the preceding hardening release intact.
+Public Chrome repeats the complete phone journey successfully; all 42 static assets/eight sample pairs match;
+health, edge, restart and final zero-workspace checks pass. Free plan/full service manifest/kernel are unchanged.
+UC-1 remains APPROVED. [Deployment evidence](../../../output/execution/demo-timetable-experience/mobile-deploy-20261017-1/ledger.md).

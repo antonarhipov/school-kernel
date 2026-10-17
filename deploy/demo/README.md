@@ -198,7 +198,7 @@ original scope and do not qualify the current implementation for public launch.
 ## Current Free deployment, 2026-10-17
 
 The timetable-first experience is live at [the demo](https://demo-smoke-production.up.railway.app/workspace/),
-deployment `2ecc350c-5519-4a0d-ba20-a4f19edd5137` (definition-input hardening; Utilities cleanup, progressive Imperial curriculum and compact retro styling preserved). The provider still reports FREE, with the original one-CPU,
+deployment `e8b68aa9-97a3-4e68-80a1-a65658fac2fb` (compact mobile week and collapsed filters; definition-input hardening, Utilities cleanup, progressive Imperial curriculum and compact retro styling preserved). The provider still reports FREE, with the original one-CPU,
 500 MB, one-replica sleeping configuration and unchanged variables. The kernel launcher routes both `verify` and
 `review` through `DEMO_VERIFY_HEAP_MB` (96 MiB on this service); real full-school review, including the 614-lesson English school and 540-lesson Imperial academy, passes at that limit.
 
@@ -222,3 +222,9 @@ editor autosaving with storage recovery. The complete public hardening Chrome jo
 the pinned production upload. A same-image restart verifies samples again and leaves zero active workspaces or
 processes. Plan, full service manifest, effective runtime settings and kernel build are unchanged.
 [Current deployment ledger](../../output/execution/definition-input-hardening/deployment-20261017-1/ledger.md).
+
+The mobile release changes exactly three presentation assets. At 320–700px, filters start collapsed, class/lens
+labels sit above schedules, and all five weekdays fit without horizontal scrolling beside a slim period column.
+Full labels/timing remain in lesson inspection. Complete public Chrome, all 42 static asset hashes/eight sample
+pairs, health/edge checks and same-image restart pass; final active workspaces are zero.
+[Mobile deployment ledger](../../output/execution/demo-timetable-experience/mobile-deploy-20261017-1/ledger.md).

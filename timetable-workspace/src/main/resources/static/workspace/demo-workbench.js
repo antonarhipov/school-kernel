@@ -2,6 +2,7 @@ import { M } from './messages.js';
 import { makeAcceptedModel } from './accepted-model.js';
 import { renderWeekMatrix } from './week-renderer.js';
 import { renderDayMatrix } from './day-renderer.js';
+import { renderMobileMatrix } from './mobile-matrix.js';
 import { createTimetableStorage, deleteLocalTimetableData, draftKey, isTimetable, isSchoolDefinition } from './timetable-storage.js';
 import { demoRequest } from './demo-transport.js';
 import { conflictItems, warningItems } from './demo-feedback.js';
@@ -11,6 +12,7 @@ import { createDefinitionAutosave } from './definition-autosave.js';
 const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const clone = value => structuredClone(value);
 const blankFilters = () => ({ cohortId: '', teacherId: '', roomId: '', subjectId: '', periodId: '', search: '', range: 'WEEK', day: '' });
+const mobileLayout = window.matchMedia('(max-width: 700px)');
 let mounted = false, repository, browserStorage, deletingLocalData = false, build, schools = new Map(), selectedSchool, selectedTimetable, model, selectedLesson = null;
 let filters = blankFilters(), notice = '', editorText = '', editorSource = '', editorDirty = false;
 const reviews = new Map(), timers = new Map();
@@ -54,8 +56,8 @@ export async function mountTimetableDemo() {
     <p id="demo-notice" class="notice" role="status" hidden></p>
     <p id="generation-indicator" class="notice" role="status" hidden></p>
     <section class="demo-timetable current-mode compact-density" aria-label="Timetable">
-      <div class="demo-view-heading"><div><h1 id="timetable-title">Timetable</h1><p id="timetable-description" class="muted">Loading verified examples…</p></div></div>
-      <div id="timetable-filters" class="demo-filters"></div>
+      <div class="demo-view-heading"><div><h1 id="timetable-title">Timetable</h1><p id="timetable-description" class="muted">Loading verified examples…</p></div><div id="timetable-range"></div></div>
+      <div id="timetable-filters"></div>
       <div id="draft-feedback" hidden></div>
       <div id="timetable-matrix" aria-busy="true"></div>
     </section>
@@ -270,6 +272,11 @@ function bindShell() {
   });
   document.addEventListener('keydown', event => { if (event.key === 'Escape') closeInspector(); });
   window.addEventListener('resize', positionInspector);
+  mobileLayout.addEventListener('change', () => {
+    const disclosure = document.querySelector('#timetable-filter-disclosure');
+    if (disclosure) disclosure.open = !mobileLayout.matches;
+    renderMatrix(); positionInspector();
+  });
   new ResizeObserver(() => {
     const bar = document.querySelector('#timetable-save-bar');
     document.body.style.setProperty('--save-bar-height', `${bar.hidden ? 0 : bar.getBoundingClientRect().height + 35}px`);
@@ -323,9 +330,12 @@ function renderEditor() {
 
 function renderFilters() {
   const parent = document.querySelector('#timetable-filters');
-  if (!model) { parent.innerHTML = ''; return; }
+  const range = document.querySelector('#timetable-range');
+  if (!model) { parent.innerHTML = ''; range.innerHTML = ''; return; }
+  const expanded = parent.querySelector('details')?.open ?? !mobileLayout.matches;
   const select = (id, title, collection, key) => `<label>${title}<select id="${id}" data-filter="${key}">${option('', `All ${title.toLowerCase()}`, filters[key])}${collection.map(e => option(e.id, e.displayName || e.id, filters[key])).join('')}</select></label>`;
-  parent.innerHTML = `<div class="demo-range" role="group" aria-label="Timetable range"><button type="button" data-range="WEEK" aria-pressed="${filters.range === 'WEEK'}">Week</button><button type="button" data-range="DAY" aria-pressed="${filters.range === 'DAY'}">Day</button></div>
+  range.innerHTML = `<div class="demo-range" role="group" aria-label="Timetable range"><button type="button" data-range="WEEK" aria-pressed="${filters.range === 'WEEK'}">Week</button><button type="button" data-range="DAY" aria-pressed="${filters.range === 'DAY'}">Day</button></div>`;
+  parent.innerHTML = `<details id="timetable-filter-disclosure" class="demo-filter-disclosure"${expanded ? ' open' : ''}><summary>Filters <span id="timetable-filter-summary"></span></summary><div class="demo-filters">
     <label>Day<select id="day-filter" data-filter="day">${option('', 'Whole week', filters.day)}${model.weekdays.map(day => option(day, M.days[day] || day, filters.day)).join('')}</select></label>
     ${select('cohort-filter', 'Classes', model.definition.cohorts, 'cohortId')}
     ${select('teacher-filter', 'Teachers', model.definition.teachers, 'teacherId')}
@@ -333,7 +343,8 @@ function renderFilters() {
     ${select('subject-filter', 'Subjects', model.definition.subjects, 'subjectId')}
     ${select('period-filter', 'Time slots', model.definition.periods.map(p => ({ ...p, displayName: periodLabel(p) })), 'periodId')}
     <label class="demo-search">Highlight lessons<input id="lesson-search" type="search" placeholder="Subject, teacher or class" value="${html(filters.search)}"></label>
-    <button id="clear-timetable-filters" class="secondary" type="button">Clear filters</button>`;
+    <button id="clear-timetable-filters" class="secondary" type="button">Clear filters</button></div></details>`;
+  updateFilterSummary();
   parent.querySelectorAll('[data-filter]').forEach(select => select.addEventListener('change', event => {
     const key = select.dataset.filter; filters[key] = event.target.value;
     if (key === 'day') filters.range = filters.day ? 'DAY' : 'WEEK';
@@ -342,12 +353,17 @@ function renderFilters() {
     if (key === 'periodId' && filters.periodId) { filters.range = 'DAY'; filters.day = model.maps.periods.get(filters.periodId)?.weekday || model.weekdays[0]; }
     closeInspector(); renderFilters(); renderMatrix();
   }));
-  parent.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
+  range.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
     filters.range = button.dataset.range; filters.day = filters.range === 'DAY' ? filters.day || model.weekdays[0] : '';
     closeInspector(); renderFilters(); renderMatrix();
   }));
-  parent.querySelector('#lesson-search').addEventListener('input', event => { filters.search = event.target.value; renderMatrix(); });
+  parent.querySelector('#lesson-search').addEventListener('input', event => { filters.search = event.target.value; updateFilterSummary(); renderMatrix(); });
   parent.querySelector('#clear-timetable-filters').addEventListener('click', () => { filters = blankFilters(); closeInspector(); renderFilters(); renderMatrix(); });
+}
+
+function updateFilterSummary() {
+  const count = ['cohortId', 'teacherId', 'roomId', 'subjectId', 'periodId', 'day', 'search'].filter(key => filters[key]).length;
+  document.querySelector('#timetable-filter-summary').textContent = count ? `${count} active` : 'All lessons';
 }
 
 function periodLabel(period) {
@@ -377,7 +393,10 @@ function renderMatrix() {
   const props = { rows, rowHeading: filters.teacherId ? 'Teacher' : filters.roomId ? 'Room' : 'Class', weekdays: model.weekdays,
     cellItems, emptyMarkup: () => '<span class="empty-cell">—</span>', periodsForDay, labels: M,
     periodLabel, lessonMarkup, escapeHtml: html, escapeAttribute: html };
-  parent.innerHTML = filters.range === 'DAY'
+  parent.innerHTML = mobileLayout.matches
+    ? renderMobileMatrix({ ...props, weekdays: filters.range === 'DAY' ? [filters.day || model.weekdays[0]] : model.weekdays,
+        periodsForDay: day => periodsForDay(day).filter(p => !filters.periodId || p.id === filters.periodId) })
+    : filters.range === 'DAY'
     ? renderDayMatrix({ ...props, periods: periodsForDay(filters.day || model.weekdays[0]), periodId: filters.periodId })
     : renderWeekMatrix(props);
   const matrix = parent.querySelector('.matrix-wrap'); matrix.tabIndex = 0; matrix.scrollLeft = scroll.left; matrix.scrollTop = scroll.top;

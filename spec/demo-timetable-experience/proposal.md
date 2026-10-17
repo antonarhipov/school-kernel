@@ -36,3 +36,6 @@ Small school is removed from the public catalog.
 This feature supersedes the affected demo-deployment navigation, sample selection, manual editing and browser
 retention contracts. The normal local workspace, existing security/owner boundaries, queue/allowance limits and
 deployment capacity/billing qualification remain governed by their existing features.
+
+On 2026-10-17 the user requested a dedicated compact mobile presentation: filters start collapsed and the complete
+week fits the screen width. Class names and period timings must no longer consume most of the horizontal space.

@@ -17,6 +17,7 @@
 .demo-view-heading { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
 .demo-view-heading h1 { font-size: 1.18rem; letter-spacing: -.02em; margin: 0; overflow-wrap: anywhere; }
 .demo-view-heading p { font: .68rem var(--font-mono, monospace); margin: 3px 0 7px; }
+.demo-filter-disclosure > summary { display: none; }
 .demo-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 7px; padding: 7px 9px; margin-bottom: 7px; border: 1px solid #c2cdc4; border-radius: 3px; background: #f3f7f4; }
 .demo-filters label { margin: 0; gap: 4px; flex: 1 1 115px; min-width: 110px; max-width: 240px; color: #43594e; font-size: .72rem; }
 .demo-filters select, .demo-filters input { width: 100%; height: 31px; font-size: .78rem !important; }
@@ -77,20 +78,46 @@
 .demo-inspector label { display: block; margin-top: 12px; }
 .timetable-demo :focus-visible { outline: 3px solid #b48018; outline-offset: 2px; }
 @media (max-width: 700px) {
-  .timetable-demo header, .timetable-demo main { width: calc(100% - 24px); }
-  .timetable-demo .demo-header { padding-top: 8px; }
-  .demo-heading-row { flex-wrap: wrap; align-items: start; gap: 12px; }
-  .demo-selectors { gap: 10px; flex-basis: 100%; }
+  .timetable-demo header, .timetable-demo main { width: calc(100% - 12px); }
+  .timetable-demo .demo-header { position: relative; padding-top: 8px; }
+  .demo-brand { padding-right: 80px; min-height: 29px; margin-bottom: 3px; gap: 5px; }
+  .demo-brand .eyebrow, .demo-tag { font-size: .58rem; }
+  .demo-heading-row { display: block; }
+  .demo-selectors { gap: 6px; }
   .demo-selectors label { min-width: 0; flex: 1 1 140px; }
-  .demo-selectors select { width: 100%; font-size: .85rem; }
-  .demo-utilities { margin-left: auto; }
-  .demo-utilities > summary { padding: 7px 12px; }
-  .demo-timetable { padding: 10px; }
-  .demo-view-heading h1 { font-size: 1.2rem; }
+  .demo-selectors select { width: 100%; font-size: .75rem; }
+  .demo-utilities > summary { position: absolute; top: 7px; right: 2px; padding: 7px 9px; }
+  .demo-timetable { padding: 7px 4px; }
+  .demo-view-heading { gap: 6px; }
+  .demo-view-heading > div:first-child { min-width: 0; }
+  .demo-view-heading h1 { font-size: 1rem; }
+  .demo-view-heading p { font-size: .6rem; line-height: 1.4; }
+  .demo-range { flex: none; }
+  .demo-range button { min-height: 30px; }
+  .demo-filter-disclosure { margin: 3px 0 5px; border: 1px solid #c2cdc4; border-radius: 3px; background: #f3f7f4; }
+  .demo-filter-disclosure > summary { display: list-item; padding: 8px; cursor: pointer; font-size: .74rem; font-weight: 700; }
+  #timetable-filter-summary { margin-left: 6px; font-size: .68rem; font-weight: 400; color: #43594e; }
   .demo-filters { gap: 8px; }
+  .demo-filter-disclosure .demo-filters { margin: 0; border: 0; border-top: 1px solid #c2cdc4; }
   .demo-filters label { flex-basis: calc(50% - 8px); max-width: none; min-width: 0; }
   .demo-filters .demo-search { flex-basis: 100%; }
-  .demo-timetable .matrix-wrap { max-height: 65vh; }
+  .mobile-matrix-hint { margin: 4px 2px; font-size: .6rem; color: #55645e; }
+  .demo-timetable .mobile-week-wrap { max-height: max(260px, calc(100dvh - 225px)); }
+  .mobile-week-matrix { width: 100%; table-layout: fixed; font-size: .65rem; }
+  .mobile-period-column { width: 22px; }
+  .mobile-week-matrix th, .mobile-week-matrix td { padding: 2px; }
+  .mobile-week-matrix thead th { position: sticky; top: 0; height: 27px; z-index: 3; text-align: center; background: #e5ece6; border-bottom: 1px solid #a6b8ad; font: 700 .65rem var(--font-mono, monospace); }
+  .mobile-week-matrix abbr { text-decoration: none; }
+  .mobile-week-matrix .mobile-population-row th { position: sticky; top: 27px; z-index: 2; padding: 5px 6px; background: #eef3f0; border-top: 2px solid #52665b; overflow-wrap: anywhere; font-size: .72rem; }
+  .mobile-week-matrix .mobile-period { text-align: center; color: #5a6962; background: #f3f7f4; font: 600 .65rem var(--font-mono, monospace); }
+  .mobile-week-matrix td { vertical-align: top; border-left: 1px solid #e4ece7; background: #fff; }
+  .mobile-week-matrix .week-slot { min-height: 36px; padding: 0; }
+  .demo-timetable .mobile-week-matrix .demo-lesson { display: flex; flex-direction: column; align-items: stretch; min-height: 36px; width: 100%; padding: 3px 2px; gap: 2px; line-height: 1.15; }
+  .demo-timetable .mobile-week-matrix .demo-lesson strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; flex: 1 0 auto; max-width: 100%; overflow: hidden; white-space: normal; overflow-wrap: anywhere; font-size: .6rem; }
+  .demo-timetable .mobile-week-matrix .week-room, .demo-timetable .mobile-week-matrix .week-meta,
+  .mobile-week-matrix .demo-tile-room, .mobile-week-matrix .demo-tile-teacher, .mobile-week-matrix .demo-tile-class { display: block; flex: none; align-self: end; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: .5rem var(--font-mono, monospace); }
+  .mobile-week-matrix .demo-conflict-mark { font-size: .48rem; }
+  .mobile-week-matrix .empty-cell { display: block; text-align: center; font-size: .65rem; }
   .demo-utilities[open] > section { inset: 12px; padding: 16px; }
   .demo-inspector { font-size: .85rem; }
   .demo-main { padding-bottom: max(40px, calc(var(--save-bar-height, 0px) + 30px)); }

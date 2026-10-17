@@ -87,8 +87,11 @@ versions are isolated by school and timetable identities; labels are not identit
   recovery feedback and can continue with the bundled schools without silently deleting stored data; continue at step 2.
 - 1b. If browser storage is unavailable, the visitor receives a persistent storage explanation, can inspect samples,
   and is never told unsaved work is durable; continue at step 2.
-- 3a. At a narrow viewport the matrix remains inspectable, selectors/filters remain usable, and lesson details and
-  editing controls fit the viewport; resume at step 3.
+- 3a. At phone widths (320–700 CSS pixels), filters start collapsed behind a disclosure showing whether criteria
+  are active. Opening, applying and collapsing filters preserves their values and visible results. The whole week
+  fits the viewport width, with short weekday headings, class/teacher/room names above their schedule, and a slim
+  numbered period column. Full lesson names and actual timings remain available by opening a lesson. Selectors,
+  lesson details and editing controls fit the viewport; resume at step 3.
 - 4a. If the selected timetable has a draft, its current draft is displayed with its pending/error/warning state;
   continue at step 5.
 - 5a. If a saved school has no timetable, the visitor sees that fact and an editor/generation handoff; end.
@@ -113,6 +116,10 @@ versions are isolated by school and timetable identities; labels are not identit
   selectors and lesson details with visible focus. There are no browser runtime errors in the accepted journey.
 - G6. No visitor changes packaged artifacts or another browser's data. Browser-local persistence never implies
   account-based recovery or cross-device access. Storage write failures do not destroy previous complete values.
+- G7. Mobile Week presents every weekday at once without horizontal timetable scrolling; all lessons remain
+  reachable vertically. Subject colors, visible tiny room labels, highlights, conflicts and inspection remain
+  available. Resizing between mobile and desktop preserves filters, selected timetable, draft and assignment values.
+  Desktop keeps its established compact matrix and expanded filters. No density/zoom switch is introduced.
 
 ### Postconditions
 

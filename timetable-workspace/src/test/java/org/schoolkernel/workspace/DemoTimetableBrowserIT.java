@@ -95,9 +95,13 @@ class DemoTimetableBrowserIT {
                 assertThat(page.locator("#lesson-inspector")).containsText("Year 1A");
                 h.record("UC-1 G1-G3 English addition: its second variant differs, retains the exact class filter, opens English lesson details and makes zero switching requests; all eight variants start no visitor kernel process", page, "03b-english-inspector");
                 page.keyboard().press("Escape");
-                page.setViewportSize(390, 844); page.locator("#cohort-filter").selectOption("");
+                page.setViewportSize(390, 844);
+                page.locator("#timetable-filter-disclosure > summary").click();
+                page.locator("#cohort-filter").selectOption("");
+                page.locator("#timetable-filter-disclosure > summary").click();
                 assertTrue((Boolean)page.evaluate("()=>document.documentElement.scrollWidth<=innerWidth+1"));
-                h.record("UC-1 G5 English addition: the complete Meadowbrook matrix remains internally scrollable at 390px without page overflow", page, "03c-english-mobile");
+                assertTrue((Boolean)page.locator(".matrix-wrap").evaluate("e=>e.scrollWidth<=e.clientWidth+1"));
+                h.record("UC-1 G5/G7 English addition: collapsed filters and the complete five-day Meadowbrook matrix fit 390px without horizontal matrix or page overflow", page, "03c-english-mobile");
                 page.setViewportSize(1440, 1000);
                 assertEquals(startupLaunches, Files.readAllLines(temporary.resolve("launches")).size());
                 page.locator("#school-selector").selectOption("star-wars");

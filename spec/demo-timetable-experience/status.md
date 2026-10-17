@@ -122,3 +122,36 @@ The existing demo-deployment implementation is pre-existing dirty work and is pr
   [Cleanup/deployment ledger](../../output/execution/demo-timetable-experience/local-data-20261017-1/ledger.md),
   [public cleanup journey](../../output/playwright/demo-timetable-experience/public/local-data-20261017-1/ledger.md),
   [verification summary](../../output/execution/demo-timetable-experience/local-data-20261017-1/verification-summary.json).
+
+- 2026-10-17: UC-1 mobile presentation correction is IN_PROGRESS. User requests collapsed filters and the complete
+  week within phone screen width. Base `4911b04`; initial working tree was clean. Implementing demo-only class/lens
+  section headings, slim period numbers, equal weekday columns and preserved lesson inspection/filter state.
+  Previous UC approvals retain their recorded scope. No deployment or commit requested.
+
+- 2026-10-17: Mobile correction is PENDING_WALKTHROUGH against the final packaged presentation. Package succeeds;
+  first real-browser edit/save and generation journeys pass. The earlier exploration journey attempted a now-hidden
+  filter without expanding it; the mobile test also assumed the wrong full-school class count (18 instead of 23).
+  Both harness assumptions are corrected. Screenshot review removed a redundant filter wrapper. Failed evidence
+  remains in `output/playwright/demo-timetable-experience/UC-1/local-1792192418693/` and
+  `output/playwright/demo-timetable-experience/UC-1/mobile-1792192712905/`. Final exploration/mobile journeys are running.
+
+- 2026-10-17: UC-1 mobile correction is APPROVED locally. Final packaged exploration and phone journeys pass
+  (2 tests, 0 failures/errors/skips), with visual screenshot inspection at 320/390px and desktop. Measurements cover
+  320/360/390/430/700px, all eight variants and exact lesson identities: five weekdays, a 22px period column and zero
+  horizontal matrix/page overflow. Collapsed filter state/counts, lenses, highlights, Day/Week, inspector timing,
+  resize and reload pass with no mutating requests or additional kernel launches. Earlier edit/save and generation
+  journeys pass and are reused for unchanged behavior. Private services and contexts are stopped. No deployment
+  or commit performed. [Execution evidence](../../output/execution/demo-timetable-experience/mobile-20261017-1/ledger.md),
+  [final phone walkthrough](../../output/playwright/demo-timetable-experience/UC-1/mobile-1792192912633/ledger.md),
+  [final exploration](../../output/playwright/demo-timetable-experience/UC-1/local-1792192823136/ledger.md).
+
+- 2026-10-17: User authorized publishing the verified mobile correction. It is live as
+  `e8b68aa9-97a3-4e68-80a1-a65658fac2fb` (SUCCESS) at
+  [the public demo](https://demo-smoke-production.up.railway.app/workspace/). Exactly three presentation files
+  differ from the preceding input-hardening deployment. Complete public Chrome phone journey passes at
+  320/360/390/430/700px plus desktop, with all eight variants' exact lesson identities, collapsed filters, full
+  inspector timing, resizing and zero horizontal overflow or mutating requests. All 42 static hashes, eight
+  timetable pairs, health/edge checks and an actual same-image restart pass. Free plan, full service manifest,
+  effective limits and kernel are unchanged. Final test workspaces/processes/queue/cache are zero. UC-1 remains
+  APPROVED; no handoff or commit. [Deployment ledger](../../output/execution/demo-timetable-experience/mobile-deploy-20261017-1/ledger.md),
+  [public mobile journey](../../output/playwright/demo-timetable-experience/public/mobile-20261017-1/ledger.md).
