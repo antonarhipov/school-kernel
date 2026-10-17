@@ -63,7 +63,8 @@ Current feature directories:
   accounts, and a hosted Timefold solver remain later, demand-driven steps.
 - [`school-setup-editor`](school-setup-editor/proposal.md) proposes a fresh structured editor for the current demo:
   grid-first setup, class-owned weekly requirements, explicit teacher eligibility, contextual scheduling rules,
-  autosaved drafts and named school copies. It includes new kernel support for required consecutive lesson pairs;
+  autosaved drafts and named school copies. It includes new kernel support for explicit consecutive lesson blocks
+  of two or more lessons, with consecutive lessons forbidden by default under the new rules;
   real-product definition versioning and activation are future requirements. The earlier authoring feature remains
   a separate historical implementation.
 

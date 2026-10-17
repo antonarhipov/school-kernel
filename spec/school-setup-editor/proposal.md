@@ -12,7 +12,9 @@ The product direction was confirmed on 2026-10-17. This is a fresh proposal for 
 its navigation, lifecycle, full-contract coverage goal and implementation approvals do not define this editor.
 
 The first delivery includes the structured editor and new kernel support for explicitly required consecutive
-lesson pairs. Real-product definition versioning and activation are future requirements described below.
+lesson blocks of two or more lessons. Real-product definition versioning and activation are future requirements
+described below. The consecutive-lesson direction was refined on 2026-10-17: adjacency is forbidden by default,
+not merely discouraged by a spreading preference.
 
 ## Current demo context
 
@@ -127,35 +129,41 @@ not an implicit precedence hierarchy.
 Rooms have names, capacities, capability information and availability. Less common placement controls belong
 beside the relevant subject, class or teaching requirement, under expandable scheduling settings.
 
-## Weekly distribution and explicit consecutive pairs
+## Weekly distribution and explicit consecutive blocks
 
 Ordinary weekly lessons prefer to spread across days. Five Math lessons do not automatically impose a hard
-one-per-day rule. An administrator can explicitly set a supported subject daily maximum when that is required.
+one-per-day rule. However, the same class cannot have consecutive lessons in a subject unless its plan explicitly
+requires that consecutive block. An administrator can separately set a supported subject daily maximum.
 
-Consecutive lessons are an optional constraint on a class's subject plan. No consecutive-pair requirement is
-created automatically. An example is:
+Consecutive lessons are an explicit hard constraint on a class's subject plan. No permission for consecutive
+lessons is created automatically. Examples are:
 
-> 5A → Mathematics → 5 lessons per week → Require exactly 1 consecutive pair per week.
+> 5A → Mathematics → 5 lessons per week → Require exactly 1 block of 2 consecutive lessons per week.
+>
+> 8A → Technology → 4 lessons per week → Require exactly 1 block of 3 consecutive lessons per week.
 
-The rule records its weekly pair count and whether that count is **at least** or **exactly**. A pair consumes two
-of the required weekly lessons; it does not add lessons to the total. The remaining occurrences retain the normal
-spreading preference, subject to the explicit rule and other hard limits.
+Each rule records the block length (an integer of at least two), its weekly block count, and whether that count is
+**at least** or **exactly**. Block length and weekly frequency are separate. A block consumes that many of the
+required weekly lessons; it does not add lessons to the total. Different lengths require separate explicit rules.
+Remaining occurrences retain the normal spreading preference and cannot form an undeclared consecutive block.
 
-The two occurrences use the same teacher and room. With split teaching, the pair belongs to one teacher's
-allocation. Both occurrences must satisfy that teacher's and class's availability, room restrictions, reservation
-permissions and other applicable constraints.
+Every occurrence in a block uses the same teacher and room. With split teaching, a whole block belongs to one
+teacher's allocation. Every occurrence must satisfy that teacher's and class's availability, room restrictions,
+reservation permissions and other applicable constraints.
 
 Consecutive means neighboring teaching periods on the same day. An ordinary break is allowed between them;
-lunch interrupts the pair. Adjacency is based on the declared grid, not on the nearest occupied lessons after
+lunch interrupts the block. Adjacency is based on the declared grid, not on the nearest occupied lessons after
 skipping unavailable or unused periods.
 
-The timetable displays two separate lesson cells with the intervening break visible. It does not merge their
-appearance into a single session spanning the break.
+The timetable displays separate lesson cells with intervening breaks visible. It does not merge their appearance
+into a single session spanning the breaks.
 
-Required pairs are hard constraints. A timetable that violates the configured pair requirement cannot be reported
-as valid. The specification must define pair counting for overlapping runs and multiple required pairs, including
-that one occurrence cannot satisfy two required pairs. It must also define how explicit pair requirements interact
-with the existing spreading preference.
+Blocks are maximal runs of that class's subject in adjacent teaching periods. A run of three is one three-lesson
+block, not a double and a single; a run of four is not two doubles. The run must match an explicitly required
+length, its occurrences must share a teacher and room, and its weekly count must satisfy the corresponding rule.
+One occurrence cannot satisfy multiple blocks. A timetable violating these rules or containing an undeclared
+consecutive block cannot be reported as valid. Required grouping is not itself penalized by the spreading
+preference; extra clustering allowed by an **at least** rule can still affect quality.
 
 ## Review readiness and save a school copy
 
@@ -165,7 +173,7 @@ Regular teaching capacity and reserved capacity must be distinguishable; reserve
 to every subject.
 
 Generation requires complete teacher allocations and a valid kernel definition. Necessary-condition checks can
-identify excessive load, missing room options, incompatible hard rules or a pair that has no available neighboring
+identify excessive load, missing room options, incompatible hard rules or a block with no available consecutive
 slots. Passing those checks does not establish that a complete timetable exists. Soft preferences remain visibly
 different from blocking definition issues and hard constraints.
 
@@ -203,14 +211,16 @@ The editor's blockout presentation must translate correctly and preserve the int
 Subjects have no general availability matrix in the current contract; contextual subject controls must use actual
 supported rules rather than inventing a blocked-period field.
 
-The current kernel has no flexible consecutive-pair requirement. A daily maximum of two neither requires a pair
-nor makes the lessons adjacent, and a series currently supplies a soft spreading preference. Locking two lessons
-to administrator-selected times is not a substitute for letting the solver choose a valid pair.
+The current kernel has no flexible consecutive-block requirement or default hard prohibition of undeclared
+consecutive lessons. A daily maximum neither requires a block nor makes lessons adjacent, and a series currently
+supplies only a soft spreading preference. Locking lessons to administrator-selected times is not a substitute
+for letting the solver choose a valid block.
 
-Consequently, this feature requires a declared kernel representation of pair requirements and valid adjacency,
+Consequently, this feature requires a declared kernel representation of block requirements and valid adjacency,
 solver enforcement, result verification and actionable failure explanations. Lunch boundaries must reach that
 model even though the current solver period value does not carry break or lunch semantics. Existing definitions
-without pair requirements must retain their scheduling behavior through the contract change.
+and saved timetables retain their original versioned scheduling behavior. Adopting the new contract explicitly
+introduces the default prohibition and any declared blocks; a legacy definition is not silently upgraded.
 
 ## Future product definition versions
 
@@ -236,9 +246,9 @@ The primary onboarding journey starts with an empty school. Arbitrary school spr
 import contract. The editor may use the existing JSON route explicitly, but administrators do not need a prepared
 file to begin.
 
-Merged classes, parallel elective streams, triple-period blocks, ordered sequences of different subjects, automatic
-swap chains and a new analytics dashboard remain outside this delivery. Consecutive pairs are the specifically
-agreed kernel extension. This proposal does not require rebuilding post-generation timetable editing.
+Merged classes, parallel elective streams, ordered sequences of different subjects, automatic swap chains and a
+new analytics dashboard remain outside this delivery. Same-subject consecutive blocks of two or more lessons are
+the specifically agreed kernel extension. This proposal does not require rebuilding post-generation timetable editing.
 
 ## Acceptance journeys for the specification
 
@@ -254,16 +264,17 @@ The use-case specification should make these administrator journeys observable:
    marking consistently in authoring, review and the timetable.
 5. Prefer a class home room, restrict a subject to specialist rooms, and require one room for a full class-subject
    allocation. Surface a conflicting hard room requirement instead of overriding another rule silently.
-6. Add an explicit weekly pair rule and generate a timetable that satisfies its count, adjacency, same-teacher and
-   same-room requirements. Exercise both minimum and exact counts, an allowed ordinary break and a prohibited
-   lunch crossing. Show the two lesson cells separately and retain the configured total weekly count.
+6. Generate with consecutive lessons forbidden by default, then explicitly require blocks of two and three lessons
+   and satisfy their lengths, weekly counts, adjacency, same-teacher and same-room requirements. Exercise minimum
+   and exact counts, an allowed ordinary break, a prohibited lunch crossing and rejected undeclared longer runs.
+   Show individual lesson cells and retain the configured total weekly count.
 7. Save a newly named demo school copy without generation, reopen its full authoring information, then generate
    from its saved snapshot. Preserve the source school and existing timetables throughout.
 8. Exercise the explicit JSON boundary and recovery from save or generation failure. Browse and edit a school
    with a realistic number of teachers and classes, as well as the small school created from empty.
 
 Specification should separate the kernel contract and verification work from editor journeys so a visual control
-cannot be accepted as evidence that required pairs are enforced. Detailed pair-counting scenarios, imported-data
+cannot be accepted as evidence that required blocks are enforced. Detailed block-counting scenarios, imported-data
 preservation, grid-change effects and draft recovery belong in those use cases before implementation.
 
 ## Source references
