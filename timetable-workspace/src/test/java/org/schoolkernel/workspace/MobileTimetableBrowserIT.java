@@ -75,12 +75,14 @@ class MobileTimetableBrowserIT {
                 assertThat(p.locator("#inspector-period")).hasValue(period);
                 h.record("UC-1 main 3-4/G7: collapsed active filters and highlights survive variant switch; tapping shows exact timing; phone/desktop/phone resize preserves timetable, filters and selected lesson", p, "04-inspector-and-resize");
                 p.keyboard().press("Escape");
-                p.locator("[data-range=DAY]").click();
+                p.locator("#timetable-filter-disclosure > summary").click();
+                p.locator("#day-filter").selectOption("MONDAY");
+                p.locator("#timetable-filter-disclosure > summary").click();
                 assertPhoneGeometry(p, 1);
                 assertNull(p.locator("#timetable-filter-disclosure").getAttribute("open"));
-                p.locator("[data-range=WEEK]").click(); assertPhoneGeometry(p, 5);
-
                 p.locator("#timetable-filter-disclosure > summary").click();
+                p.locator("#day-filter").selectOption(""); assertPhoneGeometry(p, 5);
+
                 p.locator("#clear-timetable-filters").click();
                 assertThat(p.locator("#timetable-filter-summary")).hasText("All lessons");
                 String teacher = p.locator("#teacher-filter option").nth(1).getAttribute("value");
@@ -93,7 +95,7 @@ class MobileTimetableBrowserIT {
                 assertEquals("ROOM", p.locator(".mobile-week-matrix tbody").getAttribute("data-row-kind"));
                 assertPhoneGeometry(p, 5);
                 p.locator("#timetable-filter-disclosure > summary").click();
-                h.record("UC-1 main 3/G7: Day/Week remain usable with filters collapsed; Clear restores all lessons; teacher and room lenses use full-width population headings and preserve five-day geometry", p, "05-room-lens");
+                h.record("UC-1 main 3/G7: Day dropdown switches between a single day and whole week; Clear restores all lessons; teacher and room lenses use full-width population headings and preserve five-day geometry", p, "05-room-lens");
 
                 Map<String, Integer> counts = Map.of("full", 520, "two-class", 56, "star-wars", 540, "english", 614);
                 for (String school : List.of("two-class", "star-wars", "english", "full")) {

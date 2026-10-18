@@ -1,4 +1,5 @@
 import { M } from './messages.js';
+import { resolvePdfScope } from './pdf-scope.js';
 import { makeAcceptedModel } from './accepted-model.js';
 import { renderWeekMatrix } from './week-renderer.js';
 import { renderDayMatrix } from './day-renderer.js';
@@ -20,6 +21,7 @@ const reviews = new Map(), timers = new Map();
 const fields = ['teacherId', 'roomId', 'periodId'];
 let activeGeneration = null, config = { lessonThreshold: 200, quickSeconds: 5, thoroughSeconds: 60 };
 let setupEditor;
+let pdfBusy = false;
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
 
@@ -40,7 +42,12 @@ export async function mountTimetableDemo() {
     <p id="generation-indicator" class="notice" role="status" hidden></p>
     <section class="demo-timetable current-mode compact-density" aria-label="Timetable">
       <button id="school-setup-entry" class="school-setup-entry" type="button" disabled>School setup</button>
-      <div class="demo-view-heading"><div><h1 id="timetable-title">Timetable</h1><p id="timetable-description" class="muted">Loading verified examples…</p></div><button id="resume-timetable-draft" class="secondary" type="button" hidden>Resume saved changes</button><div id="timetable-range"></div></div>
+      <div class="demo-view-heading"><div><h1 id="timetable-title">Timetable</h1><p id="timetable-description" class="muted">Loading verified examples…</p></div><button id="resume-timetable-draft" class="secondary" type="button" hidden>Resume saved changes</button>
+        <button id="export-timetable-pdf" class="secondary pdf-export-button" type="button" disabled aria-label="Export to PDF" title="Export to PDF">
+          <svg viewBox="0 0 24 28" aria-hidden="true" focusable="false"><path d="M14 1.5H4a2 2 0 0 0-2 2v21a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-15Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 1.5v8h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><text x="12" y="21" text-anchor="middle" fill="currentColor" font-family="sans-serif" font-size="7" font-weight="700">PDF</text></svg>
+        </button>
+      </div>
+      <p id="pdf-export-status" class="muted" role="status" hidden></p>
       <div id="timetable-filters"></div>
       <div id="draft-feedback" hidden></div>
       <div id="timetable-matrix" aria-busy="true"></div>
@@ -147,6 +154,7 @@ function candidate(timetable = currentTimetable(), draft = currentDraft()) {
 }
 
 function bindShell() {
+  document.querySelector('#export-timetable-pdf').addEventListener('click', exportPdf);
   const setupEntry = document.querySelector('#school-setup-entry');
   setupEditor = createSetupEditor({ repository, school: currentSchool, storage: browserStorage, entry: setupEntry, build:()=>build, generationInfo:id=>schools.get(id)?.generation, onGenerate:(id,effort)=>{const s=schools.get(id);if(s){s.effort=effort;generateTimetable(id);}}, onCancel:cancelGeneration, knownSchools:()=>[...schools.values()], onSaved(school){schools.set(school.id,{...school,timetables:new Map()});selectedSchool=school.id;selectedTimetable=undefined;filters=blankFilters();closeInspector();notice='School copy saved. No timetable yet; generation is an explicit action.';render();}, onCleanup(){document.querySelector('#delete-local-data-error').hidden=true;document.querySelector('#delete-local-data-dialog').showModal();} });
   document.querySelector('#resume-timetable-draft').addEventListener('click', () => { showSavedDraft = true; render(); });
@@ -266,6 +274,7 @@ function render() {
   document.querySelector('#timetable-title').textContent = timetable?.name || school.name;
   const baseline = candidate();
   model = baseline ? makeAcceptedModel(baseline) : null;
+  document.querySelector('#export-timetable-pdf').disabled = !model || pdfBusy;
   document.querySelector('#timetable-description').textContent = model
     ? `${school.name} · ${model.definition.cohorts.length} classes · ${model.assignments.length} lessons per week`
     : 'This school has no timetable yet. Open School setup → Review on desktop to generate a timetable.';
@@ -273,13 +282,35 @@ function render() {
   document.querySelector('#timetable-matrix').setAttribute('aria-busy', 'false');
 }
 
+async function exportPdf() {
+  if (!model || pdfBusy) return;
+  const timetable = currentTimetable();
+  // Capture the selected schedule and filters before asynchronous PDF resources load.
+  const options = { model, filters: clone(filters), schoolName: currentSchool().name,
+    timetableName: timetable.name, draft: !!currentDraft(),
+    authoring: clone(timetable.authoring ?? timetable.provenance?.source?.authoring) };
+  const { type, entityId } = resolvePdfScope(options.filters);
+  const entity = options.model.maps[type === 'teacher' ? 'teachers' : 'cohorts'].get(entityId);
+  const scope = type === 'school' ? 'full school' : `${type} ${entity?.displayName || entityId}`;
+  const button = document.querySelector('#export-timetable-pdf'), status = document.querySelector('#pdf-export-status');
+  pdfBusy = true; button.disabled = true; button.setAttribute('aria-busy', 'true');
+  status.hidden = false; status.className = 'muted'; status.textContent = `Preparing ${options.timetableName} / ${scope} / whole week…`;
+  try {
+    const { downloadTimetablePdf } = await import('./timetable-pdf.js');
+    await downloadTimetablePdf(options);
+    status.textContent = `PDF downloaded: ${options.timetableName} / ${scope}${options.draft ? ' - labelled as an unpublished draft' : ''}.`;
+  } catch (error) {
+    status.className = 'demo-error'; status.textContent = error.message || 'The PDF could not be created. Please try again.';
+  } finally {
+    pdfBusy = false; button.disabled = !model; button.setAttribute('aria-busy', 'false');
+  }
+}
+
 function renderFilters() {
   const parent = document.querySelector('#timetable-filters');
-  const range = document.querySelector('#timetable-range');
-  if (!model) { parent.innerHTML = ''; range.innerHTML = ''; return; }
+  if (!model) { parent.innerHTML = ''; return; }
   const expanded = parent.querySelector('details')?.open ?? !mobileLayout.matches;
   const select = (id, title, collection, key) => `<label>${title}<select id="${id}" data-filter="${key}">${option('', `All ${title.toLowerCase()}`, filters[key])}${collection.map(e => option(e.id, e.displayName || e.id, filters[key])).join('')}</select></label>`;
-  range.innerHTML = `<div class="demo-range" role="group" aria-label="Timetable range"><button type="button" data-range="WEEK" aria-pressed="${filters.range === 'WEEK'}">Week</button><button type="button" data-range="DAY" aria-pressed="${filters.range === 'DAY'}">Day</button></div>`;
   parent.innerHTML = `<details id="timetable-filter-disclosure" class="demo-filter-disclosure"${expanded ? ' open' : ''}><summary>Filters <span id="timetable-filter-summary"></span></summary><div class="demo-filters">
     <label>Day<select id="day-filter" data-filter="day">${option('', 'Whole week', filters.day)}${model.weekdays.map(day => option(day, M.days[day] || day, filters.day)).join('')}</select></label>
     ${select('cohort-filter', 'Classes', model.definition.cohorts, 'cohortId')}
@@ -296,10 +327,6 @@ function renderFilters() {
     if (key === 'teacherId' && filters.teacherId) filters.roomId = '';
     if (key === 'roomId' && filters.roomId) filters.teacherId = '';
     if (key === 'periodId' && filters.periodId) { filters.range = 'DAY'; filters.day = model.maps.periods.get(filters.periodId)?.weekday || model.weekdays[0]; }
-    closeInspector(); renderFilters(); renderMatrix();
-  }));
-  range.querySelectorAll('[data-range]').forEach(button => button.addEventListener('click', () => {
-    filters.range = button.dataset.range; filters.day = filters.range === 'DAY' ? filters.day || model.weekdays[0] : '';
     closeInspector(); renderFilters(); renderMatrix();
   }));
   parent.querySelector('#lesson-search').addEventListener('input', event => { filters.search = event.target.value; updateFilterSummary(); renderMatrix(); });

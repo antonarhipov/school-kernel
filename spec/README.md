@@ -16,6 +16,8 @@ spec/<feature>/
 
 Current feature directories:
 
+- [`timetable-pdf-export`](timetable-pdf-export/spec.md) specifies readable, browser-local whole-week PDFs from the selected school and schedule, with class taking priority over teacher and full-school exports combining all class weekly schedules.
+
 - [`kernel-v1`](kernel-v1/) contains the approved headless scheduling and replanning runtime.
 - [`timetable-workspace`](timetable-workspace/) contains the approved first administrator-facing product slice.
 - [`ux-evolution`](ux-evolution/) contains the non-normative, forward-looking timetable-workspace UX
