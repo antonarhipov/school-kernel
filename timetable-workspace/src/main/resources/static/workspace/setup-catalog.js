@@ -1,4 +1,4 @@
-import { teacherIssues, teacherFields } from './setup-teachers.js';
+import { teacherIssues, teacherFields, classesFor } from './setup-teachers.js';
 import { roomIssues, roomFields, subjectRoomContent } from './setup-rooms.js';
 const clone = value => structuredClone(value);
 const uid = () => crypto.randomUUID();
@@ -113,7 +113,7 @@ export function createCatalogActions({ getDraft, getKey, commit, contextOnly, no
         row.qualifiedSubjectIds=row.qualifiedSubjectIds.filter(s=>s!==id);if(event.target.checked)row.qualifiedSubjectIds.push(id);
       }else{
         const subjectId=event.target.dataset.teacherSubject,classId=event.target.dataset.teacherClass;
-        row.eligibleClassIdsBySubject??={};row.eligibleClassIdsBySubject[subjectId]=(row.eligibleClassIdsBySubject[subjectId]??[]).filter(c=>c!==classId);
+        row.eligibleClassIdsBySubject={...row.eligibleClassIdsBySubject,[subjectId]:classesFor(row,subjectId).filter(c=>c!==classId)};
         if(event.target.checked)row.eligibleClassIdsBySubject[subjectId].push(classId);
         const summary=event.target.closest('details').querySelector('summary');summary.textContent=`Eligible classes for ${display(draft.subjects.find(s=>s.id===subjectId))} (${row.eligibleClassIdsBySubject[subjectId].length})`;
       }

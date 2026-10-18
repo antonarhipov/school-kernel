@@ -1,4 +1,4 @@
-import { eligible, qualification, nameOf } from './setup-teachers.js';
+import { eligible, qualification, nameOf, classesFor } from './setup-teachers.js';
 import { curriculumContent } from './setup-curriculum.js';
 import { rowRoomContent, roomIssues } from './setup-rooms.js';
 import { blockContent, blockIssues } from './setup-blocks.js';
@@ -137,7 +137,7 @@ export function createPlanActions({getDraft,commit,contextOnly,notify,confirm,ht
         if(s.curatorLesson&&c.curatorTeacherId!==t.id){notify('This curator lesson requires the nominated class curator. Eligibility cannot override that hard rule.');return true;}
         const needsQualification=!qualification(draft,t,s.id,c.id);
         confirm('Allow teacher for this class?',`Allow ${nameOf(t)} to teach ${nameOf(s)} in ${nameOf(c)}? ${needsQualification?'This also adds the subject qualification.':'Existing qualification, including own-class curator qualification, is kept.'} No teaching is allocated by this permission.`,()=>{
-          const next=clone(getDraft()),teacher=next.teachers.find(t=>t.id===teacherId);teacher.eligibleClassIdsBySubject??={};teacher.eligibleClassIdsBySubject[s.id]??=[];
+          const next=clone(getDraft()),teacher=next.teachers.find(t=>t.id===teacherId);teacher.eligibleClassIdsBySubject={...teacher.eligibleClassIdsBySubject,[s.id]:[...classesFor(teacher,s.id)]};
           if(!teacher.eligibleClassIdsBySubject[s.id].includes(c.id))teacher.eligibleClassIdsBySubject[s.id].push(c.id);
           if(needsQualification){teacher.qualifiedSubjectIds??=[];if(!teacher.qualifiedSubjectIds.includes(s.id))teacher.qualifiedSubjectIds.push(s.id);}commit(next);
         },'Allow teacher');return true;

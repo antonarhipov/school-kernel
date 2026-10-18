@@ -1,4 +1,5 @@
-import { sections, entityKeys, emptyDraft, sourceDraft, readableDraft, draftIssues, copy, identity } from './setup-model.js';
+import { schoolDocument, parseSchoolDocument, applySchoolDocument, locatedDraftIssues, schoolDocumentSchema } from './school-document.js';
+import { sections, entityKeys, emptyDraft, sourceDraft, readableDraft, copy, identity } from './setup-model.js';
 import { storageKey, cleanupEpochKey } from './timetable-storage.js';
 import { gridContent, createGridActions } from './setup-grid.js';
 import { catalogDetail, createCatalogActions } from './setup-catalog.js';
@@ -8,15 +9,15 @@ import { availabilityContent, createAvailabilityActions } from './setup-availabi
 import { lunchContent, createLunchActions } from './setup-lunch.js';
 import { createRoomActions, configureRoomLimits } from './setup-rooms.js';
 import { createSchoolSave } from './setup-save.js';
-import { mapDefinition, createExchange } from './setup-exchange.js';
+import { mapDefinition, createExchange, downloadDocument } from './setup-exchange.js';
 import { reviewContent, createReadiness } from './setup-review.js';
 import { demoRequest } from './demo-transport.js';
 import { createBlockActions } from './setup-blocks.js';
 const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-export function createSetupEditor({ repository, school, storage, entry, build = () => null, getAdvanced = () => '', setAdvanced = () => {}, knownSchools = () => [], onSaved = () => {}, generationInfo = () => null, onGenerate = () => {}, onCancel = () => {} }) {
-  let budgets={quickSeconds:5,thoroughSeconds:60};
-  let draft, timer, durability = 'Pending', message = '', recovery, disposed = false, contextSchoolId, panelMotion;
+export function createSetupEditor({ repository, school, storage, entry, build = () => null, knownSchools = () => [], onSaved = () => {}, generationInfo = () => null, onGenerate = () => {}, onCancel = () => {}, onCleanup = () => {} }) {
+  let budgets={quickSeconds:5,thoroughSeconds:60,lessonThreshold:200};
+  let draft, timer, durability = 'Pending', message = '', storageError = '', recovery, disposed = false, contextSchoolId, panelMotion, jsonFeedback = '';
   const dialog = document.createElement('dialog');
   dialog.id = 'school-setup'; dialog.className = 'school-setup';
   dialog.setAttribute('aria-labelledby', 'setup-title');
@@ -54,15 +55,15 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   const rooms = createRoomActions({getDraft:()=>draft,protectedReasons,
     commit(next,render=true){draft=next;changed({render});},notify(text){message=text;status();}
   });
-  const blocks = createBlockActions({getDraft:()=>draft,protectedReasons,html,allIssues:draftIssues,
+  const blocks = createBlockActions({getDraft:()=>draft,protectedReasons,html,allIssues:locatedDraftIssues,
     commit(next,render=true){draft=next;changed({render});},notify(text){message=text;status();},confirm:confirmScope
   });
   const readiness = createReadiness({getDraft:()=>draft,build,request:demoRequest,render:renderDraft,flush,isDisposed:()=>disposed});
   const schoolSave=createSchoolSave({getDraft:()=>draft,repository,readiness,knownSchools,build,isDisposed:()=>disposed,cancelAutosave(){clearTimeout(timer);},notify(text){message=text;status();},onSaved(value){clearTimeout(timer);draft=null;dialog.close();onSaved(value);entry.focus();}});
-  const exchange=createExchange({getDraft:()=>draft,activate,flush,notify(text){message=text;status();},confirm:confirmScope,request:demoRequest,build,getAdvanced,setAdvanced,isDisposed:()=>disposed});
+  const exchange=createExchange({getDraft:()=>draft,activate,flush,notify(text){message=text;status();},confirm:confirmScope,request:demoRequest,build,isDisposed:()=>disposed});
   const all = () => Object.values(repository.state().setupDrafts ?? {}).filter(readableDraft);
   const rawNotice = () => Object.values(repository.state().setupDrafts ?? {}).some(d => !readableDraft(d))
-    ? 'Some setup drafts have unreadable or unsupported authoring data. Their raw values are retained. Choose readable work, start empty, or use local cleanup in Utilities.' : '';
+    ? 'Some setup drafts have unreadable or unsupported authoring data. Their raw values are retained. Choose readable work, start empty, or use Clear local demo data in Advanced.' : '';
   function status() {
     const validation = dialog.querySelector('#setup-validation');if(validation)validation.textContent=draft?.validation??'';
     const saveState=dialog.querySelector('.setup-save-state');
@@ -70,7 +71,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     const node = dialog.querySelector('#setup-durability');
     if (node) node.textContent = durability;
     const notice = dialog.querySelector('#setup-message');
-    if (notice) notice.textContent = message || rawNotice();
+    if (notice) notice.textContent = storageError || message || (draft?.advanced?.dirty ? 'Unapplied JSON changes. Open Advanced to apply or discard them before editing forms.' : rawNotice());
     const retry = dialog.querySelector('#setup-retry');
     if (retry) retry.hidden = !['Storage conflict', 'Only on this page'].includes(durability);
     const recover = dialog.querySelector('#setup-recover');
@@ -85,28 +86,30 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
         state.setupDrafts ??= {}; state.setupDrafts[draft.id] = copy(draft);
         state.setupSelection ??= {}; state.setupSelection[contextSchoolId ?? school().id] = draft.id;
       });
-      durability = 'Saved in this browser'; message = '';
+      durability = 'Saved in this browser'; storageError = '';
       status(); return true;
     } catch (error) {
       durability = error.message.startsWith('Another tab') ? 'Storage conflict' : 'Only on this page';
-      message = `${error.message} Keep this page open. Retry saving when storage is available, or download recovery to keep the full working snapshot.`;
+      storageError = `${error.message} Keep this page open. Retry saving when storage is available, or download recovery to keep the full working snapshot.`;
       status(); return false;
     }
   }
   function changed({ content = true, render = false } = {}) {
-    if (content) { draft.revision++; draft.validation = draft.retained ? 'Unchecked' : 'Incomplete'; delete draft.check; delete draft.checkIssues; }
+    if (content) { message = ''; draft.revision++; draft.validation = draft.retained ? 'Unchecked' : 'Incomplete'; delete draft.check; delete draft.checkIssues; }
     durability = 'Pending'; status(); clearTimeout(timer); timer = setTimeout(flush, 250);
-    const issues = draftIssues(draft);
+    const issues = locatedDraftIssues(draft);
     for (const button of dialog.querySelectorAll('[data-section]')) {
       const count = button.querySelector('[aria-label="issues"]');
       if (count) { const n=issues.filter(i => i.section === button.dataset.section).length; count.textContent=n; count.hidden=!n; }
     }
+    if (content && !draft.retained && !draft.advanced?.dirty) { const input=dialog.querySelector('#school-definition-json'); if(input)input.value=JSON.stringify(schoolDocument(draft),null,2); }
     if (render) renderDraft();
   }
   function activate(value, fresh = false) {
     dialog.querySelector("#setup-tools")?.removeAttribute("open");
     draft = value;
     // Old matching checks need current build verification in UC-14, never trust a restored label alone.
+    jsonFeedback = ''; message = ''; storageError = '';
     if (draft.validation === 'Ready') { draft.validation = 'Unchecked'; delete draft.check; delete draft.checkIssues; }
     durability = fresh ? 'Pending' : 'Saved in this browser';
     renderDraft(); if (fresh) flush(); dialog.querySelector('#setup-name').focus();
@@ -121,7 +124,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   function choose(sourceId) {
     const candidates = all().filter(d => d.source?.id === sourceId);
     const last = all().find(d => d.id === repository.state().setupSelection?.[sourceId]);
-    if (last && !last.source) { activate(last); return; }
+    if (last) { activate(last); return; }
     if (!candidates.length) { startScreen(); return; }
     if (candidates.length === 1) { activate(candidates[0]); return; }
     draft = null;
@@ -133,7 +136,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     const openGridDetails=[...dialog.querySelectorAll('#setup-content details[open]')].map(n=>n.id).filter(Boolean);
     const scrollTop=dialog.querySelector('#setup-content')?.scrollTop ?? 0;
     const openPlanSettings=new Set([...dialog.querySelectorAll('[data-plan] > .setup-row-settings[open]')].map(n=>n.closest('[data-plan]').dataset.plan));
-    const issues = [...draftIssues(draft),...(draft.checkIssues??[])], source = draft.source;
+    const issues = [...locatedDraftIssues(draft),...(draft.checkIssues??[])], source = draft.source;
     const descriptions = {
       'Timetable grid': 'Arrange the school week',
       Subjects: 'Add the subjects taught at your school. Extra scheduling rules are optional.',
@@ -150,16 +153,16 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
         const count=issues.filter(i=>i.section===section).length;
         return `<button data-section="${section}" ${draft.section === section ? 'aria-current="page"' : ''}><span class="setup-step-number" aria-hidden="true">${index+1} ·</span><span>${section}</span><span class="setup-issue-count" aria-label="issues" ${count?'':'hidden'}>${count}</span></button>`;
       }).join('')}
-      </nav><div class="setup-school-actions"><button id="setup-new" class="secondary">+ New school</button><button id="setup-copy-source" class="secondary">Copy selected school</button></div><details id="setup-tools" class="setup-tools" ${toolsOpen?'open':''}><summary>Draft &amp; data tools</summary><div class="setup-tools-panel">
+      </nav><div class="setup-school-actions"><button id="setup-new" class="secondary">+ New school</button><button id="setup-copy-source" class="secondary">Copy selected school</button></div></aside>
+      <div class="setup-work-area"><div class="setup-notice"><p id="setup-message" role="status"></p><div class="setup-actions"><button id="setup-retry" class="secondary" hidden>Retry saving draft</button><button id="setup-recover" class="secondary" hidden>Recover storage conflict…</button></div></div>
+      <section id="setup-content" aria-labelledby="setup-section-title"><div class="setup-section-heading"><h2 id="setup-section-title" tabindex="-1">${draft.section}</h2><p class="setup-section-intro">${descriptions[draft.section]}</p></div><details id="setup-tools" class="setup-tools" ${toolsOpen?'open':''}><summary>Advanced</summary><div class="setup-tools-panel">${advancedContent()}
       <p id="setup-source">${source ? `Source: ${html(source.name)}. Uses the saved school definition; timetable overrides are separate.` : 'New school · independent unfinished draft'}${draft.recoveredFrom ? ` · Recovered from ${html(draft.recoveredFrom)}` : ''}</p>
       <label>Unfinished setup<select id="setup-draft-selector"><option value="${html(draft.id)}">${html(draft.name || 'Untitled school')} · Current draft</option>${all().filter(d => d.id !== draft.id).map(d => `<option value="${html(d.id)}">${html(d.name || 'Untitled school')} · ${html(d.source?.name || 'New school')} · ${d.recoveredFrom ? 'Recovered' : 'Draft'}</option>`).join('')}</select></label>
       <div class="setup-actions">
-      <label>Import JSON or recovery<input id="setup-import-file" type="file" accept=".json,application/json"></label><button id="setup-import-advanced" class="secondary">Import advanced buffer…</button><button id="setup-export" class="secondary">Export kernel JSON…</button><button id="setup-transfer" class="secondary">Transfer to advanced buffer…</button><button id="setup-download" class="secondary">Download recovery</button><button id="setup-discard" class="secondary">Discard this draft…</button></div>
-      <small>Draft ${html(draft.id)} · Stored only in this browser on this device.</small></div></details></aside>
-      <div class="setup-work-area"><div class="setup-notice"><p id="setup-message" role="status"></p><div class="setup-actions"><button id="setup-retry" class="secondary" hidden>Retry saving draft</button><button id="setup-recover" class="secondary" hidden>Recover storage conflict…</button></div></div>
-      <section id="setup-content" aria-labelledby="setup-section-title"><div class="setup-section-heading"><h2 id="setup-section-title" tabindex="-1">${draft.section}</h2><p class="setup-section-intro">${descriptions[draft.section]}</p></div>${sectionContent()}</section></div></div>
+      <label>Import school JSON or recovery<input id="setup-import-file" type="file" accept=".json,application/json"></label><button id="setup-export" class="secondary">Export school JSON</button><button id="setup-schema" class="secondary">Download JSON Schema</button><button id="setup-download" class="secondary">Download recovery</button><button id="setup-discard" class="secondary">Discard this draft…</button></div>
+      <div class="setup-local-data"><h3>Local demo data</h3><p>Clear local schools, timetables, candidates and unfinished work in this browser. Bundled schools remain available. This cannot be undone.</p><button id="delete-local-data" class="secondary">Clear local demo data…</button></div><small>Draft ${html(draft.id)} · Stored only in this browser on this device.</small></div></details>${sectionContent()}</section></div></div>
       <footer class="setup-footer"><span>Working draft · ${source?'Original school preserved':'Saved only in this browser'}</span><div class="setup-actions"><button data-back-timetable class="secondary">Close setup</button></div></footer>`;
-    status();refreshGeneration();
+    status();refreshGeneration();lockForms();
     for(const id of openGridDetails){const node=dialog.querySelector(`#${id}`);if(node)node.open=true;}
     for(const node of dialog.querySelectorAll('.setup-source-preview input, .setup-source-preview select, .setup-source-preview button:not([data-grid-day]):not([data-overview-day]), .setup-source-preview summary')) { if(node.tagName==='SUMMARY')continue;node.disabled=true; }
     dialog.querySelector("#setup-content").scrollTop=scrollTop;
@@ -172,6 +175,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
       if(draft.section==='Timetable grid') {
         try {const mapped=mapDefinition(draft.retained,draft.source).draft;mapped.pendingInput=draft.pendingInput;preview=`<div class="setup-source-preview">${gridContent(mapped,html)}</div>`;} catch {preview='<p>This source cannot be shown as a structured grid. Its original definition is retained.</p>';}
       }
+      if(draft.section==='Review')return '<p>Save a new copy to use setup edits.</p>'+generationContent();
       return `<div class="setup-source-notice"><p>Preview of ${html(draft.source?.name)}. Review the conversion to edit your own copy.</p><button id="setup-convert" class="secondary">Edit this copy…</button></div>${preview}${catalogContent()}`;
     }
     if (entityKeys[draft.section]) return catalogContent();
@@ -181,9 +185,18 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   function generationContent(){
     const source=knownSchools().find(s=>s.id===draft.source?.id&&!s.bundled);
     if(!source)return '<p>Save a new school copy before generating. Bundled and unsaved setup do not start a solve.</p>';
-    return `<fieldset><legend>Generate for saved school: ${html(source.name)}</legend><p>Uses the immutable saved definition, including its original grid. This successor setup draft is independent; save another school copy to use its edits. Search failure is not proof of impossibility.</p><label>Search effort<select id="setup-effort"><option value="QUICK">Quick (${budgets.quickSeconds}s)</option><option value="THOROUGH">Thorough (${budgets.thoroughSeconds}s)</option></select></label><p>Budgets cover construction and search. Queueing, startup and checking add time. More time guarantees nothing.</p><button id="setup-start-generation">Generate saved school timetable</button><button id="setup-cancel-generation" class="secondary">Cancel generation</button><p id="setup-generation-status" role="status"></p></fieldset>`;
+    const effort=source.effort??(source.definition.lessons.length>budgets.lessonThreshold?'THOROUGH':'QUICK');
+    return `<fieldset><legend>Generate for saved school: ${html(source.name)}</legend><p>Uses the immutable saved definition, including its original grid. This successor setup draft is independent; save another school copy to use its edits. Search failure is not proof of impossibility.</p><label>Search effort<select id="setup-effort"><option value="QUICK" ${effort==='QUICK'?'selected':''}>Quick (${budgets.quickSeconds}s)</option><option value="THOROUGH" ${effort==='THOROUGH'?'selected':''}>Thorough (${budgets.thoroughSeconds}s)</option></select></label><p>Budgets cover construction and search. Queueing, startup and checking add time. More time guarantees nothing.</p><button id="setup-start-generation">Generate saved school timetable</button><button id="setup-cancel-generation" class="secondary">Cancel generation</button><p id="setup-generation-status" role="status"></p></fieldset>`;
   }
-  function refreshGeneration(){const node=dialog.querySelector('#setup-generation-status');if(!node)return;const info=generationInfo(draft?.source?.id);node.textContent=info?.message??'Ready for an explicit generation request.';const active=['PREPARING','QUEUED','RUNNING','CHECKING_RESULT'].includes(info?.status);dialog.querySelector('#setup-start-generation').disabled=active||info?.status==='CANDIDATE';dialog.querySelector('#setup-cancel-generation').hidden=!active;}
+  function refreshGeneration(){
+    const node=dialog.querySelector('#setup-generation-status');if(!node)return;
+    const info=generationInfo(draft?.source?.id),running=knownSchools().find(s=>['PREPARING','QUEUED','RUNNING','CHECKING_RESULT'].includes(s.generation?.status));
+    node.textContent=running&&running.id!==draft?.source?.id?`Generation is active for ${running.name}. Use the timetable progress indicator to view it.`:info?.message??'Ready for an explicit generation request.';
+    const active=['PREPARING','QUEUED','RUNNING','CHECKING_RESULT'].includes(info?.status);
+    dialog.querySelector('#setup-start-generation').disabled=!!running||info?.status==='CANDIDATE';
+    dialog.querySelector('#setup-cancel-generation').hidden=!active;
+    dialog.querySelector('#setup-effort').disabled=!!running;
+  }
   function catalogContent() {
     const key = entityKeys[draft.section]; if (!key) return '';
     const query = draft.searches?.[key] ?? '', focused = draft.focused?.[key];
@@ -196,6 +209,54 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
       <p id="setup-record-count">${records.length} of ${draft[key].length} records</p></div><div class="setup-record-browser"><div class="setup-record-list">${records.map(r => `<button data-record="${html(r.id)}" ${r.id === focused ? 'aria-current="true"' : ''}>${html(r.name ?? r.displayName ?? '(unnamed)')} </button>`).join('') || '<p>No matching records.</p>'}</div>
       <div id="setup-record-detail">${!draft.retained && ['subjects','classes','teachers','rooms'].includes(key) ? catalogDetail(draft, key, selected, html) : selected ? `<h3>${html(selected.name ?? selected.displayName)}</h3><pre>${html(JSON.stringify(selected, null, 2))}</pre>` : '<p>Select a record to inspect its retained values.</p>'}</div></div>`;
   }
+  function advancedContent() {
+    let text = draft.advanced?.text ?? '';
+    if (!draft.retained && !draft.advanced) text = JSON.stringify(schoolDocument(draft), null, 2);
+    return `<div class="setup-json-editor"><h3>Advanced JSON</h3>
+      <p>${draft.retained ? 'Review and accept the source conversion to edit its complete school document.' : 'Edit the same school as the forms. Apply changes before returning to form editing. Incomplete work can remain a draft.'}</p>
+      ${!draft.retained ? `<label for="school-definition-json">Complete school JSON</label><textarea id="school-definition-json" spellcheck="false" autocomplete="off">${html(text)}</textarea>
+      <div class="setup-actions"><button id="setup-apply-json">Apply to setup</button><button id="setup-discard-json" class="secondary" ${draft.advanced?.dirty?'':'disabled'}>Discard JSON changes…</button><button id="setup-pasted-import" class="secondary" ${draft.advanced?.dirty?'':'disabled'}>Import pasted legacy JSON…</button></div>` : ''}
+      <p id="setup-json-status" role="status">${html(jsonFeedback || (draft.advanced?.dirty ? 'Unapplied JSON changes. Apply or discard them before editing forms.' : 'Forms and JSON use the same school document.'))}</p>
+      ${repository.state().editor?.text ? `<details><summary>Previous JSON editor text</summary><p>Unfinished text from the previous editor is retained. ${html(repository.state().editor.name??'')}</p><label>Previous JSON buffer<textarea id="setup-previous-json" readonly>${html(repository.state().editor.text)}</textarea></label><div class="setup-actions"><button id="setup-legacy-buffer" class="secondary">Import previous JSON buffer…</button><button id="setup-download-legacy" class="secondary">Download previous JSON text</button></div></details>` : ''}</div>`;
+  }
+  function lockForms() {
+    const pending = !!draft?.advanced?.dirty;
+    for (const node of dialog.querySelectorAll('#setup-name, #setup-content input, #setup-content select, #setup-content textarea')) {
+      if (node.closest('#setup-tools') || node.id==='setup-effort') continue;
+      if (pending && !node.disabled) { node.dataset.jsonLocked = 'true'; node.disabled = true; }
+      else if (!pending && node.dataset.jsonLocked) { node.disabled = false; delete node.dataset.jsonLocked; }
+    }
+    for (const id of ['setup-discard-json','setup-pasted-import']) { const button = dialog.querySelector('#'+id); if(button)button.disabled = !pending; }
+    if (pending && dialog.querySelector('#setup-json-status') && !jsonFeedback) dialog.querySelector('#setup-json-status').textContent = 'Unapplied JSON changes. Apply or discard them before editing forms.';
+  }
+  function applyJson() {
+    try {
+      const text = draft.advanced?.text ?? dialog.querySelector('#school-definition-json').value;
+      const document = parseSchoolDocument(text);
+      const next = applySchoolDocument(draft, document);
+      const issues = locatedDraftIssues(next);
+      draft = next;
+      jsonFeedback = issues.length ? 'Applied as draft. Resolve before saving:\n'+issues.map(i=>`${i.path}: ${i.message}`).join('\n') : 'Applied to setup. Check and save from Review.';
+      changed({render:true}); flush(); return true;
+    } catch(error) {
+      jsonFeedback = error.message;
+      dialog.querySelector('#setup-json-status').textContent = jsonFeedback; return false;
+    }
+  }
+  function resolveJson() {
+    const box = document.createElement('dialog'); box.className='setup-confirm';box.setAttribute('aria-label','Resolve unapplied JSON');
+    box.innerHTML='<h2>Unapplied JSON changes</h2><p>Apply or discard your JSON changes before editing forms, checking or saving the school.</p><div class="setup-actions"><button data-keep autofocus>Keep editing JSON</button><button data-json-apply>Apply JSON</button><button data-json-discard class="secondary">Discard JSON changes…</button></div>';
+    document.body.append(box);box.showModal();box.querySelector('[data-keep]').onclick=()=>{box.close();dialog.querySelector('#setup-tools').open=true;dialog.querySelector('#school-definition-json')?.focus();};
+    box.querySelector('[data-json-apply]').onclick=()=>{box.close();dialog.querySelector('#setup-tools').open=true;applyJson();};
+    box.querySelector('[data-json-discard]').onclick=()=>{box.close();dialog.querySelector('#setup-discard-json').click();};
+    box.onclose=()=>box.remove();
+  }
+  dialog.addEventListener('click', event => {
+    if (!draft?.advanced?.dirty) return;
+    const button = event.target.closest('button');
+    if (!button || ['setup-start-generation','setup-cancel-generation'].includes(button.id) || button.closest('#setup-tools') || button.dataset.section || button.hasAttribute('data-close') || button.hasAttribute('data-back-timetable')) return;
+    event.preventDefault(); event.stopImmediatePropagation(); resolveJson();
+  }, true);
   function download(snapshot = draft) {
     try {
       const blob = new Blob([JSON.stringify({ documentType: 'school-setup-recovery', formatVersion: 1, draft: snapshot }, null, 2)], { type: 'application/json' });
@@ -217,16 +278,20 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     panelMotion=dialog.animate([{transform:opening?'translateX(-100%)':'translateX(0)'},{transform:opening?'translateX(0)':'translateX(-100%)'}], {duration:350,easing:'cubic-bezier(.22,1,.36,1)',fill:'both'});
     return panelMotion.finished.catch(()=>{});
   }
-  async function close() {
+  async function close({ immediate = false } = {}) {
+    if (!dialog.open) return;
     flush();
+    for (const box of document.querySelectorAll('dialog.setup-confirm[open]')) box.close();
     dialog.dataset.closing='true';
-    await animatePanel(false);
+    if (immediate) panelMotion?.cancel();
+    else await animatePanel(false);
     if(dialog.dataset.closing!=='true')return;
     dialog.close();delete dialog.dataset.closing;panelMotion?.cancel();entry.focus();
   }
   dialog.addEventListener('cancel', event => { event.preventDefault(); close(); });
   dialog.addEventListener('input', event => {
     if (!draft) return;
+    if (event.target.id === 'school-definition-json') { jsonFeedback = ''; draft.advanced = { text: event.target.value, dirty: true }; changed(); lockForms(); return; }
     if (!draft.retained && event.target.tagName!=='SELECT' && blocks.input(event)) return;
     if (!draft.retained && rooms.input(event)) return;
     if (!draft.retained && availability.input(event)) return;
@@ -241,7 +306,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     }
   });
   dialog.addEventListener('change', event => {
-    if(event.target.id==='setup-import-file'){const file=event.target.files[0];if(file)file.text().then(text=>exchange.preview(text,{id:'file',name:file.name,revision:null}));return;}
+    if(event.target.id==='setup-import-file'){const file=event.target.files[0];event.target.value='';if(file)file.text().then(text=>exchange.preview(text,{id:'file',name:file.name,revision:null}));return;}
     if(draft&&!draft.retained&&event.target.tagName==='SELECT'&&blocks.change(event))return;
     if(draft&&!draft.retained&&rooms.change(event))return;
     if(draft&&!draft.retained&&availability.change(event))return;
@@ -259,6 +324,13 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if (button.id === 'setup-copy-source') { flush(); activate(sourceDraft(school()), true); return; }
     if (!draft) return;
     if(draft.retained && (button.dataset.gridDay||button.dataset.overviewDay)){draft.pendingInput.gridDay=button.dataset.gridDay||button.dataset.overviewDay;changed({content:false,render:true});return;}
+    if (button.id === 'setup-apply-json') return applyJson();
+    if (button.id === 'setup-discard-json') return confirmScope('Discard JSON changes?', 'Your unapplied text will be discarded. The setup fields remain unchanged.', () => { delete draft.advanced; jsonFeedback = ''; changed({content:false,render:true}); flush(); }, 'Discard JSON changes');
+    if (button.id === 'setup-schema') return downloadDocument(JSON.stringify(schoolDocumentSchema,null,2),'school-document-v1.schema.json');
+    if (button.id === 'setup-pasted-import') return exchange.preview(draft.advanced?.text ?? '', {id:'pasted-json',name:'Pasted legacy JSON',revision:null});
+    if (button.id === 'setup-download-legacy') return downloadDocument(repository.state().editor.text,'previous-school-definition.json');
+    if (button.id === 'setup-legacy-buffer') return exchange.preview(repository.state().editor.text, {id:'advanced-buffer',name:'Previous JSON editor buffer',revision:null});
+    if (button.id === 'delete-local-data') return onCleanup();
     if(exchange.click(button))return;
     if (!draft.retained && blocks.click(event)) return;
     if (!draft.retained && lunch.click(event)) return;
@@ -274,7 +346,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if(button.id==='setup-save-school')schoolSave.save();
     if(button.id==='setup-start-generation')onGenerate(draft.source.id,dialog.querySelector('#setup-effort').value);
     if(button.id==='setup-cancel-generation')onCancel();
-    if(button.hasAttribute('data-review-issue')){const issue=[...draftIssues(draft),...(draft.checkIssues??[])][Number(button.dataset.reviewIssue)];if(issue){draft.section=issue.section;if(issue.record&&entityKeys[issue.section])draft.focused[entityKeys[issue.section]]=issue.record;if(issue.plan)draft.pendingInput.planClassId=issue.record;if(issue.section==='Timetable grid'&&issue.record){const interval=draft.grid.intervals.find(i=>i.id===issue.record);if(interval)draft.pendingInput.gridDay=interval.day;}changed({content:false,render:true});if(issue.section==='Timetable grid'&&issue.record)dialog.querySelector(`[data-interval="${CSS.escape(issue.record)}"] input`)?.focus();}}
+    if(button.hasAttribute('data-review-issue')){const issue=[...locatedDraftIssues(draft),...(draft.checkIssues??[])][Number(button.dataset.reviewIssue)];if(issue){draft.section=issue.section;if(issue.record&&entityKeys[issue.section])draft.focused[entityKeys[issue.section]]=issue.record;if(issue.plan)draft.pendingInput.planClassId=issue.record;if(issue.section==='Timetable grid'&&issue.record){const interval=draft.grid.intervals.find(i=>i.id===issue.record);if(interval)draft.pendingInput.gridDay=interval.day;}changed({content:false,render:true});if(issue.section==='Timetable grid'&&issue.record)dialog.querySelector(`[data-interval="${CSS.escape(issue.record)}"] input`)?.focus();}}
     if (button.id === 'setup-retry') flush();
     if (button.id === 'setup-download') { flush(); download(); }
     if (button.id === 'setup-discard') confirmScope('Discard this setup draft?', `Only draft ${draft.id} (${draft.name || 'Untitled school'}) will be removed. Saved schools, timetables and other drafts are kept.`, () => {
@@ -291,6 +363,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
         if (latest) draft = latest;
         else draft = sourceDraft(school());
         durability = latest ? 'Saved in this browser' : 'Pending';
+        storageError = '';
         message = 'Latest browser data loaded. Your recovery snapshot is preserved on this page and in the download. Choose Keep separate recovered draft.';
         renderDraft(); status();
         const keep = document.createElement('button'); keep.id = 'setup-keep-recovered'; keep.textContent = 'Keep separate recovered draft';
@@ -306,12 +379,15 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   });
   return {
     refreshGeneration,
+    close,
     configure(value) { budgets={...budgets,...value};configurePlanLimits(value); configureRoomLimits(value); },
-    open() {
+    open({ review = false } = {}) {
+      if (window.matchMedia('(max-width: 700px)').matches) return;
       const previousContext = contextSchoolId;
       contextSchoolId = school().id;
       if (draft && previousContext === school().id) renderDraft();
       else choose(school().id);
+      if(review) { if(!draft){draft=sourceDraft(school());draft.section='Review';activate(draft,true);}else{draft.section='Review';renderDraft();} }
       delete dialog.dataset.closing;
       if(!dialog.open)dialog.showModal();
       animatePanel(true);

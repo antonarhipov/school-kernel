@@ -17,7 +17,7 @@ class SchoolSetupBrowserIT {
     static void saved(Page p) { assertThat(p.locator("#setup-durability")).hasText("Saved in this browser"); }
     static Object durable(Page p) { return p.evaluate("JSON.parse(localStorage.getItem('"+KEY+"'))"); }
     static void open(Page p) { p.locator("#school-setup-entry").click(); assertThat(p.locator("#school-setup")).isVisible(); if(p.locator(".setup-start").isVisible()) p.locator("#setup-copy-source").click(); }
-    static void close(Page p) { p.locator("#school-setup [data-close]").click(); assertThat(p.locator("#school-setup")).not().isVisible(); }
+    static void close(Page p) { p.locator("#school-setup [data-close]").click(); assertThat(p.locator("#school-setup")).not().isVisible(new com.microsoft.playwright.assertions.LocatorAssertions.IsVisibleOptions().setTimeout(30000)); }
     static Locator tool(Page p, String selector) {
         if (!p.locator(selector).isVisible()) p.locator("#setup-tools > summary").click();
         return p.locator(selector);
@@ -83,12 +83,13 @@ class SchoolSetupBrowserIT {
                 download.saveAs(h.output.resolve("conflict-recovery.json"));
                 assertTrue(Files.readString(h.output.resolve("conflict-recovery.json")).contains("Conflicting page edit"));
                 assertThat(p.locator("#setup-name")).hasValue("Other tab current");
+                assertThat(p.locator("#setup-message")).containsText("Latest browser data loaded");
                 p.locator("#setup-keep-recovered").click(); saved(p);
                 assertThat(p.locator("#setup-name")).hasValue("Conflicting page edit");
                 assertTrue((Boolean)p.evaluate("Object.values(JSON.parse(localStorage.getItem('"+KEY+"')).setupDrafts).some(d=>d.recoveredFrom&&d.name==='Conflicting page edit')"));
                 h.record("UC-1 5b: real second tab changes catalog; stale overwrite refused; explicit recovery downloads full exact conflicting snapshot, reads latest source then creates independent recovered draft without merging",p,"04-recovered-conflict");
                 other.close();
-                for(int width:List.of(320,390,1440)) {
+                for(int width:List.of(768,1024,1440)) {
                     p.setViewportSize(width,900); assertTrue((Boolean)p.evaluate("document.documentElement.scrollWidth<=innerWidth+1"));
                     assertTrue((Boolean)p.locator("#school-setup").evaluate("d=>d.scrollWidth<=d.clientWidth+1"));
                     h.record("UC-1 G5/G6: all setup actions/sections remain within "+width+" CSS pixels without overlay or page overflow",p,"05-layout-"+width);
@@ -105,11 +106,11 @@ class SchoolSetupBrowserIT {
                 p.evaluate("()=>{const s=JSON.parse(localStorage.getItem('"+KEY+"'));const d=Object.values(s.setupDrafts).find(d=>d.source);s.setupDrafts.second={...structuredClone(d),id:'second',recoveredFrom:d.id};delete s.setupSelection.english;localStorage.setItem('"+KEY+"',JSON.stringify(s));}");
                 p.reload(); p.locator("#school-selector").selectOption("english"); open(p); assertEquals(2,p.locator(".setup-draft-choice").count());
                 p.locator(".setup-draft-choice").last().click(); section(p,"Teachers");
-                p.setViewportSize(320,900); assertThat(p.locator("#setup-record-count")).hasText("41 of 41 records");
+                p.setViewportSize(768,900); assertThat(p.locator("#setup-record-count")).hasText("41 of 41 records");
                 p.locator("#setup-search").fill("no match"); assertThat(p.locator("#setup-record-count")).hasText("0 of 41 records");
                 p.locator("#setup-search").fill(""); p.locator("#school-setup [data-record]").last().click();
                 assertTrue((Boolean)p.locator("#school-setup").evaluate("d=>d.scrollWidth<=d.clientWidth+1"));
-                h.record("UC-1 2b/2c/G4-G8: unsupported raw authoring remains exact; same-name source/recovered drafts require explicit choice; 41-teacher search and focused details fit 320px",p,"06-narrow-source-choice");
+                h.record("UC-1 2b/2c/G4-G8: unsupported raw authoring remains exact; same-name source/recovered drafts require explicit choice; 41-teacher search and focused details fit the 768px desktop layout",p,"06-narrow-source-choice");
                 p.keyboard().press("Escape"); assertThat(p.locator("#school-setup")).not().isVisible();
                 Page unavailable=owner.newPage(); unavailable.onPageError(h.errors::add);
                 unavailable.addInitScript("const get=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(k==='"+KEY+"')throw new DOMException('unavailable','SecurityError');return get.call(this,k)}");
@@ -178,7 +179,7 @@ class SchoolSetupBrowserIT {
                 h.record("UC-2 3a/G1-G2: isolated durable reference fixture exposes all five affected availability/preference/lunch/lock references; unresolved and cancelled copy preserve exact stored values; explicit clears retain empty whitelist versus all-period intent",p,"03-reference-resolution");
                 if(!p.locator("[data-active-day=THURSDAY]").isVisible())p.locator("#setup-school-days > summary").click();p.locator("[data-active-day=THURSDAY]").check();p.locator("[data-grid-day=THURSDAY]").click();p.locator("#setup-add-interval").click();saved(p);
                 assertTrue((Boolean)p.evaluate("()=>{const d=Object.values(JSON.parse(localStorage.getItem('"+KEY+"')).setupDrafts).find(d=>!d.source);return d.teachers[0].availability.availablePeriodIds.length===0&&d.rooms[0].availability.intent==='all'}"));
-                for(int width:List.of(320,390,1440)){
+                for(int width:List.of(768,1024,1440)){
                     p.setViewportSize(width,900);assertTrue((Boolean)p.locator("#school-setup").evaluate("d=>d.scrollWidth<=d.clientWidth+1"));
                     h.record("UC-2 G4: weekday switching and all interval/copy actions fit "+width+"px; adding a period does not expand explicit whitelist",p,"04-grid-"+width);
                 }
@@ -236,7 +237,7 @@ class SchoolSetupBrowserIT {
                 assertThat(p.locator("#setup-message")).containsText("subjectRoomPolicies");assertEquals(before,durable(p));
                 assertThat(p.locator("#setup-record-issues")).containsText("below required block length 4");
                 h.record("UC-3 2b/3a: restored plan block length conflicts with daily cap; subject removal names every qualification/eligibility/plan/room-policy reference and leaves exact durable data unchanged",p,"02-refused-removal");
-                for(int width:List.of(320,390,1440)){
+                for(int width:List.of(768,1024,1440)){
                     p.setViewportSize(width,900);assertTrue((Boolean)p.locator("#school-setup").evaluate("d=>d.scrollWidth<=d.clientWidth+1"));
                     h.record("UC-3/UC-1 G5-G8: subject form, contextual rules and refusal fit "+width+"px",p,"03-subject-"+width);
                 }

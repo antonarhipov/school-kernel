@@ -104,7 +104,7 @@ class SchoolSetupLandingBrowserIT {
                 p.locator("#school-setup-entry").click();
                 assertThat(p.locator("#setup-name")).hasValue("My empty school");
                 assertTrue((Boolean)p.evaluate("()=>{const d=Object.values(JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1')).setupDrafts).find(d=>d.name==='My empty school');return !d.source&&['subjects','classes','teachers','rooms','plans'].every(k=>d[k].length===0)&&d.grid.intervals.length===0;}"));
-                for(int width:List.of(320,390,1440)) {
+                for(int width:List.of(768,1024,1440)) {
                     p.setViewportSize(width,900);
                     assertTrue((Boolean)p.locator("#school-setup").evaluate("d=>d.scrollWidth<=d.clientWidth+1"));
                     h.record("Resumed empty school fits "+width+"px and keeps visible new/copy actions",p,"07-empty-"+width);

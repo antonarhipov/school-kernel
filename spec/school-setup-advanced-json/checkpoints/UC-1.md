@@ -1,0 +1,14 @@
+# UC-1 checkpoint — APPROVED 2026-10-18
+
+Base and pre-existing change are recorded in ../status.md. No commit requested. Submission is the current feature diff, covering school-document/schema modules, setup-editor, setup-review, shell integration and the new Node/Chrome journeys. Shared shell relocation groundwork does not approve UC-3.
+
+- Complete authoring fields round trip by value, including every bundled definition's compiled result. Four focused Node document checks pass; existing 21 setup model checks pass.
+- `./mvnw -pl timetable-workspace -am verify -DskipTests -DskipITs` passes.
+- `./mvnw -pl timetable-workspace -am failsafe:integration-test failsafe:verify -Dit.test=SchoolSetupAdvancedJsonBrowserIT -Dfailsafe.failIfNoSpecifiedTests=false` passes: real HTTP demo and installed Chrome, isolated browser/server and pinned archive. Initial sandbox-only socket refusal was environmental; allowed run passes.
+- [Passing walkthrough](../../../output/playwright/school-setup-advanced-json/UC-1/1792280769636/ledger.md): collapsed Advanced; malformed located refusal; no school save while pending; exact reload preservation; cancel/confirm discard; semantically incomplete apply; form rendering; checked immutable save with exact authoring fields; no solve on save. 320/390/1440 screenshots captured; 390px screenshot inspected, with no horizontal overflow.
+- Existing stale-tab/quota boundaries remain in place; affected setup regressions will be rerun at the completed feature boundary. Complete-document exchange is UC-2; relocated generation and cleanup are UC-3.
+
+Final feature repeat: [UC-1 Chrome ledger](../../../output/playwright/school-setup-advanced-json/UC-1/1792283074880/ledger.md) passes against the packaged shared-document implementation, including precise issue-to-class-plan navigation and checked school save. New screenshots at 320/390/1440px show no horizontal overflow; the 390px screenshot was inspected. All 49 Node checks pass; Maven unit suite passes 90/90. Full affected browser regression remains recorded in the final status evidence.
+
+
+2026-10-18 desktop-only amendment: [passing complete journey](../../../output/playwright/school-setup-advanced-json/UC-1/1792284303114/ledger.md) supersedes the earlier mobile-editor availability claim. Setup is available above 700px only; mobile hides its entry and resizing dismisses Setup/confirmations without losing pending JSON. Returning to desktop does not automatically open the editor. Desktop layouts at 768/1024/1440px and mobile hiding at 320/390/700px pass. Mobile timetable journey, 49 Node checks, package and diff checks pass. Screenshot helper uses viewport capture for open dialogs to avoid Playwright temporarily shrinking the layout to 1px. Final 320px timetable and 768px editor screenshots inspected.

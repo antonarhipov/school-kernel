@@ -40,6 +40,8 @@ class MobileTimetableBrowserIT {
 
                 for (int width : List.of(320, 360, 390, 430, 700)) {
                     p.setViewportSize(width, 844); assertPhoneGeometry(p, 5);
+                    assertThat(p.locator("#school-setup-entry")).not().isVisible();
+                    assertThat(p.locator("#school-setup")).not().isVisible();
                     if (width == 320 || width == 700) h.record("UC-1 G7: full five-day timetable fits " + width + "px with 22px period column and visible room labels", p, "02-width-" + width);
                 }
                 p.setViewportSize(390, 844);
@@ -110,12 +112,13 @@ class MobileTimetableBrowserIT {
                 assertEquals(1, p.locator(".week-matrix").count());
                 assertThat(p.locator("#cohort-filter")).isVisible();
                 assertEquals(520, p.locator(".demo-lesson").count());
-                h.record("UC-1 G7: desktop retains original compact retro matrix and expanded filters", p, "07-desktop");
+                assertThat(p.locator("#school-setup-entry")).isVisible();
+                h.record("UC-1 G7: desktop retains original compact retro matrix, expanded filters and School setup entry; mobile hides the editor", p, "07-desktop");
                 p.setViewportSize(390, 844); p.reload();
                 p.locator(".mobile-week-matrix").waitFor();
                 assertNull(p.locator("#timetable-filter-disclosure").getAttribute("open"));
                 assertEquals(520, p.locator(".demo-lesson").count()); assertPhoneGeometry(p, 5);
-                assertEquals(8, Files.readAllLines(temporary.resolve("launches")).size(), "Inspection launches no kernel process");
+                assertEquals(0, Files.readAllLines(temporary.resolve("launches")).size(), "Startup and inspection launch no kernel process");
                 assertTrue(mutations.isEmpty(), mutations.toString());
                 assertTrue(h.errors.isEmpty(), h.errors.toString());
                 h.record("UC-1 G2/G6/G7: reload starts collapsed; complete journey emits zero mutating requests or additional kernel launches and zero browser runtime errors", p, "08-reload");

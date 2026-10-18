@@ -291,9 +291,18 @@ against the packaged kernel. **Save school copy** creates a named browser-local 
 Reopen its Review section to explicitly choose Quick/Thorough generation, inspect the candidate and save a named
 timetable. Invalid work remains an independent recoverable setup draft.
 
-JSON import/conversion, kernel export and transfer to the advanced buffer are explicit. Older definitions preview
-catalog-10 adoption and compensating defaults/weights. **Download recovery** retains the complete authoring snapshot,
-including unfinished work, named breaks/lunch and extended eligibility that kernel JSON does not carry. Local cleanup
-in Utilities removes all saved artifacts and drafts and prevents stale tabs from restoring them.
+School setup is available in the desktop layout (above 700 CSS pixels); mobile shows the timetable without an editor entry. Resizing to mobile closes Setup and preserves unfinished work.
+
+**Advanced**, collapsed inside Setup, edits the same complete school document as the forms. **Apply to setup**
+validates JSON structure before applying; incomplete definitions stay editable drafts with located issues. Pending
+JSON must be applied or explicitly discarded before form editing, checking or saving. Closing/reloading preserves
+unfinished text. The complete format includes named breaks/lunch, unassigned demand, eligibility and every setup
+constraint. Advanced offers complete school JSON import/export, a downloadable JSON Schema and full recovery.
+Legacy kernel JSON still imports through a confirmed conversion preview. **Clear local demo data**, also in Advanced,
+removes local schools, timetables and drafts with confirmation and prevents stale tabs from restoring them. Generation,
+search effort, progress and cancellation live in Review; the timetable has no Utilities section.
+
+Proposal, behavior contract and execution evidence: [Advanced JSON feature](spec/school-setup-advanced-json/proposal.md),
+[specification](spec/school-setup-advanced-json/spec.md), [status](spec/school-setup-advanced-json/status.md).
 
 Execution checkpoints and recorded browser/kernel evidence: [school setup status](spec/school-setup-editor/status.md).

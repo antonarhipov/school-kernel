@@ -1,12 +1,10 @@
+import { schoolDocument, parseSchoolDocument, importSchoolDocument } from './school-document.js';
 import { emptyDraft, readableDraft } from './setup-model.js';
-import { compileDraft, definitionRevision } from './setup-compile.js';
-import { validateText } from './demo-definitions.js';
+import { definitionRevision } from './setup-compile.js';
+import { validateText, syntaxFeedback } from './demo-definitions.js';
 const clone=v=>structuredClone(v),uid=()=>crypto.randomUUID();
-export function strictParse(text){
- const value=JSON.parse(text),tokens=[...text.matchAll(/"(?:\\.|[^"\\])*"|[{}\[\]:,]|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|null/g)],stack=[];
- for(let i=0;i<tokens.length;i++){const token=tokens[i][0];if(token==='{')stack.push(new Set());else if(token==='[')stack.push(null);else if(token==='}'||token===']')stack.pop();else if(token.startsWith('"')&&tokens[i+1]?.[0]===':'){const key=JSON.parse(token),seen=stack.at(-1);if(seen?.has(key))throw new Error(`Duplicate field ${key} at character ${tokens[i].index+1}.`);seen?.add(key);}}
- return value;
-}
+import { strictParse } from './strict-json.js';
+export { strictParse } from './strict-json.js';
 export function mapDefinition(definition,source=null){
  if(!Number.isInteger(definition.catalogVersion)||definition.catalogVersion<1||definition.catalogVersion>10)throw new Error('Unsupported scheduling catalog.');
  if(Object.hasOwn(definition,'basedOnRevision'))throw new Error('/basedOnRevision: repair ancestry cannot be converted for initial generation.');
@@ -27,7 +25,8 @@ export function mapDefinition(definition,source=null){
   plan.requiredCount++;plan.occurrences.push(clone(occurrence));
   let allocation=plan.allocations.find(a=>a.teacherId===occurrence.teacherId);if(!allocation){allocation={teacherId:occurrence.teacherId,count:0};plan.allocations.push(allocation);}allocation.count++;
   const teacher=draft.teachers.find(t=>t.id===occurrence.teacherId);if(!teacher)throw new Error(`Missing teacher ${occurrence.teacherId}`);
-  const classes=teacher.eligibleClassIdsBySubject[occurrence.subjectId]??=[];if(!classes.includes(occurrence.cohortId))classes.push(occurrence.cohortId);
+  if(!Object.hasOwn(teacher.eligibleClassIdsBySubject,occurrence.subjectId))teacher.eligibleClassIdsBySubject={...teacher.eligibleClassIdsBySubject,[occurrence.subjectId]:[]};
+  const classes=teacher.eligibleClassIdsBySubject[occurrence.subjectId];if(!classes.includes(occurrence.cohortId))classes.push(occurrence.cohortId);
  }
  draft.plans=[...groups.values()];
  for(const plan of draft.plans){
@@ -50,32 +49,43 @@ export function mapDefinition(definition,source=null){
  draft.conversion={fromCatalog:definition.catalogVersion,toCatalog:10,changes:clone(changes),acceptedAt:null};
  return{draft,changes};
 }
-export function createExchange({getDraft,activate,flush,notify,confirm,request,build,getAdvanced,setAdvanced,isDisposed}){
- let pending;
+export function createExchange({getDraft,activate,flush,notify,confirm,request,build,isDisposed}){
  async function preview(text,source){
-  const origin=getDraft()?.id;
+  const origin=getDraft()?.id, revision=getDraft()?.revision;
   try{
    if(new TextEncoder().encode(text).length>16*1024*1024)throw new Error('Recovery input exceeds 16 MiB.');
-   const document=strictParse(text);let mapped;
+   if(getDraft()?.advanced?.dirty && source?.id!=='pasted-json')throw new Error('Apply or discard unapplied JSON changes before importing.');
+   const syntax=syntaxFeedback(text);if(syntax)throw new Error(syntax);
+   const document=strictParse(text);if(!document||typeof document!=='object'||Array.isArray(document))throw new Error('/: Expected a JSON object.');let mapped;
    if(document.documentType==='school-setup-recovery'){
     if(document.formatVersion!==1||!readableDraft(document.draft))throw new Error('Unsupported or unreadable authoring recovery version; input retained.');
     mapped={draft:clone(document.draft),changes:['Restore the complete authoring snapshot into a separate recovered draft. Invalid and unfinished input is retained.']};
     mapped.draft.recoveredFrom=mapped.draft.id;mapped.draft.id=uid();mapped.draft.validation='Unchecked';delete mapped.draft.check;
+   }else if(document.documentType==='school-setup'){
+    mapped={draft:importSchoolDocument(parseSchoolDocument(text)),changes:['Import the complete school document without changing its authored settings. Incomplete work remains a draft.']};
    }else{
+    if(Object.hasOwn(document,'documentType'))throw new Error('/documentType: Unsupported school document format.');
     validateText(text);const {value}=await request('/api/demo/definition/check',{method:'POST',body:text,headers:{'Content-Type':'text/plain'}});
-    if(isDisposed()||getDraft()?.id!==origin)return;
+    if(isDisposed()||getDraft()?.id!==origin||getDraft()?.revision!==revision)return;
     if(value.build!==build()||value.definitionRevision!==await definitionRevision(document))throw new Error('Source check provenance did not match.');
     mapped=mapDefinition(document,source);
     if(getDraft()?.retained)mapped.draft.section=getDraft().section;
    }
-   if(isDisposed()||getDraft()?.id!==origin)return;
-   const {draft,changes}=mapped;pending=draft;
-   confirm('Review conversion into a separate draft',`${draft.subjects.length} subjects; ${draft.teachers.length} teachers; ${draft.classes.length} classes; ${draft.rooms.length} rooms; ${draft.grid.intervals.filter(i=>i.periodId).length} periods; ${draft.plans.reduce((n,p)=>n+(p.occurrences?.length??0),0)} individual lessons. ${changes.join(' ')} Retained settings: ${draft.plans.filter(p=>p.protectedReasons?.length||p.blockEditsProtected).length} protected/grouping-restricted rows. Existing source and working draft remain independent.`,()=>{if(isDisposed())return;flush();if(pending.conversion)pending.conversion.acceptedAt=new Date().toISOString();activate(pending,true);},'Accept conversion into new draft');
+   if(isDisposed()||getDraft()?.id!==origin||getDraft()?.revision!==revision)return;
+   const {draft,changes}=mapped;
+   confirm('Review conversion into a separate draft',`${draft.subjects.length} subjects; ${draft.teachers.length} teachers; ${draft.classes.length} classes; ${draft.rooms.length} rooms; ${draft.grid.intervals.filter(i=>i.periodId).length} periods; ${draft.plans.reduce((n,p)=>n+(p.occurrences?.length??0),0)} individual lessons. ${changes.join(' ')} Retained settings: ${draft.plans.filter(p=>p.protectedReasons?.length||p.blockEditsProtected).length} protected/grouping-restricted rows. Existing source and working draft remain independent.`,()=>{if(isDisposed()||getDraft()?.id!==origin||getDraft()?.revision!==revision){notify('Setup changed during import preview. Preview the file again.');return;}if(!flush())return;if(draft.conversion)draft.conversion.acceptedAt=new Date().toISOString();activate(draft,true);},'Accept conversion into new draft');
   }catch(error){notify(`Import refused: ${error.message}`);}
  }
- function exportKernel(transfer=false){
-  try{flush();const definition=compileDraft(getDraft()),text=JSON.stringify(definition,null,2);confirm('Export kernel definition', 'Includes catalog 10 adjacency, explicit block policy, individual lessons and preserved kernel settings. Excludes unfinished demand, extended eligibility, named breaks/lunch and other editor-only intent. Use Download recovery for full authoring data.',()=>{try{if(transfer)setAdvanced(text);else downloadDocument(text,'school-definition.json');notify(transfer?'Explicitly transferred kernel JSON to the advanced buffer.':'Kernel JSON download requested.');}catch(error){notify(`Export failed: ${error.message}`);}},transfer?'Transfer to advanced buffer':'Download kernel JSON');}catch(error){notify(`Kernel export refused: ${error.message} Download recovery to preserve all unfinished work.`);}
+ function exportDocument(){
+  try{
+   if(getDraft().advanced?.dirty)throw new Error('Apply or discard unapplied JSON before export, or download recovery to preserve it.');
+   downloadDocument(JSON.stringify(schoolDocument(getDraft()),null,2),'school-setup.json');
+   notify('Complete school JSON download requested. Incomplete authoring settings are included.');
+  }catch(error){notify(`Export refused: ${error.message}`);}
  }
- return{preview,exportKernel,click(button){if(button.id==='setup-convert'){preview(JSON.stringify(getDraft().retained),getDraft().source);return true;}if(button.id==='setup-import-advanced'){preview(getAdvanced(),{id:'advanced-buffer',name:'Advanced JSON buffer',revision:null});return true;}if(button.id==='setup-export'){exportKernel();return true;}if(button.id==='setup-transfer'){exportKernel(true);return true;}return false;}};
+ return{preview,exportDocument,click(button){
+  if(button.id==='setup-convert'){preview(JSON.stringify(getDraft().retained),getDraft().source);return true;}
+  if(button.id==='setup-export'){exportDocument();return true;}return false;
+ }};
 }
 export function downloadDocument(text,name){const blob=new Blob([text],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}

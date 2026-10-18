@@ -32,11 +32,8 @@
 .demo-timetable .demo-lesson:hover { filter: brightness(.96); color: #17241e; background: var(--subject-bg); }
 .demo-timetable .demo-lesson.match { outline: 2px dashed #9c4714; outline-offset: -3px; }
 .demo-empty { text-align: center; padding: 60px 20px; color: #58715f; }
-.demo-utilities > summary { border: 1px solid #b8c6bd; background: #f8faf8; padding: 6px 9px; border-radius: 3px; font-size: .76rem; font-weight: 750; cursor: pointer; }
-.demo-utilities[open] > section { position: fixed; inset: 30px max(24px, calc((100vw - 1100px) / 2)); z-index: 40; overflow: auto; padding: 24px; border: 1px solid #c7d5ca; border-radius: 12px; background: #fafcf8; box-shadow: 0 12px 80px #1e372b50; }
 .demo-editor-heading { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
 .demo-editor-heading h2 { font-size: 1.25rem; }
-.demo-utilities textarea { width: 100%; min-height: 42vh; resize: vertical; font: .78rem/1.5 ui-monospace, monospace !important; }
 .demo-editor-actions, #generation-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin: 12px 0; }
 .demo-editor-actions label, #generation-controls label { margin: 0; flex: 1; }
 #generation-controls { border-top: 1px solid #d8e2d7; padding-top: 18px; }
@@ -86,7 +83,6 @@
   .demo-selectors { gap: 6px; }
   .demo-selectors label { min-width: 0; flex: 1 1 140px; }
   .demo-selectors select { width: 100%; font-size: .75rem; }
-  .demo-utilities > summary { position: absolute; top: 7px; right: 2px; padding: 7px 9px; }
   .demo-timetable { padding: 7px 4px; }
   .demo-view-heading { gap: 6px; }
   .demo-view-heading > div:first-child { min-width: 0; }
@@ -118,7 +114,6 @@
   .mobile-week-matrix .demo-tile-room, .mobile-week-matrix .demo-tile-teacher, .mobile-week-matrix .demo-tile-class { display: block; flex: none; align-self: end; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: .5rem var(--font-mono, monospace); }
   .mobile-week-matrix .demo-conflict-mark { font-size: .48rem; }
   .mobile-week-matrix .empty-cell { display: block; text-align: center; font-size: .65rem; }
-  .demo-utilities[open] > section { inset: 12px; padding: 16px; }
   .demo-inspector { font-size: .85rem; }
   .demo-main { padding-bottom: max(40px, calc(var(--save-bar-height, 0px) + 30px)); }
   .demo-save-bar { bottom: 10px; padding: 12px; }
@@ -263,8 +258,8 @@
   .setup-week-overview > button { flex:1 1 100px; width:auto; }
 }
 @media(max-width:700px) {
-  .demo-timetable { padding-left:37px; }
-  .timetable-demo .school-setup-entry { padding:12px 6px; font-size:.7rem; }
+  .demo-timetable { padding-left:4px; }
+  .timetable-demo .school-setup-entry, #generation-indicator [data-show-generation] { display:none; }
   .timetable-demo .school-setup .setup-header { padding:12px; gap:8px 12px; }
   .setup-header h1 { flex:1; font-size:.7rem; }
   .setup-header .setup-school-name { order:3; flex:1 1 100%; max-width:none; }
@@ -336,3 +331,20 @@
 .setup-start-choices small { font-size:12px; color:var(--setup-muted); }
 @media(max-width:700px) { .setup-school-actions { grid-column:1/-1; display:flex; margin:4px 0; } }
 @media(max-width:480px) { .setup-start-choices { grid-template-columns:minmax(0,1fr); } }
+
+/* Advanced is part of the setup work area, with a readable full-width document. */
+#setup-content > .setup-tools { margin:0 0 18px; padding:0; border:1px solid var(--setup-line); border-radius:8px; font-size:.85rem; }
+#setup-content > .setup-tools > summary { padding:10px 12px; font-size:.85rem; }
+#setup-content .setup-tools-panel { padding:4px 14px 16px; }
+#setup-content .setup-tools-panel p { font-size:.85rem; }
+#setup-content .setup-tools-panel .setup-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.setup-json-editor { min-width:0; }
+#school-definition-json { display:block; width:100%; box-sizing:border-box; min-height:300px; resize:vertical; font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace; white-space:pre; overflow:auto; tab-size:2; }
+#setup-json-status { white-space:pre-wrap; overflow-wrap:anywhere; max-height:220px; overflow:auto; }
+.setup-local-data { border-top:1px solid var(--setup-line); padding-top:12px; margin-top:18px; }
+#setup-content .setup-tools-panel input[type=file] { max-width:100%; box-sizing:border-box; }
+@media(max-width:700px) {
+  #setup-content .setup-tools-panel { padding:4px 8px 12px; }
+  #setup-content .setup-tools-panel .setup-actions { display:grid; grid-template-columns:minmax(0,1fr); }
+  #school-definition-json { min-height:230px; }
+}

@@ -32,7 +32,8 @@ export function readableDraft(draft) {
   const optionalArray=(row,key)=>!Object.hasOwn(row,key)||Array.isArray(row[key]);
   const references=row=>['availablePeriodIds','undesirablePeriodIds','lunchPeriodIds','qualifiedSubjectIds','capabilityIds','requiredRoomCapabilityIds','preferredRoomIds'].every(key=>optionalArray(row,key)&&(!row[key]||row[key].every(id=>typeof id==='string')))
     &&(!row.availability||object(row.availability)&&['availablePeriodIds','unavailablePeriodIds'].every(key=>optionalArray(row.availability,key)&&(!row.availability[key]||row.availability[key].every(id=>typeof id==='string'))));
-  return draft?.formatVersion === 1 && typeof draft.id === 'string' && typeof draft.name === 'string'
+  return (!draft?.advanced || object(draft.advanced) && typeof draft.advanced.text==='string' && typeof draft.advanced.dirty==='boolean')
+    && draft?.formatVersion === 1 && typeof draft.id === 'string' && typeof draft.name === 'string'
     && Number.isInteger(draft.revision) && sections.includes(draft.section)
     && ['focused','searches','pendingInput'].every(key=>object(draft[key]))
     && draft.grid && Array.isArray(draft.grid.activeDays) && draft.grid.activeDays.every(day=>typeof day==='string')

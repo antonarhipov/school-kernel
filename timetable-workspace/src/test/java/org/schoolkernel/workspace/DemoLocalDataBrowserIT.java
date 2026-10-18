@@ -27,13 +27,10 @@ class DemoLocalDataBrowserIT {
                 DemoTimetableBrowserIT.ready(p, h.base);
                 JsonNode bundle = DemoPlanningBrowserIT.JSON.readTree(p.request().get(h.base + "/api/demo/timetables").body());
                 p.locator("#school-selector").selectOption("two-class");
-                p.locator("#demo-utilities summary").click();
-                String definition = p.locator("#school-definition-json").inputValue();
-                p.locator("#school-copy-name").fill("Disposable cleanup school"); p.locator("#save-school-copy").click();
-                p.waitForFunction("()=>document.querySelector('#editor-status').textContent.includes('saved in this browser')");
-                String copy = p.locator("#school-selector").inputValue();
-                assertEquals(DemoPlanningBrowserIT.JSON.readTree(definition), stored(p).path("schools").path(copy).path("definition"));
-                p.locator("#close-editor").click(); p.locator("#school-selector").selectOption("two-class");
+                SchoolSetupAdvancedJsonBrowserIT.createLocalSchool(p,"Disposable cleanup school");
+                String copy=p.locator("#school-selector").inputValue();String definition=stored(p).path("schools").path(copy).path("definition").toString();
+                assertEquals("Disposable cleanup school",stored(p).path("schools").path(copy).path("name").asString());
+                p.locator("#school-selector").selectOption("two-class");
                 JsonNode assignment = null;
                 for (JsonNode a : bundle.path("schools").get(0).path("timetables").get(0).path("result").path("timetable").path("assignments"))
                     if (a.path("subjectId").asString().equals("demo-subject-english")) { assignment = a; break; }
@@ -45,8 +42,7 @@ class DemoLocalDataBrowserIT {
                 // Retain a second unfinished change and editor work as well as the saved artifacts.
                 p.locator("[data-lesson-id='" + assignment.path("lessonId").asString() + "']").click();
                 p.locator("#inspector-teacher").selectOption(assignment.path("teacherId").asString()); DemoTimetableBrowserIT.valid(p);
-                p.keyboard().press("Escape"); p.locator("#demo-utilities summary").click();
-                p.locator("#school-definition-json").fill(definition + "\n"); p.locator("#school-copy-name").fill("Unfinished school edit");
+                p.keyboard().press("Escape");SchoolSetupAdvancedJsonBrowserIT.newSchool(p);p.locator("#setup-name").fill("Unfinished school edit");SchoolSetupAdvancedJsonBrowserIT.advanced(p);p.locator("#school-definition-json").fill("{ unfinished JSON");SchoolSetupBrowserIT.saved(p);SchoolSetupBrowserIT.close(p);
                 assertFalse(stored(p).path("drafts").isEmpty()); assertFalse(stored(p).path("timetables").isEmpty());
                 p.evaluate("""
                     definition => {
@@ -58,15 +54,15 @@ class DemoLocalDataBrowserIT {
                       localStorage.setItem('unrelated-browser-data', 'preserve exact unrelated value');
                     }
                     """, definition);
-                p.reload(); DemoTimetableBrowserIT.readyWait(p); DemoTimetableBrowserIT.valid(p);
-                assertEquals(6, p.locator("#school-selector option").count());
-                Page stale = owner.newPage(); stale.onPageError(h.errors::add); DemoTimetableBrowserIT.ready(stale, h.base);
+                p.reload(); DemoTimetableBrowserIT.readyWait(p);p.locator("#school-selector").selectOption("two-class"); DemoTimetableBrowserIT.valid(p);
+                assertEquals(5, p.locator("#school-selector option").count());
+                Page stale = owner.newPage(); stale.onPageError(h.errors::add); DemoTimetableBrowserIT.ready(stale, h.base);SchoolSetupBrowserIT.open(stale);
                 Page foreign = other.newPage(); foreign.onPageError(h.errors::add); DemoTimetableBrowserIT.ready(foreign, h.base);
                 foreign.evaluate("definition=>localStorage.setItem('school-kernel.timetable-demo.v1',JSON.stringify({formatVersion:1,schools:{foreign:{name:'Other browser school',definition:JSON.parse(definition)}},timetables:{},drafts:{},selected:null,lastTimetable:{},editor:null}))", definition);
-                String foreignBefore = rawStorage(foreign), before = rawStorage(p);
-                p.locator("#demo-utilities summary").click(); p.locator("#delete-local-data").scrollIntoViewIfNeeded();
-                assertThat(p.locator("#local-data-description")).containsText("only school definitions, timetables and unfinished edits saved in this browser on this device");
-                h.record("UC-4 main 1/G1: Utilities explains the browser/device-only scope and bundled-example preservation; real saved school, timetable, draft, editor work and legacy artifacts exist", p, "01-utilities-scope");
+                String foreignBefore = rawStorage(foreign);
+                SchoolSetupAdvancedJsonBrowserIT.tools(p);p.locator("#delete-local-data").scrollIntoViewIfNeeded();String before=rawStorage(p);
+                assertThat(p.locator(".setup-local-data")).containsText("in this browser");
+                h.record("UC-4 main 1/G1: Setup Advanced explains the browser/device-only scope and bundled-example preservation; real saved school, timetable, draft, editor work and legacy artifacts exist", p, "01-utilities-scope");
                 p.locator("#delete-local-data").click(); assertThat(p.locator("#cancel-delete-local-data")).isFocused();
                 p.locator("#cancel-delete-local-data").click(); assertEquals(before, rawStorage(p));
                 p.locator("#delete-local-data").click(); p.keyboard().press("Escape"); assertEquals(before, rawStorage(p));
@@ -89,8 +85,8 @@ class DemoLocalDataBrowserIT {
                 assertEquals(serverBefore, h.snapshot(p)); assertTrue(cookiesBefore.equals(cookieValues(owner)), "Cleanup preserves session cookie values");
                 assertTrue(mutationRequests.isEmpty(), mutationRequests.toString());
                 assertEquals(foreignBefore, rawStorage(foreign));
-                stale.locator("#demo-utilities summary").click(); stale.locator("#school-copy-name").fill("Stale tab must not restore deleted artifacts");
-                assertThat(stale.locator("#demo-notice")).containsText("Another tab"); assertNull(p.evaluate("()=>localStorage.getItem('"+KEY+"')"));
+                stale.locator("#setup-name").fill("Stale tab must not restore deleted artifacts");
+                assertThat(stale.locator("#setup-durability")).hasText("Storage conflict"); assertNull(p.evaluate("()=>localStorage.getItem('"+KEY+"')"));
                 h.record("UC-4 main 3-4/G1/G3: confirmed cleanup removes saved and legacy artifacts, drafts and editor work; clean default reloads; cookies, exact server state, unrelated preferences and another browser remain unchanged; stale tab cannot resurrect data; no server mutation request", p, "05-clean-default");
                 for (String school : List.of("two-class", "full", "star-wars", "english")) {
                     p.locator("#school-selector").selectOption(school); assertEquals(2, p.locator("#timetable-selector option").count());
@@ -98,12 +94,11 @@ class DemoLocalDataBrowserIT {
                 assertTrue(stored(p).path("schools").isEmpty()); assertTrue(stored(p).path("timetables").isEmpty()); assertTrue(stored(p).path("drafts").isEmpty());
                 p.evaluate("()=>{localStorage.setItem('school-kernel.timetable-demo.v1','{corrupt root');localStorage.setItem('school-kernel.definition.v1.broken','{bad legacy');}");
                 p.reload(); DemoTimetableBrowserIT.readyWait(p); assertThat(p.locator("#demo-notice")).containsText("retained");
-                p.locator("#demo-utilities summary").click(); p.locator("#delete-local-data").click(); deleteConfirmed(p); assertClean(p);
-                p.locator("#demo-utilities summary").click(); p.locator("#school-copy-name").fill("New school after cleanup"); p.locator("#save-school-copy").click();
-                p.waitForFunction("()=>document.querySelector('#editor-status').textContent.includes('saved in this browser')");
+                SchoolSetupAdvancedJsonBrowserIT.tools(p);p.locator("#delete-local-data").click(); deleteConfirmed(p); assertClean(p);
+                SchoolSetupAdvancedJsonBrowserIT.createLocalSchool(p,"New school after cleanup");
                 assertEquals("New school after cleanup", stored(p).path("schools").path(p.locator("#school-selector").inputValue()).path("name").asString());
                 h.record("UC-4 extension 3b/main 4: explicit cleanup recovers an unreadable root and malformed legacy definition; fresh school work saves successfully afterward", p, "06-new-work-after-recovery");
-                p.locator("#delete-local-data").click(); deleteConfirmed(p); assertClean(p);
+                SchoolSetupAdvancedJsonBrowserIT.tools(p);p.locator("#delete-local-data").click(); deleteConfirmed(p); assertClean(p);
                 assertTrue(h.errors.isEmpty(), h.errors.toString()); Files.writeString(h.output.resolve("verdict.txt"), "PASS\n");
             } catch (Throwable failure) {
                 Files.writeString(h.output.resolve("failure-workspace-response.json"), h.snapshot(p).toPrettyString());
