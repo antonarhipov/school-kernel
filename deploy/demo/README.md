@@ -10,19 +10,69 @@ Build from the repository root:
 docker build --file deploy/demo/Dockerfile --tag school-kernel-demo:local .
 ```
 
+The default container builds a Linux native web executable with GraalVM CE 25.0.1; the separate kernel retains Java 25.
+Native compilation targets the build platform with a portable CPU instruction baseline, two compiler threads and a
+4 GiB compiler heap. Build a Railway-compatible image on Apple Silicon with `--platform linux/amd64`.
 The build context explicitly includes only production inputs. It excludes real-school examples, tests, operator
-configuration, Git metadata and prior build output. The runtime image contains the workspace JAR, packaged kernel
+configuration, Git metadata and prior build output. The runtime image contains the native workspace, packaged kernel
 and two launchers. It runs as UID/GID 10001, with a private umask and no database/volume. With configured public hostnames, the demo binds to `0.0.0.0:$PORT` (8080 by default) and enforces the
 configured HTTPS origin. With default loopback-only hosts, the same profile binds only to loopback and accepts
 direct same-origin HTTP with local session cookies; no certificates or proxy headers are needed for local tests.
 Startup reads the bundled definition/result JSON directly without kernel verification, evidence/hash comparisons
 or scoring. Verify/regenerate results through the explicit maintenance workflow when artifact inputs change.
-Custom input verification remains on demand.
+Custom input verification remains on demand. The `jvm` Docker target retains the previous web runtime:
+
+```sh
+docker build --target jvm --file deploy/demo/Dockerfile --tag school-kernel-demo:jvm .
+```
+
+The existing Railway service already selects `deploy/demo/Dockerfile`. Deploying the staged production context uses
+its native default target without changing the service's plan, resource limits or build configuration. The runtime
+still includes a JRE for kernel processes. Native and JVM web launchers share the existing `DEMO_WEB_HEAP_MB` setting.
+
+## Faster local startup with GraalVM
+
+The optional `native-demo` Maven profile compiles only the demo web application to a native executable. The
+verification/scheduling kernel remains a separate Java 25 process. The normal JVM build and `jvm` container target
+remain available.
+Use GraalVM CE 25 with Native Image and Xcode Command Line Tools on macOS (a native C compiler on other platforms).
+The JDK and compiler architectures must match: on Apple Silicon, use an **ARM64/aarch64** GraalVM installation.
+`file "$JAVA_HOME/bin/java"` should report `arm64`, not `x86_64`.
+
+From the repository root, with the appropriate GraalVM selected:
+
+```sh
+sdk use java 25.0.1-graalce
+export GRAALVM_HOME="$JAVA_HOME"
+./mvnw -Pnative-demo -DskipTests package
+SPRING_PROFILES_ACTIVE=demo timetable-workspace/target/school-demo
+```
+
+Open `http://localhost:8080/workspace/`. This launch uses the existing default loopback-only demo configuration.
+Keep `kernel-cli/target/school-kernel.jar` and the repository's `school-kernel` launcher available; custom validation
+and scheduling still require Java 25 on `PATH`. Set `DEMO_KERNEL_ARTIFACT` and `SCHOOL_KERNEL_EXECUTABLE` when running
+from a different working directory. Native compilation takes substantially longer than ordinary JVM packaging and
+produces an executable for the build machine's OS/architecture. Build with the `demo` profile and retain that active
+profile at runtime; this executable is not the PostgreSQL workspace.
+
+Compare three alternating launches of each artifact, including actual HTTP checks of samples, session isolation,
+export, validation and origin refusal:
+
+```sh
+python3 tools/demo/measure_startup.py --java "$JAVA_HOME/bin/java" \
+  --output output/execution/demo-startup/local-comparison
+```
+
+Use a new output directory for each run. The report retains per-process logs, artifact hashes, individual timings,
+framework startup times and median process-to-HTTP readiness times. Filesystem caches remain warm between trials;
+these measurements do not establish deployed cold-start latency or solver performance.
+
+## Container runtime and deployment
 
 Starting JVM heap ceilings are 512 MiB for the web process, 1,024 MiB for a solve and 256 MiB for each verification.
 `DEMO_WEB_HEAP_MB`, `DEMO_SOLVER_HEAP_MB` and `DEMO_VERIFY_HEAP_MB` can override them with positive integers.
 These are tuning inputs, not an aggregate memory qualification; native memory, caches, workspaces and concurrent
-verification must be measured under UC-12. The image's Java process is PID 1 and receives SIGTERM directly.
+verification must be measured under UC-12. The image's web executable is PID 1 and receives SIGTERM directly.
 
 For a health-only local smoke check, use an isolated container (never a local school database):
 

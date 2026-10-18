@@ -3,6 +3,7 @@ package org.schoolkernel.workspace;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
@@ -10,6 +11,7 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 
 @Configuration
 @Profile("demo")
+@ImportRuntimeHints(DemoRuntimeHints.class)
 @EnableConfigurationProperties(DemoSettings.class)
 class DemoConfiguration {
     @Bean org.springframework.boot.web.server.WebServerFactoryCustomizer<org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory>

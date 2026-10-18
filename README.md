@@ -13,6 +13,8 @@ and `timetable-workspace` (Spring Boot and PostgreSQL). A separate static viewer
 - Docker with Compose for the local workspace and PostgreSQL integration tests.
 - Chrome for browser integration tests.
 
+For the database-free demo and optional GraalVM native launch, see [demo startup](deploy/demo/README.md#faster-local-startup-with-graalvm).
+
 For a browser walkthrough, follow [Operations workspace](#operations-workspace). For command-line scheduling, build
 the project and use the launcher below.
 

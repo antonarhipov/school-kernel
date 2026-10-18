@@ -21,4 +21,5 @@
 !deploy/demo/
 !deploy/demo/Dockerfile
 !deploy/demo/start
+!deploy/demo/start-native
 !deploy/demo/kernel
