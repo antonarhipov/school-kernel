@@ -28,9 +28,9 @@ class DemoTimetableController {
         var document = read(request);
         var definition = document.path("definition"); var result = document.path("result");
         limits.check(definition, false);
-        if (!result.path("timetable").path("assignments").isArray() || result.path("timetable").path("assignments").size() != definition.path("lessons").size())
+        if (!result.path("timetable").path("assignments").isArray() || result.path("timetable").path("assignments").size() != DemoDefinitionLimits.sessionCount(definition))
             throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_CANDIDATE", "/result/timetable/assignments: A complete assignment for every lesson is required.");
-        var evidence = verification.review(new ImportDocuments(definition, result, null, ImportDocuments.ImportMode.ACCEPTED_BASELINE));
+        var evidence = verification.review(new ImportDocuments(definition, result, JSON.createObjectNode().put("exactResult", document.path("exactResult").asBoolean(false)), ImportDocuments.ImportMode.ACCEPTED_BASELINE));
         ((tools.jackson.databind.node.ObjectNode)evidence).put("build", verification.build());
         return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(evidence);
     }

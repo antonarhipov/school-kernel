@@ -1,0 +1,29 @@
+import fs from 'node:fs';
+const clone = v => structuredClone(v);
+const days=['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY'];
+const periods=days.flatMap((weekday,day)=>Array.from({length:4},(_,i)=>({id:`${day}-${i+1}`,weekday,order:i+1,displayName:`P${i+1}`,startTime:`${String(8+i).padStart(2,'0')}:00`,endTime:`${String(8+i).padStart(2,'0')}:45`,adjacentToNext:i<3,gapBoundaryAfter:false})));
+const fixtures={};
+const cross=JSON.parse(fs.readFileSync('kernel-cli/src/test/resources/fixtures/audience/cross-day.json'));
+const rows=JSON.parse(fs.readFileSync('kernel-cli/src/test/resources/fixtures/audience/cross-day-assignments.json'));
+cross.periods=clone(periods);for(const a of rows)a.periodId=a.periodId==='tue-p2'?'1-2':'3-4';
+fixtures.nested={definition:cross,assignments:rows};
+function grouped(k){
+ const groups=Array.from({length:k},(_,i)=>({id:`G${i+1}`,displayName:`Group ${i+1} Õ — original full custom audience name`,size:Math.floor(28/k)+(i<28%k?1:0)}));
+ const definition={schemaVersion:2,catalogVersion:11,schoolId:`inspection-${k}`,displayName:`Inspection ${k} groups`,subjects:[{id:'s',displayName:'Practical English with a long subject name'}],teachers:groups.map((_,i)=>({id:`T${i}`,displayName:`Teacher ${i+1}`,qualifiedSubjectIds:['s'],eligibleClassIdsBySubject:{s:['c']},...(i===0?{referenceWeeklyMaximum:0}:{})})),cohorts:[{id:'c',displayName:'5A',size:28,splits:[{id:'split',displayName:'Reusable English',groupCount:k,subjectIds:['s'],groups}]}],rooms:groups.map((_,i)=>({id:`R${i}`,displayName:`Room ${i+1}`,capacity:28,capabilityIds:[]})),periods:clone(periods),lessons:[],audiencePlans:[{id:'plan',classId:'c',subjectId:'s',weeklyTotal:1,wholeClassCount:0,delivery:'grouped',splitId:'split',overrides:{},portions:groups.map((g,i)=>({id:`Q${i}`,audienceId:g.id,sessionIds:[`S${i}`],teacherPolicy:{mode:'automatic'}}))}]};
+ const assignments=groups.map((g,i)=>({lessonId:`S${i}`,subjectId:'s',cohortId:'c',audienceId:g.id,allocationId:`Q${i}`,teacherId:`T${i}`,roomId:`R${i}`,periodId:'0-1'}));return {definition,assignments};
+}
+for(const k of [2,3,4,8])fixtures[`groups${k}`]=grouped(k);
+const partial=grouped(4);partial.definition.audiencePlans[0].overrides.G4=0;partial.definition.audiencePlans[0].portions.pop();partial.assignments.pop();fixtures.partial=partial;
+const whole=grouped(2),p=whole.definition.audiencePlans[0];p.delivery='whole';p.wholeClassCount=1;delete p.splitId;p.portions=[{id:'whole',audienceId:'class:c',sessionIds:['whole-session'],teacherPolicy:{mode:'automatic'}}];whole.assignments=[{...whole.assignments[0],lessonId:'whole-session',audienceId:'class:c',allocationId:'whole'}];fixtures.whole=whole;
+const gap=grouped(2),gp=gap.definition.audiencePlans[0];gp.weeklyTotal=2;gp.overrides.G2=0;gp.portions=[{...gp.portions[0],sessionIds:['first','last']}];gap.assignments=['first','last'].map((id,i)=>({...gap.assignments[0],lessonId:id,periodId:i?'0-3':'0-1'}));fixtures.gap=gap;
+const crossing=grouped(2),c=crossing.definition.cohorts[0];const s=clone(c.splits[0]);s.id='other';s.displayName='Crossing German';s.groups.forEach((g,i)=>{g.id=`X${i}`;g.displayName=`Crossing ${i+1}`;});c.splits.push(s);c.relationships={mode:'joint',splitIds:['split','other'],unions:{},intersections:c.splits[0].groups.flatMap(g=>s.groups.map(h=>({groupIds:[g.id,h.id],count:7})))};const xp=clone(crossing.definition.audiencePlans[0]);xp.id='other-plan';xp.subjectId='german';crossing.definition.subjects.push({id:'german',displayName:'German'});for(const t of crossing.definition.teachers){t.qualifiedSubjectIds.push('german');t.eligibleClassIdsBySubject.german=['c'];}xp.splitId='other';xp.portions.forEach((q,i)=>{q.id=`XQ${i}`;q.audienceId=`X${i}`;q.sessionIds=[`XS${i}`];});crossing.definition.audiencePlans.push(xp);crossing.assignments.push(...xp.portions.map((q,i)=>({...crossing.assignments[i],lessonId:q.sessionIds[0],subjectId:'german',allocationId:q.id,audienceId:q.audienceId,periodId:'1-1'})));fixtures.crossing=crossing;
+fs.writeFileSync('timetable-workspace/src/test/resources/student-groups/inspection-pairs.json',JSON.stringify(fixtures,null,2)+'\n');
+
+// Full authoring-to-generation journey: mixed English plus the normative nested practical arrangement.
+const authored=clone(cross);authored.periods=[clone(periods[0]),clone(periods[5]),clone(periods[8]),clone(periods[15]),clone(periods[16])];
+authored.rooms[0].capacity=28;
+const english=authored.audiencePlans[0];english.weeklyTotal=3;english.delivery='mixed';english.wholeClassCount=2;english.portions.unshift({id:'whole-portion',audienceId:'class:c',sessionIds:['whole-mon','whole-fri'],teacherPolicy:{mode:'automatic'}});
+const controls=[{id:'whole-days',classId:'c',type:'ALLOWED',count:2,days:['MONDAY','FRIDAY'],activities:[{portionId:'whole-portion',unit:'SESSION'}]},...english.portions.slice(1).map((q,i)=>({id:`english-slot-${i}`,classId:'c',type:'FIXED',count:1,day:i?'THURSDAY':'TUESDAY',periodId:i?'3-4':'1-2',activities:[{portionId:q.id,unit:'SESSION'}]})),...authored.audiencePlans[1].portions.map((q,i)=>({id:`practical-days-${i}`,classId:'c',type:'ALLOWED',count:1,days:['TUESDAY','THURSDAY'],activities:[{portionId:q.id,unit:'SESSION'}]}))];
+const authoring={documentType:'school-setup',formatVersion:1,name:'Nested mixed school',kernelSchoolId:authored.schoolId,grid:{activeDays:days,intervals:authored.periods.map(p=>({id:`interval-${p.id}`,periodId:p.id,day:p.weekday,kind:'Lesson',label:p.displayName,start:p.startTime,end:p.endTime,order:p.order,boundaryAfter:true}))},subjects:authored.subjects,teachers:authored.teachers,classes:authored.cohorts,rooms:authored.rooms,plans:[],audiencePlans:authored.audiencePlans,coordinationRules:controls};
+for(const c of authoring.classes)if(c.relationships){c.relationships.intersections??=[];c.relationships.unions??={};}
+fs.writeFileSync('timetable-workspace/src/test/resources/student-groups/generation-authoring.json',JSON.stringify(authoring,null,2)+'\n');

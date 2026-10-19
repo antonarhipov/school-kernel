@@ -117,11 +117,33 @@ class DemoSamplesTest {
         }
         assertTrue(moved >= 4, "Variants must visibly differ");
     }
+    @Test void everyKasevaljaEnglishCourseUsesOnlyParallelGroups() {
+        var school=samples.preview("full");var d=school.path("definition");
+        String english="demo-subject-010";
+        var expected=Set.of("6C","7A","7B","8A","8B","9A","9B","9C");
+        var names=new HashMap<String,String>();d.path("cohorts").forEach(c->names.put(c.path("id").asString(),c.path("displayName").asString()));
+        var found=new HashSet<String>();
+        for(JsonNode lesson:d.path("lessons"))assertNotEquals(english,lesson.path("subjectId").asString());
+        for(JsonNode plan:d.path("audiencePlans"))if(plan.path("subjectId").asString().equals(english)){
+            found.add(names.get(plan.path("classId").asString()));
+            assertEquals("grouped",plan.path("delivery").asString());assertEquals(0,plan.path("wholeClassCount").asInt());
+            assertEquals(3,plan.path("weeklyTotal").asInt());assertEquals(2,plan.path("portions").size());
+        }
+        assertEquals(expected,found);
+        for(JsonNode timetable:school.path("timetables")){
+            int sessions=0;for(JsonNode a:timetable.path("result").path("timetable").path("assignments"))if(a.path("subjectId").asString().equals(english)){
+                assertFalse(a.path("audienceId").asString().startsWith("class:"));sessions++;
+            }
+            assertEquals(48,sessions);
+        }
+    }
     @Test void imperialCurriculumProgressesFromBasicsToOperationalTrainingWithBalancedDays() {
         var academy = samples.preview("star-wars"); var d = academy.path("definition");
         assertEquals("Coruscant Imperial Academy", academy.path("title").asString());
-        assertEquals(18,d.path("cohorts").size()); assertEquals(540,d.path("lessons").size());
-        assertEquals(29,d.path("teachers").size()); assertEquals(37,d.path("rooms").size());
+        assertEquals(18,d.path("cohorts").size()); assertEquals(522,d.path("lessons").size());
+        assertEquals(37,d.path("teachers").size()); assertEquals(45,d.path("rooms").size());
+        assertEquals(50,d.path("periods").size());
+        assertEquals(5,d.path("audiencePlans").size());
         var names = new HashMap<String,String>(); d.path("subjects").forEach(s -> names.put(s.path("id").asString(),s.path("displayName").asString()));
         var subjects = Map.of(
             "junior", Set.of("Galactic Basic","Applied Numeracy","Galactic History","Natural Sciences","Droid Literacy","Physical Conditioning","Academy Citizenship","Teamwork and First Aid"),
@@ -137,6 +159,8 @@ class DemoSamplesTest {
                 String previous=teaching.putIfAbsent(lesson.path("seriesId").asString(),lesson.path("teacherId").asString());
                 if(previous!=null) assertEquals(previous,lesson.path("teacherId").asString());
             }
+            for(JsonNode plan:d.path("audiencePlans")) if(plan.path("classId").asString().equals(id))
+                counts.merge(names.get(plan.path("subjectId").asString()),plan.path("weeklyTotal").asInt(),Integer::sum);
             assertEquals(subjects.get(stage),counts.keySet(),id);
             assertEquals(perDay.get(stage)*5,counts.values().stream().mapToInt(Integer::intValue).sum(),id);
             assertEquals(3,counts.get("Physical Conditioning"));
@@ -145,11 +169,12 @@ class DemoSamplesTest {
         }
         var weekdays=new HashMap<String,String>(); d.path("periods").forEach(p->weekdays.put(p.path("id").asString(),p.path("weekday").asString()));
         for(JsonNode timetable:academy.path("timetables")) {
-            var days=new HashMap<String,Integer>();var dailySubjects=new HashSet<String>();
+            var days=new HashMap<String,Integer>();var dailySubjects=new HashMap<String,String>();var occupied=new HashSet<String>();
             for(JsonNode a:timetable.path("result").path("timetable").path("assignments")) {
                 String cohort=a.path("cohortId").asString(),day=weekdays.get(a.path("periodId").asString());
-                days.merge(cohort+"/"+day,1,Integer::sum);
-                assertTrue(dailySubjects.add(cohort+"/"+day+"/"+a.path("subjectId").asString()),"One subject occurrence per day");
+                if(occupied.add(cohort+"/"+a.path("periodId").asString())) days.merge(cohort+"/"+day,1,Integer::sum);
+                String previous=dailySubjects.putIfAbsent(cohort+"/"+day+"/"+a.path("subjectId").asString(),a.path("periodId").asString());
+                if(previous!=null) assertEquals(previous,a.path("periodId").asString(),"Parallel groups share one subject occurrence per day");
             }
             stageOf.forEach((cohort,stage)->weekdays.values().stream().distinct().forEach(day->assertEquals(perDay.get(stage),days.get(cohort+"/"+day))));
         }

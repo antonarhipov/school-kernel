@@ -17,6 +17,20 @@ class VerifySampleScores {
         Path root = Path.of(args[0]);
         for (String id : List.of("two-class", "full", "star-wars", "english")) {
             var loaded = loader.load(root.resolve(id + "-definition.json"), DefinitionLoader.Mode.INITIAL);
+            if (loaded instanceof DefinitionLoader.Accepted audience && AudienceDefinition.enabled(audience.document())) {
+                for (String variant : List.of("a", "b")) {
+                    var path = root.resolve(id + "-" + variant + "-result.json");
+                    var result = json.readTree(Files.readAllBytes(path));
+                    var reviewed = new ReviewService(loader, new FileBoundary()).handle(root.resolve(id + "-definition.json"), path, "maintenance");
+                    if (!(reviewed instanceof CommandOutcome.Succeeded success) || !success.document().path("valid").asBoolean()
+                            || success.document().path("assertedQualityMismatch").asBoolean()
+                            || !success.document().path("result").path("timetableRevision").equals(result.path("timetableRevision"))
+                            || !AudiencePairValidator.equivalent(success.document().path("result").path("effectiveSoftWeights"), result.path("effectiveSoftWeights")))
+                        throw new IllegalStateException("Invalid or stale audience sample: " + id + "/" + variant + " " + reviewed);
+                    samples.set(id + "/" + variant, result.path("score"));
+                }
+                continue;
+            }
             if (!(loaded instanceof DefinitionLoader.Accepted accepted)
                     || accepted.definition().catalogVersion() != KernelCatalog.ROOM_ASSIGNMENT_VERSION)
                 throw new IllegalStateException("Sample is not a valid legacy sample-catalog initial definition: " + id);

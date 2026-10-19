@@ -28,7 +28,7 @@ class DemoTimetableRemoteIT {
                 DemoTimetableBrowserIT.ready(p,h.base);
                 assertThat(p.locator("#school-selector")).hasValue("full");
                 assertThat(p.locator("#timetable-title")).hasText("Variant A");
-                assertEquals(520,p.locator(".demo-lesson").count());
+                assertEquals(544,DemoTimetableBrowserIT.representedLessons(p));
                 assertEquals(List.of("two-class","full","star-wars","english"),p.locator("#school-selector option").evaluateAll("ns=>ns.map(n=>n.value)"));
                 assertEquals(0,p.locator("#open-repair-setup,#reopen-inspector,#teacher-change-route,[data-show-teacher-route]").count());
                 Files.writeString(h.output.resolve("matrix-layout.json"),DemoPlanningBrowserIT.JSON.writeValueAsString(p.evaluate("""
@@ -64,7 +64,7 @@ class DemoTimetableRemoteIT {
                 }
                 p.locator("#cohort-filter").selectOption("");
                 assertThat(p.locator("#school-selector")).hasValue("english");
-                assertEquals(614,p.locator(".demo-lesson").count());
+                assertEquals(614,DemoTimetableBrowserIT.representedLessons(p));
                 assertTrue(p.locator("#timetable-matrix").innerText().contains("Design and Technology"));
                 h.record("All eight public variants open; Meadowbrook shows its independent 614-lesson English curriculum in the compact matrix; same-school switching retains filters and makes zero requests; obsolete controls absent",p,"01-eight-variants-english");
                 JsonNode englishAssignments=bundle.path("schools").get(3).path("timetables").get(1).path("result").path("timetable").path("assignments");
@@ -77,18 +77,18 @@ class DemoTimetableRemoteIT {
                 assertTrue(p.locator(".demo-lesson.has-conflict").count()>=2);
                 h.record("The entire new 614-lesson English school is authoritatively checked on the existing Free service; a real class collision identifies affected English lessons and blocks saving",p,"01b-english-conflict");
                 p.keyboard().press("Escape");p.locator("#discard-timetable-changes").click();
-                assertThat(p.locator("#timetable-save-bar")).not().isVisible();assertEquals(614,p.locator(".demo-lesson").count());
+                assertThat(p.locator("#timetable-save-bar")).not().isVisible();assertEquals(614,DemoTimetableBrowserIT.representedLessons(p));
                 p.locator("#school-selector").selectOption("star-wars");
                 assertTrue(p.locator("body").innerText().contains("Coruscant Imperial Academy"));
-                assertEquals(540,p.locator(".demo-lesson").count());
-                p.locator("#cohort-filter").selectOption("imperial-cohort-junior-1A");assertEquals(25,p.locator(".demo-lesson").count());
+                assertEquals(566,DemoTimetableBrowserIT.representedLessons(p));
+                p.locator("#cohort-filter").selectOption("imperial-cohort-junior-1A");assertEquals(25,DemoTimetableBrowserIT.representedLessons(p));
                 assertTrue(p.locator("#timetable-matrix").innerText().contains("Applied Numeracy"));
                 h.record("Imperial juniors study literacy, numeracy, sciences and teamwork in five-lesson days",p,"01c-imperial-junior");
-                p.locator("#cohort-filter").selectOption("imperial-cohort-intermediate-4A");assertEquals(30,p.locator(".demo-lesson").count());
+                p.locator("#cohort-filter").selectOption("imperial-cohort-intermediate-4A");assertEquals(42,DemoTimetableBrowserIT.representedLessons(p));
                 assertTrue(p.locator("#timetable-matrix").innerText().contains("Flight Simulation"));
                 h.record("Imperial intermediate cohorts prepare through six-lesson days of systems, navigation, simulation and fundamentals",p,"01d-imperial-intermediate");
-                p.locator("#cohort-filter").selectOption("imperial-cohort-senior-7A");assertEquals(35,p.locator(".demo-lesson").count());
-                assertTrue(p.locator("#timetable-matrix").innerText().contains("Combined Operations"));
+                p.locator("#cohort-filter").selectOption("imperial-cohort-senior-7A");assertEquals(43,DemoTimetableBrowserIT.representedLessons(p));
+                assertTrue(p.locator(".audience-summary:visible").count()>0);
                 h.record("Imperial seniors practise fleet tactics, combined operations, mission planning and leadership in seven-lesson days",p,"01e-imperial-senior");
                 p.setViewportSize(390,844);assertTrue((Boolean)p.evaluate("()=>document.documentElement.scrollWidth<=innerWidth+1"));
                 h.record("Senior Imperial curriculum retains the compact internally scrollable matrix at 390px",p,"01f-imperial-mobile");
@@ -100,12 +100,12 @@ class DemoTimetableRemoteIT {
                 p.locator("[data-lesson-id='"+imperialLesson.path("lessonId").asString()+"']").click();
                 p.locator("#inspector-period").selectOption(imperialCollision.path("periodId").asString());feedback(p,"Class double-booked");
                 assertThat(p.locator("#save-new-timetable")).isDisabled();assertTrue(p.locator(".demo-lesson.has-conflict").count()>=2);
-                h.record("Full 540-lesson Imperial validation on Free identifies a real collision and prevents saving",p,"01g-imperial-conflict");
+                h.record("Full 566-lesson Imperial validation on Free identifies a real collision and prevents saving",p,"01g-imperial-conflict");
                 p.keyboard().press("Escape");p.locator("#discard-timetable-changes").click();assertThat(p.locator("#timetable-save-bar")).not().isVisible();
                 p.locator("#school-selector").selectOption("two-class");
                 assertThat(p.locator("#cohort-filter")).hasValue("");
                 assertThat(p.locator("#teacher-filter")).hasValue("");assertThat(p.locator("#room-filter")).hasValue("");
-                assertEquals(56,p.locator(".demo-lesson").count());p.locator("#timetable-selector").selectOption("a");
+                assertEquals(56,DemoTimetableBrowserIT.representedLessons(p));p.locator("#timetable-selector").selectOption("a");
                 JsonNode school=bundle.path("schools").get(0),source=school.path("timetables").get(0).path("result");
                 JsonNode lesson=null,collision=null;
                 for(JsonNode a:source.path("timetable").path("assignments"))if(a.path("subjectId").asString().equals("demo-subject-english")){lesson=a;break;}
@@ -148,10 +148,10 @@ class DemoTimetableRemoteIT {
                 p.locator("#demo-utilities summary").click();assertEquals(1,p.locator("#demo-utilities section").count());
                 String definition=p.locator("#school-definition-json").inputValue();p.locator("#school-copy-name").fill("Public disposable Ranniku");p.locator("#save-school-copy").click();
                 p.waitForFunction("()=>document.querySelector('#editor-status').textContent.includes('saved in this browser')");
-                String copy=p.locator("#school-selector").inputValue();assertEquals(0,p.locator(".demo-lesson").count());
+                String copy=p.locator("#school-selector").inputValue();assertEquals(0,DemoTimetableBrowserIT.representedLessons(p));
                 p.locator("#generation-effort").selectOption("QUICK");p.locator("#generate-timetable").click();
                 p.waitForFunction("()=>document.querySelector('#timetable-title').textContent==='Generated timetable'",null,new Page.WaitForFunctionOptions().setTimeout(90000));
-                DemoTimetableBrowserIT.valid(p);assertEquals(56,p.locator(".demo-lesson").count());
+                DemoTimetableBrowserIT.valid(p);assertEquals(56,DemoTimetableBrowserIT.representedLessons(p));
                 p.locator("#new-timetable-name").fill("Public generated week");p.locator("#save-new-timetable").click();assertThat(p.locator("#timetable-title")).hasText("Public generated week");
                 JsonNode generated=stored(p,copy);assertEquals(DemoPlanningBrowserIT.JSON.readTree(definition),generated.path("definition"));assertEquals("PT5S",generated.path("result").path("limit").path("duration").asString());
                 Files.writeString(h.output.resolve("saved-generated.json"),generated.toPrettyString());

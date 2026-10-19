@@ -4,6 +4,16 @@ School Kernel creates, inspects, and maintains school timetables. Its local brow
 authoring, initial planning, repair, and manual period/room editing, backed by a stateless planning CLI and a versioned
 JSON contract.
 
+School setup supports reusable class splits, nested or crossing anonymous audiences, mixed whole-class/group
+teaching, eligible weekly teachers and counted hard coordination. Generated timetables show parallel lessons in
+compact sections, with full details for dense cells, student-gap and teacher-workload monitoring, explicit coordinated
+repair/manual changes, faithful import/export and compact PDFs with complete lesson keys. Existing fixed teachers
+remain fixed until an explicit adoption preview is accepted.
+
+Audience search is bounded by the caller's time or placement budget and publishes only complete independently
+reviewed candidates; it does not promise global optimality. See the [audience contract](kernel-contract/AUDIENCES.md)
+and [implementation evidence](spec/student-groups-and-coordinated-lessons/status.md).
+
 The Java 25 Maven reactor has three modules: `kernel-contract` (schemas), `kernel-cli` (verification and scheduling),
 and `timetable-workspace` (Spring Boot and PostgreSQL). A separate static viewer opens timetable result files.
 
@@ -83,6 +93,10 @@ scratch.
 
 - [`school-definition-v1.schema.json`](kernel-contract/src/main/resources/schema/school-definition-v1.schema.json) defines inputs.
 - [`result-v1.schema.json`](kernel-contract/src/main/resources/schema/result-v1.schema.json) defines planning outcomes.
+- [`school-definition-v2.schema.json`](kernel-contract/src/main/resources/schema/school-definition-v2.schema.json) and
+  [`result-v2.schema.json`](kernel-contract/src/main/resources/schema/result-v2.schema.json) carry catalog `11`
+  audience demand, anonymous membership, weekly teacher policies and counted coordination. Legacy fixed sessions
+  retain their fixed teacher until explicitly adopted. See the [audience contract](kernel-contract/AUDIENCES.md).
 - [`verification-result-v1.schema.json`](kernel-contract/src/main/resources/schema/verification-result-v1.schema.json)
   defines the non-solving import-verification outcome.
 - Schema version `1` supports catalog versions `1` through `9`. Earlier catalogs remain readable for existing accepted
@@ -93,7 +107,7 @@ scratch.
 - Optional `reservedPeriodIds` names declared school periods excluded from ordinary planning and repair. Period names or ID suffixes alone have no special meaning. A feasible
   result never assigns a lesson there unless its subject declares `reservedPeriodsAllowed` (catalog `6`). Omitting the
   field preserves existing definitions and results.
-- Product scoring is lexicographic: feasibility, period stability, room stability, then ordinary preference penalty.
+- Legacy product scoring is lexicographic: feasibility, period stability, room stability, then ordinary preference penalty.
   Feasibility has two hard levels, physical conflicts first and day-shape rules (cohort gaps, start bounds, subject
   placement) second; both must be zero. Initial planning has zero stability penalties.
 - Catalog `2` adds a penalty for each class gap inside an available school-day block and a penalty for weekly class

@@ -1,0 +1,13 @@
+# UC-4 — eligible weekly teacher policies
+
+Base `3cb66f30ef996a8cf3bb93f968cc53db15fc1191`; [exact submission](../../../output/student-groups-and-coordinated-lessons/UC-4/submission.json).
+
+Audience portions default to one automatic weekly teacher. The form displays qualification/class eligibility, inherited class-subject candidates and optional per-audience narrowing; explicit empty sets remain errors. Fixed teachers and identified deliberate sharing portions retain exact IDs/counts. Sharing totals apply only to the relevant whole/group portion. Teacher reference maximum is explicitly monitoring only. Existing fixed plans remain fixed; preview/cancel/adoption of representable plans preserves exact session IDs and the complete original fixed source. Unmappable locks/block/occurrence settings refuse adoption with locations instead of dropping them.
+
+Published definition v2/catalog 11 and compilation carry eligibility, restrictions, policies, continuity/portion identities and counts. The real packaged `verify` boundary independently checks these fields. Static validation checks resource semantics and complete used anonymous relationships; assignment review and solving remain UC-8/9 and are explicitly refused rather than approximated. Legacy v1 remains supported unchanged. Verification output schema adds catalog 11.
+
+Checks: all 65 Node checks PASS; 107 existing kernel unit checks PASS; `AudienceTeacherCliIT` 2/2 PASS. [Published process evidence](../../../output/kernel/student-groups-and-coordinated-lessons/UC-4/attempt-2/boundary-results.json): valid sharing/fixed/automatic input with zero reference workload VERIFIED; empty restriction, ineligible teacher, incorrect sharing total and duplicate session ID all INVALID_INPUT with exact unchanged input. Earlier schema-adjacency failure retained under attempt-1 and corrected for catalog 11. Package and diff checks PASS.
+
+[Full real Chrome administrator journey](../../../output/playwright/student-groups-and-coordinated-lessons/UC-4/1792349157974/ledger.md) PASS: inherited A/B candidates, fixed A, automatic narrowed B, sharing 2A+1B, empty/mismatched/unfinished recovery and exact reload, cancelled fixed adoption with exact equality and explicit adoption retaining original source labels/IDs. Screenshot inspected; no browser errors; disposable context/server stopped.
+
+APPROVED for retained policies and published input. Chosen teacher assignments, availability at placements and independent result review remain UC-8/9; no generated timetable is approved here. Current demo input gateway remains the legacy boundary until UC-6/8 integration.

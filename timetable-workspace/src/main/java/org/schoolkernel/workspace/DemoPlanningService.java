@@ -67,7 +67,7 @@ class DemoPlanningService {
         limits.check(definition, !repair);
         if (baselineResult != null && (CanonicalJson.bytes(baselineResult).length > DemoDefinitionLimits.DOCUMENT_BYTES
                 || CanonicalJson.bytes(baselineDefinition).length > DemoDefinitionLimits.DOCUMENT_BYTES)) throw transition("Current exceeds the demo document limit.");
-        String preset = preset(request, definition.path("lessons").size());
+        String preset = preset(request, DemoDefinitionLimits.sessionCount(definition));
         var input = new DemoKernelRunner.Input(repair ? "REPAIR" : "INITIAL", definition, baselineDefinition, baselineResult, settings.effort(preset));
         String key = identity(input);
         var artifact = (DemoKernelRunner.Artifact) cache.get(key);
@@ -133,7 +133,7 @@ class DemoPlanningService {
         detach(subscriber); return store.load();
     }
 
-    private String preset(JsonNode request, int lessons) {
+    private String preset(JsonNode request, long lessons) {
         if (request == null || request.isNull() || request.isObject() && request.isEmpty()) return lessons > settings.lessonThreshold() ? "THOROUGH" : "QUICK";
         if (!request.isObject() || request.size() != 1 || !Set.of("QUICK", "THOROUGH").contains(request.path("effort").asString("")))
             throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY, "INVALID_SEARCH_EFFORT", "Choose Quick search or Thorough search. Arbitrary limits and retries are unavailable.");
@@ -235,7 +235,7 @@ class DemoPlanningService {
             provenance.put("duration", subscriber.input.effort().toString()); provenance.put("seed", 0); provenance.put("solverConfiguration", "packaged-timefold-default");
             ObjectNode counts = proposal.putObject("changeCounts");
             if ("REPAIR".equals(subscriber.input.operation())) {
-                for (String field : List.of("additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves")) counts.put(field, result.path("changeReport").path(field).size());
+                for (String field : ProposalReviewService.categories(result)) counts.put(field, result.path("changeReport").path(field).size());
                 proposal.set("review", reviews.create(document.path("acceptedBaseline"), document.path("repairDraft"), subscriber.input.definition(), result));
             } else counts.put("lessonCount", result.path("timetable").path("assignments").size());
             finish(subscriber, current.version(), true, document);

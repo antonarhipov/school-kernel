@@ -138,7 +138,7 @@ public class RepairProposalService {
                         .equals(text(definition.path("basedOnRevision")))) {
             return false;
         }
-        if (demoVerification != null || RepairDraftService.seeded(current.document())) {
+        if (demoVerification != null || definition.path("schemaVersion").asInt()==2 || RepairDraftService.seeded(current.document())) {
             try {
                 ObjectNode checked = copy(current.document());
                 drafts.refreshSavedDraft(checked);
@@ -152,8 +152,8 @@ public class RepairProposalService {
                 || !demoVerification.build().equals(proposal.path("solveProvenance").path("kernelBuild").asString())
                 || !"REPAIR".equals(proposal.path("solveProvenance").path("operation").asString()))) return false;
         JsonNode report = result.path("changeReport");
-        if (!report.isObject() || report.size() != ProposalReviewService.CATEGORIES.size()) return false;
-        for (String category : ProposalReviewService.CATEGORIES) {
+        if (!report.isObject() || report.size() != ProposalReviewService.categories(result).size()) return false;
+        for (String category : ProposalReviewService.categories(result)) {
             if (!report.path(category).isArray()
                     || proposal.path("changeCounts").path(category).intValue() != report.path(category).size()) {
                 return false;

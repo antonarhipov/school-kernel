@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 2,
+  "catalogVersion": 11,
+  "schoolId": "df901fae-8ebc-48c9-82ae-3e34bcd0220c",
+  "displayName": "Published audience teacher policies",
+  "periods": [
+    {
+      "id": "p0",
+      "displayName": "P0",
+      "weekday": "MONDAY",
+      "order": 1,
+      "adjacentToNext": true,
+      "startTime": "08:00",
+      "endTime": "08:45"
+    },
+    {
+      "id": "p1",
+      "displayName": "P1",
+      "weekday": "MONDAY",
+      "order": 2,
+      "adjacentToNext": true,
+      "startTime": "09:00",
+      "endTime": "09:45"
+    },
+    {
+      "id": "p2",
+      "displayName": "P2",
+      "weekday": "MONDAY",
+      "order": 3,
+      "adjacentToNext": true,
+      "startTime": "10:00",
+      "endTime": "10:45"
+    },
+    {
+      "id": "p3",
+      "displayName": "P3",
+      "weekday": "MONDAY",
+      "order": 4,
+      "adjacentToNext": true,
+      "startTime": "11:00",
+      "endTime": "11:45"
+    },
+    {
+      "id": "p4",
+      "displayName": "P4",
+      "weekday": "MONDAY",
+      "order": 5,
+      "adjacentToNext": false,
+      "startTime": "12:00",
+      "endTime": "12:45"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "s",
+      "displayName": "English"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "A",
+      "displayName": "A",
+      "qualifiedSubjectIds": [
+        "s"
+      ],
+      "eligibleClassIdsBySubject": {
+        "s": [
+          "c"
+        ]
+      },
+      "referenceWeeklyMaximum": 0
+    },
+    {
+      "id": "B",
+      "displayName": "B",
+      "qualifiedSubjectIds": [
+        "s"
+      ],
+      "eligibleClassIdsBySubject": {
+        "s": [
+          "c"
+        ]
+      },
+      "referenceWeeklyMaximum": 0
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "c",
+      "displayName": "5A",
+      "size": 28,
+      "splits": [
+        {
+          "id": "E",
+          "displayName": "English",
+          "groupCount": 2,
+          "subjectIds": [
+            "s"
+          ],
+          "groups": [
+            {
+              "id": "E1",
+              "displayName": "North",
+              "size": 14
+            },
+            {
+              "id": "E2",
+              "displayName": "South",
+              "size": 14
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "r",
+      "displayName": "Classroom",
+      "capacity": 28,
+      "capabilityIds": []
+    }
+  ],
+  "lessons": [],
+  "audiencePlans": [
+    {
+      "id": "plan",
+      "classId": "c",
+      "subjectId": "s",
+      "weeklyTotal": 4,
+      "wholeClassCount": 3,
+      "delivery": "mixed",
+      "splitId": "E",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "76fc8eda-1172-4721-acbb-4574c9e35d1d",
+          "audienceId": "class:c",
+          "sessionIds": [
+            "924d33f7-b844-41fe-a239-2a0ee259622a",
+            "3ccbf5cf-5418-4efc-8ecd-1d048f35d964",
+            "a9818dba-1b85-48f8-8158-f1ef3d1382b2"
+          ],
+          "teacherPolicy": {
+            "mode": "sharing",
+            "shares": [
+              {
+                "id": "shareA",
+                "teacherId": "A",
+                "count": 2
+              },
+              {
+                "id": "shareB",
+                "teacherId": "B",
+                "count": 1
+              }
+            ]
+          }
+        },
+        {
+          "id": "7a996c5b-3a66-4a74-b058-897c5d47cf6d",
+          "audienceId": "E1",
+          "sessionIds": [
+            "b47c9d4e-fc20-49b5-baee-11f8a78f3b3c"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "A"
+          }
+        },
+        {
+          "id": "db6f3d41-b12b-4f65-9f02-60b0119ce42b",
+          "audienceId": "E2",
+          "sessionIds": [
+            "a12a57cd-4529-4b23-bf2f-4ab76b889445"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic",
+            "candidateTeacherIds": [
+              "B"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

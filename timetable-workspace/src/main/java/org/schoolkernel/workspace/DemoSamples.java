@@ -81,7 +81,9 @@ class DemoSamples {
                     : "Estonian curriculum with fictional staff, for exploring timetable alternatives.");
             row.put("displayOrder", catalog.size() - 1);
             for (String collection : List.of("lessons", "cohorts", "teachers", "rooms", "periods")) {
-                row.put(collection, sample.definition().path(collection).size());
+                row.put(collection, collection.equals("lessons")
+                        ? sample.result().path("timetable").path("assignments").size()
+                        : sample.definition().path(collection).size());
             }
         }
         return catalog;

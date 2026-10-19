@@ -29,6 +29,23 @@ public final class ReviewService {
             catch (tools.jackson.core.JacksonException malformed) {
                 return invalid(reports, id, started, List.of(new ValidationError("/assignments", List.of(), "Expected valid assignment JSON")));
             }
+            if(AudienceDefinition.enabled(accepted.document())){
+                boolean manual = assignments.path("manualReviewVersion").asInt()==1;
+                if(manual && (!assignments.isObject() || assignments.size()!=3 || !assignments.path("assignments").isArray() || !assignments.has("repairContext")))
+                    return invalid(reports,id,started,List.of(new ValidationError("/assignments",List.of(),"Manual review context requires exactly manualReviewVersion, assignments and repairContext")));
+                JsonNode rows=assignments.isArray()?assignments:manual?assignments.path("assignments"):assignments.path("timetable").path("assignments");
+                if(!assignments.isArray()&&!manual){var errors=new AudiencePairValidator().envelope(accepted.document(),accepted.revision(),assignments);if(!errors.isEmpty())return invalid(reports,id,started,errors);}
+                var audience=new AudienceSchedule(accepted.document(),accepted.definition());audience.assign(rows);
+                if(!audience.errors.isEmpty())return invalid(reports,id,started,audience.errors);
+                try{
+                    JsonNode context=assignments.has("repairContext")?assignments.path("repairContext"):null;var baseline=AudienceBaseline.load(context,audience,definitions);if(!baseline.errors().isEmpty())return invalid(reports,id,started,baseline.errors());var comparison=baseline.model()==null?null:new AudienceComparison().compare(baseline.model(),audience);
+                    var evaluation=new AudienceReview().evaluate(audience,assignments.isArray()||manual?null:assignments.path("coordinationMatches"));
+                    if(!assignments.isArray()&&!manual&&evaluation.valid()){
+                        var computed=new AudienceResultFactory().feasible(audience,evaluation,accepted.revision(),id,elapsed(started),"MANUAL_REVIEW",context,comparison);var errors=new AudiencePairValidator().allocations(assignments,computed);if(!errors.isEmpty())return invalid(reports,id,started,errors);
+                    }
+                    return new CommandOutcome.Succeeded(new AudienceResultFactory().review(audience,evaluation,accepted.revision(),id,elapsed(started),assignments.isArray()||manual?null:assignments,context,comparison));
+                }catch(AudienceCoordination.ReviewLimit|ArithmeticException limit){return invalid(reports,id,started,List.of(new ValidationError("/assignments",List.of(),"Validity is unestablished: "+limit.getMessage())));}
+            }
             var schedule = new PlanningMapper().toPlanningProblem(accepted.definition());
             var lessons = new HashMap<String, PlanningLesson>(); schedule.getLessons().forEach(l -> lessons.put(l.getId(), l));
             var periods = new HashMap<String, PeriodValue>(); schedule.getPeriods().forEach(p -> periods.put(p.id(), p));

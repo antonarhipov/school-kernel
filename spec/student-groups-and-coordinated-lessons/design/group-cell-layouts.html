@@ -1,0 +1,322 @@
+<div id="compact-group-lessons" class="viz-dotted-background">
+  <style>
+    #compact-group-lessons .sk-preview {
+      --sk-surface: light-dark(#ffffff, #17212b);
+      --sk-text: light-dark(#243348, #e5edf5);
+      --sk-muted: light-dark(#58667a, #b5c1d0);
+      --sk-line: light-dark(#d5dde7, #445366);
+      --sk-english: light-dark(#e5f2ec, #213d34);
+      --sk-craft: light-dark(#fff0dd, #473625);
+      --sk-science: light-dark(#e7effc, #273a54);
+      --sk-art: light-dark(#f0eafb, #3c3050);
+      --sk-neutral: light-dark(#eef1f5, #303c4a);
+      --sk-selected: light-dark(#e8edf3, #2a3b4e);
+      color: var(--sk-text); background: var(--sk-surface);
+      border: 1px solid var(--sk-line); border-radius: 8px;
+      padding: 16px; max-width: 440px; margin: 0 auto;
+      box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px; line-height: 1.35;
+    }
+    #compact-group-lessons .sk-preview * { box-sizing: border-box; }
+    #compact-group-lessons .sk-heading { margin-bottom: 16px; font-weight: 500; padding-right: 60px; }
+    #compact-group-lessons .sk-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    #compact-group-lessons th { font-weight: 400; color: var(--sk-muted); font-size: 12px; text-align: left; }
+    #compact-group-lessons thead th { padding: 0 4px 8px; }
+    #compact-group-lessons thead th:first-child { width: 48px; }
+    #compact-group-lessons tbody th { padding-right: 6px; }
+    #compact-group-lessons tbody th span { display: block; }
+    #compact-group-lessons td { padding: 4px; }
+    #compact-group-lessons .sk-slot { height: 44px; border: 1px solid var(--sk-line); border-radius: 3px; overflow: hidden; }
+    #compact-group-lessons .sk-lanes {
+      display: grid; grid-template-columns: repeat(var(--sk-lanes), minmax(0, 1fr));
+      height: 100%; gap: 1px; background: var(--sk-line);
+    }
+    #compact-group-lessons .sk-lesson, #compact-group-lessons .sk-summary {
+      border: 0; border-radius: 0; margin: 0; padding: 3px 4px; min-width: 0; width: 100%; height: 100%;
+      background: var(--sk-english); color: var(--sk-text); font: inherit; font-size: 12px;
+      text-align: left; display: flex; flex-direction: column; justify-content: center;
+    }
+    #compact-group-lessons .sk-lesson[data-subject="Handicraft"] { background: var(--sk-craft); }
+    #compact-group-lessons .sk-lesson[data-subject="Science"] { background: var(--sk-science); }
+    #compact-group-lessons .sk-lesson[data-subject="Art"] { background: var(--sk-art); }
+    #compact-group-lessons .sk-lesson[data-subject="Mathematics"],
+    #compact-group-lessons .sk-lesson[data-idle="true"], #compact-group-lessons .sk-summary { background: var(--sk-neutral); }
+    #compact-group-lessons .sk-lesson[data-idle="true"] { color: var(--sk-muted); }
+    #compact-group-lessons .sk-lesson[aria-pressed="true"],
+    #compact-group-lessons .sk-summary[aria-pressed="true"] { box-shadow: inset 0 -3px var(--sk-text); }
+    #compact-group-lessons .sk-lesson span, #compact-group-lessons .sk-summary span {
+      display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    #compact-group-lessons .sk-subject { font-weight: 500; }
+    #compact-group-lessons .sk-summary[hidden], #compact-group-lessons .sk-lanes[hidden] { display: none; }
+    #compact-group-lessons .sk-mobile { margin-top: 16px; }
+    #compact-group-lessons .sk-label { color: var(--sk-muted); font-size: 12px; margin-bottom: 8px; }
+    #compact-group-lessons .sk-mobile-grid { display: grid; grid-template-columns: 22px repeat(5, minmax(0, 1fr)); gap: 2px; }
+    #compact-group-lessons .sk-mobile-grid .sk-label { margin: 0; align-self: center; }
+    #compact-group-lessons .sk-inspector { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--sk-line); }
+    #compact-group-lessons .sk-inspector-title { font-weight: 500; margin-bottom: 8px; }
+    #compact-group-lessons .sk-inspector-items { display: grid; gap: 4px; }
+    #compact-group-lessons .sk-inspector-item {
+      border: 1px solid var(--sk-line); border-radius: 4px; background: var(--sk-surface); color: var(--sk-text);
+      padding: 6px 8px; min-height: 44px; font: inherit; text-align: left; overflow-wrap: anywhere;
+    }
+    #compact-group-lessons .sk-inspector-item[aria-pressed="true"] { background: var(--sk-selected); }
+    #compact-group-lessons .sk-inspector-item span { display: block; }
+    #compact-group-lessons .sk-detail-line { color: var(--sk-muted); font-size: 12px; }
+    @media (max-width: 400px) {
+      #compact-group-lessons .sk-preview { padding: 12px; }
+      #compact-group-lessons thead th:first-child { width: 38px; }
+      #compact-group-lessons td { padding: 3px; }
+    }
+  </style>
+  <section class="sk-preview" aria-label="Compact group lesson cells">
+    <div class="sk-heading">School Kernel · Timetable</div>
+    <table class="sk-table" aria-label="Week excerpts with whole-class, parallel, composite and untaught group sections">
+      <thead><tr><th scope="col">Class</th><th scope="col">Tuesday</th><th scope="col">Thursday</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <section class="sk-mobile" aria-label="Narrow week cells">
+      <div class="sk-label">7C · Mobile week excerpt</div>
+      <div class="sk-mobile-grid"></div>
+    </section>
+    <section class="sk-inspector" aria-label="Lesson inspector">
+      <div class="sk-label">Lesson inspector</div>
+      <div class="sk-inspector-title" aria-live="polite"></div>
+      <div class="sk-inspector-items"></div>
+    </section>
+  </section>
+  <script>
+    (() => {
+      const root = document.getElementById('compact-group-lessons');
+      const settings = { additionalGroups: '3' };
+      let selectedSlotId = 'composite-0';
+      let selectedLessonId = 'composite-0-0';
+      const stored = window.openai?.widgetState?.privateContent;
+      if (stored?.previewVersion === 3) {
+        if (stored.additionalGroups === '3' || stored.additionalGroups === '4') settings.additionalGroups = stored.additionalGroups;
+        if (typeof stored.selectedSlotId === 'string') selectedSlotId = stored.selectedSlotId;
+        if (typeof stored.selectedLessonId === 'string' || stored.selectedLessonId === null) selectedLessonId = stored.selectedLessonId;
+      }
+      const slots = new Map();
+      const subjects = {
+        english: { name: 'English', short: 'ENG' }, craft: { name: 'Handicraft', short: 'CRA' },
+        science: { name: 'Science', short: 'SCI' }, art: { name: 'Art', short: 'ART' },
+        math: { name: 'Mathematics', short: 'MAT' }
+      };
+      const item = (subject, shortGroup, group, teacher, room, size, span = 1, includes = '') =>
+        ({ subject: subjects[subject], shortGroup, group, teacher, room, size, span, includes, idle: false });
+      const idle = (number, size, span = 1) =>
+        ({ subject: { name: 'No lesson', short: '—' }, shortGroup: `G${number}`, group: `Group ${number}`, size, span, idle: true });
+      function composite(day) {
+        return day === 'Tuesday'
+          ? [item('english', 'E1', 'English Group 1', 'J. Jones', 'R18', 14, 2, 'Handicraft Groups 1 + 2'),
+             item('craft', 'H3', 'Handicraft Group 3', 'K. King', 'Workshop A', 7),
+             item('craft', 'H4', 'Handicraft Group 4', 'L. Lee', 'Workshop B', 7)]
+          : [item('craft', 'H1', 'Handicraft Group 1', 'K. King', 'Workshop A', 7),
+             item('craft', 'H2', 'Handicraft Group 2', 'L. Lee', 'Workshop B', 7),
+             item('english', 'E2', 'English Group 2', 'J. Jones', 'R18', 14, 2, 'Handicraft Groups 3 + 4')];
+      }
+      function standard(count, dayIndex) {
+        const keys = ['english', 'craft', 'science', 'art'];
+        return Array.from({ length: count }, (_, group) => {
+          const index = (group + dayIndex) % count;
+          return item(keys[index], `G${group + 1}`, `Group ${group + 1}`,
+            ['F. Lane', 'G. Stone', 'H. Reed', 'I. Wood'][index],
+            ['R32', 'Workshop C', 'Lab 4', 'Studio B'][index], count === 3 ? (group === 0 ? 10 : 9) : 7);
+        });
+      }
+      function describe(lesson) {
+        return `${lesson.subject.name} · ${lesson.group} · ${lesson.size} students${lesson.idle ? '' : ' · ' + lesson.teacher + ' · ' + lesson.room}${lesson.includes ? ' · Includes ' + lesson.includes : ''}`;
+      }
+      function save() {
+        window.openai?.setWidgetState?.({
+          modelContent: { layout: 'compact side-by-side with composite spans and dense fallback', additionalGroups: settings.additionalGroups },
+          privateContent: { previewVersion: 3, ...settings, selectedSlotId, selectedLessonId }
+        })?.catch(() => {});
+      }
+      function updateSelection() {
+        root.querySelectorAll('[data-lesson-id]').forEach(button => {
+          button.setAttribute('aria-pressed', String(button.dataset.slotId === selectedSlotId && button.dataset.lessonId === selectedLessonId));
+        });
+        root.querySelectorAll('.sk-summary').forEach(button => {
+          button.setAttribute('aria-pressed', String(button.dataset.slotId === selectedSlotId));
+        });
+      }
+      function inspect() {
+        const slot = slots.get(selectedSlotId) || slots.get('composite-0');
+        selectedSlotId = slot.id;
+        if (!slot.lessons.some(lesson => lesson.id === selectedLessonId)) selectedLessonId = null;
+        root.querySelector('.sk-inspector-title').textContent = `${slot.className} · ${slot.day} · Period ${slot.period}`;
+        const list = root.querySelector('.sk-inspector-items');
+        list.replaceChildren();
+        slot.lessons.forEach(lesson => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'sk-inspector-item cursor-interaction';
+          button.dataset.slotId = slot.id;
+          button.dataset.lessonId = lesson.id;
+          button.setAttribute('aria-label', describe(lesson));
+          const title = document.createElement('span');
+          title.textContent = `${lesson.subject.name} · ${lesson.group}`;
+          const detail = document.createElement('span');
+          detail.className = 'sk-detail-line';
+          detail.textContent = lesson.idle ? `${lesson.size} students · No scheduled lesson` : `${lesson.teacher} · ${lesson.room} · ${lesson.size} students`;
+          button.append(title, detail);
+          if (lesson.includes) {
+            const relation = document.createElement('span');
+            relation.className = 'sk-detail-line';
+            relation.textContent = `Includes ${lesson.includes}`;
+            button.append(relation);
+          }
+          button.addEventListener('click', () => { selectedLessonId = lesson.id; updateSelection(); save(); });
+          list.append(button);
+        });
+        updateSelection();
+      }
+      function select(slotId, lessonId) {
+        selectedSlotId = slotId;
+        selectedLessonId = lessonId;
+        inspect();
+        save();
+      }
+      function fitSlot(slot) {
+        const width = slot.element.clientWidth;
+        if (!width) return;
+        const minWidth = slot.mobile || window.matchMedia('(pointer: coarse)').matches ? 44 : 32;
+        const smallest = (width - slot.lanes + 1) / slot.lanes * Math.min(...slot.lessons.map(lesson => lesson.span));
+        const useSummary = slot.lessons.length > 1 && smallest < minWidth;
+        slot.laneElement.hidden = useSummary;
+        slot.summary.hidden = !useSummary;
+      }
+      const observer = new ResizeObserver(entries => entries.forEach(entry => fitSlot(slots.get(entry.target.dataset.slotId))));
+      function makeSlot(id, className, day, period, rawLessons, mobile = false) {
+        const element = document.createElement('div');
+        element.className = 'sk-slot';
+        element.dataset.slotId = id;
+        element.setAttribute('role', 'group');
+        element.setAttribute('aria-label', `${className}, ${day}, period ${period}`);
+        const laneElement = document.createElement('div');
+        laneElement.className = 'sk-lanes';
+        const lessons = rawLessons.map((lesson, index) => ({ ...lesson, id: `${id}-${index}` }));
+        const lanes = lessons.reduce((sum, lesson) => sum + lesson.span, 0);
+        laneElement.style.setProperty('--sk-lanes', lanes);
+        lessons.forEach(lesson => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'sk-lesson cursor-interaction';
+          button.dataset.slotId = id;
+          button.dataset.lessonId = lesson.id;
+          button.dataset.subject = lesson.subject.name;
+          button.dataset.idle = String(lesson.idle);
+          button.dataset.tooltip = `${className} · ${day}, period ${period} · ${describe(lesson)}`;
+          button.setAttribute('aria-label', button.dataset.tooltip);
+          button.style.gridColumn = `span ${lesson.span}`;
+          const title = document.createElement('span');
+          title.className = 'sk-subject';
+          title.textContent = lesson.subject.short;
+          const group = document.createElement('span');
+          group.textContent = lesson.shortGroup;
+          button.append(title, group);
+          button.addEventListener('click', () => select(id, lesson.id));
+          laneElement.append(button);
+        });
+        const summary = document.createElement('button');
+        summary.type = 'button';
+        summary.className = 'sk-summary cursor-interaction';
+        summary.dataset.slotId = id;
+        summary.hidden = true;
+        const free = lessons.filter(lesson => lesson.idle).length;
+        const summaryTitle = document.createElement('span');
+        summaryTitle.className = 'sk-subject';
+        summaryTitle.textContent = free ? `${lessons.length - free} lesson${lessons.length - free === 1 ? '' : 's'}` : `${lessons.length} groups`;
+        const summaryDetail = document.createElement('span');
+        summaryDetail.textContent = free ? `${free} free` : 'Split';
+        summary.append(summaryTitle, summaryDetail);
+        const taught = lessons.length - free;
+        summary.setAttribute('aria-label', `${className}, ${day}, period ${period}: ${taught} group lesson${taught === 1 ? '' : 's'}${free ? ', ' + free + ' untaught group' : ''}. Open all group details.`);
+        summary.setAttribute('aria-controls', 'sk-group-inspector-items');
+        summary.addEventListener('click', () => select(id, null));
+        element.append(laneElement, summary);
+        const slot = { id, className, day, period, lessons, lanes, element, laneElement, summary, mobile };
+        slots.set(id, slot);
+        observer.observe(element);
+        return element;
+      }
+      function render() {
+        observer.disconnect();
+        slots.clear();
+        const body = root.querySelector('tbody');
+        body.replaceChildren();
+        const rows = [
+          ['whole', '7A', 1, () => [item('math', 'Class', 'Whole class', 'E. Evans', 'R21', 28)]],
+          ['two', '7A', 2, index => index === 0
+            ? [item('english', 'G1', 'Group 1', 'A. Adams', 'R12', 14), item('craft', 'G2', 'Group 2', 'B. Brown', 'Workshop', 14)]
+            : [item('craft', 'G1', 'Group 1', 'B. Brown', 'Workshop', 14), item('english', 'G2', 'Group 2', 'A. Adams', 'R12', 14)]],
+          ['three', '7B', 3, index => standard(Number(settings.additionalGroups), index)],
+          ['composite', '7C', 4, index => composite(index ? 'Thursday' : 'Tuesday')],
+          ['idle', '7D', 5, index => index === 0
+            ? [item('english', 'G1', 'Group 1', 'M. Moss', 'R42', 14), idle(2, 14)]
+            : [idle(1, 14), item('english', 'G2', 'Group 2', 'M. Moss', 'R42', 14)]]
+        ];
+        rows.forEach(([key, className, period, create]) => {
+          const row = document.createElement('tr');
+          const label = document.createElement('th');
+          label.scope = 'row';
+          label.innerHTML = `<span>${className}</span><span>P${period}</span>`;
+          row.append(label);
+          ['Tuesday', 'Thursday'].forEach((day, index) => {
+            const cell = document.createElement('td');
+            cell.append(makeSlot(`${key}-${index}`, className, day, period, create(index)));
+            row.append(cell);
+          });
+          body.append(row);
+        });
+        const mobile = root.querySelector('.sk-mobile-grid');
+        mobile.replaceChildren();
+        ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'P4'].forEach(label => {
+          const text = document.createElement('div');
+          text.className = 'sk-label';
+          text.textContent = label;
+          mobile.append(text);
+        });
+        const mobileLessons = [
+          [item('math', 'Class', 'Whole class', 'E. Evans', 'R21', 28)],
+          composite('Tuesday'),
+          [item('english', 'G1', 'Group 1', 'J. Jones', 'R18', 14), idle(2, 14)],
+          composite('Thursday'),
+          Array.from({ length: 4 }, (_, index) => item('craft', `H${index + 1}`, `Handicraft Group ${index + 1}`,
+            ['K. King', 'L. Lee', 'N. North', 'O. Oak'][index], ['Workshop A', 'Workshop B', 'Workshop C', 'Workshop D'][index], 7))
+        ];
+        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach((day, index) => {
+          mobile.append(makeSlot(`mobile-${index}`, '7C', day, 4, mobileLessons[index], true));
+        });
+        root.querySelector('.sk-inspector-items').id = 'sk-group-inspector-items';
+        inspect();
+        slots.forEach(fitSlot);
+      }
+      render();
+      window.addEventListener('openai:set_globals', event => {
+        const next = event.detail?.globals?.widgetState?.privateContent;
+        if (next?.previewVersion !== 3) return;
+        let changed = false;
+        if ((next.additionalGroups === '3' || next.additionalGroups === '4') && next.additionalGroups !== settings.additionalGroups) {
+          settings.additionalGroups = next.additionalGroups;
+          changed = true;
+        }
+        if (typeof next.selectedSlotId === 'string' && next.selectedSlotId !== selectedSlotId) {
+          selectedSlotId = next.selectedSlotId;
+          changed = true;
+        }
+        if ((typeof next.selectedLessonId === 'string' || next.selectedLessonId === null) && next.selectedLessonId !== selectedLessonId) {
+          selectedLessonId = next.selectedLessonId;
+          changed = true;
+        }
+        if (changed) render();
+      });
+      if (globalThis.Tweak) {
+        const tweak = new Tweak({ container: root.querySelector('.sk-preview'), onChange: () => { render(); save(); } });
+        tweak.addSelect(settings, 'additionalGroups', { label: '7B group count', options: ['3', '4'] });
+      }
+    })();
+  </script>
+</div>

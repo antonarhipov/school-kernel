@@ -224,13 +224,13 @@ public class WorkspaceRepository implements WorkspaceStore {
                             version = version + 1,
                             active_run_id = NULL,
                             document = jsonb_set(document - 'run' - 'proposal', '{lastRun}',
-                                jsonb_build_object('id', document->'run'->>'id',
-                                    'kind', 'REPAIR', 'limit', document->'run'->>'limit',
-                                    'intentRevision', document->'run'->>'intentRevision',
-                                    'status', 'FAILED', 'feasible', false, 'code', 'INTERRUPTED',
-                                    'message', 'Repair generation was interrupted.'))
+                                jsonb_build_object('id', COALESCE(document->'run'->>'id', document->'proposal'->>'runId'),
+                                    'kind', 'REPAIR', 'limit', COALESCE(document->'run'->>'limit', document->'proposal'->>'limit'),
+                                    'intentRevision', COALESCE(document->'run'->>'intentRevision', document->'repairDraft'->>'intentRevision'),
+                                    'status', 'FAILED', 'feasible', false, 'code', CASE WHEN lifecycle_state='REPAIR_PROPOSAL' THEN 'STALE_PROPOSAL' ELSE 'INTERRUPTED' END,
+                                    'message', CASE WHEN lifecycle_state='REPAIR_PROPOSAL' THEN 'The workspace restarted. The saved repair draft is retained; generate and review a new proposal.' ELSE 'Repair generation was interrupted.' END))
                         WHERE workspace_id = 1
-                          AND lifecycle_state = 'SOLVING_REPAIR'
+                          AND lifecycle_state IN ('SOLVING_REPAIR', 'REPAIR_PROPOSAL')
                         """)
                 .update();
     }

@@ -695,3 +695,57 @@ export const schoolDocumentSchema = {
     "plans"
   ]
 };
+
+schoolDocumentSchema.properties.classes.items.properties.splits = {
+  type: 'array', items: {type: 'object', additionalProperties: false,
+    required: ['id','displayName','groupCount','groups','subjectIds'],
+    properties: {
+      id: {type:'string'}, displayName: {type:'string'}, groupCount: {type:['integer','string']},
+      subjectIds: {type:'array',items:{type:'string'}},
+      groups: {type:'array',items:{type:'object',additionalProperties:false,required:['id','displayName','size'],
+        properties:{id:{type:'string'},displayName:{type:'string'},size:{type:['integer','string']}}}}
+    }
+  }
+};
+schoolDocumentSchema.properties.classes.items.properties.relationships = {
+  type:'object',additionalProperties:false,required:['mode','splitIds','unions','intersections'],properties:{
+    mode:{enum:['nested','joint']},splitIds:{type:'array',items:{type:'string'}},constituentSplitId:{type:'string'},
+    unions:{type:'object',additionalProperties:{type:'array',items:{type:'string'}}},
+    intersections:{type:'array',items:{type:'object',additionalProperties:false,required:['groupIds','count'],properties:{
+      groupIds:{type:'array',items:{type:'string'}},count:{type:['integer','string']}
+    }}}
+  }
+};
+schoolDocumentSchema.properties.audiencePlans={type:'array',items:{type:'object',additionalProperties:false,
+ required:['id','classId','subjectId','weeklyTotal','delivery','wholeClassCount','overrides','portions'],properties:{
+ id:{type:'string'},classId:{type:'string'},subjectId:{type:'string'},weeklyTotal:{type:['integer','string']},delivery:{enum:['whole','grouped','mixed']},wholeClassCount:{type:['integer','string']},splitId:{type:'string'},
+ overrides:{type:'object',additionalProperties:{type:['integer','string']}},
+ portions:{type:'array',items:{type:'object',additionalProperties:false,required:['id','audienceId','sessionIds','teacherPolicy'],properties:{
+ id:{type:'string'},audienceId:{type:'string'},sessionIds:{type:'array',items:{type:'string'}},teacherPolicy:{type:'object',additionalProperties:false,required:['mode'],properties:{mode:{const:'automatic'}}}
+ }}}
+}}};
+const audiencePlanSchema=schoolDocumentSchema.properties.audiencePlans.items;
+audiencePlanSchema.properties.candidateTeacherIds={type:'array',items:{type:'string'}};
+const audiencePolicySchema=audiencePlanSchema.properties.portions.items.properties.teacherPolicy;
+audiencePolicySchema.properties={mode:{enum:['automatic','fixed','sharing']},candidateTeacherIds:{type:'array',items:{type:'string'}},fixedTeacherId:{type:'string'},shares:{type:'array',items:{type:'object',additionalProperties:false,required:['id','teacherId','count'],properties:{id:{type:'string'},teacherId:{type:'string'},count:{type:['integer','string']}}}}};
+schoolDocumentSchema.properties.teachers.items.properties.referenceWeeklyMaximum={type:['integer','string']};
+audiencePlanSchema.properties.sourceFixedPlan=structuredClone(schoolDocumentSchema.properties.plans.items);
+
+// Version-two scheduling authoring retains unfinished numeric values until readiness.
+const audienceBlocks={type:'array',items:{type:'object',additionalProperties:false,required:['id','length','count','operator'],properties:{id:{type:'string'},length:{type:['integer','string']},count:{type:['integer','string']},operator:{enum:['AT_LEAST','EXACTLY']}}}};
+for(const scope of [audiencePlanSchema,audiencePlanSchema.properties.portions.items]){
+ scope.properties.blockRules=structuredClone(audienceBlocks);
+ scope.properties.allowedRoomIds={type:'array',items:{type:'string'}};
+}
+audiencePlanSchema.properties.portions.items.properties.fixedRoomId={type:'string'};
+schoolDocumentSchema.properties.coordinationRules={type:'array',items:{type:'object',additionalProperties:false,required:['id','classId','type'],properties:{
+ id:{type:'string'},classId:{type:'string'},type:{enum:['START_TOGETHER','SAME_DAY','DIFFERENT_DAYS','ALLOWED','FIXED','COVERAGE','GAP_FREE']},count:{type:['integer','string']},
+ activities:{type:'array',items:{type:'object',additionalProperties:false,required:['portionId','unit'],properties:{portionId:{type:'string'},unit:{enum:['SESSION','BLOCK']},blockRuleId:{type:'string'}}}},
+ days:{type:'array',items:{type:'string'}},periodIds:{type:'array',items:{type:'string'}},day:{type:'string'},periodId:{type:'string'}
+}}};
+
+audiencePlanSchema.properties.requiredRoomCapabilityIds={type:'array',items:{type:'string'}};
+
+// Exact imported audience lock/boundary values have one explicit advanced editing location.
+schoolDocumentSchema.properties.sessionLocks={type:'array',items:{type:'object',additionalProperties:false,required:['sessionId'],properties:{sessionId:{type:'string'},periodId:{type:'string'},roomId:{type:'string'}}}};
+schoolDocumentSchema.properties.grid.properties.intervals.items.properties.gapBoundaryAfter={type:'boolean'};

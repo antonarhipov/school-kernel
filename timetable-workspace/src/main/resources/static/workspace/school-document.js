@@ -71,9 +71,9 @@ export function locatedDraftIssues(draft) {
   const issues = draftIssues(draft).map(issue => {
     const key = ({ Subjects: 'subjects', Teachers: 'teachers', Classes: 'classes', Rooms: 'rooms' })[issue.section];
     const index = key ? draft[key].findIndex(row => row.id === issue.record) : -1;
-    const plan = draft.plans.findIndex(row => row.id === issue.plan);
+    const plan = draft.plans.findIndex(row => row.id === issue.plan),ap=(draft.audiencePlans??[]).findIndex(row=>row.id===issue.audiencePlan),coord=(draft.coordinationRules??[]).findIndex(row=>row.id===issue.coordination);
     const interval = draft.grid.intervals.findIndex(row => row.id === issue.record);
-    return { ...issue, path: plan >= 0 ? `/plans/${plan}` : interval >= 0 ? `/grid/intervals/${interval}` : index >= 0 ? `/${key}/${index}` : key ? `/${key}` : issue.section === 'Timetable grid' ? '/grid' : '/name' };
+    return { ...issue, path: coord>=0?`/coordinationRules/${coord}`:ap>=0?`/audiencePlans/${ap}`:plan >= 0 ? `/plans/${plan}` : interval >= 0 ? `/grid/intervals/${interval}` : index >= 0 ? `/${key}/${index}` : key ? `/${key}` : issue.section === 'Timetable grid' ? '/grid' : '/name' };
   });
   const add = (path, message) => {
     const parts=path.split('/'),key=parts[1],row=draft[key]?.[Number(parts[2])];

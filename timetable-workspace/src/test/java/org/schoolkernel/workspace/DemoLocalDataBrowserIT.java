@@ -117,7 +117,7 @@ class DemoLocalDataBrowserIT {
     static void deleteConfirmed(Page p) { p.waitForNavigation(() -> p.locator("#confirm-delete-local-data").click()); DemoTimetableBrowserIT.readyWait(p); }
     static void assertClean(Page p) {
         assertThat(p.locator("#school-selector")).hasValue("full"); assertThat(p.locator("#timetable-selector")).hasValue("a");
-        assertEquals(4,p.locator("#school-selector option").count()); assertEquals(520,p.locator(".demo-lesson").count());
+        assertEquals(4,p.locator("#school-selector option").count()); assertEquals(544,p.locator(".demo-lesson").count());
         assertNull(p.evaluate("()=>localStorage.getItem('"+KEY+"')"));
         assertEquals(0,p.evaluate("()=>Object.keys(localStorage).filter(k=>k.startsWith('school-kernel.definition.v1.')||k==='school-kernel.definition-use.v1').length"));
         assertEquals("preserve exact view preference",p.evaluate("()=>localStorage.getItem('school-kernel.view.preference')"));

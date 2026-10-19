@@ -36,7 +36,7 @@ class DemoRemoteExpiryIT {
             Page one = active.newPage(); Page two = idle.newPage();
             one.onPageError(errors::add); two.onPageError(errors::add);
             try {
-                one.navigate(base + "/workspace/"); one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();
+                one.navigate(base + "/workspace/"); one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();
                 String exact = "{\n  \"unfinished-expiry-copy\": true\n}\n";
                 one.locator("#demo-json").fill(exact);
                 one.onceDialog(dialog -> dialog.accept("expiry-copy")); one.locator("#demo-save").click();
@@ -54,7 +54,7 @@ class DemoRemoteExpiryIT {
                 assertEquals(definition, solving.path("workspace").path("initialDefinition"));
                 record(output, steps, one, "01-active-run", "UC-2 G5: real private kernel run with browser polling; exact browser version saved");
 
-                two.navigate(base + "/workspace/"); two.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();
+                two.navigate(base + "/workspace/"); two.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();
                 two.locator("#demo-definition").selectOption("small");
                 two.waitForFunction("() => document.querySelector('#demo-json').value.includes('Small school')");
                 two.locator("#demo-use").click();

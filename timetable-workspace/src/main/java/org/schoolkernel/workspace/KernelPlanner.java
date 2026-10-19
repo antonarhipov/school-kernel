@@ -114,7 +114,7 @@ public class KernelPlanner {
             JsonNode result = readResult(outputPath);
             String status = result.path("status").stringValue();
             if (exit == 0 && "FEASIBLE".equals(status)) {
-                if (result.path("schemaVersion").intValue() != 1
+                if (result.path("schemaVersion").intValue() != definition.path("schemaVersion").intValue()
                         || !correlationId.equals(result.path("correlationId").stringValue())
                         || !definition.path("schoolId").stringValue().equals(result.path("schoolId").stringValue())
                         || result.path("seed").longValue() != 0L
@@ -229,7 +229,7 @@ public class KernelPlanner {
             JsonNode result = readResult(outputPath);
             String status = result.path("status").stringValue();
             if (exit == 0 && "FEASIBLE".equals(status)) {
-                if (result.path("schemaVersion").intValue() != 1
+                if (result.path("schemaVersion").intValue() != successorDefinition.path("schemaVersion").intValue()
                         || !correlationId.equals(result.path("correlationId").stringValue())
                         || !successorDefinition.path("schoolId").stringValue()
                                 .equals(result.path("schoolId").stringValue())
@@ -287,7 +287,7 @@ public class KernelPlanner {
                 && report.path("forcedMoves").isArray()
                 && report.path("periodMoves").isArray()
                 && report.path("roomOnlyMoves").isArray()
-                && report.size() == 6;
+                && (report.size() == 6 || report.size() == 7 && report.path("unmatchedChanges").isArray());
     }
 
     public boolean cancel(UUID runId) {

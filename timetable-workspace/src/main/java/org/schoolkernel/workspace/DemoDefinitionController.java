@@ -54,7 +54,7 @@ class DemoDefinitionController {
         document.put("origin", java.util.Set.of("two-class", "full", "star-wars", "english", "file").contains(source) ? source : "custom");
         document.put("definitionRevision", trusted.definitionRevision());
         document.set("initialDefinition", definition);
-        boolean large = definition.path("lessons").size() > threshold;
+        boolean large = DemoDefinitionLimits.sessionCount(definition) > threshold;
         document.put("defaultEffort", large ? "THOROUGH" : "QUICK");
         document.put("defaultEffortSeconds", large ? thorough : quick);
         var installed = mutation.resetAndImport(version, WorkspaceState.INITIAL_DRAFT, document);

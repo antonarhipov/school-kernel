@@ -31,18 +31,20 @@ public class ProposalReviewService {
         ArrayNode categories = review.putArray("categories");
         Set<String> changedIds = new LinkedHashSet<>();
         Map<String, List<String>> lessonCategories = new LinkedHashMap<>();
-        for (String category : CATEGORIES) {
+        for (String category : categories(result)) {
             JsonNode items = report.path(category);
             ObjectNode summary = categories.addObject();
             summary.put("id", category);
             summary.put("count", items.size());
             ArrayNode lessonIds = summary.putArray("lessonIds");
             for (JsonNode item : items) {
-                String lessonId = text(item.path("lessonId"));
-                if (lessonId == null) continue;
-                lessonIds.add(lessonId);
-                changedIds.add(lessonId);
-                lessonCategories.computeIfAbsent(lessonId, ignored -> new ArrayList<>()).add(category);
+                List<String> ids = new ArrayList<>();
+                if (item.path("lessonId").isTextual()) ids.add(item.path("lessonId").asString());
+                for (JsonNode id : item.path("sessionIds")) ids.add(id.asString());
+                for (String lessonId : ids) {
+                    lessonIds.add(lessonId); changedIds.add(lessonId);
+                    lessonCategories.computeIfAbsent(lessonId, ignored -> new ArrayList<>()).add(category);
+                }
             }
         }
         review.put("uniqueChangedLessonCount", changedIds.size());
@@ -53,8 +55,8 @@ public class ProposalReviewService {
         Map<String, JsonNode> oldAssignments = byId(
                 acceptedBaseline.path("result").path("timetable").path("assignments"), "lessonId");
         Map<String, JsonNode> proposedAssignments = byId(result.path("timetable").path("assignments"), "lessonId");
-        Map<String, JsonNode> oldLessons = byId(acceptedBaseline.path("definition").path("lessons"), "id");
-        Map<String, JsonNode> proposedLessons = byId(successorDefinition.path("lessons"), "id");
+        Map<String, JsonNode> oldLessons = byId(WorkspaceSessions.lessons(acceptedBaseline.path("definition")), "id");
+        Map<String, JsonNode> proposedLessons = byId(WorkspaceSessions.lessons(successorDefinition), "id");
         Map<String, JsonNode> oldPeriods = byId(acceptedBaseline.path("definition").path("periods"), "id");
         Map<String, JsonNode> proposedPeriods = byId(successorDefinition.path("periods"), "id");
 
@@ -110,7 +112,7 @@ public class ProposalReviewService {
             if (oldValue != null) item.set("old", oldValue);
             if (proposedValue != null) item.set("proposed", proposedValue);
             ArrayNode dimensions = item.putArray("changedDimensions");
-            for (String dimension : List.of("subjectId", "cohortId", "teacherId", "periodId", "roomId")) {
+            for (String dimension : List.of("subjectId", "cohortId", "audienceId", "allocationId", "teacherId", "periodId", "roomId")) {
                 if (!same(oldValue, proposedValue, dimension)) dimensions.add(dimension);
             }
             if (repairDraft.has("seedDefinition") && oldValue != null && proposedValue != null
@@ -127,7 +129,21 @@ public class ProposalReviewService {
         writeGroups(groupings.putArray("teachers"), teacherGroups);
         writeGroups(groupings.putArray("rooms"), roomGroups);
         writeGroups(groupings.putArray("days"), dayGroups);
+        if(result.path("schemaVersion").asInt()==2) {
+            review.set("weeklyTeacherAllocations",result.path("weeklyTeacherAllocations").deepCopy());
+            review.set("teacherReplacements",report.path("teacherChanges").deepCopy());
+            review.set("unmatchedChanges",report.path("unmatchedChanges").deepCopy());
+            review.set("oldQuality",acceptedBaseline.path("result").path("quality").deepCopy());
+            review.set("proposedQuality",result.path("quality").deepCopy());
+            review.set("oldScore",acceptedBaseline.path("result").path("score").deepCopy());
+            review.set("proposedScore",result.path("score").deepCopy());
+        }
         return review;
+    }
+
+    static List<String> categories(JsonNode result) {
+        if(result.path("schemaVersion").asInt()!=2)return CATEGORIES;
+        var categories=new ArrayList<>(CATEGORIES);categories.add("unmatchedChanges");return categories;
     }
 
     private ObjectNode timing(JsonNode period) {
@@ -142,7 +158,7 @@ public class ProposalReviewService {
         if (assignment == null && lesson == null) return null;
         ObjectNode side = json.createObjectNode();
         if (assignment != null) {
-            for (String field : List.of("subjectId", "cohortId", "teacherId", "periodId", "roomId")) {
+            for (String field : List.of("subjectId", "cohortId", "audienceId", "allocationId", "teacherId", "periodId", "roomId")) {
                 if (assignment.path(field).isTextual()) side.put(field, assignment.path(field).stringValue());
             }
         }

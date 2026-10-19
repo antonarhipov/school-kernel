@@ -103,7 +103,16 @@ public class KernelVerifier {
             if (documents.mode() == ImportDocuments.ImportMode.SUCCESSOR_DEFINITION) arguments.add("--successor");
             if (documents.result() != null) {
                 Path result = directory.resolve("timetable-result.json");
-                writePrivate(result, CanonicalJson.bytes(review ? documents.result().path("timetable").path("assignments") : documents.result()));
+                boolean exactReview = documents.definition().path("schemaVersion").asInt() == 2 && documents.manifest() != null && documents.manifest().path("exactResult").asBoolean(false);
+                JsonNode reviewInput = documents.result();
+                if(review && !exactReview) {
+                    if(documents.definition().path("schemaVersion").asInt()==2 && documents.result().has("repairContext")) {
+                        var manual = JSON.createObjectNode().put("manualReviewVersion",1);
+                        manual.set("assignments",documents.result().path("timetable").path("assignments"));
+                        manual.set("repairContext",documents.result().path("repairContext"));reviewInput=manual;
+                    } else reviewInput=documents.result().path("timetable").path("assignments");
+                }
+                writePrivate(result, CanonicalJson.bytes(reviewInput));
                 arguments.add(4, review ? "--assignments" : "--result");
                 arguments.add(5, result.toString());
             }
@@ -127,7 +136,7 @@ public class KernelVerifier {
                 if (!correlationId.equals(verification.path("correlationId").asString())) throw unavailable("Mismatched review evidence.");
                 if (exit == 0 && (!verification.path("valid").isBoolean() || !verification.path("conflicts").isArray()
                         || !verification.path("hardMatchCounts").isObject() || !verification.path("softMatchCounts").isObject()
-                        || verification.path("hardMatchCounts").size() != (documents.definition().path("catalogVersion").asInt() >= 10 ? 20 : 19) || verification.path("softMatchCounts").size() != 7
+                        || verification.path("hardMatchCounts").size() != (documents.definition().path("schemaVersion").asInt() == 2 ? 24 : documents.definition().path("catalogVersion").asInt() >= 10 ? 20 : 19) || verification.path("softMatchCounts").size() != (documents.definition().path("schemaVersion").asInt() == 2 ? 8 : 7)
                         || verification.path("hardMatchCounts").properties().stream().anyMatch(e -> !e.getValue().isIntegralNumber() || e.getValue().asLong() < 0)
                         || !verification.path("truncated").isBoolean()
                         || !documents.definition().path("catalogVersion").equals(verification.path("catalogVersion"))

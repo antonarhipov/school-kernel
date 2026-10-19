@@ -41,7 +41,7 @@ class DemoRemoteSessionIT {
             for (Page page : List.of(one, two)) page.onResponse(response -> network.add(
                     response.request().method() + " " + response.status() + " " + response.url()));
             try {
-            one.navigate(base + "/workspace/"); one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();
+            one.navigate(base + "/workspace/"); one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();
             assertEquals("full", one.locator("#demo-definition").inputValue());
             assertEquals("EMPTY", snapshot(one).path("state").stringValue());
             assertEquals(0, one.locator("#open-authoring").count());
@@ -53,7 +53,7 @@ class DemoRemoteSessionIT {
             one.locator("#demo-use").click(); awaitSchool(one, "Full school");
             assertEquals("EMPTY", snapshot(two).path("state").stringValue());
             JsonNode full = snapshot(one).path("workspace").path("acceptedBaseline");
-            assertEquals(520, full.path("result").path("timetable").path("assignments").size());
+            assertEquals(544, full.path("result").path("timetable").path("assignments").size());
             record("UC-2 ownership / UC-3 enabling: Full accepted privately; other browser stays EMPTY", one, "02-full");
             one.setViewportSize(390, 844);
             one.locator(".narrow-banner").waitFor();

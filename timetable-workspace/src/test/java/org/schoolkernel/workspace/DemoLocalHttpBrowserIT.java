@@ -22,7 +22,7 @@ class DemoLocalHttpBrowserIT {
                 assertTrue(p.url().startsWith("http://localhost:"));
                 assertThat(p.locator("#school-selector")).hasValue("full");
                 assertThat(p.locator("#timetable-selector")).hasValue("a");
-                assertEquals(520,p.locator(".demo-lesson").count());
+                assertEquals(544,p.locator(".demo-lesson").count());
                 assertEquals("",Files.readString(temporary.resolve("launches")));
                 assertFalse(owner.cookies().isEmpty());assertTrue(owner.cookies().stream().noneMatch(c->c.secure));
                 h.record("Plain demo profile, default localhost configuration: actual HTTP Chrome arrival has a usable local session, clean precomputed matrix and zero startup kernel launches; no certificate or HTTPS-ignore setting",p,"01-http-matrix");

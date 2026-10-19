@@ -125,7 +125,7 @@ class TimetablePdfBrowserIT {
                 savePdf(draft, h.output.resolve("draft.pdf"));
                 assertTrue(draft.suggestedFilename().endsWith("-draft.pdf"));
                 assertEquals(draftStorage, p.evaluate("JSON.stringify(localStorage)"));
-                assertThat(p.locator("#pdf-export-status")).containsText("unpublished draft");
+                assertThat(p.locator("#pdf-export-status")).isHidden();
                 assertTrue(traffic.subList(requestsBefore, traffic.size()).stream().allMatch(s -> s.startsWith("GET ")),
                     "Export starts no additional review or solve");
                 h.record("UC-1 extension 4a/G1: actual unsaved room edit exports a clearly named unpublished draft without changing stored edits or starting another review/solve", p, "07-draft");
@@ -149,6 +149,7 @@ class TimetablePdfBrowserIT {
         // Allow the host's cold Java Playwright module/font processing.
         Download result = page.waitForDownload(new Page.WaitForDownloadOptions().setTimeout(90000),
             () -> page.locator("#export-timetable-pdf").click());
+        assertThat(page.locator("#pdf-export-status")).isHidden();
         assertEquals(storage, page.evaluate("JSON.stringify(localStorage)"));
         assertEquals(selections, page.locator("#school-selector, #timetable-selector, #timetable-filters select, #lesson-search")
             .evaluateAll("nodes=>JSON.stringify(nodes.map(n=>[n.id,n.value]))"));

@@ -148,7 +148,7 @@ class DemoCustomDefinitionBrowserIT {
             var keytool=new ProcessBuilder(Path.of(System.getProperty("java.home"),"bin","keytool").toString(),"-genkeypair","-alias","demo","-keyalg","RSA","-storetype","PKCS12","-keystore",key.toString(),"-storepass","disposable-demo-test","-dname","CN=localhost","-ext","SAN=dns:localhost","-validity","1").redirectErrorStream(true).redirectOutput(temporary.resolve("keytool.log").toFile()).start();assertTrue(keytool.waitFor(15,TimeUnit.SECONDS));assertEquals(0,keytool.exitValue());start(key,1);}
     }
     void open(Page p){p.navigate(base+"/workspace/");ready(p);}
-    void ready(Page p){p.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();}
+    void ready(Page p){p.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();}
     void select(Page p,String id){p.locator("#demo-definition").selectOption(id);p.waitForFunction("id=>document.querySelector('#demo-definition').value===id&&!document.querySelector('#demo-json').disabled",id);}
     void sample(Page p,String id,boolean replace){select(p,id);if(replace)p.onceDialog(Dialog::accept);p.locator("#demo-use").click();p.waitForFunction("()=>document.querySelector('#demo-feedback').textContent.includes('accepted sample is in use')&&!document.querySelector('#demo-use').disabled");}
     void save(Page p,String id){p.onceDialog(d->d.accept(id));p.locator("#demo-save").click();p.waitForFunction("id=>document.querySelector('#demo-definition').value===id",id);}

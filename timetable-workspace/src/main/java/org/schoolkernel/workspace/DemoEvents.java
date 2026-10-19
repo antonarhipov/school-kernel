@@ -108,7 +108,7 @@ class DemoEvents {
             ObjectNode line = line(use ? "definition" : "decision", action.name());
             if (sample != null && Set.of("two-class", "full", "star-wars", "english").contains(sample)) line.put("sample", sample);
             if (definition != null) {
-                long lessons = definition.path("lessons").size(), work = lessons * definition.path("rooms").size() * definition.path("periods").size();
+                long lessons = DemoDefinitionLimits.sessionCount(definition), work = lessons * definition.path("rooms").size() * definition.path("periods").size();
                 line.put("lessons", lessons); line.put("placementWork", work);
                 line.put("complexityBucket", work <= 100000 ? "SMALL" : work <= 1000000 ? "MEDIUM" : "LARGE");
                 line.put("verification", "VERIFIED");

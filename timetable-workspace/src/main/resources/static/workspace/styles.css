@@ -1012,3 +1012,99 @@ body.operational:has(#demo-retention) .header-utilities:has(.utility-disclosure[
   width: fit-content; margin-bottom: .5rem;
 }
 body.operational:has(#demo-retention) .header-utilities .utility-disclosure[open] { width: 100%; max-width: 100%; }
+
+.setup-splits { min-width: 0; margin-top: 1.5rem; }
+.setup-splits fieldset { min-width: 0; margin: 1rem 0; border: 1px solid var(--border, #ccc); border-radius: .5rem; }
+.setup-splits legend, .setup-splits p { overflow-wrap: anywhere; }
+.setup-split-groups { display: grid; gap: .5rem; }
+.setup-splits details label { display: flex; gap: .5rem; align-items: center; }
+.setup-splits input[type=checkbox] { width: auto; }
+[data-relationship-class] { min-width: 0; overflow-wrap: anywhere; }
+#setup-content [data-relationship-class] fieldset label { display: flex; gap: .5rem; align-items: center; }
+[data-relationship-class] input[type=checkbox] { width: auto; }
+[data-relationship-class] > label { display: grid; gap: .3rem; margin: 1rem 0; }
+[data-relationship-class] fieldset { min-width: 0; margin: 1rem 0; }
+[data-audience-plan-class], [data-audience-plan] { min-width: 0; overflow-wrap: anywhere; }
+[data-audience-plan] { margin: 1.25rem 0; }
+[data-audience-plan] > label, [data-audience-plan-class] > label { display: grid; gap: .4rem; margin: 1rem 0; }
+.setup-teacher-policies fieldset { min-width: 0; margin: 1rem 0; }
+#setup-content .setup-teacher-policies label { display: grid; gap: .35rem; margin: .5rem 0; }
+#setup-content .setup-teacher-policies label:has(input[type=checkbox]) { display: flex; align-items: center; }
+.setup-teacher-policies input[type=checkbox] { width: auto; }
+
+[data-coordination-class] label:has(input[type="checkbox"]),
+.setup-audience-scheduling label:has(input[type="checkbox"]) { display:flex; align-items:center; gap:.5rem; }
+[data-coordination-class] input[type="checkbox"],
+.setup-audience-scheduling input[type="checkbox"] { width:auto; flex:none; margin:0; }
+
+/* Parallel teaching shares the established compact cell, regardless of group count. */
+.audience-cell { width:100%; height:100%; min-width:0; container-type:inline-size; }
+.audience-sections { display:grid; grid-template-columns:repeat(var(--audience-lanes),minmax(0,1fr)); height:100%; gap:0; }
+.audience-sections[hidden], .audience-summary[hidden] { display:none; }
+.audience-span { min-width:0; overflow:hidden; border-inline-end:1px solid currentColor; }
+.audience-span:last-child { border-inline-end:0; }
+.audience-span .lesson-cell { width:100%; height:100%; margin:0; min-width:0; overflow:hidden; }
+/* State remains in outlines, accessible labels and the inspector; badges must not consume group labels. */
+.audience-span .lesson-cell em, .audience-span .lesson-cell .demo-conflict-mark { display:none; }
+.audience-summary,.audience-untaught { width:100%; height:100%; min-height:0; min-width:0; padding:3px; font-size:10px; border:1px solid #9ca3af; border-radius:3px; color:#263445; background:#f3f4f6; overflow:hidden; overflow-wrap:anywhere; }
+.audience-untaught { font-weight:normal; background:#f8fafc; }
+.audience-untaught small,.audience-short { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:9px; }
+.audience-detail-row { padding:8px 0; border-bottom:1px solid #aab2bd; overflow-wrap:anywhere; }
+.audience-detail-row button { min-height:44px; width:100%; white-space:normal; }
+.audience-description { overflow-wrap:anywhere; }
+.week-slot > .audience-cell { height:32px; }
+.week-matrix .week-slot, .current-mode .week-matrix .week-slot, .review-mode.current-mode .week-matrix .week-slot { min-height:34px; }
+.week-slot .week-lesson, .current-mode .week-slot .week-lesson, .review-mode.current-mode .week-slot .week-lesson { min-height:32px; }
+.mobile-week-matrix .week-slot > .audience-cell { height:42px; }
+.mobile-week-matrix .week-slot .week-lesson { min-height:42px; }
+.audience-span .week-lesson { flex-direction:column; justify-content:center; padding:1px 2px; gap:0; }
+.audience-span .week-lesson .week-room { font-size:8px; line-height:1; }
+.audience-span .week-lesson strong { flex:none; width:100%; font-size:9px; }
+.audience-quality { margin-block:8px; overflow-wrap:anywhere; }
+.audience-quality button { min-height:44px; white-space:normal; }
+.lesson-cell:has(> .split-title), .current-mode .lesson-cell:has(> .split-title),
+.lesson-cell:has(> .whole-title), .current-mode .lesson-cell:has(> .whole-title) {
+  display:grid; grid-template-columns:minmax(0,1fr) max-content; grid-template-rows:auto auto;
+  align-content:center; align-items:center; gap:2px 3px; padding:3px; text-align:left;
+}
+.lesson-cell:has(> .whole-title) { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.lesson-cell .whole-title, .current-mode .lesson-cell .whole-title {
+  grid-column:1 / -1; grid-row:1; min-width:0; max-width:100%; margin:0; font-size:10px; line-height:1.1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.lesson-cell:has(> .whole-title) .whole-room, .lesson-cell:has(> .whole-title) .whole-teacher {
+  grid-row:2; min-width:0; max-width:100%; font-size:9px; font-weight:500; line-height:1.1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.lesson-cell:has(> .whole-title) .whole-room { grid-column:1; justify-self:stretch; text-align:left; }
+.lesson-cell:has(> .whole-title) .whole-teacher { grid-column:2; justify-self:stretch; text-align:right; }
+.lesson-cell .split-title, .current-mode .lesson-cell .split-title {
+  grid-column:1; grid-row:1; width:auto; min-width:0; margin:0; font-size:9px; line-height:1.1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.lesson-cell:has(> .split-title) .audience-short {
+  grid-column:2; grid-row:1; max-width:none; padding:1px 3px; border:1px solid #6f8178;
+  border-radius:3px; font-size:9px; font-weight:750; line-height:1; color:#24392e;
+  background:#ffffffb3; overflow:visible;
+}
+.lesson-cell:has(> .split-title) .split-room {
+  grid-column:1 / -1; grid-row:2; min-width:0; max-width:100%; font-size:9px; font-weight:500; line-height:1.1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.lesson-cell:has(> .split-title) .split-context, .lesson-cell:has(> .whole-title) .split-context {
+  grid-column:1 / -1; grid-row:3; min-width:0; max-width:100%; font-size:9px; line-height:1.1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.audience-untaught { line-height:1; white-space:nowrap; text-overflow:ellipsis; overflow-wrap:normal; }
+.audience-summary { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:0; line-height:1.1; }
+.audience-summary strong,.audience-summary small { display:block; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:9px; }
+.audience-summary small { font-size:8px; }
+.audience-summary:hover,.audience-summary:focus-visible,.audience-untaught:hover,.audience-untaught:focus-visible { color:#162d23; background:#e4ece8; }
+button.audience-summary:hover:not([disabled]),button.audience-summary:focus-visible,button.audience-untaught:hover:not([disabled]),button.audience-untaught:focus-visible { color:#162d23; background:#e4ece8; }
+
+/* Class-subject teaching arrangements remain readable inside the setup dialog. */
+.setup-subject-teaching, .setup-teaching-card { min-width: 0; overflow-wrap: anywhere; }
+.setup-teaching-card { border: 1px solid var(--border, #ccc); border-radius: .5rem; padding: .8rem; margin: .8rem 0; }
+.setup-teaching-card h4 { margin: 0 0 .5rem; }
+.setup-teaching-card ul { padding-left: 1.25rem; }
+.setup-subject-teaching button { white-space: normal; }

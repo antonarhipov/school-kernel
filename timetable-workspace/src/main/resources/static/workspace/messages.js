@@ -205,6 +205,7 @@ export const M = Object.freeze({
   comparisonSelectionCleared: 'The selected lesson is not present in this timetable; the remaining view context is preserved.',
   selectionOutsideDay: 'The selected lesson moved outside the represented Day; the remaining view context is preserved.',
   acceptanceNotAdvanced: 'Current did not advance. The unchanged proposal remains available for an explicit retry.',
+  audienceRepairPriority: 'Kernel priority: hard validity; automatic weekly teacher stability; period stability; room-only stability; internal student gaps; ordinary preferences.',
   repairPriority: 'Kernel priority: period stability, then room-only stability, then ordinary preferences.',
   runDiagnostics: 'Evidence from this run',
   diagnosticMatches: count => `${count} ${count === 1 ? 'match' : 'matches'}`,

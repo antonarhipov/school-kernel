@@ -294,7 +294,7 @@ public class RepairPlanningService {
 
     private ObjectNode changeCounts(JsonNode report) {
         ObjectNode counts = json.createObjectNode();
-        CHANGE_CATEGORIES.stream().sorted().forEach(category -> counts.put(category, report.path(category).size()));
+        report.propertyStream().sorted(java.util.Map.Entry.comparingByKey()).forEach(entry -> counts.put(entry.getKey(), entry.getValue().size()));
         return counts;
     }
 

@@ -14,6 +14,15 @@ import tools.jackson.databind.JsonNode;
 class DemoTimetableBrowserIT {
     @TempDir Path temporary;
 
+    static int representedLessons(Page page) {
+        return ((Number)page.evaluate("""
+            () => document.querySelectorAll('.demo-lesson').length +
+              [...document.querySelectorAll('.audience-cell')]
+                .filter(cell=>!cell.querySelector('.demo-lesson'))
+                .reduce((count,cell)=>count+Number(cell.querySelector('.audience-summary strong').textContent),0)
+            """)).intValue();
+    }
+
     @Test void exploresVerifiedVariantsWithInstantSwitchingFiltersAndResponsiveInspector() throws Exception {
         var h = new DemoPlanningBrowserIT(); h.temporary = temporary;
         h.initialize("timetable-explore", Path.of("../output/playwright/demo-timetable-experience/UC-1/local-"+System.currentTimeMillis()));
@@ -26,7 +35,7 @@ class DemoTimetableBrowserIT {
                 page.locator("#school-selector option[value=full]").waitFor(new Locator.WaitForOptions().setState(com.microsoft.playwright.options.WaitForSelectorState.ATTACHED));
                 assertThat(page.locator("#school-selector")).hasValue("full");
                 assertThat(page.locator("#timetable-title")).hasText("Variant A");
-                assertEquals(520, page.locator(".demo-lesson").count());
+                assertEquals(544, DemoTimetableBrowserIT.representedLessons(page));
                 assertEquals(List.of("two-class", "full", "star-wars", "english"), page.locator("#school-selector option").evaluateAll("nodes=>nodes.map(n=>n.value)"));
                 assertEquals(2, page.locator("#timetable-selector option").count());
                 assertTrue(page.locator("body").innerText().contains("Kasevälja Põhikool"));
@@ -35,7 +44,7 @@ class DemoTimetableBrowserIT {
                 assertEquals(0,page.locator("#demo-utilities").count());
                 long startupLaunches = Files.readAllLines(temporary.resolve("launches")).size();
                 assertEquals(0, startupLaunches);
-                h.record("UC-1 main 1-2/G1/G4: default full Estonian timetable, exact four schools and two variants each, 520 real labels, Utilities removed and obsolete actions absent", page, "01-default-matrix");
+                h.record("UC-1 main 1-2/G1/G4: default full Estonian timetable, exact four schools and two variants each, 544 real labels, Utilities removed and obsolete actions absent", page, "01-default-matrix");
 
                 page.locator("#cohort-filter").selectOption("demo-cohort-001");
                 String a = page.locator("#timetable-matrix").innerHTML();
@@ -51,35 +60,35 @@ class DemoTimetableBrowserIT {
 
                 page.locator("#school-selector").selectOption("two-class");
                 assertThat(page.locator("#cohort-filter")).hasValue("");
-                assertEquals(56, page.locator(".demo-lesson").count());
+                assertEquals(56, DemoTimetableBrowserIT.representedLessons(page));
                 assertTrue(page.locator("#timetable-matrix").innerText().contains("Inglise keel"));
                 assertTrue(page.locator("#timetable-matrix").innerText().contains("Kehaline kasvatus"));
                 page.locator("#timetable-selector").selectOption("b");
                 page.locator("#school-selector").selectOption("star-wars");
-                assertEquals(540, page.locator(".demo-lesson").count());
+                assertEquals(566, DemoTimetableBrowserIT.representedLessons(page));
                 assertTrue(page.locator("body").innerText().contains("Coruscant Imperial Academy"));
                 assertTrue(page.locator(".demo-lesson").evaluateAll("nodes=>nodes.some(n=>n.getAttribute('aria-label').includes('Grand Admiral Thrawn'))").equals(true));
                 page.locator("#cohort-filter").selectOption("imperial-cohort-junior-1A");
-                assertEquals(25,page.locator(".demo-lesson").count());
+                assertEquals(25,DemoTimetableBrowserIT.representedLessons(page));
                 assertTrue(page.locator("#timetable-matrix").innerText().contains("Applied Numeracy"));
                 h.record("UC-1 G1 Imperial academy: younger cadets have 25 lessons in literacy, numeracy, science, fitness and teamwork; no advanced combat courses",page,"03a-imperial-junior");
                 page.locator("#cohort-filter").selectOption("imperial-cohort-intermediate-4A");
-                assertEquals(30,page.locator(".demo-lesson").count());
+                assertEquals(42,DemoTimetableBrowserIT.representedLessons(page));
                 assertTrue(page.locator("#timetable-matrix").innerText().contains("Flight Simulation"));
                 h.record("UC-1 G1 Imperial academy: intermediate cadets have 30 lessons in physics, systems, navigation, simulation, tactical fundamentals and survival",page,"03b-imperial-intermediate");
                 page.locator("#cohort-filter").selectOption("imperial-cohort-senior-7A");
-                assertEquals(35,page.locator(".demo-lesson").count());
-                assertTrue(page.locator("#timetable-matrix").innerText().contains("Combined Operations"));
+                assertEquals(43,DemoTimetableBrowserIT.representedLessons(page));
+                assertTrue(page.locator(".audience-summary:visible").count()>0,"Crossing arrangements expose complete summaries");
                 h.record("UC-1 G1 Imperial academy: seniors have 35 lessons emphasizing operations, fleet tactics, mission planning and leadership, with specialist facilities and qualified Imperial faculty",page,"03c-imperial-senior");
                 page.locator("#timetable-selector").selectOption("b");
                 assertThat(page.locator("#cohort-filter")).hasValue("imperial-cohort-senior-7A");
                 page.locator("#cohort-filter").selectOption("");
                 assertEquals(startupLaunches, Files.readAllLines(temporary.resolve("launches")).size());
-                h.record("UC-1 main 5/G1-G3: changing schools clears filters; 5A/5B has 56 lessons; Coruscant Imperial Academy has 540 progressively staged lessons with balanced days and related specialist faculty", page, "03-star-wars");
+                h.record("UC-1 main 5/G1-G3: changing schools clears filters; 5A/5B has 56 lessons; Coruscant Imperial Academy has 566 progressively staged lessons with balanced days and related specialist faculty", page, "03-star-wars");
 
                 page.locator("#school-selector").selectOption("english");
                 assertThat(page.locator("#cohort-filter")).hasValue("");
-                assertEquals(614, page.locator(".demo-lesson").count());
+                assertEquals(614, DemoTimetableBrowserIT.representedLessons(page));
                 assertEquals(23, page.locator("#cohort-filter option").count());
                 assertEquals(42, page.locator("#teacher-filter option").count());
                 assertEquals(36, page.locator("#room-filter option").count());
@@ -129,7 +138,7 @@ class DemoTimetableBrowserIT {
                 page.locator("#school-selector").selectOption("two-class");
                 page.locator("#timetable-selector").selectOption("b");
                 assertThat(page.locator("#demo-notice")).containsText("retained");
-                assertEquals(56, page.locator(".demo-lesson").count());
+                assertEquals(56, DemoTimetableBrowserIT.representedLessons(page));
                 assertTrue(page.evaluate("()=>localStorage.getItem('school-kernel.timetable-demo.v1').includes('missing')").equals(true));
                 h.record("UC-1 extension 1a/G3: unreadable draft is explained and retained byte-for-byte while readable bundled schools remain inspectable",page,"06-unreadable-draft");
                 page.evaluate("()=>localStorage.setItem('school-kernel.timetable-demo.v1','{unfinished')");
@@ -273,16 +282,16 @@ class DemoTimetableBrowserIT {
                 assertEquals(expected,p.evaluate("id=>JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1')).schools[id].definition",copyId));
                 h.record("Checked immutable school copy stores the exact compiled complete document without solving",p,"02-school-copy");
                 SchoolSetupAdvancedJsonBrowserIT.review(p);assertThat(p.locator("#setup-effort")).hasValue("QUICK");Files.writeString(temporary.resolve("stall"),"1");p.locator("#setup-effort").selectOption("THOROUGH");p.locator("#setup-start-generation").click();assertThat(p.locator("#setup-generation-status")).containsText("Running",new com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions().setTimeout(30000));p.locator("#setup-cancel-generation").click();assertThat(p.locator("#setup-generation-status")).containsText("cancelled",new com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions().setTimeout(30000));
-                Files.delete(temporary.resolve("stall"));assertEquals(0,p.locator(".demo-lesson").count());h.record("Thorough generation cancels through Review, retaining exact school and no candidate",p,"03-cancelled");
+                Files.delete(temporary.resolve("stall"));assertEquals(0,DemoTimetableBrowserIT.representedLessons(p));h.record("Thorough generation cancels through Review, retaining exact school and no candidate",p,"03-cancelled");
                 Files.writeString(temporary.resolve("crash"),"1");p.locator("#setup-effort").selectOption("QUICK");p.locator("#setup-start-generation").click();assertThat(p.locator("#setup-generation-status")).containsText("no complete bounded result",new com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions().setTimeout(30000));Files.delete(temporary.resolve("crash"));
-                assertEquals(0,p.locator(".demo-lesson").count());h.record("Actual kernel process failure retains school and publishes no partial candidate",p,"04-process-failure");
+                assertEquals(0,DemoTimetableBrowserIT.representedLessons(p));h.record("Actual kernel process failure retains school and publishes no partial candidate",p,"04-process-failure");
                 p.locator("#setup-start-generation").click();SchoolSetupBrowserIT.close(p);p.locator("#school-selector").selectOption("star-wars");p.locator("#cohort-filter").selectOption("imperial-cohort-junior-1A");assertThat(p.locator("#generation-indicator")).containsText("awaits naming",new com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions().setTimeout(60000));
-                assertThat(p.locator("#school-selector")).hasValue("star-wars");assertThat(p.locator("#cohort-filter")).hasValue("imperial-cohort-junior-1A");p.locator("[data-view-generated]").click();assertThat(p.locator("#school-selector")).hasValue(copyId);valid(p);assertEquals(1,p.locator(".demo-lesson").count());
+                assertThat(p.locator("#school-selector")).hasValue("star-wars");assertThat(p.locator("#cohort-filter")).hasValue("imperial-cohort-junior-1A");p.locator("[data-view-generated]").click();assertThat(p.locator("#school-selector")).hasValue(copyId);valid(p);assertEquals(1,DemoTimetableBrowserIT.representedLessons(p));
                 h.record("Real Quick checked candidate attaches to origin without changing another school's filters",p,"05-generated-candidate");
                 p.reload();readyWait(p);assertThat(p.locator("#timetable-save-bar")).not().isVisible();p.locator("#school-selector").selectOption(copyId);valid(p);p.locator("#new-timetable-name").fill("Planned week");p.locator("#save-new-timetable").click();assertThat(p.locator("#timetable-title")).hasText("Planned week");
                 JsonNode saved=DemoPlanningBrowserIT.JSON.readTree((String)p.evaluate("()=>{const s=JSON.parse(localStorage.getItem('school-kernel.timetable-demo.v1'));return JSON.stringify(s.timetables[s.selected.schoolId][s.selected.timetableId])}"));assertEquals("PT5S",saved.path("result").path("limit").path("duration").asString());assertEquals(saved.path("provenance").path("source").path("result"),saved.path("result"));
                 assertEquals(DemoPlanningBrowserIT.JSON.valueToTree(expected),saved.path("definition"));Files.writeString(h.output.resolve("saved-generated-timetable.json"),saved.toPrettyString());Page foreign=other.newPage();ready(foreign,h.base);assertEquals(schoolCount,foreign.locator("#school-selector option").count());
-                p.locator("#school-selector").selectOption("two-class");assertEquals(56,p.locator(".demo-lesson").count());assertEquals(2,p.locator("#timetable-selector option").count());p.setViewportSize(390,844);p.locator("#school-selector").selectOption(copyId);SchoolSetupAdvancedJsonBrowserIT.review(p);assertTrue((Boolean)p.evaluate("()=>document.documentElement.scrollWidth<=innerWidth+1"));
+                p.locator("#school-selector").selectOption("two-class");assertEquals(56,DemoTimetableBrowserIT.representedLessons(p));assertEquals(2,p.locator("#timetable-selector option").count());p.setViewportSize(390,844);p.locator("#school-selector").selectOption(copyId);SchoolSetupAdvancedJsonBrowserIT.review(p);assertTrue((Boolean)p.evaluate("()=>document.documentElement.scrollWidth<=innerWidth+1"));
                 h.record("Candidate reload/naming preserves exact result, budget and definition; bundled original and other owner unchanged; Setup fits mobile",p,"06-saved-generation-mobile");
                 assertTrue(h.errors.isEmpty(),h.errors.toString());Files.writeString(h.output.resolve("verdict.txt"),"PASS\n");
             }catch(Throwable failure){Files.writeString(h.output.resolve("verdict.txt"),"FAIL: "+failure+"\n");h.record("FAIL: "+failure,p,"failure");throw failure;}

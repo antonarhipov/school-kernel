@@ -47,7 +47,7 @@ class DemoRemoteSmokeIT {
             }
             try {
                 one.navigate(base + "/workspace/");
-                one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();
+                one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();
                 two.navigate(base + "/workspace/"); two.locator("#demo-json").waitFor();
                 assertEquals("full", one.locator("#demo-definition").inputValue());
                 assertEquals("EMPTY", snapshot(one, base).path("state").stringValue());

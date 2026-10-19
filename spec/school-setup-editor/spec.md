@@ -1069,6 +1069,12 @@ invalidates their pending callbacks; it does not mutate a running server session
 
 ### Setup sections
 
+School setup also includes a **Student gaps and teacher workload** monitoring tab. It displays the selected
+school/timetable's checked results, independently of setup edits, and is available before creating a draft.
+Without a timetable for that school, it explains that monitoring is unavailable. Class/period and teacher
+links return to the corresponding timetable view. This monitoring panel does not appear on the timetable.
+
+
 The suggested navigation contains exactly these rows — no more, no fewer. The order is guidance, not a prerequisite
 chain; contextual scheduling settings and import/export are actions within these sections or the header.
 

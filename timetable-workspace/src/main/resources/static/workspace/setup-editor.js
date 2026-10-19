@@ -1,3 +1,6 @@
+import { subjectTeachingContent, subjectArrangementContent } from './setup-subject-teaching.js';
+import { renderAudienceQuality } from './audience-quality.js';
+import { coordinationContent, createCoordinationActions } from './setup-coordination.js';
 import { schoolDocument, parseSchoolDocument, applySchoolDocument, locatedDraftIssues, schoolDocumentSchema } from './school-document.js';
 import { sections, entityKeys, emptyDraft, sourceDraft, readableDraft, copy, identity } from './setup-model.js';
 import { storageKey, cleanupEpochKey } from './timetable-storage.js';
@@ -13,9 +16,15 @@ import { mapDefinition, createExchange, downloadDocument } from './setup-exchang
 import { reviewContent, createReadiness } from './setup-review.js';
 import { demoRequest } from './demo-transport.js';
 import { createBlockActions } from './setup-blocks.js';
+import { createSplitActions, splitsPreview } from './setup-splits.js';
+import { relationshipsContent, createRelationshipActions } from './setup-relationships.js';
+import { audiencePlansContent, createAudiencePlanActions } from './setup-audience-plans.js';
+import { createAudienceTeacherActions } from './setup-audience-teachers.js';
 const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-export function createSetupEditor({ repository, school, storage, entry, build = () => null, knownSchools = () => [], onSaved = () => {}, generationInfo = () => null, onGenerate = () => {}, onCancel = () => {}, onCleanup = () => {} }) {
+export function createSetupEditor({ repository, school, storage, entry, qualityInfo = () => null, build = () => null, knownSchools = () => [], onSaved = () => {}, generationInfo = () => null, onGenerate = () => {}, onCancel = () => {}, onCleanup = () => {} }) {
+  const qualityTitle = 'Student gaps and teacher workload';
+  let qualityOpen = false;
   let budgets={quickSeconds:5,thoroughSeconds:60,lessonThreshold:200};
   let draft, timer, durability = 'Pending', message = '', storageError = '', recovery, disposed = false, contextSchoolId, panelMotion, jsonFeedback = '';
   const dialog = document.createElement('dialog');
@@ -32,6 +41,19 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     contextOnly(next) { flush(); draft = next; changed({ content: false, render: true }); flush(); },
     notify(text) { message = text; status(); }, confirm: confirmScope
   });
+  const splits = createSplitActions({getDraft:()=>draft,html,
+    commit(next,render=true){draft=next;changed({render});},
+    notify(text){message=text;status();},confirm:confirmScope});
+  const relationships = createRelationshipActions({getDraft:()=>draft,html,confirm:confirmScope,
+    commit(next,render=true){draft=next;changed({render});},
+    contextOnly(next){flush();draft=next;changed({content:false,render:true});flush();}});
+  const audiencePlans = createAudiencePlanActions({getDraft:()=>draft,html,confirm:confirmScope,
+    notify(text){message=text;status();},commit(next,render=true){draft=next;changed({render});},
+    contextOnly(next){flush();draft=next;changed({content:false,render:true});flush();}});
+  const coordination = createCoordinationActions({getDraft:()=>draft,html,confirm:confirmScope,notify(text){message=text;status();},
+    commit(next,render=true){draft=next;changed({render});},contextOnly(next){flush();draft=next;changed({content:false,render:true});flush();}});
+  const audienceTeachers = createAudienceTeacherActions({getDraft:()=>draft,html,confirm:confirmScope,notify(text){message=text;status();},
+    commit(next,render=true){draft=next;changed({render});}});
   const plans = createPlanActions({ getDraft: () => draft, html,
     commit(next, render = true) { draft = next; changed({ render }); },
     contextOnly(next, render = true) { flush(); draft = next; changed({ content: false, render }); },
@@ -95,7 +117,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     }
   }
   function changed({ content = true, render = false } = {}) {
-    if (content) { message = ''; draft.revision++; draft.validation = draft.retained ? 'Unchecked' : 'Incomplete'; delete draft.check; delete draft.checkIssues; }
+    if (content) { message = ''; draft.revision++; draft.validation = draft.retained ? 'Unchecked' : 'Incomplete'; delete draft.check; delete draft.checkIssues; delete draft.checkNotice; }
     durability = 'Pending'; status(); clearTimeout(timer); timer = setTimeout(flush, 250);
     const issues = locatedDraftIssues(draft);
     for (const button of dialog.querySelectorAll('[data-section]')) {
@@ -107,17 +129,17 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   }
   function activate(value, fresh = false) {
     dialog.querySelector("#setup-tools")?.removeAttribute("open");
-    draft = value;
+    draft = value; qualityOpen = false;
     // Old matching checks need current build verification in UC-14, never trust a restored label alone.
     jsonFeedback = ''; message = ''; storageError = '';
-    if (draft.validation === 'Ready') { draft.validation = 'Unchecked'; delete draft.check; delete draft.checkIssues; }
+    if (draft.validation === 'Ready') { draft.validation = 'Unchecked'; delete draft.check; delete draft.checkIssues; delete draft.checkNotice; }
     durability = fresh ? 'Pending' : 'Saved in this browser';
     renderDraft(); if (fresh) flush(); dialog.querySelector('#setup-name').focus();
   }
   function startScreen() {
-    draft = null;
+    qualityOpen = false; draft = null;
     dialog.innerHTML = `<header class="setup-header"><h1 id="setup-title">School setup</h1><button data-close class="secondary">← Timetable</button></header>
-      <section class="setup-start"><h2>Set up your school</h2><p>Edit an independent copy of the selected school, or start with an empty school.</p>
+      <nav aria-label="Setup sections"><button data-setup-start aria-current="page">School setup</button><button data-setup-quality>Student gaps and teacher workload</button></nav><section class="setup-start"><h2>Set up your school</h2><p>Edit an independent copy of the selected school, or start with an empty school.</p>
       <div class="setup-start-choices"><button id="setup-copy-source"><strong>Edit a copy</strong><span>${html(school().name)}</span><small>Original school and timetable preserved</small></button>
       <button id="setup-new"><strong>Create new school</strong><span>Start with an empty school</span><small>Build your own week, classes and teaching plans</small></button></div><p>Work is saved only in this browser on this device.</p></section>`;
   }
@@ -131,13 +153,30 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     dialog.innerHTML = `<header><h1 id="setup-title">Choose unfinished setup</h1><button data-close>Close setup</button></header>
       <p>Several drafts belong to this school. Select the work to resume.</p>${candidates.map(d => `<button class="setup-draft-choice" data-draft="${html(d.id)}">${html(d.name || 'Untitled school')} · ${html(d.source?.name)} · ${d.recoveredFrom ? 'Recovered draft' : 'Draft'} ${html(d.id)}</button>`).join('')}`;
   }
+  function qualityContent() {
+    const sourceId = draft ? draft.source?.id : school().id;
+    const info = qualityInfo(sourceId);
+    if (!info?.model) return `<p>${html(info?.message ?? 'Select a timetable for this school to see student gaps and teacher workload.')}</p>`;
+    if (info.model.definition.schemaVersion !== 2) return '<p>Student gap and workload details are unavailable for this timetable.</p>';
+    return `<p>${html(info.schoolName)} · ${html(info.timetableName)}. Based on the selected timetable; setup edits are separate.</p>${renderAudienceQuality(info.model, html, { embedded: true })}`;
+  }
+  function renderQuality() {
+    qualityOpen = true;
+    if (draft) return renderDraft();
+    dialog.innerHTML = `<header class="setup-header"><h1 id="setup-title">School setup</h1><button data-close class="secondary">← Timetable</button></header>
+      <div class="setup-layout"><aside class="setup-sidebar"><nav aria-label="Setup sections"><button data-setup-start>School setup</button><button data-setup-quality aria-current="page">${qualityTitle}</button></nav></aside>
+      <div class="setup-work-area"><section id="setup-content" aria-labelledby="setup-section-title"><h2 id="setup-section-title" tabindex="-1">${qualityTitle}</h2>${qualityContent()}</section></div></div>`;
+    dialog.querySelector('#setup-section-title').focus({ preventScroll: true });
+  }
   function renderDraft() {
     const toolsOpen=dialog.querySelector('#setup-tools')?.open ?? false;
     const openGridDetails=[...dialog.querySelectorAll('#setup-content details[open]')].map(n=>n.id).filter(Boolean);
     const scrollTop=dialog.querySelector('#setup-content')?.scrollTop ?? 0;
     const openPlanSettings=new Set([...dialog.querySelectorAll('[data-plan] > .setup-row-settings[open]')].map(n=>n.closest('[data-plan]').dataset.plan));
     const issues = [...locatedDraftIssues(draft),...(draft.checkIssues??[])], source = draft.source;
+    const activeSection = qualityOpen ? qualityTitle : draft.section;
     const descriptions = {
+      [qualityTitle]: 'Inspect the student gaps and teacher workload of the selected timetable.',
       'Timetable grid': 'Arrange the school week',
       Subjects: 'Add the subjects taught at your school. Extra scheduling rules are optional.',
       Classes: 'Set up each class, then add its weekly subjects and teachers.',
@@ -151,11 +190,11 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
       <button data-close class="secondary" aria-label="Close setup">← Timetable</button></header>
       <div class="setup-layout"><aside class="setup-sidebar"><nav aria-label="Setup sections">${sections.map((section,index) => {
         const count=issues.filter(i=>i.section===section).length;
-        return `<button data-section="${section}" ${draft.section === section ? 'aria-current="page"' : ''}><span class="setup-step-number" aria-hidden="true">${index+1} ·</span><span>${section}</span><span class="setup-issue-count" aria-label="issues" ${count?'':'hidden'}>${count}</span></button>`;
+        return `<button data-section="${section}" ${!qualityOpen && draft.section === section ? 'aria-current="page"' : ''}><span class="setup-step-number" aria-hidden="true">${index+1} ·</span><span>${section}</span><span class="setup-issue-count" aria-label="issues" ${count?'':'hidden'}>${count}</span></button>`;
       }).join('')}
-      </nav><div class="setup-school-actions"><button id="setup-new" class="secondary">+ New school</button><button id="setup-copy-source" class="secondary">Copy selected school</button></div></aside>
+      <button data-setup-quality ${qualityOpen?'aria-current="page"':''}>${qualityTitle}</button></nav><div class="setup-school-actions"><button id="setup-new" class="secondary">+ New school</button><button id="setup-copy-source" class="secondary">Copy selected school</button></div></aside>
       <div class="setup-work-area"><div class="setup-notice"><p id="setup-message" role="status"></p><div class="setup-actions"><button id="setup-retry" class="secondary" hidden>Retry saving draft</button><button id="setup-recover" class="secondary" hidden>Recover storage conflict…</button></div></div>
-      <section id="setup-content" aria-labelledby="setup-section-title"><div class="setup-section-heading"><h2 id="setup-section-title" tabindex="-1">${draft.section}</h2><p class="setup-section-intro">${descriptions[draft.section]}</p></div><details id="setup-tools" class="setup-tools" ${toolsOpen?'open':''}><summary>Advanced</summary><div class="setup-tools-panel">${advancedContent()}
+      <section id="setup-content" aria-labelledby="setup-section-title"><div class="setup-section-heading"><h2 id="setup-section-title" tabindex="-1">${activeSection}</h2><p class="setup-section-intro">${descriptions[activeSection]}</p></div><details id="setup-tools" class="setup-tools" ${qualityOpen?'hidden':''} ${toolsOpen?'open':''}><summary>Advanced</summary><div class="setup-tools-panel">${advancedContent()}
       <p id="setup-source">${source ? `Source: ${html(source.name)}. Uses the saved school definition; timetable overrides are separate.` : 'New school · independent unfinished draft'}${draft.recoveredFrom ? ` · Recovered from ${html(draft.recoveredFrom)}` : ''}</p>
       <label>Unfinished setup<select id="setup-draft-selector"><option value="${html(draft.id)}">${html(draft.name || 'Untitled school')} · Current draft</option>${all().filter(d => d.id !== draft.id).map(d => `<option value="${html(d.id)}">${html(d.name || 'Untitled school')} · ${html(d.source?.name || 'New school')} · ${d.recoveredFrom ? 'Recovered' : 'Draft'}</option>`).join('')}</select></label>
       <div class="setup-actions">
@@ -170,13 +209,15 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if (dialog.open && !dialog.contains(document.activeElement)) dialog.querySelector('#setup-section-title').focus({ preventScroll: true });
   }
   function sectionContent() {
+    if (qualityOpen) return qualityContent();
     if (draft.retained) {
       let preview='';
       if(draft.section==='Timetable grid') {
         try {const mapped=mapDefinition(draft.retained,draft.source).draft;mapped.pendingInput=draft.pendingInput;preview=`<div class="setup-source-preview">${gridContent(mapped,html)}</div>`;} catch {preview='<p>This source cannot be shown as a structured grid. Its original definition is retained.</p>';}
       }
       if(draft.section==='Review')return '<p>Save a new copy to use setup edits.</p>'+generationContent();
-      return `<div class="setup-source-notice"><p>Preview of ${html(draft.source?.name)}. Review the conversion to edit your own copy.</p><button id="setup-convert" class="secondary">Edit this copy…</button></div>${preview}${catalogContent()}`;
+      const outdated=draft.source?.id===school().id && JSON.stringify(draft.retained)!==JSON.stringify(school().definition);
+      return `<div class="setup-source-notice">${outdated ? '<p>The selected school has changed since this preview was saved. Your existing draft is preserved.</p><button data-current-source class="secondary">Open current school copy</button>' : ''}<p>Preview of ${html(draft.source?.name)}. Review the conversion to edit your own copy.</p><button id="setup-convert" class="secondary">Edit this copy…</button></div>${preview}${catalogContent()}`;
     }
     if (entityKeys[draft.section]) return catalogContent();
     if (draft.section === 'Review') return reviewContent(draft,html)+'<button id="setup-save-school">Save school copy</button><p>A fresh check saves a new immutable browser-local school; no timetable is generated.</p>'+generationContent();
@@ -202,12 +243,23 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     const query = draft.searches?.[key] ?? '', focused = draft.focused?.[key];
     const records = draft[key].filter(r => `${r.name ?? r.displayName ?? ''} ${r.id}`.toLowerCase().includes(query.toLowerCase()));
     const selected = draft[key].find(r => r.id === focused);
+    if(!draft.retained && key==='subjects' && selected?.id===draft.pendingInput?.subjectTeachingSubjectId) {
+      const c=draft.classes.find(c=>c.id===draft.pendingInput.subjectTeachingClassId);
+      if(c) {
+        if(draft.pendingInput.subjectArrangement)return subjectArrangementContent(draft,c,selected,html);
+        if(draft.plans.some(p=>(p.classId??p.cohortId)===c.id&&p.subjectId===selected.id))return plansContent(draft,c.id,html,{subjectId:selected.id});
+        return audiencePlansContent(draft,c,html,{subjectId:selected.id});
+      }
+    }
+    if(!draft.retained && key==='classes' && selected && selected.id===draft.pendingInput?.coordinationClassId)return coordinationContent(draft,selected,html);
+    if(!draft.retained && key==='classes' && selected && selected.id===draft.pendingInput?.audiencePlanClassId)return audiencePlansContent(draft,selected,html);
+    if(!draft.retained && key==='classes' && selected && selected.id===draft.pendingInput?.relationshipClassId)return relationshipsContent(draft,selected,html);
     if(!draft.retained && key==='classes' && selected && selected.id===draft.pendingInput?.planClassId)return plansContent(draft,selected.id,html);
     if(!draft.retained && selected && draft.pendingInput?.availability?.kind===key && draft.pendingInput.availability.id===selected.id)return availabilityContent(draft,key,selected,html);
     if(!draft.retained && selected && key==='classes' && draft.pendingInput?.lunch?.classId===selected.id)return lunchContent(draft,selected,html);
     return `<div class="setup-catalog-toolbar">${!draft.retained && ['subjects','classes','teachers','rooms'].includes(key) ? `<button id="setup-add-record">Add ${({subjects:'subject',classes:'class',teachers:'teacher',rooms:'room'})[key]}</button>` : ''}<label>Find ${draft.section.toLowerCase()}<input id="setup-search" value="${html(query)}" autocomplete="off"></label>
-      <p id="setup-record-count">${records.length} of ${draft[key].length} records</p></div><div class="setup-record-browser"><div class="setup-record-list">${records.map(r => `<button data-record="${html(r.id)}" ${r.id === focused ? 'aria-current="true"' : ''}>${html(r.name ?? r.displayName ?? '(unnamed)')} </button>`).join('') || '<p>No matching records.</p>'}</div>
-      <div id="setup-record-detail">${!draft.retained && ['subjects','classes','teachers','rooms'].includes(key) ? catalogDetail(draft, key, selected, html) : selected ? `<h3>${html(selected.name ?? selected.displayName)}</h3><pre>${html(JSON.stringify(selected, null, 2))}</pre>` : '<p>Select a record to inspect its retained values.</p>'}</div></div>`;
+      <p id="setup-record-count">${records.length} of ${draft[key].length} records</p></div><div class="setup-record-browser"><div class="setup-record-list">${records.map(r => `<button data-record="${html(r.id)}" ${r.id === focused ? 'aria-current="true"' : ''}>${html(r.name ?? r.displayName ?? '(unnamed)')}${key==='classes' && r.splits?.length ? ` <small>· ${r.splits.reduce((n,s)=>n+s.groups.length,0)} groups</small>` : ''} </button>`).join('') || '<p>No matching records.</p>'}</div>
+      <div id="setup-record-detail">${!draft.retained && ['subjects','classes','teachers','rooms'].includes(key) ? catalogDetail(draft, key, selected, html) : selected ? `<h3>${html(selected.name ?? selected.displayName)}</h3>${key==='classes' ? `${splitsPreview(draft,selected,html)}<details><summary>Advanced class data</summary><pre>${html(JSON.stringify(selected, null, 2))}</pre></details>` : key==='subjects' ? `${subjectTeachingContent(draft,selected,html)}<details><summary>Advanced subject data</summary><pre>${html(JSON.stringify(selected,null,2))}</pre></details>` : `<pre>${html(JSON.stringify(selected, null, 2))}</pre>`}` : '<p>Select a record to inspect its retained values.</p>'}</div></div>`;
   }
   function advancedContent() {
     let text = draft.advanced?.text ?? '';
@@ -254,7 +306,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   dialog.addEventListener('click', event => {
     if (!draft?.advanced?.dirty) return;
     const button = event.target.closest('button');
-    if (!button || ['setup-start-generation','setup-cancel-generation'].includes(button.id) || button.closest('#setup-tools') || button.dataset.section || button.hasAttribute('data-close') || button.hasAttribute('data-back-timetable')) return;
+    if (!button || ['setup-start-generation','setup-cancel-generation'].includes(button.id) || button.closest('#setup-tools') || button.dataset.section || button.hasAttribute('data-setup-quality') || button.hasAttribute('data-setup-start') || button.hasAttribute('data-quality-class') || button.hasAttribute('data-quality-teacher') || button.hasAttribute('data-close') || button.hasAttribute('data-back-timetable')) return;
     event.preventDefault(); event.stopImmediatePropagation(); resolveJson();
   }, true);
   function download(snapshot = draft) {
@@ -292,6 +344,11 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
   dialog.addEventListener('input', event => {
     if (!draft) return;
     if (event.target.id === 'school-definition-json') { jsonFeedback = ''; draft.advanced = { text: event.target.value, dirty: true }; changed(); lockForms(); return; }
+    if (!draft.retained && relationships.input(event)) return;
+    if (!draft.retained && coordination.input(event)) return;
+    if (!draft.retained && audiencePlans.input(event)) return;
+    if (!draft.retained && audienceTeachers.input(event)) return;
+    if (!draft.retained && event.target.type!=='checkbox' && splits.input(event)) return;
     if (!draft.retained && event.target.tagName!=='SELECT' && blocks.input(event)) return;
     if (!draft.retained && rooms.input(event)) return;
     if (!draft.retained && availability.input(event)) return;
@@ -306,6 +363,11 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     }
   });
   dialog.addEventListener('change', event => {
+    if(draft&&!draft.retained&&relationships.change(event))return;
+    if(draft&&!draft.retained&&coordination.change(event))return;
+    if(draft&&!draft.retained&&audiencePlans.change(event))return;
+    if(draft&&!draft.retained&&audienceTeachers.change(event))return;
+    if(draft&&!draft.retained&&splits.change(event))return;
     if(event.target.id==='setup-import-file'){const file=event.target.files[0];event.target.value='';if(file)file.text().then(text=>exchange.preview(text,{id:'file',name:file.name,revision:null}));return;}
     if(draft&&!draft.retained&&event.target.tagName==='SELECT'&&blocks.change(event))return;
     if(draft&&!draft.retained&&rooms.change(event))return;
@@ -321,7 +383,9 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if (button.hasAttribute('data-close') || button.hasAttribute('data-back-timetable')) return close();
     if (button.dataset.draft) return activate(all().find(d => d.id === button.dataset.draft));
     if (button.id === 'setup-new') { flush(); activate(emptyDraft(), true); return; }
-    if (button.id === 'setup-copy-source') { flush(); activate(sourceDraft(school()), true); return; }
+    if (button.id === 'setup-copy-source' || button.hasAttribute('data-current-source')) { flush(); activate(sourceDraft(school()), true); return; }
+    if (button.hasAttribute('data-setup-quality')) { flush(); renderQuality(); return; }
+    if (button.hasAttribute('data-setup-start')) { qualityOpen = false; if(draft)renderDraft();else startScreen(); return; }
     if (!draft) return;
     if(draft.retained && (button.dataset.gridDay||button.dataset.overviewDay)){draft.pendingInput.gridDay=button.dataset.gridDay||button.dataset.overviewDay;changed({content:false,render:true});return;}
     if (button.id === 'setup-apply-json') return applyJson();
@@ -332,6 +396,31 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if (button.id === 'setup-legacy-buffer') return exchange.preview(repository.state().editor.text, {id:'advanced-buffer',name:'Previous JSON editor buffer',revision:null});
     if (button.id === 'delete-local-data') return onCleanup();
     if(exchange.click(button))return;
+    if (!draft.retained && (button.hasAttribute('data-subject-teaching') || button.hasAttribute('data-add-subject-teaching'))) {
+      const adding=button.hasAttribute('data-add-subject-teaching');
+      const subjectId=adding?button.dataset.addSubjectTeaching:button.dataset.teachingSubject;
+      const classId=adding?dialog.querySelector('#setup-subject-class')?.value:button.dataset.subjectTeaching;
+      if(!draft.subjects.some(s=>s.id===subjectId)||!draft.classes.some(c=>c.id===classId))return;
+      flush();
+      if(adding) {
+        if((draft.audiencePlans??[]).some(p=>p.classId===classId&&p.subjectId===subjectId)||draft.plans.some(p=>(p.classId??p.cohortId)===classId&&p.subjectId===subjectId))return;
+        if(!draft.audiencePlans?.length)for(const c of draft.classes)if(!Object.hasOwn(c,'maxDailyGaps')&&draft.plans.some(p=>(p.classId??p.cohortId)===c.id))c.maxDailyGaps=0;
+        (draft.audiencePlans??=[]).push({id:identity(),classId,subjectId,weeklyTotal:'',delivery:'whole',wholeClassCount:0,overrides:{},portions:[]});
+      }
+      draft.pendingInput.subjectTeachingSubjectId=subjectId;draft.pendingInput.subjectTeachingClassId=classId;delete draft.pendingInput.subjectArrangement;
+      changed({content:adding,render:true});flush();dialog.querySelector('#setup-content').scrollTop=0;return;
+    }
+    if(!draft.retained && (button.hasAttribute('data-back-subject-teaching')||button.hasAttribute('data-back-subject-arrangement')||button.hasAttribute('data-manage-subject-groups'))) {
+      flush();
+      if(button.hasAttribute('data-back-subject-teaching')) {delete draft.pendingInput.subjectTeachingSubjectId;delete draft.pendingInput.subjectTeachingClassId;}
+      if(button.hasAttribute('data-manage-subject-groups'))draft.pendingInput.subjectArrangement=true;else delete draft.pendingInput.subjectArrangement;
+      changed({content:false,render:true});flush();dialog.querySelector('#setup-content').scrollTop=0;return;
+    }
+    if (!draft.retained && relationships.click(event)) return;
+    if (!draft.retained && coordination.click(event)) return;
+    if (!draft.retained && audiencePlans.click(event)) return;
+    if (!draft.retained && audienceTeachers.click(event)) return;
+    if (!draft.retained && splits.click(event)) return;
     if (!draft.retained && blocks.click(event)) return;
     if (!draft.retained && lunch.click(event)) return;
     if (!draft.retained && availability.click(event)) return;
@@ -340,13 +429,13 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if (!draft.retained && draft.section === 'Timetable grid' && grid.click(event)) return;
     if (!draft.retained && entityKeys[draft.section] && catalog.click(event)) return;
     const section = button.dataset.section || button.dataset.goSection || button.dataset.issueSection;
-    if (section) { flush(); draft.section = section; changed({ content: false, render: true }); flush(); dialog.querySelector('#setup-content').scrollTop=0; dialog.querySelector('#setup-section-title').focus({preventScroll:true}); }
+    if (section) { flush(); qualityOpen = false; draft.section = section; changed({ content: false, render: true }); flush(); dialog.querySelector('#setup-content').scrollTop=0; dialog.querySelector('#setup-section-title').focus({preventScroll:true}); }
     if (button.dataset.record) { draft.focused ??= {}; draft.focused[entityKeys[draft.section]] = button.dataset.record; changed({ content: false, render: true }); dialog.querySelector('[aria-current="true"]')?.focus(); }
     if(button.id==='setup-check')readiness.check();
     if(button.id==='setup-save-school')schoolSave.save();
     if(button.id==='setup-start-generation')onGenerate(draft.source.id,dialog.querySelector('#setup-effort').value);
     if(button.id==='setup-cancel-generation')onCancel();
-    if(button.hasAttribute('data-review-issue')){const issue=[...locatedDraftIssues(draft),...(draft.checkIssues??[])][Number(button.dataset.reviewIssue)];if(issue){draft.section=issue.section;if(issue.record&&entityKeys[issue.section])draft.focused[entityKeys[issue.section]]=issue.record;if(issue.plan)draft.pendingInput.planClassId=issue.record;if(issue.section==='Timetable grid'&&issue.record){const interval=draft.grid.intervals.find(i=>i.id===issue.record);if(interval)draft.pendingInput.gridDay=interval.day;}changed({content:false,render:true});if(issue.section==='Timetable grid'&&issue.record)dialog.querySelector(`[data-interval="${CSS.escape(issue.record)}"] input`)?.focus();}}
+    if(button.hasAttribute('data-review-issue')){const issue=[...locatedDraftIssues(draft),...(draft.checkIssues??[])][Number(button.dataset.reviewIssue)];if(issue){draft.section=issue.section;if(issue.record&&entityKeys[issue.section])draft.focused[entityKeys[issue.section]]=issue.record;if(issue.split){delete draft.pendingInput.audiencePlanClassId;delete draft.pendingInput.coordinationClassId;delete draft.pendingInput.relationshipClassId;}if(issue.plan)draft.pendingInput.planClassId=issue.record;if(issue.audiencePlan)draft.pendingInput.audiencePlanClassId=issue.record;if(issue.coordination)draft.pendingInput.coordinationClassId=issue.record;if(issue.relationship){delete draft.pendingInput.audiencePlanClassId;delete draft.pendingInput.coordinationClassId;draft.pendingInput.relationshipClassId=issue.record;}if(issue.section==='Timetable grid'&&issue.record){const interval=draft.grid.intervals.find(i=>i.id===issue.record);if(interval)draft.pendingInput.gridDay=interval.day;}changed({content:false,render:true});if(issue.section==='Timetable grid'&&issue.record)dialog.querySelector(`[data-interval="${CSS.escape(issue.record)}"] input`)?.focus();}}
     if (button.id === 'setup-retry') flush();
     if (button.id === 'setup-download') { flush(); download(); }
     if (button.id === 'setup-discard') confirmScope('Discard this setup draft?', `Only draft ${draft.id} (${draft.name || 'Untitled school'}) will be removed. Saved schools, timetables and other drafts are kept.`, () => {
@@ -378,6 +467,7 @@ export function createSetupEditor({ repository, school, storage, entry, build = 
     if ([storageKey,cleanupEpochKey].includes(event.key) && draft) { clearTimeout(timer); durability = 'Storage conflict'; message = 'Another tab changed browser data. This page’s work is retained. Recover before overwriting.'; status(); }
   });
   return {
+    refreshQuality() { if (dialog.open && qualityOpen) renderQuality(); },
     refreshGeneration,
     close,
     configure(value) { budgets={...budgets,...value};configurePlanLimits(value); configureRoomLimits(value); },

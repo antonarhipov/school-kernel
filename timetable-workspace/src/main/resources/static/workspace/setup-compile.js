@@ -1,3 +1,4 @@
+import { activeAudienceClass } from './setup-audience-readiness.js';
 import { draftIssues } from './setup-model.js';
 import { available } from './setup-availability.js';
 import { allocated, planLimits } from './setup-plans.js';
@@ -19,6 +20,7 @@ function resource(value,keys,periods){
 export function compileDraft(draft,{allowIssues=false}={}){
  if(draft.retained)throw new Error('Explicit conversion and adoption are required.');
  const issues=draftIssues(draft);if(!allowIssues&&issues.length)throw new Error(issues.map(i=>i.message).join(' '));
+ if(Object.hasOwn(draft,'audiencePlans')||Object.hasOwn(draft,'coordinationRules')||Object.hasOwn(draft,'sessionLocks'))return compileAudienceDraft(draft);
  const definition={...(clone(draft.kernelExtras??{})),schemaVersion:1,catalogVersion:10,schoolId:draft.kernelSchoolId??draft.id,displayName:draft.name.trim()};
  definition.periods=[];
  for(const day of draft.grid.activeDays){
@@ -47,6 +49,24 @@ export function compileDraft(draft,{allowIssues=false}={}){
  const text=JSON.stringify(definition),{lessonMax,workMax}=planLimits();
  if(new TextEncoder().encode(text).length>2*1024*1024)throw new Error('Definition exceeds the 2 MiB UTF-8 limit.');
  if(definition.lessons.length>lessonMax||definition.lessons.length*definition.periods.length*definition.rooms.length>workMax)throw new Error(`Definition exceeds configured limits: ${lessonMax} lessons; placement work ${workMax}.`);
+ return definition;
+}
+function compileAudienceDraft(draft){
+ const legacy=clone(draft);delete legacy.audiencePlans;delete legacy.coordinationRules;delete legacy.sessionLocks;
+ const definition=compileDraft(legacy,{allowIssues:true});
+ for(const period of definition.periods){const interval=draft.grid.intervals.find(i=>i.periodId===period.id),sameDay=draft.grid.intervals.filter(i=>i.day===interval.day),index=sameDay.indexOf(interval),next=sameDay.slice(index+1).find(teaching);if(Object.hasOwn(interval,'gapBoundaryAfter'))period.gapBoundaryAfter=interval.gapBoundaryAfter;else if(!!next&&sameDay.slice(index+1,sameDay.indexOf(next)).some(i=>i.kind==='Lunch'))period.gapBoundaryAfter=true;}
+ definition.schemaVersion=2;definition.catalogVersion=11;definition.audiencePlans=clone(draft.audiencePlans??[]);
+ // Adoption provenance belongs to the full school document, outside the public scheduling contract.
+ for(const plan of definition.audiencePlans)delete plan.sourceFixedPlan;
+ // Legacy gap defaults are materialized when audience teaching is adopted.
+ // Compilation must preserve omitted settings, including after document import.
+ if(Object.hasOwn(draft,'coordinationRules'))definition.coordinationRules=clone(draft.coordinationRules);
+ if(Object.hasOwn(draft,'sessionLocks'))definition.sessionLocks=clone(draft.sessionLocks);
+ for(const c of definition.cohorts){const authored=activeAudienceClass(draft,draft.classes.find(row=>row.id===c.id)).active;for(const key of ['splits','relationships'])if(Object.hasOwn(authored,key))c[key]=clone(authored[key]);}
+ for(const t of definition.teachers){const authored=draft.teachers.find(row=>row.id===t.id);if(Object.hasOwn(authored,'eligibleClassIdsBySubject'))t.eligibleClassIdsBySubject=clone(authored.eligibleClassIdsBySubject);if(Object.hasOwn(authored,'referenceWeeklyMaximum'))t.referenceWeeklyMaximum=authored.referenceWeeklyMaximum;}
+ const sessions=definition.lessons.length+definition.audiencePlans.reduce((n,p)=>n+p.portions.reduce((m,q)=>m+q.sessionIds.length,0),0),{lessonMax,workMax}=planLimits();
+ if(sessions>lessonMax||sessions*definition.periods.length*definition.rooms.length>workMax)throw new Error('Audience definition exceeds the configured session/placement-work limits.');
+ if(new TextEncoder().encode(JSON.stringify(definition)).length>2*1024*1024)throw new Error('Audience definition exceeds the 2 MiB UTF-8 limit.');
  return definition;
 }
 // Exact kernel canonical definition revision; mirrors RevisionService normalization.

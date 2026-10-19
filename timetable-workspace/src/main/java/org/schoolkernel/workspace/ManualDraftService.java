@@ -93,6 +93,8 @@ public class ManualDraftService {
         WorkspaceAggregate current = repository.load();
         long expectedVersion = ImportService.requireMatchingVersion(ifMatch, current);
         boolean isBaseline = current.state() == WorkspaceState.ACCEPTED_BASELINE;
+        if ((isBaseline || current.state()==WorkspaceState.MANUAL_DRAFT) && current.document().path("acceptedBaseline").path("definition").path("schemaVersion").asInt()==2)
+            return mutateAudience(current, expectedVersion, payload);
         if (payload.has("teacherId")) {
             String route = repository.ephemeral() ? "Edit definition JSON and save a browser version. Using it starts new initial planning. Pending repair or manual work is not transferred or discarded automatically." : switch (current.state()) {
                 case ACCEPTED_BASELINE -> "Open Author definition from Current.";
@@ -247,8 +249,86 @@ public class ManualDraftService {
                 document);
     }
 
+    private WorkspaceAggregate mutateAudience(WorkspaceAggregate current,long version,JsonNode payload) {
+        ObjectNode document=(ObjectNode)current.document().deepCopy();
+        JsonNode baseline=document.path("acceptedBaseline"),definition=baseline.path("definition");
+        boolean starting=current.state()==WorkspaceState.ACCEPTED_BASELINE;
+        ObjectNode draft=starting?document.putObject("manualDraft"):(ObjectNode)document.path("manualDraft");
+        if(starting)draft.set("assignments",baseline.path("result").path("timetable").path("assignments").deepCopy());
+        ArrayNode assignments=(ArrayNode)draft.path("assignments");
+        Map<String,JsonNode> placed=byId(assignments,"lessonId"),original=byId(baseline.path("result").path("timetable").path("assignments"),"lessonId");
+        String action=payload.path("action").asString("");
+        if(action.equals("REVERT_LESSON")) {
+            String id=payload.path("lessonId").asString("");JsonNode source=original.get(id),target=placed.get(id);
+            if(source==null||target==null)throw manualInvalid("Unknown selected session.");
+            for(String field:List.of("periodId","roomId","teacherId"))((ObjectNode)target).set(field,source.path(field));
+        } else {
+            ArrayNode patches=json.createArrayNode();
+            if(action.equals("APPLY_COMBINED")) {
+                if(!payload.path("confirmedCombined").asBoolean()||!payload.path("patches").isArray()||payload.path("patches").isEmpty())throw manualInvalid("Confirm every listed combined assignment change.");
+                patches=(ArrayNode)payload.path("patches");
+            } else if(action.equals("REASSIGN_LESSON"))patches.add(payload);
+            else throw manualInvalid("Unsupported audience manual action.");
+            Set<String> seen=new HashSet<>();
+            for(JsonNode patch:patches) {
+                String id=patch.path("lessonId").asString("");ObjectNode target=(ObjectNode)placed.get(id);
+                if(target==null||!seen.add(id))throw manualInvalid("Unknown or duplicate selected session.");
+                if(patch.has("teacherId")&&!patch.path("teacherId").equals(target.path("teacherId"))) {
+                    String allocation=target.path("allocationId").asString("");
+                    JsonNode descriptor=byId(WorkspaceSessions.lessons(definition)).get(id);
+                    if(!WorkspaceSessions.automatic(descriptor))throw manualInvalid("This fixed teacher policy requires explicit definition editing.");
+                    if(!payload.path("confirmedAllocation").asBoolean())throw manualInvalid("Confirm the whole weekly automatic teacher allocation and its affected sessions.");
+                    String teacher=patch.path("teacherId").asString("");
+                    JsonNode t=byId(definition.path("teachers")).get(teacher);
+                    if(t==null||!textSet(t.path("qualifiedSubjectIds")).contains(target.path("subjectId").asString())
+                            ||!textSet(t.path("eligibleClassIdsBySubject").path(target.path("subjectId").asString())).contains(target.path("cohortId").asString())
+                            ||descriptor.has("candidateTeacherIds")&&!textSet(descriptor.path("candidateTeacherIds")).contains(teacher)
+                            ||descriptor.path("teacherPolicy").has("candidateTeacherIds")&&!textSet(descriptor.path("teacherPolicy").path("candidateTeacherIds")).contains(teacher))throw manualInvalid("Teacher is not qualified/eligible for this weekly allocation.");
+                    for(JsonNode a:assignments)if(allocation.equals(a.path("allocationId").asString()))((ObjectNode)a).put("teacherId",teacher);
+                }
+                for(String field:List.of("periodId","roomId"))if(patch.has(field)) {
+                    String collection=field.equals("periodId")?"periods":"rooms";
+                    if(!byId(definition.path(collection)).containsKey(patch.path(field).asString("")))throw manualInvalid("Unknown "+field+".");
+                    target.set(field,patch.path(field));
+                }
+            }
+        }
+        ObjectNode modifications=draft.putObject("modifications");
+        for(JsonNode a:assignments) {
+            JsonNode old=original.get(a.path("lessonId").asString());
+            boolean changed=false;for(String f:List.of("periodId","roomId","teacherId"))changed|=!a.path(f).equals(old.path(f));
+            if(changed){ObjectNode m=modifications.putObject(a.path("lessonId").asString());m.set("lessonId",a.path("lessonId"));for(String f:List.of("period","room","teacher")){m.put(f+"Changed",!a.path(f+"Id").equals(old.path(f+"Id")));m.set("original"+Character.toUpperCase(f.charAt(0))+f.substring(1)+"Id",old.path(f+"Id"));}}
+        }
+        ObjectNode supplied=(ObjectNode)baseline.path("result").deepCopy();((ObjectNode)supplied.path("timetable")).set("assignments",assignments);
+        JsonNode reviewed;
+        try {reviewed=reviewAudience(definition,supplied);}catch(WorkspaceProblem failure){reviewed=json.createObjectNode().put("valid",false).put("message",failure.getMessage());}
+        ArrayNode conflicts=draft.putArray("conflicts");audienceConflicts(reviewed).forEach(conflicts::add);
+        draft.set("review",reviewed);draft.put("draftRevision",UUID.randomUUID().toString());
+        return mutation.replaceManualDraft(version,current.state(),WorkspaceState.MANUAL_DRAFT,document);
+    }
+    private JsonNode reviewAudience(JsonNode definition,JsonNode result) {
+        var input=new ImportDocuments(definition,result,null,ImportDocuments.ImportMode.ACCEPTED_BASELINE);
+        return demoVerification==null?verifier.review(input,java.time.Duration.ofSeconds(30),ignored->{},()->{}):demoVerification.review(input);
+    }
+    private List<ObjectNode> audienceConflicts(JsonNode review) {
+        List<ObjectNode> rows=new ArrayList<>();
+        if(review.path("valid").asBoolean())return rows;
+        for(JsonNode c:review.path("conflicts"))for(JsonNode id:c.path("lessonIds")) {
+            ObjectNode item=json.createObjectNode().put("lessonId",id.asString()).put("code",c.path("constraintId").asString()).put("description","Audience/resource/rule conflict: "+c.path("constraintId").asString()+" "+c.path("examples"));
+            item.putArray("competingLessonIds");rows.add(item);
+        }
+        if(rows.isEmpty())rows.add(json.createObjectNode().put("lessonId","").put("code","REVIEW_UNESTABLISHED").put("description",review.toString()));
+        return rows;
+    }
+    private static WorkspaceProblem manualInvalid(String message) {return new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY,"INVALID_MANUAL_DRAFT",message);}
+
     public List<ObjectNode> evaluateConflicts(JsonNode definition, JsonNode assignments) {
         List<ObjectNode> conflicts = new ArrayList<>();
+        if(definition.path("schemaVersion").asInt()==2) {
+            ObjectNode supplied=json.createObjectNode();supplied.putObject("timetable").set("assignments",assignments);
+            JsonNode review=reviewAudience(definition,supplied);
+            return audienceConflicts(review);
+        }
 
         Map<String, JsonNode> teachers = byId(definition.path("teachers"));
         Map<String, JsonNode> rooms = byId(definition.path("rooms"));
@@ -607,6 +687,12 @@ public class ManualDraftService {
                 candidateResult.path("inputRevision").stringValue(),
                 candidateAssignments);
         candidateResult.put("timetableRevision", timetableRevision);
+
+        if(definition.path("schemaVersion").asInt()==2) {
+            JsonNode reviewed=reviewAudience(definition,candidateResult);
+            if(!reviewed.path("valid").asBoolean())throw new WorkspaceProblem(HttpStatus.UNPROCESSABLE_ENTITY,"VERIFICATION_FAILED","The exact working copy could not be independently reviewed: "+reviewed.toString());
+            candidateResult=(ObjectNode)reviewed.path("result").deepCopy();
+        }
 
         // Kernel verification
         KernelVerifier.Verification verified;

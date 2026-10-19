@@ -20,6 +20,17 @@ class BuildTimetableVariants {
             var loaded = loader.load(root.resolve(id + "-definition.json"), DefinitionLoader.Mode.INITIAL);
             if (!(loaded instanceof DefinitionLoader.Accepted accepted))
                 throw new IllegalStateException("Invalid fictional curriculum: " + id + " " + loaded);
+            if (AudienceDefinition.enabled(accepted.document())) {
+                for (String variant : List.of("a", "b")) {
+                    Path assignments = root.resolve("../../../../../../tools/demo/seeds/" + id + "-" + variant + "-assignments.json").normalize();
+                    var reviewed = new ReviewService(loader, new FileBoundary()).handle(root.resolve(id + "-definition.json"), assignments, "bundled-"+id+"-"+variant);
+                    if (!(reviewed instanceof CommandOutcome.Succeeded success) || !success.document().path("valid").asBoolean())
+                        throw new IllegalStateException("Invalid audience seed: " + id + "/" + variant + " " + reviewed);
+                    Files.writeString(root.resolve(id + "-" + variant + "-result.json"), json.writerWithDefaultPrettyPrinter().writeValueAsString(success.document().path("result"))+"\n");
+                }
+                System.out.println(id + ": two independently reviewed audience variants");
+                continue;
+            }
             var seed = id.equals("two-class")
                     ? json.readTree(Files.readAllBytes(root.resolve("../../../../../../tools/demo/seeds/two-class-result.json").normalize())).path("timetable").path("assignments")
                     : json.readTree(Files.readAllBytes(root.resolve("../../../../../../tools/demo/seeds/"

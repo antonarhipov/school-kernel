@@ -1,0 +1,3820 @@
+{
+  "nested": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "cross-day",
+      "displayName": "Normative cross-day groups",
+      "subjects": [
+        {
+          "id": "english",
+          "displayName": "English"
+        },
+        {
+          "id": "handicraft",
+          "displayName": "Handicraft"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "TE",
+          "displayName": "English teacher",
+          "qualifiedSubjectIds": [
+            "english"
+          ],
+          "eligibleClassIdsBySubject": {
+            "english": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "TH1",
+          "displayName": "TH1",
+          "qualifiedSubjectIds": [
+            "handicraft"
+          ],
+          "eligibleClassIdsBySubject": {
+            "handicraft": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "TH2",
+          "displayName": "TH2",
+          "qualifiedSubjectIds": [
+            "handicraft"
+          ],
+          "eligibleClassIdsBySubject": {
+            "handicraft": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "E",
+              "displayName": "E",
+              "groupCount": 2,
+              "subjectIds": [],
+              "groups": [
+                {
+                  "id": "E1",
+                  "displayName": "E1",
+                  "size": 14
+                },
+                {
+                  "id": "E2",
+                  "displayName": "E2",
+                  "size": 14
+                }
+              ]
+            },
+            {
+              "id": "H",
+              "displayName": "H",
+              "groupCount": 4,
+              "subjectIds": [],
+              "groups": [
+                {
+                  "id": "H1",
+                  "displayName": "H1",
+                  "size": 7
+                },
+                {
+                  "id": "H2",
+                  "displayName": "H2",
+                  "size": 7
+                },
+                {
+                  "id": "H3",
+                  "displayName": "H3",
+                  "size": 7
+                },
+                {
+                  "id": "H4",
+                  "displayName": "H4",
+                  "size": 7
+                }
+              ]
+            }
+          ],
+          "relationships": {
+            "mode": "nested",
+            "splitIds": [
+              "E",
+              "H"
+            ],
+            "constituentSplitId": "H",
+            "unions": {
+              "E1": [
+                "H1",
+                "H2"
+              ],
+              "E2": [
+                "H3",
+                "H4"
+              ]
+            },
+            "intersections": []
+          }
+        }
+      ],
+      "rooms": [
+        {
+          "id": "ER",
+          "displayName": "English room",
+          "capacity": 14,
+          "capabilityIds": []
+        },
+        {
+          "id": "HR1",
+          "displayName": "HR1",
+          "capacity": 7,
+          "capabilityIds": [
+            "practical"
+          ]
+        },
+        {
+          "id": "HR2",
+          "displayName": "HR2",
+          "capacity": 7,
+          "capabilityIds": [
+            "practical"
+          ]
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "english-plan",
+          "classId": "c",
+          "subjectId": "english",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "E",
+          "overrides": {},
+          "candidateTeacherIds": [
+            "TE"
+          ],
+          "allowedRoomIds": [
+            "ER"
+          ],
+          "requiredRoomCapabilityIds": [],
+          "portions": [
+            {
+              "id": "portion-E1",
+              "audienceId": "E1",
+              "sessionIds": [
+                "e1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "portion-E2",
+              "audienceId": "E2",
+              "sessionIds": [
+                "e2"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        },
+        {
+          "id": "handicraft-plan",
+          "classId": "c",
+          "subjectId": "handicraft",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "H",
+          "overrides": {},
+          "candidateTeacherIds": [
+            "TH1",
+            "TH2"
+          ],
+          "allowedRoomIds": [
+            "HR1",
+            "HR2"
+          ],
+          "requiredRoomCapabilityIds": [
+            "practical"
+          ],
+          "portions": [
+            {
+              "id": "portion-H1",
+              "audienceId": "H1",
+              "sessionIds": [
+                "h1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "portion-H2",
+              "audienceId": "H2",
+              "sessionIds": [
+                "h2"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "portion-H3",
+              "audienceId": "H3",
+              "sessionIds": [
+                "h3"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "portion-H4",
+              "audienceId": "H4",
+              "sessionIds": [
+                "h4"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ],
+      "coordinationRules": []
+    },
+    "assignments": [
+      {
+        "lessonId": "e1",
+        "subjectId": "english",
+        "cohortId": "c",
+        "teacherId": "TE",
+        "periodId": "1-2",
+        "roomId": "ER",
+        "audienceId": "E1",
+        "allocationId": "portion-E1"
+      },
+      {
+        "lessonId": "e2",
+        "subjectId": "english",
+        "cohortId": "c",
+        "teacherId": "TE",
+        "periodId": "3-4",
+        "roomId": "ER",
+        "audienceId": "E2",
+        "allocationId": "portion-E2"
+      },
+      {
+        "lessonId": "h1",
+        "subjectId": "handicraft",
+        "cohortId": "c",
+        "teacherId": "TH1",
+        "periodId": "3-4",
+        "roomId": "HR1",
+        "audienceId": "H1",
+        "allocationId": "portion-H1"
+      },
+      {
+        "lessonId": "h2",
+        "subjectId": "handicraft",
+        "cohortId": "c",
+        "teacherId": "TH2",
+        "periodId": "3-4",
+        "roomId": "HR2",
+        "audienceId": "H2",
+        "allocationId": "portion-H2"
+      },
+      {
+        "lessonId": "h3",
+        "subjectId": "handicraft",
+        "cohortId": "c",
+        "teacherId": "TH1",
+        "periodId": "1-2",
+        "roomId": "HR1",
+        "audienceId": "H3",
+        "allocationId": "portion-H3"
+      },
+      {
+        "lessonId": "h4",
+        "subjectId": "handicraft",
+        "cohortId": "c",
+        "teacherId": "TH2",
+        "periodId": "1-2",
+        "roomId": "HR2",
+        "audienceId": "H4",
+        "allocationId": "portion-H4"
+      }
+    ]
+  },
+  "groups2": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-2",
+      "displayName": "Inspection 2 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 2,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 14
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 14
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "S0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q1",
+              "audienceId": "G2",
+              "sessionIds": [
+                "S1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "S0",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S1",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G2",
+        "allocationId": "Q1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "0-1"
+      }
+    ]
+  },
+  "groups3": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-3",
+      "displayName": "Inspection 3 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T2",
+          "displayName": "Teacher 3",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 3,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 10
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 9
+                },
+                {
+                  "id": "G3",
+                  "displayName": "Group 3 Õ — original full custom audience name",
+                  "size": 9
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R2",
+          "displayName": "Room 3",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "S0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q1",
+              "audienceId": "G2",
+              "sessionIds": [
+                "S1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q2",
+              "audienceId": "G3",
+              "sessionIds": [
+                "S2"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "S0",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S1",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G2",
+        "allocationId": "Q1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S2",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G3",
+        "allocationId": "Q2",
+        "teacherId": "T2",
+        "roomId": "R2",
+        "periodId": "0-1"
+      }
+    ]
+  },
+  "groups4": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-4",
+      "displayName": "Inspection 4 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T2",
+          "displayName": "Teacher 3",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T3",
+          "displayName": "Teacher 4",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 4,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 7
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 7
+                },
+                {
+                  "id": "G3",
+                  "displayName": "Group 3 Õ — original full custom audience name",
+                  "size": 7
+                },
+                {
+                  "id": "G4",
+                  "displayName": "Group 4 Õ — original full custom audience name",
+                  "size": 7
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R2",
+          "displayName": "Room 3",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R3",
+          "displayName": "Room 4",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "S0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q1",
+              "audienceId": "G2",
+              "sessionIds": [
+                "S1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q2",
+              "audienceId": "G3",
+              "sessionIds": [
+                "S2"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q3",
+              "audienceId": "G4",
+              "sessionIds": [
+                "S3"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "S0",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S1",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G2",
+        "allocationId": "Q1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S2",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G3",
+        "allocationId": "Q2",
+        "teacherId": "T2",
+        "roomId": "R2",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S3",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G4",
+        "allocationId": "Q3",
+        "teacherId": "T3",
+        "roomId": "R3",
+        "periodId": "0-1"
+      }
+    ]
+  },
+  "groups8": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-8",
+      "displayName": "Inspection 8 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T2",
+          "displayName": "Teacher 3",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T3",
+          "displayName": "Teacher 4",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T4",
+          "displayName": "Teacher 5",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T5",
+          "displayName": "Teacher 6",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T6",
+          "displayName": "Teacher 7",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T7",
+          "displayName": "Teacher 8",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 8,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 4
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 4
+                },
+                {
+                  "id": "G3",
+                  "displayName": "Group 3 Õ — original full custom audience name",
+                  "size": 4
+                },
+                {
+                  "id": "G4",
+                  "displayName": "Group 4 Õ — original full custom audience name",
+                  "size": 4
+                },
+                {
+                  "id": "G5",
+                  "displayName": "Group 5 Õ — original full custom audience name",
+                  "size": 3
+                },
+                {
+                  "id": "G6",
+                  "displayName": "Group 6 Õ — original full custom audience name",
+                  "size": 3
+                },
+                {
+                  "id": "G7",
+                  "displayName": "Group 7 Õ — original full custom audience name",
+                  "size": 3
+                },
+                {
+                  "id": "G8",
+                  "displayName": "Group 8 Õ — original full custom audience name",
+                  "size": 3
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R2",
+          "displayName": "Room 3",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R3",
+          "displayName": "Room 4",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R4",
+          "displayName": "Room 5",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R5",
+          "displayName": "Room 6",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R6",
+          "displayName": "Room 7",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R7",
+          "displayName": "Room 8",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "S0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q1",
+              "audienceId": "G2",
+              "sessionIds": [
+                "S1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q2",
+              "audienceId": "G3",
+              "sessionIds": [
+                "S2"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q3",
+              "audienceId": "G4",
+              "sessionIds": [
+                "S3"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q4",
+              "audienceId": "G5",
+              "sessionIds": [
+                "S4"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q5",
+              "audienceId": "G6",
+              "sessionIds": [
+                "S5"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q6",
+              "audienceId": "G7",
+              "sessionIds": [
+                "S6"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q7",
+              "audienceId": "G8",
+              "sessionIds": [
+                "S7"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "S0",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S1",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G2",
+        "allocationId": "Q1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S2",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G3",
+        "allocationId": "Q2",
+        "teacherId": "T2",
+        "roomId": "R2",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S3",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G4",
+        "allocationId": "Q3",
+        "teacherId": "T3",
+        "roomId": "R3",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S4",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G5",
+        "allocationId": "Q4",
+        "teacherId": "T4",
+        "roomId": "R4",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S5",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G6",
+        "allocationId": "Q5",
+        "teacherId": "T5",
+        "roomId": "R5",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S6",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G7",
+        "allocationId": "Q6",
+        "teacherId": "T6",
+        "roomId": "R6",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S7",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G8",
+        "allocationId": "Q7",
+        "teacherId": "T7",
+        "roomId": "R7",
+        "periodId": "0-1"
+      }
+    ]
+  },
+  "partial": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-4",
+      "displayName": "Inspection 4 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T2",
+          "displayName": "Teacher 3",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        },
+        {
+          "id": "T3",
+          "displayName": "Teacher 4",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 4,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 7
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 7
+                },
+                {
+                  "id": "G3",
+                  "displayName": "Group 3 Õ — original full custom audience name",
+                  "size": 7
+                },
+                {
+                  "id": "G4",
+                  "displayName": "Group 4 Õ — original full custom audience name",
+                  "size": 7
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R2",
+          "displayName": "Room 3",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R3",
+          "displayName": "Room 4",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {
+            "G4": 0
+          },
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "S0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q1",
+              "audienceId": "G2",
+              "sessionIds": [
+                "S1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q2",
+              "audienceId": "G3",
+              "sessionIds": [
+                "S2"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "S0",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S1",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G2",
+        "allocationId": "Q1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S2",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G3",
+        "allocationId": "Q2",
+        "teacherId": "T2",
+        "roomId": "R2",
+        "periodId": "0-1"
+      }
+    ]
+  },
+  "whole": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-2",
+      "displayName": "Inspection 2 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 2,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 14
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 14
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 1,
+          "delivery": "whole",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "whole",
+              "audienceId": "class:c",
+              "sessionIds": [
+                "whole-session"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "whole-session",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "class:c",
+        "allocationId": "whole",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      }
+    ]
+  },
+  "gap": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-2",
+      "displayName": "Inspection 2 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 2,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 14
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 14
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 2,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {
+            "G2": 0
+          },
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "first",
+                "last"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "first",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "last",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-3"
+      }
+    ]
+  },
+  "crossing": {
+    "definition": {
+      "schemaVersion": 2,
+      "catalogVersion": 11,
+      "schoolId": "inspection-2",
+      "displayName": "Inspection 2 groups",
+      "subjects": [
+        {
+          "id": "s",
+          "displayName": "Practical English with a long subject name"
+        },
+        {
+          "id": "german",
+          "displayName": "German"
+        }
+      ],
+      "teachers": [
+        {
+          "id": "T0",
+          "displayName": "Teacher 1",
+          "qualifiedSubjectIds": [
+            "s",
+            "german"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ],
+            "german": [
+              "c"
+            ]
+          },
+          "referenceWeeklyMaximum": 0
+        },
+        {
+          "id": "T1",
+          "displayName": "Teacher 2",
+          "qualifiedSubjectIds": [
+            "s",
+            "german"
+          ],
+          "eligibleClassIdsBySubject": {
+            "s": [
+              "c"
+            ],
+            "german": [
+              "c"
+            ]
+          }
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "c",
+          "displayName": "5A",
+          "size": 28,
+          "splits": [
+            {
+              "id": "split",
+              "displayName": "Reusable English",
+              "groupCount": 2,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "G1",
+                  "displayName": "Group 1 Õ — original full custom audience name",
+                  "size": 14
+                },
+                {
+                  "id": "G2",
+                  "displayName": "Group 2 Õ — original full custom audience name",
+                  "size": 14
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "displayName": "Crossing German",
+              "groupCount": 2,
+              "subjectIds": [
+                "s"
+              ],
+              "groups": [
+                {
+                  "id": "X0",
+                  "displayName": "Crossing 1",
+                  "size": 14
+                },
+                {
+                  "id": "X1",
+                  "displayName": "Crossing 2",
+                  "size": 14
+                }
+              ]
+            }
+          ],
+          "relationships": {
+            "mode": "joint",
+            "splitIds": [
+              "split",
+              "other"
+            ],
+            "unions": {},
+            "intersections": [
+              {
+                "groupIds": [
+                  "G1",
+                  "X0"
+                ],
+                "count": 7
+              },
+              {
+                "groupIds": [
+                  "G1",
+                  "X1"
+                ],
+                "count": 7
+              },
+              {
+                "groupIds": [
+                  "G2",
+                  "X0"
+                ],
+                "count": 7
+              },
+              {
+                "groupIds": [
+                  "G2",
+                  "X1"
+                ],
+                "count": 7
+              }
+            ]
+          }
+        }
+      ],
+      "rooms": [
+        {
+          "id": "R0",
+          "displayName": "Room 1",
+          "capacity": 28,
+          "capabilityIds": []
+        },
+        {
+          "id": "R1",
+          "displayName": "Room 2",
+          "capacity": 28,
+          "capabilityIds": []
+        }
+      ],
+      "periods": [
+        {
+          "id": "0-1",
+          "weekday": "MONDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-2",
+          "weekday": "MONDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-3",
+          "weekday": "MONDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "0-4",
+          "weekday": "MONDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-1",
+          "weekday": "TUESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-2",
+          "weekday": "TUESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-3",
+          "weekday": "TUESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "1-4",
+          "weekday": "TUESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-1",
+          "weekday": "WEDNESDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-2",
+          "weekday": "WEDNESDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-3",
+          "weekday": "WEDNESDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "2-4",
+          "weekday": "WEDNESDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-1",
+          "weekday": "THURSDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-2",
+          "weekday": "THURSDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-3",
+          "weekday": "THURSDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "3-4",
+          "weekday": "THURSDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-1",
+          "weekday": "FRIDAY",
+          "order": 1,
+          "displayName": "P1",
+          "startTime": "08:00",
+          "endTime": "08:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-2",
+          "weekday": "FRIDAY",
+          "order": 2,
+          "displayName": "P2",
+          "startTime": "09:00",
+          "endTime": "09:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-3",
+          "weekday": "FRIDAY",
+          "order": 3,
+          "displayName": "P3",
+          "startTime": "10:00",
+          "endTime": "10:45",
+          "adjacentToNext": true,
+          "gapBoundaryAfter": false
+        },
+        {
+          "id": "4-4",
+          "weekday": "FRIDAY",
+          "order": 4,
+          "displayName": "P4",
+          "startTime": "11:00",
+          "endTime": "11:45",
+          "adjacentToNext": false,
+          "gapBoundaryAfter": false
+        }
+      ],
+      "lessons": [],
+      "audiencePlans": [
+        {
+          "id": "plan",
+          "classId": "c",
+          "subjectId": "s",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "split",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "Q0",
+              "audienceId": "G1",
+              "sessionIds": [
+                "S0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "Q1",
+              "audienceId": "G2",
+              "sessionIds": [
+                "S1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        },
+        {
+          "id": "other-plan",
+          "classId": "c",
+          "subjectId": "german",
+          "weeklyTotal": 1,
+          "wholeClassCount": 0,
+          "delivery": "grouped",
+          "splitId": "other",
+          "overrides": {},
+          "portions": [
+            {
+              "id": "XQ0",
+              "audienceId": "X0",
+              "sessionIds": [
+                "XS0"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            },
+            {
+              "id": "XQ1",
+              "audienceId": "X1",
+              "sessionIds": [
+                "XS1"
+              ],
+              "teacherPolicy": {
+                "mode": "automatic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "assignments": [
+      {
+        "lessonId": "S0",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G1",
+        "allocationId": "Q0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "S1",
+        "subjectId": "s",
+        "cohortId": "c",
+        "audienceId": "G2",
+        "allocationId": "Q1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "0-1"
+      },
+      {
+        "lessonId": "XS0",
+        "subjectId": "german",
+        "cohortId": "c",
+        "audienceId": "X0",
+        "allocationId": "XQ0",
+        "teacherId": "T0",
+        "roomId": "R0",
+        "periodId": "1-1"
+      },
+      {
+        "lessonId": "XS1",
+        "subjectId": "german",
+        "cohortId": "c",
+        "audienceId": "X1",
+        "allocationId": "XQ1",
+        "teacherId": "T1",
+        "roomId": "R1",
+        "periodId": "1-1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "lessonId": "e1",
+    "subjectId": "english",
+    "cohortId": "c",
+    "teacherId": "TE",
+    "periodId": "tue-p2",
+    "roomId": "ER",
+    "audienceId": "E1",
+    "allocationId": "portion-E1"
+  },
+  {
+    "lessonId": "e2",
+    "subjectId": "english",
+    "cohortId": "c",
+    "teacherId": "TE",
+    "periodId": "thu-p4",
+    "roomId": "ER",
+    "audienceId": "E2",
+    "allocationId": "portion-E2"
+  },
+  {
+    "lessonId": "h1",
+    "subjectId": "handicraft",
+    "cohortId": "c",
+    "teacherId": "TH1",
+    "periodId": "thu-p4",
+    "roomId": "HR1",
+    "audienceId": "H1",
+    "allocationId": "portion-H1"
+  },
+  {
+    "lessonId": "h2",
+    "subjectId": "handicraft",
+    "cohortId": "c",
+    "teacherId": "TH2",
+    "periodId": "thu-p4",
+    "roomId": "HR2",
+    "audienceId": "H2",
+    "allocationId": "portion-H2"
+  },
+  {
+    "lessonId": "h3",
+    "subjectId": "handicraft",
+    "cohortId": "c",
+    "teacherId": "TH1",
+    "periodId": "tue-p2",
+    "roomId": "HR1",
+    "audienceId": "H3",
+    "allocationId": "portion-H3"
+  },
+  {
+    "lessonId": "h4",
+    "subjectId": "handicraft",
+    "cohortId": "c",
+    "teacherId": "TH2",
+    "periodId": "tue-p2",
+    "roomId": "HR2",
+    "audienceId": "H4",
+    "allocationId": "portion-H4"
+  }
+]

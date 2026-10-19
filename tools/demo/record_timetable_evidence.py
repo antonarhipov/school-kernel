@@ -22,7 +22,7 @@ def main():
             digest.update(name.encode()+b'\0'+archive.read(name))
     checked = json.loads(subprocess.check_output(['java', '--class-path', str(ROOT/'kernel-cli/target/school-kernel.jar'),
         str(ROOT/'tools/demo/VerifySampleScores.java'), str(SAMPLES)], text=True))
-    evidence = {'kernelBuild': digest.hexdigest(), 'catalogVersion': 9, 'samples': {}}
+    evidence = {'kernelBuild': digest.hexdigest(), 'catalogVersion': checked['catalogVersion'], 'samples': {}}
     for identifier in ['two-class', 'full', 'star-wars', 'english']:
         definition = json.loads((SAMPLES/f'{identifier}-definition.json').read_text())
         for variant in ['a', 'b']:

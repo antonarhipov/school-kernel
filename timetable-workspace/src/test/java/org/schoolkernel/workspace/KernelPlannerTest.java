@@ -277,7 +277,7 @@ class KernelPlannerTest {
 
     private static ObjectNode definition() {
         ObjectNode definition = JSON.createObjectNode();
-        definition.put("schoolId", "demo-school");
+        definition.put("schoolId", "demo-school").put("schemaVersion", 1);
         return definition;
     }
 

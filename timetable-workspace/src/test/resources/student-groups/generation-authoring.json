@@ -1,0 +1,445 @@
+{
+  "documentType": "school-setup",
+  "formatVersion": 1,
+  "name": "Nested mixed school",
+  "kernelSchoolId": "cross-day",
+  "grid": {
+    "activeDays": [
+      "MONDAY",
+      "TUESDAY",
+      "WEDNESDAY",
+      "THURSDAY",
+      "FRIDAY"
+    ],
+    "intervals": [
+      {
+        "id": "interval-0-1",
+        "periodId": "0-1",
+        "day": "MONDAY",
+        "kind": "Lesson",
+        "label": "P1",
+        "start": "08:00",
+        "end": "08:45",
+        "order": 1,
+        "boundaryAfter": true
+      },
+      {
+        "id": "interval-1-2",
+        "periodId": "1-2",
+        "day": "TUESDAY",
+        "kind": "Lesson",
+        "label": "P2",
+        "start": "09:00",
+        "end": "09:45",
+        "order": 2,
+        "boundaryAfter": true
+      },
+      {
+        "id": "interval-2-1",
+        "periodId": "2-1",
+        "day": "WEDNESDAY",
+        "kind": "Lesson",
+        "label": "P1",
+        "start": "08:00",
+        "end": "08:45",
+        "order": 1,
+        "boundaryAfter": true
+      },
+      {
+        "id": "interval-3-4",
+        "periodId": "3-4",
+        "day": "THURSDAY",
+        "kind": "Lesson",
+        "label": "P4",
+        "start": "11:00",
+        "end": "11:45",
+        "order": 4,
+        "boundaryAfter": true
+      },
+      {
+        "id": "interval-4-1",
+        "periodId": "4-1",
+        "day": "FRIDAY",
+        "kind": "Lesson",
+        "label": "P1",
+        "start": "08:00",
+        "end": "08:45",
+        "order": 1,
+        "boundaryAfter": true
+      }
+    ]
+  },
+  "subjects": [
+    {
+      "id": "english",
+      "displayName": "English"
+    },
+    {
+      "id": "handicraft",
+      "displayName": "Handicraft"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "TE",
+      "displayName": "English teacher",
+      "qualifiedSubjectIds": [
+        "english"
+      ],
+      "eligibleClassIdsBySubject": {
+        "english": [
+          "c"
+        ]
+      },
+      "referenceWeeklyMaximum": 0
+    },
+    {
+      "id": "TH1",
+      "displayName": "TH1",
+      "qualifiedSubjectIds": [
+        "handicraft"
+      ],
+      "eligibleClassIdsBySubject": {
+        "handicraft": [
+          "c"
+        ]
+      }
+    },
+    {
+      "id": "TH2",
+      "displayName": "TH2",
+      "qualifiedSubjectIds": [
+        "handicraft"
+      ],
+      "eligibleClassIdsBySubject": {
+        "handicraft": [
+          "c"
+        ]
+      }
+    }
+  ],
+  "classes": [
+    {
+      "id": "c",
+      "displayName": "5A",
+      "size": 28,
+      "splits": [
+        {
+          "id": "E",
+          "displayName": "E",
+          "groupCount": 2,
+          "subjectIds": [],
+          "groups": [
+            {
+              "id": "E1",
+              "displayName": "E1",
+              "size": 14
+            },
+            {
+              "id": "E2",
+              "displayName": "E2",
+              "size": 14
+            }
+          ]
+        },
+        {
+          "id": "H",
+          "displayName": "H",
+          "groupCount": 4,
+          "subjectIds": [],
+          "groups": [
+            {
+              "id": "H1",
+              "displayName": "H1",
+              "size": 7
+            },
+            {
+              "id": "H2",
+              "displayName": "H2",
+              "size": 7
+            },
+            {
+              "id": "H3",
+              "displayName": "H3",
+              "size": 7
+            },
+            {
+              "id": "H4",
+              "displayName": "H4",
+              "size": 7
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "mode": "nested",
+        "splitIds": [
+          "E",
+          "H"
+        ],
+        "constituentSplitId": "H",
+        "unions": {
+          "E1": [
+            "H1",
+            "H2"
+          ],
+          "E2": [
+            "H3",
+            "H4"
+          ]
+        },
+        "intersections": []
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "ER",
+      "displayName": "English room",
+      "capacity": 28,
+      "capabilityIds": []
+    },
+    {
+      "id": "HR1",
+      "displayName": "HR1",
+      "capacity": 7,
+      "capabilityIds": [
+        "practical"
+      ]
+    },
+    {
+      "id": "HR2",
+      "displayName": "HR2",
+      "capacity": 7,
+      "capabilityIds": [
+        "practical"
+      ]
+    }
+  ],
+  "plans": [],
+  "audiencePlans": [
+    {
+      "id": "english-plan",
+      "classId": "c",
+      "subjectId": "english",
+      "weeklyTotal": 3,
+      "wholeClassCount": 2,
+      "delivery": "mixed",
+      "splitId": "E",
+      "overrides": {},
+      "candidateTeacherIds": [
+        "TE"
+      ],
+      "allowedRoomIds": [
+        "ER"
+      ],
+      "requiredRoomCapabilityIds": [],
+      "portions": [
+        {
+          "id": "whole-portion",
+          "audienceId": "class:c",
+          "sessionIds": [
+            "whole-mon",
+            "whole-fri"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-E1",
+          "audienceId": "E1",
+          "sessionIds": [
+            "e1"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-E2",
+          "audienceId": "E2",
+          "sessionIds": [
+            "e2"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        }
+      ]
+    },
+    {
+      "id": "handicraft-plan",
+      "classId": "c",
+      "subjectId": "handicraft",
+      "weeklyTotal": 1,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "H",
+      "overrides": {},
+      "candidateTeacherIds": [
+        "TH1",
+        "TH2"
+      ],
+      "allowedRoomIds": [
+        "HR1",
+        "HR2"
+      ],
+      "requiredRoomCapabilityIds": [
+        "practical"
+      ],
+      "portions": [
+        {
+          "id": "portion-H1",
+          "audienceId": "H1",
+          "sessionIds": [
+            "h1"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-H2",
+          "audienceId": "H2",
+          "sessionIds": [
+            "h2"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-H3",
+          "audienceId": "H3",
+          "sessionIds": [
+            "h3"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-H4",
+          "audienceId": "H4",
+          "sessionIds": [
+            "h4"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        }
+      ]
+    }
+  ],
+  "coordinationRules": [
+    {
+      "id": "whole-days",
+      "classId": "c",
+      "type": "ALLOWED",
+      "count": 2,
+      "days": [
+        "MONDAY",
+        "FRIDAY"
+      ],
+      "activities": [
+        {
+          "portionId": "whole-portion",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "english-slot-0",
+      "classId": "c",
+      "type": "FIXED",
+      "count": 1,
+      "day": "TUESDAY",
+      "periodId": "1-2",
+      "activities": [
+        {
+          "portionId": "portion-E1",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "english-slot-1",
+      "classId": "c",
+      "type": "FIXED",
+      "count": 1,
+      "day": "THURSDAY",
+      "periodId": "3-4",
+      "activities": [
+        {
+          "portionId": "portion-E2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "practical-days-0",
+      "classId": "c",
+      "type": "ALLOWED",
+      "count": 1,
+      "days": [
+        "TUESDAY",
+        "THURSDAY"
+      ],
+      "activities": [
+        {
+          "portionId": "portion-H1",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "practical-days-1",
+      "classId": "c",
+      "type": "ALLOWED",
+      "count": 1,
+      "days": [
+        "TUESDAY",
+        "THURSDAY"
+      ],
+      "activities": [
+        {
+          "portionId": "portion-H2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "practical-days-2",
+      "classId": "c",
+      "type": "ALLOWED",
+      "count": 1,
+      "days": [
+        "TUESDAY",
+        "THURSDAY"
+      ],
+      "activities": [
+        {
+          "portionId": "portion-H3",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "practical-days-3",
+      "classId": "c",
+      "type": "ALLOWED",
+      "count": 1,
+      "days": [
+        "TUESDAY",
+        "THURSDAY"
+      ],
+      "activities": [
+        {
+          "portionId": "portion-H4",
+          "unit": "SESSION"
+        }
+      ]
+    }
+  ]
+}

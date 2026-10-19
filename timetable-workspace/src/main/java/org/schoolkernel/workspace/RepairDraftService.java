@@ -103,7 +103,7 @@ public class RepairDraftService {
             throw new WorkspaceProblem(HttpStatus.CONFLICT, "INVALID_WORKSPACE_TRANSITION",
                     "A repair draft can be edited only while no solve is running.");
         }
-        if (current.repairDraft().has("seedDefinition")) {
+        if (current.repairDraft().has("seedDefinition") || current.assignment() != null && current.assignment().has("audienceId")) {
             WorkspaceAggregate saved=update(ifMatch,request);
             return new MinimalUpdate((ObjectNode)saved.document().path("repairDraft"),saved.version());
         }
@@ -145,7 +145,7 @@ public class RepairDraftService {
         JsonNode draft = current.document().path("repairDraft");
         Set<String> directlyAffected = textSet(draft.path("directEffectLessonIds"));
         List<JsonNode> selected = new ArrayList<>();
-        Map<String, JsonNode> lessons = byId(effectiveDefinition(current).path("lessons"));
+        Map<String, JsonNode> lessons = byId(WorkspaceSessions.lessons(effectiveDefinition(current)));
         Map<String, JsonNode> periods = byId(effectiveDefinition(current).path("periods"));
         for (JsonNode assignment : acceptedAssignments(current)) {
             JsonNode lesson = lessons.get(assignment.path("lessonId").stringValue());
@@ -232,15 +232,15 @@ public class RepairDraftService {
             ArrayNode materialized = resource.putArray("availablePeriodIds");
             available.forEach(materialized::add);
         }
-        Map<String, ObjectNode> lessons = mutableById(definition.path("lessons"));
+        Map<String, ObjectNode> lessons = mutableById(WorkspaceSessions.lessons(definition));
         Map<String, JsonNode> assignments = byId(workspaceDocument.path("acceptedBaseline").path("result")
                 .path("timetable").path("assignments"), "lessonId");
         for (JsonNode pin : intent.path("pins")) {
             ObjectNode lesson = lessons.get(pin.path("lessonId").stringValue());
             JsonNode assignment = assignments.get(pin.path("lessonId").stringValue());
             if (lesson==null || assignment==null) throw invalid("Only surviving accepted placements can be pinned.");
-            if (pin.path("periodSources").size() > 0) { if (seeded(workspaceDocument)) checkSeedDimension(definition,lesson,assignment,"PERIOD"); lesson.put("periodLock", assignment.path("periodId").stringValue()); }
-            if (pin.path("roomSources").size() > 0) { if (seeded(workspaceDocument)) checkSeedDimension(definition,lesson,assignment,"ROOM"); lesson.put("roomLock", assignment.path("roomId").stringValue()); }
+            if (pin.path("periodSources").size() > 0) { if (seeded(workspaceDocument)) checkSeedDimension(definition,lesson,assignment,"PERIOD"); WorkspaceSessions.lock(definition, lesson.path("id").asString(), "PERIOD", assignment.path("periodId").stringValue()); }
+            if (pin.path("roomSources").size() > 0) { if (seeded(workspaceDocument)) checkSeedDimension(definition,lesson,assignment,"ROOM"); WorkspaceSessions.lock(definition, lesson.path("id").asString(), "ROOM", assignment.path("roomId").stringValue()); }
         }
         return definition;
     }
@@ -271,7 +271,7 @@ public class RepairDraftService {
         for(JsonNode change:draft.path("definitionChanges")) {
             String type=change.path("ownerType").asString(""),id=change.path("ownerId").asString("");
             if(type.equals("Lesson"))direct.add(id);
-            for(JsonNode lesson:definition.path("lessons")) {
+            for(JsonNode lesson:WorkspaceSessions.lessons(definition)) {
                 String lessonId=lesson.path("id").asString("");
                 if(type.equals("Teacher")&&id.equals(lesson.path("teacherId").asString(""))
                         ||type.equals("Cohort")&&id.equals(lesson.path("cohortId").asString(""))
@@ -284,7 +284,7 @@ public class RepairDraftService {
         ObjectNode bound=json.createObjectNode();bound.set("intent",draft.path("intent"));bound.set("seed",draft.path("seedDefinition"));bound.set("source",document.path("acceptedBaseline"));bound.set("retainedAuthoring",draft.path("retainedAuthoring"));
         draft.put("intentRevision",revision(bound));
         ArrayNode conflicts=(ArrayNode)draft.path("conflicts");
-        for(JsonNode change:draft.path("intent").path("changes"))for(JsonNode lesson:definition.path("lessons")) {
+        for(JsonNode change:draft.path("intent").path("changes"))for(JsonNode lesson:WorkspaceSessions.lessons(definition)) {
             String type=change.path("resourceType").asString(""),resource=change.path("resourceId").asString("");
             boolean matches=type.equals("TEACHER")?resource.equals(lesson.path("teacherId").asString("")):resource.equals(lesson.path("roomLock").asString(""));
             if(matches&&lesson.has("periodLock")&&textSet(change.path("unavailablePeriodIds")).contains(lesson.path("periodLock").asString("")))
@@ -296,7 +296,7 @@ public class RepairDraftService {
     private void requireSeedPin(WorkspaceAggregate current,JsonNode request) {
         if(!seeded(current.document()))return;
         validateSeed(current.document());
-        JsonNode definition=effectiveDefinition(current),lesson=byId(definition.path("lessons")).get(requiredText(request,"lessonId")),assignment=byId(acceptedAssignments(current),"lessonId").get(requiredText(request,"lessonId"));
+        JsonNode definition=effectiveDefinition(current),lesson=byId(WorkspaceSessions.lessons(definition)).get(requiredText(request,"lessonId")),assignment=byId(acceptedAssignments(current),"lessonId").get(requiredText(request,"lessonId"));
         if(lesson==null||assignment==null)throw invalid("Only surviving accepted lessons can be pinned. New or cancelled occurrences have no eligible accepted placement.");
         for(String dimension:requiredDimensions(request.path("dimensions")))checkSeedDimension(definition,lesson,assignment,dimension);
     }
@@ -307,18 +307,12 @@ public class RepairDraftService {
     }
     private JsonNode effectiveManifest(JsonNode document) {
         if(!seeded(document))return document.path("acceptedBaseline").path("manifest");
-        ObjectNode manifest=json.createObjectNode();ArrayNode locks=manifest.putArray("locks");for(JsonNode lesson:document.path("repairDraft").path("seedDefinition").path("lessons"))if(lesson.has("periodLock")||lesson.has("roomLock")){ObjectNode lock=locks.addObject().put("lessonId",lesson.path("id").asString());if(lesson.has("periodLock"))lock.put("periodLockOrigin","PERSISTENT_POLICY");if(lesson.has("roomLock"))lock.put("roomLockOrigin","PERSISTENT_POLICY");}return manifest;
+        ObjectNode manifest=json.createObjectNode();ArrayNode locks=manifest.putArray("locks");for(JsonNode lesson:WorkspaceSessions.lessons(document.path("repairDraft").path("seedDefinition")))if(lesson.has("periodLock")||lesson.has("roomLock")){ObjectNode lock=locks.addObject().put("lessonId",lesson.path("id").asString());if(lesson.has("periodLock"))lock.put("periodLockOrigin","PERSISTENT_POLICY");if(lesson.has("roomLock"))lock.put("roomLockOrigin","PERSISTENT_POLICY");}return manifest;
     }
     private static JsonNode effectiveDefinition(WorkspaceAggregate current) { return seeded(current.document())?current.document().path("repairDraft").path("seedDefinition"):acceptedDefinition(current); }
 
     private static void clearPriorAttemptScopedLocks(ObjectNode definition, JsonNode manifest) {
-        Map<String, ObjectNode> lessons = mutableById(definition.path("lessons"));
-        for (JsonNode lock : manifest.path("locks")) {
-            ObjectNode lesson = lessons.get(lock.path("lessonId").stringValue());
-            if (lesson == null) continue;
-            if ("ATTEMPT_SCOPED".equals(text(lock.path("periodLockOrigin")))) lesson.remove("periodLock");
-            if ("ATTEMPT_SCOPED".equals(text(lock.path("roomLockOrigin")))) lesson.remove("roomLock");
-        }
+        WorkspaceSessions.clearAttemptLocks(definition, manifest);
     }
 
     boolean hasUnsavedBrowserState(long durableVersion) {
@@ -473,7 +467,7 @@ public class RepairDraftService {
                         .contains(assignment.path("periodId").stringValue());
                 boolean conflict = atPeriod && (("TEACHER".equals(change.path("resourceType").stringValue())
                         && change.path("resourceId").stringValue().equals(assignment.path("teacherId").stringValue())
-                        && periodPinned) || ("ROOM".equals(change.path("resourceType").stringValue())
+                        && periodPinned && !WorkspaceSessions.automatic(lesson)) || ("ROOM".equals(change.path("resourceType").stringValue())
                         && change.path("resourceId").stringValue().equals(assignment.path("roomId").stringValue())
                         && roomPinned));
                 if (conflict) {
@@ -485,7 +479,7 @@ public class RepairDraftService {
                             + " is pinned while that resource is unavailable.");
                     item.put("resourceType", change.path("resourceType").stringValue());
                     item.put("resourceId", change.path("resourceId").stringValue());
-                    if (lesson != null) item.put("lessonDisplayName", lesson.path("displayName").stringValue());
+                    if (lesson != null) item.put("lessonDisplayName", lesson.path("displayName").asString(lessonId));
                 }
             }
         }
@@ -514,7 +508,7 @@ public class RepairDraftService {
 
     private List<ObjectNode> conflictsFor(JsonNode definition, JsonNode assignments, JsonNode intent, JsonNode manifest,
             Set<String> selectedIds, Set<String> previewDimensions) {
-        Map<String, JsonNode> lessons = byId(definition.path("lessons"));
+        Map<String, JsonNode> lessons = byId(WorkspaceSessions.lessons(definition));
         Map<String, ObjectNode> pins = new HashMap<>();
         for (JsonNode pin : intent.path("pins")) pins.put(pin.path("lessonId").stringValue(), (ObjectNode) pin);
         Set<String> persistentPeriod = new HashSet<>();
@@ -534,7 +528,7 @@ public class RepairDraftService {
             for (JsonNode change : intent.path("changes")) {
                 boolean atPeriod = textSet(change.path("unavailablePeriodIds")).contains(assignment.path("periodId").stringValue());
                 boolean conflict = atPeriod && (("TEACHER".equals(change.path("resourceType").stringValue())
-                        && change.path("resourceId").stringValue().equals(assignment.path("teacherId").stringValue()) && periodPinned)
+                        && change.path("resourceId").stringValue().equals(assignment.path("teacherId").stringValue()) && periodPinned && !WorkspaceSessions.automatic(lesson))
                         || ("ROOM".equals(change.path("resourceType").stringValue())
                         && change.path("resourceId").stringValue().equals(assignment.path("roomId").stringValue()) && roomPinned));
                 if (conflict) {
@@ -545,7 +539,7 @@ public class RepairDraftService {
                             + " is pinned while that resource is unavailable.");
                     item.put("resourceType", change.path("resourceType").stringValue());
                     item.put("resourceId", change.path("resourceId").stringValue());
-                    if (lesson != null) item.put("lessonDisplayName", lesson.path("displayName").stringValue());
+                    if (lesson != null) item.put("lessonDisplayName", lesson.path("displayName").asString(lessonId));
                     conflicts.add(item);
                 }
             }

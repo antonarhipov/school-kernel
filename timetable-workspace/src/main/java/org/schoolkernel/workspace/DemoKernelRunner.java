@@ -74,7 +74,7 @@ class DemoKernelRunner {
             if (exit == 2 && "INVALID_INPUT".equals(status))
                 return new Outcome(null, "INVALID_INPUT", status, "School Kernel rejected the input. Review the located validation errors.", safeEvidence(result));
             if (exit != 0 || !"FEASIBLE".equals(status)) return failure("KERNEL_FAILED", "School Kernel could not complete this search.");
-            if (result.path("schemaVersion").asInt() != 1
+            if (result.path("schemaVersion").asInt() != input.definition().path("schemaVersion").asInt()
                     || result.path("catalogVersion").asInt() != input.definition().path("catalogVersion").asInt()
                     || !correlation.equals(result.path("correlationId").asString(""))
                     || !input.definition().path("schoolId").equals(result.path("schoolId"))
@@ -119,7 +119,7 @@ class DemoKernelRunner {
     }
     private static boolean completeChanges(JsonNode report) {
         var fields = Set.of("additions", "cancellations", "teacherChanges", "forcedMoves", "periodMoves", "roomOnlyMoves");
-        return report.isObject() && report.size() == fields.size() && fields.stream().allMatch(field -> report.path(field).isArray());
+        return report.isObject() && (report.size() == fields.size() || report.size() == fields.size() + 1 && report.path("unmatchedChanges").isArray()) && fields.stream().allMatch(field -> report.path(field).isArray());
     }
     private static Outcome failure(String code, String message) { return new Outcome(null, "FAILED", code, message, null); }
     private static Path write(Path directory, String name, JsonNode node) throws IOException {

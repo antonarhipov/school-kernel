@@ -93,12 +93,12 @@ class DemoSamplesBrowserIT {
                 }
                 one.reload(); openReady(one); assertTrue(one.locator("#demo-in-use").innerText().contains("Full school"));
                 select(two, "small"); use(two, null); JsonNode other = snapshot(two);
-                assertTrue(one.locator("#represented-lesson-count").innerText().contains("520"));
-                assertEquals(520, one.locator(".lesson-cell").count());
+                assertTrue(one.locator("#represented-lesson-count").innerText().contains("544"));
+                assertEquals(544, one.locator(".lesson-cell").count());
                 one.locator(".lesson-cell").first().click();
                 assertTrue(one.locator("#lesson-panel-title").isVisible());
                 String detail = one.locator("#workbench-inspector").innerText(); assertTrue(detail.contains("Teacher")); assertTrue(detail.contains("Room"));
-                record("G5: Full whole-school Week renders 520 lessons with fictional names and faithful lesson details", one, "05-full-week-details");
+                record("G5: Full whole-school Week renders 544 lessons with fictional names and faithful lesson details", one, "05-full-week-details");
                 one.locator("[data-range=DAY]").click();
                 one.locator("#filters > summary").click();
                 one.locator("#teacher-filter").selectOption("demo-teacher-001");
@@ -179,7 +179,7 @@ class DemoSamplesBrowserIT {
         } finally { if (!remote) stop(); }
     }
     private void open(Page page) { page.navigate(base + "/workspace/"); openReady(page); }
-    private void openReady(Page page) { page.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor(); }
+    private void openReady(Page page) { page.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor(); }
     private void select(Page page, String id) {
         page.locator("#demo-definition").selectOption(id);
         page.waitForFunction("id => !document.querySelector('#demo-use').disabled && document.querySelector('#demo-definition').value === id && JSON.parse(document.querySelector('#demo-json').value).displayName === ({small:'Small school', 'two-class':'Two-class school', full:'Full school'})[id]", id);

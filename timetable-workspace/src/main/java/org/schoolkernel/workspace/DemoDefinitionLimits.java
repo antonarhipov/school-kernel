@@ -20,17 +20,22 @@ class DemoDefinitionLimits {
     private final long workMax;
     private final int lessonMax;
     private final com.networknt.schema.Schema schema;
+    private final com.networknt.schema.Schema audienceSchema;
 
     DemoDefinitionLimits(@Value("${demo.complexity.work-max:11000000}") long workMax,
             @Value("${demo.complexity.lesson-max:2500}") int lessonMax) {
         if (workMax < 1 || lessonMax < 1) throw new IllegalArgumentException("Positive demo complexity limits required");
         this.workMax = workMax;
         this.lessonMax = lessonMax;
-        try (var input = getClass().getResourceAsStream("/schema/school-definition-v1.schema.json")) {
-            schema = com.networknt.schema.SchemaRegistry.withDefaultDialect(com.networknt.schema.SpecificationVersion.DRAFT_2020_12,
+        schema=loadSchema("/schema/school-definition-v1.schema.json");
+        audienceSchema=loadSchema("/schema/school-definition-v2.schema.json");
+    }
+    private com.networknt.schema.Schema loadSchema(String resource) {
+        try (var input = getClass().getResourceAsStream(resource)) {
+            var loaded = com.networknt.schema.SchemaRegistry.withDefaultDialect(com.networknt.schema.SpecificationVersion.DRAFT_2020_12,
                     builder -> builder.schemaRegistryConfig(com.networknt.schema.SchemaRegistryConfig.builder()
                             .failFast(true).build())).getSchema(input);
-            schema.initializeValidators();
+            loaded.initializeValidators();return loaded;
         } catch (IOException exception) { throw new IllegalStateException("Definition schema missing", exception); }
     }
 
@@ -66,7 +71,7 @@ class DemoDefinitionLimits {
             }
         }
         // Divide before multiplying; neither overflow nor malformed arrays can bypass either gate.
-        long lessons = definition.path("lessons").size();
+        long lessons = sessionCount(definition);
         long periods = definition.path("periods").size(), rooms = definition.path("rooms").size();
         if (lessons > lessonMax || lessons != 0 && periods > workMax / lessons
                 || lessons != 0 && periods != 0 && rooms > workMax / (lessons * periods)) {
@@ -78,7 +83,7 @@ class DemoDefinitionLimits {
         if (initial && definition.has("basedOnRevision")) throw invalid("/basedOnRevision",
                 "An initial definition must omit repair ancestry. Use a complete accepted bundle to retain a repaired timetable.");
         try {
-            var errors = schema.validate(definition);
+            var errors = (definition.path("schemaVersion").asInt()==2?audienceSchema:schema).validate(definition);
             if (!errors.isEmpty()) throw schemaError(errors.getFirst());
         } catch (com.networknt.schema.FailFastAssertionException exception) {
             throw schemaError(exception.getError());
@@ -91,6 +96,10 @@ class DemoDefinitionLimits {
                 "DEFINITION_TOO_LARGE", "The definition must be at most 2 MiB UTF-8.");
     }
 
+    static long sessionCount(JsonNode definition) {
+        long count=definition.path("lessons").size();
+        for(JsonNode p:definition.path("audiencePlans"))for(JsonNode q:p.path("portions"))count+=q.path("sessionIds").size();return count;
+    }
     private static WorkspaceProblem schemaError(com.networknt.schema.Error error) {
         return invalid(error.getInstanceLocation().toString(), error.getMessage());
     }
@@ -110,7 +119,8 @@ class DemoDefinitionLimits {
             int maximum = switch (field) {
                 case "subjects", "rooms", "periods" -> 512;
                 case "teachers", "cohorts" -> 1024;
-                case "lessons" -> lessonMax;
+                case "lessons", "sessionIds", "audiencePlans" -> lessonMax;
+                case "intersections", "coordinationRules" -> 4096;
                 case "roomAssignments" -> 4096;
                 case "softConstraintOverrides" -> 7;
                 default -> 2048;

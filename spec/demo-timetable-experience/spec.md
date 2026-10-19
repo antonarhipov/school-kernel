@@ -311,9 +311,12 @@ Exactly these rows — no more, no fewer:
 | Identifier | School | Curriculum and people | Scale | Bundled timetables |
 |---|---|---|---|---|
 | two-class | Ranniku õppehoone | Real Estonian subject/class labels; fictional Estonian staff | 5A and 5B; complete plausible weekly workloads | Variant A, Variant B |
-| full | Kasevälja Põhikool | Real Estonian subjects; fictional Estonian staff | Grades 1–9 with parallel classes | Variant A, Variant B |
-| star-wars | Coruscant Imperial Academy | Progressive English fictional curriculum; Star Wars specialists teach related subjects | 18 cohorts, 540 lessons, 29 teachers, 37 rooms, 35 periods | Variant A, Variant B |
+| full | Kasevälja Põhikool | Real Estonian subjects; fictional Estonian staff; all Inglise keel lessons taught in groups | Grades 1–9 with parallel classes; 544 actual sessions | Variant A, Variant B |
+| star-wars | Coruscant Imperial Academy | Progressive English fictional curriculum; Star Wars specialists teach related subjects; nested, overlapping and mixed group teaching | 18 cohorts, 540 class teaching periods / 566 actual sessions, 37 teachers, 45 rooms, 50 periods (10 per day) | Variant A, Variant B |
 | english | Meadowbrook Community School | Real English subject labels; fictional English-speaking staff; independently constructed curriculum and placements | Years 1–9; 22 classes, 614 weekly lessons, 41 teachers, 35 rooms, 30 periods | Variant A, Variant B |
+
+The concrete group scenarios and sample maintenance steps are listed in
+[`SAMPLE_GROUPS.md`](../../tools/demo/SAMPLE_GROUPS.md).
 
 Fixture identities and internal references are synthetic. Real source staff names, name-derived identifiers and
 identifying policy labels must not enter packaged demo artifacts. The normal examples are not modified.

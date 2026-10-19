@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 2,
+  "catalogVersion": 11,
+  "schoolId": "cross-day",
+  "displayName": "Normative cross-day groups",
+  "subjects": [
+    {
+      "id": "english",
+      "displayName": "English"
+    },
+    {
+      "id": "handicraft",
+      "displayName": "Handicraft"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "TE",
+      "displayName": "English teacher",
+      "qualifiedSubjectIds": [
+        "english"
+      ],
+      "eligibleClassIdsBySubject": {
+        "english": [
+          "c"
+        ]
+      },
+      "referenceWeeklyMaximum": 0
+    },
+    {
+      "id": "TH1",
+      "displayName": "TH1",
+      "qualifiedSubjectIds": [
+        "handicraft"
+      ],
+      "eligibleClassIdsBySubject": {
+        "handicraft": [
+          "c"
+        ]
+      }
+    },
+    {
+      "id": "TH2",
+      "displayName": "TH2",
+      "qualifiedSubjectIds": [
+        "handicraft"
+      ],
+      "eligibleClassIdsBySubject": {
+        "handicraft": [
+          "c"
+        ]
+      }
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "c",
+      "displayName": "5A",
+      "size": 28,
+      "splits": [
+        {
+          "id": "E",
+          "displayName": "E",
+          "groupCount": 2,
+          "subjectIds": [],
+          "groups": [
+            {
+              "id": "E1",
+              "displayName": "E1",
+              "size": 14
+            },
+            {
+              "id": "E2",
+              "displayName": "E2",
+              "size": 14
+            }
+          ]
+        },
+        {
+          "id": "H",
+          "displayName": "H",
+          "groupCount": 4,
+          "subjectIds": [],
+          "groups": [
+            {
+              "id": "H1",
+              "displayName": "H1",
+              "size": 7
+            },
+            {
+              "id": "H2",
+              "displayName": "H2",
+              "size": 7
+            },
+            {
+              "id": "H3",
+              "displayName": "H3",
+              "size": 7
+            },
+            {
+              "id": "H4",
+              "displayName": "H4",
+              "size": 7
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "mode": "nested",
+        "splitIds": [
+          "E",
+          "H"
+        ],
+        "constituentSplitId": "H",
+        "unions": {
+          "E1": [
+            "H1",
+            "H2"
+          ],
+          "E2": [
+            "H3",
+            "H4"
+          ]
+        },
+        "intersections": []
+      }
+    }
+  ],
+  "rooms": [
+    {
+      "id": "ER",
+      "displayName": "English room",
+      "capacity": 14,
+      "capabilityIds": []
+    },
+    {
+      "id": "HR1",
+      "displayName": "HR1",
+      "capacity": 7,
+      "capabilityIds": [
+        "practical"
+      ]
+    },
+    {
+      "id": "HR2",
+      "displayName": "HR2",
+      "capacity": 7,
+      "capabilityIds": [
+        "practical"
+      ]
+    }
+  ],
+  "periods": [
+    {
+      "id": "tue-p2",
+      "displayName": "P2",
+      "weekday": "TUESDAY",
+      "order": 2,
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "thu-p4",
+      "displayName": "P4",
+      "weekday": "THURSDAY",
+      "order": 4,
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
+    }
+  ],
+  "lessons": [],
+  "audiencePlans": [
+    {
+      "id": "english-plan",
+      "classId": "c",
+      "subjectId": "english",
+      "weeklyTotal": 1,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "E",
+      "overrides": {},
+      "candidateTeacherIds": [
+        "TE"
+      ],
+      "allowedRoomIds": [
+        "ER"
+      ],
+      "requiredRoomCapabilityIds": [],
+      "portions": [
+        {
+          "id": "portion-E1",
+          "audienceId": "E1",
+          "sessionIds": [
+            "e1"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-E2",
+          "audienceId": "E2",
+          "sessionIds": [
+            "e2"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        }
+      ]
+    },
+    {
+      "id": "handicraft-plan",
+      "classId": "c",
+      "subjectId": "handicraft",
+      "weeklyTotal": 1,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "H",
+      "overrides": {},
+      "candidateTeacherIds": [
+        "TH1",
+        "TH2"
+      ],
+      "allowedRoomIds": [
+        "HR1",
+        "HR2"
+      ],
+      "requiredRoomCapabilityIds": [
+        "practical"
+      ],
+      "portions": [
+        {
+          "id": "portion-H1",
+          "audienceId": "H1",
+          "sessionIds": [
+            "h1"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-H2",
+          "audienceId": "H2",
+          "sessionIds": [
+            "h2"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-H3",
+          "audienceId": "H3",
+          "sessionIds": [
+            "h3"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        },
+        {
+          "id": "portion-H4",
+          "audienceId": "H4",
+          "sessionIds": [
+            "h4"
+          ],
+          "teacherPolicy": {
+            "mode": "automatic"
+          }
+        }
+      ]
+    }
+  ],
+  "coordinationRules": []
+}

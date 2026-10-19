@@ -72,7 +72,7 @@ public class ManifestService {
         manifest.put("timetableRevision", result.path("timetableRevision").stringValue());
         ArrayNode locks = manifest.putArray("locks");
         List<JsonNode> lessons = new ArrayList<>();
-        definition.path("lessons").forEach(lessons::add);
+        WorkspaceSessions.lessons(definition).forEach(lessons::add);
         lessons.stream()
                 .filter(lesson -> lesson.has("periodLock") || lesson.has("roomLock"))
                 .sorted(Comparator.comparing(lesson -> lesson.path("id").stringValue()))
@@ -102,7 +102,7 @@ public class ManifestService {
             throw invalidManifest();
         }
         List<String> expected = new ArrayList<>();
-        definition.path("lessons").forEach(lesson -> {
+        WorkspaceSessions.lessons(definition).forEach(lesson -> {
             if (lesson.has("periodLock") || lesson.has("roomLock")) {
                 expected.add(lesson.path("id").stringValue());
             }
@@ -133,7 +133,7 @@ public class ManifestService {
     }
 
     private static JsonNode findLesson(JsonNode definition, String id) {
-        for (JsonNode lesson : definition.path("lessons")) {
+        for (JsonNode lesson : WorkspaceSessions.lessons(definition)) {
             if (id.equals(lesson.path("id").stringValue())) {
                 return lesson;
             }

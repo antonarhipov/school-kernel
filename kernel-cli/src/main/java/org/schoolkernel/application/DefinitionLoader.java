@@ -12,6 +12,7 @@ import org.schoolkernel.domain.KernelCatalog;
 import org.schoolkernel.domain.SchoolDefinition;
 import org.schoolkernel.domain.ValidationError;
 import org.schoolkernel.domain.ValidationReport;
+import org.schoolkernel.domain.AudienceDefinition;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.exc.StreamConstraintsException;
@@ -69,6 +70,10 @@ public final class DefinitionLoader {
             return rejected("Malformed JSON input", null, null, null);
         }
 
+        return load(document,mode);
+    }
+
+    public Outcome load(JsonNode document,Mode mode) {
         List<ValidationError> schemaErrors = schema.validate(document);
         if (!schemaErrors.isEmpty()) {
             Integer catalogVersion = document.path("catalogVersion").isInt()
@@ -82,7 +87,7 @@ public final class DefinitionLoader {
         String revision = revisions.definitionRevision(document);
         SchoolDefinitionDto dto;
         try {
-            dto = JsonSupport.mapper().treeToValue(document, SchoolDefinitionDto.class);
+            dto = JsonSupport.mapper().treeToValue(AudienceDefinition.enabled(document) ? AudienceDefinition.legacyResources(document) : document, SchoolDefinitionDto.class);
         } catch (JacksonException exception) {
             return rejected("Input could not be bound to schema version 1",
                     schoolId, dtoVersion(document), revision);
@@ -97,6 +102,11 @@ public final class DefinitionLoader {
         };
         if (!validation.report().isValid()) {
             return new Rejected(validation.report(), schoolId, dto.catalogVersion(), revision);
+        }
+        if (AudienceDefinition.enabled(document)) {
+            var errors = AudienceDefinition.validate(document);
+            if (!errors.isEmpty()) return new Rejected(ValidationReport.from(errors),schoolId,11,revision);
+            dto = new SchoolDefinitionDto(2,11,dto.schoolId(),dto.displayName(),dto.basedOnRevision(),dto.subjects(),dto.teachers(),dto.cohorts(),dto.rooms(),dto.periods(),dto.reservedPeriodIds(),dto.lessons(),dto.roomAssignments(),dto.softConstraintOverrides(),dto.consecutiveBlocks());
         }
         return new Accepted(document, dto, validation.definition(), revision);
     }

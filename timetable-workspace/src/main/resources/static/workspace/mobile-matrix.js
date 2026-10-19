@@ -1,5 +1,5 @@
 // One shared weekday header, with the population label above each schedule instead of in a wide frozen column.
-export function renderMobileMatrix({ rows, rowHeading, weekdays, cellItems, emptyMarkup, periodsForDay,
+export function renderMobileMatrix({ rows, rowHeading, weekdays, cellItems, cellMarkup, emptyMarkup, periodsForDay,
   labels, periodLabel, lessonMarkup, escapeHtml: html, escapeAttribute: attr }) {
   const days = weekdays.map(day => new Map(periodsForDay(day).map(period => [period.order, period])));
   const orders = [...new Set(days.flatMap(periods => [...periods.keys()]))].sort((a, b) => a - b);
@@ -10,7 +10,7 @@ export function renderMobileMatrix({ rows, rowHeading, weekdays, cellItems, empt
       const period = periods.get(order);
       if (!period) return `<td data-weekday="${attr(weekdays[index])}"><span class="empty-cell">${labels.emptyCell}</span></td>`;
       const items = cellItems(row, period);
-      return `<td data-weekday="${attr(weekdays[index])}" title="${attr(periodLabel(period))}"><div class="week-slot">${items.length ? items.map(lessonMarkup).join('') : emptyMarkup(row, period, false)}</div></td>`;
+      return `<td data-weekday="${attr(weekdays[index])}" title="${attr(periodLabel(period))}"><div class="week-slot">${cellMarkup?.(row, period, items) ?? (items.length ? items.map(lessonMarkup).join('') : emptyMarkup(row, period, false))}</div></td>`;
     }).join('')}</tr>`).join('')}</tbody>`).join('');
   return `<p class="mobile-matrix-hint">Tap a lesson for full names and times.</p><div class="matrix-wrap mobile-week-wrap" aria-label="${labels.weekRange}">
     <table class="mobile-week-matrix"><colgroup><col class="mobile-period-column">${weekdays.map(() => '<col>').join('')}</colgroup>

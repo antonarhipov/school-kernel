@@ -1,0 +1,1177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://school-kernel.invalid/schema/result-v2.schema.json",
+  "title": "School Kernel audience result v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "kernelVersion",
+    "correlationId",
+    "elapsedTimeMs"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "status": {
+      "enum": [
+        "FEASIBLE",
+        "NO_FEASIBLE_SOLUTION_FOUND",
+        "INVALID_INPUT",
+        "INTERNAL_ERROR"
+      ]
+    },
+    "kernelVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "correlationId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "elapsedTimeMs": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "schoolId": {
+      "$ref": "#/$defs/id"
+    },
+    "catalogVersion": {
+      "const": 11
+    },
+    "inputRevision": {
+      "$ref": "#/$defs/revision"
+    },
+    "effectiveSoftWeights": {
+      "$ref": "#/$defs/effectiveSoftWeights"
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": -9223372036854776000,
+      "maximum": 9223372036854776000
+    },
+    "limit": {
+      "$ref": "#/$defs/limit"
+    },
+    "terminationReason": {
+      "enum": [
+        "TIME_LIMIT",
+        "STEP_LIMIT",
+        "SEARCH_EXHAUSTED",
+        "EMPTY_PROBLEM",
+        "MANUAL_REVIEW"
+      ]
+    },
+    "timetable": {
+      "$ref": "#/$defs/timetable"
+    },
+    "timetableRevision": {
+      "$ref": "#/$defs/revision"
+    },
+    "score": {
+      "$ref": "#/$defs/score"
+    },
+    "validationReport": {
+      "$ref": "#/$defs/validationReport"
+    },
+    "searchDiagnostics": {
+      "$ref": "#/$defs/searchDiagnostics"
+    },
+    "safeMessage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "changeReport": {
+      "$ref": "#/$defs/changeReport"
+    },
+    "weeklyTeacherAllocations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "portionId",
+          "classId",
+          "subjectId",
+          "audienceId",
+          "mode",
+          "teacherId",
+          "sessionIds"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "portionId": {
+            "type": "string"
+          },
+          "classId": {
+            "type": "string"
+          },
+          "subjectId": {
+            "type": "string"
+          },
+          "audienceId": {
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "automatic",
+              "fixed",
+              "sharing"
+            ]
+          },
+          "teacherId": {
+            "type": "string"
+          },
+          "sessionIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "coordinationMatches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ruleId",
+          "type",
+          "rounds"
+        ],
+        "properties": {
+          "ruleId": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "START_TOGETHER",
+              "SAME_DAY",
+              "DIFFERENT_DAYS",
+              "ALLOWED",
+              "FIXED",
+              "COVERAGE",
+              "GAP_FREE"
+            ]
+          },
+          "rounds": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "occurrences"
+              ],
+              "properties": {
+                "occurrences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "sessionIds",
+                      "periodIds",
+                      "startPeriodId",
+                      "day"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "sessionIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "periodIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "startPeriodId": {
+                        "type": "string"
+                      },
+                      "day": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coverageStudentPeriods",
+        "gapDetailCount",
+        "gapDetailsTruncated",
+        "gaps",
+        "teacherWorkload"
+      ],
+      "properties": {
+        "coverageStudentPeriods": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gapDetailCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gapDetailsTruncated": {
+          "type": "boolean"
+        },
+        "gaps": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "classId",
+              "blockId",
+              "studentCount",
+              "day",
+              "periodIds",
+              "studentPeriods"
+            ],
+            "properties": {
+              "classId": {
+                "type": "string"
+              },
+              "blockId": {
+                "type": "string"
+              },
+              "studentCount": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "day": {
+                "type": "string"
+              },
+              "periodIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "studentPeriods": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "teacherWorkload": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "teacherId",
+              "actualSessions",
+              "referenceWeeklyMaximum",
+              "exceedsReference"
+            ],
+            "properties": {
+              "teacherId": {
+                "type": "string"
+              },
+              "actualSessions": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "referenceWeeklyMaximum": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "exceedsReference": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "repairContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "definition",
+        "definitionRevision",
+        "timetableRevision",
+        "assignments",
+        "coordinationMatches"
+      ],
+      "properties": {
+        "definition": {
+          "type": "object"
+        },
+        "definitionRevision": {
+          "$ref": "#/$defs/revision"
+        },
+        "timetableRevision": {
+          "$ref": "#/$defs/revision"
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assignment"
+          }
+        },
+        "coordinationMatches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ruleId",
+              "type",
+              "rounds"
+            ],
+            "properties": {
+              "ruleId": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "START_TOGETHER",
+                  "SAME_DAY",
+                  "DIFFERENT_DAYS",
+                  "ALLOWED",
+                  "FIXED",
+                  "COVERAGE",
+                  "GAP_FREE"
+                ]
+              },
+              "rounds": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "occurrences"
+                  ],
+                  "properties": {
+                    "occurrences": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "id",
+                          "sessionIds",
+                          "periodIds",
+                          "startPeriodId",
+                          "day"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "sessionIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "periodIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "startPeriodId": {
+                            "type": "string"
+                          },
+                          "day": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "searchOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visitedNodes",
+        "completeCandidates",
+        "reviewedCandidates",
+        "unestablishedReviews",
+        "searchExhausted",
+        "globalOptimalityClaimed"
+      ],
+      "properties": {
+        "visitedNodes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completeCandidates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "reviewedCandidates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unestablishedReviews": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "searchExhausted": {
+          "type": "boolean"
+        },
+        "globalOptimalityClaimed": {
+          "const": false
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "FEASIBLE"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "schoolId",
+          "catalogVersion",
+          "inputRevision",
+          "effectiveSoftWeights",
+          "seed",
+          "limit",
+          "terminationReason",
+          "timetable",
+          "timetableRevision",
+          "score",
+          "weeklyTeacherAllocations",
+          "coordinationMatches",
+          "quality"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "validationReport"
+              ]
+            },
+            {
+              "required": [
+                "searchDiagnostics"
+              ]
+            },
+            {
+              "required": [
+                "safeMessage"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "INVALID_INPUT"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "seed",
+          "limit",
+          "validationReport"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "timetable"
+              ]
+            },
+            {
+              "required": [
+                "timetableRevision"
+              ]
+            },
+            {
+              "required": [
+                "score"
+              ]
+            },
+            {
+              "required": [
+                "searchDiagnostics"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "NO_FEASIBLE_SOLUTION_FOUND"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "schoolId",
+          "catalogVersion",
+          "inputRevision",
+          "effectiveSoftWeights",
+          "seed",
+          "limit",
+          "searchDiagnostics"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "timetable"
+              ]
+            },
+            {
+              "required": [
+                "timetableRevision"
+              ]
+            },
+            {
+              "required": [
+                "score"
+              ]
+            },
+            {
+              "required": [
+                "validationReport"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "INTERNAL_ERROR"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "seed",
+          "limit",
+          "safeMessage"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "timetable"
+              ]
+            },
+            {
+              "required": [
+                "timetableRevision"
+              ]
+            },
+            {
+              "required": [
+                "score"
+              ]
+            },
+            {
+              "required": [
+                "validationReport"
+              ]
+            },
+            {
+              "required": [
+                "searchDiagnostics"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "revision": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "effectiveSoftWeights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "soft.teacher-gap",
+        "soft.cohort-gap",
+        "soft.cohort-late-start",
+        "soft.cohort-week-balance",
+        "soft.series-same-day",
+        "soft.undesirable-period",
+        "soft.non-preferred-room",
+        "soft.parallel-coverage"
+      ],
+      "properties": {
+        "soft.teacher-gap": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.cohort-gap": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.cohort-late-start": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.cohort-week-balance": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.series-same-day": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.undesirable-period": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.non-preferred-room": {
+          "$ref": "#/$defs/weight"
+        },
+        "soft.parallel-coverage": {
+          "const": 1
+        }
+      }
+    },
+    "weight": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000000
+    },
+    "limit": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "NONE"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "duration"
+          ],
+          "properties": {
+            "type": {
+              "const": "TIME"
+            },
+            "duration": {
+              "type": "string",
+              "pattern": "^PT"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "steps"
+          ],
+          "properties": {
+            "type": {
+              "const": "STEP"
+            },
+            "steps": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lessonId",
+        "subjectId",
+        "cohortId",
+        "teacherId",
+        "periodId",
+        "roomId"
+      ],
+      "properties": {
+        "lessonId": {
+          "$ref": "#/$defs/id"
+        },
+        "subjectId": {
+          "$ref": "#/$defs/id"
+        },
+        "cohortId": {
+          "$ref": "#/$defs/id"
+        },
+        "teacherId": {
+          "$ref": "#/$defs/id"
+        },
+        "periodId": {
+          "$ref": "#/$defs/id"
+        },
+        "roomId": {
+          "$ref": "#/$defs/id"
+        },
+        "audienceId": {
+          "type": "string"
+        },
+        "allocationId": {
+          "type": "string"
+        }
+      }
+    },
+    "timetable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assignments"
+      ],
+      "properties": {
+        "assignments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assignment"
+          }
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "periodMoves",
+        "roomOnlyMoves",
+        "ordinaryPreferencePenalty",
+        "constraintBreakdown",
+        "teacherAllocationChanges",
+        "internalGapStudentPeriods"
+      ],
+      "properties": {
+        "periodMoves": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "roomOnlyMoves": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ordinaryPreferencePenalty": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "constraintBreakdown": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/breakdown"
+          }
+        },
+        "teacherAllocationChanges": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "internalGapStudentPeriods": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "breakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constraintId",
+        "category",
+        "effectiveWeight",
+        "matchCount",
+        "aggregatePenalty"
+      ],
+      "properties": {
+        "constraintId": {
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "STUDENT_GAP",
+            "ORDINARY_PREFERENCE"
+          ]
+        },
+        "effectiveWeight": {
+          "$ref": "#/$defs/weight"
+        },
+        "matchCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "aggregatePenalty": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "validationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "totalErrors",
+        "truncated",
+        "errors"
+      ],
+      "properties": {
+        "totalErrors": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "$ref": "#/$defs/validationError"
+          }
+        }
+      }
+    },
+    "validationError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "location",
+        "entityIds",
+        "message"
+      ],
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "searchDiagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "totalMatches",
+        "truncated",
+        "constraints"
+      ],
+      "properties": {
+        "totalMatches": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraintDiagnostic"
+          }
+        }
+      }
+    },
+    "constraintDiagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constraintId",
+        "matchCount",
+        "examples"
+      ],
+      "properties": {
+        "constraintId": {
+          "type": "string",
+          "pattern": "^hard\\."
+        },
+        "matchCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "examples": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "changeReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "additions",
+        "cancellations",
+        "teacherChanges",
+        "forcedMoves",
+        "periodMoves",
+        "roomOnlyMoves"
+      ],
+      "properties": {
+        "additions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lessonChange"
+          }
+        },
+        "cancellations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lessonChange"
+          }
+        },
+        "teacherChanges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "allocationId",
+              "classId",
+              "subjectId",
+              "audienceId",
+              "oldTeacherId",
+              "newTeacherId",
+              "sessionIds"
+            ],
+            "properties": {
+              "allocationId": {
+                "type": "string"
+              },
+              "classId": {
+                "type": "string"
+              },
+              "subjectId": {
+                "type": "string"
+              },
+              "audienceId": {
+                "type": "string"
+              },
+              "oldTeacherId": {
+                "type": "string"
+              },
+              "newTeacherId": {
+                "type": "string"
+              },
+              "sessionIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "forcedMoves": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/forcedMove"
+          }
+        },
+        "periodMoves": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/periodMove"
+          }
+        },
+        "roomOnlyMoves": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/roomOnlyMove"
+          }
+        },
+        "unmatchedChanges": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "lessonChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lessonId"
+      ],
+      "properties": {
+        "lessonId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "teacherChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lessonId",
+        "oldTeacherId",
+        "newTeacherId"
+      ],
+      "properties": {
+        "lessonId": {
+          "$ref": "#/$defs/id"
+        },
+        "oldTeacherId": {
+          "$ref": "#/$defs/id"
+        },
+        "newTeacherId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "forcedMove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lessonId"
+      ],
+      "properties": {
+        "lessonId": {
+          "$ref": "#/$defs/id"
+        },
+        "oldPeriodId": {
+          "$ref": "#/$defs/id"
+        },
+        "newPeriodId": {
+          "$ref": "#/$defs/id"
+        },
+        "oldRoomId": {
+          "$ref": "#/$defs/id"
+        },
+        "newRoomId": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "oldPeriodId",
+            "newPeriodId"
+          ]
+        },
+        {
+          "required": [
+            "oldRoomId",
+            "newRoomId"
+          ]
+        }
+      ]
+    },
+    "periodMove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lessonId",
+        "oldPeriodId",
+        "newPeriodId",
+        "oldRoomId",
+        "newRoomId"
+      ],
+      "properties": {
+        "lessonId": {
+          "$ref": "#/$defs/id"
+        },
+        "oldPeriodId": {
+          "$ref": "#/$defs/id"
+        },
+        "newPeriodId": {
+          "$ref": "#/$defs/id"
+        },
+        "oldRoomId": {
+          "$ref": "#/$defs/id"
+        },
+        "newRoomId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "roomOnlyMove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lessonId",
+        "oldRoomId",
+        "newRoomId"
+      ],
+      "properties": {
+        "lessonId": {
+          "$ref": "#/$defs/id"
+        },
+        "oldRoomId": {
+          "$ref": "#/$defs/id"
+        },
+        "newRoomId": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    }
+  }
+}

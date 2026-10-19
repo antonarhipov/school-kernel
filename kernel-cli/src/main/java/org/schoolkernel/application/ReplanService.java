@@ -99,6 +99,8 @@ public final class ReplanService {
                     (DefinitionLoader.Accepted) currentDefinitionLoaded;
             DefinitionLoader.Accepted acceptedUpdatedDefinition =
                     (DefinitionLoader.Accepted) updatedDefinitionLoaded;
+            if (org.schoolkernel.domain.AudienceDefinition.enabled(acceptedCurrentDefinition.document()) || org.schoolkernel.domain.AudienceDefinition.enabled(acceptedUpdatedDefinition.document()))
+                return new AudiencePlanning(definitions).repair(acceptedCurrentDefinition,currentNode,acceptedUpdatedDefinition,request.controls(),correlationId,started);
 
             var errors = new ArrayList<ValidationError>();
             var currentOutcome = currentReader.read(currentNode);

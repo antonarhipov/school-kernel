@@ -1,3 +1,4 @@
+import { sessionDefinitions } from './audience-model.js';
 import { prefix as definitionPrefix, useKey as definitionUseKey } from './demo-definitions.js';
 
 export const cleanupEpochKey = 'school-kernel.timetable-demo.epoch.v1';
@@ -81,7 +82,7 @@ export function createTimetableStorage(storage) {
 }
 
 export function isSchoolDefinition(d) {
-  if (!object(d) || typeof d.schoolId !== 'string'
+  if (!object(d) || ![1,2].includes(d.schemaVersion) || d.schemaVersion === 2 && (d.catalogVersion !== 11 || !Array.isArray(d.audiencePlans)) || typeof d.schoolId !== 'string'
       || !['subjects', 'teachers', 'cohorts', 'rooms', 'periods', 'lessons'].every(key => Array.isArray(d[key])
         && d[key].every(item => object(item) && typeof item.id === 'string')
         && new Set(d[key].map(item => item.id)).size === d[key].length)) return false;
@@ -92,13 +93,16 @@ export function isTimetable(value) {
   if (typeof value?.id !== 'string' || typeof value?.name !== 'string' || !isSchoolDefinition(d) || !Array.isArray(a)) return false;
   const ids = Object.fromEntries(['subjects', 'teachers', 'cohorts', 'rooms', 'periods', 'lessons']
     .map(key => [key, new Set(d[key].map(item => item.id))]));
+  const sessions = sessionDefinitions(d);
+  ids.lessons = new Set(sessions.keys());
   const seen = new Set();
-  return a.length === d.lessons.length && a.every(item => {
+  return value.result.schemaVersion === d.schemaVersion && a.length === sessions.size && a.every(item => {
     if (seen.has(item.lessonId)) return false;
     seen.add(item.lessonId);
-    const lesson = d.lessons.find(l => l.id === item.lessonId);
+    const lesson = sessions.get(item.lessonId);
     return ['lessonId', 'subjectId', 'teacherId', 'cohortId', 'roomId', 'periodId'].every((key, i) =>
       typeof item[key] === 'string' && ids[['lessons', 'subjects', 'teachers', 'cohorts', 'rooms', 'periods'][i]].has(item[key]))
-      && ['subjectId', 'teacherId', 'cohortId'].every(key => item[key] === lesson[key]);
+      && ['subjectId', 'cohortId'].every(key => item[key] === lesson[key])
+      && (lesson.portionId ? item.audienceId === lesson.audienceId && typeof item.allocationId === 'string' : item.teacherId === lesson.teacherId);
   });
 }

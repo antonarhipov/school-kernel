@@ -1,5 +1,7 @@
+import { subjectTeachingContent } from './setup-subject-teaching.js';
 import { teacherIssues, teacherFields, classesFor } from './setup-teachers.js';
 import { roomIssues, roomFields, subjectRoomContent } from './setup-rooms.js';
+import { splitsContent, splitIssues, refreshSplitFeedback } from './setup-splits.js';
 const clone = value => structuredClone(value);
 const uid = () => crypto.randomUUID();
 export const subjectControls = [
@@ -27,7 +29,7 @@ export function classIssues(draft) {
     if(Object.hasOwn(row,'curatorTeacherId')&&!draft.teachers.some(t=>t.id===row.curatorTeacherId)) add(`curator ${row.curatorTeacherId} is missing.`);
     if(Object.hasOwn(row,'homeRoomId')&&!draft.rooms.some(r=>r.id===row.homeRoomId)) add(`home room ${row.homeRoomId} is missing.`);
   }
-  return issues;
+  return [...issues, ...splitIssues(draft)];
 }
 export function protectedPlans(draft, classId) {
   return draft.plans.filter(p=>(p.classId??p.cohortId)===classId&&(p.protected||p.protectedReasons?.length||(p.occurrences??[]).some(o=>o.protected||o.periodLock||o.roomLock||o.exception)));
@@ -39,12 +41,13 @@ function classFields(draft, row, html) {
     <p>A curator can look after several classes; choosing one doesn’t add lessons. The home room is a preference unless a specific lesson or room rule requires it.</p>
     <details><summary>Class scheduling settings</summary><div class="setup-context-fields">${classControls.map(([field,label,min,defaultValue,special,help])=>{
       const present=Object.hasOwn(row,field),mode=!present?'default':row[field]===2147483647?'unrestricted':'value';
-      const effective=defaultValue===2147483647?special:String(defaultValue);
+      const soft=field==='maxDailyGaps'&&Object.hasOwn(draft,'audiencePlans');
+      const effective=soft?'Soft student gaps (no hard bound)':defaultValue===2147483647?special:String(defaultValue);
       return `<label>${label}<select data-class-mode="${field}"><option value="default" ${mode==='default'?'selected':''}>Inherited default: ${effective}</option><option value="value" ${mode==='value'?'selected':''}>Explicit value</option><option value="unrestricted" ${mode==='unrestricted'?'selected':''}>${special}</option></select>
-        <input data-catalog-field="${field}" data-value-type="required-integer" inputmode="numeric" aria-label="${label} value" value="${html(mode==='value'?row[field]:'')}" ${mode==='value'?'':'disabled'}><small>${help} Default: ${effective}; minimum explicit value: ${min}.</small></label>`;
+        <input data-catalog-field="${field}" data-value-type="required-integer" inputmode="numeric" aria-label="${label} value" value="${html(mode==='value'?row[field]:'')}" ${mode==='value'?'':'disabled'}><small>${soft?'Internal student gaps are minimized before ordinary preferences; an explicit value remains hard.':help} Default: ${effective}; minimum explicit value: ${min}.</small></label>`;
     }).join('')}</div></details>
     ${['availablePeriodIds','undesirablePeriodIds','availability','lunchPeriodIds'].some(f=>Object.hasOwn(row,f))?`<details><summary>Retained availability and preferences</summary><p>These exact restrictions remain active. Lunch reasons remain separate. Use the corresponding grid controls or the advanced JSON route to change them.</p><pre>${html(JSON.stringify(Object.fromEntries(['availablePeriodIds','undesirablePeriodIds','availability','lunchPeriodIds'].filter(f=>Object.hasOwn(row,f)).map(f=>[f,row[f]])),null,2))}</pre></details>`:''}
-    <button data-open-class-plan="${html(row.id)}" class="secondary">Open class teaching plan</button><button data-open-class-lunch="${html(row.id)}" class="secondary">Class lunch</button>`;
+    <button data-open-audience-plans="${html(row.id)}">Whole-class and group teaching</button><button data-open-class-plan="${html(row.id)}" class="secondary">Open class teaching plan</button><button data-open-class-lunch="${html(row.id)}" class="secondary">Class lunch</button>${splitsContent(draft,row,html)}${row.splits?.length?`<button data-open-relationships="${html(row.id)}" class="secondary">Split relationships</button>`:''}`;
 }
 export function subjectIssues(draft) {
   const issues = [];
@@ -88,14 +91,14 @@ export function controlFields(record, fields, html) {
 export function catalogDetail(draft, key, record, html) {
   if (!record) return '<p>Select a record or add one.</p>';
   const singular={subjects:'Subject',classes:'Class',teachers:'Teacher',rooms:'Room'}[key];
-  const issueList = catalogIssues(draft,key).filter(i=>i.record===record.id);
+  const issueList = catalogIssues(draft,key).filter(i=>i.record===record.id&&!i.split);
   return `<div data-catalog-record="${html(record.id)}"><label>${singular} name<input id="setup-record-name" data-catalog-field="displayName" value="${html(display(record))}"></label>
     <p class="sr-only">Identifier: ${html(record.id)}</p>
     ${key === 'subjects' ? `<details><summary>Subject scheduling rules</summary><p>These rules apply to every class using this subject. Consecutive permission is set separately in each class plan.</p><div class="setup-context-fields">${controlFields(record,subjectControls,html)}</div></details>` : ''}
     ${key === 'classes'?classFields(draft,record,html):''}
     ${key === 'teachers'?teacherFields(draft,record,html):''}
     ${key === 'rooms'?roomFields(draft,record,html):''}
-    ${key === 'subjects'?subjectRoomContent(draft,record,html):''}
+    ${key === 'subjects'?subjectTeachingContent(draft,record,html)+subjectRoomContent(draft,record,html):''}
     <div id="setup-record-issues" role="status">${issueList.map(i=>`<p>${html(i.message)}</p>`).join('')}</div>
     <button id="setup-remove-record" class="secondary">Remove ${singular.toLowerCase()}…</button></div>`;
 }
@@ -132,7 +135,8 @@ export function createCatalogActions({ getDraft, getKey, commit, contextOnly, no
     } else row[field] = raw;
     commit(draft, false);
     const issues = document.querySelector('#setup-record-issues');
-    if (issues) issues.innerHTML = catalogIssues(draft,key).filter(i=>i.record===row.id).map(i=>`<p>${html(i.message)}</p>`).join('');
+    if (issues) issues.innerHTML = catalogIssues(draft,key).filter(i=>i.record===row.id&&!i.split).map(i=>`<p>${html(i.message)}</p>`).join('');
+    if(key==='classes')refreshSplitFeedback(draft,row,event.target.closest('[data-catalog-record]'),html);
     const button = [...document.querySelectorAll('[data-record]')].find(b=>b.dataset.record===row.id);
     if (button) button.textContent=display(row) || '(unnamed)';
     return true;

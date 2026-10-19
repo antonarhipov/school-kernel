@@ -65,6 +65,20 @@ public final class VerifyService {
             }
 
             JsonNode resultNode = parse(files.read(request.resultPath(), maximumInputBytes()), "result");
+            if(org.schoolkernel.domain.AudienceDefinition.enabled(accepted.document())){
+                var pairValidator=new org.schoolkernel.contract.AudiencePairValidator();var errors=pairValidator.envelope(accepted.document(),definitionRevision,resultNode);
+                if(!errors.isEmpty())return new CommandOutcome.InvalidInput(results.invalid(correlationId,elapsed(started),ValidationReport.from(errors)));
+                var model=new org.schoolkernel.solver.AudienceSchedule(accepted.document(),accepted.definition());model.assign(resultNode.path("timetable").path("assignments"));
+                if(!model.errors.isEmpty())return new CommandOutcome.InvalidInput(results.invalid(correlationId,elapsed(started),ValidationReport.from(model.errors)));
+                try{
+                    JsonNode context=resultNode.has("repairContext")?resultNode.path("repairContext"):null;var baseline=AudienceBaseline.load(context,model,definitions);if(!baseline.errors().isEmpty())return new CommandOutcome.InvalidInput(results.invalid(correlationId,elapsed(started),ValidationReport.from(baseline.errors())));var comparison=baseline.model()==null?null:new org.schoolkernel.solver.AudienceComparison().compare(baseline.model(),model);
+                    var evaluation=new org.schoolkernel.solver.AudienceReview().evaluate(model,resultNode.path("coordinationMatches"));
+                    if(!evaluation.valid())return new CommandOutcome.InvalidInput(results.invalid(correlationId,elapsed(started),ValidationReport.from(evaluation.conflicts().stream().map(c->new ValidationError("/timetable/assignments",c.lessonIds(),c.constraintId()+": "+c.examples())).toList())));
+                    var computed=new org.schoolkernel.contract.AudienceResultFactory().feasible(model,evaluation,definitionRevision,correlationId,elapsed(started),"MANUAL_REVIEW",context,comparison);errors=pairValidator.allocations(resultNode,computed);
+                    if(!errors.isEmpty())return new CommandOutcome.InvalidInput(results.invalid(correlationId,elapsed(started),ValidationReport.from(errors)));
+                    var evidence=results.verifiedBaseline(correlationId,elapsed(started),accepted.dto().schoolId(),11,definitionRevision,resultNode.path("timetableRevision").asString());evidence.set("recomputedScore",computed.path("score"));evidence.set("recomputedQuality",computed.path("quality"));evidence.put("assertedQualityMismatch",!org.schoolkernel.contract.AudiencePairValidator.equivalent(computed.path("score"),resultNode.path("score"))||!org.schoolkernel.contract.AudiencePairValidator.equivalent(computed.path("quality"),resultNode.path("quality")));return new CommandOutcome.Succeeded(evidence);
+                }catch(org.schoolkernel.solver.AudienceCoordination.ReviewLimit|ArithmeticException limit){return new CommandOutcome.InvalidInput(results.invalid(correlationId,elapsed(started),ValidationReport.from(List.of(new ValidationError("/timetable",List.of(),"Validity is unestablished: "+limit.getMessage())))));}
+            }
             var timetableOutcome = timetableReader.read(resultNode);
             var errors = new java.util.ArrayList<ValidationError>();
             errors.addAll(timetableOutcome.report().errors());

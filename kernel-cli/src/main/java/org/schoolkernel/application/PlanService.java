@@ -63,6 +63,8 @@ public final class PlanService {
             }
 
             DefinitionLoader.Accepted accepted = (DefinitionLoader.Accepted) loaded;
+            if (org.schoolkernel.domain.AudienceDefinition.enabled(accepted.document()))
+                return new AudiencePlanning(definitions).initial(accepted,request.controls(),correlationId,started);
             derivedSchoolId = accepted.dto().schoolId();
             acceptedCatalogVersion = accepted.dto().catalogVersion();
             derivedInputRevision = accepted.revision();

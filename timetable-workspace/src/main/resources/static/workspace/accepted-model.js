@@ -1,3 +1,4 @@
+import { sessionDefinitions, classAudiences } from './audience-model.js';
 // The inspection UI has one read-only, indexed representation of the accepted snapshot.
 // Renderers receive this model; they never rebuild it from DOM positions or mutable view state.
 export function makeAcceptedModel(baseline) {
@@ -6,8 +7,11 @@ export function makeAcceptedModel(baseline) {
   const definition = immutableBaseline.definition;
   const maps = Object.fromEntries(['subjects', 'teachers', 'cohorts', 'rooms', 'periods', 'lessons']
     .map(key => [key, new Map(definition[key].map(item => [item.id, item]))]));
+  maps.lessons = sessionDefinitions(definition);
+  const audienceClasses = new Map(definition.cohorts.map(c => [c.id, classAudiences(definition, c)]));
   const weekdays = Object.freeze([...new Set(definition.periods.map(period => period.weekday))]);
   const assignments = Object.freeze(immutableBaseline.result.timetable.assignments.map(assignment => Object.freeze({ ...assignment,
+    audience: audienceClasses.get(assignment.cohortId).audiences.get(assignment.audienceId ?? `class:${assignment.cohortId}`),
     subject: maps.subjects.get(assignment.subjectId), teacher: maps.teachers.get(assignment.teacherId), cohort: maps.cohorts.get(assignment.cohortId),
     room: maps.rooms.get(assignment.roomId), period: maps.periods.get(assignment.periodId), lesson: maps.lessons.get(assignment.lessonId) })));
   const assignmentMap = new Map(assignments.map(item => [item.lessonId, item]));
@@ -25,7 +29,7 @@ export function makeAcceptedModel(baseline) {
   freezeIndex(assignmentsByCell);
   freezeIndex(assignmentsBySubject);
   freezeIndex(assignmentsByTeacher);
-  return Object.freeze({ definition, assignments, assignmentMap, assignmentsByCell, assignmentsBySubject, assignmentsByTeacher, maps, weekdays });
+  return Object.freeze({ definition, result: immutableBaseline.result, audienceClasses, assignments, assignmentMap, assignmentsByCell, assignmentsBySubject, assignmentsByTeacher, maps, weekdays });
 }
 
 function addIndexed(index, key, assignment) {

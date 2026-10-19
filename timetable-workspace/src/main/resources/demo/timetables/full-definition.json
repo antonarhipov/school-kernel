@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "catalogVersion": 9,
+  "schemaVersion": 2,
+  "catalogVersion": 11,
   "schoolId": "demo-full-school",
   "displayName": "Kasevälja Põhikool",
   "reservedPeriodIds": [
@@ -203,14 +203,16 @@
       "qualifiedSubjectIds": [
         "demo-subject-001",
         "demo-subject-025"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-020",
       "displayName": "Jaan Tammela",
       "qualifiedSubjectIds": [
         "demo-subject-015"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-051",
@@ -218,14 +220,16 @@
       "qualifiedSubjectIds": [
         "demo-subject-012",
         "demo-subject-021"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-008",
       "displayName": "Toomas Tammela",
       "qualifiedSubjectIds": [
         "demo-subject-012"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-038",
@@ -233,12 +237,20 @@
       "qualifiedSubjectIds": [
         "demo-subject-010",
         "demo-subject-018"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-021",
+          "demo-cohort-022",
+          "demo-cohort-023"
+        ]
+      }
     },
     {
       "id": "demo-teacher-029",
       "displayName": "Martin Tammela",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-016",
@@ -250,7 +262,8 @@
         "demo-subject-019",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-014",
@@ -258,12 +271,14 @@
       "qualifiedSubjectIds": [
         "demo-subject-007",
         "demo-subject-012"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-009",
       "displayName": "Evelin Tammela",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-023",
@@ -271,14 +286,16 @@
       "qualifiedSubjectIds": [
         "demo-subject-003",
         "demo-subject-016"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-026",
       "displayName": "Helen Tammela",
       "qualifiedSubjectIds": [
         "demo-subject-023"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-004",
@@ -291,7 +308,8 @@
         "demo-subject-021",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-034",
@@ -299,7 +317,8 @@
       "qualifiedSubjectIds": [
         "demo-subject-019",
         "demo-subject-021"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-028",
@@ -309,14 +328,16 @@
         "demo-subject-012",
         "demo-subject-014",
         "demo-subject-019"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-018",
       "displayName": "Annika Tammela",
       "qualifiedSubjectIds": [
         "demo-subject-023"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-044",
@@ -329,7 +350,8 @@
         "demo-subject-019",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-013",
@@ -343,7 +365,8 @@
         "demo-subject-021",
         "demo-subject-019",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-041",
@@ -356,7 +379,8 @@
         "demo-subject-019",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-035",
@@ -364,12 +388,18 @@
       "qualifiedSubjectIds": [
         "demo-subject-010",
         "demo-subject-012"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-016"
+        ]
+      }
     },
     {
       "id": "demo-teacher-033",
       "displayName": "Katrin Kaseväli",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-046",
@@ -378,26 +408,30 @@
         "demo-subject-016",
         "demo-subject-017",
         "demo-subject-024"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-039",
       "displayName": "Liis Kaseväli",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-048",
       "displayName": "Martin Kaseväli",
       "qualifiedSubjectIds": [
         "demo-subject-012"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-002",
       "displayName": "Kärt Kaseväli",
       "qualifiedSubjectIds": [
         "demo-subject-022"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-019",
@@ -411,7 +445,8 @@
         "demo-subject-019",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-025",
@@ -424,7 +459,8 @@
         "demo-subject-019",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-042",
@@ -433,33 +469,38 @@
         "demo-subject-012",
         "demo-subject-021",
         "demo-subject-006"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-017",
       "displayName": "Helen Kaseväli",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-022",
       "displayName": "Priit Kaseväli",
       "qualifiedSubjectIds": [
         "demo-subject-015"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-036",
       "displayName": "Kadri Kaseväli",
       "qualifiedSubjectIds": [
         "demo-subject-012"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-027",
       "displayName": "Rasmus Kaseväli",
       "qualifiedSubjectIds": [
         "demo-subject-017"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-011",
@@ -467,7 +508,8 @@
       "qualifiedSubjectIds": [
         "demo-subject-003",
         "demo-subject-016"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-003",
@@ -477,12 +519,14 @@
         "demo-subject-017",
         "demo-subject-024",
         "demo-subject-025"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-005",
       "displayName": "Triin Kaseväli",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-001",
@@ -490,12 +534,14 @@
       "qualifiedSubjectIds": [
         "demo-subject-003",
         "demo-subject-005"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-050",
       "displayName": "Jaan Metsaru",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-031",
@@ -508,14 +554,16 @@
         "demo-subject-021",
         "demo-subject-018",
         "demo-subject-011"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-032",
       "displayName": "Toomas Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-002"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-007",
@@ -523,33 +571,45 @@
       "qualifiedSubjectIds": [
         "demo-subject-011",
         "demo-subject-012"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-040",
       "displayName": "Martin Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-026"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-006",
       "displayName": "Kärt Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-010"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-017",
+          "demo-cohort-018",
+          "demo-cohort-019",
+          "demo-cohort-020"
+        ]
+      }
     },
     {
       "id": "demo-teacher-030",
       "displayName": "Andres Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-009"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-037",
       "displayName": "Evelin Metsaru",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-010",
@@ -560,19 +620,22 @@
         "demo-subject-012",
         "demo-subject-020",
         "demo-subject-025"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-045",
       "displayName": "Helen Metsaru",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-012",
       "displayName": "Priit Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-015"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-021",
@@ -581,31 +644,548 @@
         "demo-subject-003",
         "demo-subject-012",
         "demo-subject-016"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-015",
       "displayName": "Rasmus Metsaru",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-043",
       "displayName": "Annika Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-002"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-047",
       "displayName": "Tanel Metsaru",
-      "qualifiedSubjectIds": []
+      "qualifiedSubjectIds": [],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "demo-teacher-024",
       "displayName": "Triin Metsaru",
       "qualifiedSubjectIds": [
         "demo-subject-007"
-      ]
+      ],
+      "eligibleClassIdsBySubject": {}
+    },
+    {
+      "id": "demo-cohort-016-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Liina Metsalu",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-016"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-017-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Kristi Pärnamaa",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-017"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-018-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Siiri Kivimäe",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-018"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-019-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Kairi Lehtmaa",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-019"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-020-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Maris Ojaveer",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-020"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-021-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Eveli Saarepuu",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-021"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-022-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Anu Kaskla",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-022"
+        ]
+      }
+    },
+    {
+      "id": "demo-cohort-023-demo-subject-010-teaching-portion-2-teacher",
+      "displayName": "Piret Vahermaa",
+      "qualifiedSubjectIds": [
+        "demo-subject-010"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ],
+      "eligibleClassIdsBySubject": {
+        "demo-subject-010": [
+          "demo-cohort-023"
+        ]
+      }
     }
   ],
   "cohorts": [
@@ -766,7 +1346,29 @@
       "maxDailyLessonSpread": 1,
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
-      "curatorTeacherId": "demo-teacher-040"
+      "curatorTeacherId": "demo-teacher-040",
+      "splits": [
+        {
+          "id": "demo-cohort-016-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-016-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-016-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-017",
@@ -776,7 +1378,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-048",
-      "homeRoomId": "demo-room-030"
+      "homeRoomId": "demo-room-030",
+      "splits": [
+        {
+          "id": "demo-cohort-017-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-017-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-017-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-018",
@@ -786,7 +1410,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-007",
-      "homeRoomId": "demo-room-021"
+      "homeRoomId": "demo-room-021",
+      "splits": [
+        {
+          "id": "demo-cohort-018-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-018-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-018-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-019",
@@ -796,7 +1442,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-010",
-      "homeRoomId": "demo-room-028"
+      "homeRoomId": "demo-room-028",
+      "splits": [
+        {
+          "id": "demo-cohort-019-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-019-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-019-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-020",
@@ -806,7 +1474,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-036",
-      "homeRoomId": "demo-room-022"
+      "homeRoomId": "demo-room-022",
+      "splits": [
+        {
+          "id": "demo-cohort-020-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-020-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-020-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-021",
@@ -816,7 +1506,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-035",
-      "homeRoomId": "demo-room-007"
+      "homeRoomId": "demo-room-007",
+      "splits": [
+        {
+          "id": "demo-cohort-021-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-021-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-021-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-022",
@@ -826,7 +1538,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-042",
-      "homeRoomId": "demo-room-026"
+      "homeRoomId": "demo-room-026",
+      "splits": [
+        {
+          "id": "demo-cohort-022-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-022-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-022-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "demo-cohort-023",
@@ -836,7 +1570,29 @@
       "dailyLessonSpreadLimit": 2,
       "latestStartSlot": 4,
       "curatorTeacherId": "demo-teacher-014",
-      "homeRoomId": "demo-room-029"
+      "homeRoomId": "demo-room-029",
+      "splits": [
+        {
+          "id": "demo-cohort-023-english",
+          "displayName": "Inglise keele rühmad",
+          "groupCount": 2,
+          "subjectIds": [
+            "demo-subject-010"
+          ],
+          "groups": [
+            {
+              "id": "demo-cohort-023-english-1",
+              "displayName": "Group 1",
+              "size": 12
+            },
+            {
+              "id": "demo-cohort-023-english-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        }
+      ]
     }
   ],
   "rooms": [
@@ -1176,6 +1932,968 @@
       "capabilityIds": [
         "demo-capability-002"
       ]
+    },
+    {
+      "id": "demo-cohort-016-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 1",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-016-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 2",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-017-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 3",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-017-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 4",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-018-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 5",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-018-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 6",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-019-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 7",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-019-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 8",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-020-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 9",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-020-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 10",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-021-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 11",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-021-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 12",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-022-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 13",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-022-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 14",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-023-demo-subject-010-teaching-portion-1-room",
+      "displayName": "Keelteklass 15",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-001",
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
+    },
+    {
+      "id": "demo-cohort-023-demo-subject-010-teaching-portion-2-room",
+      "displayName": "Keelteklass 16",
+      "capacity": 12,
+      "capabilityIds": [
+        "demo-capability-001",
+        "demo-capability-002"
+      ],
+      "availablePeriodIds": [
+        "demo-period-011",
+        "demo-period-012",
+        "demo-period-013",
+        "demo-period-014",
+        "demo-period-015",
+        "demo-period-016",
+        "demo-period-017",
+        "demo-period-018",
+        "demo-period-019",
+        "demo-period-020",
+        "demo-period-031",
+        "demo-period-032",
+        "demo-period-033",
+        "demo-period-034",
+        "demo-period-035",
+        "demo-period-036",
+        "demo-period-037",
+        "demo-period-038",
+        "demo-period-039",
+        "demo-period-040",
+        "demo-period-041",
+        "demo-period-042",
+        "demo-period-043",
+        "demo-period-044",
+        "demo-period-045",
+        "demo-period-046",
+        "demo-period-047",
+        "demo-period-048",
+        "demo-period-049",
+        "demo-period-050",
+        "demo-period-021",
+        "demo-period-022",
+        "demo-period-023",
+        "demo-period-024",
+        "demo-period-025",
+        "demo-period-026",
+        "demo-period-027",
+        "demo-period-028",
+        "demo-period-029",
+        "demo-period-030",
+        "demo-period-001",
+        "demo-period-002",
+        "demo-period-003",
+        "demo-period-004",
+        "demo-period-005",
+        "demo-period-006",
+        "demo-period-007",
+        "demo-period-008",
+        "demo-period-009",
+        "demo-period-010"
+      ]
     }
   ],
   "periods": [
@@ -1185,7 +2903,9 @@
       "weekday": "MONDAY",
       "order": 1,
       "startTime": "08:00:00",
-      "endTime": "08:40:00"
+      "endTime": "08:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-012",
@@ -1193,7 +2913,9 @@
       "weekday": "MONDAY",
       "order": 2,
       "startTime": "08:45:00",
-      "endTime": "09:30:00"
+      "endTime": "09:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-013",
@@ -1201,7 +2923,9 @@
       "weekday": "MONDAY",
       "order": 3,
       "startTime": "09:40:00",
-      "endTime": "10:25:00"
+      "endTime": "10:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-014",
@@ -1209,7 +2933,9 @@
       "weekday": "MONDAY",
       "order": 4,
       "startTime": "10:45:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-015",
@@ -1217,7 +2943,9 @@
       "weekday": "MONDAY",
       "order": 5,
       "startTime": "11:50:00",
-      "endTime": "12:35:00"
+      "endTime": "12:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-016",
@@ -1225,7 +2953,9 @@
       "weekday": "MONDAY",
       "order": 6,
       "startTime": "12:55:00",
-      "endTime": "13:40:00"
+      "endTime": "13:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-017",
@@ -1233,7 +2963,9 @@
       "weekday": "MONDAY",
       "order": 7,
       "startTime": "13:50:00",
-      "endTime": "14:35:00"
+      "endTime": "14:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-018",
@@ -1241,7 +2973,9 @@
       "weekday": "MONDAY",
       "order": 8,
       "startTime": "14:45:00",
-      "endTime": "15:30:00"
+      "endTime": "15:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-019",
@@ -1249,7 +2983,9 @@
       "weekday": "MONDAY",
       "order": 9,
       "startTime": "15:40:00",
-      "endTime": "16:25:00"
+      "endTime": "16:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-020",
@@ -1257,7 +2993,9 @@
       "weekday": "MONDAY",
       "order": 10,
       "startTime": "16:30:00",
-      "endTime": "17:15:00"
+      "endTime": "17:15:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-031",
@@ -1265,7 +3003,9 @@
       "weekday": "TUESDAY",
       "order": 1,
       "startTime": "08:00:00",
-      "endTime": "08:40:00"
+      "endTime": "08:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-032",
@@ -1273,7 +3013,9 @@
       "weekday": "TUESDAY",
       "order": 2,
       "startTime": "08:45:00",
-      "endTime": "09:30:00"
+      "endTime": "09:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-033",
@@ -1281,7 +3023,9 @@
       "weekday": "TUESDAY",
       "order": 3,
       "startTime": "09:40:00",
-      "endTime": "10:25:00"
+      "endTime": "10:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-034",
@@ -1289,7 +3033,9 @@
       "weekday": "TUESDAY",
       "order": 4,
       "startTime": "10:45:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-035",
@@ -1297,7 +3043,9 @@
       "weekday": "TUESDAY",
       "order": 5,
       "startTime": "11:50:00",
-      "endTime": "12:35:00"
+      "endTime": "12:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-036",
@@ -1305,7 +3053,9 @@
       "weekday": "TUESDAY",
       "order": 6,
       "startTime": "12:55:00",
-      "endTime": "13:40:00"
+      "endTime": "13:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-037",
@@ -1313,7 +3063,9 @@
       "weekday": "TUESDAY",
       "order": 7,
       "startTime": "13:50:00",
-      "endTime": "14:35:00"
+      "endTime": "14:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-038",
@@ -1321,7 +3073,9 @@
       "weekday": "TUESDAY",
       "order": 8,
       "startTime": "14:45:00",
-      "endTime": "15:30:00"
+      "endTime": "15:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-039",
@@ -1329,7 +3083,9 @@
       "weekday": "TUESDAY",
       "order": 9,
       "startTime": "15:40:00",
-      "endTime": "16:25:00"
+      "endTime": "16:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-040",
@@ -1337,7 +3093,9 @@
       "weekday": "TUESDAY",
       "order": 10,
       "startTime": "16:30:00",
-      "endTime": "17:15:00"
+      "endTime": "17:15:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-041",
@@ -1345,7 +3103,9 @@
       "weekday": "WEDNESDAY",
       "order": 1,
       "startTime": "08:00:00",
-      "endTime": "08:40:00"
+      "endTime": "08:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-042",
@@ -1353,7 +3113,9 @@
       "weekday": "WEDNESDAY",
       "order": 2,
       "startTime": "08:45:00",
-      "endTime": "09:30:00"
+      "endTime": "09:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-043",
@@ -1361,7 +3123,9 @@
       "weekday": "WEDNESDAY",
       "order": 3,
       "startTime": "09:40:00",
-      "endTime": "10:25:00"
+      "endTime": "10:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-044",
@@ -1369,7 +3133,9 @@
       "weekday": "WEDNESDAY",
       "order": 4,
       "startTime": "10:45:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-045",
@@ -1377,7 +3143,9 @@
       "weekday": "WEDNESDAY",
       "order": 5,
       "startTime": "11:50:00",
-      "endTime": "12:35:00"
+      "endTime": "12:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-046",
@@ -1385,7 +3153,9 @@
       "weekday": "WEDNESDAY",
       "order": 6,
       "startTime": "12:55:00",
-      "endTime": "13:40:00"
+      "endTime": "13:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-047",
@@ -1393,7 +3163,9 @@
       "weekday": "WEDNESDAY",
       "order": 7,
       "startTime": "13:50:00",
-      "endTime": "14:35:00"
+      "endTime": "14:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-048",
@@ -1401,7 +3173,9 @@
       "weekday": "WEDNESDAY",
       "order": 8,
       "startTime": "14:45:00",
-      "endTime": "15:30:00"
+      "endTime": "15:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-049",
@@ -1409,7 +3183,9 @@
       "weekday": "WEDNESDAY",
       "order": 9,
       "startTime": "15:40:00",
-      "endTime": "16:25:00"
+      "endTime": "16:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-050",
@@ -1417,7 +3193,9 @@
       "weekday": "WEDNESDAY",
       "order": 10,
       "startTime": "16:30:00",
-      "endTime": "17:15:00"
+      "endTime": "17:15:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-021",
@@ -1425,7 +3203,9 @@
       "weekday": "THURSDAY",
       "order": 1,
       "startTime": "08:00:00",
-      "endTime": "08:40:00"
+      "endTime": "08:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-022",
@@ -1433,7 +3213,9 @@
       "weekday": "THURSDAY",
       "order": 2,
       "startTime": "08:45:00",
-      "endTime": "09:30:00"
+      "endTime": "09:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-023",
@@ -1441,7 +3223,9 @@
       "weekday": "THURSDAY",
       "order": 3,
       "startTime": "09:40:00",
-      "endTime": "10:25:00"
+      "endTime": "10:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-024",
@@ -1449,7 +3233,9 @@
       "weekday": "THURSDAY",
       "order": 4,
       "startTime": "10:45:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-025",
@@ -1457,7 +3243,9 @@
       "weekday": "THURSDAY",
       "order": 5,
       "startTime": "11:50:00",
-      "endTime": "12:35:00"
+      "endTime": "12:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-026",
@@ -1465,7 +3253,9 @@
       "weekday": "THURSDAY",
       "order": 6,
       "startTime": "12:55:00",
-      "endTime": "13:40:00"
+      "endTime": "13:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-027",
@@ -1473,7 +3263,9 @@
       "weekday": "THURSDAY",
       "order": 7,
       "startTime": "13:50:00",
-      "endTime": "14:35:00"
+      "endTime": "14:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-028",
@@ -1481,7 +3273,9 @@
       "weekday": "THURSDAY",
       "order": 8,
       "startTime": "14:45:00",
-      "endTime": "15:30:00"
+      "endTime": "15:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-029",
@@ -1489,7 +3283,9 @@
       "weekday": "THURSDAY",
       "order": 9,
       "startTime": "15:40:00",
-      "endTime": "16:25:00"
+      "endTime": "16:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-030",
@@ -1497,7 +3293,9 @@
       "weekday": "THURSDAY",
       "order": 10,
       "startTime": "16:30:00",
-      "endTime": "17:15:00"
+      "endTime": "17:15:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-001",
@@ -1505,7 +3303,9 @@
       "weekday": "FRIDAY",
       "order": 1,
       "startTime": "08:00:00",
-      "endTime": "08:40:00"
+      "endTime": "08:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-002",
@@ -1513,7 +3313,9 @@
       "weekday": "FRIDAY",
       "order": 2,
       "startTime": "08:45:00",
-      "endTime": "09:30:00"
+      "endTime": "09:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-003",
@@ -1521,7 +3323,9 @@
       "weekday": "FRIDAY",
       "order": 3,
       "startTime": "09:40:00",
-      "endTime": "10:25:00"
+      "endTime": "10:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-004",
@@ -1529,7 +3333,9 @@
       "weekday": "FRIDAY",
       "order": 4,
       "startTime": "10:45:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-005",
@@ -1537,7 +3343,9 @@
       "weekday": "FRIDAY",
       "order": 5,
       "startTime": "11:50:00",
-      "endTime": "12:35:00"
+      "endTime": "12:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-006",
@@ -1545,7 +3353,9 @@
       "weekday": "FRIDAY",
       "order": 6,
       "startTime": "12:55:00",
-      "endTime": "13:40:00"
+      "endTime": "13:40:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-007",
@@ -1553,7 +3363,9 @@
       "weekday": "FRIDAY",
       "order": 7,
       "startTime": "13:50:00",
-      "endTime": "14:35:00"
+      "endTime": "14:35:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-008",
@@ -1561,7 +3373,9 @@
       "weekday": "FRIDAY",
       "order": 8,
       "startTime": "14:45:00",
-      "endTime": "15:30:00"
+      "endTime": "15:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-009",
@@ -1569,7 +3383,9 @@
       "weekday": "FRIDAY",
       "order": 9,
       "startTime": "15:40:00",
-      "endTime": "16:25:00"
+      "endTime": "16:25:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "demo-period-010",
@@ -1577,7 +3393,9 @@
       "weekday": "FRIDAY",
       "order": 10,
       "startTime": "16:30:00",
-      "endTime": "17:15:00"
+      "endTime": "17:15:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     }
   ],
   "lessons": [
@@ -6122,20 +7940,6 @@
       ]
     },
     {
-      "id": "demo-lesson-328",
-      "displayName": "6C · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-016",
-      "teacherId": "demo-teacher-035",
-      "seriesId": "demo-series-084",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-007"
-      ]
-    },
-    {
       "id": "demo-lesson-339",
       "displayName": "6C · Ühiskonnaõpetus",
       "subjectId": "demo-subject-025",
@@ -6161,20 +7965,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-010"
-      ]
-    },
-    {
-      "id": "demo-lesson-329",
-      "displayName": "6C · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-016",
-      "teacherId": "demo-teacher-035",
-      "seriesId": "demo-series-084",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-007"
       ]
     },
     {
@@ -6318,20 +8108,6 @@
       ]
     },
     {
-      "id": "demo-lesson-330",
-      "displayName": "6C · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-016",
-      "teacherId": "demo-teacher-035",
-      "seriesId": "demo-series-084",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-007"
-      ]
-    },
-    {
       "id": "demo-lesson-322",
       "displayName": "6C · Ajalugu",
       "subjectId": "demo-subject-001",
@@ -6357,20 +8133,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-011"
-      ]
-    },
-    {
-      "id": "demo-lesson-350",
-      "displayName": "7A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-017",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-095",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
       ]
     },
     {
@@ -6541,34 +8303,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-029"
-      ]
-    },
-    {
-      "id": "demo-lesson-351",
-      "displayName": "7A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-017",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-095",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
-      ]
-    },
-    {
-      "id": "demo-lesson-352",
-      "displayName": "7A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-017",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-095",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-021"
       ]
     },
     {
@@ -6784,20 +8518,6 @@
       ]
     },
     {
-      "id": "demo-lesson-373",
-      "displayName": "7B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-018",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-107",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-019"
-      ]
-    },
-    {
       "id": "demo-lesson-376",
       "displayName": "7B · Inimeseõpetus",
       "subjectId": "demo-subject-011",
@@ -6851,20 +8571,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-039"
-      ]
-    },
-    {
-      "id": "demo-lesson-374",
-      "displayName": "7B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-018",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-107",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
       ]
     },
     {
@@ -6967,20 +8673,6 @@
       ]
     },
     {
-      "id": "demo-lesson-375",
-      "displayName": "7B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-018",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-107",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
-      ]
-    },
-    {
       "id": "demo-lesson-377",
       "displayName": "7B · Lõimitud õpe",
       "subjectId": "demo-subject-012",
@@ -7007,20 +8699,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-027"
-      ]
-    },
-    {
-      "id": "demo-lesson-398",
-      "displayName": "8A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-019",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-120",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
       ]
     },
     {
@@ -7106,20 +8784,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-017"
-      ]
-    },
-    {
-      "id": "demo-lesson-399",
-      "displayName": "8A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-019",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-120",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
       ]
     },
     {
@@ -7306,20 +8970,6 @@
       ]
     },
     {
-      "id": "demo-lesson-400",
-      "displayName": "8A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-019",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-120",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
-      ]
-    },
-    {
       "id": "demo-lesson-397",
       "displayName": "8A · Geograafia",
       "subjectId": "demo-subject-009",
@@ -7377,20 +9027,6 @@
       "roomLock": "demo-room-028"
     },
     {
-      "id": "demo-lesson-424",
-      "displayName": "8B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-020",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-133",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-028"
-      ]
-    },
-    {
       "id": "demo-lesson-414",
       "displayName": "8B · Ajalugu",
       "subjectId": "demo-subject-001",
@@ -7417,20 +9053,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-029"
-      ]
-    },
-    {
-      "id": "demo-lesson-425",
-      "displayName": "8B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-020",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-133",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
       ]
     },
     {
@@ -7530,20 +9152,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-016"
-      ]
-    },
-    {
-      "id": "demo-lesson-426",
-      "displayName": "8B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-020",
-      "teacherId": "demo-teacher-006",
-      "seriesId": "demo-series-133",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-019"
       ]
     },
     {
@@ -7885,20 +9493,6 @@
       ]
     },
     {
-      "id": "demo-lesson-451",
-      "displayName": "9A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-021",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-148",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
-      ]
-    },
-    {
       "id": "demo-lesson-444",
       "displayName": "9A · Eesti keel",
       "subjectId": "demo-subject-003",
@@ -7952,34 +9546,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-024"
-      ]
-    },
-    {
-      "id": "demo-lesson-452",
-      "displayName": "9A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-021",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-148",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
-      ]
-    },
-    {
-      "id": "demo-lesson-453",
-      "displayName": "9A · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-021",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-148",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-030"
       ]
     },
     {
@@ -8182,34 +9748,6 @@
       "roomLock": "demo-room-023"
     },
     {
-      "id": "demo-lesson-478",
-      "displayName": "9B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-022",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-162",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-026"
-      ]
-    },
-    {
-      "id": "demo-lesson-479",
-      "displayName": "9B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-022",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-162",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-026"
-      ]
-    },
-    {
       "id": "demo-lesson-468",
       "displayName": "9B · Ajalugu",
       "subjectId": "demo-subject-001",
@@ -8306,20 +9844,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-026"
-      ]
-    },
-    {
-      "id": "demo-lesson-480",
-      "displayName": "9B · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-022",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-162",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
       ]
     },
     {
@@ -8718,20 +10242,6 @@
       ]
     },
     {
-      "id": "demo-lesson-505",
-      "displayName": "9C · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-023",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-176",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-013"
-      ]
-    },
-    {
       "id": "demo-lesson-516",
       "displayName": "9C · Matemaatika",
       "subjectId": "demo-subject-021",
@@ -8771,20 +10281,6 @@
       ],
       "preferredRoomIds": [
         "demo-room-014"
-      ]
-    },
-    {
-      "id": "demo-lesson-506",
-      "displayName": "9C · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-023",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-176",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-002"
-      ],
-      "preferredRoomIds": [
-        "demo-room-030"
       ]
     },
     {
@@ -8845,20 +10341,6 @@
       ]
     },
     {
-      "id": "demo-lesson-507",
-      "displayName": "9C · Inglise keel",
-      "subjectId": "demo-subject-010",
-      "cohortId": "demo-cohort-023",
-      "teacherId": "demo-teacher-038",
-      "seriesId": "demo-series-176",
-      "requiredRoomCapabilityIds": [
-        "demo-capability-001"
-      ],
-      "preferredRoomIds": [
-        "demo-room-040"
-      ]
-    },
-    {
       "id": "demo-lesson-504",
       "displayName": "9C · Geograafia",
       "subjectId": "demo-subject-009",
@@ -8884,6 +10366,483 @@
       ],
       "preferredRoomIds": [
         "demo-room-014"
+      ]
+    }
+  ],
+  "audiencePlans": [
+    {
+      "id": "demo-cohort-016-demo-subject-010-teaching",
+      "classId": "demo-cohort-016",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-016-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-016-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-016-english-1",
+          "sessionIds": [
+            "demo-lesson-328-audience-1",
+            "demo-lesson-329-audience-1",
+            "demo-lesson-330-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-035"
+          },
+          "fixedRoomId": "demo-cohort-016-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-016-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-016-english-2",
+          "sessionIds": [
+            "demo-lesson-328-audience-2",
+            "demo-lesson-329-audience-2",
+            "demo-lesson-330-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-016-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-016-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-017-demo-subject-010-teaching",
+      "classId": "demo-cohort-017",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-017-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-017-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-017-english-1",
+          "sessionIds": [
+            "demo-lesson-350-audience-1",
+            "demo-lesson-351-audience-1",
+            "demo-lesson-352-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-006"
+          },
+          "fixedRoomId": "demo-cohort-017-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-017-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-017-english-2",
+          "sessionIds": [
+            "demo-lesson-350-audience-2",
+            "demo-lesson-351-audience-2",
+            "demo-lesson-352-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-017-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-017-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-018-demo-subject-010-teaching",
+      "classId": "demo-cohort-018",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-018-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-018-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-018-english-1",
+          "sessionIds": [
+            "demo-lesson-373-audience-1",
+            "demo-lesson-374-audience-1",
+            "demo-lesson-375-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-006"
+          },
+          "fixedRoomId": "demo-cohort-018-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-018-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-018-english-2",
+          "sessionIds": [
+            "demo-lesson-373-audience-2",
+            "demo-lesson-374-audience-2",
+            "demo-lesson-375-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-018-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-018-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-019-demo-subject-010-teaching",
+      "classId": "demo-cohort-019",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-019-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-019-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-019-english-1",
+          "sessionIds": [
+            "demo-lesson-398-audience-1",
+            "demo-lesson-399-audience-1",
+            "demo-lesson-400-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-006"
+          },
+          "fixedRoomId": "demo-cohort-019-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-019-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-019-english-2",
+          "sessionIds": [
+            "demo-lesson-398-audience-2",
+            "demo-lesson-399-audience-2",
+            "demo-lesson-400-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-019-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-019-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-020-demo-subject-010-teaching",
+      "classId": "demo-cohort-020",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-020-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-020-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-020-english-1",
+          "sessionIds": [
+            "demo-lesson-424-audience-1",
+            "demo-lesson-425-audience-1",
+            "demo-lesson-426-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-006"
+          },
+          "fixedRoomId": "demo-cohort-020-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-020-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-020-english-2",
+          "sessionIds": [
+            "demo-lesson-424-audience-2",
+            "demo-lesson-425-audience-2",
+            "demo-lesson-426-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-020-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-020-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-021-demo-subject-010-teaching",
+      "classId": "demo-cohort-021",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-021-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-021-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-021-english-1",
+          "sessionIds": [
+            "demo-lesson-451-audience-1",
+            "demo-lesson-452-audience-1",
+            "demo-lesson-453-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-038"
+          },
+          "fixedRoomId": "demo-cohort-021-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-021-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-021-english-2",
+          "sessionIds": [
+            "demo-lesson-451-audience-2",
+            "demo-lesson-452-audience-2",
+            "demo-lesson-453-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-021-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-021-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-022-demo-subject-010-teaching",
+      "classId": "demo-cohort-022",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-022-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-022-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-022-english-1",
+          "sessionIds": [
+            "demo-lesson-478-audience-1",
+            "demo-lesson-479-audience-1",
+            "demo-lesson-480-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-038"
+          },
+          "fixedRoomId": "demo-cohort-022-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-022-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-022-english-2",
+          "sessionIds": [
+            "demo-lesson-478-audience-2",
+            "demo-lesson-479-audience-2",
+            "demo-lesson-480-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-022-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-022-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-002"
+      ]
+    },
+    {
+      "id": "demo-cohort-023-demo-subject-010-teaching",
+      "classId": "demo-cohort-023",
+      "subjectId": "demo-subject-010",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "demo-cohort-023-english",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "demo-cohort-023-demo-subject-010-teaching-portion-1",
+          "audienceId": "demo-cohort-023-english-1",
+          "sessionIds": [
+            "demo-lesson-505-audience-1",
+            "demo-lesson-506-audience-1",
+            "demo-lesson-507-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-teacher-038"
+          },
+          "fixedRoomId": "demo-cohort-023-demo-subject-010-teaching-portion-1-room"
+        },
+        {
+          "id": "demo-cohort-023-demo-subject-010-teaching-portion-2",
+          "audienceId": "demo-cohort-023-english-2",
+          "sessionIds": [
+            "demo-lesson-505-audience-2",
+            "demo-lesson-506-audience-2",
+            "demo-lesson-507-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "demo-cohort-023-demo-subject-010-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "demo-cohort-023-demo-subject-010-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "demo-capability-001",
+        "demo-capability-002"
+      ]
+    }
+  ],
+  "coordinationRules": [
+    {
+      "id": "demo-cohort-016-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-016",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-016-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-016-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-017-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-017",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-017-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-017-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-018-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-018",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-018-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-018-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-019-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-019",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-019-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-019-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-020-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-020",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-020-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-020-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-021-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-021",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-021-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-021-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-022-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-022",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-022-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-022-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "demo-cohort-023-demo-subject-010-teaching-parallel",
+      "classId": "demo-cohort-023",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "demo-cohort-023-demo-subject-010-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "demo-cohort-023-demo-subject-010-teaching-portion-2",
+          "unit": "SESSION"
+        }
       ]
     }
   ]

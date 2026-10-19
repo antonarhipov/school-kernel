@@ -201,7 +201,7 @@ class DemoDefinitionsBrowserIT {
         Download download=page.waitForDownload(()->page.locator("#demo-download").click());Path file=temporary.resolve(filename);download.saveAs(file);return Files.readString(file);
     }
     private void open(Page page) { page.navigate(base + "/workspace/"); openReady(page); }
-    private void openReady(Page page) { page.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor(); }
+    private void openReady(Page page) { page.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor(); }
     private void select(Page page, String id) {
         page.locator("#demo-definition").selectOption(id);
         page.waitForFunction("id => !document.querySelector('#demo-use').disabled && document.querySelector('#demo-definition').value === id && JSON.parse(document.querySelector('#demo-json').value).displayName === ({small:'Small school', 'two-class':'Two-class school', full:'Full school'})[id]", id);

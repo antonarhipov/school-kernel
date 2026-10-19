@@ -1,6 +1,6 @@
 {
-  "kernelBuild": "2fa4a89dde297b020d61ffb56f2d00ee17560a47005906c9bc2e780a13b604d9",
-  "catalogVersion": 9,
+  "kernelBuild": "f01ad4ec41553d3b8288e8ce99f2e68ce745297314f882e6369503d6f337997a",
+  "catalogVersion": 10,
   "samples": {
     "two-class/a": {
       "definitionSha256": "4b65f00185354311188b5e7347a5dbbeb27a06ac9abee599515dfac2d39b862c",
@@ -123,13 +123,126 @@
       }
     },
     "full/a": {
-      "definitionSha256": "84452ed0283206c827d3b87c79585df9ecebbebcdcda6a7539a445c4802f7274",
-      "resultSha256": "eb689d79f9fb8ea440faa63bf76318052d8f5da08444a5d1375f5a6e449094fd",
+      "definitionSha256": "8c6e0bb94cab6de6f318e47f6d12b8486015889238008abc02def1dda4748ba1",
+      "resultSha256": "ab0adebb3284c2095e8d8ab853302f1a2568c365f39d9dfb789af1b92a7b0a00",
       "score": {
+        "teacherAllocationChanges": 0,
         "periodMoves": 0,
         "roomOnlyMoves": 0,
-        "ordinaryPreferencePenalty": 5375,
+        "internalGapStudentPeriods": 0,
+        "ordinaryPreferencePenalty": 99775,
         "constraintBreakdown": [
+          {
+            "constraintId": "soft.cohort-gap",
+            "category": "STUDENT_GAP",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.cohort-late-start",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 10000,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.cohort-week-balance",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1000,
+            "matchCount": 96,
+            "aggregatePenalty": 96000
+          },
+          {
+            "constraintId": "soft.non-preferred-room",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 5,
+            "matchCount": 198,
+            "aggregatePenalty": 990
+          },
+          {
+            "constraintId": "soft.parallel-coverage",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.series-same-day",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 2400,
+            "aggregatePenalty": 2400
+          },
+          {
+            "constraintId": "soft.teacher-gap",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 5,
+            "matchCount": 77,
+            "aggregatePenalty": 385
+          },
+          {
+            "constraintId": "soft.undesirable-period",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          }
+        ]
+      }
+    },
+    "full/b": {
+      "definitionSha256": "8c6e0bb94cab6de6f318e47f6d12b8486015889238008abc02def1dda4748ba1",
+      "resultSha256": "395e703232a77b849cb63c427188269511226475332f1ad5d872039dc2845704",
+      "score": {
+        "teacherAllocationChanges": 0,
+        "periodMoves": 0,
+        "roomOnlyMoves": 0,
+        "internalGapStudentPeriods": 0,
+        "ordinaryPreferencePenalty": 99798,
+        "constraintBreakdown": [
+          {
+            "constraintId": "soft.cohort-gap",
+            "category": "STUDENT_GAP",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.cohort-late-start",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 10000,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.cohort-week-balance",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1000,
+            "matchCount": 96,
+            "aggregatePenalty": 96000
+          },
+          {
+            "constraintId": "soft.non-preferred-room",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 5,
+            "matchCount": 198,
+            "aggregatePenalty": 990
+          },
+          {
+            "constraintId": "soft.parallel-coverage",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.series-same-day",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 2448,
+            "aggregatePenalty": 2448
+          },
           {
             "constraintId": "soft.teacher-gap",
             "category": "ORDINARY_PREFERENCE",
@@ -138,118 +251,67 @@
             "aggregatePenalty": 360
           },
           {
-            "constraintId": "soft.cohort-gap",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1000000,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.cohort-late-start",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 10000,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.cohort-week-balance",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1000,
-            "matchCount": 4,
-            "aggregatePenalty": 4000
-          },
-          {
-            "constraintId": "soft.series-same-day",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 100,
-            "aggregatePenalty": 100
-          },
-          {
             "constraintId": "soft.undesirable-period",
             "category": "ORDINARY_PREFERENCE",
             "effectiveWeight": 1,
             "matchCount": 0,
             "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.non-preferred-room",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 5,
-            "matchCount": 183,
-            "aggregatePenalty": 915
-          }
-        ]
-      }
-    },
-    "full/b": {
-      "definitionSha256": "84452ed0283206c827d3b87c79585df9ecebbebcdcda6a7539a445c4802f7274",
-      "resultSha256": "4afb47242b02a7d6bad4396ab2be2070e3ed86143cf2b161e5379eff21637901",
-      "score": {
-        "periodMoves": 0,
-        "roomOnlyMoves": 0,
-        "ordinaryPreferencePenalty": 5352,
-        "constraintBreakdown": [
-          {
-            "constraintId": "soft.teacher-gap",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 5,
-            "matchCount": 67,
-            "aggregatePenalty": 335
-          },
-          {
-            "constraintId": "soft.cohort-gap",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1000000,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.cohort-late-start",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 10000,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.cohort-week-balance",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1000,
-            "matchCount": 4,
-            "aggregatePenalty": 4000
-          },
-          {
-            "constraintId": "soft.series-same-day",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 102,
-            "aggregatePenalty": 102
-          },
-          {
-            "constraintId": "soft.undesirable-period",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.non-preferred-room",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 5,
-            "matchCount": 183,
-            "aggregatePenalty": 915
           }
         ]
       }
     },
     "star-wars/a": {
-      "definitionSha256": "c214e2308835cc7271ee4080e12ddbe7071b94c477885d8593f8c751b35c8e53",
-      "resultSha256": "01f5f38572ba2107c220f223399edb26d25b420a2ecad32df84628b4be357498",
+      "definitionSha256": "d89b663355ffffbfd7d5141b84ab141b05d4a4eaa8d20c83332ff8181f68cc0f",
+      "resultSha256": "4f03d603c83de8a97339da5f8c9381f76b3a6aa627923027da230c053c9d01fd",
       "score": {
+        "teacherAllocationChanges": 0,
         "periodMoves": 0,
         "roomOnlyMoves": 0,
+        "internalGapStudentPeriods": 0,
         "ordinaryPreferencePenalty": 179,
         "constraintBreakdown": [
+          {
+            "constraintId": "soft.cohort-gap",
+            "category": "STUDENT_GAP",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.cohort-late-start",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.cohort-week-balance",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.non-preferred-room",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.parallel-coverage",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.series-same-day",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
           {
             "constraintId": "soft.teacher-gap",
             "category": "ORDINARY_PREFERENCE",
@@ -258,42 +320,7 @@
             "aggregatePenalty": 179
           },
           {
-            "constraintId": "soft.cohort-gap",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.cohort-late-start",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.cohort-week-balance",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.series-same-day",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
             "constraintId": "soft.undesirable-period",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
-          },
-          {
-            "constraintId": "soft.non-preferred-room",
             "category": "ORDINARY_PREFERENCE",
             "effectiveWeight": 1,
             "matchCount": 0,
@@ -303,23 +330,18 @@
       }
     },
     "star-wars/b": {
-      "definitionSha256": "c214e2308835cc7271ee4080e12ddbe7071b94c477885d8593f8c751b35c8e53",
-      "resultSha256": "84134f559a4d0eb152163c3466c66feeeb5c58e1530be7057fde17135f715c13",
+      "definitionSha256": "d89b663355ffffbfd7d5141b84ab141b05d4a4eaa8d20c83332ff8181f68cc0f",
+      "resultSha256": "5f917c707723cccd16263bf2a5fbebe596cf769a68add6c08a4c2d51c7434571",
       "score": {
+        "teacherAllocationChanges": 0,
         "periodMoves": 0,
         "roomOnlyMoves": 0,
+        "internalGapStudentPeriods": 0,
         "ordinaryPreferencePenalty": 180,
         "constraintBreakdown": [
           {
-            "constraintId": "soft.teacher-gap",
-            "category": "ORDINARY_PREFERENCE",
-            "effectiveWeight": 1,
-            "matchCount": 180,
-            "aggregatePenalty": 180
-          },
-          {
             "constraintId": "soft.cohort-gap",
-            "category": "ORDINARY_PREFERENCE",
+            "category": "STUDENT_GAP",
             "effectiveWeight": 1,
             "matchCount": 0,
             "aggregatePenalty": 0
@@ -339,6 +361,20 @@
             "aggregatePenalty": 0
           },
           {
+            "constraintId": "soft.non-preferred-room",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
+            "constraintId": "soft.parallel-coverage",
+            "category": "ORDINARY_PREFERENCE",
+            "effectiveWeight": 1,
+            "matchCount": 0,
+            "aggregatePenalty": 0
+          },
+          {
             "constraintId": "soft.series-same-day",
             "category": "ORDINARY_PREFERENCE",
             "effectiveWeight": 1,
@@ -346,14 +382,14 @@
             "aggregatePenalty": 0
           },
           {
-            "constraintId": "soft.undesirable-period",
+            "constraintId": "soft.teacher-gap",
             "category": "ORDINARY_PREFERENCE",
             "effectiveWeight": 1,
-            "matchCount": 0,
-            "aggregatePenalty": 0
+            "matchCount": 180,
+            "aggregatePenalty": 180
           },
           {
-            "constraintId": "soft.non-preferred-room",
+            "constraintId": "soft.undesirable-period",
             "category": "ORDINARY_PREFERENCE",
             "effectiveWeight": 1,
             "matchCount": 0,

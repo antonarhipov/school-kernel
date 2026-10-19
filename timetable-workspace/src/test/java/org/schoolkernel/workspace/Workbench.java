@@ -274,7 +274,7 @@ final class Workbench {
     }
 
     void checkRepairPeriod(String periodId) {
-        check("#start-repair-form [name=period][value=" + periodId + "]");
+        check("#start-repair-form [name=period][value=\"" + periodId + "\"]");
     }
 
     void submitRepair() {

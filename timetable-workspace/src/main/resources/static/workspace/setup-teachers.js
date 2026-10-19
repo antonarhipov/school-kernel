@@ -18,6 +18,7 @@ export function teacherIssues(draft) {
     issues.push(...availabilityCapacityIssues(draft,t));
     const add=message=>issues.push({section:'Teachers',record:t.id,message:`${nameOf(t)||'Unnamed teacher'}: ${message}`});
     if(!nameOf(t).trim())add('enter a teacher name.');
+    if(Object.hasOwn(t,'referenceWeeklyMaximum')&&(!Number.isInteger(t.referenceWeeklyMaximum)||t.referenceWeeklyMaximum<0||t.referenceWeeklyMaximum>2147483647))add('reference weekly maximum must be a nonnegative integer, or omitted. It is monitoring only.');
     for(const id of t.qualifiedSubjectIds??[])if(!draft.subjects.some(s=>s.id===id))add(`qualified subject ${id} is missing.`);
     for(const [subjectId,classes] of Object.entries(t.eligibleClassIdsBySubject??{})){
       if(!draft.subjects.some(s=>s.id===subjectId))add(`eligibility subject ${subjectId} is missing.`);
@@ -36,6 +37,7 @@ export function teacherFields(draft,t,html){
     ${draft.subjects.map(s=>`<fieldset><legend>${html(nameOf(s))}</legend><label><input type="checkbox" data-teacher-qualification="${html(s.id)}" ${t.qualifiedSubjectIds?.includes(s.id)?'checked':''}>Qualified for ${html(nameOf(s))}</label>
       <details><summary>Eligible classes for ${html(nameOf(s))} (${classesFor(t,s.id).length})</summary>
       <div class="setup-eligibility-list">${draft.classes.map(c=>`<label><input type="checkbox" data-teacher-subject="${html(s.id)}" data-teacher-class="${html(c.id)}" ${classesFor(t,s.id).includes(c.id)?'checked':''}>${html(nameOf(c))}${s.curatorLesson&&c.curatorTeacherId===t.id?' · Own-class implicit curator qualification':''}</label>`).join('')||'<p>Add a class to record eligibility.</p>'}</div></details></fieldset>`).join('')||'<p>Add subjects before recording qualification or eligibility.</p>'}
+    <label>Reference weekly maximum (monitoring only)<input data-catalog-field="referenceWeeklyMaximum" data-value-type="integer" inputmode="numeric" value="${html(t.referenceWeeklyMaximum??'')}" placeholder="No reference"></label>
     <h3>Derived weekly workload</h3><p id="setup-teacher-workload">${workload(draft,t.id)} allocated lessons per week</p>
     <p>Workload comes from class teaching plans. Assign lessons there.</p>
     ${plans.map(p=>`<p><button data-teacher-plan="${html(p.id)}">${html(nameOf(draft.classes.find(c=>c.id===(p.classId??p.cohortId))))}: ${html(nameOf(draft.subjects.find(s=>s.id===p.subjectId)))} · ${(p.allocations??[]).filter(a=>a.teacherId===t.id).map(a=>a.count).join(', ')} lessons</button></p>`).join('')}

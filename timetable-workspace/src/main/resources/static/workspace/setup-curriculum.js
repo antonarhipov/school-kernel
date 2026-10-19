@@ -2,6 +2,7 @@ const clone=value=>structuredClone(value),uid=()=>crypto.randomUUID();
 const nameOf=row=>row?.displayName??row?.name??'(missing)';
 export function copyCurriculum(draft,sourceId,destinationId){
   if(sourceId===destinationId||!draft.classes.some(c=>c.id===sourceId)||!draft.classes.some(c=>c.id===destinationId))throw new Error('Choose distinct existing source and destination classes.');
+  if((draft.audiencePlans??[]).some(p=>[sourceId,destinationId].includes(p.classId)))throw new Error('This curriculum includes audience teaching. Use its class teaching requirements explicitly; the fixed-teacher curriculum copy cannot preserve grouped demand and will not copy a partial curriculum.');
   if(draft.plans.some(p=>(p.classId??p.cohortId)===destinationId))throw new Error('The destination already has teaching rows. Curriculum copy requires an empty destination; nothing was replaced.');
   const source=draft.plans.filter(p=>(p.classId??p.cohortId)===sourceId);
   if(!source.length)throw new Error('The source has no curriculum to copy.');

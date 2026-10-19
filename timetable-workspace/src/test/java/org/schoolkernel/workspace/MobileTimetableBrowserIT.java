@@ -30,13 +30,13 @@ class MobileTimetableBrowserIT {
                 assertNull(p.locator("#timetable-filter-disclosure").getAttribute("open"));
                 assertFalse(p.locator("#cohort-filter").isVisible());
                 assertTrue(p.locator("#timetable-filter-disclosure").boundingBox().height <= 36);
-                assertEquals(520, p.locator(".demo-lesson").count());
+                assertEquals(544, DemoTimetableBrowserIT.representedLessons(p));
                 var bundle = DemoPlanningBrowserIT.JSON.readTree(p.request().get(h.base + "/api/demo/timetables").body());
                 assertAssignmentIdentities(p, bundle, "full", "a");
                 assertEquals(23, p.locator(".mobile-population-row").count());
                 assertTrue((Boolean)p.locator(".matrix-wrap").evaluate("e=>e.getBoundingClientRect().top < 280"));
                 assertPhoneGeometry(p, 5);
-                h.record("UC-1 extension 3a/G7: fresh 390px visit collapses filters, keeps all 520 lessons across 23 class sections, and shows all five weekdays above the fold without horizontal scrolling", p, "01-phone-default");
+                h.record("UC-1 extension 3a/G7: fresh 390px visit collapses filters, keeps all 544 lessons across 23 class sections, and shows all five weekdays above the fold without horizontal scrolling", p, "01-phone-default");
 
                 for (int width : List.of(320, 360, 390, 430, 700)) {
                     p.setViewportSize(width, 844); assertPhoneGeometry(p, 5);
@@ -97,13 +97,13 @@ class MobileTimetableBrowserIT {
                 p.locator("#timetable-filter-disclosure > summary").click();
                 h.record("UC-1 main 3/G7: Day dropdown switches between a single day and whole week; Clear restores all lessons; teacher and room lenses use full-width population headings and preserve five-day geometry", p, "05-room-lens");
 
-                Map<String, Integer> counts = Map.of("full", 520, "two-class", 56, "star-wars", 540, "english", 614);
+                Map<String, Integer> counts = Map.of("full", 544, "two-class", 56, "star-wars", 566, "english", 614);
                 for (String school : List.of("two-class", "star-wars", "english", "full")) {
                     p.locator("#school-selector").selectOption(school);
                     assertThat(p.locator("#timetable-filter-summary")).hasText("All lessons");
                     for (String variant : List.of("a", "b")) {
                         p.locator("#timetable-selector").selectOption(variant);
-                        assertEquals(counts.get(school), p.locator(".demo-lesson").count());
+                        assertEquals(counts.get(school), DemoTimetableBrowserIT.representedLessons(p));
                         assertAssignmentIdentities(p, bundle, school, variant);
                         assertPhoneGeometry(p, 5);
                     }
@@ -113,13 +113,13 @@ class MobileTimetableBrowserIT {
                 p.locator(".week-matrix").waitFor();
                 assertEquals(1, p.locator(".week-matrix").count());
                 assertThat(p.locator("#cohort-filter")).isVisible();
-                assertEquals(520, p.locator(".demo-lesson").count());
+                assertEquals(544, DemoTimetableBrowserIT.representedLessons(p));
                 assertThat(p.locator("#school-setup-entry")).isVisible();
                 h.record("UC-1 G7: desktop retains original compact retro matrix, expanded filters and School setup entry; mobile hides the editor", p, "07-desktop");
                 p.setViewportSize(390, 844); p.reload();
                 p.locator(".mobile-week-matrix").waitFor();
                 assertNull(p.locator("#timetable-filter-disclosure").getAttribute("open"));
-                assertEquals(520, p.locator(".demo-lesson").count()); assertPhoneGeometry(p, 5);
+                assertEquals(544, DemoTimetableBrowserIT.representedLessons(p)); assertPhoneGeometry(p, 5);
                 assertEquals(0, Files.readAllLines(temporary.resolve("launches")).size(), "Startup and inspection launch no kernel process");
                 assertTrue(mutations.isEmpty(), mutations.toString());
                 assertTrue(h.errors.isEmpty(), h.errors.toString());

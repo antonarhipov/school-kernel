@@ -150,7 +150,7 @@ class DemoPlanningBrowserIT {
         long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(45);
         while(System.nanoTime()<deadline){if(!server.isAlive())fail(Files.readString(output.resolve("server-"+number+".log")));if(Files.readString(output.resolve("server-"+number+".log")).contains("Started WorkspaceApplication"))return;Thread.sleep(100);}fail("Readiness timeout");
     }
-    void open(Page p){p.navigate(base+"/workspace/");p.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();}
+    void open(Page p){p.navigate(base+"/workspace/");p.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();}
     void select(Page p,String id){p.locator("#demo-definition").selectOption(id);p.waitForFunction("id=>document.querySelector('#demo-definition').value===id&&!document.querySelector('#demo-json').disabled",id);}
     void save(Page p,String id){p.onceDialog(d->d.accept(id));p.locator("#demo-save").click();p.waitForFunction("id=>document.querySelector('#demo-definition').value===id",id);}
     void initial(Page p,String id,String variant)throws Exception {

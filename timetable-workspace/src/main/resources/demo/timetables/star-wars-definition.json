@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "catalogVersion": 9,
+  "schemaVersion": 2,
+  "catalogVersion": 11,
   "schoolId": "demo-star-wars-school",
   "displayName": "Coruscant Imperial Academy",
   "subjects": [
@@ -157,6 +157,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -164,6 +167,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -171,6 +177,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -178,14 +187,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-communications-2",
@@ -203,6 +219,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -210,6 +229,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -217,6 +239,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -224,14 +249,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-communications-3",
@@ -249,6 +281,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -256,6 +291,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -263,6 +301,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -270,14 +311,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-science-1",
@@ -295,6 +343,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -302,6 +353,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -309,6 +363,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -316,14 +373,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-science-2",
@@ -341,6 +405,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -348,6 +415,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -355,6 +425,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -362,14 +435,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-science-3",
@@ -387,6 +467,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -394,6 +477,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -401,6 +487,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -408,14 +497,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-civics-1",
@@ -433,6 +529,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -440,6 +539,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -447,6 +549,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -454,14 +559,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-civics-2",
@@ -479,6 +591,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -486,6 +601,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -493,6 +611,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -500,14 +621,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-technology-1",
@@ -525,6 +653,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -532,6 +663,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -539,6 +673,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -546,14 +683,25 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-systems": [
+          "imperial-cohort-intermediate-4A"
+        ]
+      }
     },
     {
       "id": "imperial-teacher-technology-2",
@@ -571,6 +719,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -578,6 +729,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -585,6 +739,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -592,14 +749,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-technology-3",
@@ -617,6 +781,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -624,6 +791,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -631,6 +801,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -638,14 +811,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-fitness-1",
@@ -661,6 +841,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -668,6 +851,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -675,6 +861,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -682,14 +871,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-fitness-2",
@@ -705,6 +901,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -712,6 +911,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -719,6 +921,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -726,14 +931,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-fitness-3",
@@ -749,6 +961,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -756,6 +971,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -763,6 +981,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -770,14 +991,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-medicine-1",
@@ -795,6 +1023,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -802,6 +1033,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -809,6 +1043,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -816,14 +1053,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-medicine-2",
@@ -841,6 +1085,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -848,6 +1095,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -855,6 +1105,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -862,14 +1115,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-navigation-1",
@@ -886,6 +1146,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -893,6 +1156,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -900,6 +1166,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -907,14 +1176,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-navigation-2",
@@ -931,6 +1207,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -938,6 +1217,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -945,6 +1227,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -952,14 +1237,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-flight-1",
@@ -976,6 +1268,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -983,6 +1278,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -990,6 +1288,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -997,14 +1298,28 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-simulation": [
+          "imperial-cohort-intermediate-4A"
+        ],
+        "imperial-subject-flight-operations": [
+          "imperial-cohort-senior-7A"
+        ]
+      }
     },
     {
       "id": "imperial-teacher-flight-2",
@@ -1021,6 +1336,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1028,6 +1346,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1035,6 +1356,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1042,14 +1366,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-flight-3",
@@ -1066,6 +1397,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1073,6 +1407,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1080,6 +1417,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1087,14 +1427,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-tactics-1",
@@ -1112,6 +1459,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1119,6 +1469,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1126,6 +1479,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1133,14 +1489,25 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-fleet-tactics": [
+          "imperial-cohort-senior-7A"
+        ]
+      }
     },
     {
       "id": "imperial-teacher-tactics-2",
@@ -1158,6 +1525,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1165,6 +1535,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1172,6 +1545,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1179,14 +1555,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-tactics-3",
@@ -1204,6 +1587,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1211,6 +1597,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1218,6 +1607,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1225,14 +1617,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-fieldcraft-1",
@@ -1249,6 +1648,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1256,6 +1658,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1263,6 +1668,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1270,14 +1678,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-fieldcraft-2",
@@ -1294,6 +1709,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1301,6 +1719,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1308,6 +1729,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1315,14 +1739,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-intelligence-1",
@@ -1339,6 +1770,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1346,6 +1780,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1353,6 +1790,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1360,14 +1800,25 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-mission-planning": [
+          "imperial-cohort-senior-8A"
+        ]
+      }
     },
     {
       "id": "imperial-teacher-intelligence-2",
@@ -1384,6 +1835,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1391,6 +1845,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1398,6 +1855,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1405,14 +1865,21 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
     },
     {
       "id": "imperial-teacher-intelligence-3",
@@ -1429,6 +1896,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1436,6 +1906,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1443,6 +1916,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1450,14 +1926,533 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
-      ]
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {}
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-2-teacher",
+      "displayName": "Maarek Stele",
+      "qualifiedSubjectIds": [
+        "imperial-subject-simulation"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-simulation": [
+          "imperial-cohort-intermediate-4A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-2-teacher",
+      "displayName": "Dara Ors",
+      "qualifiedSubjectIds": [
+        "imperial-subject-systems"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-systems": [
+          "imperial-cohort-intermediate-4A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-3-teacher",
+      "displayName": "Ved Foslo",
+      "qualifiedSubjectIds": [
+        "imperial-subject-systems"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-systems": [
+          "imperial-cohort-intermediate-4A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-4-teacher",
+      "displayName": "Nash Windrider",
+      "qualifiedSubjectIds": [
+        "imperial-subject-systems"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-systems": [
+          "imperial-cohort-intermediate-4A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-2-teacher",
+      "displayName": "Seyn Marana",
+      "qualifiedSubjectIds": [
+        "imperial-subject-flight-operations"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-flight-operations": [
+          "imperial-cohort-senior-7A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-2-teacher",
+      "displayName": "ISB Training Droid KX-7",
+      "qualifiedSubjectIds": [
+        "imperial-subject-fleet-tactics"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-fleet-tactics": [
+          "imperial-cohort-senior-7A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-3-teacher",
+      "displayName": "Command Instructor Rho",
+      "qualifiedSubjectIds": [
+        "imperial-subject-mission-planning"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-mission-planning": [
+          "imperial-cohort-senior-8A"
+        ]
+      }
+    },
+    {
+      "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-4-teacher",
+      "displayName": "Command Instructor Sigma",
+      "qualifiedSubjectIds": [
+        "imperial-subject-mission-planning"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ],
+      "eligibleClassIdsBySubject": {
+        "imperial-subject-mission-planning": [
+          "imperial-cohort-senior-8A"
+        ]
+      }
     }
   ],
   "rooms": [
@@ -1476,6 +2471,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1483,6 +2481,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1490,6 +2491,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1497,13 +2501,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1521,6 +2531,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1528,6 +2541,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1535,6 +2551,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1542,13 +2561,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1566,6 +2591,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1573,6 +2601,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1580,6 +2611,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1587,13 +2621,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1611,6 +2651,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1618,6 +2661,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1625,6 +2671,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1632,13 +2681,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1656,6 +2711,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1663,6 +2721,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1670,6 +2731,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1677,13 +2741,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1701,6 +2771,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1708,6 +2781,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1715,6 +2791,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1722,13 +2801,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1746,6 +2831,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1753,6 +2841,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1760,6 +2851,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1767,13 +2861,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1791,6 +2891,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1798,6 +2901,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1805,6 +2911,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1812,13 +2921,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1836,6 +2951,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1843,6 +2961,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1850,6 +2971,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1857,13 +2981,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1881,6 +3011,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1888,6 +3021,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1895,6 +3031,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1902,13 +3041,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1926,6 +3071,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1933,6 +3081,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1940,6 +3091,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1947,13 +3101,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -1971,6 +3131,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -1978,6 +3141,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -1985,6 +3151,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -1992,13 +3161,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2016,6 +3191,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2023,6 +3201,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2030,6 +3211,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2037,13 +3221,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2061,6 +3251,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2068,6 +3261,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2075,6 +3271,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2082,13 +3281,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2106,6 +3311,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2113,6 +3321,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2120,6 +3331,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2127,13 +3341,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2151,6 +3371,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2158,6 +3381,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2165,6 +3391,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2172,13 +3401,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2196,6 +3431,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2203,6 +3441,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2210,6 +3451,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2217,13 +3461,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2241,6 +3491,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2248,6 +3501,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2255,6 +3511,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2262,13 +3521,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2286,6 +3551,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2293,6 +3561,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2300,6 +3571,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2307,13 +3581,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2331,6 +3611,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2338,6 +3621,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2345,6 +3631,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2352,13 +3641,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2376,6 +3671,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2383,6 +3681,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2390,6 +3691,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2397,13 +3701,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2421,6 +3731,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2428,6 +3741,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2435,6 +3751,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2442,13 +3761,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2466,6 +3791,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2473,6 +3801,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2480,6 +3811,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2487,13 +3821,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2511,6 +3851,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2518,6 +3861,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2525,6 +3871,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2532,13 +3881,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2556,6 +3911,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2563,6 +3921,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2570,6 +3931,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2577,13 +3941,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2601,6 +3971,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2608,6 +3981,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2615,6 +3991,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2622,13 +4001,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2646,6 +4031,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2653,6 +4041,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2660,6 +4051,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2667,13 +4061,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2691,6 +4091,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2698,6 +4101,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2705,6 +4111,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2712,13 +4121,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2736,6 +4151,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2743,6 +4161,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2750,6 +4171,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2757,13 +4181,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2781,6 +4211,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2788,6 +4221,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2795,6 +4231,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2802,13 +4241,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2826,6 +4271,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2833,6 +4281,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2840,6 +4291,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2847,13 +4301,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2871,6 +4331,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2878,6 +4341,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2885,6 +4351,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2892,13 +4361,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2916,6 +4391,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2923,6 +4401,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2930,6 +4411,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2937,13 +4421,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -2961,6 +4451,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -2968,6 +4461,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -2975,6 +4471,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -2982,13 +4481,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -3006,6 +4511,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -3013,6 +4521,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -3020,6 +4531,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -3027,13 +4541,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -3051,6 +4571,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -3058,6 +4581,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -3065,6 +4591,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -3072,13 +4601,19 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     },
     {
@@ -3096,6 +4631,9 @@
         "imperial-period-1-5",
         "imperial-period-1-6",
         "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
         "imperial-period-2-1",
         "imperial-period-2-2",
         "imperial-period-2-3",
@@ -3103,6 +4641,9 @@
         "imperial-period-2-5",
         "imperial-period-2-6",
         "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
         "imperial-period-3-1",
         "imperial-period-3-2",
         "imperial-period-3-3",
@@ -3110,6 +4651,9 @@
         "imperial-period-3-5",
         "imperial-period-3-6",
         "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
         "imperial-period-4-1",
         "imperial-period-4-2",
         "imperial-period-4-3",
@@ -3117,13 +4661,499 @@
         "imperial-period-4-5",
         "imperial-period-4-6",
         "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
         "imperial-period-5-1",
         "imperial-period-5-2",
         "imperial-period-5-3",
         "imperial-period-5-4",
         "imperial-period-5-5",
         "imperial-period-5-6",
-        "imperial-period-5-7"
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-2-room",
+      "displayName": "Flight Simulator Bay 4",
+      "capacity": 12,
+      "capabilityIds": [
+        "imperial-capability-flight"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-2-room",
+      "displayName": "Systems lab 1",
+      "capacity": 6,
+      "capabilityIds": [
+        "imperial-capability-workshop"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-3-room",
+      "displayName": "Systems lab 2",
+      "capacity": 6,
+      "capabilityIds": [
+        "imperial-capability-workshop"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-4-room",
+      "displayName": "Systems lab 3",
+      "capacity": 6,
+      "capabilityIds": [
+        "imperial-capability-workshop"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-2-room",
+      "displayName": "Flight Simulator Bay 5",
+      "capacity": 13,
+      "capabilityIds": [
+        "imperial-capability-flight"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-2-room",
+      "displayName": "Tactical Holosuite 4",
+      "capacity": 13,
+      "capabilityIds": [
+        "imperial-capability-tactical"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-3-room",
+      "displayName": "Mission lab 1",
+      "capacity": 9,
+      "capabilityIds": [
+        "imperial-capability-intelligence"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-4-room",
+      "displayName": "Mission lab 2",
+      "capacity": 9,
+      "capabilityIds": [
+        "imperial-capability-intelligence"
+      ],
+      "availablePeriodIds": [
+        "imperial-period-1-1",
+        "imperial-period-1-2",
+        "imperial-period-1-3",
+        "imperial-period-1-4",
+        "imperial-period-1-5",
+        "imperial-period-1-6",
+        "imperial-period-1-7",
+        "imperial-period-1-8",
+        "imperial-period-1-9",
+        "imperial-period-1-10",
+        "imperial-period-2-1",
+        "imperial-period-2-2",
+        "imperial-period-2-3",
+        "imperial-period-2-4",
+        "imperial-period-2-5",
+        "imperial-period-2-6",
+        "imperial-period-2-7",
+        "imperial-period-2-8",
+        "imperial-period-2-9",
+        "imperial-period-2-10",
+        "imperial-period-3-1",
+        "imperial-period-3-2",
+        "imperial-period-3-3",
+        "imperial-period-3-4",
+        "imperial-period-3-5",
+        "imperial-period-3-6",
+        "imperial-period-3-7",
+        "imperial-period-3-8",
+        "imperial-period-3-9",
+        "imperial-period-3-10",
+        "imperial-period-4-1",
+        "imperial-period-4-2",
+        "imperial-period-4-3",
+        "imperial-period-4-4",
+        "imperial-period-4-5",
+        "imperial-period-4-6",
+        "imperial-period-4-7",
+        "imperial-period-4-8",
+        "imperial-period-4-9",
+        "imperial-period-4-10",
+        "imperial-period-5-1",
+        "imperial-period-5-2",
+        "imperial-period-5-3",
+        "imperial-period-5-4",
+        "imperial-period-5-5",
+        "imperial-period-5-6",
+        "imperial-period-5-7",
+        "imperial-period-5-8",
+        "imperial-period-5-9",
+        "imperial-period-5-10"
       ]
     }
   ],
@@ -3196,7 +5226,78 @@
       "curatorTeacherId": "imperial-teacher-civics-1",
       "latestStartSlot": 1,
       "maxDailyGaps": 0,
-      "dailyLessonSpreadLimit": 0
+      "dailyLessonSpreadLimit": 0,
+      "splits": [
+        {
+          "id": "imperial-cohort-intermediate-4A-flight",
+          "displayName": "Simulator wings",
+          "groupCount": 2,
+          "subjectIds": [
+            "imperial-subject-simulation"
+          ],
+          "groups": [
+            {
+              "id": "imperial-cohort-intermediate-4A-flight-1",
+              "displayName": "Group 1",
+              "size": 13
+            },
+            {
+              "id": "imperial-cohort-intermediate-4A-flight-2",
+              "displayName": "Group 2",
+              "size": 12
+            }
+          ]
+        },
+        {
+          "id": "imperial-cohort-intermediate-4A-engineering",
+          "displayName": "Engineering crews",
+          "groupCount": 4,
+          "subjectIds": [
+            "imperial-subject-systems"
+          ],
+          "groups": [
+            {
+              "id": "imperial-cohort-intermediate-4A-engineering-1",
+              "displayName": "Group 1",
+              "size": 7
+            },
+            {
+              "id": "imperial-cohort-intermediate-4A-engineering-2",
+              "displayName": "Group 2",
+              "size": 6
+            },
+            {
+              "id": "imperial-cohort-intermediate-4A-engineering-3",
+              "displayName": "Group 3",
+              "size": 6
+            },
+            {
+              "id": "imperial-cohort-intermediate-4A-engineering-4",
+              "displayName": "Group 4",
+              "size": 6
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "mode": "nested",
+        "splitIds": [
+          "imperial-cohort-intermediate-4A-flight",
+          "imperial-cohort-intermediate-4A-engineering"
+        ],
+        "constituentSplitId": "imperial-cohort-intermediate-4A-engineering",
+        "unions": {
+          "imperial-cohort-intermediate-4A-flight-1": [
+            "imperial-cohort-intermediate-4A-engineering-1",
+            "imperial-cohort-intermediate-4A-engineering-2"
+          ],
+          "imperial-cohort-intermediate-4A-flight-2": [
+            "imperial-cohort-intermediate-4A-engineering-3",
+            "imperial-cohort-intermediate-4A-engineering-4"
+          ]
+        },
+        "intersections": []
+      }
     },
     {
       "id": "imperial-cohort-intermediate-4B",
@@ -3256,7 +5357,87 @@
       "curatorTeacherId": "imperial-teacher-fieldcraft-1",
       "latestStartSlot": 1,
       "maxDailyGaps": 0,
-      "dailyLessonSpreadLimit": 0
+      "dailyLessonSpreadLimit": 0,
+      "splits": [
+        {
+          "id": "imperial-cohort-senior-7A-flight",
+          "displayName": "Starfighter squadrons",
+          "groupCount": 2,
+          "subjectIds": [
+            "imperial-subject-flight-operations"
+          ],
+          "groups": [
+            {
+              "id": "imperial-cohort-senior-7A-flight-1",
+              "displayName": "Group 1",
+              "size": 13
+            },
+            {
+              "id": "imperial-cohort-senior-7A-flight-2",
+              "displayName": "Group 2",
+              "size": 13
+            }
+          ]
+        },
+        {
+          "id": "imperial-cohort-senior-7A-tactics",
+          "displayName": "Tactical command teams",
+          "groupCount": 2,
+          "subjectIds": [
+            "imperial-subject-fleet-tactics"
+          ],
+          "groups": [
+            {
+              "id": "imperial-cohort-senior-7A-tactics-1",
+              "displayName": "Group 1",
+              "size": 13
+            },
+            {
+              "id": "imperial-cohort-senior-7A-tactics-2",
+              "displayName": "Group 2",
+              "size": 13
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "mode": "joint",
+        "splitIds": [
+          "imperial-cohort-senior-7A-flight",
+          "imperial-cohort-senior-7A-tactics"
+        ],
+        "unions": {},
+        "intersections": [
+          {
+            "groupIds": [
+              "imperial-cohort-senior-7A-flight-1",
+              "imperial-cohort-senior-7A-tactics-1"
+            ],
+            "count": 7
+          },
+          {
+            "groupIds": [
+              "imperial-cohort-senior-7A-flight-1",
+              "imperial-cohort-senior-7A-tactics-2"
+            ],
+            "count": 6
+          },
+          {
+            "groupIds": [
+              "imperial-cohort-senior-7A-flight-2",
+              "imperial-cohort-senior-7A-tactics-1"
+            ],
+            "count": 6
+          },
+          {
+            "groupIds": [
+              "imperial-cohort-senior-7A-flight-2",
+              "imperial-cohort-senior-7A-tactics-2"
+            ],
+            "count": 7
+          }
+        ]
+      }
     },
     {
       "id": "imperial-cohort-senior-7B",
@@ -3276,7 +5457,34 @@
       "curatorTeacherId": "imperial-teacher-fieldcraft-1",
       "latestStartSlot": 1,
       "maxDailyGaps": 0,
-      "dailyLessonSpreadLimit": 0
+      "dailyLessonSpreadLimit": 0,
+      "splits": [
+        {
+          "id": "imperial-cohort-senior-8A-command",
+          "displayName": "Mission planning cells",
+          "groupCount": 3,
+          "subjectIds": [
+            "imperial-subject-mission-planning"
+          ],
+          "groups": [
+            {
+              "id": "imperial-cohort-senior-8A-command-1",
+              "displayName": "Group 1",
+              "size": 10
+            },
+            {
+              "id": "imperial-cohort-senior-8A-command-2",
+              "displayName": "Group 2",
+              "size": 9
+            },
+            {
+              "id": "imperial-cohort-senior-8A-command-3",
+              "displayName": "Group 3",
+              "size": 9
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "imperial-cohort-senior-8B",
@@ -3316,7 +5524,9 @@
       "weekday": "MONDAY",
       "order": 1,
       "startTime": "08:30:00",
-      "endTime": "09:20:00"
+      "endTime": "09:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-1-2",
@@ -3324,7 +5534,9 @@
       "weekday": "MONDAY",
       "order": 2,
       "startTime": "09:30:00",
-      "endTime": "10:20:00"
+      "endTime": "10:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-1-3",
@@ -3332,7 +5544,9 @@
       "weekday": "MONDAY",
       "order": 3,
       "startTime": "10:40:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-1-4",
@@ -3340,7 +5554,9 @@
       "weekday": "MONDAY",
       "order": 4,
       "startTime": "11:40:00",
-      "endTime": "12:30:00"
+      "endTime": "12:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": true
     },
     {
       "id": "imperial-period-1-5",
@@ -3348,7 +5564,9 @@
       "weekday": "MONDAY",
       "order": 5,
       "startTime": "13:15:00",
-      "endTime": "14:05:00"
+      "endTime": "14:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-1-6",
@@ -3356,7 +5574,9 @@
       "weekday": "MONDAY",
       "order": 6,
       "startTime": "14:15:00",
-      "endTime": "15:05:00"
+      "endTime": "15:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-1-7",
@@ -3364,7 +5584,39 @@
       "weekday": "MONDAY",
       "order": 7,
       "startTime": "15:15:00",
-      "endTime": "16:05:00"
+      "endTime": "16:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-1-8",
+      "displayName": "Monday 8",
+      "weekday": "MONDAY",
+      "order": 8,
+      "startTime": "16:15:00",
+      "endTime": "17:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-1-9",
+      "displayName": "Monday 9",
+      "weekday": "MONDAY",
+      "order": 9,
+      "startTime": "17:15:00",
+      "endTime": "18:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-1-10",
+      "displayName": "Monday 10",
+      "weekday": "MONDAY",
+      "order": 10,
+      "startTime": "18:15:00",
+      "endTime": "19:05:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-2-1",
@@ -3372,7 +5624,9 @@
       "weekday": "TUESDAY",
       "order": 1,
       "startTime": "08:30:00",
-      "endTime": "09:20:00"
+      "endTime": "09:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-2-2",
@@ -3380,7 +5634,9 @@
       "weekday": "TUESDAY",
       "order": 2,
       "startTime": "09:30:00",
-      "endTime": "10:20:00"
+      "endTime": "10:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-2-3",
@@ -3388,7 +5644,9 @@
       "weekday": "TUESDAY",
       "order": 3,
       "startTime": "10:40:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-2-4",
@@ -3396,7 +5654,9 @@
       "weekday": "TUESDAY",
       "order": 4,
       "startTime": "11:40:00",
-      "endTime": "12:30:00"
+      "endTime": "12:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": true
     },
     {
       "id": "imperial-period-2-5",
@@ -3404,7 +5664,9 @@
       "weekday": "TUESDAY",
       "order": 5,
       "startTime": "13:15:00",
-      "endTime": "14:05:00"
+      "endTime": "14:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-2-6",
@@ -3412,7 +5674,9 @@
       "weekday": "TUESDAY",
       "order": 6,
       "startTime": "14:15:00",
-      "endTime": "15:05:00"
+      "endTime": "15:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-2-7",
@@ -3420,7 +5684,39 @@
       "weekday": "TUESDAY",
       "order": 7,
       "startTime": "15:15:00",
-      "endTime": "16:05:00"
+      "endTime": "16:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-2-8",
+      "displayName": "Tuesday 8",
+      "weekday": "TUESDAY",
+      "order": 8,
+      "startTime": "16:15:00",
+      "endTime": "17:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-2-9",
+      "displayName": "Tuesday 9",
+      "weekday": "TUESDAY",
+      "order": 9,
+      "startTime": "17:15:00",
+      "endTime": "18:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-2-10",
+      "displayName": "Tuesday 10",
+      "weekday": "TUESDAY",
+      "order": 10,
+      "startTime": "18:15:00",
+      "endTime": "19:05:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-3-1",
@@ -3428,7 +5724,9 @@
       "weekday": "WEDNESDAY",
       "order": 1,
       "startTime": "08:30:00",
-      "endTime": "09:20:00"
+      "endTime": "09:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-3-2",
@@ -3436,7 +5734,9 @@
       "weekday": "WEDNESDAY",
       "order": 2,
       "startTime": "09:30:00",
-      "endTime": "10:20:00"
+      "endTime": "10:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-3-3",
@@ -3444,7 +5744,9 @@
       "weekday": "WEDNESDAY",
       "order": 3,
       "startTime": "10:40:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-3-4",
@@ -3452,7 +5754,9 @@
       "weekday": "WEDNESDAY",
       "order": 4,
       "startTime": "11:40:00",
-      "endTime": "12:30:00"
+      "endTime": "12:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": true
     },
     {
       "id": "imperial-period-3-5",
@@ -3460,7 +5764,9 @@
       "weekday": "WEDNESDAY",
       "order": 5,
       "startTime": "13:15:00",
-      "endTime": "14:05:00"
+      "endTime": "14:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-3-6",
@@ -3468,7 +5774,9 @@
       "weekday": "WEDNESDAY",
       "order": 6,
       "startTime": "14:15:00",
-      "endTime": "15:05:00"
+      "endTime": "15:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-3-7",
@@ -3476,7 +5784,39 @@
       "weekday": "WEDNESDAY",
       "order": 7,
       "startTime": "15:15:00",
-      "endTime": "16:05:00"
+      "endTime": "16:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-3-8",
+      "displayName": "Wednesday 8",
+      "weekday": "WEDNESDAY",
+      "order": 8,
+      "startTime": "16:15:00",
+      "endTime": "17:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-3-9",
+      "displayName": "Wednesday 9",
+      "weekday": "WEDNESDAY",
+      "order": 9,
+      "startTime": "17:15:00",
+      "endTime": "18:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-3-10",
+      "displayName": "Wednesday 10",
+      "weekday": "WEDNESDAY",
+      "order": 10,
+      "startTime": "18:15:00",
+      "endTime": "19:05:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-4-1",
@@ -3484,7 +5824,9 @@
       "weekday": "THURSDAY",
       "order": 1,
       "startTime": "08:30:00",
-      "endTime": "09:20:00"
+      "endTime": "09:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-4-2",
@@ -3492,7 +5834,9 @@
       "weekday": "THURSDAY",
       "order": 2,
       "startTime": "09:30:00",
-      "endTime": "10:20:00"
+      "endTime": "10:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-4-3",
@@ -3500,7 +5844,9 @@
       "weekday": "THURSDAY",
       "order": 3,
       "startTime": "10:40:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-4-4",
@@ -3508,7 +5854,9 @@
       "weekday": "THURSDAY",
       "order": 4,
       "startTime": "11:40:00",
-      "endTime": "12:30:00"
+      "endTime": "12:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": true
     },
     {
       "id": "imperial-period-4-5",
@@ -3516,7 +5864,9 @@
       "weekday": "THURSDAY",
       "order": 5,
       "startTime": "13:15:00",
-      "endTime": "14:05:00"
+      "endTime": "14:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-4-6",
@@ -3524,7 +5874,9 @@
       "weekday": "THURSDAY",
       "order": 6,
       "startTime": "14:15:00",
-      "endTime": "15:05:00"
+      "endTime": "15:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-4-7",
@@ -3532,7 +5884,39 @@
       "weekday": "THURSDAY",
       "order": 7,
       "startTime": "15:15:00",
-      "endTime": "16:05:00"
+      "endTime": "16:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-4-8",
+      "displayName": "Thursday 8",
+      "weekday": "THURSDAY",
+      "order": 8,
+      "startTime": "16:15:00",
+      "endTime": "17:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-4-9",
+      "displayName": "Thursday 9",
+      "weekday": "THURSDAY",
+      "order": 9,
+      "startTime": "17:15:00",
+      "endTime": "18:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-4-10",
+      "displayName": "Thursday 10",
+      "weekday": "THURSDAY",
+      "order": 10,
+      "startTime": "18:15:00",
+      "endTime": "19:05:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-5-1",
@@ -3540,7 +5924,9 @@
       "weekday": "FRIDAY",
       "order": 1,
       "startTime": "08:30:00",
-      "endTime": "09:20:00"
+      "endTime": "09:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-5-2",
@@ -3548,7 +5934,9 @@
       "weekday": "FRIDAY",
       "order": 2,
       "startTime": "09:30:00",
-      "endTime": "10:20:00"
+      "endTime": "10:20:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-5-3",
@@ -3556,7 +5944,9 @@
       "weekday": "FRIDAY",
       "order": 3,
       "startTime": "10:40:00",
-      "endTime": "11:30:00"
+      "endTime": "11:30:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-5-4",
@@ -3564,7 +5954,9 @@
       "weekday": "FRIDAY",
       "order": 4,
       "startTime": "11:40:00",
-      "endTime": "12:30:00"
+      "endTime": "12:30:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": true
     },
     {
       "id": "imperial-period-5-5",
@@ -3572,7 +5964,9 @@
       "weekday": "FRIDAY",
       "order": 5,
       "startTime": "13:15:00",
-      "endTime": "14:05:00"
+      "endTime": "14:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-5-6",
@@ -3580,7 +5974,9 @@
       "weekday": "FRIDAY",
       "order": 6,
       "startTime": "14:15:00",
-      "endTime": "15:05:00"
+      "endTime": "15:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
     },
     {
       "id": "imperial-period-5-7",
@@ -3588,7 +5984,39 @@
       "weekday": "FRIDAY",
       "order": 7,
       "startTime": "15:15:00",
-      "endTime": "16:05:00"
+      "endTime": "16:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-5-8",
+      "displayName": "Friday 8",
+      "weekday": "FRIDAY",
+      "order": 8,
+      "startTime": "16:15:00",
+      "endTime": "17:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-5-9",
+      "displayName": "Friday 9",
+      "weekday": "FRIDAY",
+      "order": 9,
+      "startTime": "17:15:00",
+      "endTime": "18:05:00",
+      "adjacentToNext": true,
+      "gapBoundaryAfter": false
+    },
+    {
+      "id": "imperial-period-5-10",
+      "displayName": "Friday 10",
+      "weekday": "FRIDAY",
+      "order": 10,
+      "startTime": "18:15:00",
+      "endTime": "19:05:00",
+      "adjacentToNext": false,
+      "gapBoundaryAfter": false
     }
   ],
   "lessons": [
@@ -5697,17 +8125,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-intermediate-4A-simulation-1",
-      "displayName": "Intermediate Cadet 4A · Flight Simulation",
-      "subjectId": "imperial-subject-simulation",
-      "cohortId": "imperial-cohort-intermediate-4A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-intermediate-4A-simulation",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
-      ]
-    },
-    {
       "id": "imperial-lesson-intermediate-4A-survival-3",
       "displayName": "Intermediate Cadet 4A · Fieldcraft and Survival",
       "subjectId": "imperial-subject-survival",
@@ -5716,17 +8133,6 @@
       "seriesId": "imperial-series-intermediate-4A-survival",
       "requiredRoomCapabilityIds": [
         "imperial-capability-field"
-      ]
-    },
-    {
-      "id": "imperial-lesson-intermediate-4A-systems-1",
-      "displayName": "Intermediate Cadet 4A · Starship Systems",
-      "subjectId": "imperial-subject-systems",
-      "cohortId": "imperial-cohort-intermediate-4A",
-      "teacherId": "imperial-teacher-technology-1",
-      "seriesId": "imperial-series-intermediate-4A-systems",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-workshop"
       ]
     },
     {
@@ -5777,17 +8183,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-intermediate-4A-simulation-2",
-      "displayName": "Intermediate Cadet 4A · Flight Simulation",
-      "subjectId": "imperial-subject-simulation",
-      "cohortId": "imperial-cohort-intermediate-4A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-intermediate-4A-simulation",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
-      ]
-    },
-    {
       "id": "imperial-lesson-intermediate-4A-navigation-2",
       "displayName": "Intermediate Cadet 4A · Astrogation Fundamentals",
       "subjectId": "imperial-subject-navigation",
@@ -5824,17 +8219,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-intermediate-4A-systems-2",
-      "displayName": "Intermediate Cadet 4A · Starship Systems",
-      "subjectId": "imperial-subject-systems",
-      "cohortId": "imperial-cohort-intermediate-4A",
-      "teacherId": "imperial-teacher-technology-1",
-      "seriesId": "imperial-series-intermediate-4A-systems",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-workshop"
-      ]
-    },
-    {
       "id": "imperial-lesson-intermediate-4A-physics-3",
       "displayName": "Intermediate Cadet 4A · Applied Physics",
       "subjectId": "imperial-subject-physics",
@@ -5857,17 +8241,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-intermediate-4A-systems-3",
-      "displayName": "Intermediate Cadet 4A · Starship Systems",
-      "subjectId": "imperial-subject-systems",
-      "cohortId": "imperial-cohort-intermediate-4A",
-      "teacherId": "imperial-teacher-technology-1",
-      "seriesId": "imperial-series-intermediate-4A-systems",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-workshop"
-      ]
-    },
-    {
       "id": "imperial-lesson-intermediate-4A-physics-4",
       "displayName": "Intermediate Cadet 4A · Applied Physics",
       "subjectId": "imperial-subject-physics",
@@ -5887,17 +8260,6 @@
       "seriesId": "imperial-series-intermediate-4A-navigation",
       "requiredRoomCapabilityIds": [
         "imperial-capability-navigation"
-      ]
-    },
-    {
-      "id": "imperial-lesson-intermediate-4A-simulation-3",
-      "displayName": "Intermediate Cadet 4A · Flight Simulation",
-      "subjectId": "imperial-subject-simulation",
-      "cohortId": "imperial-cohort-intermediate-4A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-intermediate-4A-simulation",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
       ]
     },
     {
@@ -7702,17 +10064,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-senior-7A-flight-operations-1",
-      "displayName": "Senior Officer Cadet 7A · Starfighter Operations",
-      "subjectId": "imperial-subject-flight-operations",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-senior-7A-flight-operations",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
-      ]
-    },
-    {
       "id": "imperial-lesson-senior-7A-leadership-1",
       "displayName": "Senior Officer Cadet 7A · Field Leadership",
       "subjectId": "imperial-subject-leadership",
@@ -7743,17 +10094,6 @@
       "seriesId": "imperial-series-senior-7A-combined-operations",
       "requiredRoomCapabilityIds": [
         "imperial-capability-field"
-      ]
-    },
-    {
-      "id": "imperial-lesson-senior-7A-fleet-tactics-1",
-      "displayName": "Senior Officer Cadet 7A · Fleet Tactics",
-      "subjectId": "imperial-subject-fleet-tactics",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-tactics-1",
-      "seriesId": "imperial-series-senior-7A-fleet-tactics",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-tactical"
       ]
     },
     {
@@ -7867,28 +10207,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-senior-7A-flight-operations-2",
-      "displayName": "Senior Officer Cadet 7A · Starfighter Operations",
-      "subjectId": "imperial-subject-flight-operations",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-senior-7A-flight-operations",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
-      ]
-    },
-    {
-      "id": "imperial-lesson-senior-7A-fleet-tactics-2",
-      "displayName": "Senior Officer Cadet 7A · Fleet Tactics",
-      "subjectId": "imperial-subject-fleet-tactics",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-tactics-1",
-      "seriesId": "imperial-series-senior-7A-fleet-tactics",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-tactical"
-      ]
-    },
-    {
       "id": "imperial-lesson-senior-7A-combined-operations-4",
       "displayName": "Senior Officer Cadet 7A · Combined Operations",
       "subjectId": "imperial-subject-combined-operations",
@@ -7900,17 +10218,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-senior-7A-flight-operations-3",
-      "displayName": "Senior Officer Cadet 7A · Starfighter Operations",
-      "subjectId": "imperial-subject-flight-operations",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-senior-7A-flight-operations",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
-      ]
-    },
-    {
       "id": "imperial-lesson-senior-7A-conditioning-2",
       "displayName": "Senior Officer Cadet 7A · Physical Conditioning",
       "subjectId": "imperial-subject-conditioning",
@@ -7919,17 +10226,6 @@
       "seriesId": "imperial-series-senior-7A-conditioning",
       "requiredRoomCapabilityIds": [
         "imperial-capability-conditioning"
-      ]
-    },
-    {
-      "id": "imperial-lesson-senior-7A-fleet-tactics-3",
-      "displayName": "Senior Officer Cadet 7A · Fleet Tactics",
-      "subjectId": "imperial-subject-fleet-tactics",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-tactics-1",
-      "seriesId": "imperial-series-senior-7A-fleet-tactics",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-tactical"
       ]
     },
     {
@@ -8002,17 +10298,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-senior-7A-fleet-tactics-4",
-      "displayName": "Senior Officer Cadet 7A · Fleet Tactics",
-      "subjectId": "imperial-subject-fleet-tactics",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-tactics-1",
-      "seriesId": "imperial-series-senior-7A-fleet-tactics",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-tactical"
-      ]
-    },
-    {
       "id": "imperial-lesson-senior-7A-intelligence-3",
       "displayName": "Senior Officer Cadet 7A · Intelligence Analysis",
       "subjectId": "imperial-subject-intelligence",
@@ -8021,17 +10306,6 @@
       "seriesId": "imperial-series-senior-7A-intelligence",
       "requiredRoomCapabilityIds": [
         "imperial-capability-intelligence"
-      ]
-    },
-    {
-      "id": "imperial-lesson-senior-7A-flight-operations-4",
-      "displayName": "Senior Officer Cadet 7A · Starfighter Operations",
-      "subjectId": "imperial-subject-flight-operations",
-      "cohortId": "imperial-cohort-senior-7A",
-      "teacherId": "imperial-teacher-flight-1",
-      "seriesId": "imperial-series-senior-7A-flight-operations",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-flight"
       ]
     },
     {
@@ -8531,17 +10805,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-senior-8A-mission-planning-1",
-      "displayName": "Senior Officer Cadet 8A · Mission Planning",
-      "subjectId": "imperial-subject-mission-planning",
-      "cohortId": "imperial-cohort-senior-8A",
-      "teacherId": "imperial-teacher-intelligence-1",
-      "seriesId": "imperial-series-senior-8A-mission-planning",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-intelligence"
-      ]
-    },
-    {
       "id": "imperial-lesson-senior-8A-advanced-navigation-2",
       "displayName": "Senior Officer Cadet 8A · Advanced Astrogation",
       "subjectId": "imperial-subject-advanced-navigation",
@@ -8594,17 +10857,6 @@
       "seriesId": "imperial-series-senior-8A-combined-operations",
       "requiredRoomCapabilityIds": [
         "imperial-capability-field"
-      ]
-    },
-    {
-      "id": "imperial-lesson-senior-8A-mission-planning-2",
-      "displayName": "Senior Officer Cadet 8A · Mission Planning",
-      "subjectId": "imperial-subject-mission-planning",
-      "cohortId": "imperial-cohort-senior-8A",
-      "teacherId": "imperial-teacher-intelligence-1",
-      "seriesId": "imperial-series-senior-8A-mission-planning",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-intelligence"
       ]
     },
     {
@@ -8718,17 +10970,6 @@
       ]
     },
     {
-      "id": "imperial-lesson-senior-8A-mission-planning-3",
-      "displayName": "Senior Officer Cadet 8A · Mission Planning",
-      "subjectId": "imperial-subject-mission-planning",
-      "cohortId": "imperial-cohort-senior-8A",
-      "teacherId": "imperial-teacher-intelligence-1",
-      "seriesId": "imperial-series-senior-8A-mission-planning",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-intelligence"
-      ]
-    },
-    {
       "id": "imperial-lesson-senior-8A-fleet-tactics-3",
       "displayName": "Senior Officer Cadet 8A · Fleet Tactics",
       "subjectId": "imperial-subject-fleet-tactics",
@@ -8803,17 +11044,6 @@
       "seriesId": "imperial-series-senior-8A-advanced-navigation",
       "requiredRoomCapabilityIds": [
         "imperial-capability-navigation"
-      ]
-    },
-    {
-      "id": "imperial-lesson-senior-8A-mission-planning-4",
-      "displayName": "Senior Officer Cadet 8A · Mission Planning",
-      "subjectId": "imperial-subject-mission-planning",
-      "cohortId": "imperial-cohort-senior-8A",
-      "teacherId": "imperial-teacher-intelligence-1",
-      "seriesId": "imperial-series-senior-8A-mission-planning",
-      "requiredRoomCapabilityIds": [
-        "imperial-capability-intelligence"
       ]
     },
     {
@@ -9998,6 +12228,369 @@
       "seriesId": "imperial-series-senior-9B-combined-operations",
       "requiredRoomCapabilityIds": [
         "imperial-capability-field"
+      ]
+    }
+  ],
+  "audiencePlans": [
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching",
+      "classId": "imperial-cohort-intermediate-4A",
+      "subjectId": "imperial-subject-simulation",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "imperial-cohort-intermediate-4A-flight",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-1",
+          "audienceId": "imperial-cohort-intermediate-4A-flight-1",
+          "sessionIds": [
+            "imperial-lesson-intermediate-4A-simulation-1-audience-1",
+            "imperial-lesson-intermediate-4A-simulation-2-audience-1",
+            "imperial-lesson-intermediate-4A-simulation-3-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-teacher-flight-1"
+          }
+        },
+        {
+          "id": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-2",
+          "audienceId": "imperial-cohort-intermediate-4A-flight-2",
+          "sessionIds": [
+            "imperial-lesson-intermediate-4A-simulation-1-audience-2",
+            "imperial-lesson-intermediate-4A-simulation-2-audience-2",
+            "imperial-lesson-intermediate-4A-simulation-3-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "imperial-capability-flight"
+      ]
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching",
+      "classId": "imperial-cohort-intermediate-4A",
+      "subjectId": "imperial-subject-systems",
+      "weeklyTotal": 3,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "imperial-cohort-intermediate-4A-engineering",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-1",
+          "audienceId": "imperial-cohort-intermediate-4A-engineering-1",
+          "sessionIds": [
+            "imperial-lesson-intermediate-4A-systems-1-audience-1",
+            "imperial-lesson-intermediate-4A-systems-2-audience-1",
+            "imperial-lesson-intermediate-4A-systems-3-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-teacher-technology-1"
+          }
+        },
+        {
+          "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-2",
+          "audienceId": "imperial-cohort-intermediate-4A-engineering-2",
+          "sessionIds": [
+            "imperial-lesson-intermediate-4A-systems-1-audience-2",
+            "imperial-lesson-intermediate-4A-systems-2-audience-2",
+            "imperial-lesson-intermediate-4A-systems-3-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-2-room"
+        },
+        {
+          "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-3",
+          "audienceId": "imperial-cohort-intermediate-4A-engineering-3",
+          "sessionIds": [
+            "imperial-lesson-intermediate-4A-systems-1-audience-3",
+            "imperial-lesson-intermediate-4A-systems-2-audience-3",
+            "imperial-lesson-intermediate-4A-systems-3-audience-3"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-3-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-3-room"
+        },
+        {
+          "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-4",
+          "audienceId": "imperial-cohort-intermediate-4A-engineering-4",
+          "sessionIds": [
+            "imperial-lesson-intermediate-4A-systems-1-audience-4",
+            "imperial-lesson-intermediate-4A-systems-2-audience-4",
+            "imperial-lesson-intermediate-4A-systems-3-audience-4"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-4-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-4-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "imperial-capability-workshop"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching",
+      "classId": "imperial-cohort-senior-7A",
+      "subjectId": "imperial-subject-flight-operations",
+      "weeklyTotal": 4,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "imperial-cohort-senior-7A-flight",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-1",
+          "audienceId": "imperial-cohort-senior-7A-flight-1",
+          "sessionIds": [
+            "imperial-lesson-senior-7A-flight-operations-1-audience-1",
+            "imperial-lesson-senior-7A-flight-operations-2-audience-1",
+            "imperial-lesson-senior-7A-flight-operations-3-audience-1",
+            "imperial-lesson-senior-7A-flight-operations-4-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-teacher-flight-1"
+          }
+        },
+        {
+          "id": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-2",
+          "audienceId": "imperial-cohort-senior-7A-flight-2",
+          "sessionIds": [
+            "imperial-lesson-senior-7A-flight-operations-1-audience-2",
+            "imperial-lesson-senior-7A-flight-operations-2-audience-2",
+            "imperial-lesson-senior-7A-flight-operations-3-audience-2",
+            "imperial-lesson-senior-7A-flight-operations-4-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "imperial-capability-flight"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching",
+      "classId": "imperial-cohort-senior-7A",
+      "subjectId": "imperial-subject-fleet-tactics",
+      "weeklyTotal": 4,
+      "wholeClassCount": 0,
+      "delivery": "grouped",
+      "splitId": "imperial-cohort-senior-7A-tactics",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-1",
+          "audienceId": "imperial-cohort-senior-7A-tactics-1",
+          "sessionIds": [
+            "imperial-lesson-senior-7A-fleet-tactics-1-audience-1",
+            "imperial-lesson-senior-7A-fleet-tactics-2-audience-1",
+            "imperial-lesson-senior-7A-fleet-tactics-3-audience-1",
+            "imperial-lesson-senior-7A-fleet-tactics-4-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-teacher-tactics-1"
+          }
+        },
+        {
+          "id": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-2",
+          "audienceId": "imperial-cohort-senior-7A-tactics-2",
+          "sessionIds": [
+            "imperial-lesson-senior-7A-fleet-tactics-1-audience-2",
+            "imperial-lesson-senior-7A-fleet-tactics-2-audience-2",
+            "imperial-lesson-senior-7A-fleet-tactics-3-audience-2",
+            "imperial-lesson-senior-7A-fleet-tactics-4-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-2-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-2-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "imperial-capability-tactical"
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching",
+      "classId": "imperial-cohort-senior-8A",
+      "subjectId": "imperial-subject-mission-planning",
+      "weeklyTotal": 4,
+      "wholeClassCount": 1,
+      "delivery": "mixed",
+      "splitId": "imperial-cohort-senior-8A-command",
+      "overrides": {},
+      "portions": [
+        {
+          "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-1",
+          "audienceId": "class:imperial-cohort-senior-8A",
+          "sessionIds": [
+            "imperial-lesson-senior-8A-mission-planning-1-audience-1"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-teacher-intelligence-1"
+          }
+        },
+        {
+          "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-2",
+          "audienceId": "imperial-cohort-senior-8A-command-1",
+          "sessionIds": [
+            "imperial-lesson-senior-8A-mission-planning-2-audience-2",
+            "imperial-lesson-senior-8A-mission-planning-3-audience-2",
+            "imperial-lesson-senior-8A-mission-planning-4-audience-2"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-teacher-intelligence-1"
+          }
+        },
+        {
+          "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-3",
+          "audienceId": "imperial-cohort-senior-8A-command-2",
+          "sessionIds": [
+            "imperial-lesson-senior-8A-mission-planning-2-audience-3",
+            "imperial-lesson-senior-8A-mission-planning-3-audience-3",
+            "imperial-lesson-senior-8A-mission-planning-4-audience-3"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-3-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-3-room"
+        },
+        {
+          "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-4",
+          "audienceId": "imperial-cohort-senior-8A-command-3",
+          "sessionIds": [
+            "imperial-lesson-senior-8A-mission-planning-2-audience-4",
+            "imperial-lesson-senior-8A-mission-planning-3-audience-4",
+            "imperial-lesson-senior-8A-mission-planning-4-audience-4"
+          ],
+          "teacherPolicy": {
+            "mode": "fixed",
+            "fixedTeacherId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-4-teacher"
+          },
+          "fixedRoomId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-4-room"
+        }
+      ],
+      "requiredRoomCapabilityIds": [
+        "imperial-capability-intelligence"
+      ]
+    }
+  ],
+  "coordinationRules": [
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-parallel",
+      "classId": "imperial-cohort-intermediate-4A",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-intermediate-4A-imperial-subject-simulation-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-parallel",
+      "classId": "imperial-cohort-intermediate-4A",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-2",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-3",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-intermediate-4A-imperial-subject-systems-teaching-portion-4",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-parallel",
+      "classId": "imperial-cohort-senior-7A",
+      "type": "START_TOGETHER",
+      "count": 4,
+      "activities": [
+        {
+          "portionId": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-senior-7A-imperial-subject-flight-operations-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-parallel",
+      "classId": "imperial-cohort-senior-7A",
+      "type": "START_TOGETHER",
+      "count": 4,
+      "activities": [
+        {
+          "portionId": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-1",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-senior-7A-imperial-subject-fleet-tactics-teaching-portion-2",
+          "unit": "SESSION"
+        }
+      ]
+    },
+    {
+      "id": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-parallel",
+      "classId": "imperial-cohort-senior-8A",
+      "type": "START_TOGETHER",
+      "count": 3,
+      "activities": [
+        {
+          "portionId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-2",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-3",
+          "unit": "SESSION"
+        },
+        {
+          "portionId": "imperial-cohort-senior-8A-imperial-subject-mission-planning-teaching-portion-4",
+          "unit": "SESSION"
+        }
       ]
     }
   ]

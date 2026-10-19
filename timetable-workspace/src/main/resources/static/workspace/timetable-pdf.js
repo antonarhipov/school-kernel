@@ -2,11 +2,12 @@ import { PDFDocument, rgb } from './vendor/pdf/pdf-lib.js';
 import fontkit from './vendor/pdf/fontkit.js';
 import { M } from './messages.js';
 import { resolvePdfScope } from './pdf-scope.js';
+import { drawAudiencePdf } from './audience-pdf.js';
+import { PDF_SLOT_WIDTH, lessonColor, slotLabels } from './pdf-style.js';
 
 const WIDTH = 841.89, HEIGHT = 595.28, MARGIN = 32, BOTTOM = 550;
 const INK = rgb(.09, .17, .13), MUTED = rgb(.32, .39, .35), GREEN = rgb(.12, .32, .24);
 const LINE = rgb(.81, .85, .82), WHITE = rgb(1, 1, 1);
-const PALETTE = [[.91,.95,.92], [.92,.94,.98], [.98,.94,.87], [.96,.91,.94], [.90,.96,.96], [.95,.94,.89]];
 const clean = value => String(value ?? '').normalize('NFC').replace(/[\u2010-\u2015]/g, '-').replace(/\s+/g, ' ').trim();
 const name = (entity, fallback) => clean(entity?.displayName || fallback);
 let fontResources;
@@ -87,10 +88,8 @@ export async function createTimetablePdf(options) {
   pdf.setTitle(`${clean(schoolName)} - ${clean(timetableName)}`); pdf.setAuthor('School Kernel');
   pdf.setSubject(`${selected.kind} weekly timetable`); pdf.setCreator('School Kernel timetable export'); pdf.setLanguage('en');
   const sheets = [];
-  const times = period => [period.startTime, period.endTime].filter(Boolean).map(t => t.slice(0,5)).join(' - ');
-  const cellFor = (period, lessons, width, cohortId, includeTimes) => {
+  const cellFor = (period, lessons, width, cohortId) => {
     const lines = [];
-    if (period && includeTimes && times(period)) lines.push(...linesFor(times(period), 8, regular, width, MUTED));
     if (period?.nonTeaching) lines.push(...linesFor(`${period.nonTeaching}: ${period.displayName}`, 8, regular, width, MUTED));
     const lunch = authoring?.classes?.find(c => c.id === cohortId)?.lunchPeriodIds?.includes(period?.id);
     if (lunch) lines.push(...linesFor('Class lunch', 9, bold, width, MUTED));
@@ -98,36 +97,38 @@ export async function createTimetablePdf(options) {
       if (index) lines.push({ text: '', size: 8, font: regular, color: MUTED });
       lines.push(...linesFor(name(item.subject, item.subjectId), 9, bold, width));
       lines.push(...linesFor(name(item.teacher, item.teacherId), 8, regular, width));
-      lines.push(...linesFor(`Room ${name(item.room, item.roomId)}`, 8, regular, width, MUTED));
+      lines.push(...linesFor(name(item.room, item.roomId), 8, regular, width, MUTED));
       if (type === 'teacher') lines.push(...linesFor(`Class ${name(item.cohort, item.cohortId)}`, 8, regular, width, MUTED));
     });
-    if (period && !lessons.length && !period.nonTeaching && !lunch) lines.push(...linesFor('No lesson', 8, regular, width, MUTED));
-    const subjectIndex = model.definition.subjects.findIndex(s => s.id === lessons[0]?.subjectId);
     // Unoccupied slots keep only their grid border, leaving the paper unprinted.
-    return { lines, color: lessons.length ? rgb(...PALETTE[Math.max(0, subjectIndex) % PALETTE.length]) : undefined };
+    return { lines, color: lessonColor(model, lessons[0]) };
   };
   const plans = [];
   // School export reuses the individual weekly layout for every class, in definition order.
   for (const entity of selected.entities) {
     const classView = type !== 'teacher';
     const items = type === 'school' ? selected.items.filter(item => item.cohortId === entity.id) : selected.items;
-    const labelWidth = 38;
+    const labelWidth = PDF_SLOT_WIDTH;
     const cellWidth = (contentWidth - labelWidth) / selected.days.length, width = cellWidth - 16;
     const occupied = items.map(item => item.period.order);
     const orders = occupied.length
       ? selected.orders.filter(order => order >= Math.min(...occupied) && order <= Math.max(...occupied))
       : selected.orders;
     const rows = orders.map(order => ({
-      label: linesFor(Number.isInteger(order) ? String(order) : '', 10, bold, labelWidth - 12, MUTED),
+      label: slotLabels(selected, order).flatMap((text, index) => linesFor(text, index ? 8 : 10, index ? regular : bold, labelWidth - 12, MUTED)),
       cells: selected.days.map((day, index) => {
         const period = selected.periods[index].find(p => p.order === order);
-        return cellFor(period, items.filter(i => i.periodId === period?.id), width, classView ? entity.id : null, true);
+        return cellFor(period, items.filter(i => i.periodId === period?.id), width, classView ? entity.id : null);
       })
     }));
     plans.push({ heading: `${classView ? 'Class' : 'Teacher'} ${name(entity, entity.id)}`, scope: `Whole week / Slots ${orders[0]}-${orders.at(-1)}`, label: 'Slot', labelWidth, cellWidth,
       columns: selected.days.map(day => linesFor(M.days[day] || day, 10, bold, width, WHITE)), rows });
   }
-  for (const plan of plans) {
+  if (model.definition.schemaVersion === 2) {
+    drawAudiencePdf({ model, selected, pdf, sheets, schoolName, timetableName, draft,
+      drawText, box, linesFor, regular, bold, width: WIDTH, height: HEIGHT, margin: MARGIN, bottom: BOTTOM });
+  }
+  for (const plan of model.definition.schemaVersion === 2 ? [] : plans) {
     let page, y, part = 0;
     const newPage = () => {
       page = pdf.addPage([WIDTH, HEIGHT]); part++;

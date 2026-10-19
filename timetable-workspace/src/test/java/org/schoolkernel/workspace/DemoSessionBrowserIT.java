@@ -50,7 +50,7 @@ class DemoSessionBrowserIT {
             Page one = first.newPage(); one.onPageError(errors::add);
             Page two = second.newPage(); two.onPageError(errors::add);
             try {
-            one.navigate(base + "/workspace/"); one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("520 lessons")).waitFor();
+            one.navigate(base + "/workspace/"); one.locator("#demo-sample-preview").filter(new Locator.FilterOptions().setHasText("544 lessons")).waitFor();
             assertEquals("full", one.locator("#demo-definition").inputValue());
             assertEquals("EMPTY", snapshot(one).path("state").stringValue());
             assertEquals(0, one.locator("#open-authoring").count());
@@ -65,7 +65,7 @@ class DemoSessionBrowserIT {
             assertEquals("EMPTY", snapshot(two).path("state").stringValue());
             assertEquals(startupVerifications, verificationCount(1));
             JsonNode full = snapshot(one).path("workspace").path("acceptedBaseline");
-            assertEquals(520, full.path("result").path("timetable").path("assignments").size());
+            assertEquals(544, full.path("result").path("timetable").path("assignments").size());
             record("UC-2 ownership / UC-3 enabling: Full accepted privately without a visitor process; other browser stays EMPTY", one, "02-full");
             one.setViewportSize(390, 844);
             one.locator(".narrow-banner").waitFor();

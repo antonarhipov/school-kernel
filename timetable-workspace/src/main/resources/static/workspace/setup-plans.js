@@ -62,13 +62,13 @@ export function synchronizeOccurrences(plan,draft){
   next.occurrences=result.sort((a,b)=>(previousOrder.get(a.id)??Number.MAX_SAFE_INTEGER)-(previousOrder.get(b.id)??Number.MAX_SAFE_INTEGER));
   return next;
 }
-export function plansContent(draft,classId,html){
-  const cohort=draft.classes.find(c=>c.id===classId),plans=draft.plans.filter(p=>(p.classId??p.cohortId)===classId);
+export function plansContent(draft,classId,html,{subjectId}={}){
+  const cohort=draft.classes.find(c=>c.id===classId),plans=draft.plans.filter(p=>(p.classId??p.cohortId)===classId&&(!subjectId||p.subjectId===subjectId));
   const options=draft.subjects.filter(s=>!plans.some(p=>p.subjectId===s.id));
-  return `<div id="setup-class-plan" data-plan-class="${html(classId)}"><h3>${html(nameOf(cohort))} · weekly teaching</h3><button id="setup-back-class" class="secondary">Class details</button>
+  return `<div id="setup-class-plan" data-plan-class="${html(classId)}"><h3>${html(nameOf(cohort))} · weekly teaching</h3>${subjectId?'<button data-back-subject-teaching class="secondary">← Subject teaching arrangements</button>':'<button id="setup-back-class" class="secondary">Class details</button>'}
     <p>Each subject has one weekly demand row. Allocate existing occurrences to teachers; unassigned demand blocks generation. Undeclared consecutive lessons are hard-forbidden under the new rules.</p>
-    <label>Add subject to class<select id="setup-plan-subject"><option value="">Choose a subject…</option>${options.map(s=>`<option value="${html(s.id)}">${html(nameOf(s))}</option>`).join('')}</select></label><button id="setup-add-plan">Add weekly subject</button>
-    ${curriculumContent(draft,classId,html)}
+    ${subjectId?'':`<label>Add subject to class<select id="setup-plan-subject"><option value="">Choose a subject…</option>${options.map(s=>`<option value="${html(s.id)}">${html(nameOf(s))}</option>`).join('')}</select></label><button id="setup-add-plan">Add weekly subject</button>`}
+    ${subjectId?'':curriculumContent(draft,classId,html)}
     ${plans.map(p=>{
       const total=allocated(p),delta=positive(p.requiredCount)?p.requiredCount-total:null;
       const choices=draft.teachers.filter(t=>eligible(draft,t,p.subjectId,classId)&&!p.allocations?.some(a=>a.teacherId===t.id));
@@ -83,6 +83,7 @@ export function plansContent(draft,classId,html){
       <details><summary>Retained occurrence settings (${p.occurrences?.length??0} lessons)</summary><p>Surviving lesson identities, labels, series and settings are retained.</p><pre>${html(JSON.stringify(p.occurrences??[],null,2))}</pre>${protectedReasons(p).map(r=>`<p>${html(r)} · use advanced JSON before changing demand or allocations.</p>`).join('')}</details>
       <details class="setup-row-settings"><summary>Row scheduling and room settings</summary>${rowRoomContent(draft,p,html)}${blockContent(p,html)}</details>
       <button data-remove-plan class="secondary">Remove weekly row…</button>
+      <button data-adopt-automatic-teacher class="secondary">Preview automatic weekly teacher selection…</button>
       <div class="setup-plan-issues" role="status">${issues.map(i=>`<p>${html(i.message)}</p>`).join('')}</div></fieldset>`;
     }).join('')}</div>`;
 }

@@ -1,5 +1,8 @@
+import { groupLessonContent, wholeLessonContent, isGroupLesson } from './lesson-labels.js';
+import { audienceEditProposal, describeAudiencePatches } from './audience-manual.js';
+import { sessionDefinitions, sessionCount, audienceDescription } from './audience-model.js';
+import { renderAudienceCell, fitAudienceCells, audienceSummaryDetails } from './audience-renderer.js';
 import { M } from './messages.js';
-import { resolvePdfScope } from './pdf-scope.js';
 import { makeAcceptedModel } from './accepted-model.js';
 import { renderWeekMatrix } from './week-renderer.js';
 import { renderDayMatrix } from './day-renderer.js';
@@ -21,7 +24,7 @@ const reviews = new Map(), timers = new Map();
 const fields = ['teacherId', 'roomId', 'periodId'];
 let activeGeneration = null, config = { lessonThreshold: 200, quickSeconds: 5, thoroughSeconds: 60 };
 let setupEditor;
-let pdfBusy = false;
+let pdfBusy = false, audienceObserver, inspectorOrigin;
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.keys(value).sort().map(key => [key, canonical(value[key])])) : value;
 
@@ -130,7 +133,7 @@ function currentDraft() {
   if (!draft) return null;
   const source = draft.source || currentTimetable();
   if (!isTimetable(source) || !draft.changes || typeof draft.changes !== 'object' || Array.isArray(draft.changes)
-      || Object.entries(draft.changes).some(([id, patch]) => !source.definition.lessons.some(l => l.id === id)
+      || Object.entries(draft.changes).some(([id, patch]) => !sessionDefinitions(source.definition).has(id)
         || !patch || typeof patch !== 'object' || Object.entries(patch).some(([field, value]) =>
           !['teacherId', 'roomId', 'periodId'].includes(field) || typeof value !== 'string'
           || !source.definition[{ teacherId: 'teachers', roomId: 'rooms', periodId: 'periods' }[field]].some(e => e.id === value)))) {
@@ -150,13 +153,34 @@ function candidate(timetable = currentTimetable(), draft = currentDraft()) {
     const lesson = baseline.definition.lessons.find(l => l.id === assignment.lessonId);
     if (lesson) lesson.teacherId = assignment.teacherId;
   }
+  if (Object.keys(draft.changes).length) { delete baseline.result.quality; delete baseline.result.score; }
   return baseline;
 }
 
 function bindShell() {
   document.querySelector('#export-timetable-pdf').addEventListener('click', exportPdf);
+  document.addEventListener('click', event => {
+    const quality = event.target.closest('[data-quality-class], [data-quality-teacher]');
+    if (quality) {
+      if (quality.closest('#school-setup')) setupEditor.close({ immediate: true });
+      if (quality.dataset.qualityTeacher) { filters = blankFilters(); filters.teacherId = quality.dataset.qualityTeacher; }
+      else { filters = blankFilters(); filters.cohortId = quality.dataset.qualityClass; filters.periodId = quality.dataset.qualityPeriod; filters.day = model.maps.periods.get(filters.periodId).weekday; filters.range = 'DAY'; }
+      closeInspector(); renderFilters(); renderMatrix();
+      const lesson = model.assignments.find(a => matches(a)); if (lesson) openInspector(lesson.lessonId);
+      else { const dialog = document.querySelector('#lesson-inspector'); inspectorOrigin = quality; dialog.innerHTML = `<button data-close-inspector>Close</button>` + audienceSummaryDetails(model, quality.dataset.qualityClass, quality.dataset.qualityPeriod, [], html); if (!dialog.open) dialog.show(); positionInspector(); }
+    }
+    const summary = event.target.closest('[data-audience-class]');
+    if (summary) {
+      inspectorOrigin = summary; selectedLesson = null;
+      const dialog = document.querySelector('#lesson-inspector');
+      dialog.innerHTML = `<button class="secondary" data-close-inspector aria-label="Close lesson inspector">Close</button>` + audienceSummaryDetails(model, summary.dataset.audienceClass, summary.dataset.audiencePeriod, model.assignments.filter(matches), html);
+      if (!dialog.open) dialog.show(); positionInspector(); dialog.querySelector('#inspector-title').focus();
+    }
+    const lesson = event.target.closest('[data-inspect-audience-lesson]');
+    if (lesson) openInspector(lesson.dataset.inspectAudienceLesson);
+  });
   const setupEntry = document.querySelector('#school-setup-entry');
-  setupEditor = createSetupEditor({ repository, school: currentSchool, storage: browserStorage, entry: setupEntry, build:()=>build, generationInfo:id=>schools.get(id)?.generation, onGenerate:(id,effort)=>{const s=schools.get(id);if(s){s.effort=effort;generateTimetable(id);}}, onCancel:cancelGeneration, knownSchools:()=>[...schools.values()], onSaved(school){schools.set(school.id,{...school,timetables:new Map()});selectedSchool=school.id;selectedTimetable=undefined;filters=blankFilters();closeInspector();notice='School copy saved. No timetable yet; generation is an explicit action.';render();}, onCleanup(){document.querySelector('#delete-local-data-error').hidden=true;document.querySelector('#delete-local-data-dialog').showModal();} });
+  setupEditor = createSetupEditor({ repository, school: currentSchool, qualityInfo: setupQualityInfo, storage: browserStorage, entry: setupEntry, build:()=>build, generationInfo:id=>schools.get(id)?.generation, onGenerate:(id,effort)=>{const s=schools.get(id);if(s){s.effort=effort;generateTimetable(id);}}, onCancel:cancelGeneration, knownSchools:()=>[...schools.values()], onSaved(school){schools.set(school.id,{...school,timetables:new Map()});selectedSchool=school.id;selectedTimetable=undefined;filters=blankFilters();closeInspector();notice='School copy saved. No timetable yet; generation is an explicit action.';render();}, onCleanup(){document.querySelector('#delete-local-data-error').hidden=true;document.querySelector('#delete-local-data-dialog').showModal();} });
   document.querySelector('#resume-timetable-draft').addEventListener('click', () => { showSavedDraft = true; render(); });
   setupEntry.addEventListener('click', () => { setupEditor.open(); });
   setupEntry.disabled = false;
@@ -282,25 +306,41 @@ function render() {
   document.querySelector('#timetable-matrix').setAttribute('aria-busy', 'false');
 }
 
+function setupQualityInfo(schoolId) {
+  if (schoolId !== selectedSchool || !model) return { message: 'Select a timetable for this school to see student gaps and teacher workload.' };
+  const timetableName = currentTimetable()?.name;
+  if (!currentDraft()) return { model, timetableName, schoolName: currentSchool().name };
+  const review = reviews.get(draftKey(selectedSchool, selectedTimetable));
+  if (review?.status !== 'VALID' || review.signature !== signature(candidate()))
+    return { message: 'Student gaps and teacher workload are unavailable until the current timetable edits pass review.' };
+  return { model: makeAcceptedModel({ definition: model.definition, result: review.evidence.result }), timetableName, schoolName: currentSchool().name };
+}
+
 async function exportPdf() {
   if (!model || pdfBusy) return;
   const timetable = currentTimetable();
+  let exportModel=model;
+  if(model.definition.schemaVersion===2 && currentDraft()) {
+    const review=reviews.get(draftKey(selectedSchool,selectedTimetable));
+    if(review?.status!=='VALID' || review.signature!==signature(candidate())) {
+      const status=document.querySelector('#pdf-export-status');status.hidden=false;status.className='demo-error';
+      status.textContent='Export refused: this exact grouped working copy must pass review first. Your timetable and edits are unchanged.';return;
+    }
+    exportModel=makeAcceptedModel({definition:model.definition,result:review.evidence.result});
+  }
   // Capture the selected schedule and filters before asynchronous PDF resources load.
-  const options = { model, filters: clone(filters), schoolName: currentSchool().name,
+  const options = { model:exportModel, filters: clone(filters), schoolName: currentSchool().name,
     timetableName: timetable.name, draft: !!currentDraft(),
     authoring: clone(timetable.authoring ?? timetable.provenance?.source?.authoring) };
-  const { type, entityId } = resolvePdfScope(options.filters);
-  const entity = options.model.maps[type === 'teacher' ? 'teachers' : 'cohorts'].get(entityId);
-  const scope = type === 'school' ? 'full school' : `${type} ${entity?.displayName || entityId}`;
   const button = document.querySelector('#export-timetable-pdf'), status = document.querySelector('#pdf-export-status');
   pdfBusy = true; button.disabled = true; button.setAttribute('aria-busy', 'true');
-  status.hidden = false; status.className = 'muted'; status.textContent = `Preparing ${options.timetableName} / ${scope} / whole week…`;
+  status.hidden = true; status.className = 'muted'; status.textContent = '';
   try {
     const { downloadTimetablePdf } = await import('./timetable-pdf.js');
     await downloadTimetablePdf(options);
-    status.textContent = `PDF downloaded: ${options.timetableName} / ${scope}${options.draft ? ' - labelled as an unpublished draft' : ''}.`;
+    status.hidden = true; status.textContent = '';
   } catch (error) {
-    status.className = 'demo-error'; status.textContent = error.message || 'The PDF could not be created. Please try again.';
+    status.hidden = false; status.className = 'demo-error'; status.textContent = error.message || 'The PDF could not be created. Please try again.';
   } finally {
     pdfBusy = false; button.disabled = !model; button.setAttribute('aria-busy', 'false');
   }
@@ -371,7 +411,7 @@ function renderMatrix() {
   };
   const emptyMarkup=(row,period)=>period.nonTeaching?`<span class="setup-bell-interval">${html(period.nonTeaching)}: ${html(period.displayName)} <time>${html(period.startTime)}–${html(period.endTime)}</time></span>`:row.kind==='CLASS'&&snapshot?.classes.find(c=>c.id===row.id)?.lunchPeriodIds?.includes(period.id)?'<span class="setup-class-lunch">Class lunch</span>':'<span class="empty-cell">—</span>';
   const props = { rows, rowHeading: filters.teacherId ? 'Teacher' : filters.roomId ? 'Room' : 'Class', weekdays: model.weekdays,
-    cellItems, emptyMarkup, periodsForDay, labels: M,
+    cellItems, cellMarkup: (row, period, items) => renderAudienceCell({model,row,period,items,lessonMarkup,html}), emptyMarkup, periodsForDay, labels: M,
     periodLabel, lessonMarkup, escapeHtml: html, escapeAttribute: html };
   parent.innerHTML = mobileLayout.matches
     ? renderMobileMatrix({ ...props, weekdays: filters.range === 'DAY' ? [filters.day || model.weekdays[0]] : model.weekdays,
@@ -379,30 +419,29 @@ function renderMatrix() {
     : filters.range === 'DAY'
     ? renderDayMatrix({ ...props, periods: periodsForDay(filters.day || model.weekdays[0]), periodId: filters.periodId })
     : renderWeekMatrix(props);
+  audienceObserver?.disconnect(); audienceObserver = fitAudienceCells(parent);
   const matrix = parent.querySelector('.matrix-wrap'); matrix.tabIndex = 0; matrix.scrollLeft = scroll.left; matrix.scrollTop = scroll.top;
 }
 function lessonMarkup(item) {
-  const text = [item.subject?.displayName, item.teacher?.displayName, item.cohort?.displayName, item.room?.displayName].join(' · ');
+  const text = [item.subject?.displayName, item.teacher?.displayName, item.cohort?.displayName, audienceDescription(item), item.room?.displayName].join(' · ');
   const highlighted = filters.search && text.toLocaleLowerCase().includes(filters.search.toLocaleLowerCase());
   const color = model.definition.subjects.findIndex(s => s.id === item.subjectId) % 24;
   const week = filters.range === 'WEEK';
-  const teacher = `<span class="demo-tile-teacher${week ? ' week-meta' : ''}" title="${html(item.teacher?.displayName || item.teacherId)}">${html(item.teacher?.displayName || item.teacherId)}</span>`;
-  const room = `<span class="demo-tile-room${week ? ' week-room' : ''}" title="${html(item.room?.displayName || item.roomId)}">${html(item.room?.displayName || item.roomId)}</span>`;
-  const cohort = `<span class="demo-tile-class${week ? ' week-meta' : ''}" title="${html(item.cohort?.displayName || item.cohortId)}">${html(item.cohort?.displayName || item.cohortId)}</span>`;
-  const details = filters.teacherId ? room + cohort : filters.roomId ? teacher + cohort : week ? room : teacher + room;
+  const context = filters.teacherId || filters.roomId ? item.cohort?.displayName || item.cohortId : '';
   const conflicts = conflictItems(reviews.get(draftKey(selectedSchool, selectedTimetable))?.evidence, model);
   const invalid = conflicts.some(c => c.lessonIds.includes(item.lessonId));
-  return `<button type="button" class="lesson-cell demo-lesson subject-color-${color}${week ? ' week-lesson' : ''}${highlighted ? ' match' : ''}${invalid ? ' has-conflict' : ''}" data-lesson-id="${html(item.lessonId)}" aria-label="${html((invalid ? 'Must fix · ' : '') + text + ' · ' + periodLabel(item.period))}">${invalid ? '<span class="demo-conflict-mark">Must fix</span>' : ''}<strong title="${html(item.subject?.displayName || item.subjectId)}">${html(item.subject?.displayName || item.subjectId)}</strong>${details}</button>`;
+  return `<button type="button" class="lesson-cell demo-lesson subject-color-${color}${week ? ' week-lesson' : ''}${highlighted ? ' match' : ''}${invalid ? ' has-conflict' : ''}" data-lesson-id="${html(item.lessonId)}" aria-label="${html((invalid ? 'Must fix · ' : '') + text + ' · ' + periodLabel(item.period))}">${invalid ? '<span class="demo-conflict-mark">Must fix</span>' : ''}${isGroupLesson(item) ? groupLessonContent(item, html, filters.teacherId || filters.roomId ? [item.cohort?.displayName || item.cohortId, ...(filters.roomId ? [item.teacher?.displayName || item.teacherId] : [])].join(' · ') : '') : wholeLessonContent(item, html, context)}</button>`;
 }
 
 function openInspector(lessonId) {
   const item = model?.assignmentMap.get(lessonId); if (!item) return;
+  inspectorOrigin = document.activeElement;
   selectedLesson = lessonId;
   const inspector = document.querySelector('#lesson-inspector');
   inspector.innerHTML = `<div class="demo-inspector-heading"><div><p class="eyebrow">${html(item.cohort?.displayName)}</p><h2 id="inspector-title" tabindex="-1">${html(item.subject?.displayName)}</h2></div><button type="button" class="secondary" data-close-inspector aria-label="Close lesson inspector">✕</button></div>
+    ${item.audienceId && !item.audienceId.startsWith('class:') ? `<p class="audience-description">${html(item.audience.displayName)}</p>` : ''}
     <label>Teacher<select id="inspector-teacher">${model.definition.teachers.map(t => option(t.id, (t.displayName || t.id) + (eligible(t, item) ? '' : ' · not eligible for this lesson'), item.teacherId)).join('')}</select></label>
-    <p class="muted">Only eligible teachers can be saved. Busy teachers remain selectable so you can swap lessons.</p>
-    <label>Room<select id="inspector-room">${model.definition.rooms.map(r => option(r.id, `${r.displayName || r.id} · ${r.capacity} seats${r.capacity < item.cohort.size ? ' · too small' : !(item.lesson.requiredRoomCapabilityIds || []).every(id => r.capabilityIds?.includes(id)) ? ' · missing required equipment' : ''}`, item.roomId)).join('')}</select></label>
+    <label>Room<select id="inspector-room">${model.definition.rooms.map(r => option(r.id, `${r.displayName || r.id} · ${r.capacity} seats${r.capacity < item.audience.size ? ' · too small' : !(item.lesson.requiredRoomCapabilityIds || []).every(id => r.capabilityIds?.includes(id)) ? ' · missing required equipment' : ''}`, item.roomId)).join('')}</select></label>
     <label>Time slot<select id="inspector-period">${model.definition.periods.map(p => option(p.id, periodLabel(p) + (item.lesson.periodLock && item.lesson.periodLock !== p.id ? ' · outside fixed time' : item.teacher.availablePeriodIds && !item.teacher.availablePeriodIds.includes(p.id) ? ' · teacher unavailable' : item.cohort.availablePeriodIds && !item.cohort.availablePeriodIds.includes(p.id) ? ' · class unavailable' : ''), item.periodId)).join('')}</select></label>
     <div id="inspector-feedback"></div>`;
   for (const [field, id] of [['teacherId', 'inspector-teacher'], ['roomId', 'inspector-room'], ['periodId', 'inspector-period']]) {
@@ -418,17 +457,36 @@ function eligible(teacher, item) {
 }
 
 function editLesson(lessonId, field, value) {
+  let proposal;
+  try { proposal = audienceEditProposal(model,lessonId,field,value); }
+  catch(error) { openInspector(lessonId); document.querySelector('#inspector-feedback').textContent=error.message; return; }
+  if (model.definition.schemaVersion===2 && (proposal.unavailable || proposal.allocation || proposal.combined.length>1)) {
+    const host=document.querySelector('#inspector-feedback');
+    host.innerHTML=`<section class="manual-combined-proposal"><h3>Review combined change</h3><p>${html(proposal.reason)}</p><ul>${describeAudiencePatches(model,proposal.combined).map(t=>`<li>${html(t)}</li>`).join('')}</ul><button id="apply-combined-change" ${proposal.unavailable ? 'disabled' : ''}>Apply listed ${proposal.allocation ? 'weekly teacher allocation' : 'combined change'}</button>${proposal.allocation ? '' : '<button id="apply-individual-change" class="secondary">Keep only selected provisional change</button>'}<button id="cancel-combined-change" class="secondary">Cancel change</button></section>`;
+    host.querySelector('#apply-combined-change').onclick=()=>applyLessonPatches(lessonId,proposal.combined);
+    host.querySelector('#apply-individual-change')?.addEventListener('click',()=>applyLessonPatches(lessonId,proposal.single));
+    host.querySelector('#cancel-combined-change').onclick=()=>openInspector(lessonId);
+    positionInspector(); host.querySelector(proposal.unavailable ? '#apply-individual-change' : '#apply-combined-change').focus();
+    return;
+  }
+  applyLessonPatches(lessonId,proposal.single);
+}
+function applyLessonPatches(lessonId, patches) {
   const key = draftKey(selectedSchool, selectedTimetable);
   if (!showSavedDraft && repository.state().drafts[key]) { notice = 'Resume your saved changes before editing this timetable.'; renderNotice(); return; }
   showSavedDraft = true;
   const existing = currentDraft();
   if (repository.state().drafts[key] && !existing) { notice = 'This retained draft cannot be edited safely. Select another timetable to continue.'; renderNotice(); return; }
   const source = existing?.source || clone(currentTimetable());
-  const original = source.result.timetable.assignments.find(a => a.lessonId === lessonId);
   const draft = existing || { source, changes: {}, name: '', createdAt: new Date().toISOString() };
-  draft.changes[lessonId] ||= {};
-  if (value === original[field]) delete draft.changes[lessonId][field]; else draft.changes[lessonId][field] = value;
-  if (!Object.keys(draft.changes[lessonId]).length) delete draft.changes[lessonId];
+  for (const patch of patches) {
+    const original=source.result.timetable.assignments.find(a=>a.lessonId===patch.lessonId);
+    draft.changes[patch.lessonId] ||= {};
+    for(const [field,value] of Object.entries(patch)) if(field!=='lessonId') {
+      if(value===original[field]) delete draft.changes[patch.lessonId][field]; else draft.changes[patch.lessonId][field]=value;
+    }
+    if(!Object.keys(draft.changes[patch.lessonId]).length)delete draft.changes[patch.lessonId];
+  }
   persist(state => {
     if (Object.keys(draft.changes).length || draft.generated) state.drafts[key] = draft;
     else delete state.drafts[key];
@@ -444,7 +502,7 @@ function queueReview(force = false) {
   const review = { signature: exact, status: 'PENDING' }; reviews.set(key, review); renderDraft();
   timers.set(key, setTimeout(async () => {
     try {
-      const { value } = await demoRequest('/api/demo/timetable/review', { method: 'POST', body: input });
+      const { value } = await demoRequest('/api/demo/timetable/review', { method: 'POST', body: { ...input, exactResult: !Object.keys(draft.changes).length } });
       if (reviews.get(key) !== review) return;
       const expectedRevision=await definitionRevision(input.definition);
       if(reviews.get(key)!==review)return;
@@ -456,6 +514,7 @@ function queueReview(force = false) {
       review.evidence = value; review.status = value.valid === true ? 'VALID' : 'INVALID';
     } catch (error) { if (reviews.get(key) !== review) return; review.status = 'FAILED'; review.error = error.message; }
     if (draftKey(selectedSchool, selectedTimetable) === key) {
+      setupEditor?.refreshQuality();
       renderDraft(); renderMatrix(); if (selectedLesson) openInspector(selectedLesson);
     }
   }, 300));
@@ -502,7 +561,7 @@ function saveTimetable() {
 
 function renderGeneration() {
   if (!currentSchool()) return;
-  const school = currentSchool(), large = school.definition.lessons.length > config.lessonThreshold;
+  const school = currentSchool(), large = sessionCount(school.definition) > config.lessonThreshold;
   const effort = school.effort || (large ? 'THOROUGH' : 'QUICK');
   const candidateWaiting = [...school.timetables.keys()].some(id => repository.state().drafts[draftKey(school.id, id)]?.generated);
   let text = activeGeneration ? `Generating for ${schools.get(activeGeneration.schoolId)?.name}. ${schools.get(activeGeneration.schoolId)?.generation?.message || 'Preparing…'}`
@@ -537,7 +596,7 @@ function cancelPreparation(token) {
 async function generateTimetable(schoolId=selectedSchool) {
   const school = schools.get(schoolId);
   if (!school || activeGeneration || school.bundled || [...school.timetables.keys()].some(id=>repository.state().drafts[draftKey(school.id,id)]?.generated)) return;
-  const pin={schoolId:school.id,definition:clone(school.definition),definitionRevision:school.definitionRevision,build,authoring:school.authoring?clone(school.authoring):null,effort:school.effort||(school.definition.lessons.length>config.lessonThreshold?'THOROUGH':'QUICK')};
+  const pin={schoolId:school.id,definition:clone(school.definition),definitionRevision:school.definitionRevision,build,authoring:school.authoring?clone(school.authoring):null,effort:school.effort||(sessionCount(school.definition)>config.lessonThreshold?'THOROUGH':'QUICK')};
   const token = { schoolId: school.id, runId: null,pin }; activeGeneration = token;
   generationState(school.id, { status: 'PREPARING',pin,message: 'Preparing and checking the saved school definition…' },true);
   try {
@@ -618,7 +677,7 @@ async function cancelGeneration() {
 }
 function positionInspector() {
   const inspector = document.querySelector('#lesson-inspector'); if (!inspector?.open) return;
-  const anchor = [...document.querySelectorAll('.demo-lesson')].find(element => element.dataset.lessonId === selectedLesson);
+  const anchor = [...document.querySelectorAll('.demo-lesson')].find(element => element.dataset.lessonId === selectedLesson) || inspectorOrigin;
   if (!anchor) return;
   const rect = anchor.getBoundingClientRect(), width = Math.min(390, window.innerWidth - 24);
   inspector.style.left = `${Math.max(12, Math.min(rect.right + 10, window.innerWidth - width - 12))}px`;
@@ -628,6 +687,7 @@ function positionInspector() {
 function closeInspector() {
   const inspector = document.querySelector('#lesson-inspector'); if (!inspector?.open) { selectedLesson = null; return; }
   inspector.close();
+  if (inspectorOrigin?.isConnected) inspectorOrigin.focus({ preventScroll:true });
   const previous = selectedLesson; selectedLesson = null;
   [...document.querySelectorAll('.demo-lesson')].find(e => e.dataset.lessonId === previous)?.focus({ preventScroll: true });
 }

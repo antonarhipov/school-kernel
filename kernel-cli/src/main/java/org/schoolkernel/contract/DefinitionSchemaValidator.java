@@ -15,6 +15,7 @@ import tools.jackson.databind.JsonNode;
 
 public final class DefinitionSchemaValidator {
     private final Schema schema;
+    private final Schema audienceSchema;
 
     public DefinitionSchemaValidator() {
         try (InputStream input = DefinitionSchemaValidator.class
@@ -27,10 +28,14 @@ public final class DefinitionSchemaValidator {
         } catch (IOException exception) {
             throw new IllegalStateException("Bundled school definition schema cannot be loaded", exception);
         }
+        try (InputStream input = DefinitionSchemaValidator.class.getResourceAsStream("/schema/school-definition-v2.schema.json")) {
+            audienceSchema = SchemaRegistry.withDefaultDialect(SpecificationVersion.DRAFT_2020_12).getSchema(input);
+            audienceSchema.initializeValidators();
+        } catch (IOException exception) { throw new IllegalStateException("Audience definition schema cannot be loaded", exception); }
     }
 
     public List<ValidationError> validate(JsonNode input) {
-        return schema.validate(input).stream()
+        return (input.path("schemaVersion").asInt() == 2 ? audienceSchema : schema).validate(input).stream()
                 .map(error -> new ValidationError(
                         error.getInstanceLocation().toString(),
                         List.of(),

@@ -1,5 +1,5 @@
 // Rows are class row groups or one lens row group; the caller supplies each cell's items and empty-cell markup.
-export function renderWeekMatrix({ rows, rowHeading, weekdays, cellItems, emptyMarkup, periodsForDay, labels, periodLabel, lessonMarkup, escapeHtml, escapeAttribute }) {
+export function renderWeekMatrix({ rows, rowHeading, weekdays, cellItems, cellMarkup, emptyMarkup, periodsForDay, labels, periodLabel, lessonMarkup, escapeHtml, escapeAttribute }) {
   const headers = weekdays.map(day => `<th scope="col">${escapeHtml(labels.days[day] || day)}</th>`).join('');
   const dayPeriods = weekdays.map(day => new Map(periodsForDay(day).map(period => [period.order, period])));
   const orders = [...new Set(dayPeriods.flatMap(periods => [...periods.keys()]))].sort((a, b) => a - b);
@@ -14,7 +14,7 @@ export function renderWeekMatrix({ rows, rowHeading, weekdays, cellItems, emptyM
       if (!period) return `<td data-weekday="${escapeAttribute(day)}"><span class="empty-cell">${labels.emptyCell}</span></td>`;
       const items = cellItems(row, period);
       const time = period.startTime ? labels.optionalTime(period.startTime.slice(0, 5), period.endTime.slice(0, 5)) : '';
-      const content = items.length ? `${items.map(lessonMarkup).join('')}${row.kind === 'CLASS' ? '' : emptyMarkup(row, period, true)}` : emptyMarkup(row, period, false);
+      const content = cellMarkup?.(row, period, items) ?? (items.length ? `${items.map(lessonMarkup).join('')}${row.kind === 'CLASS' ? '' : emptyMarkup(row, period, true)}` : emptyMarkup(row, period, false));
       return `<td data-weekday="${escapeAttribute(day)}" title="${escapeAttribute(periodLabel(period))}"><div class="week-slot">${time && time !== sharedTime ? `<small class="week-time">${escapeHtml(time)}</small>` : ''}${content}</div></td>`;
     }).join('');
     return `<tr>${classCell}${periodCell}${slots}</tr>`;
